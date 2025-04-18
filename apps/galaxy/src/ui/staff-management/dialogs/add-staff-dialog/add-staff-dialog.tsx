@@ -8,10 +8,10 @@ import { AddStaffDialogForm } from './add-staff-dialog-form'
 const AddStaffDialog = ({ children }: PropsWithChildren) => {
   const [isOpen, setIsOpen] = useState(false)
 
-  const handleOpen = (open: boolean) => setIsOpen(open)
+  const onToggle = (open: boolean) => setIsOpen(open)
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={(isOpen) => handleOpen(!!isOpen)}>
+    <Dialog.Root open={isOpen} onOpenChange={(open) => onToggle(open)}>
       <Dialog.Trigger>{children}</Dialog.Trigger>
       <Dialog.Content className="w-[721px] rounded-2 p-6">
         <Flex justify="between" align="start" gap="2">
@@ -22,7 +22,7 @@ const AddStaffDialog = ({ children }: PropsWithChildren) => {
             <X size={22} strokeWidth={1} />
           </Dialog.Close>
         </Flex>
-        <AddStaffDialogForm handleOpen={handleOpen} />
+        <AddStaffDialogForm onClose={onToggle} />
       </Dialog.Content>
     </Dialog.Root>
   )

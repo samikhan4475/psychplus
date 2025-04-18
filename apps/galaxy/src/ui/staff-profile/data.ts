@@ -1,43 +1,44 @@
 import { SelectOptionType } from '@/types'
-import { Address, Staff } from '../staff-management/types'
+import {
+  deepSanitizeFormData,
+  getPaddedDateString,
+  sanitizeFormData,
+} from '@/utils'
+import { Staff } from '../staff-management/types'
+import { SchemaType } from './schema'
 import { StaffUpdatePayload } from './types'
 
-const defaultAddress = {
-  type: '',
-  street1: '',
-  street2: '',
-  city: '',
-  state: '',
-  country: '',
-  postalCode: '',
-  timeZoneId: '',
-}
+const transformOut = ({
+  mailingAddress,
+  homeAddress,
+  phoneContact,
+  contactInfo: {
+    isMailingAddressSameAsPrimary,
+    emailVerificationStatus,
+    email,
+  },
 
-function transformOut(data: StaffUpdatePayload): StaffUpdatePayload {
-  const businessAddress =
-    data.addresses?.find((addr: Address) => addr.type === 'Business') ||
-    defaultAddress
-  const mailingAddress =
-    data.addresses?.find((addr: Address) => addr.type === 'Mailing') ||
-    defaultAddress
+  ...data
+}: SchemaType): Partial<Staff> => {
+  const addresses = [
+    deepSanitizeFormData({ ...homeAddress, type: 'Business' }),
+    deepSanitizeFormData({
+      ...(isMailingAddressSameAsPrimary ? homeAddress : mailingAddress),
+      type: 'Mailing',
+    }),
+  ]
 
-  delete data['addresses']
-  return {
+  return deepSanitizeFormData({
     ...data,
-    address: businessAddress.street1 || '',
-    address2: businessAddress.street2 || '',
-    country: businessAddress.country || '',
-    stateCode: businessAddress.state || '',
-    city: businessAddress.city || '',
-    postalCode: businessAddress.postalCode || '',
-    secondaryAddress: mailingAddress.street1 || businessAddress.street1 || '',
-    secondaryAddress2: mailingAddress.street2 || businessAddress.street2 || '',
-    secondaryCountry: mailingAddress.country || businessAddress.country || '',
-    secondaryStateCode: mailingAddress.state || businessAddress.state || '',
-    secondaryCity: mailingAddress.city || businessAddress.city || '',
-    secondaryPostalCode:
-      mailingAddress.postalCode || businessAddress.postalCode || '',
-  }
+    contactInfo: deepSanitizeFormData({
+      isMailingAddressSameAsPrimary,
+      addresses,
+      emailVerificationStatus: emailVerificationStatus ?? '',
+      phoneNumbers: [{ number: phoneContact }],
+      email,
+    }),
+    dob: data.dob ? getPaddedDateString(data.dob) : null,
+  })
 }
 
 const transformInLanguages = (
@@ -53,108 +54,68 @@ const transformInLanguages = (
 }
 
 const transformIn = (
-  data: Partial<Staff>,
-  languageOptions: SelectOptionType[],
-): StaffUpdatePayload => {
-  const {
-    id,
+  {
+    id: staffId = '',
     legalName,
-    dateOfBirth,
+    dateOfBirth: dob = '',
     gender,
     contactInfo,
     spokenLanguages = [],
     virtualRoomLink = '',
-    status,
+    status = '',
     npi = '',
     staffUserRoleIds = [],
     supervisorStaffId = '',
     organizationIds = [],
     practiceIds = [],
-    phoneContact,
-    bio,
-    userId,
-    hasBioVideo,
-    timeZonePreference,
-    supervisedBy,
-    providerAttributions,
-  } = data
-  const {
-    firstName = '',
-    middleName = '',
-    lastName = '',
-    honors = '',
-  } = legalName || {}
-
-  const {
-    email = '',
-    phoneNumbers = [],
-    addresses,
-    isMailingAddressSameAsPrimary = false,
-  } = contactInfo || {}
-  const getAddress = (type: string) => {
-    const address = addresses?.find((address) => address.type === type)
-
-    return {
-      type,
-      street1: address?.street1 ?? '',
-      street2: address?.street2 ?? '',
-      city: address?.city ?? '',
-      state: address?.state ?? '',
-      country: address?.country ?? '',
-      postalCode: address?.postalCode ?? '',
-      geoCoordinates: address?.geoCoordinates ?? {
-        longitude: 0,
-        latitude: 0,
-        altitude: 0,
-      },
-      timeZoneId: address?.timeZoneId ?? '',
-    }
-  }
-  const homeAddress = getAddress('Business')
-  const mailingAddress = getAddress('Mailing')
-  const phoneNumber = phoneNumbers?.[0]?.number ?? phoneContact
-  return {
-    addresses: [homeAddress, mailingAddress],
-    staffId: id ?? '',
-    userId: userId ?? '',
-    staffRoleId: '1',
-    status: status ?? '',
-    staffUserRoleIds,
-    staffTypeIds: staffUserRoleIds ?? [],
-    firstName,
-    lastName,
-    dob: dateOfBirth ?? '',
-    spokenLanguages: transformInLanguages(spokenLanguages, languageOptions),
-    middleName,
-    address: '',
-    address2: '',
-    country: '',
-    stateCode: '',
-    city: '',
-    postalCode: '',
-    secondaryAddress: '',
-    secondaryAddress2: '',
-    secondaryCountry: '',
-    secondaryStateCode: '',
-    secondaryCity: '',
-    secondaryPostalCode: '',
-    virtualRoomLink,
-    biography: bio ?? '',
-    title: honors,
-    npi,
-    gender,
-    email,
-    phoneContact: phoneNumber,
-    supervisedBy: supervisedBy,
-    supervisorStaffId,
-    specialists: [],
-    providerAttributions: providerAttributions || [],
-    organizationIds,
-    practiceIds,
+    bio: biography = '',
+    userId = '',
+    hasBioVideo = false,
+    timeZonePreference = '',
+    providerAttributions = [],
+    staffTypes: staffTypeIds = [],
     isMailingAddressSameAsPrimary,
-    timeZonePreference: timeZonePreference || '',
-    hasBioVideo: hasBioVideo,
-  }
-}
+    ...rest
+  }: Partial<Staff>,
+  languageOptions: SelectOptionType[],
+): StaffUpdatePayload => ({
+  staffId,
+  userId,
+  staffRoleId: '1',
+  status,
+  staffUserRoleIds,
+  staffTypeIds,
+  legalName: {
+    ...legalName,
+    firstName: legalName?.firstName ?? '',
+    lastName: legalName?.lastName ?? '',
+    title: legalName?.title ?? legalName?.honors ?? '',
+  },
+  dob,
+  spokenLanguages: transformInLanguages(spokenLanguages, languageOptions),
+  virtualRoomLink,
+  biography,
+  npi,
+  gender: String(gender),
+  supervisedBy: rest?.supervisedBy ?? '',
+  supervisorStaffId,
+  specialists: [],
+  providerAttributions,
+  organizationIds,
+  practiceIds,
+  timeZonePreference,
+  hasBioVideo,
+  contactInfo: {
+    email: contactInfo?.email ?? '',
+    addresses: contactInfo?.addresses ?? [],
+    emailVerificationStatus: contactInfo?.emailVerificationStatus ?? '',
+    phoneNumbers: contactInfo?.phoneNumbers ?? [],
+    isMailingAddressSameAsPrimary: Boolean(
+      contactInfo?.isMailingAddressSameAsPrimary ??
+        isMailingAddressSameAsPrimary,
+    ),
+  },
+  ...rest,
+})
 
 export { transformOut, transformIn, transformInLanguages }

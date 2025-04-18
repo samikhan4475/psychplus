@@ -94,6 +94,7 @@ interface Staff {
   staffUserRoleIds: string[]
   hasBioVideo?: boolean
   timeZonePreference: string
+  isMailingAddressSameAsPrimary?: boolean
 }
 
 interface StaffSearchParams extends Staff {
@@ -154,6 +155,17 @@ interface GetStaffListResponse {
   staff: Staff[]
   total: number
 }
+
+enum StaffType {
+  Provider = 'Provider',
+}
+
+enum StaffRole {
+  Psychiatrist = 'Psychiatrist',
+  InternalMedicine = 'Internal Medicine',
+  Therapist = 'Therapist',
+}
+
 export {
   type Staff,
   type Address,
@@ -161,4 +173,6 @@ export {
   type OrganizationOptionsResponse,
   type StaffSearchParams,
   type OrganizationOptions,
+  StaffType,
+  StaffRole,
 }

@@ -1,6 +1,7 @@
-import { DateValue } from 'react-aria-components'
+import { CalendarDate } from '@internationalized/date'
 import { z } from 'zod'
-import { Address } from '../staff-management/types'
+import { PatientAddressType } from '@/types'
+import { StaffType } from '../staff-management/types'
 
 const requiredString = z
   .string()
@@ -16,41 +17,71 @@ const optionalString = z
   .string()
   .max(128, { message: 'Cannot exceed 128 characters' })
   .optional()
-const addressSchema = z.object({
-  type: z.string(),
-  street1: optionalString,
-  street2: optionalString,
-  city: optionalString,
-  state: optionalString,
-  country: optionalString,
-  postalCode: optionalString,
-  geoCoordinates: z
-    .object({
-      longitude: z.number(),
-      latitude: z.number(),
-      altitude: z.number(),
-    })
-    .optional(),
-  timeZoneId: optionalString,
+
+const nameSchema = z.object({
+  firstName: requiredName,
+  middleName: optionalString,
+  lastName: requiredName,
+  preferredName: optionalString,
+  title: optionalString,
+  suffix: optionalString,
+  honors: optionalString,
 })
 
+const getAddressSchema = (type: PatientAddressType) =>
+  z
+    .object({
+      type: z.string().optional(),
+      street1: type === 'Mailing' ? optionalString : requiredString,
+      street2: optionalString,
+      city: type === 'Mailing' ? optionalString : requiredString,
+      state: type === 'Mailing' ? optionalString : requiredString,
+      country: optionalString,
+      postalCode: type === 'Mailing' ? optionalString : requiredString,
+      geoCoordinates: z
+        .object({
+          longitude: z.number(),
+          latitude: z.number(),
+          altitude: z.number(),
+        })
+        .optional(),
+      timeZoneId: optionalString,
+    })
+    .optional()
 const validateAddressFields = (
-  address: Address,
-  pathPrefix: string,
+  address: any,
+  path: string,
   ctx: z.RefinementCtx,
 ) => {
   const fields = ['street1', 'city', 'state', 'postalCode']
   fields.forEach((field) => {
-    const fieldValue = address[field as keyof Address]
-    if (typeof fieldValue !== 'string' || fieldValue.trim().length < 1) {
+    if (!address[field] || address[field].trim().length < 1) {
       ctx.addIssue({
-        path: [`addresses.${pathPrefix}.${field}`],
-        message: 'Required',
+        path: [path],
+        message: `Required`,
         code: z.ZodIssueCode.custom,
       })
     }
   })
 }
+
+const ContactInfoSchema = z.object({
+  email: requiredString.email(),
+  emailVerificationStatus: z.ostring().nullable(),
+  phoneNumbers: z
+    .array(
+      z
+        .object({
+          type: z.string().optional(),
+          number: optionalString,
+          extension: optionalString,
+          comment: optionalString,
+        })
+        .optional(),
+    )
+    .optional(),
+  isMailingAddressSameAsPrimary: z.boolean(),
+})
 
 const schema = z
   .object({
@@ -58,53 +89,66 @@ const schema = z
     userId: requiredString,
     staffRoleId: optionalString,
     status: requiredString,
+    phoneContact: requiredString,
+    legalName: nameSchema,
     staffUserRoleIds: z.array(requiredString),
-    firstName: requiredName,
-    lastName: requiredName,
-    dob: z.custom<DateValue | null>().refine((value) => value !== undefined, {
-      message: 'Required',
-    }),
-    middleName: optionalString,
-    spokenLanguages: z
-      .array(requiredString)
-      .min(1, { message: 'Minimum 1 is required' }),
+    dob: z
+      .custom<CalendarDate | null>()
+      .refine((value) => value !== undefined, {
+        message: 'Required',
+      }),
+    spokenLanguages: z.array(z.string()).optional().optional(),
     virtualRoomLink: optionalString,
+    isVirtualRoomLink: z.boolean().optional(),
     biography: optionalString,
-    title: requiredString,
-    address: optionalString,
-    address2: optionalString,
-    country: optionalString,
-    stateCode: optionalString,
-    city: optionalString,
-    postalCode: optionalString,
-    secondaryAddress: optionalString,
-    secondaryAddress2: optionalString,
-    secondaryCountry: optionalString,
-    secondaryStateCode: optionalString,
-    secondaryCity: optionalString,
-    secondaryPostalCode: optionalString,
     npi: z.string().min(10, { message: 'NPI must be 10 characters' }),
     gender: requiredString,
-    email: requiredString.email(),
-    addresses: z.array(addressSchema),
-    phoneContact: requiredString,
+    homeAddress: getAddressSchema('Home'),
+    mailingAddress: getAddressSchema('Mailing'),
     supervisedBy: optionalString,
+    staffTypeLabel: optionalString,
     supervisorStaffId: z.string(),
     specialists: z.array(requiredString),
     providerAttributions: z.array(z.string()).optional(),
     organizationIds: z.array(requiredString),
     practiceIds: z.array(requiredString),
-    isMailingAddressSameAsPrimary: z.boolean(),
     timeZonePreference: requiredString,
-    hasBioVideo: z.boolean(),
+    hasBioVideo: z.boolean().optional(),
     staffTypeIds: z.array(requiredString),
+    contactInfo: ContactInfoSchema,
   })
   .superRefine((data, ctx) => {
-    const { addresses, isMailingAddressSameAsPrimary } = data
-
-    validateAddressFields(addresses[0], '0', ctx)
+    const {
+      mailingAddress,
+      contactInfo: { isMailingAddressSameAsPrimary },
+      isVirtualRoomLink,
+      virtualRoomLink,
+      staffTypeLabel,
+      npi,
+    } = data
+    if (staffTypeLabel === StaffType.Provider && !npi) {
+      ctx.addIssue({
+        path: ['npi'],
+        message: `Required`,
+        code: z.ZodIssueCode.custom,
+      })
+    }
+    if (staffTypeLabel === StaffType.Provider && !data?.legalName?.title) {
+      ctx.addIssue({
+        path: ['legalName.title'],
+        message: `Required`,
+        code: z.ZodIssueCode.custom,
+      })
+    }
+    if (isVirtualRoomLink && !virtualRoomLink) {
+      ctx.addIssue({
+        path: ['virtualRoomLink'],
+        message: `Required`,
+        code: z.ZodIssueCode.custom,
+      })
+    }
     if (!isMailingAddressSameAsPrimary)
-      validateAddressFields(addresses[1], '1', ctx)
+      validateAddressFields(mailingAddress, 'mailingAddress', ctx)
   })
 
 type SchemaType = z.infer<typeof schema>

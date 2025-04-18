@@ -1,22 +1,36 @@
+import {
+  deepSanitizeFormData,
+  getPaddedDateString,
+  sanitizeFormData,
+} from '@/utils'
 import { Staff } from '../../types'
+import { SchemaType } from './schema'
 
-const transformOut = (data: Partial<Staff>): Partial<Staff> => {
-  if (
-    data?.contactInfo?.isMailingAddressSameAsPrimary &&
-    data?.contactInfo.addresses?.length > 0
-  ) {
-    const { street1, city, state, postalCode, country } =
-      data.contactInfo.addresses[0]
-    data.contactInfo.addresses[1] = {
+const transformOut = ({
+  mailingAddress,
+  homeAddress,
+  contactInfo: { isMailingAddressSameAsPrimary, ...contactInfo },
+  dateOfBirth,
+  ...data
+}: SchemaType): Partial<Staff> => {
+  const addresses = [
+    sanitizeFormData({ ...homeAddress, type: 'Home' }),
+    sanitizeFormData({
+      ...(isMailingAddressSameAsPrimary ? homeAddress : mailingAddress),
       type: 'Mailing',
-      country,
-      street1,
-      city,
-      state,
-      postalCode,
-    }
-  }
-  return data
+    }),
+  ]
+  return deepSanitizeFormData({
+    ...data,
+    contactInfo: deepSanitizeFormData({
+      isMailingAddressSameAsPrimary,
+      addresses,
+      ...contactInfo,
+    }),
+    dateOfBirth: dateOfBirth ? getPaddedDateString(dateOfBirth) : null,
+    virtualRoomLink:
+      data?.isVirtualRoomLink === true ? data?.virtualRoomLink : undefined,
+  })
 }
 
 export { transformOut }

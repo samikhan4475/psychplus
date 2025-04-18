@@ -14,6 +14,7 @@ interface PhoneNumberInputProps {
   placeholder?: string
   autoFocus?: boolean
   className?: string
+  labelClassName?: string
   isFormattedValue?: boolean
 }
 
@@ -25,12 +26,17 @@ const PhoneNumberInput = ({
   className,
   autoFocus,
   isFormattedValue,
+  labelClassName,
 }: PhoneNumberInputProps) => {
   const form = useFormContext()
 
   return (
     <Flex align="center" gap="2">
-      {label && <BlockLabel name={fieldName}>{label}</BlockLabel>}
+      {label && (
+        <BlockLabel className={labelClassName} name={fieldName}>
+          {label}
+        </BlockLabel>
+      )}
       <Controller
         control={form.control}
         name={fieldName}

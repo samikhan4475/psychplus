@@ -6,10 +6,7 @@ const HomeAddressGroup = () => {
   return (
     <>
       <TabContentHeading title="Home Address" />
-      <AddressFieldsGroup
-        prefix="contactInfo.addresses.0"
-        addressFieldName="street1"
-      />
+      <AddressFieldsGroup prefix="homeAddress" addressFieldName="street1" />
     </>
   )
 }

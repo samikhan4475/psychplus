@@ -22,7 +22,6 @@ const updateStaffAction = async ({
       error: response.error,
     }
   }
-
   return {
     state: 'success',
     data: response.data,

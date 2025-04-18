@@ -16,7 +16,7 @@ const PracticeSelect = ({ practices }: PracticeSelectProps) => {
     <FormFieldContainer>
       <FormFieldLabel required>Practice</FormFieldLabel>
       <SelectInput
-        disabled={practices.length === 0}
+        disabled
         options={practices}
         field="practiceIds.[0]"
         buttonClassName="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"

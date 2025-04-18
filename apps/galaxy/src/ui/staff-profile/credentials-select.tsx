@@ -1,5 +1,4 @@
 import React from 'react'
-import { useFormContext } from 'react-hook-form'
 import {
   CodesetSelect,
   FormFieldContainer,
@@ -7,22 +6,23 @@ import {
   FormFieldLabel,
 } from '@/components'
 import { CODESETS } from '@/constants'
+import { useFormContext } from 'react-hook-form'
+import { SchemaType } from './schema'
+import { StaffType } from '../staff-management/types'
 
 const CredentialsSelect = () => {
-  const form = useFormContext()
-  const staffUserRole = form.watch('staffUserRoleIds.0')
+  const form = useFormContext<SchemaType>()
+  const staffTypeLabel = form.watch('staffTypeLabel')
   return (
     <FormFieldContainer>
-      <FormFieldLabel required>Credentials</FormFieldLabel>
+      <FormFieldLabel required={staffTypeLabel === StaffType.Provider}>Credentials</FormFieldLabel>
       <CodesetSelect
         size="1"
-        disabled={staffUserRole === ''}
         codeset={CODESETS.PractitionerHonor}
-        name="title"
+        name="legalName.title"
       />
-      <FormFieldError name="title" />
+      <FormFieldError name="legalName.title" />
     </FormFieldContainer>
   )
 }
-
 export { CredentialsSelect }

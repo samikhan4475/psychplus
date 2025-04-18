@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
+import { format } from 'date-fns'
 import {
   ColumnHeader,
   DataTable,
@@ -93,7 +94,7 @@ const columns = (
       ),
     },
     {
-      id: 'staffUserRoleIds',
+      id: 'role',
       header: ({ column }) => (
         <ColumnHeader
           label="Role"
@@ -111,7 +112,7 @@ const columns = (
       ),
     },
     {
-      id: 'honors',
+      id: 'credentials',
       header: ({ column }) => (
         <ColumnHeader
           label="Credentials"
@@ -139,7 +140,7 @@ const columns = (
       cell: ({ row }) => <TextCell>{row.original.supervisedBy}</TextCell>,
     },
     {
-      id: 'organizationIds',
+      id: 'organization',
       header: ({ column }) => (
         <ColumnHeader
           label="Organization"
@@ -155,7 +156,7 @@ const columns = (
       ),
     },
     {
-      id: 'practiceIds',
+      id: 'practice',
       header: ({ column }) => (
         <ColumnHeader
           label="Practice"
@@ -201,7 +202,7 @@ const columns = (
       cell: ({ row }) => <TextCell>{row.original.status}</TextCell>,
     },
     {
-      id: 'dateOfBirth',
+      id: 'dob',
       header: ({ column }) => (
         <ColumnHeader
           label="DOB"
@@ -214,7 +215,7 @@ const columns = (
       ),
       cell: ({ row }) => (
         <TextCell className="w-[85px]">
-          {String(row.original.dateOfBirth)}
+          {format(new Date(String(row.original?.dateOfBirth)), 'dd/MM/yyyy')}
         </TextCell>
       ),
     },
@@ -233,7 +234,7 @@ const columns = (
       cell: ({ row }) => <TextCell>{row.original.gender}</TextCell>,
     },
     {
-      id: 'spokenLanguages',
+      id: 'language',
       header: ({ column }) => (
         <ColumnHeader
           label="Language"
@@ -251,7 +252,7 @@ const columns = (
       ),
     },
     {
-      id: 'providerAttributions',
+      id: 'providerPreference',
       header: ({ column }) => (
         <ColumnHeader
           label="Provider Preference"
@@ -283,7 +284,7 @@ const columns = (
       cell: ({ row }) => <TextCell>{row.original.contactInfo?.email}</TextCell>,
     },
     {
-      id: 'phoneNumbers',
+      id: 'phone',
       header: ({ column }) => (
         <ColumnHeader
           label="Phone"
@@ -299,7 +300,7 @@ const columns = (
       ),
     },
     {
-      id: 'virtualRoomLink',
+      id: 'virtualWaitRoom',
       header: ({ column }) => (
         <ColumnHeader
           label="Virtual Wait Room"
@@ -313,7 +314,7 @@ const columns = (
       cell: ({ row }) => <TextCell>{row.original.virtualRoomLink}</TextCell>,
     },
     {
-      id: 'contactInfo.addresses',
+      id: 'address',
       header: ({ column }) => (
         <ColumnHeader
           label="Home Address"

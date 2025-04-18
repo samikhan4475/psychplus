@@ -19,7 +19,7 @@ const OrganizationSelect = ({ organizations }: OrganizationSelectProps) => {
       <FormFieldLabel required>Primary Organization</FormFieldLabel>
       <SelectInput
         options={organizations}
-        disabled={organizations.length === 0}
+        disabled
         field="organizationIds.[0]"
         buttonClassName="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
       />

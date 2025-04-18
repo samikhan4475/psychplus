@@ -16,9 +16,9 @@ const LastNameField = () => {
       <TextField.Root
         size="1"
         className="border-pp-gray-2 w-full border border-solid !outline-none [box-shadow:none] "
-        {...form.register('lastName')}
+        {...form.register('legalName.lastName')}
       />
-      <FormFieldError name="lastName" />
+      <FormFieldError name="legalName.lastName" />
     </FormFieldContainer>
   )
 }

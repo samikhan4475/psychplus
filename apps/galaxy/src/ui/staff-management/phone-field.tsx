@@ -1,17 +1,14 @@
 import React from 'react'
-import {
-  FormFieldContainer,
-  FormFieldLabel,
-  PhoneNumberInput,
-} from '@/components'
+import { FormFieldContainer, PhoneNumberInput } from '@/components'
 
 const PhoneField = () => {
   return (
-    <FormFieldContainer className="w-full flex-row items-center gap-2">
-      <FormFieldLabel>Phone</FormFieldLabel>
+    <FormFieldContainer>
       <PhoneNumberInput
-        className="border-pp-gray-2 border border-solid !outline-none [box-shadow:none]"
+        label="Phone"
+        className="border-pp-gray-2 w-full border border-solid !outline-none [box-shadow:none] "
         field="phone"
+        labelClassName="text-[11px]"
         placeholder="Search"
       />
     </FormFieldContainer>

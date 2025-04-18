@@ -1,22 +1,28 @@
 import React from 'react'
-import { useFormContext } from 'react-hook-form'
-import { CodesetSelect, FormFieldContainer, FormFieldLabel } from '@/components'
+import {
+  CodesetSelect,
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+} from '@/components'
 import { CODESETS } from '@/constants'
+import { useFormContext } from 'react-hook-form'
+import { SchemaType } from './schema'
+import { StaffType } from '../../types'
 
 const CredentialsSelect = () => {
-  const form = useFormContext()
-  const staffUserRole = form.watch('staffUserRoleIds.0')
+  const form = useFormContext<SchemaType>()
+  const staffTypeLabel = form.watch('staffTypeLabel')
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Credentials</FormFieldLabel>
+      <FormFieldLabel required={staffTypeLabel === StaffType.Provider}>Credentials</FormFieldLabel>
       <CodesetSelect
         size="1"
-        disabled={staffUserRole === ''}
         codeset={CODESETS.PractitionerHonor}
         name="legalName.honors"
       />
+      <FormFieldError name="legalName.honors" />
     </FormFieldContainer>
   )
 }
-
 export { CredentialsSelect }

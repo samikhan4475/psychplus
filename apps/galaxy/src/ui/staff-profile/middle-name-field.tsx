@@ -12,7 +12,7 @@ const MiddleNameField = () => {
       <TextField.Root
         size="1"
         className="border-pp-gray-2 w-full border border-solid !outline-none [box-shadow:none] "
-        {...form.register('middleName')}
+        {...form.register('legalName.middleName')}
       />
     </FormFieldContainer>
   )

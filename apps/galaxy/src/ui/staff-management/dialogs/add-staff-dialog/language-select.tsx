@@ -2,7 +2,6 @@ import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import {
   FormFieldContainer,
-  FormFieldError,
   FormFieldLabel,
   MultiSelectField,
 } from '@/components'
@@ -15,7 +14,7 @@ const LanguageSelect = () => {
   const options = useCodesetOptions(CODESETS.Language)
   return (
     <FormFieldContainer>
-      <FormFieldLabel required>Language</FormFieldLabel>
+      <FormFieldLabel>Language</FormFieldLabel>
       <MultiSelectField
         onChange={(vals) =>
           form.setValue('language', vals, {
@@ -24,7 +23,6 @@ const LanguageSelect = () => {
         }
         options={options}
       />
-      <FormFieldError name="language" />
     </FormFieldContainer>
   )
 }

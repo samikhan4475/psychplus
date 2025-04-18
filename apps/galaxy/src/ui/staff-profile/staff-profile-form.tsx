@@ -8,7 +8,6 @@ import toast from 'react-hot-toast'
 import { FormContainer, TabContentHeading } from '@/components'
 import { GooglePlacesContextProvider } from '@/providers/google-places-provider'
 import { useStore as useRootStore } from '@/store'
-import { getPaddedDateString, sanitizeFormData } from '@/utils'
 import { OrganizationOptions } from '../staff-management/types'
 import { updateStaffAction } from './actions/update-staff'
 import { AgeField } from './age-field'
@@ -27,11 +26,9 @@ import { LastNameField } from './last-name-field'
 import { MailingAddressGroup } from './mailing-address-group'
 import { MiddleNameField } from './middle-name-field'
 import { OrganizationSelect } from './organization-select'
-import { PasswordField } from './password-field'
 import { PhoneField } from './phone-field'
 import { PracticeSelect } from './practice-select'
 import { ProviderPreferenceSelect } from './provider-preference-select'
-import { ResetPasswordButton } from './reset-password-button'
 import { SaveStaffButton } from './save-staff-button'
 import { schema, SchemaType } from './schema'
 import { StaffRoleSelect } from './staff-role-select'
@@ -41,6 +38,7 @@ import { SupervisedByField } from './supervised-by-fields'
 import { TimeZoneSelect } from './time-zone-select'
 import { StaffUpdatePayload } from './types'
 import { getInitialValues } from './utils'
+import { VideoCallLinkInput } from './video-call-link-input'
 import { VirtualWaitRoomField } from './virtual-wait-room-field'
 
 interface StaffProfileFormProps {
@@ -57,23 +55,16 @@ const StaffProfileForm = ({
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onSubmit',
+    mode: 'onChange',
     defaultValues: getInitialValues(staff),
   })
-
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
-    const finalData = {
-      ...data,
-      dob: data.dob ? getPaddedDateString(data.dob) : null,
-    }
-    const sanatizedData = sanitizeFormData(finalData)
-
     const result = await updateStaffAction({
       staffId: staff.staffId,
-      payload: transformOut(sanatizedData),
+      payload: transformOut(data),
     })
     if (result.state === 'success') {
       toast.success('Staff Updated Successfully')
-
       const {
         id,
         legalName: { firstName, lastName },
@@ -85,7 +76,6 @@ const StaffProfileForm = ({
       toast.error(result.error)
     }
   }
-
   return (
     <GooglePlacesContextProvider apiKey={googleApiKey}>
       <FormContainer className="bg-white" form={form} onSubmit={onSubmit}>
@@ -108,12 +98,8 @@ const StaffProfileForm = ({
             <LanguageSelect />
             <EmailField />
             <PhoneField />
-            <Box className="col-span-2">
-              <VirtualWaitRoomField />
-            </Box>
-            <Flex className="mb-auto gap-x-2">
-              <PasswordField /> <ResetPasswordButton />
-            </Flex>
+            <VirtualWaitRoomField />
+            <VideoCallLinkInput />
           </Grid>
           <Grid columns="2" gap="2">
             <IndividualNpiField />
@@ -122,7 +108,7 @@ const StaffProfileForm = ({
           <Grid columns="2" gap="2">
             <BioField />
           </Grid>
-          <Grid columns="2" gap="2" mt="1">
+          <Grid columns="2" gap="2" align="start">
             <HomeAddressGroup />
             <MailingAddressGroup />
           </Grid>

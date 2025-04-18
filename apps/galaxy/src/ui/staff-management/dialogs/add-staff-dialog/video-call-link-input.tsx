@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
@@ -8,19 +10,19 @@ import {
 } from '@/components'
 import { SchemaType } from './schema'
 
-const EmailField = () => {
+const VideoCallLinkInput = () => {
   const form = useFormContext<SchemaType>()
   return (
     <FormFieldContainer>
-      <FormFieldLabel required>Email</FormFieldLabel>
+      <FormFieldLabel required>Video Call Link</FormFieldLabel>
       <TextField.Root
         size="1"
-        className="border-pp-gray-2 w-full border border-solid !outline-none [box-shadow:none] "
-        {...form.register('contactInfo.email')}
+        className="border-pp-gray-2 w-full border border-solid !outline-none [box-shadow:none]"
+        {...form.register('virtualRoomLink')}
       />
-      <FormFieldError name="contactInfo.email" />
+      <FormFieldError name="virtualRoomLink" />
     </FormFieldContainer>
   )
 }
 
-export { EmailField }
+export { VideoCallLinkInput }

@@ -15,7 +15,7 @@ const LanguageSelect = () => {
   const options = useCodesetOptions(CODESETS.Language)
   return (
     <FormFieldContainer>
-      <FormFieldLabel required>Language</FormFieldLabel>
+      <FormFieldLabel>Language</FormFieldLabel>
       <MultiSelectField
         onChange={(vals) =>
           form.setValue('spokenLanguages', vals, {
@@ -25,7 +25,6 @@ const LanguageSelect = () => {
         defaultValues={form.watch('spokenLanguages')}
         options={options}
       />
-      <FormFieldError name="spokenLanguages" />
     </FormFieldContainer>
   )
 }

@@ -1,53 +1,36 @@
+'use client'
+
 import React, { useEffect } from 'react'
 import { Box } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { AddressFieldsGroup } from '@/components'
 import { MailingRadioButton } from './mailing-radio-button'
 import { SchemaType } from './schema'
 import { TabContentHeading } from './tab-content-heading'
 
 const MailingAddressGroup = () => {
-  const { watch, resetField } = useFormContext<SchemaType>()
-  const isMailingAddressSameAsPrimary = watch('isMailingAddressSameAsPrimary')
-  const addresses = watch('addresses')
-
-  const {
-    city,
-    country,
-    postalCode,
-    state,
-    street1,
-    street2,
-    type,
-    timeZoneId,
-  } = addresses[0]
+  const { control, resetField } = useFormContext<SchemaType>()
+  const [homeAddress, isMailingAddressSameAsPrimary] = useWatch({
+    control,
+    name: ['homeAddress', 'contactInfo.isMailingAddressSameAsPrimary'],
+  })
 
   useEffect(() => {
-    if (isMailingAddressSameAsPrimary)
-      resetField('addresses.1', {
+    if (isMailingAddressSameAsPrimary) {
+      resetField('mailingAddress', {
         defaultValue: {
-          postalCode: isMailingAddressSameAsPrimary ? postalCode : '',
+          postalCode: homeAddress?.postalCode ?? '',
           type: 'Mailing',
-          street1: isMailingAddressSameAsPrimary ? street1 : '',
-          street2: isMailingAddressSameAsPrimary ? street2 : '',
-          city: isMailingAddressSameAsPrimary ? city : '',
-          state: isMailingAddressSameAsPrimary ? state : '',
-          country: isMailingAddressSameAsPrimary ? country : '',
-          timeZoneId: isMailingAddressSameAsPrimary ? timeZoneId : '',
+          street1: homeAddress?.street1 ?? '',
+          street2: homeAddress?.street2 ?? '',
+          city: homeAddress?.city ?? '',
+          state: homeAddress?.state ?? '',
+          country: homeAddress?.country ?? '',
+          timeZoneId: homeAddress?.timeZoneId ?? '',
         },
       })
-  }, [
-    isMailingAddressSameAsPrimary,
-    city,
-    country,
-    postalCode,
-    state,
-    street1,
-    street2,
-    type,
-    timeZoneId,
-    resetField,
-  ])
+    }
+  }, [isMailingAddressSameAsPrimary, homeAddress, resetField])
 
   return (
     <Box>
@@ -56,9 +39,8 @@ const MailingAddressGroup = () => {
       </TabContentHeading>
       <AddressFieldsGroup
         disabled={isMailingAddressSameAsPrimary}
-        prefix="addresses.1"
+        prefix="mailingAddress"
         addressFieldName="street1"
-        columnsPerRow="1"
       />
     </Box>
   )

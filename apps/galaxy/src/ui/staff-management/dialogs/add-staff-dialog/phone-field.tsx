@@ -12,7 +12,8 @@ const PhoneField = () => {
       <FormFieldLabel required>Phone</FormFieldLabel>
       <PhoneNumberInput
         field="contactInfo.phoneNumbers.0.number"
-        placeholder="Phone Number"
+        placeholder="000-000-0000"
+        className="border-pp-gray-2 w-full border border-solid !outline-none [box-shadow:none]"
       />
       <FormFieldError name="contactInfo.phoneNumbers.0.number" />
     </FormFieldContainer>

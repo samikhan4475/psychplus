@@ -27,6 +27,7 @@ const DeleteConfirmDialog = ({
             disabled={loading}
             variant="ghost"
             color="gray"
+            type="button"
             highContrast
           >
             <Cross2Icon />
@@ -41,11 +42,22 @@ const DeleteConfirmDialog = ({
 
         <Flex gap="3" justify="end" mt="5">
           <Dialog.Close>
-            <Button variant="soft" color="gray" disabled={loading}>
+            <Button
+              variant="soft"
+              color="gray"
+              type="button"
+              disabled={loading}
+            >
               Cancel
             </Button>
           </Dialog.Close>
-          <Button size="2" color="red" onClick={onDelete} disabled={loading}>
+          <Button
+            size="2"
+            color="red"
+            type="button"
+            onClick={onDelete}
+            loading={loading}
+          >
             Delete
           </Button>
         </Flex>

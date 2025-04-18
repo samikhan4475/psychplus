@@ -4,12 +4,17 @@ import { Button, Flex, IconButton, Spinner, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import {
+  DeleteConfirmDialog,
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
 } from '@/components'
 import { UploadIcon } from '@/components/icons'
 import { deleteStaffVideoAction } from './actions/delete-staff-video'
+import {
+  STAFF_BIO_VIDEO_MAX_SIZE,
+  STAFF_BIO_VIDEO_SIZE_ERROR,
+} from './constants'
 import { SchemaType } from './schema'
 import { handleUploadBioVideo } from './utils'
 
@@ -17,6 +22,8 @@ const BioVideoField = () => {
   const [isBioVideoDeleting, setIsBioVideoDeleting] = useState(false)
   const [isVideoUploading, setIsVideoUploading] = useState(false)
   const [isVideoUploaded, setIsVideoUploaded] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+  const toggleOpen = (open: boolean) => setIsOpen(open)
   const form = useFormContext<SchemaType>()
   const staffId = form.watch('staffId')
   const hasBioVideo = form.watch('hasBioVideo')
@@ -32,6 +39,7 @@ const BioVideoField = () => {
         toast.success('The record has been deleted successfully')
         form.setValue('hasBioVideo', false)
         setIsVideoUploaded(false)
+        toggleOpen(false)
       }
       setIsBioVideoDeleting(false)
     }
@@ -48,15 +56,26 @@ const BioVideoField = () => {
   ) => {
     const file = event.target.files?.[0]
     if (file) {
+      const fileSizeInMB = file.size / (1024 * 1024)
+      if (fileSizeInMB > STAFF_BIO_VIDEO_MAX_SIZE) {
+        toast.error(STAFF_BIO_VIDEO_SIZE_ERROR)
+        event.target.value = ''
+        return
+      }
       setIsVideoUploading(true)
       const uploadSuccess = await handleUploadBioVideo(file, staffId)
+
       if (!uploadSuccess) {
-        return setIsVideoUploading(false)
+        setIsVideoUploading(false)
+        event.target.value = ''
+        return
       }
+
       form.setValue('hasBioVideo', true)
       form.trigger('hasBioVideo')
       setIsVideoUploading(false)
       setIsVideoUploaded(true)
+      event.target.value = ''
     }
   }
 
@@ -73,7 +92,8 @@ const BioVideoField = () => {
           <IconButton
             variant="ghost"
             color="gray"
-            onClick={deleteBioVideo}
+            type="button"
+            onClick={() => toggleOpen(true)}
             disabled={isBioVideoDeleting}
           >
             <Cross1Icon width="8" height="8" />
@@ -109,6 +129,13 @@ const BioVideoField = () => {
         ref={fileInputRef}
         className="hidden"
         onChange={handleBioVideoChange}
+      />
+      <DeleteConfirmDialog
+        isOpen={isOpen}
+        toggleOpen={toggleOpen}
+        title="Bio video"
+        onDelete={deleteBioVideo}
+        loading={isBioVideoDeleting}
       />
     </FormFieldContainer>
   )

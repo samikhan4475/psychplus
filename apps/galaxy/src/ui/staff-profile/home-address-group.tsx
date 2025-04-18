@@ -7,7 +7,7 @@ const HomeAddressGroup = () => {
   return (
     <Box>
       <TabContentHeading title="Home Address" />
-      <AddressFieldsGroup className='mt-3' prefix="addresses.0" addressFieldName="street1" columnsPerRow='1' />
+      <AddressFieldsGroup prefix="homeAddress" addressFieldName="street1" className='mt-2.5' />
     </Box>
   )
 }

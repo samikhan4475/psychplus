@@ -1,26 +1,26 @@
 import React from 'react'
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import {
-  FormFieldContainer,
-  FormFieldError,
-  FormFieldLabel,
-} from '@/components'
+import { FormFieldContainer, FormFieldLabel } from '@/components'
+import { getAgeFromDate } from '@/utils'
 import { SchemaType } from './schema'
 
-const EmailField = () => {
+const AgeField = () => {
   const form = useFormContext<SchemaType>()
+  const dob = form.watch('dateOfBirth')
+  const age = dob ? getAgeFromDate(dob) : ''
+
   return (
     <FormFieldContainer>
-      <FormFieldLabel required>Email</FormFieldLabel>
+      <FormFieldLabel>Age</FormFieldLabel>
       <TextField.Root
         size="1"
+        disabled
         className="border-pp-gray-2 w-full border border-solid !outline-none [box-shadow:none] "
-        {...form.register('contactInfo.email')}
+        value={age}
       />
-      <FormFieldError name="contactInfo.email" />
     </FormFieldContainer>
   )
 }
 
-export { EmailField }
+export { AgeField }

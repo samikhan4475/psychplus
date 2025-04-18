@@ -8,12 +8,13 @@ import {
   SelectInput,
 } from '@/components'
 import { useStore } from '../../store'
+
 const OrganizationSelect = () => {
   const organizations = useStore((state) => state.dropDownOptions.organizations)
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel required>Organization</FormFieldLabel>
+      <FormFieldLabel required>Primary Organization</FormFieldLabel>
       <SelectInput
         options={organizations}
         disabled={organizations.length === 0}

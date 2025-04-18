@@ -7,26 +7,29 @@ import {
   SelectInput,
 } from '@/components'
 import { SelectOptionType } from '@/types'
+import { SchemaType } from './schema'
 
 interface StaffRoleSelectProps {
   roles: SelectOptionType[]
 }
 
 const StaffRoleSelect = ({ roles }: StaffRoleSelectProps) => {
-  const form = useFormContext()
-  const staffType = form.watch('staffTypeIds.0')
-  const filteredRoles = roles.filter((role) => role.value === staffType)
+  const { setValue } = useFormContext<SchemaType>()
 
   return (
     <FormFieldContainer>
       <FormFieldLabel required>Role</FormFieldLabel>
       <SelectInput
         field="staffUserRoleIds.0"
-        options={filteredRoles}
-        disabled={filteredRoles.length === 0 || staffType === ''}
+        options={roles}
+        onValueChange={(val) => {
+          setValue('staffUserRoleIds.0', val)
+          setValue('staffTypeIds.0', '')
+        }}
+        disabled
         buttonClassName="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
       />
-      <FormFieldError name="staffUserRoleIds.[0]" />
+      <FormFieldError name="staffUserRoleIds.0" />
     </FormFieldContainer>
   )
 }

@@ -40,7 +40,7 @@ const StaffProfileView = ({
   useEffect(() => {
     if (id && typeof id === 'string')
       getStaffAction({ staffId: id, languageOptions }).then(async (result) => {
-        if (result.state === 'success') {
+        if (result.state === 'success' && result.data.userId) {
           setStaff(result.data)
           await getUserSetting(result.data.userId)
           setLoading(false)
