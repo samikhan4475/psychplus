@@ -357,6 +357,12 @@ const GET_PATIENT_MEDICATIONS = () =>
   `${API_URL}/api/prescriptions/actions/search`
 const NOTE_UPLOAD_FILE = (patientId: string, appointmentId: string | null) =>
   `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}/documents`
+const GET_PRACTICE_STAFF_ROLES = (practiceId: string, staffId: string) =>
+  `${API_URL}/api/practices/${practiceId}/users/${staffId}/roles`
+const GET_ORGANIZATION_STAFF_ROLES = (
+  organizationId: string,
+  staffId: string,
+) => `${API_URL}/api/organizations/${organizationId}/users/${staffId}/roles`
 const GET_ORGANIZATION_ROLES = `${API_URL}/api/organizations/actions/search`
 const GET_USER_ROLES = `${API_URL}/api/userroles/action/search`
 const Add_USER_ROLES = `${API_URL}/api/userroles`
@@ -391,8 +397,9 @@ const GET_INSURANCE_PAYERS_LIST_ENDPOINT = `${API_URL}/api/insurance/plans/actio
 const IMPORT_ERA_ENDPOINT = `${API_URL}/api/receivers/responses/actions/claimeraimport`
 const GET_PAYMENT_SERVICELINES_ENDPOINT = `${API_URL}/api/claimservicelinepayments/actions/search`
 const GET_PRACTICES_ENDPOINT = `${API_URL}/api/practices/actions/search`
-const GET_STAFF_ORGANIZATIONS_ENDPOINT = (userId: string) =>
-  `${API_URL}/api/users/${userId}/organizations?includeRecordMetadata=false`
+const GET_ORGANIZATION_PRACTICES_ROLES_ENDPOINT = `${API_URL}/api/userroles/action/search`
+const GET_STAFF_ORGANIZATIONS_ENDPOINT = (staffId: string) =>
+  `${API_URL}/api/users/${staffId}/organizations?includeRecordMetadata=false`
 const GET_PATIENT_VITALS_ENDPOINT = `${API_URL}/api/patientvitalsigns/actions/search`
 const ADD_PATIENT_VITAL_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/vitalsigns`
@@ -715,6 +722,16 @@ const GET_STAFF_ORGANIZATION_PRACTICES_ENDPOINT = (staffId: string) =>
   `${API_URL}/api/users/${staffId}/practices`
 const UPDATE_PRACTICE_ENDPOINT = (organizationId: string, practiceId: string) =>
   `${API_URL}/api/organizations/${organizationId}/practices/${practiceId}`
+const ATTACH_ORGANIZATION_STAFF_ENDPOINT = (
+  staffId: string,
+  organizationId: string,
+) =>
+  `${API_URL}/api/organizations/${organizationId}/users/${staffId}/actions/associate`
+const DETACH_ORGANIZATION_STAFF_ENDPOINT = (
+  staffId: string,
+  organizationId: string,
+) =>
+  `${API_URL}/api/users/${staffId}/organizations/${organizationId}/actions/deassociate`
 const ATTACH_PRACTICE_STAFF_ENDPOINT = (userId: string, practiceId: string) =>
   `${API_URL}/api/users/${userId}/practices/${practiceId}/actions/associate`
 const DETACH_PRACTICE_STAFF_ENDPOINT = (userId: string, practiceId: string) =>
@@ -1261,6 +1278,11 @@ export {
   GET_PRACTICES_LICENSE_MANAGERS_ENDPOINT,
   ADD_PRACTICES_LICENSE_MANAGERS_ENDPOINT,
   UPDATE_PRACTICES_LICENSE_MANAGERS_ENDPOINT,
+  GET_PRACTICE_STAFF_ROLES,
+  GET_ORGANIZATION_PRACTICES_ROLES_ENDPOINT,
+  GET_ORGANIZATION_STAFF_ROLES,
+  ATTACH_ORGANIZATION_STAFF_ENDPOINT,
+  DETACH_ORGANIZATION_STAFF_ENDPOINT,
   GET_SCHEDULES_REPORTS,
   DISABLE_SCHEDULE_REPORT_JOB,
   ENABLE_SCHEDULE_REPORT_JOB,

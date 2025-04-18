@@ -7,6 +7,7 @@ interface SelectCellProps {
   onValueChange?: (value: string) => void
   className?: string
   disabled?: boolean
+  loading?: boolean
 }
 
 interface SelectCellOption {
@@ -21,17 +22,21 @@ const SelectCell = ({
   onValueChange,
   className,
   disabled,
+  loading,
 }: SelectCellProps) => {
   return (
     <Select.Root
       size="1"
       value={value}
       onValueChange={onValueChange}
-      disabled={disabled}
+      disabled={disabled || loading}
     >
       <Select.Trigger
         placeholder="Select"
-        className={cn('h-5 w-full text-gray-12', className)}
+        className={cn('h-5 w-full text-gray-12', className, {
+          'loading hide-default-select-icon relative overflow-x-hidden':
+            loading,
+        })}
       />
       <Select.Content position="popper" highContrast>
         {options.map((option) => (

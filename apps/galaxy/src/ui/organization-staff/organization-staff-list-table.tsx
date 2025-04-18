@@ -5,10 +5,11 @@ import { useParams } from 'next/navigation'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { DataTable, LoadingPlaceholder } from '@/components'
 import { columns } from './columns'
+import { FEATURE_TYPES } from './constants'
 import { useStore } from './store'
 
 const OrganizationStaffListTable = () => {
-  const { id } = useParams<{ id: string }>()
+  const { id, type } = useParams<{ id: string; type: string }>()
   const { search, data, loading, sort, sortData } = useStore((state) => ({
     data: state.data,
     loading: state.loading,
@@ -19,7 +20,8 @@ const OrganizationStaffListTable = () => {
 
   useEffect(() => {
     search({
-      organizationsIds: [id],
+      organizationsIds: type === FEATURE_TYPES.ORGANIZATION ? [id] : [],
+      practicesIds: type === FEATURE_TYPES.PRACTICE ? [id] : [],
     })
   }, [])
 
@@ -35,7 +37,7 @@ const OrganizationStaffListTable = () => {
     <ScrollArea>
       <DataTable
         data={data?.staff ?? []}
-        columns={columns(sort, sortData)}
+        columns={columns(sort, sortData, type === FEATURE_TYPES.ORGANIZATION)}
         disablePagination
         sticky
         isRowSpan

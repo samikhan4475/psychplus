@@ -304,6 +304,10 @@ const getManagementNavLinks = (
         href: `${orgBase}/organization-staff`,
       },
       {
+        label: 'Staff Roles',
+        href: `${orgBase}/organization-staff-roles`,
+      },
+      {
         label: 'Users',
         href: `${orgBase}/organization-users`,
       },
@@ -345,7 +349,11 @@ const getManagementNavLinks = (
       },
       {
         label: 'Staff',
-        href: `${practiceBase}/staff`,
+        href: `${practiceBase}/practice-staff`,
+      },
+      {
+        label: 'Staff Roles',
+        href: `${practiceBase}/practice-staff-roles`,
       },
     ]
   }

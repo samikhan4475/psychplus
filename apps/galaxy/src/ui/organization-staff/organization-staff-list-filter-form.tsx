@@ -10,6 +10,7 @@ import { z } from 'zod'
 import { FormContainer } from '@/components'
 import { formatDate, sanitizeFormData } from '@/utils'
 import { ClearButton } from './clear-button'
+import { FEATURE_TYPES } from './constants'
 import { CredntialsSelect } from './credentials-select'
 import { DobField } from './dob-date-field'
 import { EmailField } from './email-field'
@@ -54,7 +55,7 @@ const schema = z.object({
 type SchemaType = z.infer<typeof schema>
 
 const OrganizationStaffListFilterForm = () => {
-  const { id } = useParams<{ id: string }>()
+  const { id, type } = useParams<{ id: string; type: string }>()
   const { search, showFilters } = useStore((state) => ({
     search: state.search,
     showFilters: state.showFilters,
@@ -75,11 +76,11 @@ const OrganizationStaffListFilterForm = () => {
       gender: '',
       spokenLanguage: '',
       honors: [''],
-      organizationsIds: [id],
+      organizationsIds: type === FEATURE_TYPES.ORGANIZATION ? [id] : [''],
       roleCodes: [''],
       staffType: '',
       providerType: '',
-      practicesIds: [''],
+      practicesIds: type === FEATURE_TYPES.PRACTICE ? [id] : [''],
       providerAttributionCodes: [''],
     },
   })

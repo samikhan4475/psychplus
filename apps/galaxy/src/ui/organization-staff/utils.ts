@@ -48,7 +48,7 @@ const getHomeAddress = (data: Staff) => {
 }
 
 const uniqueStaffType = (staff: string[]) => {
-  return staff.filter((item, i, ar) => ar.indexOf(item) === i).join(', ')
+  return staff?.filter((item, i, ar) => ar.indexOf(item) === i).join(', ')
 }
 
 export {

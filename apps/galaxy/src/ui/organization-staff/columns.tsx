@@ -16,8 +16,9 @@ import {
 const columns = (
   sort?: Sort,
   onSort?: (column: string) => void,
+  isOrganization?: boolean,
 ): ColumnDef<Staff>[] => {
-  return [
+  const columnsList: ColumnDef<Staff>[] = [
     {
       id: 'status',
       header: ({ column }) => (
@@ -308,12 +309,17 @@ const columns = (
       ),
       cell: ({ row }) => <TextCell>{getHomeAddress(row.original)}</TextCell>,
     },
-    {
+  ]
+
+  if (isOrganization) {
+    columnsList.push({
       id: 'actions',
       header: () => <ColumnHeader label="Actions" />,
       cell: ({ row }) => <ActionsCell row={row} />,
-    },
-  ]
+    })
+  }
+
+  return columnsList
 }
 
 export { columns }
