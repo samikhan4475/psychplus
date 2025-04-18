@@ -19,9 +19,9 @@ const defaultPayload = {
   isIncludeLocations: true,
   recordStatuses: DEFAULT_STATUSES,
   includePractices: true,
-  includeUsers: true,
-  includeRoles: true,
-  includePermissions: true,
+  includeUsers: false,
+  includeRoles: false,
+  includePermissions: false,
   isIncludePracticeAddressLocation: true,
   isIncludePaymentAddressLocation: true,
 }

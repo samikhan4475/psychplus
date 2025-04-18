@@ -7,7 +7,8 @@ import { Appointment } from '@/types'
 
 const CosignerSelect = ({ appointment }: { appointment?: Appointment }) => {
   const fetchOptions = useCallback(
-    () => getProvidersOptionsAction(appointment?.providerType),
+    () =>
+      getProvidersOptionsAction({ providerType: appointment?.providerType }),
     [appointment?.providerType],
   )
   return (

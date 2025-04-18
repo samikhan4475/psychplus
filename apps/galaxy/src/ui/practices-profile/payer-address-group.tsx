@@ -4,13 +4,18 @@ import { AddressFieldsGroup, YesNoSelect } from '@/components'
 
 const PayerAddressGroup = () => {
   const form = useFormContext()
+  const isDisabled = form.watch('isMailingAddressSameAsPrimary') === 'yes'
+
   const onChange = (value: string) => {
+    form.setValue('isMailingAddressSameAsPrimary', value)
     const yesChecked = value === 'yes'
     const fields = ['street1', 'street2', 'city', 'state', 'postalCode']
-    const formValues = ['address1', 'address2', 'city', 'state', 'zip']
+    const primaryFormFields = ['address1', 'address2', 'city', 'state', 'zip']
 
     fields.forEach((field, index) => {
-      const formValue = yesChecked ? form.getValues(formValues[index]) : ''
+      const formValue = yesChecked
+        ? form.getValues(primaryFormFields[index])
+        : ''
       form.setValue(`payer.${field}`, formValue, {
         shouldValidate: false,
       })
@@ -34,7 +39,12 @@ const PayerAddressGroup = () => {
           />
         </Box>
       </Flex>
-      <AddressFieldsGroup columnsPerRow="1" />
+      <AddressFieldsGroup
+        prefix="payer"
+        addressFieldName="street1"
+        columnsPerRow="1"
+        disabled={isDisabled}
+      />
     </Box>
   )
 }

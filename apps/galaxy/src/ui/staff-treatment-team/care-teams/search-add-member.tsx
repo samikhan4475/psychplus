@@ -15,7 +15,7 @@ const SearchAddMemberSelect = () => {
         allowMultiple
         label="Select Staff member"
         onRowClick={onOptionClick}
-        fetchOptions={getProvidersOptionsAction}
+        fetchOptions={() => getProvidersOptionsAction()}
       />
     </FormFieldContainer>
   )

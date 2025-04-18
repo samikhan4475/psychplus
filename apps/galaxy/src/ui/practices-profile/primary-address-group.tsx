@@ -11,7 +11,10 @@ const PrimaryAddressGroup = ({
   organizationAddress,
 }: PrimaryAddressFieldsProps) => {
   const form = useFormContext()
+  const isDisabled = form.watch('isMailingAddressSameAsOrganization') === 'yes'
+
   const onChange = (value: string) => {
+    form.setValue('isMailingAddressSameAsOrganization', value)
     const yesChecked = value === 'yes'
     const fields: (keyof PatientAddress)[] = [
       'street1',
@@ -28,7 +31,7 @@ const PrimaryAddressGroup = ({
         yesChecked && organizationAddress
           ? organizationAddress[organizationField] || ''
           : ''
-      form.setValue(field, valueToSet)
+      form.setValue(field, valueToSet, { shouldDirty: true })
     })
   }
 
@@ -50,11 +53,7 @@ const PrimaryAddressGroup = ({
           />
         </Box>
       </Flex>
-      <AddressFieldsGroup
-        prefix="payer"
-        addressFieldName="street1"
-        columnsPerRow="1"
-      />
+      <AddressFieldsGroup disabled={isDisabled} columnsPerRow="1" />
     </Box>
   )
 }

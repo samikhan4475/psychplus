@@ -14,6 +14,7 @@ const SaveButton = () => {
       highContrast
       type="submit"
       loading={form.formState.isSubmitting}
+      disabled={form.formState.isSubmitting}
     >
       <SaveIcon width={15} height={15} strokeWidth={1.75} />
       Save

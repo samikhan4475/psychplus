@@ -6,12 +6,15 @@ import { StaffResource } from '@/types'
 import { sanitizeFormData } from '@/utils'
 
 const getProvidersOptionsAction = async (
-  providerType?: string,
+  payload: {
+    providerType?: string
+    practicesIds?: string[]
+  } = {},
 ): Promise<api.ActionResult<{ label: string; value: string }[]>> => {
   const body = {
     roleCodes: [STAFF_ROLE_CODE_PRESCRIBER],
-    providerType,
-    isIncludeTestProviders:false
+    isIncludeTestProviders: false,
+    ...payload,
   }
 
   const response = await api.POST<StaffResource[]>(

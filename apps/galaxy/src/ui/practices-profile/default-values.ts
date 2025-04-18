@@ -12,7 +12,9 @@ const defaultValues = (data: PracticeResource) => {
     recordStatus: data.recordStatus,
     practicePhone: data.practicePhone,
     practiceFax: data.practiceFax,
-    defaultProviderStaffId: data.defaultProviderStaffId,
+    defaultProviderStaffId: data.defaultProviderStaffId
+      ? `${data.defaultProviderStaffId}`
+      : '',
     primaryAddress: data.practiceAddress,
     payerAddress: data.paymentAddressId,
     isMailingAddressSameAsPrimary: 'no',

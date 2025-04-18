@@ -8,7 +8,7 @@ const StatusSelect = () => {
       <SelectInput
         size="1"
         options={STATUS_CODESET}
-        name="recordStatus"
+        field="recordStatus"
         buttonClassName="w-full h-6"
       />
     </FormFieldContainer>

@@ -22,6 +22,7 @@ const ProfileSchema = z.object({
   taxonomy: z.string().optional(),
   clia: z.string().optional(),
   organizationId: z.string(),
+  defaultProviderStaffId: z.string().optional(),
   practicePhone: z.string().optional(),
   practiceFax: z.string().optional(),
   address1: z.string().min(1, { message: 'Address is required' }),
@@ -39,6 +40,8 @@ const ProfileSchema = z.object({
   recordStatus: z.string().optional(),
   sameAsOrganizationAddress: z.boolean().optional().default(true),
   sameAsPrimaryAddress: z.boolean().optional().default(true),
+  isMailingAddressSameAsOrganization: z.string().optional(),
+  isMailingAddressSameAsPrimary: z.string().optional(),
 })
 
 type ProfileSchemaType = z.infer<typeof ProfileSchema>
@@ -61,6 +64,9 @@ const ProfileForm = ({ practice, organization }: ProfileFormProps) => {
   ) => {
     const requestPayload: Partial<PracticeResource> = {
       ...formData,
+      defaultProviderStaffId: formData.defaultProviderStaffId
+        ? +formData.defaultProviderStaffId
+        : undefined,
       displayName: formData.name,
       shortName: formData.name,
       practiceAddress: {
@@ -79,6 +85,8 @@ const ProfileForm = ({ practice, organization }: ProfileFormProps) => {
         postalCode: formData.payer.postalCode,
         type: 'Business',
       },
+      practiceAddressId: practice.practiceAddressId,
+      paymentAddressId: practice.paymentAddressId,
     }
 
     const sanitizedPayload = sanitizeFormData(requestPayload)
@@ -95,7 +103,6 @@ const ProfileForm = ({ practice, organization }: ProfileFormProps) => {
     }
 
     if (response.data) {
-      form.reset()
       toast.success('Record has been saved successfully')
     } else {
       toast.error('Unable to save record')
