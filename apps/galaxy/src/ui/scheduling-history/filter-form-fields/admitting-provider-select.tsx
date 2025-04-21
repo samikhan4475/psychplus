@@ -1,16 +1,21 @@
-import { useCallback } from 'react'
-import { getProvidersOptionsAction } from '@/actions'
-import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
+import { useShallow } from 'zustand/react/shallow'
+import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
+import { useStore } from '../store'
 
 const AdmittingProviderSelect = () => {
-  const fetchOptions = useCallback(() => getProvidersOptionsAction(), [])
+  const { providers } = useStore(
+    useShallow((state) => ({
+      providers: state.providers,
+    })),
+  )
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel>Admitting Provider</FormFieldLabel>
-      <AsyncSelect
+      <SelectInput
         field="providerStaffId"
         placeholder="Select"
-        fetchOptions={fetchOptions}
+        loading={providers?.loading}
+        options={providers?.data ?? []}
         buttonClassName="w-[120px] h-6"
         className="h-full flex-1"
       />

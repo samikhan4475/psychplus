@@ -1,6 +1,6 @@
 import toast from 'react-hot-toast'
 import { create } from 'zustand'
-import { SelectOptionType, Sort } from '@/types'
+import { ActionResult, SelectOptionType, Sort } from '@/types'
 import { getNewSortDir } from '@/utils'
 import {
   getFacilityAdmissionHistoryAction,
@@ -17,7 +17,15 @@ import type {
   SchedulingHistoryPayload,
 } from './types'
 
+type AsyncState<T> = {
+  loading: boolean
+  error?: string
+  data?: T
+}
 interface Store {
+  providers: AsyncState<SelectOptionType[]>
+  clinics: AsyncState<SelectOptionType[]>
+  insurancePlans: AsyncState<SelectOptionType[]>
   sort?: Sort
   sortData: (column: string) => void
   data?: GetSchedulingHistoryListResponse
@@ -70,9 +78,17 @@ interface Store {
   pageCache: Record<number, GetSchedulingHistoryListResponse>
   patientId: string
   setPatientId: (id: string) => void
+
+  fetchAsync: (
+    key: keyof Pick<Store, 'providers' | 'clinics' | 'insurancePlans'>,
+    fn: () => Promise<ActionResult<SelectOptionType[]>>,
+  ) => Promise<void>
 }
 
 const useStore = create<Store>((set, get) => ({
+  providers: { loading: false },
+  clinics: { loading: false },
+  insurancePlans: { loading: false },
   patientId: '',
   page: 1,
   pageCache: {},
@@ -263,6 +279,23 @@ const useStore = create<Store>((set, get) => ({
     fetchSchedulingHistory(patientId, schedulingHistoryPayload, page)
   },
   setPatientId: (id: string) => set({ patientId: id }),
+  fetchAsync: async (key, fn) => {
+    set((state) => ({
+      [key]: { ...state[key], loading: true, data: [] },
+    }))
+
+    const result = await fn()
+
+    if (result.state === 'error') {
+      set((state) => ({
+        [key]: { ...state[key], loading: false, data: [] },
+      }))
+    } else {
+      set((state) => ({
+        [key]: { ...state[key], loading: false, data: result.data ?? [] },
+      }))
+    }
+  },
 }))
 
 export { useStore }

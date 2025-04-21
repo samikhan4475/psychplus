@@ -53,13 +53,14 @@ const DataTablePagination = ({
       justify="end"
       className={cn('border-pp-gray-2 h-12 border', className)}
     >
+      {showTotal && <Text className="px-1 text-[14px]">TOTAL: {total}</Text>}
+
       {onPageSizeChange && (
         <PaginationSelectField
           onPageSizeChange={onPageSizeChange}
           pageSize={pageSize}
         />
       )}
-      {showTotal && <Text className="px-1 text-[14px]">TOTAL: {total}</Text>}
       <PaginationButton onClick={prev} disabled={!hasPrev || loading}>
         Previous
       </PaginationButton>

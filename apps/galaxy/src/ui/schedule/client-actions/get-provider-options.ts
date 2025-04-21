@@ -25,11 +25,6 @@ const getProvidersOptionsAction = async (
   const response = await api.POST<StaffResource[]>(
     GET_STAFF_ENDPOINT,
     sanitizeFormData(body),
-    {
-      next: {
-        revalidate: 3600,
-      },
-    },
   )
 
   if (response.state === 'error') {

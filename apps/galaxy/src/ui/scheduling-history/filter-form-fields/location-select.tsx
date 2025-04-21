@@ -1,20 +1,15 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { getClinicsOptionsAction } from '@/actions'
+import { useShallow } from 'zustand/react/shallow'
 import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
-import { SelectOptionType } from '../types'
+import { useStore } from '../store'
 
 const LocationSelect = () => {
-  const [locationsResult, setLocationsResult] = useState<SelectOptionType[]>([])
-
-  useEffect(() => {
-    getClinicsOptionsAction().then((res) => {
-      if (res.state === 'success') {
-        setLocationsResult(res.data)
-      }
-    })
-  }, [])
+  const { clinics } = useStore(
+    useShallow((state) => ({
+      clinics: state.clinics,
+    })),
+  )
 
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
@@ -22,7 +17,8 @@ const LocationSelect = () => {
       <SelectInput
         field="locationId"
         buttonClassName={buttonClassName}
-        options={locationsResult}
+        options={clinics?.data ?? []}
+        loading={clinics?.loading}
       />
     </FormFieldContainer>
   )

@@ -304,6 +304,8 @@ const QuickNotesSignButton = ({
       setAlertInfo(initialAlertInfo)
       refetchFollowupOnSign()
       toast.success(`Quicknote ${toastMessage}!`)
+      revalidateAction(false)
+
       return
     }
 
@@ -321,6 +323,7 @@ const QuickNotesSignButton = ({
           onClick: async () => {
             setAlertInfo(initialAlertInfo)
             markAsError(signPayload, refetchFollowupOnSign)
+            revalidateAction(false)
           },
         },
       })
@@ -328,7 +331,6 @@ const QuickNotesSignButton = ({
     }
     toast.error(signResults.error)
     setAlertInfo(initialAlertInfo)
-    revalidateAction(false)
   }
 
   return (

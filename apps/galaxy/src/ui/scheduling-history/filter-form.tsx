@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Button } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { useShallow } from 'zustand/react/shallow'
 import { FormContainer } from '@/components'
 import { sanitizeFormData } from '@/utils'
 import { getDateString } from '../schedule/utils'
@@ -45,7 +46,13 @@ import { TCMVisitTypes } from './types'
 
 const FilterForm = () => {
   const { id } = useParams<{ id: string }>()
-  const { fetchSchedulingHistory, visitTypes, setIsTCMVisitType } = useStore()
+  const { fetchSchedulingHistory, visitTypes, setIsTCMVisitType } = useStore(
+    useShallow((state) => ({
+      fetchSchedulingHistory: state.fetchSchedulingHistory,
+      visitTypes: state.visitTypes,
+      setIsTCMVisitType: state.setIsTCMVisitType,
+    })),
+  )
 
   const form = useForm<SchedulingHistorySchemaType>({
     resolver: zodResolver(schema),
@@ -110,6 +117,7 @@ const FilterForm = () => {
   useEffect(() => {
     setIsTCMVisitType(isTCMVisitType)
   }, [isTCMVisitType])
+
   return (
     <FormContainer
       className="bg-white flex-row flex-wrap gap-2 rounded-b-2 rounded-t-1 px-2 py-1 shadow-2"

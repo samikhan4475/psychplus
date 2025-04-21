@@ -12,25 +12,11 @@ interface PatientInfoPageProps {
 
 const PatientInfoPage = ({ params }: PatientInfoPageProps) => {
   return (
-    <Suspense
-      fallback={
-        <Flex
-          direction="column"
-          align="center"
-          justify="center"
-          flexGrow="1"
-          className="h-full"
-        >
-          <LoadingPlaceholder />
-        </Flex>
-      }
-    >
-      <PatientInfoView
-        patientId={params.id}
-        googleApiKey={GOOGLE_MAPS_API_KEY}
-        stripeApiKey={STRIPE_PUBLISHABLE_KEY}
-      />
-    </Suspense>
+    <PatientInfoView
+      patientId={params.id}
+      googleApiKey={GOOGLE_MAPS_API_KEY}
+      stripeApiKey={STRIPE_PUBLISHABLE_KEY}
+    />
   )
 }
 

@@ -31,7 +31,7 @@ const hospitalInitialWidgetSchema = z.object({
   stgOtherDetails: z.string().trim().max(500, 'Max 500 characters are allowed'),
   precautionsOtherDetails: z
     .string()
-    .trim()
+  .trim()
     .max(500, 'Max 500 characters are allowed'),
   dcplanOtherDetails: z
     .string()

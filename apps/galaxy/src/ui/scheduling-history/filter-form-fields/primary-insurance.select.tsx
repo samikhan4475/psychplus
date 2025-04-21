@@ -1,18 +1,23 @@
 'use client'
 
-import { useCallback } from 'react'
-import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
-import { getInsurancePlanOptionsAction } from '../actions'
+import { useShallow } from 'zustand/react/shallow'
+import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
+import { useStore } from '../store'
 
 const PrimaryInsuranceSelect = () => {
-  const fetchOptions = useCallback(() => getInsurancePlanOptionsAction(), [])
+  const { insurancePlans } = useStore(
+    useShallow((state) => ({
+      insurancePlans: state.insurancePlans,
+    })),
+  )
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel>Primary Insurance</FormFieldLabel>
-      <AsyncSelect
+      <SelectInput
         field="primaryInsurancePolicyId"
         placeholder="Select"
-        fetchOptions={fetchOptions}
+        loading={insurancePlans?.loading}
+        options={insurancePlans?.data ?? []}
         buttonClassName="w-[120px] h-6"
         className="h-6 flex-1"
       />

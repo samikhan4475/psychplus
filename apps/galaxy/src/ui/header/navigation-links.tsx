@@ -38,13 +38,14 @@ const NavigationLinks = () => {
       {isFeatureFlagEnabled && (
         <>
           <NavigationLink href="/experience" label="Experience" />
-          <NavigationLink href="/auto-text" label="Auto Text" />
           <NavigationLink
             href="/pre-visit-assessment"
             label="Pre-visit Assessment"
           />
         </>
       )}
+      <NavigationLink href="/auto-text" label="Auto Text" />
+
       {isAvfeatureFlagEnabled && (
         <NavigationLink href="/call" label="Audio/Video" />
       )}

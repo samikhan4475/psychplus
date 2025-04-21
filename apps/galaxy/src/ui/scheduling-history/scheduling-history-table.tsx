@@ -4,10 +4,14 @@ import { useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { Box, Flex, ScrollArea } from '@radix-ui/themes'
 import { Row } from '@tanstack/react-table'
+import { useShallow } from 'zustand/react/shallow'
+import { getClinicsOptionsAction } from '@/actions'
 import { DataTable, LoadingPlaceholder } from '@/components'
 import { useStore as useRootStore } from '@/store'
 import { capitalizeName, constructQuickNotesUrl, getPatientMRN } from '@/utils'
 import { useStore as useQuickNotesStore } from '../quicknotes/store'
+import { getProvidersOptionsAction } from '../schedule/client-actions'
+import { getInsurancePlanOptionsAction } from './actions'
 import { FilterForm } from './filter-form'
 import { useStore } from './store'
 import { getSchedulingColumns as column } from './table-columns'
@@ -26,11 +30,28 @@ const SchedulingHistoryTable = () => {
     sort,
     setPatientId,
     sortData,
-  } = useStore()
+    fetchAsync,
+  } = useStore(
+    useShallow((state) => ({
+      data: state.data,
+      fetchSchedulingHistory: state.fetchSchedulingHistory,
+      loading: state.loading,
+      isTCMVisitType: state.isTCMVisitType,
+      sort: state.sort,
+      setPatientId: state.setPatientId,
+      sortData: state.sortData,
+      fetchAsync: state.fetchAsync,
+    })),
+  )
 
   useEffect(() => {
     setPatientId(id)
-    fetchSchedulingHistory(id)
+    Promise.all([
+      fetchAsync('providers', getProvidersOptionsAction),
+      fetchAsync('insurancePlans', getInsurancePlanOptionsAction),
+      fetchAsync('clinics', getClinicsOptionsAction),
+      fetchSchedulingHistory(id),
+    ])
   }, [id])
 
   const onRowCLick = (row: Row<SchedulingHistoryData>) => {
