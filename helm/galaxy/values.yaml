@@ -20,18 +20,18 @@ podAnnotations:
 
 podSecurityContext: {}
 
-securityContext: {}
-
-#podSecurityContext:
-#  fsGroup: 1001
-#
-#securityContext:
-#  capabilities:
-#    drop:
-#    - ALL
-#  readOnlyRootFilesystem: true
-#  runAsNonRoot: true
-#  runAsUser: 1001
+securityContext: 
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  privileged: false
+  readOnlyRootFilesystem: false
+  runAsGroup: 1001
+  runAsNonRoot: true
+  runAsUser: 1001
+  seccompProfile:
+    type: RuntimeDefault
 
 container:
   portName: http

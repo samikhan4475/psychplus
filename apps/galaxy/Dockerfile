@@ -54,6 +54,7 @@ WORKDIR /app
 # Don't run production as root
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
+RUN chown -R nextjs:nodejs /app
 USER nextjs
 
 COPY --from=builder /app/apps/galaxy/next.config.js .
@@ -61,9 +62,9 @@ COPY --from=builder /app/apps/galaxy/package.json .
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/apps/galaxy/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/apps/galaxy/.next/static ./apps/galaxy/.next/static
-COPY --from=builder --chown=nextjs:nodejs /app/apps/galaxy/public ./apps/galaxy/public
+COPY --from=builder  /app/apps/galaxy/.next/standalone ./
+COPY --from=builder  /app/apps/galaxy/.next/static ./apps/galaxy/.next/static
+COPY --from=builder  /app/apps/galaxy/public ./apps/galaxy/public
 
 EXPOSE 3004
 ENV PORT 3004
