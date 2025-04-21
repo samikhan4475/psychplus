@@ -135,7 +135,6 @@ const getStaffNavLinks = ({
     {
       label: 'Clinic Schedule',
       href: `${baseHref}/clinic-schedule`,
-      conditions: [isFeatureFlagEnabled],
     },
     {
       label: 'Groups',
