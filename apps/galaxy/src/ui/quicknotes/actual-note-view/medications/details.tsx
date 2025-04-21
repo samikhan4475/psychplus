@@ -5,7 +5,7 @@ import {
   PatientMedication,
   PatientPrescriptionStatus,
 } from '@/ui/medications/patient-medications-widget/types'
-import { formatDate } from '@/utils'
+import { formatDateManually } from '@/utils'
 import { BlockContainer } from '../shared'
 
 interface Props {
@@ -29,8 +29,8 @@ const formatMedicationsDetails = (medication: PatientMedication) => {
     medicationDetails?.directions ?? 'N/A',
     quantityValue ?? 'N/A',
     refills ?? 'N/A',
-    formatDate(writtenDate) ?? 'N/A',
-    formatDate(endDateTime) ?? 'N/A',
+    formatDateManually(writtenDate) ?? 'N/A',
+    formatDateManually(endDateTime) ?? 'N/A',
     medicationDetails?.providerName ?? 'N/A',
   ]?.join(' | ')
 }

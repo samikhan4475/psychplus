@@ -355,6 +355,12 @@ const concatDateTimeAndFormat = (date: string, time?: string) => {
   return formatDateTime(dateTimeString, false)
 }
 
+function formatDateManually(isoString: string): string {
+  const [datePart] = isoString?.split('T') ?? []
+  const [year, month, day] = datePart.split('-')
+  return `${month}/${day}/${year}`
+}
+
 export {
   getCalendarDate,
   getLocalCalendarDate,
@@ -384,4 +390,5 @@ export {
   isDateInRange,
   formatUTCDate,
   concatDateTimeAndFormat,
+  formatDateManually,
 }
