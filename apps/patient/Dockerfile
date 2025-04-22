@@ -54,6 +54,7 @@ WORKDIR /app
 # Don't run production as root
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
+RUN chown -R nextjs:nodejs /app
 USER nextjs
 
 COPY --from=builder /app/apps/patient/next.config.js .
