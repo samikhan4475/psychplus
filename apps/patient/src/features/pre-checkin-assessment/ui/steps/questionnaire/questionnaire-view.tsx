@@ -9,12 +9,14 @@ import { useStore } from '@/features/pre-checkin-assessment/store'
 import {
   Aims,
   Audit,
+  Cssrs,
   Dast10,
   Gad7,
   HamD,
   Moca,
   Pcl5,
   Phq9,
+  Psc17,
   SnapIv,
   Ybocs,
 } from '@/features/questionnaire'
@@ -72,8 +74,18 @@ const sectionComponents = [
     title: 'DAST-10',
     component: Dast10,
   },
-  { name: NoteSectionName.NoteSectionHamD, title: 'HAM-D', component: HamD },
   { name: NoteSectionName.NoteSectionMoca, title: 'MOCA', component: Moca },
+  { name: NoteSectionName.NoteSectionHamD, title: 'HAM-D', component: HamD },
+  {
+    name: NoteSectionName.NoteSectionCssrs,
+    title: 'C-SSRC',
+    component: Cssrs,
+  },
+  {
+    name: NoteSectionName.NoteSectionPsc17,
+    title: 'PSC-17',
+    component: Psc17,
+  },
 ]
 
 export { QuestionnaireView }

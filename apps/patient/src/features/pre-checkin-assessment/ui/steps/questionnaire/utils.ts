@@ -12,6 +12,8 @@ const QuestionnaireQuestionToSectionName: Record<string, NoteSectionName> = {
   Q8: NoteSectionName.NoteSectionHamD,
   Q9: NoteSectionName.NoteSectionMoca,
   Q10: NoteSectionName.NoteSectionDast10,
+  Q11: NoteSectionName.NoteSectionCssrs,
+  Q12: NoteSectionName.NoteSectionPsc17,
 }
 
 const questionnairesToShowOnPreCheckin = (

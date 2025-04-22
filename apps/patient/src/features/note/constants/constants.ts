@@ -13,6 +13,8 @@ enum NoteSectionName {
   NoteSectionAims = 'QuicknoteSectionQuestionnaireAims',
   NoteSectionHamD = 'QuicknoteSectionQuestionnaireHamD',
   NoteSectionMoca = 'QuicknoteSectionQuestionnaireMoca',
+  NoteSectionCssrs = 'QuicknoteSectionQuestionnaireCssrs',
+  NoteSectionPsc17 = 'QuicknoteSectionQuestionnairePsc17',
   NoteSectionFamilyPsychHx = 'QuicknoteSectionFamilyPsychHx',
   NoteSectionPastPsychHx = 'QuicknoteSectionPastPsychHx',
   NoteSectionPastMedicalHx = 'QuicknoteSectionPastMedicalHx',
