@@ -12,6 +12,7 @@ import {
 } from '@radix-ui/themes'
 import { FEATURE_FLAGS } from '@/constants'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
+import { Tabs } from '@/ui/messages/types'
 import { cn, getInboxNavLinks } from '@/utils'
 import { useStore } from './messages/store'
 
@@ -38,6 +39,10 @@ const InboxNavigation = () => {
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr11786EnableGalaxySecondPhaseFeatures,
   )
+  const isSureScriptFeatureFlag = useFeatureFlagEnabled(
+    FEATURE_FLAGS.ehr7406Surescripts,
+  )
+
   const navLinks: InboxNavLinks = useMemo(
     () =>
       getInboxNavLinks({
@@ -95,19 +100,26 @@ const InboxNavigation = () => {
                 </Accordion.AccordionTrigger>
 
                 <Accordion.AccordionContent className="bg-white flex max-w-[770px] flex-col gap-2 p-1.5 empty:hidden">
-                  {widget.links?.map((link) => (
-                    <NavigationLink
-                      key={link.label}
-                      onClick={() => {
-                        setActiveTab(link.tab)
-                        fetchUnreadCount()
-                      }}
-                      isActive={link.tab === activeTab}
-                      unreadCount={link.unreadCount ?? 0}
-                    >
-                      {link.label}
-                    </NavigationLink>
-                  ))}
+                  {widget.links
+                    ?.filter((link) => {
+                      if (link.tab === Tabs.MEDICATION_ORDERS) {
+                        return isSureScriptFeatureFlag
+                      }
+                      return true
+                    })
+                    .map((link) => (
+                      <NavigationLink
+                        key={link.label}
+                        onClick={() => {
+                          setActiveTab(link.tab)
+                          fetchUnreadCount()
+                        }}
+                        isActive={link.tab === activeTab}
+                        unreadCount={link.unreadCount ?? 0}
+                      >
+                        {link.label}
+                      </NavigationLink>
+                    ))}
                 </Accordion.AccordionContent>
               </Accordion.Item>
             )

@@ -13,9 +13,9 @@ const MedicationField = () => {
       <FormFieldLabel>Medication Name</FormFieldLabel>
       <TextField.Root
         size="1"
-        placeholder="Test name"
+        placeholder="Medication name"
         className="border-pp-gray-2 h-6 w-[122px] border border-solid !outline-none [box-shadow:none]"
-        {...form.register('labTestName')}
+        {...form.register('drugDescriptionStartsWith')}
       />
     </FormFieldContainer>
   )

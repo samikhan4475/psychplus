@@ -1,9 +1,7 @@
 'use client'
 
-import { type PropsWithRow } from '@/components'
-import { SignIcon } from '@/components/icons'
 import { IconButton } from '@radix-ui/themes'
-import { Edit2Icon } from 'lucide-react'
+import { SignIcon } from '@/components/icons'
 
 const RowActionEdit = () => {
   return (

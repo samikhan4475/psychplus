@@ -3,7 +3,7 @@ import { TabContentHeading } from '@/components'
 import { useStore } from './store'
 
 const MedicationOrderRefillHeader = () => {
-  const { fetch, loading } = useStore()
+  const { searchMedicationsList, loading } = useStore()
 
   return (
     <TabContentHeading title="Refill Requests">
@@ -12,9 +12,7 @@ const MedicationOrderRefillHeader = () => {
           className="border-pp-grey bg-white h-6 flex-row gap-1 rounded-2 border border-solid align-middle"
           type="button"
           disabled={loading}
-          onClick={() =>
-            fetch()
-          }
+          onClick={() => searchMedicationsList()}
         >
           <Text className="text-pp-black-3 text-1">Decline All</Text>
         </Button>
@@ -22,9 +20,7 @@ const MedicationOrderRefillHeader = () => {
           className="border-pp-grey bg-white h-6 flex-row gap-1 rounded-2 border border-solid align-middle"
           type="button"
           disabled={loading}
-          onClick={() =>
-            fetch()
-          }
+          onClick={() => searchMedicationsList()}
         >
           <Text className="text-pp-black-3 text-1">Approve All</Text>
         </Button>

@@ -1,12 +1,23 @@
 import { useState } from 'react'
-import { TextCell } from '@/components'
-import { Info } from 'lucide-react'
 import { Flex } from '@radix-ui/themes'
+import { Info } from 'lucide-react'
+import { LongTextCell } from '@/components'
 import PatientDetailsDialog from '../dialogs/patient-details-dialog'
 
 const PatientNameCell = ({ row }: { row: any }) => {
   const [dialogOpen, setDialogOpen] = useState(false)
-
+  const patientName = `${row.original.patientFirstName} ${row.original.patientLastName}`
+  const patientData = {
+    patientId: row.original?.patientId,
+    patientFirstName: row.original?.patientFirstName,
+    patientLastName: row.original?.patientLastName,
+    patientGender: row.original?.patientGender,
+    patientDateOfBirth: row.original?.patientDateOfBirth,
+    patientAddressLine1: row.original?.patientAddressLine1,
+    patientCity: row.original?.patientCity,
+    patientStateCode: row.original?.patientStateCode,
+    patientCountryCode: row.original?.patientCountryCode,
+  }
   return (
     <>
       <Flex
@@ -18,11 +29,15 @@ const PatientNameCell = ({ row }: { row: any }) => {
         onClick={() => setDialogOpen(true)}
         className="cursor-pointer"
       >
-        <Info size={16} className="text-gray-500" />
-        <TextCell>Text</TextCell>
+        <Info size={14} className="text-gray-500" />
+        <LongTextCell className="w-[150px]">{patientName}</LongTextCell>
       </Flex>
 
-      <PatientDetailsDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+      <PatientDetailsDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        patient={patientData}
+      />
     </>
   )
 }

@@ -1,12 +1,14 @@
 import { PropsWithChildren, useEffect } from 'react'
 import { Tabs } from '@radix-ui/themes'
+import { FEATURE_FLAGS, MAIN_PAGE_FEATURE_FLAGS } from '@/constants'
+import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { InboxNavigation } from '../inbox-navigation'
+import { InboxLabOrder } from '../lab-orders'
+import { MedicationOrderView } from '../medication-orders'
 import { NotesView } from '../notes/notes-view'
 import { SecureMessagesView } from '../secure-messages/secure-messages-view'
 import { useStore } from './store'
 import { Tabs as TabsEnum } from './types'
-import { MedicationOrderView } from '../medication-orders'
-import { InboxLabOrder } from '../lab-orders'
 
 const MessagesTabs = () => {
   const {
@@ -38,7 +40,9 @@ const MessagesTabs = () => {
 
   const status =
     activeTab === TabsEnum.PENDING_NOTES ? 'pending' : 'SignedPending'
-
+  const isSureScriptFeatureFlag = useFeatureFlagEnabled(
+    FEATURE_FLAGS.ehr7406Surescripts,
+  )
   return (
     <Tabs.Root
       value={activeTab}
@@ -74,9 +78,12 @@ const MessagesTabs = () => {
           tab={status}
         />
       </TabsContent>
-      <TabsContent value={TabsEnum.MEDICATION_ORDERS}>
-        <MedicationOrderView />
+      {isSureScriptFeatureFlag && (
+        <TabsContent value={TabsEnum.MEDICATION_ORDERS}>
+          <MedicationOrderView />
         </TabsContent>
+      )}
+
       <TabsContent value={TabsEnum.LAB_RESULTS}>
         <InboxLabOrder />
       </TabsContent>

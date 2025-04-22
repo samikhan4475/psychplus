@@ -885,6 +885,7 @@ const EDIT_SCHEDULE_REPORT_ENDPOINT = (scheduleId: string) =>
   `${API_URL}/api/reporting/schedules/${scheduleId}`
 const UPDATE_SCHEDULE_REPORT_JOB_ENDPOINT = (jobId: string) =>
   `${API_URL}/api/jobmanager/jobs/${jobId}`
+const GET_MEDICATIONS_REFILL = `${API_URL}/api/pharmacynotifications/actions/search`
 
 const UPDATE_DEFAULT_PAYMENT = (
   patientId: string,
@@ -1288,6 +1289,7 @@ export {
   ENABLE_SCHEDULE_REPORT_JOB,
   EDIT_SCHEDULE_REPORT_ENDPOINT,
   UPDATE_SCHEDULE_REPORT_JOB_ENDPOINT,
+  GET_MEDICATIONS_REFILL,
   DIS_ASSOCIATE_PERMISSION_ENDPOINT,
   UPDATE_DEFAULT_PAYMENT,
 }

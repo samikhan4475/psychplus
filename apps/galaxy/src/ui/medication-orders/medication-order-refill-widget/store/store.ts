@@ -1,15 +1,27 @@
 import { create } from 'zustand'
+import { Sort } from '@/types'
+import { getNewSortDir } from '@/utils'
+import { getMedicationsListAction } from '../actions'
 import { MedicationOrdersTabs } from '../constant'
-import { MedicationRefill, MedicationRefillResponseList } from '../types'
+import {
+  MedicationRefill,
+  MedicationRefillAPIRequest,
+  MedicationRefillResponseList,
+} from '../types'
 
 interface StoreState {
   data: MedicationRefillResponseList
   loading: boolean
   error?: string
-  payload?: MedicationRefill
+  payload?: MedicationRefillAPIRequest
   activeTab: string
   viewedTabs: Set<string>
-  fetch: (
+  sortData: (column: string) => void
+  sort?: Sort
+  searchMedicationsList: (
+    payload?: MedicationRefillAPIRequest,
+    page?: number,
+    reset?: boolean,
   ) => Promise<void>
   setActiveTab: (tab: string) => void
   pageCache: Record<number, MedicationRefillResponseList>
@@ -33,9 +45,34 @@ const useStore = create<StoreState>((set, get) => ({
   loading: false,
   activeTab: MedicationOrdersTabs.REFILL_REQUESTS,
   viewedTabs: new Set([MedicationOrdersTabs.REFILL_REQUESTS]),
-
-  fetch: async () => {
-
+  sort: undefined,
+  searchMedicationsList: async (
+    payload?: MedicationRefillAPIRequest,
+    page = 1,
+    reset = false,
+  ) => {
+    set({
+      loading: true,
+      payload: payload,
+    })
+    const result = await getMedicationsListAction({
+      payload,
+      sort: get().sort,
+      page,
+    })
+    if (result.state === 'error') {
+      return set({
+        loading: false,
+      })
+    }
+    set({
+      data: result.data,
+      loading: false,
+      page,
+      pageCache: reset
+        ? { [page]: result.data }
+        : { ...get().pageCache, [page]: result.data },
+    })
   },
 
   setActiveTab: (activeTab) => {
@@ -59,7 +96,7 @@ const useStore = create<StoreState>((set, get) => ({
     } else {
       const { payload } = get()
       if (payload) {
-        get().fetch()
+        get().searchMedicationsList()
       }
     }
   },
@@ -86,9 +123,18 @@ const useStore = create<StoreState>((set, get) => ({
     } else {
       const { payload } = get()
       if (payload) {
-        get().fetch()
+        get().searchMedicationsList()
       }
     }
+  },
+  sortData: (column) => {
+    set({
+      sort: {
+        column,
+        direction: getNewSortDir(column, get().sort),
+      },
+    })
+    get().searchMedicationsList(get().payload, 1, true)
   },
 }))
 

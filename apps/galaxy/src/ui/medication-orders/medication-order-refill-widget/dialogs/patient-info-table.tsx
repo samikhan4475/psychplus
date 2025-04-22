@@ -1,69 +1,48 @@
-
 import React from 'react'
 import { ScrollArea } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
-import { DataTable, TextCell, ColumnHeader } from '@/components'
+import { ColumnHeader, DataTable, TextCell } from '@/components'
+import { PatientPersonInfo } from '../types'
 
-type PersonInfo = {
-  gender: string
-  dob: string
-  address: string
-  phone: string
-  email: string
-}
-
-const columns: ColumnDef<PersonInfo>[] = [
+const columns: ColumnDef<PatientPersonInfo>[] = [
   {
-    id: 'gender',
-    accessorKey: 'gender',
+    id: 'patientGender',
+    accessorKey: 'patientGender',
     header: () => <ColumnHeader label="Gender" />,
-    cell: ({ row }) => <TextCell>{row.original.gender}</TextCell>,
+    cell: ({ row }) => <TextCell>{row.original?.patientGender}</TextCell>,
   },
   {
-    id: 'dob',
-    accessorKey: 'dob',
+    id: 'patientDateOfBirth',
+    accessorKey: 'patientDateOfBirth',
     header: () => <ColumnHeader label="DOB" />,
-    cell: ({ row }) => <TextCell>{row.original.dob}</TextCell>,
+    cell: ({ row }) => <TextCell>{row.original?.patientDateOfBirth}</TextCell>,
   },
   {
-    id: 'address',
-    accessorKey: 'address',
+    id: 'patientAddressLine1',
+    accessorKey: 'patientAddressLine1',
     header: () => <ColumnHeader label="Address" />,
-    cell: ({ row }) => <TextCell>{row.original.address}</TextCell>,
+    cell: ({ row }) => <TextCell>{row.original?.patientAddressLine1}</TextCell>,
   },
   {
     id: 'phone',
     accessorKey: 'phone',
     header: () => <ColumnHeader label="Phone" />,
-    cell: ({ row }) => <TextCell>{row.original.phone}</TextCell>,
+    cell: ({ row }) => <TextCell>{row.original?.phone}</TextCell>,
   },
   {
     id: 'email',
     accessorKey: 'email',
     header: () => <ColumnHeader label="Email" />,
-    cell: ({ row }) => <TextCell>{row.original.email}</TextCell>,
+    cell: ({ row }) => <TextCell>{row.original?.email}</TextCell>,
   },
 ]
-
-const dummyData: PersonInfo[] = [
-  {
-    gender: 'Male',
-    dob: '12/11/1994',
-    address: 'St 10, Willow brook',
-    phone: '021-27272902',
-    email: 'abc@ymail.com',
-  },
-]
-
-const PatientInfoTable = () => {
+interface PatientInfoTableProps {
+  patient: PatientPersonInfo[]
+}
+const PatientInfoTable = ({ patient }: PatientInfoTableProps) => {
   return (
     <ScrollArea>
-      <DataTable
-        data={dummyData}
-        columns={columns}
-        disablePagination
-        sticky
-      />
+      <DataTable data={patient} columns={columns} disablePagination sticky />
     </ScrollArea>
   )
 }

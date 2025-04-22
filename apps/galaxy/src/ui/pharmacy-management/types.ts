@@ -17,6 +17,7 @@ interface Pharmacy {
   contactDetails: ContactDetails
   lastUsed: string
   isPreferred: false
+  id?: string
 }
 
 type PharmacyRow = Row<Pharmacy>
