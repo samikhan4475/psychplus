@@ -101,6 +101,10 @@ const AddClaimForm = ({ onCloseModal }: AddClaimFormProps) => {
         (sum, line) => sum + (Number(line.totalAmount) || 0),
         0,
       ),
+      amountDue: (formData.claimServiceLines ?? []).reduce(
+        (sum, line) => sum + (Number(line.totalAmount) || 0),
+        0,
+      ),
       primaryStatusCode: 'NewCharge',
       claimServiceLines: (formData.claimServiceLines ?? []).map((line) => ({
         ...line,
