@@ -396,6 +396,10 @@ const getManagementNavLinks = (
       href: `${baseHref}/credentialing`,
     },
     {
+      label: 'Preferred Partner',
+      href: `${baseHref}/preferred-partner`,
+    },
+    {
       label: 'Assigning Authorities',
       href: `${baseHref}/assigning-authorities`,
     },
