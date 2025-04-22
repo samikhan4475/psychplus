@@ -3,7 +3,7 @@ import { Tabs } from '@radix-ui/themes'
 import { FEATURE_FLAGS, MAIN_PAGE_FEATURE_FLAGS } from '@/constants'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { InboxNavigation } from '../inbox-navigation'
-import { InboxLabOrder } from '../lab-orders'
+import { InboxLabOrder, LabOrdersInboxView } from '../lab-orders'
 import { MedicationOrderView } from '../medication-orders'
 import { NotesView } from '../notes/notes-view'
 import { SecureMessagesView } from '../secure-messages/secure-messages-view'
@@ -83,7 +83,9 @@ const MessagesTabs = () => {
           <MedicationOrderView />
         </TabsContent>
       )}
-
+      <TabsContent value={TabsEnum.LAB_ORDERS}>
+        <LabOrdersInboxView />
+      </TabsContent>
       <TabsContent value={TabsEnum.LAB_RESULTS}>
         <InboxLabOrder />
       </TabsContent>

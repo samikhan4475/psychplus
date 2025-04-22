@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Table } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { useStore } from '../../lab-orders-widget/store'
 import { deleteTestLabsApi } from '../api'
 import { LabOrderSchemaType } from '../lab-order-schema'
@@ -22,6 +23,7 @@ const TestLabItem = ({
   const [isOpen, setIsOpen] = useState(false)
   const appointmentId = useSearchParams().get('id') ?? ''
   const form = useFormContext<LabOrderSchemaType>()
+  const testLabs = form.watch('testLabs')
   const orderId = form.getValues('labOrderId')
   const { updateLabOrderTestList } = useStore()
   const labQuestions = form.getValues('labQuestions')
@@ -57,6 +59,16 @@ const TestLabItem = ({
   }
 
   const onClickDelete = () => {
+    const nonNewSelectedTests = testLabs.filter((test) => !test.isNewTestLab)
+    if (
+      nonNewSelectedTests.length === 1 &&
+      !testLabData.isNewTestLab &&
+      nonNewSelectedTests[0].labTestCode === testLabData.labTestCode
+    ) {
+      toast.error('At least one existing test should remain in the lab order.')
+      return
+    }
+
     setIsOpen(true)
   }
 

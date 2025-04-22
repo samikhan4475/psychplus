@@ -14,7 +14,7 @@ type LabResultRow = Row<LabResult>
 
 type LabOrderPayload = {
   appointmentIds?: string[]
-  patientId: string[]
+  patientId?: string[]
   orderStatus?: string
   orderCreatedDate?: DateValue | null | string
   orderingStaffId?: string
@@ -22,6 +22,7 @@ type LabOrderPayload = {
   location?: string
   labTestCode?: string
   idList?: string[]
+  IsOrderSendStatus?: boolean
 }
 
 interface LabDocument {
@@ -90,5 +91,5 @@ export type {
   LabOrderPayload,
   LabResult,
   LabResultRow,
-  LabDocument
+  LabDocument,
 }

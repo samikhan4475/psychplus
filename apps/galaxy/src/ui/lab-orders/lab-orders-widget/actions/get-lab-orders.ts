@@ -6,7 +6,7 @@ import { LABS_ORDER_TABLE_PAGE_SIZE } from '../constant'
 import { LabOrderPayload } from '../types'
 
 interface GetLabOrdersActionProps {
-  appointmentId: string
+  appointmentId: string | null
   payload?: LabOrderPayload
   page?: number
 }
@@ -18,7 +18,9 @@ const getLabOrdersAction = async ({
 }: GetLabOrdersActionProps): Promise<
   api.ActionResult<LabOrderResponseList>
 > => {
-  const url = new URL(api.GET_LAB_ORDERS(appointmentId))
+  const url = appointmentId
+    ? new URL(api.GET_LAB_ORDERS(appointmentId))
+    : new URL(api.GET_LAB_ORDERS_SEARCH)
   const offset = (page - 1) * LABS_ORDER_TABLE_PAGE_SIZE
 
   url.searchParams.append('limit', String(LABS_ORDER_TABLE_PAGE_SIZE))

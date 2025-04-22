@@ -11,7 +11,7 @@ const rowActions: RowAction<LabOrders>[] = [
     render: RowResultAttachment,
   },
   {
-    id: '',
+    id: 'row-results-edit',
     render: ({ row }) => (
       <AddLabOrderView isEdit={true} labOrderData={row.original} />
     ),

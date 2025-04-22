@@ -15,6 +15,7 @@ import { OrderDateField } from './order-date-field'
 import { StatusSelect } from './status-select'
 import { useStore } from './store'
 import { TestField } from './test-field'
+import { LabOrderPayload } from './types'
 
 const schema = z.object({
   orderCreatedDate: z.custom<DateValue | null>().nullable(),
@@ -27,10 +28,16 @@ const schema = z.object({
 
 export type SchemaType = z.infer<typeof schema>
 
-const LabOrdersFilterForm = () => {
+const LabOrdersFilterForm = ({
+  isInboxLabOrder = false,
+  defaultPayload = {},
+}: {
+  isInboxLabOrder?: boolean
+  defaultPayload?: LabOrderPayload
+}) => {
   const searchParams = useSearchParams()
   const { fetch } = useStore()
-  const appointmentId = searchParams.get('id') ?? '0'
+  const appointmentId = !isInboxLabOrder ? searchParams.get('id') ?? '0' : null
 
   const { id } = useParams<{ id: string }>()
 
@@ -57,9 +64,12 @@ const LabOrdersFilterForm = () => {
       orderStatus: '',
       labTestCode: '',
     })
-    fetch(appointmentId!, {
-      ...(appointmentId !== '0' ? { appointmentIds: [appointmentId] } : {}),
-      patientId: [id],
+    fetch(appointmentId, {
+      ...defaultPayload,
+      ...(appointmentId && appointmentId !== '0'
+        ? { appointmentIds: [appointmentId] }
+        : {}),
+      ...(!isInboxLabOrder ? { patientId: [id] } : {}),
     })
   }
 
@@ -72,8 +82,11 @@ const LabOrdersFilterForm = () => {
     }
     const sanitizedData = sanitizeFormData(formattedData)
     const payload = {
-      ...(appointmentId !== '0' ? { appointmentIds: [appointmentId] } : {}),
-      patientId: [id],
+      ...defaultPayload,
+      ...(appointmentId && appointmentId !== '0'
+        ? { appointmentIds: [appointmentId] }
+        : {}),
+      ...(!isInboxLabOrder ? { patientId: [id] } : {}),
       ...sanitizedData,
     }
     fetch(appointmentId, payload)
@@ -89,7 +102,7 @@ const LabOrdersFilterForm = () => {
       <OrderBySelect />
       <LocationSelect />
       <TestField />
-      <StatusSelect />
+      {!isInboxLabOrder && <StatusSelect />}
 
       <Button
         color="gray"

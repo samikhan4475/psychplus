@@ -34,7 +34,7 @@ const AfterVisitSummaryView = ({
   const { fetchPatientMedications } = useMedicationsStore((state) => ({
     fetchPatientMedications: state.fetchPatientMedications,
   }))
-  const { data } = useLabOrdersStore()
+  const { data, fetch, setAppointmentId } = useLabOrdersStore()
   const { fetchWorkingDiagnosis } = useProviderRecommendationsStore()
 
   const upcomingAppointments = appointments.filter((appointment) =>
@@ -48,8 +48,18 @@ const AfterVisitSummaryView = ({
     pastAppointments[0] || ({} as Appointment),
   )
 
+  const fetchData = () => {
+    setAppointmentId(appointmentId)
+    const payload = {
+      patientId: [patientId],
+      ...(appointmentId !== '0' ? { appointmentIds: [appointmentId] } : {}),
+    }
+    fetch(appointmentId, payload)
+  }
+
   useEffect(() => {
     fetchPatientMedications(patientId, true)
+    fetchData()
   }, [patientId, fetchPatientMedications])
 
   useEffect(() => {

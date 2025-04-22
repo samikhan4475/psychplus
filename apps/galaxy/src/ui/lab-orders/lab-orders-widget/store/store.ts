@@ -2,17 +2,17 @@ import { create } from 'zustand'
 import { LabOrderResponseList, LabOrders, LabResult } from '@/types'
 import { getLabOrdersAction } from '../actions'
 import { LabOrdersTabs } from '../constant'
-import { LabOrderPayload  } from '../types'
+import { LabOrderPayload } from '../types'
 
 interface StoreState {
   data: LabOrderResponseList
   loading: boolean
   error?: string
   payload?: LabOrderPayload
-  activeTab: string,
-  viewedTabs: Set<string>,
+  activeTab: string
+  viewedTabs: Set<string>
   fetch: (
-    appointmentId: string,
+    appointmentId: string | null,
     payload: LabOrderPayload,
     page?: number,
     reset?: boolean,
@@ -34,11 +34,12 @@ interface StoreState {
   next: () => void
   prev: () => void
   jumpToPage: (page: number) => void
-  setAppointmentId: (appointmentId: string) => void
+  setAppointmentId: (appointmentId: string | null) => void
   page: number
-  appointmentId: string
+  appointmentId: string | null
   fetchLabOrderByIds: (appointmentId: string, payload: LabOrderPayload) => void
-
+  setSelectedRows: (value: LabOrders[]) => void
+  selectedRows: LabOrders[]
 }
 
 const useStore = create<StoreState>((set, get) => ({
@@ -322,7 +323,8 @@ const useStore = create<StoreState>((set, get) => ({
     }
     get().fetch(get().appointmentId, get().payload!, page)
   },
-  setAppointmentId: (appointmentId: string) => set({ appointmentId }),
+  setAppointmentId: (appointmentId: string | null) => set({ appointmentId }),
+  setSelectedRows: (orders: LabOrders[]) => set({ selectedRows: orders }),
 }))
 
 export { useStore }

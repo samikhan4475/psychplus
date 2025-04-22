@@ -1,10 +1,10 @@
 import { TabContentHeading } from '@/components'
 import { AddLabOrdersButton } from './add-lab-orders-button'
 
-const LabOrdersHeader = () => {
+const LabOrdersHeader = ({ onRefresh }: { onRefresh: () => void }) => {
   return (
     <TabContentHeading title="Lab Orders">
-      <AddLabOrdersButton />
+      <AddLabOrdersButton onRefresh={onRefresh} />
     </TabContentHeading>
   )
 }

@@ -6,12 +6,10 @@ import { RefreshCcw } from 'lucide-react'
 import { AddLabOrderView } from '../add-lab-order'
 import { useStore } from './store'
 
-const AddLabOrdersButton = () => {
-  const fetch = useStore((state) => state.fetch)
+const AddLabOrdersButton = ({ onRefresh }: { onRefresh: () => void }) => {
   const loading = useStore((state) => state.loading)
 
   const searchParams = useSearchParams()
-  const { id } = useParams<{ id: string }>()
   const appointmentId = searchParams.get('id') ?? '0'
 
   return (
@@ -20,14 +18,7 @@ const AddLabOrdersButton = () => {
         className="border-pp-grey bg-white h-6 flex-row gap-1 rounded-2 border border-solid align-middle"
         type="button"
         disabled={loading}
-        onClick={() =>
-          fetch(appointmentId, {
-            patientId: [id],
-            ...(appointmentId !== '0'
-              ? { appointmentIds: [appointmentId] }
-              : {}),
-          })
-        }
+        onClick={onRefresh}
       >
         <RefreshCcw className="text-pp-gray-3" width="16px" height="16px" />
         <Text className="text-pp-black-3 text-1">Refresh</Text>

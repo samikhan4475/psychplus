@@ -232,6 +232,10 @@ const getInboxNavLinks = ({
       label: 'Orders',
       links: [
         {
+          label: 'Lab Orders',
+          tab: Tabs.LAB_ORDERS,
+        },
+        {
           label: 'Lab Results',
           tab: Tabs.LAB_RESULTS,
         },
