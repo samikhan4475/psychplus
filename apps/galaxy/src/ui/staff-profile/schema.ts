@@ -18,6 +18,8 @@ const optionalString = z
   .max(128, { message: 'Cannot exceed 128 characters' })
   .optional()
 
+const isNpiValid = (npi: string): boolean => /^\d{10}$/.test(npi) // only digits, exactly 10
+
 const nameSchema = z.object({
   firstName: requiredName,
   middleName: optionalString,
@@ -101,7 +103,7 @@ const schema = z
     virtualRoomLink: optionalString,
     isVirtualRoomLink: z.boolean().optional(),
     biography: optionalString,
-    npi: z.string().min(10, { message: 'NPI must be 10 characters' }),
+    npi: z.string().optional(),
     gender: requiredString,
     homeAddress: getAddressSchema('Home'),
     mailingAddress: getAddressSchema('Mailing'),
@@ -126,12 +128,21 @@ const schema = z
       staffTypeLabel,
       npi,
     } = data
-    if (staffTypeLabel === StaffType.Provider && !npi) {
-      ctx.addIssue({
-        path: ['npi'],
-        message: `Required`,
-        code: z.ZodIssueCode.custom,
-      })
+
+    if (staffTypeLabel === StaffType.Provider || npi) {
+      if (!npi?.trim()) {
+        ctx.addIssue({
+          path: ['npi'],
+          message: 'Required',
+          code: z.ZodIssueCode.custom,
+        })
+      } else if (!isNpiValid(npi)) {
+        ctx.addIssue({
+          path: ['npi'],
+          message: 'NPI must be 10 characterss',
+          code: z.ZodIssueCode.custom,
+        })
+      }
     }
     if (staffTypeLabel === StaffType.Provider && !data?.legalName?.title) {
       ctx.addIssue({
