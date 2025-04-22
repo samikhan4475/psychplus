@@ -2,15 +2,21 @@ import { User } from '@psychplus-v2/auth'
 import { PsychPlusNavLogo } from '@psychplus-v2/components'
 import { CODESETS } from '@psychplus-v2/constants'
 import { Container, Flex } from '@radix-ui/themes'
-import { getCodesets, getProfile } from '@/api'
+import { getCodesets, getIsFeatureFlagEnabled, getProfile } from '@/api'
+import { FeatureFlags } from '@/constants'
 import { ScheduleAppointmentButton } from '@/features/appointments/search'
+import { NotificationPopover } from '@/features/notifications'
 import { NavigationMenu } from './navigation-menu'
 import { ResponsiveMenu } from './responsive-menu'
 import { ResponsiveMenuToggle } from './responsive-menu-toggle'
+import { ScrollAlert } from './scroll-alert'
 import { UserDropdownMenu } from './user-dropdown-menu'
 
 const Header = async () => {
   const profileResponse = await getProfile()
+  const notificationPopoverFlagEnabled = await getIsFeatureFlagEnabled(
+    FeatureFlags.ehr13738PatientPortalNotifications,
+  )
   if (profileResponse.state === 'error') {
     throw new Error(profileResponse.error)
   }
@@ -36,14 +42,14 @@ const Header = async () => {
             className="h-[var(--header-height)]"
           >
             <PsychPlusNavLogo responsive />
+            <ScrollAlert />
             <Flex align="center" gap="3">
               <NavigationMenu />
               <ScheduleAppointmentButton
                 size={{ initial: '2', md: '3' }}
                 className="hidden sm:block"
               />
-              {/* <NotificationsMenu /> */}
-              {/* <NotificationPopover /> */}
+              {notificationPopoverFlagEnabled && <NotificationPopover />}
               <UserDropdownMenu user={user} />
               <ResponsiveMenuToggle />
             </Flex>

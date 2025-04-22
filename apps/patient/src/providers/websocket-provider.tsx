@@ -159,7 +159,6 @@ export const WebSocketProvider = ({
     [sendMessage, connectionStatus],
   )
 
-  console.log('Socket ' + connectionStatus, webSocketUrl)
 
   return (
     <WebSocketContext.Provider value={ctxValue}>

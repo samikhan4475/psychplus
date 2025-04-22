@@ -1,9 +1,9 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { cn } from '@psychplus-v2/utils'
-import { Button, Flex, Text } from '@radix-ui/themes'
+import { Box, Button, Flex, Text } from '@radix-ui/themes'
 import { NotificationItem } from '../../types'
 import { getPurposeCodeIconPath, getTimeAgo } from '../utils'
 
@@ -13,14 +13,18 @@ interface NotificationCardProps extends NotificationItem {
   className?: string
   confirmLabel?: string
   cancelLabel?: string
+  readOn?: string
+  onMark: (notificationId: string) => void
 }
 
 const NotificationCard: React.FC<NotificationCardProps> = ({
   purposeCode,
   message,
   createdOn,
+  readOn,
   id,
   onConfirm,
+  onMark,
   cancelLabel,
   confirmLabel,
   onCancel,
@@ -28,19 +32,43 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
 }) => {
   const iconPath = getPurposeCodeIconPath(purposeCode)
 
+  const [isRead, setIsRead] = useState(false)
+  const onRead = async () => {
+    if (isRead) return
+    setIsRead(true)
+    onMark(id)
+  }
+
+  useEffect(() => {
+    setIsRead(!!readOn)
+  }, [readOn])
+
   return (
     <Flex
+      onClick={onRead}
       className={cn(
-        `min-w-56 mx-2 items-start gap-x-4 border-b border-b-gray-4 p-3`,
+        `min-w-56 bg-white mx-2 items-start gap-x-4 border-b border-b-gray-4 p-3`,
         className,
       )}
     >
-      <Image
-        src={iconPath}
-        width={40}
-        height={40}
-        alt={`${purposeCode}_${id}`}
-      />
+      <Box className="relative">
+        <Image
+          src={iconPath}
+          width={40}
+          height={40}
+          className="min-w-[40px]"
+          alt={`${purposeCode}_${id}`}
+        />
+        {!isRead && (
+          <Image
+            src="/images/notification-icons/red-dot.svg"
+            alt="red-dot"
+            width="8"
+            height="8"
+            className="absolute right-[3px] top-[3px]"
+          />
+        )}
+      </Box>
 
       <Flex direction="column" className="gap-y-4">
         <Flex direction="column" className="gap-y-1">
