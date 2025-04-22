@@ -4,7 +4,7 @@ import {
   InsurancePayment,
 } from '../../types'
 import { removeNegative } from './cells/utils'
-import { DEFAULT_ADJUSTMENT_TYPE } from './constants'
+import { DEFAULT_ADJUSTMENT_TYPE, WRITE_OFF_ADJUSTMENT } from './constants'
 
 interface ValidatePaymentParams {
   paymentDetail: InsurancePayment
@@ -45,7 +45,8 @@ const validatePayment = ({
       .filter((adj) => adj.recordStatus !== 'Inactive')
       .every(
         (adjustment) =>
-          adjustment.adjustmentStatus === DEFAULT_ADJUSTMENT_TYPE
+          adjustment.adjustmentStatus === DEFAULT_ADJUSTMENT_TYPE ||
+          adjustment.adjustmentStatus === WRITE_OFF_ADJUSTMENT.adjustmentStatus,
       )
 
     if (

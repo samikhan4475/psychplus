@@ -8,6 +8,8 @@ import { ClaimServiceLinePayment, InsurancePayment } from '../../../types'
 import { PaymentListTypes } from '../../types'
 import {
   adjustmentMapping,
+  adjustmentStatusMapping,
+  DEFAULT_ADJUSTMENT_TYPE,
   PROCESSED_AS_REVERSAL,
   WRITE_OFF_ADJUSTMENT,
 } from '../constants'
@@ -94,6 +96,10 @@ const AdjustmentReasonRemarkCell = ({
         } else if (result.state === 'error') {
           toast.error(result.error ?? 'Failed to get adjustment status')
         }
+      } else {
+        adjustmentStatus =
+          adjustmentStatusMapping[`${adjustmentCode}-${reasonCode}`] ??
+          DEFAULT_ADJUSTMENT_TYPE
       }
 
       const finalAdjustmentAmount =

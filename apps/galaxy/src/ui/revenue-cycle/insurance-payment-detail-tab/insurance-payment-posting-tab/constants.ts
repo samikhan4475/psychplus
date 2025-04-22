@@ -42,6 +42,14 @@ const DEFAULT_ADJUSTMENT_TYPE = 'Denied'
 
 const PROCESSED_AS_REVERSAL = 'ReversalOfPreviousPayment'
 
+const adjustmentStatusMapping: Record<string, string> = {
+  'CO-45': WRITE_OFF_ADJUSTMENT.adjustmentStatus,
+  ...['PR-1', 'PR-2', 'PR-3'].reduce((acc, key) => {
+    acc[key] = CO_INSURANCE_ADJUSTMENT.adjustmentStatus
+    return acc
+  }, {} as Record<string, string>),
+}
+
 const adjustmentMapping = {
   [`${WRITE_OFF_ADJUSTMENT.adjustmentGroupCode}_${WRITE_OFF_ADJUSTMENT.adjustmentReasonCode}`]:
     'allowedAmount',
@@ -67,6 +75,7 @@ export {
   DEDUCTIBLE_ADJUSTMENT,
   CO_PAY_ADJUSTMENT,
   adjustmentMapping,
+  adjustmentStatusMapping,
   PROCESSED_AS_REVERSAL,
   allowedAmountKeys,
   type AdjustmentField,
