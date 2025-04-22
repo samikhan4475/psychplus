@@ -65,6 +65,7 @@ const getNavLinks = (
     { label: 'Review of System', href: '/ros' },
     { label: 'Vitals', href: '/vitals' },
     { label: 'Physical Exam', href: '/physical-exam' },
+    { label: 'After Visit Summary', href: '/after-visit-summary' },
     {
       label: 'Therapy',
       href: '/therapy',

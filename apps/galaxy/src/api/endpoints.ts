@@ -52,6 +52,11 @@ const GET_PATIENT_PROFILE_ENDPOINT = (id: string) =>
   `${API_URL}/api/patients/${id}/profile`
 const GET_PATIENT_CONSENTS_ENDPOINT = (id: string) =>
   `${API_URL}/api/patients/${id}/consents?includeHistory=true`
+const GET_PROVIDER_RECOMMENDATIONS = (appointmentId: string) =>
+  `${API_URL}/api/appointments/${appointmentId}/providerrecommendations/actions/history/search`
+const SAVE_PROVIDER_RECOMMENDATIONS = (appointmentId: string) =>
+  `${API_URL}/api/appointments/${appointmentId}/providerrecommendations`
+
 const SEND_POLICY_NOTICE_ENDPOINT = (id: string) =>
   `${API_URL}/api/patients/${id}/consents/actions/sendnotice`
 const STANDARD_CODESET_ENDPOINT = (
@@ -952,6 +957,8 @@ export {
   NOTE_DETAILS_SAVE_ENDPOINT,
   GET_PATIENT_PROFILE_ENDPOINT,
   GET_PATIENT_CONSENTS_ENDPOINT,
+  GET_PROVIDER_RECOMMENDATIONS,
+  SAVE_PROVIDER_RECOMMENDATIONS,
   SEND_POLICY_NOTICE_ENDPOINT,
   STANDARD_CODESET_ENDPOINT,
   METADATA_CODESET_ENDPOINT,

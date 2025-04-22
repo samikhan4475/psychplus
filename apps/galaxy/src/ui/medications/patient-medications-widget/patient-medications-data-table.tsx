@@ -105,7 +105,7 @@ const columns: ColumnDef<PatientMedication>[] = [
   },
 ]
 
-const PatientMedicationsDataTable = () => {
+const PatientMedicationsDataTable = ({ actionsHide = false }) => {
   const { data, loading } = useStore(
     useShallow((state) => ({
       data: state.data,
@@ -121,11 +121,15 @@ const PatientMedicationsDataTable = () => {
     )
   }
 
+  const filteredColumns = actionsHide
+    ? columns.filter((col) => col.id !== 'medication-actions')
+    : columns
+
   return (
     <ScrollArea>
       <DataTable
         data={data?.medications ?? []}
-        columns={columns}
+        columns={filteredColumns}
         disablePagination
         sticky
       />

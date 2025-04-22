@@ -8,7 +8,7 @@ interface GetNoteDetailsParams {
   patientId: string
   appointmentId?: string | null
   isIncludeDetails?: boolean
-  encounterSignedNoteQueryFilters: {
+  encounterSignedNoteQueryFilters?: {
     encounterNoteId?: string
   }
 }

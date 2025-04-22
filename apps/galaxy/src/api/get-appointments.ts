@@ -3,6 +3,7 @@ import { Appointment } from '@/types'
 
 interface Payload {
   providerIds?: string[]
+  patientIds?: string[]
   startingDate?: string
   endingDate?: string
   visitMediums?: string[]
@@ -24,7 +25,7 @@ const getAppointments = async (
       error: response.error,
     }
   }
- 
+
   return {
     state: 'success',
     data: response.data,

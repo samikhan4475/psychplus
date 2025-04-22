@@ -17,10 +17,11 @@ import { LabTestCell, ResultsCell, StatusCell } from './cells'
 import { ActionsCell } from './cells/actions-cell'
 import { useStore } from './store'
 
-const getColumns: (appointmentId: string) => ColumnDef<LabOrders>[] = (
-  appointmentId,
-) => {
-  const columns: ColumnDef<LabOrders>[] = [
+const getColumns: (
+  appointmentId: string,
+  afterSummaryVisit: boolean,
+) => ColumnDef<LabOrders>[] = (appointmentId, afterSummaryVisit) => {
+  const baseColumns: ColumnDef<LabOrders>[] = [
     {
       id: 'labOrderDate',
       accessorKey: 'labOrderDate',
@@ -56,6 +57,22 @@ const getColumns: (appointmentId: string) => ColumnDef<LabOrders>[] = (
         </TextCell>
       ),
     },
+  ]
+
+  if (afterSummaryVisit) {
+    baseColumns.push({
+      id: 'initiated',
+      accessorKey: 'initiated',
+      header: ({ column }) => (
+        <ColumnHeader column={column} clientSideSort label="Initiated" />
+      ),
+      cell: ({ row }) => (
+        <TextCell>{row.original?.metadata?.createdByFullName ?? ''}</TextCell>
+      ),
+    })
+  }
+
+  const remainingColumns: ColumnDef<LabOrders>[] = [
     {
       id: 'labTests',
       accessorKey: 'labTests',
@@ -93,20 +110,24 @@ const getColumns: (appointmentId: string) => ColumnDef<LabOrders>[] = (
     },
   ]
 
-  return appointmentId === '0'
-    ? columns
-    : [
-        ...columns,
-        {
-          id: 'actions',
-          size: 100,
-          header: () => <ColumnHeader label="Actions" />,
-          cell: ({ row }) => <ActionsCell row={row} />,
-        },
-      ]
+  const columns = [...baseColumns, ...remainingColumns]
+
+  if (!afterSummaryVisit && appointmentId !== '0') {
+    return [
+      ...columns,
+      {
+        id: 'actions',
+        size: 100,
+        header: () => <ColumnHeader label="Actions" />,
+        cell: ({ row }) => <ActionsCell row={row} />,
+      },
+    ]
+  }
+
+  return columns
 }
 
-const LabOrderTable = () => {
+const LabOrderTable = ({ afterSummaryVisit = false }) => {
   const searchParams = useSearchParams()
   const { data, fetch, loading, setAppointmentId } = useStore()
   const { id } = useParams<{ id: string }>()
@@ -133,7 +154,7 @@ const LabOrderTable = () => {
     <ScrollArea>
       <DataTable
         data={data?.labOrders ?? []}
-        columns={getColumns(appointmentId)}
+        columns={getColumns(appointmentId, afterSummaryVisit)}
         disablePagination
         sticky
       />
