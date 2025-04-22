@@ -1,3 +1,5 @@
+"use client"
+
 import React from 'react'
 import { cn } from '@psychplus-v2/utils'
 import { Table } from '@radix-ui/themes'
