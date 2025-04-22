@@ -3,10 +3,11 @@ import { Box, Grid } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { FormContainer } from '@/components'
+import { updatePracticeAction } from '@/ui/organization-practices/actions'
+import { useStore as practiceStore } from '@/ui/organization-practices/store'
 import { sanitizeFormData } from '@/utils'
 import { addOrganizationPracticeAction } from '../../actions'
 import { useStore } from '../../organizations/store'
-import { useStore as practiceStore } from '@/ui/organization-practices/store'
 import { Organization, Practice } from '../../types'
 import { CliaField } from './clia-field'
 import { DefProviderField } from './def-provider-field'
@@ -23,7 +24,6 @@ import { StatusSelect } from './status-select'
 import { SubmitFormButton } from './submit-form-button'
 import { TaxonomyCodeField } from './taxonomy-code-field'
 import { TinField } from './tin-field'
-import { updatePracticeAction } from '@/ui/organization-practices/actions'
 
 interface FormProps {
   data: Organization
@@ -38,17 +38,10 @@ const PracticeForm = ({ data, onCloseModal, practiceData }: FormProps) => {
   const { search: practiceSearchStore } = practiceStore((state) => ({
     search: state.search,
   }))
-  let newData;
-  if (practiceData) {
-    newData = {
-      ...practiceData,
-      organizationId: data.id,
-      id: practiceData.id,
-      paymentAddressId: practiceData.paymentAddressId,
-      practiceAddressId: practiceData.practiceAddressId,
-    }
-  } else {
-    newData = { practiceAddress: data.organizationAddress, organizationId: data.id }
+  const newData = {
+    ...data,
+    practiceAddress: data.organizationAddress,
+    organizationId: data.id,
   }
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -81,14 +74,11 @@ const PracticeForm = ({ data, onCloseModal, practiceData }: FormProps) => {
     const response =
       data && practiceData
         ? await updatePracticeAction(
-          sanitizedPayload,
-          data.id,
-          practiceData?.id,
-        )
-        : await addOrganizationPracticeAction(
-          data.id,
-          sanitizedPayload,
-        )
+            sanitizedPayload,
+            data.id,
+            practiceData?.id,
+          )
+        : await addOrganizationPracticeAction(data.id, sanitizedPayload)
 
     if (response.state === 'error') {
       toast.error(response.error)
@@ -132,7 +122,7 @@ const PracticeForm = ({ data, onCloseModal, practiceData }: FormProps) => {
             <CliaField />
           </Box>
           <Box className="col-span-6">
-            <OrganizationSelect />
+            <OrganizationSelect organizationId={data.id} />
           </Box>
         </Grid>
 

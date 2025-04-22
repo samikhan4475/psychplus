@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FormContainer } from '@/components'
 import { PatientAddress } from '@/types'
-import { formatDate, sanitizeFormData } from '@/utils'
+import { formatUTCDate, sanitizeFormData } from '@/utils'
 import { addStaffAction, updateStaffAction } from '../../actions'
 import { useStore } from '../../store'
 import { Staff } from '../../types'
@@ -78,7 +78,7 @@ const OrganizationStaffForm = ({ data, onCloseModal }: FormProps) => {
         honors: formData.credentials,
       },
       dateOfBirth: formData.dateOfBirth
-        ? formatDate(formData.dateOfBirth.toString())
+        ? formatUTCDate(formData.dateOfBirth.toString(), 'yyyy-MM-dd')
         : '',
       contactInfo: {
         email: formData.email,
@@ -106,7 +106,7 @@ const OrganizationStaffForm = ({ data, onCloseModal }: FormProps) => {
         firstName: formData.firstName,
         lastName: formData.lastName,
         dob: formData.dateOfBirth
-          ? formatDate(formData.dateOfBirth.toString())
+          ? formatUTCDate(formData.dateOfBirth.toString(), 'yyyy-MM-dd')
           : '',
         middleName: formData.middleName,
         address: formData.address1,
@@ -136,6 +136,24 @@ const OrganizationStaffForm = ({ data, onCloseModal }: FormProps) => {
         practiceIds: formData.practiceIds,
         isMailingAddressSameAsPrimary:
           formData.isMailingAddressSameAsHome === 'yes',
+        legalName: {
+          firstName: formData.firstName,
+          middleName: formData.middleName,
+          lastName: formData.lastName,
+          honors: formData.credentials,
+        },
+        contactInfo: {
+          email: formData.email,
+          phoneNumbers: [
+            {
+              type: 'Home',
+              number: formData.phone,
+            },
+          ],
+          addresses: addresses,
+          isMailingAddressSameAsPrimary:
+            formData.isMailingAddressSameAsHome === 'yes',
+        },
       }
       delete reqPayload.password
     } else {
@@ -182,8 +200,8 @@ const OrganizationStaffForm = ({ data, onCloseModal }: FormProps) => {
           <PracticeSelect />
         </Grid>
         <Grid columns="2" className="mb-2 mt-2 gap-3">
-          <StaffTypeSelect />
           <StaffRoleSelect />
+          <StaffTypeSelect />
         </Grid>
         <Grid columns="3" className="mb-2 mt-2 gap-3">
           <IndividualNpiField />

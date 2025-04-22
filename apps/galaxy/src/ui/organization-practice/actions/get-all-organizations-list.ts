@@ -23,6 +23,7 @@ const defaultPayload: OrganizationsSearchParams = {
   isIncludeMetadataResourceIds: true,
   isIncludeMetadataResourceStatus: true,
   isIncludeLocations: true,
+  includePractices: true,
   recordStatuses: DEFAULT_STATUSES,
 }
 

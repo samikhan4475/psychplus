@@ -13,13 +13,20 @@ const defaultPayload: OrganizationsSearchParams = {
   recordStatuses: DEFAULT_STATUSES,
 }
 
-const getOrganizationOptionsAction = async (): Promise<
-  api.ActionResult<SelectOptionType[]>
-> => {
+interface Payload {
+  payload?: {
+    organizationId?: string
+  }
+}
+
+const getOrganizationOptionsAction = async ({
+  payload,
+}: Payload): Promise<api.ActionResult<SelectOptionType[]>> => {
   const response = await api.POST<Organization[]>(
     api.GET_ORGANIZATIONS_ENDPOINT,
     {
       ...defaultPayload,
+      ...payload,
     },
   )
 

@@ -56,6 +56,7 @@ const useStore = create<Store>((set, get) => ({
     set({
       data: result.data,
       loading: false,
+      page,
       pageCache: reset
         ? { [page]: result.data }
         : { ...get().pageCache, [page]: result.data },

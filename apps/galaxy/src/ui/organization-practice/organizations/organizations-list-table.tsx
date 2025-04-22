@@ -18,9 +18,7 @@ const OrganizationsListTable = () => {
   }))
 
   useEffect(() => {
-    search({
-      includePractices: true,
-    })
+    search()
   }, [activeTab])
 
   if (loading) {

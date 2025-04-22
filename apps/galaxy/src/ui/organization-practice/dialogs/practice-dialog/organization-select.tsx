@@ -8,14 +8,24 @@ import {
 } from '@/components'
 import { getOrganizationOptionsAction } from '../../actions'
 
-const OrganizationSelect = () => {
+interface OrganizationSelectProps {
+  organizationId: string
+}
+
+const OrganizationSelect = ({ organizationId }: OrganizationSelectProps) => {
   return (
     <FormFieldContainer className="flex w-full">
       <FormFieldLabel className="pb-[3px]">Organization</FormFieldLabel>
       <AsyncSelect
         field="organizationId"
         placeholder="Select"
-        fetchOptions={getOrganizationOptionsAction}
+        fetchOptions={() =>
+          getOrganizationOptionsAction({
+            payload: {
+              organizationId: organizationId,
+            },
+          })
+        }
         buttonClassName="w-full border-pp-gray-2 h-6 border border-solid !outline-none [box-shadow:none]"
         tooltip
         disabled

@@ -11,15 +11,15 @@ import { PracticeForm } from './practice-form'
 interface DialogProps {
   organizationId?: string
   practiceData?: Practice
+  data: Organization
 }
 
-const PracticeDialog = ({ organizationId, practiceData }: DialogProps) => {
+const PracticeDialog = ({ practiceData, data }: DialogProps) => {
   const [open, setOpen] = useState(false)
 
   const onOpenChange = (open: boolean) => {
     setOpen(open)
   }
-  const [organization] = useState<Organization>()
   const [loading] = useState(false)
 
   return (
@@ -30,7 +30,7 @@ const PracticeDialog = ({ organizationId, practiceData }: DialogProps) => {
         <CloseDialogTrigger />
 
         <Dialog.Title className="font-sans -tracking-[0.25px]">
-          Edit Practice
+          Add Practice
         </Dialog.Title>
 
         {loading ? (
@@ -39,7 +39,7 @@ const PracticeDialog = ({ organizationId, practiceData }: DialogProps) => {
           </Flex>
         ) : (
           <PracticeForm
-            data={organization || ({} as Organization)}
+            data={data}
             practiceData={practiceData}
             onCloseModal={onOpenChange}
           />

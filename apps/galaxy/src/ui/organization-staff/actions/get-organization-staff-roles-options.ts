@@ -1,8 +1,7 @@
 'use server'
 
 import * as api from '@/api'
-import { SelectOptionType } from '@/types'
-import { Organization } from '../types'
+import { Role, SelectOptionType } from '@/types'
 
 const defaultPayload = {
   isIncludeMetadataResourceChangeControl: true,
@@ -11,11 +10,23 @@ const defaultPayload = {
   isIncludeLocations: false,
 }
 
-const getOrganizationStaffRolesOptionsAction = async (): Promise<
+type OrganizationsSearchParams = {
+  payload: {
+    organizationId?: string
+    roleIds?: string[]
+  }
+  category?: boolean
+}
+
+const getOrganizationStaffRolesOptionsAction = async ({
+  payload,
+  category,
+}: OrganizationsSearchParams): Promise<
   api.ActionResult<SelectOptionType[]>
 > => {
-  const response = await api.POST<Organization[]>(api.GET_ORGANIZATION_ROLES, {
+  const response = await api.POST<Role[]>(api.GET_USER_ROLES, {
     ...defaultPayload,
+    ...payload,
   })
 
   if (response.state === 'error') {
@@ -25,19 +36,22 @@ const getOrganizationStaffRolesOptionsAction = async (): Promise<
     }
   }
 
-  const roleLookup: Record<string, SelectOptionType> = {}
-
-  response.data?.forEach(({ users }) => {
-    users?.forEach(({ userRoles }) => {
-      userRoles?.forEach(({ displayName, id }) => {
-        roleLookup[id] = { label: displayName, value: id }
-      })
-    })
-  })
+  let transformedData = []
+  if (category) {
+    transformedData = response.data.map((data) => ({
+      value: data.actorCategory,
+      label: data.actorCategory,
+    }))
+  } else {
+    transformedData = response.data.map((data) => ({
+      value: data.id,
+      label: data.displayName,
+    }))
+  }
 
   return {
     state: 'success',
-    data: Object.values(roleLookup),
+    data: transformedData,
   }
 }
 

@@ -27,6 +27,7 @@ const OrganizationStaffListTablePagination = () => {
       next={next}
       prev={prev}
       jumpToPage={jumpToPage}
+      className="bg-white rounded-b-1 border-0 border-t"
     />
   )
 }

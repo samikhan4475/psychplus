@@ -77,6 +77,9 @@ interface Staff extends StaffResource {
   email: string
   specialists: number[]
   isMailingAddressSameAsPrimary?: boolean
+  hipaaConsentOn?: string
+  termsOfServiceConsentOn?: string
+  privacyPolicyConsentOn?: string
 }
 
 interface GetStaffListResponse {
