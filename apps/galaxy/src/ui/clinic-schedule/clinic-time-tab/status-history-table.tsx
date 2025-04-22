@@ -24,7 +24,9 @@ const columns: ColumnDef<ClinicSchedule>[] = [
     id: 'date',
     header: ({ column }) => <ColumnHeader column={column} label="Date/Time" />,
     cell: ({ row }) => (
-      <TextCell>{formatDateTime(row.original.metadata.createdOn)}</TextCell>
+      <TextCell>
+        {formatDateTime(row.original.metadata.createdOn, false)}
+      </TextCell>
     ),
   },
   {

@@ -17,7 +17,13 @@ import {
 } from '../../clinic-time-tab/constants'
 import { useStore } from '../../clinic-time-tab/store'
 
-const PendingClinicSchedule = () => {
+interface PendingClinicScheduleDialogProps {
+  isInitialLogin: boolean
+}
+
+const PendingClinicSchedule = ({
+  isInitialLogin,
+}: PendingClinicScheduleDialogProps) => {
   const [showDialog, setShowDialog] = useState(true)
   const [showApproveScheduleAlert, setShowApproveScheduleAlert] =
     useState(false)
@@ -38,6 +44,7 @@ const PendingClinicSchedule = () => {
   )
 
   const openDialogCheck =
+    isInitialLogin &&
     showDialog &&
     isProvider &&
     !!pendingClinicSchedulesWithApproveOption?.length

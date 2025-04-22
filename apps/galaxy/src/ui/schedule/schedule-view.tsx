@@ -4,6 +4,7 @@ import { PropsWithChildren, useEffect } from 'react'
 import { Flex, Heading, Tabs } from '@radix-ui/themes'
 import { FEATURE_FLAGS } from '@/constants'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
+import { PendingClinicSchedule } from '../clinic-schedule/dialogs/pending-clinic-schedule'
 import { LicenseExpiryAlert } from '../staff-credentialing/license-expiry-alert'
 import { PreferencesApprovalAlert } from '../staff-preferences/staff-preference-approval-alert'
 import { CalendarView } from './calendar-view'
@@ -49,6 +50,7 @@ const ScheduleView = ({ isInitialLogin }: { isInitialLogin: boolean }) => {
           <TabsList isFeatureFlagEnabled={isFeatureFlagEnabled} />
         </Flex>
         <LicenseExpiryAlert isInitialLogin={isInitialLogin} />
+        <PendingClinicSchedule isInitialLogin={isInitialLogin} />
         <PreferencesApprovalAlert isInitialLogin={isInitialLogin} />
         <ViewHeader selectedTab={activeTab} />
         <SchedulerActionButtonGroup />
