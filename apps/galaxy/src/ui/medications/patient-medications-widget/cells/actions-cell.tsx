@@ -1,26 +1,32 @@
-import { type Row } from '@tanstack/react-table'
+'use client'
+
+import { AdaptiveRowActionsCell, PropsWithRow, RowAction } from '@/components'
 import { PatientMedication } from '../types'
-import { AdaptiveRowActionsCell, RowAction } from '@/components'
-import { RowActionRefresh } from './row-action-refresh'
 import { RowActionCancel } from './row-action-cancel'
+// import { RowActionCheckbox } from './row-action-checkbox'
+// import { RowActionEdit } from './row-action-edit'
+import { RowActionRefresh } from './row-action-refresh'
 
 const rowActions: RowAction<PatientMedication>[] = [
   {
-    id: 'pharmacy-list-row-action-cancel',
+    id: 'row-action-cancel',
     render: RowActionCancel,
   },
   {
-    id: 'pharmacy-list-row-action-refresh',
+    id: 'row-action-refresh',
     render: RowActionRefresh,
   },
+  // {
+  //   id: 'row-action-edit',
+  //   render: RowActionEdit,
+  // },
+  // {
+  //   id: 'row-action-check',
+  //   render: RowActionCheckbox,
+  // },
 ]
-interface ActionsCellProps {
-  row: Row<PatientMedication>
-}
-
-const ActionsCell = ({ row }: ActionsCellProps) => {
-  return <AdaptiveRowActionsCell actions={rowActions} row={row} />
-}
+const ActionsCell = ({ row }: PropsWithRow<PatientMedication>) => (
+  <AdaptiveRowActionsCell actions={rowActions} row={row} />
+)
 
 export { ActionsCell }
-

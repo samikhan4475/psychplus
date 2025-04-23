@@ -1,103 +1,103 @@
 'use client'
 
-import { Dialog, Flex, IconButton, Tooltip } from '@radix-ui/themes'
+import { Fragment, useMemo, useState } from 'react'
+import { useParams } from 'next/navigation'
+import { Dialog, IconButton, Tooltip } from '@radix-ui/themes'
 import { RefreshCw } from 'lucide-react'
-import { PatientMedication, PatientPrescriptionStatus } from '../types'
-import { getPatientMedicationOrderAction } from '../actions'
-import { useParams, usePathname } from 'next/navigation'
-import { useState } from 'react'
 import toast from 'react-hot-toast'
-import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
+import { PropsWithRow } from '@/components'
 import { FEATURE_FLAGS } from '@/constants'
-import { useStore } from '../store'
+import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { useStore as globalStore } from '@/store'
-import { AddMedication } from '../../add-medication'
-import { Cross2Icon } from '@radix-ui/react-icons'
-import { Row } from '@tanstack/react-table'
-import { PatientMedicationIframe } from '../patient-medication-iframe'
+import { getPatientMedicationOrderAction } from '../actions'
+import { PatientMedicationDialog } from '../patient-medication-dialog'
+import { ScriptSureIframeDialog } from '../script-sure-iframe-dialog'
+import { useStore } from '../store'
+import { PatientMedication, PatientPrescriptionStatus } from '../types'
 
-interface RowActionRefreshProps {
-  row: Row<PatientMedication>
-}
-
-const RowActionRefresh = ({
-  row,
-}: RowActionRefreshProps) => {
-  const {
-    prescriptionStatusTypeId,
-  } = row.original;
-
-  const { original: record } = row
-  const patientId = useParams().id as string
-  const isDisabled =
-    prescriptionStatusTypeId?.toString() !== PatientPrescriptionStatus.ACTIVE;
+const RowActionRefresh = ({ row }: PropsWithRow<PatientMedication>) => {
+  const { prescriptionStatusTypeId, externalPrescriptionId: prescriptionId } =
+    row.original
+  const { id: patientId = '' } = useParams<{ id: string }>()
+  const scriptSureSessionToken = useStore(
+    (state) => state.scriptSureSessionToken,
+  )
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
   )
-  const pathname = usePathname()
-  const isQuickNoteSection = pathname.includes('quicknotes')
-  const { fetchPatientMedications, scriptSureSessionToken } = useStore();
-
   const [isLoading, setIsLoading] = useState(false)
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [iframeUrl, setIframeUrl] = useState<string>("")
+  const [iframeUrl, setIframeUrl] = useState<string>('')
   const { constant } = globalStore((state) => ({
     constant: state.constants,
   }))
 
+  const isDisabled = useMemo(
+    () =>
+      prescriptionStatusTypeId?.toString() !== PatientPrescriptionStatus.ACTIVE,
+    [prescriptionStatusTypeId],
+  )
   const onRefresh = async () => {
     setIsLoading(true)
     const result = await getPatientMedicationOrderAction({
       patientId,
-      prescriptionId: record.externalPrescriptionId
+      prescriptionId,
     })
-
-    if (result.state === 'success') {
-      const { pendingOrderId, externalPatientId } = result.data;
-      const iframeUrl =
-        `${constant.scriptsureBaseApplicationUrl}/widgets/prescription/${externalPatientId}/${pendingOrderId}?sessiontoken=${scriptSureSessionToken}&darkmode=off`
-      setIframeUrl(iframeUrl)
-      setIsOpen(true)
-    } else if (result.state === 'error') {
-      toast.error(result.error ?? 'Failed to load')
+    if (result.state === 'error') {
+      setIsLoading(false)
+      return toast.error(result.error ?? 'Failed to load')
     }
+    const { pendingOrderId, externalPatientId } = result.data
+    const iframeUrl = `${constant.scriptsureBaseApplicationUrl}/widgets/prescription/${externalPatientId}/${pendingOrderId}?sessiontoken=${scriptSureSessionToken}&darkmode=off`
+    setIframeUrl(iframeUrl)
+    setIsOpen(true)
     setIsLoading(false)
   }
 
-  const refreshMedications = () => {
-    fetchPatientMedications(patientId, isQuickNoteSection);
-  };
+  if (!isFeatureFlagEnabled) {
+    return (
+      <PatientMedicationDialog
+        title="Patient Medication"
+        medication={row.original}
+      >
+        <Dialog.Trigger disabled={isDisabled}>
+          <Tooltip content="Re-Prescribe">
+            <IconButton
+              size="1"
+              color="gray"
+              variant="ghost"
+              type="button"
+              disabled={isDisabled}
+            >
+              <RefreshCw size={18} color="black" />
+            </IconButton>
+          </Tooltip>
+        </Dialog.Trigger>
+      </PatientMedicationDialog>
+    )
+  }
 
   return (
-    <>
+    <Fragment>
       <Tooltip content="Re-Prescribe">
-        <IconButton size="1" color="gray" variant="ghost" onClick={onRefresh} disabled={isLoading || isDisabled}>
+        <IconButton
+          size="1"
+          color="gray"
+          variant="ghost"
+          onClick={onRefresh}
+          disabled={isDisabled}
+        >
           <RefreshCw size={18} color="black" />
         </IconButton>
       </Tooltip>
-      <Dialog.Root open={isOpen}>
-        <Dialog.Content
-          className="relative max-h-[80vh] max-w-[60vw] overflow-y-scroll">
-          <Flex justify="between" align="center" mb="2">
-            <Dialog.Title
-              size="5"
-              weight="bold"
-              className="text-black m-0 font-sans"
-            >
-              Add Medication
-            </Dialog.Title>
-            <Dialog.Close className="cursor-pointer" onClick={refreshMedications}>
-              <Cross2Icon />
-            </Dialog.Close>
-          </Flex>
-          {!isFeatureFlagEnabled ? (
-            <AddMedication />
-          ) : (
-            iframeUrl && <PatientMedicationIframe iframeSrc={iframeUrl} />
-          )}
-        </Dialog.Content>
-      </Dialog.Root>
-    </>
+      <ScriptSureIframeDialog
+        iframeUrl={iframeUrl}
+        isLoading={isLoading}
+        onOpenChange={setIsOpen}
+        isOpen={isOpen}
+        title="Patient Medication"
+      />
+    </Fragment>
   )
 }
 

@@ -14,7 +14,7 @@ interface DiagnosisResource {
 interface DiagnosisIcd10Code {
   description: string
   code: string
-  id?: string | number 
+  id?: string | number
   isFavorite: boolean
   isActive: boolean
   metadata?: Metadata

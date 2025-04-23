@@ -2,7 +2,7 @@
 
 import { useCallback, useRef } from 'react'
 import { CheckIcon } from '@radix-ui/react-icons'
-import { Button, DropdownMenu, Flex } from '@radix-ui/themes'
+import { Button, DropdownMenu, Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { SelectOptionType } from '@/types'
 import { cn } from '@/utils'
@@ -35,7 +35,7 @@ const DropdownSelect = ({
 }: DropdownSelectProps) => {
   const form = useFormContext()
   const ref = useRef<HTMLButtonElement>(null)
-  const value = fieldValue? fieldValue: form.watch(field)
+  const value = fieldValue ? fieldValue : form.watch(field)
   const findLabel = useCallback(
     (value: string) => {
       const selectedOption = options?.find((option) => option?.value === value)
@@ -48,7 +48,7 @@ const DropdownSelect = ({
     <Flex className={cn('flex-1', className)}>
       <DropdownMenu.Root>
         <DropdownMenu.Trigger
-          disabled={disabled}
+          disabled={disabled || loading}
           className={cn({
             'loading hide-default-select-icon relative overflow-x-hidden':
               loading,
@@ -64,9 +64,12 @@ const DropdownSelect = ({
               { '!font-light !text-gray-9': !findLabel(value) },
               buttonClassName,
             )}
+            title={findLabel(value) ?? undefined}
           >
-            {findLabel(value) ?? placeholder}
-            <DropdownMenu.TriggerIcon className={cn({ hidden: loading })} />
+            <Text className="truncate">{findLabel(value) ?? placeholder}</Text>
+            <DropdownMenu.TriggerIcon
+              className={cn('!min-w-4', { hidden: loading })}
+            />
           </Button>
         </DropdownMenu.Trigger>
         <DropdownMenu.Content

@@ -56,7 +56,10 @@ const CODESETS = {
   ReferralSource: 'ReferralSource',
   ParameterAdjustmentStatus: 'ParameterAdjustmentStatus',
   LicenseStatus: 'LicenseStatus',
+  DurationUnit:'DurationUnit',
+  PrescribedStatus: 'PrescribedStatus',
   FileFormatType: 'FileFormatType',
+  MedicationStatus: 'MedicationStatus',
 
   // PsychPlusPublic Codesets
   TMSCoilType: 'PsychPlusPublic.TMSCoilType',
@@ -104,6 +107,11 @@ const CODESETS = {
   HallucinationType: 'PsychPlusPublic.HallucinationType',
   DelusionType: 'PsychPlusPublic.DelusionType',
   CreditCardStatus: 'CreditCardStatus',
+  PrescriptionDosageFormList: 'PsychPlusPublic.PrescriptionDosageFormList',
+  PrescriptionUnitList: 'PsychPlusPublic.PrescriptionUnitList',
+  PrescriptionRouteList: 'PsychPlusPublic.PrescriptionRouteList',
+  PrescriptionFrequencyList: 'PsychPlusPublic.PrescriptionFrequencyList',
+  PRNReason: 'PsychPlusPublic.PRNReason',
   PatientRelationship: 'PsychPlusPublic.PatientRelationship',
   PsychHistoryRelation: 'PsychPlusPublic.PsychHistoryRelation',
   PermissionSection: 'PsychPlusPublic.PermissionSection',

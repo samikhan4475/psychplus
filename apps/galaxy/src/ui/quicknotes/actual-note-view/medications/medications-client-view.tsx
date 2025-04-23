@@ -1,27 +1,25 @@
 'use client'
 
 import { LoadingPlaceholder } from '@/components'
-import { Details } from './details'
-import { useStore } from '@/ui/medications/patient-medications-widget/store'
 import { QuickNoteSectionItem } from '@/types'
+import { useStore } from '@/ui/medications/patient-medications-widget/store'
+import { Details } from './details'
 
 interface MedicationsClientViewProps {
-  data?: QuickNoteSectionItem[];
-  patientId: string
+  data?: QuickNoteSectionItem[]
 }
-const MedicationsClientView = ({ data, patientId }: MedicationsClientViewProps) => {
+const MedicationsClientView = ({ data }: MedicationsClientViewProps) => {
   const { data: medicationData, loading } = useStore((state) => ({
     data: state.data,
     error: state.error,
-    loading: state.loading
-  }));
-
+    loading: state.loading,
+  }))
 
   if (loading) {
     return <LoadingPlaceholder className="min-h-24" />
   }
 
-  return <Details data={data} medicationData={medicationData?.medications || []} />
+  return <Details data={data} medicationData={medicationData ?? []} />
 }
 
 export { MedicationsClientView }

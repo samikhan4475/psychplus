@@ -1,13 +1,10 @@
 'use client'
 
 import { Box, Flex, TextField } from '@radix-ui/themes'
-import { useDebouncedCallback } from 'use-debounce'
 import { SearchButton } from '@/ui/schedule/shared'
 import { cn } from '@/utils'
 
 const SearchMedications = () => {
-  const handleSearchService = useDebouncedCallback((value: string) => {}, 500)
-
   return (
     <Flex align="center" gap="2">
       <Box className="relative">
@@ -28,7 +25,6 @@ const SearchMedications = () => {
             size="1"
             className="min-w-14 !outline-white w-[500px] flex-1 [box-shadow:none]"
             placeholder="Select Practice"
-            onChange={(e) => handleSearchService(e.target.value)}
           />
         </Flex>
       </Box>

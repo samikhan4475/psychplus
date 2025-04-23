@@ -38,7 +38,7 @@ const NotesPrintButton = ({ id }: NotesPrintButtonProps) => {
       className="text-black"
       onClick={onClick}
     >
-      <PrinterIcon height={14} width={14} strokeWidth={1.5} />
+      <PrinterIcon height={14} width={14} strokeWidth={1.5} /> Print
     </Button>
   )
 }

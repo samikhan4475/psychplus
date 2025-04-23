@@ -9,7 +9,7 @@ interface AlertDialogProps {
   onOpenChange: (open: boolean) => void
   title: string
   message?: string
-  loading: boolean
+  loading?: boolean
   okButton?: {
     text: string
     onClick: () => void

@@ -5,10 +5,8 @@ import { PatientMedicationsWidget } from './patient-medications-widget'
 
 const PatientMedicationsClientLoader = () => {
   return (
-    <Flex direction="column" width="100%">
-      <Flex direction="column" gap="2">
-        <PatientMedicationsWidget />
-      </Flex>
+    <Flex direction="column" width="100%" gap="2">
+      <PatientMedicationsWidget />
     </Flex>
   )
 }

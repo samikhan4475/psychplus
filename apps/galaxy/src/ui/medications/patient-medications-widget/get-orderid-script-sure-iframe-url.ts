@@ -1,8 +1,8 @@
+'use client'
+
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import {
-  getScriptSureSessionToken,
-} from '@/actions'
+import { getScriptSureSessionToken } from '@/actions'
 import { DAWSYS } from '@/constants'
 
 const useGetOrderIdScriptSureIframeUrl = (
@@ -19,18 +19,23 @@ const useGetOrderIdScriptSureIframeUrl = (
     const fetchData = async () => {
       const sessionTokenResponse = await getScriptSureSessionToken(DAWSYS)
 
-      if (sessionTokenResponse.state !== 'error' && externalPatientId && pendingOrderId) {
+      if (
+        sessionTokenResponse.state !== 'error' &&
+        externalPatientId &&
+        pendingOrderId
+      ) {
         const sessionToken = sessionTokenResponse.data
         const url = `${scriptSureAppUrl}/widgets/${baseUrl}/${externalPatientId}/${pendingOrderId}?sessiontoken=${sessionToken}&darkmode=${darkMode}`
         setIsOpen(true)
         setIframeUrl(url)
       } else if (sessionTokenResponse.state === 'error') {
-        toast.error(sessionTokenResponse.error ?? "Failed to get response")
+        toast.error(sessionTokenResponse.error ?? 'Failed to get response')
         setIsOpen(false)
       }
     }
 
     fetchData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, scriptSureAppUrl, baseUrl, pendingOrderId, externalPatientId])
 
   return { iframeUrl, isOpen }

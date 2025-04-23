@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { PropsWithChildren, useEffect, useRef, useState } from 'react'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import {
   Box,
@@ -28,6 +28,7 @@ interface AsyncAutoCompleteTextFieldProps {
   className?: string
   truncateText?: number
   fetchDataAction: (search: string) => Promise<ActionResult<SelectOptionType[]>>
+  onSelect?: (option: SelectOptionType) => void
 }
 
 const AsyncAutoCompleteTextField = ({
@@ -38,7 +39,9 @@ const AsyncAutoCompleteTextField = ({
   truncateText,
   disabled = false,
   valueKey = 'value',
-}: AsyncAutoCompleteTextFieldProps) => {
+  onSelect,
+  children,
+}: PropsWithChildren<AsyncAutoCompleteTextFieldProps>) => {
   const form = useFormContext()
   const [open, setOpen] = useState(false)
   const [results, setResults] = useState<SelectOptionType[]>([])
@@ -106,32 +109,35 @@ const AsyncAutoCompleteTextField = ({
     focusedItem?.scrollIntoView({ block: 'nearest' })
   }, [focusedIndex])
 
-  const renderTrigger = () => (
-    <Box
-      onClick={() => onOpenChange(true)}
-      className={cn(
-        'flex h-7 w-full cursor-pointer items-center justify-between rounded-1 border border-gray-7',
-        { 'bg-pp-states-disabled cursor-not-allowed': disabled },
-        className,
-      )}
-    >
-      {form.watch(field) ? (
-        <Tooltip
-          content={<Text className="select-text"> {selectedLabel}</Text>}
-        >
-          <Text className="text-gray-200 px-2 text-1">
-            {truncateText
-              ? truncateString(selectedLabel, truncateText)
-              : selectedLabel}
-          </Text>
-        </Tooltip>
-      ) : (
-        <Text className="px-2 text-1 text-gray-9">{placeholder}</Text>
-      )}
+  const renderTrigger = () =>
+    children ? (
+      <Box onClick={() => !disabled && onOpenChange(true)}>{children}</Box>
+    ) : (
+      <Box
+        onClick={() => onOpenChange(true)}
+        className={cn(
+          'flex h-7 w-full cursor-pointer items-center justify-between rounded-1 border border-gray-7',
+          { 'bg-pp-states-disabled cursor-not-allowed': disabled },
+          className,
+        )}
+      >
+        {form.watch(field) ? (
+          <Tooltip
+            content={<Text className="select-text"> {selectedLabel}</Text>}
+          >
+            <Text className="text-gray-200 px-2 text-1">
+              {truncateText
+                ? truncateString(selectedLabel, truncateText)
+                : selectedLabel}
+            </Text>
+          </Tooltip>
+        ) : (
+          <Text className="px-2 text-1 text-gray-9">{placeholder}</Text>
+        )}
 
-      <MagnifyingGlassIcon className="mr-2" height="16" width="16" />
-    </Box>
-  )
+        <MagnifyingGlassIcon className="mr-2" height="16" width="16" />
+      </Box>
+    )
   const renderItem = (item: SelectOptionType, index: number) => (
     <Box
       key={item.value}
@@ -147,6 +153,7 @@ const AsyncAutoCompleteTextField = ({
     </Box>
   )
   const handleSelect = (item: SelectOptionType) => {
+    onSelect?.(item)
     const value = valueKey === 'value' ? item.value : item.label
     form.setValue(field, value)
     setSelectedLabel(item.label)

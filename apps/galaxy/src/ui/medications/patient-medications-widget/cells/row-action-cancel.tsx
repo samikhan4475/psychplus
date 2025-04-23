@@ -3,53 +3,28 @@
 import { useState } from 'react'
 import { useParams, usePathname } from 'next/navigation'
 import { IconButton, Tooltip } from '@radix-ui/themes'
-import { Row } from '@tanstack/react-table'
 import { CircleX } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { PropsWithRow } from '@/components'
 import { cancelPatientPrescriptions } from '../actions'
 import { useStore } from '../store'
-import { PatientMedication, PatientPrescriptionStatus } from '../types'
+import { PatientMedication } from '../types'
 
-interface RowActionRefreshProps {
-  row: Row<PatientMedication>
-}
-
-const RowActionCancel = ({ row }: RowActionRefreshProps) => {
-  const {
-    externalPrescriptionId,
-    externalMessageId,
-    writtenDate,
-    prescriptionStatusTypeId,
-  } = row.original
+const RowActionCancel = ({ row }: PropsWithRow<PatientMedication>) => {
+  const { refetch } = useStore((state) => ({
+    refetch: state.refetch,
+  }))
+  const { id } = row.original
+  const patientId = useParams().id as string
   const pathname = usePathname()
   const isQuickNoteSection = pathname.includes('quicknotes')
-
-  const { externalPatientId, fetchPatientMedications } =
-    useStore((state) => ({
-      externalPatientId: state.externalPatientId,
-      fetchPatientMedications: state.fetchPatientMedications
-    }))
-
-  const isDisabled =
-    prescriptionStatusTypeId?.toString() === PatientPrescriptionStatus.AWAITING_APPROVAL ||
-    prescriptionStatusTypeId?.toString() === PatientPrescriptionStatus.CANCELLED;
-
-  const patientId = useParams().id as string
   const [isLoading, setIsLoading] = useState(false)
-
   const onCancel = async () => {
-    if (!externalPatientId) return;
     setIsLoading(true)
-    const result = await cancelPatientPrescriptions({
-      patientId,
-      externalPatientId,
-      externalPrescriptionId,
-      externalMessageId,
-      writtenDate,
-    })
+    const result = await cancelPatientPrescriptions(Number(patientId), id)
     if (result.state === 'success') {
       toast.success('Prescription cancelled successfully.')
-      fetchPatientMedications(patientId, isQuickNoteSection)
+      refetch(isQuickNoteSection)
     } else if (result.state === 'error') {
       toast.error('Unable to cancel prescription.')
     }
@@ -63,7 +38,7 @@ const RowActionCancel = ({ row }: RowActionRefreshProps) => {
         color="gray"
         variant="ghost"
         onClick={onCancel}
-        disabled={isDisabled || isLoading}
+        disabled={isLoading}
       >
         <CircleX size={18} color="black" />
       </IconButton>

@@ -1,61 +1,97 @@
 'use client'
 
-import { Edit2Icon } from '@/components/icons'
+import { Fragment, useMemo, useState } from 'react'
+import { useParams } from 'next/navigation'
+import { Dialog, IconButton, Tooltip } from '@radix-ui/themes'
+import { RefreshCw } from 'lucide-react'
+import toast from 'react-hot-toast'
+import { PropsWithRow } from '@/components'
 import { FEATURE_FLAGS } from '@/constants'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
-import { Cross2Icon } from '@radix-ui/react-icons'
-import { Dialog, Flex, IconButton, Tooltip } from '@radix-ui/themes'
-import { useParams } from 'next/navigation'
-import { AddMedication } from '../../add-medication'
-import { AddMedicationButton } from '../add-medication-button'
+import { useStore as globalStore } from '@/store'
+import { getPatientMedicationOrderAction } from '../actions'
+import { PatientMedicationDialog } from '../patient-medication-dialog'
+import { ScriptSureIframeDialog } from '../script-sure-iframe-dialog'
 import { useStore } from '../store'
-const RowActionEdit = () => {
+import { PatientMedication, PatientPrescriptionStatus } from '../types'
+
+const RowActionEdit = ({ row }: PropsWithRow<PatientMedication>) => {
+  const { prescriptionStatusTypeId, externalPrescriptionId: prescriptionId } =
+    row.original
+  const { id: patientId = '' } = useParams<{ id: string }>()
+  const scriptSureSessionToken = useStore(
+    (state) => state.scriptSureSessionToken,
+  )
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
   )
-  const patientId = useParams().id as string
-  const { fetchPatientMedications } = useStore();
-  const fetchMedications = () => {
-    fetchPatientMedications(patientId);
-  };
-  return (
-    <Dialog.Root>
-      <Dialog.Trigger>
-        <Tooltip content="Edit">
-          <IconButton size="1" color="gray" variant="ghost" >
-            <Flex justify="between" align="center" gap="1">
-              <Edit2Icon
-                width={16}
-                height={16}
-                className="cursor-pointer"
-                fill="black"
-              />
-            </Flex>
-          </IconButton>
-        </Tooltip>
-      </Dialog.Trigger>
+  const [isLoading, setIsLoading] = useState(false)
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [iframeUrl, setIframeUrl] = useState<string>('')
+  const { constant } = globalStore((state) => ({
+    constant: state.constants,
+  }))
 
-      <Dialog.Content
-        className="relative max-h-[80vh] max-w-[60vw] overflow-y-scroll">
-        <Flex justify="between" align="center" mb="2">
-          <Dialog.Title
-            size="5"
-            weight="bold"
-            className="text-black m-0 font-sans"
-          >
-            Add Medication
-          </Dialog.Title>
-          <Dialog.Close className="cursor-pointer" onClick={fetchMedications}>
-            <Cross2Icon />
-          </Dialog.Close>
-        </Flex>
-        {!isFeatureFlagEnabled ? (
-          <AddMedication />
-        ) : (
-          <AddMedicationButton />
-        )}
-      </Dialog.Content>
-    </Dialog.Root>
+  const isDisabled = useMemo(
+    () =>
+      prescriptionStatusTypeId?.toString() !== PatientPrescriptionStatus.ACTIVE,
+    [prescriptionStatusTypeId],
+  )
+  const onRefresh = async () => {
+    setIsLoading(true)
+    const result = await getPatientMedicationOrderAction({
+      patientId,
+      prescriptionId,
+    })
+    if (result.state === 'error') {
+      setIsLoading(false)
+      return toast.error(result.error ?? 'Failed to load')
+    }
+    const { pendingOrderId, externalPatientId } = result.data
+    const iframeUrl = `${constant.scriptsureBaseApplicationUrl}/widgets/prescription/${externalPatientId}/${pendingOrderId}?sessiontoken=${scriptSureSessionToken}&darkmode=off`
+    setIframeUrl(iframeUrl)
+    setIsOpen(true)
+    setIsLoading(false)
+  }
+
+  if (!isFeatureFlagEnabled) {
+    return (
+      <PatientMedicationDialog
+        title="Edit Medication"
+        medication={row.original}
+      >
+        <Dialog.Trigger>
+          <Tooltip content="Edit">
+            <IconButton size="1" color="gray" variant="ghost" type="button">
+              <RefreshCw size={18} color="black" />
+            </IconButton>
+          </Tooltip>
+        </Dialog.Trigger>
+      </PatientMedicationDialog>
+    )
+  }
+
+  return (
+    <Fragment>
+      <Tooltip content="Edit">
+        <IconButton
+          size="1"
+          color="gray"
+          variant="ghost"
+          onClick={onRefresh}
+          disabled={isDisabled}
+        >
+          <RefreshCw size={18} color="black" />
+        </IconButton>
+      </Tooltip>
+      <ScriptSureIframeDialog
+        iframeUrl={iframeUrl}
+        isLoading={isLoading}
+        onOpenChange={setIsOpen}
+        isOpen={isOpen}
+        title="Edit Medication"
+      />
+    </Fragment>
   )
 }
 

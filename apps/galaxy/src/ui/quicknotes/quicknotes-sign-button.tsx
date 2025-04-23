@@ -232,7 +232,7 @@ const QuickNotesSignButton = ({
     }
     handleAutoFollowupGeneration()
 
-    if (checkIfPmpReviewRequired(medicationData?.medications)) {
+    if (checkIfPmpReviewRequired(medicationData ?? [])) {
       toast.error(SIGN_PMP_WARNING)
       return
     }

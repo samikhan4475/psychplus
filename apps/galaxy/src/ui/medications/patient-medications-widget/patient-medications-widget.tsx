@@ -1,18 +1,16 @@
 'use client'
 
-import { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 import { useParams, usePathname } from 'next/navigation'
 import { Box, Flex } from '@radix-ui/themes'
 import {
   CheckboxCell,
-  WidgetAddButton,
   WidgetClearButton,
   WidgetContainer,
   WidgetSaveButton,
 } from '@/components'
 import { FEATURE_FLAGS } from '@/constants'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
-import { AddMedication } from '../add-medication'
 import { AddMedicationButton } from './add-medication-button'
 import { PatientMedicationsDataTable } from './patient-medications-data-table'
 import { PatientMedicationsTabView } from './patient-medications-tab-view'
@@ -20,84 +18,67 @@ import { SearchMedications } from './search-medications'
 import { useStore } from './store'
 
 const PatientMedicationsWidget = () => {
+  const { id: patientId = '' } = useParams<{ id: string }>()
+  const pathname = usePathname()
+  const isQuickNoteSection = pathname.includes('quicknotes')
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
   )
-  const pathname = usePathname()
-  const isQuickNoteView = pathname.includes('quicknotes')
-  const patientId = useParams().id as string
 
   const {
     isPmpReviewed,
     setPmpReviewed,
-    fetchPatientMedications,
+    fetchPatientMedication,
     fetchScriptSureSessionToken,
-  } = useStore((state) => ({
-    isPmpReviewed: state.isPmpReviewed,
-    setPmpReviewed: state.setPmpReviewed,
-    fetchPatientMedications: state.fetchPatientMedications,
-    fetchScriptSureSessionToken: state.fetchScriptSureSessionToken,
-  }))
+  } = useStore()
 
   useEffect(() => {
     if (!patientId) return
-    const fetchAllData = async () => {
-      await Promise.all([
-        fetchScriptSureSessionToken(),
-        fetchPatientMedications(patientId, isQuickNoteView),
-      ])
-    }
-    fetchAllData()
-  }, [patientId, fetchPatientMedications, fetchScriptSureSessionToken])
+    const promises: Promise<void>[] = [
+      fetchPatientMedication({ patientIds: [Number(patientId)] }, 1, true, isQuickNoteSection),
+    ]
+    if (isFeatureFlagEnabled) promises.push(fetchScriptSureSessionToken())
+    Promise.all(promises)
+  }, [
+    patientId,
+    fetchPatientMedication,
+    fetchScriptSureSessionToken,
+    isFeatureFlagEnabled,
+  ])
 
   const path = usePathname()
   const tabViewEnabled = path.includes('medications')
-  const fetchMedications = () => {
-    fetchPatientMedications(patientId, isQuickNoteView)
-  }
 
+  if (tabViewEnabled) {
+    return <PatientMedicationsTabView patientId={patientId} />
+  }
   return (
-    <>
-      {tabViewEnabled ? (
-        <PatientMedicationsTabView />
-      ) : (
-        <Box position="relative" width="100%">
-          <WidgetContainer
-            title="Medications"
-            headerRight={
-              <>
-                <WidgetClearButton />
-                <WidgetSaveButton />
-              </>
-            }
-            headerLeft={
-              <>
-                <SearchMedications />
-                <WidgetAddButton
-                  title="Add Medication"
-                  onClose={fetchMedications}
-                >
-                  {!isFeatureFlagEnabled ? (
-                    <AddMedication />
-                  ) : (
-                    <AddMedicationButton />
-                  )}
-                </WidgetAddButton>
-                <Flex>
-                  <CheckboxCell
-                    label="PMP is reviewed"
-                    checked={isPmpReviewed}
-                    onCheckedChange={(checked) => setPmpReviewed(!!checked)}
-                  />
-                </Flex>
-              </>
-            }
-          >
-            <PatientMedicationsDataTable />
-          </WidgetContainer>
-        </Box>
-      )}
-    </>
+    <Box position="relative" width="100%">
+      <WidgetContainer
+        title="Medications"
+        headerRight={
+          <>
+            <WidgetClearButton />
+            <WidgetSaveButton />
+          </>
+        }
+        headerLeft={
+          <Fragment>
+            <SearchMedications />
+            <AddMedicationButton />
+            <Flex>
+              <CheckboxCell
+                label="PMP is reviewed"
+                checked={isPmpReviewed}
+                onCheckedChange={(checked) => setPmpReviewed(!!checked)}
+              />
+            </Flex>
+          </Fragment>
+        }
+      >
+        <PatientMedicationsDataTable />
+      </WidgetContainer>
+    </Box>
   )
 }
 

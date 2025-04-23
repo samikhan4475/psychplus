@@ -358,8 +358,7 @@ const UPDATE_PATIENT_DRIVING_LICENSE_IMAGE_ENDPOINT = (
   patientId: number,
   side: string,
 ) => `${API_URL}/api/patients/${patientId}/driverslicenseimage/${side}`
-const GET_PATIENT_MEDICATIONS = () =>
-  `${API_URL}/api/prescriptions/actions/search`
+
 const NOTE_UPLOAD_FILE = (patientId: string, appointmentId: string | null) =>
   `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}/documents`
 const GET_PRACTICE_STAFF_ROLES = (practiceId: string, staffId: string) =>
@@ -785,8 +784,9 @@ const UPDATE_CODSET_CODE = (
 const ADD_ASSIGNING_AUTHORITY = `${API_URL}/api/codeset/authorities`
 const ADD_CODSET_CODE = (assigningAuthorityId: string, codesetId: string) =>
   `${API_URL}/api/codeset/authorities/${assigningAuthorityId}/codesets/${codesetId}/codes`
-const CANCEL_PATIENT_PRESCRIPTIONS = (patientId: string) =>
-  `${API_URL}/api/patients/${patientId}/scriptsureprescriptions/actions/cancel`
+const CANCEL_PATIENT_PRESCRIPTIONS = (patientId: number, id: string) =>
+  `${API_URL}/api/patients/${patientId}/prescriptions/${id}
+`
 
 const GET_PATIENT_PRESCRIPTIONS_MEDICATION_ORDER = (
   patientId: string,
@@ -841,6 +841,18 @@ const UPDATE_SERVICE_ENDPOINT = (locationId: string, serviceId: string) =>
 const GET_SERVICE_HISTORY = (serviceId: string) =>
   `${API_URL}/api/services/${serviceId}/history/actions/search`
 const GET_CURRENT_USER_SETTINGS = `${API_URL}/api/users/self/settings`
+const GET_DRUGS = `${API_URL}/api/drugs/erxprescribable/actions/search`
+const SAVE_PATIENT_PRESCRIPTIONS = (patientId: number) =>
+  `${API_URL}/api/patients/${patientId}/prescriptions`
+const GET_PATIENT_MEDICATIONS = () =>
+  `${API_URL}/api/prescriptions/actions/search`
+const UPDATE_PATIENT_MEDICATION = (patientId: number, id: string) =>
+  `${API_URL}/api/patients/${patientId}/prescriptions/${id}`
+const GET_PATIENT_MEDICATION_HISTORY_ENDPOINT = (
+  patientId: number,
+  id: string,
+) =>
+  `${API_URL}/api/patients/${patientId}/prescriptions/${id}/history/actions/search`
 const ADD_BULK_USER_SETTINGS = (userId: number) =>
   `${API_URL}/api/users/${userId}/bulksettings`
 const UPDATE_BULK_USER_SETTINGS = (userId: number) =>
@@ -871,6 +883,9 @@ const UPDATE_FOLLOW_UP_DENIAL_STATUS = (appointmentId: number) =>
   `${API_URL}/api/appointments/${appointmentId}/actions/followupstatus`
 
 const GET_USERS_SELF_INITIAL_INFORMATION_ENDPOINT = `${API_URL}/api/users/self/initialinformation`
+const GET_PATIENT_MEDICATION_ENDPOINT = (patientId: number, id: string) =>
+  `${API_URL}/api/patients/${patientId}/prescriptions/${id}`
+const PATIENT_MEDICATION_SIGN_IN = `${API_URL}/api/prescribing/prescriptions/actions/transmit`
 const GET_PROVIDER_PRESCRIBING_DATA = `${API_URL}/api/providerlocations/GetProviderWithPrescribingData`
 
 const GET_SCHEDULES_REPORTS = `${API_URL}/api/reporting/schedules/actions/search`
@@ -901,6 +916,8 @@ const UPDATE_DEFAULT_PAYMENT = (
   `${API_URL}/api/patients/${patientId}/financialdata/${finanicalDataId}/actions/selfpay/${isSelfPay}`
 
 export {
+  PATIENT_MEDICATION_SIGN_IN,
+  GET_PATIENT_MEDICATION_ENDPOINT,
   GET_LAB_RESULTS_ENDPOINT,
   NOTE_UPLOAD_FILE,
   GET_NOTE_VIEW_ENDPOINT,
@@ -1216,6 +1233,8 @@ export {
   UPDATE_PRACTICE_ENDPOINT,
   GET_PRACTICE_HISTORY_ENDPOINT,
   GET_ADDENDUMS_AGAINST_NOTE_ID,
+  GET_DRUGS,
+  SAVE_PATIENT_PRESCRIPTIONS,
   GET_USER_ROLES,
   Add_USER_ROLES,
   UPDATE_USER_ROLES,
@@ -1280,6 +1299,8 @@ export {
   GET_LAB_ORDER_RESULTS,
   ADD_SIGNED_LAB_ORDERS,
   GET_USERS_SELF_INITIAL_INFORMATION_ENDPOINT,
+  UPDATE_PATIENT_MEDICATION,
+  GET_PATIENT_MEDICATION_HISTORY_ENDPOINT,
   GET_DISTRIBUTION_GROUPS,
   DELETE_STAFF_VIDEO_ENDPOINT,
   SIGN_PATIENT_REFERRAL_ENDPOINT,

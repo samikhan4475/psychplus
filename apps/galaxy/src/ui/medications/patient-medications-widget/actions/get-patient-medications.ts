@@ -1,21 +1,32 @@
 'use server'
 
 import * as api from '@/api'
-import type { GetPatientMedicationsResponse, PatientMedication } from '../types'
-
-interface GetPatientMedicationsParams {
-  patientIds: string[]
-}
+import { PATIENT_MEDICATIONS_TABLE_PAGE_SIZE } from '../constants'
+import type { GetPatientMedicationsParams, PatientMedication } from '../types'
 
 const getPatientMedicationsAction = async ({
-  patientIds,
+  page = 1,
+  formValues,
+  sort,
 }: GetPatientMedicationsParams): Promise<
-  api.ActionResult<GetPatientMedicationsResponse>
+  api.ActionResult<PatientMedication[]>
 > => {
+  const offset = (page - 1) * PATIENT_MEDICATIONS_TABLE_PAGE_SIZE
+
+  const url = new URL(api.GET_PATIENT_MEDICATIONS())
+  url.searchParams.append('limit', String(PATIENT_MEDICATIONS_TABLE_PAGE_SIZE))
+  url.searchParams.append('offset', String(offset))
+
+  if (sort) {
+    url.searchParams.append('orderBy', `${sort.column} ${sort.direction}`)
+  } else {
+    url.searchParams.append('orderBy', 'createdOn desc')
+  }
   const response = await api.POST<PatientMedication[]>(
-    api.GET_PATIENT_MEDICATIONS(),
-    { patientIds },
+    url?.toString(),
+    formValues,
   )
+
   if (response.state === 'error') {
     return {
       state: 'error',
@@ -25,9 +36,8 @@ const getPatientMedicationsAction = async ({
 
   return {
     state: 'success',
-    data: {
-      medications: response.data,
-    },
+    data: response?.data,
+    total: Number(response.headers.get('psychplus-totalresourcecount')),
   }
 }
 

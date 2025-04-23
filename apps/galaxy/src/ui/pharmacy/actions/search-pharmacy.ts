@@ -7,6 +7,7 @@ const searchPharmaciesAction = async (
   patientId: string,
   payload?: PharmacyParams,
 ): Promise<api.ActionResult<Pharmacy[]>> => {
+
   const response = await api.POST<Pharmacy[]>(
     api.SEARCH_PHARMACIES(patientId),
     payload,

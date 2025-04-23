@@ -1,26 +1,42 @@
-'use client'
-
-import { useParams } from 'next/navigation'
-import { LoadingPlaceholder } from '@/components'
-import { useGetScriptSureIframeUrl } from '@/hooks'
-import { PatientMedicationIframe } from './patient-medication-iframe'
-import { useStore } from '@/store'
+import React from 'react'
+import { Button, Dialog } from '@radix-ui/themes'
+import { PlusIcon } from 'lucide-react'
+import { FEATURE_FLAGS } from '@/constants'
+import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
+import { PatientMedicationDialog } from './patient-medication-dialog'
+import { ScriptSureMedicationDialog } from './script-sure-medication-dialog'
 
 const AddMedicationButton = () => {
-  const { id } = useParams<{ id: string }>()
-  const { constant } = useStore((state) => ({
-    constant: state.constants,
-  }))
-  const { iframeUrl, loading } = useGetScriptSureIframeUrl(
-    id,
-    constant.scriptsureBaseApplicationUrl,
-    'drug-list',
+  const isFeatureFlagEnabled = useFeatureFlagEnabled(
+    FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
   )
-  if (loading) {
-    return <LoadingPlaceholder className="h-full" />
+  if (!isFeatureFlagEnabled) {
+    return (
+      <PatientMedicationDialog title="Add Medication">
+        <Dialog.Trigger>
+          <Button
+            size="1"
+            variant="outline"
+            color="gray"
+            className="text-black"
+          >
+            <PlusIcon height={16} width={16} />
+            Add New
+          </Button>
+        </Dialog.Trigger>
+      </PatientMedicationDialog>
+    )
   }
-
-  return <PatientMedicationIframe iframeSrc={iframeUrl} />
+  return (
+    <ScriptSureMedicationDialog title="Add Medication">
+      <Dialog.Trigger>
+        <Button size="1" variant="outline" color="gray" className="text-black">
+          <PlusIcon height={16} width={16} />
+          Add New
+        </Button>
+      </Dialog.Trigger>
+    </ScriptSureMedicationDialog>
+  )
 }
 
 export { AddMedicationButton }

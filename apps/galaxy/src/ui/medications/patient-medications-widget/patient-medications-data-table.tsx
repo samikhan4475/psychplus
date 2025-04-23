@@ -1,109 +1,11 @@
-import React from 'react'
-import { Flex, ScrollArea } from '@radix-ui/themes'
-import { type ColumnDef } from '@tanstack/react-table'
-import { useShallow } from 'zustand/react/shallow'
-import {
-  ColumnHeader,
-  DataTable,
-  DateCell,
-  LoadingPlaceholder,
-  LongTextCell,
-  TextCell,
-} from '@/components'
-import { formatDateManually } from '@/utils'
-import { ActionsCell } from './cells'
-import { PharmacyCell } from './cells/pharmacy-cell'
-import { StatusCell } from './cells/status-cell'
-import { useStore } from './store'
-import type { PatientMedication } from './types'
+'use client'
 
-const columns: ColumnDef<PatientMedication>[] = [
-  {
-    id: 'medication-drug',
-    accessorKey: 'medicationDrug',
-    header: () => <ColumnHeader label="Drug" />,
-    cell: ({ row }) => (
-      <LongTextCell>{row.original.drugDescription ?? 'N/A'}</LongTextCell>
-    ),
-  },
-  {
-    id: 'medication-strength',
-    header: () => <ColumnHeader label="Strength" />,
-    cell: ({ row }) => (
-      <LongTextCell>{row.original.medicationDetails.strength}</LongTextCell>
-    ),
-  },
-  {
-    id: 'medication-direction',
-    accessorKey: 'medicationDirection',
-    header: () => <ColumnHeader label="Direction" />,
-    cell: ({ row }) => (
-      <LongTextCell>{row.original.medicationDetails.directions}</LongTextCell>
-    ),
-  },
-  {
-    id: 'medication-quantity',
-    accessorKey: 'medicationQuantity',
-    header: () => <ColumnHeader label="Quantity" />,
-    cell: ({ row }) => (
-      <TextCell>{row.original.quantityValue ?? 'N/A'}</TextCell>
-    ),
-  },
-  {
-    id: 'medication-refill',
-    accessorKey: 'medicationRefill',
-    header: () => <ColumnHeader label="Refill" />,
-    cell: ({ row }) => <TextCell>{row.original.refills ?? 'N/A'}</TextCell>,
-  },
-  {
-    id: 'medication-written-date',
-    accessorKey: 'medicationWrittenDate',
-    header: () => <ColumnHeader label="Written Date" />,
-    cell: ({ row }) => (
-      <DateCell>
-        {formatDateManually(row.original.writtenDate) ?? 'N/A'}
-      </DateCell>
-    ),
-  },
-  {
-    id: 'medication-end-date',
-    accessorKey: 'medicationEndDate',
-    header: () => <ColumnHeader label="End Date" />,
-    cell: ({ row }) => (
-      <DateCell>
-        {formatDateManually(row.original.endDateTime) ?? 'N/A'}
-      </DateCell>
-    ),
-  },
-  {
-    id: 'medication-prescriber',
-    accessorKey: 'medicationPrescriber',
-    header: () => <ColumnHeader label="Prescriber" />,
-    cell: ({ row }) => (
-      <TextCell>
-        {row.original.medicationDetails.providerName ?? 'N/A'}
-      </TextCell>
-    ),
-  },
-  {
-    id: 'medication-pharmacy',
-    accessorKey: 'medicationPharmacy',
-    header: () => <ColumnHeader label="Pharmacy" />,
-    cell: ({ row }) => <PharmacyCell row={row} />,
-  },
-  {
-    id: 'medication-status',
-    accessorKey: 'medicationStatus',
-    header: () => <ColumnHeader label="Status" />,
-    cell: ({ row }) => <StatusCell row={row} />,
-  },
-  {
-    id: 'medication-actions',
-    accessorKey: 'medicationActions',
-    header: () => <ColumnHeader label="Actions" />,
-    cell: ({ row }) => <ActionsCell row={row} />,
-  },
-]
+import React, { useMemo } from 'react'
+import { ScrollArea } from '@radix-ui/themes'
+import { useShallow } from 'zustand/react/shallow'
+import { DataTable, LoadingPlaceholder } from '@/components'
+import { columns } from './columns'
+import { useStore } from './store'
 
 const PatientMedicationsDataTable = ({ actionsHide = false }) => {
   const { data, loading } = useStore(
@@ -113,25 +15,26 @@ const PatientMedicationsDataTable = ({ actionsHide = false }) => {
     })),
   )
 
+  const filteredColumns = useMemo(
+    () =>
+      actionsHide
+        ? columns?.filter((col) => col.id !== 'medication-actions')
+        : columns,
+    [actionsHide, columns],
+  )
+
   if (loading) {
-    return (
-      <Flex height="100%" align="center" justify="center">
-        <LoadingPlaceholder />
-      </Flex>
-    )
+    return <LoadingPlaceholder className="h-full w-full" />
   }
 
-  const filteredColumns = actionsHide
-    ? columns.filter((col) => col.id !== 'medication-actions')
-    : columns
-
   return (
-    <ScrollArea>
+    <ScrollArea className="bg-white h-full flex-1 p-2">
       <DataTable
-        data={data?.medications ?? []}
+        data={data ?? []}
         columns={filteredColumns}
         disablePagination
         sticky
+        theadClass="z-[1]"
       />
     </ScrollArea>
   )

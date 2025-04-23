@@ -4,6 +4,7 @@ import { ContactDetails, Metadata } from '@/types'
 interface Pharmacy {
   id: string
   metadata?: Metadata
+  name?: string
   pharmacyId: string
   pharmacyName: string
   pharmacyContactDetails: ContactDetails
@@ -11,6 +12,7 @@ interface Pharmacy {
   isPreferred: boolean
   isFavorite: boolean
   patientId: string
+  externalPharmacyId: string
 }
 interface PharmacyFilter {
   id?: string

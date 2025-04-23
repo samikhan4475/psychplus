@@ -8,7 +8,11 @@ import { PatientMedication } from '@/ui/medications/patient-medications-widget/t
 import { NoteDetailProps } from '../types'
 import { Details } from './details'
 
-const MedicationsNoteDetailsView = ({ data, isNoteView, patientId  }: NoteDetailProps) => {
+const MedicationsNoteDetailsView = ({
+  data,
+  isNoteView,
+  patientId,
+}: NoteDetailProps) => {
   const [response, setResponse] = useState<PatientMedication[]>([])
   const [loading, setLoading] = useState(false)
 
@@ -16,18 +20,20 @@ const MedicationsNoteDetailsView = ({ data, isNoteView, patientId  }: NoteDetail
     const fetchData = async () => {
       setLoading(true)
       const result = await getPatientMedicationsAction({
-        patientIds: [patientId],
+        formValues: {
+          patientIds: [Number(patientId)],
+        },
       })
       if (result.state === 'error') {
         setLoading(false)
         return
       }
 
-      setResponse(result.data.medications)
+      setResponse(result?.data)
       setLoading(false)
     }
     fetchData()
-  }, [])
+  }, [patientId])
 
   if (loading) {
     return (
@@ -38,7 +44,9 @@ const MedicationsNoteDetailsView = ({ data, isNoteView, patientId  }: NoteDetail
   }
   if (response.length === 0) return null
 
-  return <Details data={data} medicationData={response} isNoteView={isNoteView} />
+  return (
+    <Details data={data} medicationData={response} isNoteView={isNoteView} />
+  )
 }
 
 export { MedicationsNoteDetailsView }
