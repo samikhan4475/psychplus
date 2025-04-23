@@ -1,5 +1,4 @@
 import toast from 'react-hot-toast'
-import { displayName } from 'react-quill'
 import { addTemplateReportAction } from './actions'
 import { ParameterCodeSet, ParsedCron, ReportFilterParameters } from './types'
 
@@ -89,40 +88,6 @@ const convertToCSV = (data: any[]): string => {
   return [headers, ...rows].join('\n')
 }
 
-const downloadPDFFile = async (
-  endpoint: string,
-  filename: string,
-  data: ReportFilterParameters[] | null,
-) => {
-  try {
-    const fetchOptions: RequestInit = {
-      method: data ? 'POST' : 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: data ? JSON.stringify(data) : null,
-    }
-
-    const result = await fetch('/ehr' + endpoint, fetchOptions)
-
-    const htmlContent = await result.text()
-    const iframe = document.createElement('iframe')
-    iframe.style.display = 'none'
-    document.body.appendChild(iframe)
-
-    iframe.contentDocument?.open()
-    iframe.contentDocument?.write(htmlContent)
-    iframe.contentDocument?.close()
-
-    iframe.contentWindow?.focus()
-    iframe.contentWindow?.print()
-
-    document.body.removeChild(iframe)
-  } catch (error) {
-    console.error('Error downloading file:', error)
-    throw error
-  }
-}
 const handleUploadReport = async (
   definitionPayloadUrl: File,
   templateId: string,
@@ -204,7 +169,7 @@ const generateCronExpression = ({
             }
             return dayMap[day]
           })
-          .join(',') || '*'
+          .join(',') ?? '*'
       cronExpression = `${minute} ${hour} * * ${weekDays}`
       break
     }
@@ -240,7 +205,9 @@ const processParameters = (
     if (
       param.parameterCode === 'EndDate' ||
       param.parameterCode === 'StartDate' ||
-      param.scheduleParameterValue.includes('::')
+      (param.scheduleParameterValue &&
+        typeof param.scheduleParameterValue === 'string' &&
+        param.scheduleParameterValue.includes('::'))
     ) {
       return {
         templateParameterId: param.id,
@@ -278,14 +245,20 @@ const formatJobData = (
   const updatedParameters =
     selectedTemplate?.parameters?.map((param: any) => ({
       ...param,
-      shortName: param.displayName + numberOfDuration + +getRandomThreeDigit(),
+      shortName:
+        param.displayName.replace(/\s+/g, '') +
+        numberOfDuration +
+        getRandomThreeDigit(),
       defaultValueContent: '',
-    })) || []
+    })) ?? []
 
   return {
     cronScheduleDefinition,
     runHistoryExpireDays: 45,
-    shortName: displayName + numberOfDuration + getRandomThreeDigit(),
+    shortName:
+      selectedTemplate.displayName.replace(/\s+/g, '') +
+      numberOfDuration +
+      getRandomThreeDigit(),
     category: 'Reporter',
     scheduleType: 'Cron',
     displayName: selectedTemplate?.displayName,
@@ -374,7 +347,6 @@ export {
   truncateFileName,
   getFieldType,
   downloadCSVReport,
-  downloadPDFFile,
   handleUploadReport,
   generateCronExpression,
   processParameters,
