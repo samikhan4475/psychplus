@@ -19,9 +19,8 @@ import {
   STRIPE_PUBLISHABLE_KEY,
   WEBSOCKETSERVICE_URL,
 } from '@/constants'
-import { WebSocketProvider } from '@/providers/websocket-provider'
+import { WebSocketConnector } from '@/providers/websocket-provider'
 import { StoreProvider } from '@/store'
-import { RecordStatus } from '@/types/feature-flag'
 import { Header } from '@/ui/header'
 import { LockScreenProvider } from '@/ui/lock-screen-context'
 import { cn } from '@/utils'
@@ -60,9 +59,8 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
           <Flex direction="column" className="flex-1 overflow-y-auto">
             {auth ? (
               <>
-                <WebSocketProvider>
-                  <LockScreenProvider>{children}</LockScreenProvider>
-                </WebSocketProvider>
+                <WebSocketConnector />
+                <LockScreenProvider>{children}</LockScreenProvider>
               </>
             ) : (
               children

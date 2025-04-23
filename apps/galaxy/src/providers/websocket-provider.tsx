@@ -1,36 +1,12 @@
 'use client'
 
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { getUserAuthAction, getUserSessionAction } from '@/actions'
 import { useConstants } from '@/hooks/use-constants'
 import { webSocketEventBus } from '@/lib/websocket-event-bus'
 import { WebSocketEventType } from '@/types'
 
-type WebSocketContextType = {
-  sendMessage: (
-    type: WebSocketEventType,
-    payload?: Record<string, unknown>,
-  ) => void
-  connectionStatus: 'connected' | 'disconnected' | 'connecting'
-}
-
-const WebSocketContext = createContext<WebSocketContextType | undefined>(
-  undefined,
-)
-
-export const WebSocketProvider = ({
-  children,
-}: {
-  children: React.ReactNode
-}) => {
+export const WebSocketConnector = () => {
   const { webSocketUrl } = useConstants()
 
   const [connectionStatus, setConnectionStatus] = useState<
@@ -160,27 +136,8 @@ export const WebSocketProvider = ({
     },
     [],
   )
-  const ctxValue = useMemo(
-    () => ({
-      sendMessage,
-      connectionStatus,
-    }),
-    [sendMessage, connectionStatus],
-  )
 
   console.log('Socket ' + connectionStatus)
 
-  return (
-    <WebSocketContext.Provider value={ctxValue}>
-      {children}
-    </WebSocketContext.Provider>
-  )
-}
-
-export const useWebSocketContext = () => {
-  const context = useContext(WebSocketContext)
-  if (!context) {
-    throw new Error('useWebSocket must be used within a WebSocketProvider')
-  }
-  return context
+  return null
 }

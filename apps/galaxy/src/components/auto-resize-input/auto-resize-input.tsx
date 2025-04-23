@@ -14,6 +14,7 @@ type AutoResizeInputProps = Omit<BoxProps, 'contentEditable'> & {
   maxLength?: number
   placeholder?: string
   resize?: 'horizontal' | 'both'
+  enableAutoSuggestions?: boolean
 }
 
 const AutoResizeInput = ({
@@ -25,6 +26,7 @@ const AutoResizeInput = ({
   maxLength = 4000,
   autoFocus = false,
   placeholder,
+  enableAutoSuggestions = true,
   ...props
 }: AutoResizeInputProps) => {
   const form = useFormContext()
@@ -50,7 +52,7 @@ const AutoResizeInput = ({
     suggestions,
     offset,
     ...rest
-  } = useAutoTextSuggestions(ref)
+  } = useAutoTextSuggestions(ref, enableAutoSuggestions)
 
   useEffect(() => {
     if (!ref.current) return
@@ -115,7 +117,7 @@ const AutoResizeInput = ({
                 placeholder,
               'before:hidden': !isEmpty,
               'whitespace-nowrap': resize === 'horizontal',
-              'cursor-not-allowed bg-gray-6 text-gray-8': disabled,
+              'cursor-not-allowed bg-gray-6 !text-1 text-gray-8': disabled,
             },
             className,
           )}

@@ -35,6 +35,7 @@ import { StaffRoleSelect } from './staff-role-select'
 import { StaffTypeSelect } from './staff-type-select'
 import { StatusSelect } from './status-select'
 import { SupervisedByField } from './supervised-by-fields'
+import { TestStaffCheckbox } from './test-staff-checkbox'
 import { TimeZoneSelect } from './time-zone-select'
 import { StaffUpdatePayload } from './types'
 import { getInitialValues } from './utils'
@@ -80,7 +81,10 @@ const StaffProfileForm = ({
     <GooglePlacesContextProvider apiKey={googleApiKey}>
       <FormContainer className="bg-white" form={form} onSubmit={onSubmit}>
         <TabContentHeading title="Profile">
-          <SaveStaffButton />
+          <Flex align="center" gap="2">
+            <TestStaffCheckbox />
+            <SaveStaffButton />
+          </Flex>
         </TabContentHeading>
         <Box className="bg-gray-3 px-3 py-1 text-1 font-medium">
           Personal Info

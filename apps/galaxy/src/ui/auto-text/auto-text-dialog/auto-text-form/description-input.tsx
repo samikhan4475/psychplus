@@ -1,8 +1,8 @@
 'use client'
 
-import { TextArea } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import {
+  AutoResizeInput,
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
@@ -10,19 +10,22 @@ import {
 import { AutoTextSchemaType } from './schema'
 
 const DescriptionInput = () => {
-  const form = useFormContext<AutoTextSchemaType>()
+  const {
+    formState: { isSubmitting },
+  } = useFormContext<AutoTextSchemaType>()
   return (
     <FormFieldContainer className="gap-1">
       <FormFieldLabel className="!text-1" required>
         Description
       </FormFieldLabel>
-      <TextArea
-        size="1"
-        rows={8}
-        {...form.register('content')}
-        className="border-pp-gray-2 w-full border border-solid text-1 !outline-none [box-shadow:none]"
+      <AutoResizeInput
+        field="content"
+        className="min-h-44 !w-full !max-w-[615px]"
+        enableAutoSuggestions={false}
+        disabled={isSubmitting}
+        maxLength={4000}
       />
-      <FormFieldError name="name" />
+      <FormFieldError name="content" />
     </FormFieldContainer>
   )
 }

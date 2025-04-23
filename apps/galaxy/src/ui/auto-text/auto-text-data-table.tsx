@@ -7,6 +7,7 @@ import {
   ColumnHeader,
   DataTable,
   LoadingPlaceholder,
+  LongTextCell,
   TextCell,
 } from '@/components'
 import { Sort, UserSetting } from '@/types'
@@ -37,7 +38,9 @@ const columns = (
     size: 500,
     id: 'content',
     header: () => <ColumnHeader label="Short" />,
-    cell: ({ row: { original } }) => <TextCell>{original?.content}</TextCell>,
+    cell: ({ row: { original } }) => (
+      <LongTextCell className="!line-clamp-2">{original?.content}</LongTextCell>
+    ),
   },
   {
     size: 30,

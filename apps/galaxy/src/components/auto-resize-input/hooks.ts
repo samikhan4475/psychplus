@@ -3,9 +3,12 @@ import toast from 'react-hot-toast'
 import { useDebouncedCallback } from 'use-debounce'
 import { getUserSettings } from '@/actions'
 import { SelectOptionType } from '@/types'
-import { sanitizeFormData } from '@/utils'
+import { encodeTextToHtml, sanitizeFormData } from '@/utils'
 
-const useAutoTextSuggestions = (ref: RefObject<HTMLDivElement>) => {
+const useAutoTextSuggestions = (
+  ref: RefObject<HTMLDivElement>,
+  enableAutoSuggestions?: boolean,
+) => {
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [loading, setLoading] = useState(false)
   const [suggestions, setSuggestions] = useState<SelectOptionType[]>([])
@@ -41,6 +44,7 @@ const useAutoTextSuggestions = (ref: RefObject<HTMLDivElement>) => {
   }, [])
 
   const handleInsetSuggestion = (value: string, callback?: () => void) => {
+    if (!enableAutoSuggestions) return
     const sel = window.getSelection()
     if (!sel || !ref.current || !sel.rangeCount) return
     const range = sel.getRangeAt(0)
@@ -54,7 +58,8 @@ const useAutoTextSuggestions = (ref: RefObject<HTMLDivElement>) => {
     mentionRange.setStart(range.startContainer, start)
     mentionRange.setEnd(range.startContainer, offset)
     mentionRange.deleteContents()
-    const insertedNode = document.createTextNode(value + ' ')
+    const insertedNode = document.createElement('span')
+    insertedNode.innerHTML = encodeTextToHtml(value) + '&nbsp;'
     mentionRange.insertNode(insertedNode)
     sel.removeAllRanges()
     const newRange = document.createRange()
@@ -66,6 +71,7 @@ const useAutoTextSuggestions = (ref: RefObject<HTMLDivElement>) => {
   }
 
   const handleTrackSuggestions = useDebouncedCallback(() => {
+    if (!enableAutoSuggestions) return
     const sel = window.getSelection()
     if (!sel || !sel.anchorNode) return
     let text = ''

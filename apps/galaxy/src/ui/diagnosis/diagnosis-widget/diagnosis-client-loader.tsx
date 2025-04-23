@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { useShallow } from 'zustand/react/shallow'
+import { dequal } from 'dequal'
 import { useStore } from '@/store'
 import { DiagnosisIcd10Code, FavouriteDiagnosisData } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
@@ -19,19 +19,18 @@ const DiagnosisWidgetClientLoader = ({
   patientId,
 }: DiagnosisWidgetClientLoaderProps) => {
   const data = useQuicknoteStore(
-    useShallow(
-      (state) =>
-        state.actualNotewidgetsData[
-          QuickNoteSectionName.QuickNoteSectionDiagnosis
-        ],
-    ),
+    (state) =>
+      state.actualNotewidgetsData[
+        QuickNoteSectionName.QuickNoteSectionDiagnosis
+      ],
+    dequal,
   )
   const { staffId } = useStore((state) => ({
     staffId: state.user.staffId,
   }))
   const [workingDiagnosisData, setWorkingDiagnosisData] = useState<
-    DiagnosisIcd10Code[]
-  >([])
+    DiagnosisIcd10Code[] | undefined
+  >(undefined)
   const [favouritesDiagnosisData, setFavouritesDiagnosisData] = useState<
     FavouriteDiagnosisData[]
   >([])

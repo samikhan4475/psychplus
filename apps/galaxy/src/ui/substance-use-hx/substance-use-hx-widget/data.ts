@@ -257,7 +257,6 @@ const getDiagnosisSections = async (
       sectionItemValue: sectionItemValue,
     },
   ]
-
   return diagnosisCodesToAddSet
 }
 export { transformIn, transformOut }

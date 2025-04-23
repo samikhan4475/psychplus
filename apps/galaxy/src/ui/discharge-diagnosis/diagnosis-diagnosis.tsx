@@ -4,8 +4,10 @@ import { PropsWithChildren, useEffect } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { Flex, Text } from '@radix-ui/themes'
 import { XIcon } from 'lucide-react'
+import { AddDiagnosisDialog } from './add-diagnosis-dialog'
 import { DiagnosisList } from './diagnosis-list'
 import { FavouriteDiagnosis } from './favourite-diagnosis'
+import { DiagnosisSaveButton, SearchDiagnosisField } from './shared'
 import { useStore } from './store'
 
 interface DiagnosisViewProps {
@@ -38,9 +40,22 @@ const DiagnosisView = ({ patientId, appointmentId }: DiagnosisViewProps) => {
       <TabsContent value="Diagnosis">
         <Flex className="bg-whiteA-12" gap="2">
           <Flex width="70%" direction="column">
-            <Text className="bg-pp-bg-table-label px-2 py-1 font-bold">
-              Working Discharge Diagnosis
-            </Text>
+            <Flex align="center" p="2">
+              <Flex className="flex-none">
+                <Text className="text-[16px] font-[600]">
+                  Working Discharge Diagnosis
+                </Text>
+              </Flex>
+              <Flex justify="between" align="center" width="100%">
+                <Flex pl="4" gap="2" align="center">
+                  <SearchDiagnosisField />
+                </Flex>
+                <Flex gap="2">
+                  <AddDiagnosisDialog />
+                  <DiagnosisSaveButton />
+                </Flex>
+              </Flex>
+            </Flex>
             <DiagnosisList />
           </Flex>
           <Flex width="30%" direction="column">

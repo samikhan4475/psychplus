@@ -3,7 +3,9 @@
 import { createContext, useContext, useRef } from 'react'
 import { format } from 'date-fns'
 import toast from 'react-hot-toast'
-import { useStore as zustandUseStore, type StoreApi } from 'zustand'
+import { type StoreApi } from 'zustand'
+import { shallow } from 'zustand/shallow'
+import { useStoreWithEqualityFn } from 'zustand/traditional'
 import { createStore as zustandCreateStore } from 'zustand/vanilla'
 import {
   Appointment,
@@ -236,7 +238,6 @@ const StoreProvider = ({
   if (!storeRef.current) {
     storeRef.current = createStore(initialState)
   }
-
   return (
     <StoreContext.Provider value={storeRef.current}>
       {children}
@@ -244,14 +245,17 @@ const StoreProvider = ({
   )
 }
 
-const useStore = <T,>(selector: (store: Store) => T): T => {
+const useStore = <T,>(
+  selector: (store: Store) => T,
+  equalityFn?: (a: T, b: T) => boolean,
+): T => {
   const context = useContext(StoreContext)
 
   if (!context) {
-    throw new Error(`useStore must be use within StoreProvider`)
+    throw new Error(`useStore must be used within StoreProvider`)
   }
 
-  return zustandUseStore(context, selector)
+  return useStoreWithEqualityFn(context, selector, equalityFn ?? shallow)
 }
 
 export { StoreProvider, useStore, createStore }

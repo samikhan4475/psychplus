@@ -57,7 +57,7 @@ const DiagnosisWidget = ({
   )
 
   useEffect(() => {
-    if (isQuickNoteView) {
+    if (isQuickNoteView && workingDiagnosis !== undefined) {
       handleDiagnosischange([
         {
           pid: Number(patientId),

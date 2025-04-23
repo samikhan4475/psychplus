@@ -53,6 +53,7 @@ const getInitialValues = ({
   practiceIds: staff?.practiceIds ?? [''],
   timeZonePreference: staff?.timeZonePreference ?? '',
   hasBioVideo: staff?.hasBioVideo ?? false,
+  isTest: staff.isTest ?? false,
 })
 
 const handleUploadBioVideo = async (

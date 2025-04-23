@@ -1,5 +1,6 @@
 'use client'
 
+import { dequal } from 'dequal'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { useStore } from '@/ui/quicknotes/store'
@@ -20,6 +21,7 @@ const SubstanceUseHxClientLoader = ({
       state.actualNotewidgetsData[
         QuickNoteSectionName.QuickNoteSectionDiagnosis
       ],
+    dequal,
   )
   const initialValue = transformIn(data ?? [])
 

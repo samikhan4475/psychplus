@@ -87,6 +87,7 @@ const ContactInfoSchema = z.object({
 
 const schema = z
   .object({
+    isTest: z.boolean(),
     staffId: requiredString,
     userId: requiredString,
     staffRoleId: optionalString,

@@ -28,7 +28,7 @@ const WorkingDiagnosisClientView = ({
         DiagnosisCodes: diagnosis,
       }).then((response) => {
         if (response.state === 'error') {
-          return
+        return
         }
         setWorkingDiagnosisData(response?.data ?? [])
       })
