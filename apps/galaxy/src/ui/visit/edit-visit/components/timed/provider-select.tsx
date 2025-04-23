@@ -58,7 +58,9 @@ const ProviderSelect = () => {
         field="provider"
         loading={loading}
         onValueChange={(value) => {
-          form.setValue('provider', value)
+          form.setValue('provider', value, {
+            shouldDirty: true,
+          })
           setUserId(
             providers.find((provider) => provider.id === +value)?.userId ?? 0,
           )
