@@ -31,8 +31,8 @@ const AfterVisitSummaryView = ({
   appointmentId,
   referrals,
 }: AfterVisitSummaryViewProps) => {
-  const { fetchPatientMedications } = useMedicationsStore((state) => ({
-    fetchPatientMedications: state.fetchPatientMedications,
+  const { fetchPatientMedication } = useMedicationsStore((state) => ({
+    fetchPatientMedication: state.fetchPatientMedication,
   }))
   const { data, fetch, setAppointmentId } = useLabOrdersStore()
   const { fetchWorkingDiagnosis } = useProviderRecommendationsStore()
@@ -58,9 +58,9 @@ const AfterVisitSummaryView = ({
   }
 
   useEffect(() => {
-    fetchPatientMedications(patientId, true)
+    fetchPatientMedication({ patientIds: [Number(patientId)] })
     fetchData()
-  }, [patientId, fetchPatientMedications])
+  }, [patientId, fetchPatientMedication])
 
   useEffect(() => {
     if (patientId) {

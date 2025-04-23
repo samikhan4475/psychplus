@@ -56,7 +56,7 @@ const CODESETS = {
   ReferralSource: 'ReferralSource',
   ParameterAdjustmentStatus: 'ParameterAdjustmentStatus',
   LicenseStatus: 'LicenseStatus',
-  DurationUnit:'DurationUnit',
+  DurationUnit: 'DurationUnit',
   PrescribedStatus: 'PrescribedStatus',
   FileFormatType: 'FileFormatType',
   MedicationStatus: 'MedicationStatus',
@@ -116,7 +116,6 @@ const CODESETS = {
   PsychHistoryRelation: 'PsychPlusPublic.PsychHistoryRelation',
   PermissionSection: 'PsychPlusPublic.PermissionSection',
   TimeZoneId: 'PsychPlusPublic.TimeZoneId',
-  PrescriptionUnitList: 'PsychPlusPublic.PrescriptionUnitList',
   UserActorCategory: 'UserActorCategory',
   Paging: 'PsychPlusPublic.Paging',
 
