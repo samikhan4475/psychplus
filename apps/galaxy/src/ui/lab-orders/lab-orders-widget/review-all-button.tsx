@@ -18,24 +18,18 @@ const ReviewAllButton = () => {
   }))
 
   const placeOrder = async (order: LabOrders) => {
-    const requisitionResponse = await getLabOrderRequisition(order?.id ?? '')
-    if (requisitionResponse.state === 'success') {
-      const placeOrderResponse = await placeLabOrderApi(order?.id ?? '')
-      if (placeOrderResponse.state === 'error') {
-        toast.error(
-          placeOrderResponse?.error !== ''
-            ? placeOrderResponse?.error
-            : 'Error while placing order',
-        )
-      }
-    } else {
-      toast.error(
-        requisitionResponse?.error !== ''
-          ? requisitionResponse?.error
-          : 'Error while placing order',
-      )
+    const requisitionResponse = await getLabOrderRequisition(order?.id ?? '');
+  
+    if (requisitionResponse.state === 'error') {
+      toast.error(requisitionResponse?.error ?? 'Error while placing order');
+      return; 
     }
-  }
+  
+    const placeOrderResponse = await placeLabOrderApi(order?.id ?? '');
+    if (placeOrderResponse.state === 'error') {
+      toast.error(placeOrderResponse?.error ?? 'Error while placing order');
+    }
+  };
 
   const editLabStatus = async (order: LabOrders) => {
     const orderId = order?.id ?? ''
@@ -48,11 +42,8 @@ const ReviewAllButton = () => {
       },
       ...rest,
     })
-    console.log(result, 'resultresultresult')
     if (result.state === 'error') {
-      toast.error(
-        result?.error !== '' ? result?.error : 'Error while placing order',
-      )
+      toast.error(result?.error ?? 'Error while placing order');
     }
   }
 

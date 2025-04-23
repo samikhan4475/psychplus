@@ -138,14 +138,12 @@ const useStore = create<StoreState>((set, get) => ({
         loading: false,
       })
     } else {
-      const labOrders = result.data.labOrders?.filter(
-        (laborder) => laborder.recordStatus === 'Active',
-      )
+      const labOrders = result.data.labOrders; 
 
       const labOrdersData = {
         ...result.data,
         labOrders,
-      }
+      };
 
       set({
         data: labOrdersData,
@@ -153,7 +151,7 @@ const useStore = create<StoreState>((set, get) => ({
         pageCache: reset
           ? { [page]: labOrdersData }
           : { ...get().pageCache, [page]: labOrdersData },
-      })
+      });
     }
   },
 
@@ -292,36 +290,39 @@ const useStore = create<StoreState>((set, get) => ({
     })
   },
   next: () => {
-    const page = get().page + 1
-
-    if (get().pageCache[page]) {
-      return set({
-        data: get().pageCache[page],
-        page,
-      })
+    const nextPage = get().page + 1;
+    
+    set({ page: nextPage });
+  
+    if (get().pageCache[nextPage]) {
+      set({
+        data: get().pageCache[nextPage],
+      });
+    } else {
+      get().fetch(get().appointmentId!, get().payload!, nextPage);
     }
-    get().fetch(get().appointmentId!, get().payload!, page)
   },
   prev: () => {
-    const page = get().page - 1
-
-    set({
-      data: get().pageCache[page],
-      page,
-    })
+    const prevPage = get().page - 1;
+    if (prevPage >= 1) {
+      set({ page: prevPage });
+      if (get().pageCache[prevPage]) {
+        set({
+          data: get().pageCache[prevPage],
+        });
+      }
+    }
   },
   jumpToPage: (page: number) => {
-    if (page < 1) {
-      return
-    }
-
+    if (page < 1) return;
+    set({ page });
     if (get().pageCache[page]) {
-      return set({
+      set({
         data: get().pageCache[page],
-        page,
-      })
+      });
+    } else {
+      get().fetch(get().appointmentId, get().payload!, page)
     }
-    get().fetch(get().appointmentId, get().payload!, page)
   },
   setAppointmentId: (appointmentId: string | null) => set({ appointmentId }),
   setSelectedRows: (orders: LabOrders[]) => set({ selectedRows: orders }),

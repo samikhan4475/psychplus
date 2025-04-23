@@ -23,6 +23,7 @@ type LabOrderPayload = {
   labTestCode?: string
   idList?: string[]
   IsOrderSendStatus?: boolean
+  resourceStatusList?:string[]
 }
 
 interface LabDocument {

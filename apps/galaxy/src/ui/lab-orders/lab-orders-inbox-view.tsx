@@ -14,6 +14,7 @@ import { useStore } from './lab-orders-widget/store'
 const labOrderPayload = {
   orderStatus: LabOrderStatusEnum.Unsigned,
   IsOrderSendStatus: false,
+  resourceStatusList: ['Active'],
 }
 
 const LabOrdersInboxView = () => {

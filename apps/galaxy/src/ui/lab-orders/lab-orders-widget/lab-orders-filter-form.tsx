@@ -16,6 +16,8 @@ import { StatusSelect } from './status-select'
 import { useStore } from './store'
 import { TestField } from './test-field'
 import { LabOrderPayload } from './types'
+import { useStore as useGlobalStore } from '@/store'
+import { STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
 
 const schema = z.object({
   orderCreatedDate: z.custom<DateValue | null>().nullable(),
@@ -38,15 +40,21 @@ const LabOrdersFilterForm = ({
   const searchParams = useSearchParams()
   const { fetch } = useStore()
   const appointmentId = !isInboxLabOrder ? searchParams.get('id') ?? '0' : null
-
+  
   const { id } = useParams<{ id: string }>()
+  const { staffId, staffRoleCode } = useGlobalStore((state) => ({
+    staffId: state.user.staffId,
+    staffRoleCode: state.staffResource.staffRoleCode,
+  }))
+  const isPrescriber = staffRoleCode === STAFF_ROLE_CODE_PRESCRIBER
+  const defaultOrderingStaffId = isPrescriber ? String(staffId) : ''
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
     defaultValues: {
       orderCreatedDate: undefined,
-      orderingStaffId: '',
+      orderingStaffId: defaultOrderingStaffId,
       labTestName: '',
       orderingLab: '',
       orderStatus: '',
@@ -58,7 +66,7 @@ const LabOrdersFilterForm = ({
     e.preventDefault()
     form.reset({
       orderCreatedDate: undefined,
-      orderingStaffId: '',
+      orderingStaffId: defaultOrderingStaffId,
       labTestName: '',
       orderingLab: '',
       orderStatus: '',
@@ -70,6 +78,7 @@ const LabOrdersFilterForm = ({
         ? { appointmentIds: [appointmentId] }
         : {}),
       ...(!isInboxLabOrder ? { patientId: [id] } : {}),
+      ...(isInboxLabOrder ? { resourceStatusList: ['Active'] } : {}),
     })
   }
 
@@ -87,6 +96,7 @@ const LabOrdersFilterForm = ({
         ? { appointmentIds: [appointmentId] }
         : {}),
       ...(!isInboxLabOrder ? { patientId: [id] } : {}),
+      ...(isInboxLabOrder ? { resourceStatusList: ['Active'] } : {}),
       ...sanitizedData,
     }
     fetch(appointmentId, payload)

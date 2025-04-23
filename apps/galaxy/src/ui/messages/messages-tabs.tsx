@@ -78,17 +78,17 @@ const MessagesTabs = () => {
           tab={status}
         />
       </TabsContent>
-      {isSureScriptFeatureFlag && (
-        <TabsContent value={TabsEnum.MEDICATION_ORDERS}>
-          <MedicationOrderView />
-        </TabsContent>
-      )}
       <TabsContent value={TabsEnum.LAB_ORDERS}>
         <LabOrdersInboxView />
       </TabsContent>
       <TabsContent value={TabsEnum.LAB_RESULTS}>
         <InboxLabOrder />
       </TabsContent>
+      {isSureScriptFeatureFlag && (
+        <TabsContent value={TabsEnum.MEDICATION_ORDERS}>
+          <MedicationOrderView />
+        </TabsContent>
+      )}
     </Tabs.Root>
   )
 }

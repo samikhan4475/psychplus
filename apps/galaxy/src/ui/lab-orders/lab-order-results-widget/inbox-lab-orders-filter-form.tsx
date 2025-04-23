@@ -109,7 +109,7 @@ const InboxLabOrdersFilterForm = () => {
       isResultSigned: false,
       orderingStaffId: defaultOrderingStaffId,
     }
-    fetchLabOrderResults(payload)
+    fetchLabOrderResults(payload,1,true)
   }
 
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
@@ -136,7 +136,7 @@ const InboxLabOrdersFilterForm = () => {
       isResultSigned: data.isResultSigned,
       isIncludeResults: !!(data.resultObservationFromDate || data.resultObservationToDate),
     }
-    fetchLabOrderResults(payload)
+    fetchLabOrderResults(payload,1,true)
   }
 
   return (

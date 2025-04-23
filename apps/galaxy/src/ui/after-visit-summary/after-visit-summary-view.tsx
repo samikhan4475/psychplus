@@ -48,7 +48,7 @@ const AfterVisitSummaryView = ({
     pastAppointments[0] || ({} as Appointment),
   )
 
-  const fetchData = () => {
+  const fetchData = async () => {
     setAppointmentId(appointmentId)
     const payload = {
       patientId: [patientId],

@@ -82,24 +82,28 @@ const useStore = create<StoreState>((set, get) => ({
   },
 
   next: () => {
-    const page = get().page + 1
-
-    if (get().pageCache[page]) {
-      return set({
-        data: get().pageCache[page],
-        page,
-      })
+    const nextPage = get().page + 1;
+    
+    set({ page: nextPage });
+  
+    if (get().pageCache[nextPage]) {
+      set({
+        data: get().pageCache[nextPage],
+      });
+    } else {
+      get().fetchLabOrderResults(get().payload!, nextPage);
     }
-    get().fetchLabOrderResults(get().payload!, page)
   },
 
   prev: () => {
-    const page = get().page - 1
-    if (page >= 1) {
-      set({
-        data: get().pageCache[page],
-        page,
-      })
+    const prevPage = get().page - 1;
+    if (prevPage >= 1) {
+      set({ page: prevPage });
+      if (get().pageCache[prevPage]) {
+        set({
+          data: get().pageCache[prevPage],
+        });
+      }
     }
   },
   sortData: (column) => {
@@ -112,15 +116,15 @@ const useStore = create<StoreState>((set, get) => ({
     get().fetchLabOrderResults(get().payload!, 1)
   },
   jumpToPage: (page: number) => {
-    if (page < 1) return
-
+    if (page < 1) return;
+    set({ page });
     if (get().pageCache[page]) {
-      return set({
+      set({
         data: get().pageCache[page],
-        page,
-      })
+      });
+    } else {
+      get().fetchLabOrderResults(get().payload!, page);
     }
-    get().fetchLabOrderResults(get().payload!, page)
   },
 }))
 
