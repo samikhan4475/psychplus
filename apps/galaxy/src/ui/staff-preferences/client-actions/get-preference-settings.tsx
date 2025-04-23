@@ -2,12 +2,13 @@
 
 import * as api from '@/api/api.client'
 import { GET_PROVIDER_SETTINGS_ENDPOINT } from '@/api/endpoints'
-import { LevelCode, SettingStatusCode } from '@/constants'
+import { CategoryValue, LevelCode, SettingStatusCode } from '@/constants'
 import { UserSetting } from '@/types'
 
 const getPreferenceSettings = async (payload: {
   userId: number
   name?: string
+  names?: string[]
   categoryValues?: string[]
   levelCodes?: LevelCode[]
   settingStatusCode?: SettingStatusCode
@@ -17,7 +18,10 @@ const getPreferenceSettings = async (payload: {
     {
       isHierarchicalQuery: true,
       levelCodes: [LevelCode.System, LevelCode.User],
-      categoryValues: ['ProviderDefaults', 'StaffPreference'],
+      categoryValues: [
+        CategoryValue.ProviderDefaults,
+        CategoryValue.StaffPreference,
+      ],
       ...payload,
     },
   )

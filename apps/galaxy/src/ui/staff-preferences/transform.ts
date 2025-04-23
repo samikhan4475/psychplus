@@ -1,17 +1,71 @@
 import { CategoryCode, LevelCode, SettingStatusCode } from '@/constants'
 import { AddOthersSettingBody, Encounter, UserSetting } from '@/types'
-import { SchemaType } from './schema'
+import {
+  AlertSchemaType,
+  CosignerInfoSchemaType,
+  PublicSchemaType,
+  VisitTypesSchemaType,
+} from './schema'
+import { VisitTypes } from './types'
 
-const transformData = ({ data }: { data: UserSetting[] }) => {
-  let isPendingStatus = false
+// this arrays contains key mappings for backend and frontend keys
+const publicKeyMappings: [string, string][] = [
+  ['MinutesLeftDoNotShowPublicViewValue', 'publicViewHideMinsBeforeVisit'],
+  [
+    'MinutesLeftDoNotAllowStaffToBookValue',
+    'staffBookingCutoffMinsBeforeVisit',
+  ],
+  ['DayIsFullDoNotShowPublicViewValue', 'dayIsFullDoNotShowPublicViewPercent'],
+  [
+    'DayIsFullDoNotAllowStaffToBookValue',
+    'dayIsFullDoNotAllowStaffToBookPercent',
+  ],
+]
+const alertKeyMappings: [string, string][] = [
+  ['PatientIsInRoomValue', 'patientIsInRoom'],
+  ['MinutesLeftFromPatientScheduleValue', 'minutesLeftFromPatientSchedule'],
+  [
+    'ShowNeitherOnTherapyTimeDependentVisitsValue',
+    'showNeitherOnTherapyTimeDependentVisits',
+  ],
+  [
+    'AllowDoubleBookingUnconfirmedTimeDependentVisitsValue',
+    'allowDoubleBookingUnconfirmedTimeDependentVisits',
+  ],
+]
+const cosignerKeyMappings: [string, string][] = [
+  ['CosignerInfoDirectSupervisionText', 'cosignerInfoDirectSupervisionText'],
+  [
+    'CosignerInfoInDirectSupervisionText',
+    'cosignerInfoInDirectSupervisionText',
+  ],
+  ['CosignerInfoDirectSupervisionValue', 'isCosignerInfoDirectSupervision'],
+  ['CosignerInfoInDirectSupervisionValue', 'isCosignerInfoIndirectSupervision'],
+]
+
+const transformResponse = ({ data }: { data: UserSetting[] }) => {
+  const dashboardStatus = {
+    public: false,
+    alert: false,
+    cosigner: false,
+    visit: false,
+  }
   const mappedData = data.reduce((acc, item) => {
     acc[item.name] = item
     if (item.settingStatusCode === SettingStatusCode.Inactive) {
-      isPendingStatus = true
+      if (publicKeyMappings.some(([bk]) => bk === item.name)) {
+        dashboardStatus.public = true
+      } else if (alertKeyMappings.some(([bk]) => bk === item.name)) {
+        dashboardStatus.alert = true
+      } else if (cosignerKeyMappings.some(([bk]) => bk === item.name)) {
+        dashboardStatus.cosigner = true
+      } else {
+        dashboardStatus.visit = true
+      }
     }
     return acc
   }, {} as { [key: string]: UserSetting })
-  return { mappedData, isPendingStatus }
+  return { dashboardStatus, mappedData }
 }
 
 const transformVisitTypesData = (
@@ -39,55 +93,21 @@ const transformVisitTypesData = (
     }
   })
 }
-
-const transformBulkAddUpdate = (
+const transformSettingsForBulkAddUpdate = (
   mappedPreferences: { [key: string]: UserSetting },
-  data: SchemaType,
+  data: Record<string, string | string[]>,
+  keyMappings: [string, string][],
   userId: number,
 ) => {
   const dataToAdd: AddOthersSettingBody[] = []
   const dataToUpdate: AddOthersSettingBody[] = []
-  // this array contains key mappings for backend and frontend keys
-  const keys = [
-    ['MinutesLeftDoNotShowPublicViewValue', 'publicViewHideMinsBeforeVisit'],
-    [
-      'MinutesLeftDoNotAllowStaffToBookValue',
-      'staffBookingCutoffMinsBeforeVisit',
-    ],
-    [
-      'DayIsFullDoNotShowPublicViewValue',
-      'dayIsFullDoNotShowPublicViewPercent',
-    ],
-    [
-      'DayIsFullDoNotAllowStaffToBookValue',
-      'dayIsFullDoNotAllowStaffToBookPercent',
-    ],
-    ['PatientIsInRoomValue', 'patientIsInRoom'],
-    ['MinutesLeftFromPatientScheduleValue', 'minutesLeftFromPatientSchedule'],
-    [
-      'ShowNeitherOnTherapyTimeDependentVisitsValue',
-      'showNeitherOnTherapyTimeDependentVisits',
-    ],
-    [
-      'AllowDoubleBookingUnconfirmedTimeDependentVisitsValue',
-      'allowDoubleBookingUnconfirmedTimeDependentVisits',
-    ],
-    ['CosignerInfoDirectSupervisionText', 'cosignerInfoDirectSupervisionText'],
-    [
-      'CosignerInfoInDirectSupervisionText',
-      'cosignerInfoIndirectSupervisionText',
-    ],
-    ['CosignerInfoDirectSupervisionValue', 'isCosignerInfoDirectSupervision'],
-    [
-      'CosignerInfoInDirectSupervisionValue',
-      'isCosignerInfoIndirectSupervision',
-    ],
-  ]
-  keys.forEach(([bk, fk]) => {
-    let value = data?.[fk as keyof SchemaType]
+
+  keyMappings.forEach(([bk, fk]) => {
+    let value = data?.[fk]
+    if (!value) return
     if (Array.isArray(value)) value = value.join('|')
-    if (mappedPreferences[bk].content !== value) {
-      if (mappedPreferences[bk].levelCode === 'System') {
+    if (mappedPreferences[bk]?.content !== value) {
+      if (mappedPreferences[bk]?.levelCode === 'System') {
         const { id, metadata, ...newSetting } = mappedPreferences[bk]
         dataToAdd.push({
           ...newSetting,
@@ -106,6 +126,57 @@ const transformBulkAddUpdate = (
       }
     }
   })
+
+  return { dataToAdd, dataToUpdate }
+}
+
+const transformPublicSettingsForBulkAddUpdate = (
+  mappedPreferences: { [key: string]: UserSetting },
+  data: PublicSchemaType,
+  userId: number,
+) => {
+  return transformSettingsForBulkAddUpdate(
+    mappedPreferences,
+    data,
+    publicKeyMappings,
+    userId,
+  )
+}
+
+const transformAlertSettingsForBulkAddUpdate = (
+  mappedPreferences: { [key: string]: UserSetting },
+  data: AlertSchemaType,
+  userId: number,
+) => {
+  return transformSettingsForBulkAddUpdate(
+    mappedPreferences,
+    data,
+    alertKeyMappings,
+    userId,
+  )
+}
+
+const transformCosignerSettingsForBulkAddUpdate = (
+  mappedPreferences: { [key: string]: UserSetting },
+  data: CosignerInfoSchemaType,
+  userId: number,
+) => {
+  return transformSettingsForBulkAddUpdate(
+    mappedPreferences,
+    data,
+    cosignerKeyMappings,
+    userId,
+  )
+}
+
+const transformVisitTypesDataForBulkAddUpdate = (
+  mappedPreferences: { [key: string]: UserSetting },
+  data: VisitTypesSchemaType,
+  userId: number,
+) => {
+  const dataToAdd: AddOthersSettingBody[] = []
+  const dataToUpdate: AddOthersSettingBody[] = []
+
   data.visitTypes.forEach((vt) => {
     const durationKey = `${vt.visitTypeCode}_${vt.visitSequence}_${vt.visitMedium}`
     const cptKey = `${vt.visitTypeCode}_${vt.visitSequence}_${vt.visitMedium}_CPTCode`
@@ -182,9 +253,70 @@ const transformDataToApprove = (mappedPreferences: UserSetting[]) => {
     }))
 }
 
+const transformSettingsToApprove = (
+  mappedPreferences: { [key: string]: UserSetting },
+  type: 'all' | 'public' | 'alert' | 'cosigner' | 'visit',
+  visitTypes?: VisitTypes[],
+) => {
+  if (type === 'all') {
+    return Object.values(mappedPreferences)
+      .filter(
+        (a) =>
+          a.levelCode === LevelCode.User &&
+          a.settingStatusCode === SettingStatusCode.Inactive,
+      )
+      .map((a) => ({
+        ...a,
+        settingStatusCode: SettingStatusCode.Active,
+      }))
+  }
+
+  let keyMappings: [string, string][] = []
+
+  if (type === 'public') {
+    keyMappings = publicKeyMappings
+  } else if (type === 'alert') {
+    keyMappings = alertKeyMappings
+  } else if (type === 'cosigner') {
+    keyMappings = cosignerKeyMappings
+  } else if (type === 'visit' && visitTypes) {
+    const keys = visitTypes.flatMap((vt) => [
+      `${vt.visitTypeCode}_${vt.visitSequence}_${vt.visitMedium}`,
+      `${vt.visitTypeCode}_${vt.visitSequence}_${vt.visitMedium}_CPTCode`,
+    ])
+    return keys
+      .map((key) => mappedPreferences[key])
+      .filter(
+        (a) =>
+          a?.levelCode === LevelCode.User &&
+          a?.settingStatusCode === SettingStatusCode.Inactive,
+      )
+      .map((a) => ({
+        ...a,
+        settingStatusCode: SettingStatusCode.Active,
+      }))
+  }
+
+  return keyMappings
+    .map(([bk]) => mappedPreferences[bk])
+    .filter(
+      (a) =>
+        a?.levelCode === LevelCode.User &&
+        a?.settingStatusCode === SettingStatusCode.Inactive,
+    )
+    .map((a) => ({
+      ...a,
+      settingStatusCode: SettingStatusCode.Active,
+    }))
+}
+
 export {
-  transformBulkAddUpdate,
-  transformData,
+  transformAlertSettingsForBulkAddUpdate,
+  transformCosignerSettingsForBulkAddUpdate,
   transformDataToApprove,
+  transformPublicSettingsForBulkAddUpdate,
+  transformResponse,
+  transformSettingsToApprove,
   transformVisitTypesData,
+  transformVisitTypesDataForBulkAddUpdate,
 }

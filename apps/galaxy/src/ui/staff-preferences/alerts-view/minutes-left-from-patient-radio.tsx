@@ -3,6 +3,8 @@ import { RadioGroup } from '@/components'
 import { useOptionsAndDefaults } from '../hook'
 import { SchemaType } from '../schema'
 
+const field = 'minutesLeftFromPatientSchedule'
+
 const MinutesLeftFromPatientRadio = ({
   isAdminView,
 }: {
@@ -16,9 +18,9 @@ const MinutesLeftFromPatientRadio = ({
   return (
     <RadioGroup
       className="ml-2 border-none !bg-transparent"
-      field="minutesLeftFromPatientSchedule"
-      defaultValue={watch('minutesLeftFromPatientSchedule') ?? defaultValue}
-      onValueChange={(val) => setValue('minutesLeftFromPatientSchedule', val)}
+      field={field}
+      defaultValue={watch(field) ?? defaultValue}
+      onValueChange={(val) => setValue(field, val)}
       options={options}
       disabled={!isAdminView}
     />

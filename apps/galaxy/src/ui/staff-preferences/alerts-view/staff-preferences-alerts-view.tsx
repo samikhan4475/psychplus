@@ -1,19 +1,85 @@
 'use client'
 
-import { Box, Grid, Text } from '@radix-ui/themes'
+import { useEffect } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Box, Grid, Separator, Text } from '@radix-ui/themes'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { FormContainer } from '@/components'
+import { AddOthersSettingBody } from '@/types'
+import { alertSchema, AlertSchemaType } from '../schema'
+import { StaffPreferencesHeader } from '../staff-preferences-header/staff-preferences-header'
+import { useStore } from '../store'
+import { transformAlertSettingsForBulkAddUpdate } from '../transform'
+import { ApprovalType } from '../types'
+import { getInitialValues } from '../utils'
 import { AllowDoubleBookingTimeDependentRadio } from './allow-double-booking-time-dependent-radio'
 import { MinutesLeftFromPatientRadio } from './minutes-left-from-patient-radio'
 import { PatientIsInRoomRadio } from './patient-is-in-room-radio'
 import { ShowNeitherOnTherapyTimeDependentVisitsRadio } from './show-neither-on-therapy-time-dependent-visits-radio'
 
+interface StaffPreferencesAlertsViewProps {
+  isAdminView: boolean
+  userId: number | undefined
+  onApprove: (type: ApprovalType) => Promise<string | void>
+  onSave: ({
+    dataToAdd,
+    dataToUpdate,
+  }: {
+    dataToAdd: AddOthersSettingBody[]
+    dataToUpdate: AddOthersSettingBody[]
+  }) => void
+}
+
 const StaffPreferencesAlertsView = ({
   isAdminView,
-}: {
-  isAdminView: boolean
-}) => {
+  userId,
+  onApprove,
+  onSave,
+}: StaffPreferencesAlertsViewProps) => {
+  const {
+    dashboardStatus,
+    isAlertPendingStatus,
+    mappedPreferences,
+    setIsPendingStatus,
+    visitTypes,
+  } = useStore((state) => ({
+    dashboardStatus: state.dashboardStatus,
+    isAlertPendingStatus: state.isAlertPendingStatus,
+    mappedPreferences: state.mappedPreferences,
+    setIsPendingStatus: state.setIsPendingStatus,
+    visitTypes: state.visitTypes,
+  }))
+  const form = useForm<AlertSchemaType>({
+    resolver: zodResolver(alertSchema),
+    reValidateMode: 'onSubmit',
+    defaultValues: getInitialValues(mappedPreferences, visitTypes),
+  })
+  useEffect(() => {
+    const subscription = form.watch(() => {
+      setIsPendingStatus('isAlertPendingStatus', true)
+    })
+    return () => subscription.unsubscribe()
+  }, [])
+  const submitHandler: SubmitHandler<AlertSchemaType> = (data) => {
+    if (!userId) return
+    const { dataToAdd, dataToUpdate } = transformAlertSettingsForBulkAddUpdate(
+      mappedPreferences,
+      data,
+      userId,
+    )
+    onSave({ dataToAdd, dataToUpdate })
+  }
   return (
-    <>
-      <Box className="bg-gray-3 px-3 py-1 text-1 font-medium">Alerts</Box>
+    <FormContainer className="bg-white" form={form} onSubmit={submitHandler}>
+      <StaffPreferencesHeader
+        heading="Alerts"
+        isPendingStatus={isAlertPendingStatus}
+        hasUnsavedChanges={isAlertPendingStatus && !dashboardStatus.public}
+        userId={userId}
+        onApprove={() => onApprove(ApprovalType.alert)}
+      />
+      <Separator className="bg-pp-bg-accent w-full" />
+
       <Grid columns="3" gap="2" px="3" py="2">
         <Box className="border-pp-gray-2 rounded col-span-2 grid grid-cols-3 border">
           <Box className="border-pp-gray-2 col-span-2 border-b border-r pl-1">
@@ -53,7 +119,7 @@ const StaffPreferencesAlertsView = ({
         </Box>
         <br />
       </Grid>
-    </>
+    </FormContainer>
   )
 }
 

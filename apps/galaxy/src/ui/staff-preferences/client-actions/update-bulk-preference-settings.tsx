@@ -2,7 +2,7 @@
 
 import * as api from '@/api/api.client'
 import { UPDATE_BULK_USER_SETTINGS } from '@/api/endpoints'
-import { AddOthersSettingBody, Metadata } from '@/types'
+import { Metadata, UpdateOthersSettingBody } from '@/types'
 
 interface UpdateBulkPreferenceSettingsResponse {
   id: string
@@ -16,7 +16,7 @@ interface UpdateBulkPreferenceSettingsResponse {
 }
 
 const updateBulkPreferenceSettings = async (
-  payload: AddOthersSettingBody[],
+  payload: UpdateOthersSettingBody[],
   userId: number,
 ): Promise<api.ActionResult<UpdateBulkPreferenceSettingsResponse[]>> => {
   const response = await api.PUT<UpdateBulkPreferenceSettingsResponse[]>(

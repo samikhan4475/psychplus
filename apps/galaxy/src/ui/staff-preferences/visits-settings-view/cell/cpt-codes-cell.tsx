@@ -15,7 +15,8 @@ const CPTCodesCell = ({
   const { control } = useFormContext<SchemaType>()
 
   const options = useMemo(() => {
-    const options = row.original.cptPrimaryCodes || []
+    const { cptPrimaryCodes = [] } = row.original
+    const options = [...cptPrimaryCodes]
     while (options.length < 4) {
       options.push({} as CPTPrimaryCode)
     }
@@ -70,7 +71,7 @@ const CPTCodesCell = ({
                       hidden: !option.code,
                     })}
                   >
-                    {option.code ? option.code : ''}
+                    {option.code ?? ''}
                   </Text>
                 </Text>
               )

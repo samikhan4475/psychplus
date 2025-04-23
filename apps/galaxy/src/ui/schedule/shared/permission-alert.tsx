@@ -6,12 +6,14 @@ interface PermissionAlertProps {
   isOpen: boolean
   message: string
   onClose: () => void
+  showHeading?: boolean
 }
 
 const PermissionAlert = ({
   message,
   isOpen,
   onClose,
+  showHeading = true,
 }: PermissionAlertProps) => {
   return (
     <AlertDialog.Root
@@ -26,7 +28,9 @@ const PermissionAlert = ({
         <Flex gap="3">
           <TriangleAlert className="min-w-6 min-h-6 text-pp-warning-border" />
           <Flex direction="column">
-            <AlertDialog.Title className="pt-1">Error</AlertDialog.Title>
+            {showHeading ? (
+              <AlertDialog.Title className="pt-1">Error</AlertDialog.Title>
+            ) : null}
             <AlertDialog.Description size="4">
               {message}
             </AlertDialog.Description>

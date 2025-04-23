@@ -45,7 +45,7 @@ const getInitialValues = (
     // Cosigner Info
     cosignerInfoDirectSupervisionText:
       CosignerInfoDirectSupervisionText?.content ?? '',
-    cosignerInfoIndirectSupervisionText:
+    cosignerInfoInDirectSupervisionText:
       CosignerInfoInDirectSupervisionText?.content ?? '',
     isCosignerInfoDirectSupervision:
       CosignerInfoDirectSupervisionValue?.content,

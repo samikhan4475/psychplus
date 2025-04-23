@@ -2,7 +2,6 @@
 
 import { Box, Button, Dialog, Text } from '@radix-ui/themes'
 import { CloseDialogTrigger } from '@/components/close-dialog-trigger'
-import { cn } from '@/utils'
 import { usePreferenceApprovalAlert } from './hook'
 
 interface PreferenceApprovalAlertProps {
@@ -39,7 +38,7 @@ const PreferencesApprovalAlert = ({
             <Text size="1">Cancel</Text>
           </Button>
           <Button
-            className={cn('bg-pp-black-1 text-white')}
+            className={'bg-pp-black-1 text-white'}
             color="gray"
             variant="outline"
             type="button"

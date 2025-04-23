@@ -3,7 +3,13 @@ import { FormFieldContainer, FormFieldLabel, RadioGroup } from '@/components'
 import { useOptionsAndDefaults } from '../hook'
 import { SchemaType } from '../schema'
 
-const IndirectSupervisionRadioButton = () => {
+const field = 'isCosignerInfoIndirectSupervision'
+
+const IndirectSupervisionRadioButton = ({
+  isAdminView,
+}: {
+  isAdminView: boolean
+}) => {
   const { watch, setValue } = useFormContext<SchemaType>()
   const { defaultValue, options } = useOptionsAndDefaults({
     optionKey: 'CosignerInfoDirectSupervisionOptions',
@@ -14,14 +20,11 @@ const IndirectSupervisionRadioButton = () => {
       <FormFieldLabel>Indirect Supervision</FormFieldLabel>
       <RadioGroup
         className="ml-2 border-none"
-        field="isCosignerInfoIndirectSupervision"
-        defaultValue={
-          watch('isCosignerInfoIndirectSupervision') ?? defaultValue
-        }
-        onValueChange={(val) =>
-          setValue('isCosignerInfoIndirectSupervision', val)
-        }
+        field={field}
+        defaultValue={watch(field) ?? defaultValue}
+        onValueChange={(val) => setValue(field, val)}
         options={options}
+        disabled={!isAdminView}
       />
     </FormFieldContainer>
   )

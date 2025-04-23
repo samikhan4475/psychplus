@@ -1,26 +1,32 @@
 import { useState } from 'react'
-import { usePathname } from 'next/navigation'
 import { Button, Flex, Text } from '@radix-ui/themes'
 import { TabContentHeading } from '@/components'
 import { useHasPermission } from '@/hooks'
 import { useStore as useGlobalStore } from '@/store'
 import { useProviderId } from '@/ui/schedule/hooks'
+import { PermissionAlert } from '@/ui/schedule/shared'
 import { cn } from '@/utils'
 import {
   APPROVE_ALERT,
   NO_CHANGES_TO_APPROVE_ALERT,
+  SAVE_BEFORE_APPROVE,
   VIEW_HISTORY_ALERT,
 } from '../constant'
-import { useStore } from '../store'
-import { PermissionAlert } from './permission-alert'
 import { SavePreferencesButton } from './save-staff-button'
 
 const StaffPreferencesHeader = ({
+  heading,
   userId,
+  isPendingStatus,
+  hasUnsavedChanges,
   onApprove,
   showHistory,
 }: {
-  userId: number
+  heading: string
+  userId: number | undefined
+  isPendingStatus: boolean
+  hasUnsavedChanges: boolean
+
   onApprove: () => void
   showHistory?: () => void
 }) => {
@@ -28,7 +34,7 @@ const StaffPreferencesHeader = ({
   const [alertMessage, setAlertMessage] = useState<string>('')
   const loggedInUser = useGlobalStore((state) => state.user)
   const loggedInProviderId = useProviderId()
-  const isPendingStatus = useStore((state) => state.isPendingStatus)
+
   const canViewHistory = useHasPermission(
     'clickHxMangStaffPrefAdminViewNonAdmin',
   )
@@ -37,12 +43,32 @@ const StaffPreferencesHeader = ({
   )
   const showApproveButton = loggedInProviderId && loggedInUser.id === userId
 
+  const handleApproval = () => {
+    if (hasUnsavedChanges) {
+      setIsOpen(true)
+      setAlertMessage(SAVE_BEFORE_APPROVE)
+      return
+    }
+    if (!isPendingStatus) {
+      setIsOpen(true)
+      setAlertMessage(NO_CHANGES_TO_APPROVE_ALERT)
+      return
+    }
+    if (!canApprove) {
+      setIsOpen(true)
+      setAlertMessage(APPROVE_ALERT)
+      return
+    }
+    onApprove()
+  }
+
   return (
-    <TabContentHeading title="Preferences" className="border-white flex-1">
+    <TabContentHeading title={heading} className="border-white flex-1">
       <Flex flexGrow="1" justify="end" align="center">
         <PermissionAlert
           isOpen={isOpen}
           message={alertMessage}
+          showHeading={false}
           onClose={() => {
             setIsOpen(false)
             setAlertMessage('')
@@ -65,19 +91,7 @@ const StaffPreferencesHeader = ({
               color="gray"
               size="1"
               className="text-black"
-              onClick={() => {
-                if (!isPendingStatus) {
-                  setIsOpen(true)
-                  setAlertMessage(NO_CHANGES_TO_APPROVE_ALERT)
-                  return
-                }
-                if (!canApprove) {
-                  setIsOpen(true)
-                  setAlertMessage(APPROVE_ALERT)
-                  return
-                }
-                onApprove()
-              }}
+              onClick={handleApproval}
               type="button"
             >
               Approve

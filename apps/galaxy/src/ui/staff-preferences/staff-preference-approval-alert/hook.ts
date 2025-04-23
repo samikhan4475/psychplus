@@ -12,9 +12,7 @@ export const usePreferenceApprovalAlert = (isInitialLogin: boolean) => {
   const isProvider = useProviderId()
 
   const { id: userId } = globalStore((state) => state.user)
-  const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [hasUnapprovedSettings, setHasUnapprovedSettings] =
-    useState<boolean>(false)
+  const [isOpen, setIsOpen] = useState(false)
   const [data, setData] = useState<UserSetting[]>([])
 
   useEffect(() => {
@@ -36,7 +34,6 @@ export const usePreferenceApprovalAlert = (isInitialLogin: boolean) => {
       if (hasInactive && res.data.length) {
         setIsOpen(true)
         setData(res.data)
-        setHasUnapprovedSettings(res.data.length > 0)
       }
     })
   }, [isInitialLogin, isProvider, userId])
@@ -55,7 +52,7 @@ export const usePreferenceApprovalAlert = (isInitialLogin: boolean) => {
   return {
     isOpen,
     setIsOpen,
-    hasUnapprovedSettings,
+    hasUnapprovedSettings: data.length > 0,
     approvePreferences,
   }
 }

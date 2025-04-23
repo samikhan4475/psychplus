@@ -57,23 +57,21 @@ const columns: ColumnDef<FieldArrayWithId<SchemaType, 'visitTypes'>>[] = [
   },
 ]
 
-const StaffPreferencesVisitTypesView = () => {
+const VisitSettingsTable = () => {
   const { fields } = useFieldArray<SchemaType, 'visitTypes'>({
     name: 'visitTypes',
   })
+
   return (
-    <>
-      <Box className="bg-gray-3 px-3 py-1 text-1 font-medium">Visit Types</Box>
-      <Box p="2" className="bg-white mt-[3px]">
-        <ScrollArea
-          scrollbars="horizontal"
-          className="w-full max-w-[calc(100vw_-_210px)]"
-        >
-          <DataTable columns={columns} data={fields} tdClass="p-0" isRowSpan />
-        </ScrollArea>
-      </Box>
-    </>
+    <Box p="2" className="bg-white mt-[3px]">
+      <ScrollArea
+        scrollbars="horizontal"
+        className="w-full max-w-[calc(100vw_-_210px)]"
+      >
+        <DataTable columns={columns} data={fields} tdClass="p-0" isRowSpan />
+      </ScrollArea>
+    </Box>
   )
 }
 
-export { StaffPreferencesVisitTypesView }
+export { VisitSettingsTable }

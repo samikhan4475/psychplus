@@ -3,6 +3,8 @@ import { RadioGroup } from '@/components'
 import { useOptionsAndDefaults } from '../hook'
 import { SchemaType } from '../schema'
 
+const field = 'allowDoubleBookingUnconfirmedTimeDependentVisits'
+
 const AllowDoubleBookingTimeDependentRadio = ({
   isAdminView,
 }: {
@@ -16,14 +18,9 @@ const AllowDoubleBookingTimeDependentRadio = ({
   return (
     <RadioGroup
       className="ml-2 border-none !bg-transparent"
-      field="allowDoubleBookingUnconfirmedTimeDependentVisits"
-      defaultValue={
-        watch('allowDoubleBookingUnconfirmedTimeDependentVisits') ??
-        defaultValue
-      }
-      onValueChange={(val) =>
-        setValue('allowDoubleBookingUnconfirmedTimeDependentVisits', val)
-      }
+      field={field}
+      defaultValue={watch(field) ?? defaultValue}
+      onValueChange={(val) => setValue(field, val)}
       options={options}
       disabled={!isAdminView}
     />

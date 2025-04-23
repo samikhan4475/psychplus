@@ -1,5 +1,21 @@
 import { CPTPrimaryCode, Metadata } from '@/types'
 
+enum PreferenceTab {
+  Dashboard = 'Dashboard',
+  PublicView = 'Public View',
+  Alerts = 'Alerts',
+  CoSignerInfo = 'CoSigner Info',
+  VisitSetting = 'Visit Setting',
+}
+
+enum ApprovalType {
+  all = 'all',
+  public = 'public',
+  alert = 'alert',
+  cosigner = 'cosigner',
+  visit = 'visit',
+}
+
 interface VisitTypes {
   defaultDuration?: string
   defaultCPTCode?: string
@@ -22,4 +38,5 @@ interface PreferenceSettings {
   content: string
 }
 
+export { ApprovalType, PreferenceTab }
 export type { PreferenceSettings, VisitTypes }

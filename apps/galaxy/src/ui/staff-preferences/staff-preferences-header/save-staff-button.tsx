@@ -12,25 +12,18 @@ const SavePreferencesButton = ({
 }) => {
   const form = useFormContext()
   const canSave = useHasPermission('clickSaveMangStaffPrefAdminViewNonAdmin')
-  return canSave ? (
+  const handleSaveClick = () => {
+    if (!canSave) showPermissionAlert(true, SAVE_ALERT)
+  }
+  return (
     <Button
+      className="ml-auto"
+      highContrast
+      size="1"
       loading={form.formState.isSubmitting}
-      className="ml-auto"
-      type="submit"
-      size="1"
-      highContrast
-    >
-      <SaveIcon width="16" className="mr-1" /> Save
-    </Button>
-  ) : (
-    <Button
-      className="ml-auto"
-      type="button"
-      size="1"
-      highContrast
-      onClick={() => {
-        showPermissionAlert(true, SAVE_ALERT)
-      }}
+      disabled={form.formState.isSubmitting}
+      type={canSave ? 'submit' : 'button'}
+      onClick={handleSaveClick}
     >
       <SaveIcon width="16" className="mr-1" /> Save
     </Button>

@@ -31,9 +31,12 @@ type AddSelfUserSettingBody = Omit<UserSetting, 'id' | 'metadata' | 'userId'>
 
 type AddOthersSettingBody = Omit<UserSetting, 'id' | 'metadata'>
 
+type UpdateOthersSettingBody = Omit<UserSetting, 'id' | 'metadata'>
+
 export type {
   UserSetting,
   AddSelfUserSettingBody,
   AddOthersSettingBody,
+  UpdateOthersSettingBody,
   SettingSearchFilters,
 }

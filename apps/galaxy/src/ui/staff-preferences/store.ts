@@ -5,11 +5,25 @@ import {
   getPreferenceSettings,
   getVisitEncounterTypesAction,
 } from './client-actions'
-import { transformData, transformVisitTypesData } from './transform'
-import { VisitTypes } from './types'
+import { transformResponse, transformVisitTypesData } from './transform'
+import { PreferenceTab, VisitTypes } from './types'
 
 interface Store {
-  isPendingStatus: boolean
+  activeTab: PreferenceTab
+  viewedTabs: Set<string>
+  setActiveTab: (tab: PreferenceTab) => void
+
+  dashboardStatus: {
+    public: boolean
+    alert: boolean
+    cosigner: boolean
+    visit: boolean
+  }
+  isPublicPendingStatus: boolean
+  isAlertPendingStatus: boolean
+  isCosignerInfoPendingStatus: boolean
+  isVisitSettingsPendingStatus: boolean
+
   loadingPreferences: boolean
   preferences: UserSetting[]
   mappedPreferences: { [key: string]: UserSetting }
@@ -18,34 +32,64 @@ interface Store {
   fetchPreferences: (
     filters: { userId: number },
     useSavedEncounterTypes?: boolean,
-  ) => Promise<any>
-  setIsPendingStatus: (status: boolean) => void
+  ) => Promise<void>
+  setIsPendingStatus: (
+    key:
+      | 'isPublicPendingStatus'
+      | 'isAlertPendingStatus'
+      | 'isCosignerInfoPendingStatus'
+      | 'isVisitSettingsPendingStatus',
+    status: boolean,
+  ) => void
 }
 
 const useStore = create<Store>((set, get) => ({
-  isPendingStatus: false,
+  activeTab: PreferenceTab.Dashboard,
+  viewedTabs: new Set([PreferenceTab.Dashboard]),
+  setActiveTab: (tab) => {
+    const viewedTabs = get().viewedTabs
+    viewedTabs.add(tab)
+    set({ activeTab: tab, viewedTabs })
+  },
+
+  dashboardStatus: {
+    public: false,
+    alert: false,
+    cosigner: false,
+    visit: false,
+  },
+  isPublicPendingStatus: false,
+  isAlertPendingStatus: false,
+  isCosignerInfoPendingStatus: false,
+  isVisitSettingsPendingStatus: false,
   loadingPreferences: true,
   preferences: [],
   visitTypes: [],
   encounterTypes: [],
   mappedPreferences: {},
-  setIsPendingStatus: (status) => set({ isPendingStatus: status }),
+  setIsPendingStatus: (key, status) => set({ [key]: status }),
   fetchPreferences: async (filters, useSavedEncounterTypes = false) => {
+    if (!filters.userId) return
     set({ loadingPreferences: true })
 
     const result = await getPreferenceSettings(filters)
     if (result.state === 'error') {
       toast.error(result.error ?? 'Error while fetching Licenses')
-      return set({ loadingPreferences: false })
+      set({ loadingPreferences: false })
+      return
     }
 
-    const { isPendingStatus, mappedData } = transformData({
+    const { dashboardStatus, mappedData } = transformResponse({
       data: result.data,
     })
 
     set({
-      isPendingStatus,
       preferences: result.data,
+      dashboardStatus,
+      isPublicPendingStatus: dashboardStatus.public,
+      isAlertPendingStatus: dashboardStatus.alert,
+      isCosignerInfoPendingStatus: dashboardStatus.cosigner,
+      isVisitSettingsPendingStatus: dashboardStatus.visit,
       mappedPreferences: mappedData,
     })
 
@@ -58,10 +102,14 @@ const useStore = create<Store>((set, get) => ({
       return
     }
 
-    const res = await getVisitEncounterTypesAction()
+    const res = await getVisitEncounterTypesAction({
+      isIncludeDurations: true,
+      isIncludeCptCodes: true,
+    })
     if (res.state === 'error') {
       toast.error(res.error ?? 'Error while fetching Licenses')
-      return set({ loadingPreferences: false })
+      set({ loadingPreferences: false })
+      return
     }
     const mappedVisitTypes = transformVisitTypesData(res.data, mappedData)
 

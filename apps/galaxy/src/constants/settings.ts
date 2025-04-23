@@ -11,6 +11,11 @@ enum CategoryCode {
   FilterDefault = 'FilterDefault',
 }
 
+enum CategoryValue {
+  ProviderDefaults = 'ProviderDefaults',
+  StaffPreference = 'StaffPreference',
+}
+
 enum SettingStatusCode {
   Active = 'Active',
   Inactive = 'Inactive',
@@ -20,4 +25,10 @@ enum SettingStatusCode {
 
 const NULL_CONTENT = 'null'
 
-export { LevelCode, CategoryCode, SettingStatusCode, NULL_CONTENT }
+export {
+  LevelCode,
+  CategoryCode,
+  CategoryValue,
+  SettingStatusCode,
+  NULL_CONTENT,
+}
