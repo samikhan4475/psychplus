@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useRef } from 'react'
 import { create, useStore, type StoreApi } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { createJSONStorage, persist } from 'zustand/middleware'
 import { NoteSectionName } from '../constants'
 import { NoteSectionItem } from '../types'
 
@@ -32,7 +32,7 @@ const createNoteStore = (initialNotes: NoteSectionItem[]) =>
       }),
       {
         name: 'note-storage',
-        getStorage: () => sessionStorage,
+        storage: createJSONStorage(() => sessionStorage),
       },
     ),
   )
