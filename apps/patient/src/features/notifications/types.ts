@@ -13,6 +13,7 @@ interface NotificationItem {
 
 interface NotificationResponse {
   notificationList: NotificationItem[]
+  total:number
 }
 
 export { type NotificationResponse, type NotificationItem }

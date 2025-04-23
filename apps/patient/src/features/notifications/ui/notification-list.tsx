@@ -1,22 +1,31 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import { Flex, ScrollArea, Text } from '@radix-ui/themes'
+import React, { useEffect, useRef, useState } from 'react'
+import { Box, Button, Flex, ScrollArea, Text } from '@radix-ui/themes'
 import { LoadingPlaceholder } from '@/components-v2'
 import { useToast } from '@/providers'
-import { getNotificationsAction, markAsReadNotificationAction } from '../actions'
-
-import { NotificationItem } from '../types'
+import {
+  getNotificationsAction,
+  markAsReadNotificationAction,
+} from '../actions'
+import { NotificationResponse } from '../types'
 import { NotificationCard } from './notification-card/notification-card'
+import { createScrollRestorer } from './utils'
 
 const NotificationList = () => {
   const { toast } = useToast()
-  const [notificationList, setNotificationList] = useState<NotificationItem[]>(
-    [],
-  )
+  const [notificationListResponse, setNotificationListResponse] =
+    useState<NotificationResponse>({
+      notificationList: [],
+      total: 0,
+    })
+  const { notificationList, total } = notificationListResponse
+  const [page, setPage] = useState(1)
   const [isLoading, setIsLoading] = useState(true)
 
-  const onMark = async (notificationId: string) => {
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  const handleMarkAsRead = async (notificationId: string) => {
     const result = await markAsReadNotificationAction(notificationId)
 
     if (result.state === 'error') {
@@ -27,33 +36,77 @@ const NotificationList = () => {
     }
   }
 
+  const handleShowMore = () => setPage((prev) => prev + 1)
+
   useEffect(() => {
     ;(async () => {
-      const response = await getNotificationsAction(true)
+      const container = scrollRef.current
+      const restoreScroll = createScrollRestorer(container)
 
-      if (response.state === 'success') {
-        setNotificationList(response.data.notificationList)
-      } else if (response.state === 'error') {
+      setIsLoading(true)
+
+      const response = await getNotificationsAction(page)
+
+      if (response.state === 'error') {
         toast({
-          title: response.error ?? 'Failed to fetch NotificationList',
+          title: response.error ?? 'Failed to fetch notifications',
           type: 'error',
         })
+        return
       }
+
+      const { notificationList } = response.data
+      setNotificationListResponse((prev) => ({
+        total: response.data.total,
+        notificationList: [...prev.notificationList, ...notificationList],
+      }))
+      restoreScroll()
+
       setIsLoading(false)
     })()
-  }, [])
+  }, [page])
 
-  if (isLoading)
+  if (isLoading && notificationList.length === 0) {
     return (
       <LoadingPlaceholder containerClassName="min-w-[350px] mx-auto my-auto min-h-[70vh]" />
     )
+  }
 
-  return notificationList.length > 0 ? (
-    <ScrollArea className="max-h-[calc(100vh-290px)]">
-      {notificationList.map((note) => (
-        <NotificationCard onMark={onMark} key={note.id} {...note} />
-      ))}
-    </ScrollArea>
+  let buttonContent = 'Show More'
+
+  if (isLoading) {
+    buttonContent = 'Loading...'
+  } else if (notificationList.length >= total) {
+    buttonContent = 'No more notifications to show'
+  }
+
+  return notificationListResponse.notificationList.length > 0 ? (
+    <>
+      <ScrollArea className="max-h-[calc(100vh-290px)]">
+        <Box ref={scrollRef}>
+          {notificationList.map((notification) => (
+            <NotificationCard
+              key={notification.id}
+              {...notification}
+              onMark={handleMarkAsRead}
+            />
+          ))}
+        </Box>
+      </ScrollArea>
+      <Box className="px-2 py-3">
+        <Button
+          onClick={handleShowMore}
+          radius="full"
+          className="w-full"
+          variant="outline"
+          disabled={isLoading || notificationList.length >= total}
+          color="gray"
+          size="2"
+        >
+          {buttonContent}
+        </Button>
+      </Box>
+    </>
   ) : (
     <Flex className="min-h-[70vh]" align="center" justify="center">
       <Text size="2" weight="bold" color="gray">

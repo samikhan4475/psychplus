@@ -24,6 +24,20 @@ const getPurposeCodeIconPath = (purposeCode: string): string => {
   return PurposeCodePaths.logo
 }
 
+const createScrollRestorer = (container: HTMLElement | null) => {
+  const prevScrollHeight = container?.scrollHeight ?? 0
+  const prevScrollTop = container?.scrollTop ?? 0
+
+  return () => {
+    setTimeout(() => {
+      if (container) {
+        const newScrollHeight = container.scrollHeight
+        container.scrollTop = newScrollHeight - prevScrollHeight + prevScrollTop
+      }
+    }, 0)
+  }
+}
+
 const getTimeAgo = (date: Date): string => {
   const diffInSeconds = Math.floor(
     (new Date().getTime() - date.getTime()) / 1000,
@@ -52,4 +66,4 @@ const getTimeAgo = (date: Date): string => {
   return `${years} year${years === 1 ? '' : 's'} ago`
 }
 
-export { getPurposeCodeIconPath, getTimeAgo }
+export { getPurposeCodeIconPath, getTimeAgo, createScrollRestorer }

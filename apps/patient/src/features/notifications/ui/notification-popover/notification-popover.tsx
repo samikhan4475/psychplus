@@ -91,7 +91,7 @@ const NotificationPopover = () => {
   return (
     <>
       <Box className="hidden sm:block">
-        <Popover.Root onOpenChange={onOpen}>
+        <Popover.Root open={isOpen} onOpenChange={onOpen}>
           <Popover.Trigger>
             <Button
               variant="outline"
@@ -121,6 +121,7 @@ const NotificationPopover = () => {
               />
               <Flex className="items-center justify-center border-t border-gray-4 px-2 py-3">
                 <Link
+                  onClick={onOpen}
                   href="/notifications"
                   className="text-pp-blue-3 cursor-pointer text-2 font-bold hover:underline"
                 >

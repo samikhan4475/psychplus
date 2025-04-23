@@ -4,5 +4,6 @@ enum NotificationTab {
   Others = 'Others',
 }
 
+const NOTIFICATION_PAGINATION_SIZE = 10
 
-export { NotificationTab }
+export { NotificationTab, NOTIFICATION_PAGINATION_SIZE }
