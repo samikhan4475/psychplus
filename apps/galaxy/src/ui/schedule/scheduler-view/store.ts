@@ -27,7 +27,7 @@ interface Store {
   error?: string
   isSettingsSaving?: boolean
   data: AppointmentAvailability[]
-  formData?: AvailableSlotsParams
+  formData?: AvailableSlotsParams & { intervalCount?: number }
   persistedFormData?: AvailableSlotsParams
   dates: AppointmentDate[]
   settingMap: Map<string, UserSetting>
@@ -174,6 +174,7 @@ const useStore = create<Store>()(
           loading: true,
         })
         const params = { ...(get().formData ?? {}) }
+        const intervalCount = params.intervalCount ?? 1
         const result = await searchAppointmentsAction({
           ...params,
           maxDaysOutToLook: 90,
@@ -190,6 +191,7 @@ const useStore = create<Store>()(
         set({
           data: mergeRecords([...get().data, ...(result.data || [])]),
           loading: false,
+          formData: { ...params, intervalCount: intervalCount + 1 },
         })
       },
     }),

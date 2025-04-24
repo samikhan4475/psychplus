@@ -24,7 +24,8 @@ const DateStepper = ({ noOfDays = 13 }: { noOfDays?: number }) => {
     const updatedDays = setAppointmentDates(nextWeekDay, noOfDays)
 
     if (!formData?.maxDaysOutToLook) {
-      const next90thDay = getNext90thDay(formData?.startingDate)
+      const intervalCount = formData?.intervalCount ?? 1
+      const next90thDay = getNext90thDay(formData?.startingDate, intervalCount)
       const dayAfter90th = updatedDays.find(({ date }) => {
         const isoDateString = date.toISOString().split('T')[0]
         const calendarDate = parseDate(isoDateString)

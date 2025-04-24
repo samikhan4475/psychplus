@@ -8,7 +8,7 @@ import {
 } from '@internationalized/date'
 import { Box, Flex, Grid, Text } from '@radix-ui/themes'
 import { addDays } from 'date-fns'
-import { cn } from '@/utils'
+import { cn, getDateLabel } from '@/utils'
 import { START_OF_WEEK_LOCALE } from '../constants'
 import { NavigationButton } from './navigation-button'
 import { useStore } from './store'
@@ -46,12 +46,20 @@ const DayHeader = ({
     const nextDay = addDays(appointmentDates[0].date, 1)
     setAppointmentDates(nextDay, noOfDays)
 
+    const nextDayForDayStepper = addDays(
+      appointmentDates[appointmentDates.length - 1].date,
+      1,
+    )
     if (!formData?.maxDaysOutToLook) {
-      const next90thDay = getNext90thDay(formData?.startingDate)
-      const isoDateString = nextDay.toISOString().split("T")[0]
+      const intervalCount = formData?.intervalCount ?? 1
+      const next90thDay = getNext90thDay(formData?.startingDate, intervalCount)
+
+      const isoDateString = getDateLabel(nextDayForDayStepper)
       const nextCalendarDate = parseDate(isoDateString)
-      if (nextCalendarDate.compare(next90thDay) === 1) {
-        fetchNext90DaySlots(nextDay.toISOString())
+      nextCalendarDate.add({ days: 1 })
+
+      if (nextCalendarDate.compare(next90thDay) === 0) {
+        fetchNext90DaySlots(nextDayForDayStepper.toISOString())
       }
     }
   }

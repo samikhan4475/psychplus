@@ -57,9 +57,12 @@ const getMaxDaysOutToLookFor = (start?: DateValue, end?: DateValue) => {
   return Math.abs(end.compare(startingDate)) + 1
 }
 
-const getNext90thDay = (startingDate: string | undefined): CalendarDate =>
-  getCalendarDateFromUtc(startingDate)?.add({ days: 90 }) ??
-  today(getLocalTimeZone()).add({ days: 90 })
+const getNext90thDay = (
+  startingDate: string | undefined,
+  intervalCount = 1,
+): CalendarDate =>
+  getCalendarDateFromUtc(startingDate)?.add({ days: 90 * intervalCount }) ??
+  today(getLocalTimeZone()).add({ days: 90 * intervalCount })
 
 export {
   extractDate,

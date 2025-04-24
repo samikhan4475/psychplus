@@ -88,13 +88,15 @@ const getSlashedDateString = (
   return `${month}/${day}/${truncateYear ? year.toString().slice(2) : year}`
 }
 
-const getDateLabel = (date?: DateValue) => {
+const getDateLabel = (date?: Date) => {
   if (!date) {
-    date = getCalendarDate()
+    date = new Date()
   }
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
 
-  const { month, day, year } = date
-  return `${MONTH_LABELS[month - 1]} ${day}, ${year}`
+  return `${year}-${month}-${day}`
 }
 
 const getPaddedDateString = (date?: DateValue) => {
