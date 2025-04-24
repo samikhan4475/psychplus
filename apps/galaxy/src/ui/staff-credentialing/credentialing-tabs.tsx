@@ -15,6 +15,9 @@ import { LicenseHistory } from './license-history'
 import { PrescriberSettingsView } from './prescriber-settings'
 import { useStore } from './store'
 import { CredentialingTab } from './types'
+import { EPCSView } from './epcs'
+import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
+import { FEATURE_FLAGS } from '@/constants'
 
 const CredentialingTabs = (props: {
   isProfileView?: boolean
@@ -28,6 +31,9 @@ const CredentialingTabs = (props: {
       ? `${user.staffId}`
       : props.staffId || ''
   const [loadingStates, setLoadingStates] = useState<boolean>(false)
+  const isSureScriptFeatureFlag = useFeatureFlagEnabled(
+    FEATURE_FLAGS.ehr7406Surescripts,
+  )
   useEffect(() => {
     setLoadingStates(true)
     getUsStatesAction().then((res) => {
@@ -65,6 +71,12 @@ const CredentialingTabs = (props: {
             <TabsTrigger value={CredentialingTab.PrescriberSettings}>
               {CredentialingTab.PrescriberSettings}
             </TabsTrigger>
+            {isSureScriptFeatureFlag && (
+              <TabsTrigger value={CredentialingTab.EPCS}>
+              {CredentialingTab.EPCS}
+            </TabsTrigger>
+            )}
+           
           </Tabs.List>
         </Flex>
         {loadingStates ? (
@@ -94,6 +106,9 @@ const CredentialingTabs = (props: {
             </TabsContent>
             <TabsContent value={CredentialingTab.PrescriberSettings}>
               <PrescriberSettingsView states={states} staffId={staffId} />
+            </TabsContent>
+            <TabsContent value={CredentialingTab.EPCS}>
+              <EPCSView  staffId={staffId} />
             </TabsContent>
           </>
         )}

@@ -881,13 +881,11 @@ const DELETE_STAFF_VIDEO_ENDPOINT = (staffId: string) =>
 
 const UPDATE_FOLLOW_UP_DENIAL_STATUS = (appointmentId: number) =>
   `${API_URL}/api/appointments/${appointmentId}/actions/followupstatus`
-
 const GET_USERS_SELF_INITIAL_INFORMATION_ENDPOINT = `${API_URL}/api/users/self/initialinformation`
 const GET_PATIENT_MEDICATION_ENDPOINT = (patientId: number, id: string) =>
   `${API_URL}/api/patients/${patientId}/prescriptions/${id}`
 const PATIENT_MEDICATION_SIGN_IN = `${API_URL}/api/prescribing/prescriptions/actions/transmit`
 const GET_PROVIDER_PRESCRIBING_DATA = `${API_URL}/api/providerlocations/GetProviderWithPrescribingData`
-
 const GET_SCHEDULES_REPORTS = `${API_URL}/api/reporting/schedules/actions/search`
 const DISABLE_SCHEDULE_REPORT_JOB = (jobId: string) =>
   `${API_URL}/api/jobmanager/jobs/${jobId}/actions/disable`
@@ -905,9 +903,17 @@ const EDIT_SCHEDULE_REPORT_ENDPOINT = (scheduleId: string) =>
   `${API_URL}/api/reporting/schedules/${scheduleId}`
 const UPDATE_SCHEDULE_REPORT_JOB_ENDPOINT = (jobId: string) =>
   `${API_URL}/api/jobmanager/jobs/${jobId}`
+const GET_USERS_SELF_PROOFINGS_ENDPOINT = `${API_URL}/api/userproofings/actions/search`
+const START_USERS_PROOFINGS_ENDPOINT = (
+  userId: string,
+) => `${API_URL}/api/users/${userId}/idproofings/actions/start`
+const START_SELF_PROOFINGS_ENDPOINT = `${API_URL}/api/users/self/idproofings/actions/start`
+const LAUNCH_SELF_PROOFINGS_ENDPOINT = `${API_URL}/api/users/self/idproofings/actions/launchUrl`
+const LAUNCH_USERS_PROOFINGS_ENDPOINT = (
+  userId: string,
+) => `${API_URL}/api/users/${userId}/idproofings/actions/launchUrl`
 const GET_LAB_ORDERS_SEARCH = `${API_URL}/api/laborders/actions/search`
 const GET_MEDICATIONS_REFILL = `${API_URL}/api/pharmacynotifications/actions/search`
-
 const UPDATE_DEFAULT_PAYMENT = (
   patientId: string,
   finanicalDataId: string,
@@ -1318,8 +1324,13 @@ export {
   ENABLE_SCHEDULE_REPORT_JOB,
   EDIT_SCHEDULE_REPORT_ENDPOINT,
   UPDATE_SCHEDULE_REPORT_JOB_ENDPOINT,
+  GET_USERS_SELF_PROOFINGS_ENDPOINT,
+  START_USERS_PROOFINGS_ENDPOINT,
+  START_SELF_PROOFINGS_ENDPOINT,
+  LAUNCH_SELF_PROOFINGS_ENDPOINT,
+  LAUNCH_USERS_PROOFINGS_ENDPOINT,
   GET_LAB_ORDERS_SEARCH,
   GET_MEDICATIONS_REFILL,
   DIS_ASSOCIATE_PERMISSION_ENDPOINT,
-  UPDATE_DEFAULT_PAYMENT,
+  UPDATE_DEFAULT_PAYMENT
 }

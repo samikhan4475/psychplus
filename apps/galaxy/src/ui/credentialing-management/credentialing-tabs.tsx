@@ -12,7 +12,6 @@ import { DEAView } from './dea'
 import { StateLicenseView } from './state-license'
 import { useStore } from './store'
 import { CredentialingTab } from './types'
-
 const CredentialingTabs = () => {
   const { activeTab, setActiveTab } = useStore((state) => ({
     activeTab: state.activeTab,

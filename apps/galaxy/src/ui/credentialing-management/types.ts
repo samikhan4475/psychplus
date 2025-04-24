@@ -5,7 +5,8 @@ enum CredentialingTab {
   StateLicense = 'State License',
   DEA = 'DEA',
   CDS = 'CDS',
-}
+  EPCS = 'EPCS Manger'
+} 
 
 enum LicenseType {
   License = 'License',
@@ -23,6 +24,7 @@ enum RecordStatus {
   Active = 'Active',
   InActive = 'InActive',
 }
+
 
 interface Filters {
   providerStaffIds?: number[]
@@ -65,7 +67,6 @@ interface GetLicensesActionResponse {
   licenses: GetLicensesResponse
   total: number
 }
-
 export {
   CredentialingTab,
   LicenseType,
@@ -74,5 +75,5 @@ export {
   type License,
   type Filters,
   type GetLicensesResponse,
-  type GetLicensesActionResponse,
+  type GetLicensesActionResponse
 }

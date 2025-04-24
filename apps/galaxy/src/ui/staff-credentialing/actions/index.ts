@@ -7,3 +7,7 @@ export * from './update-license'
 export * from './add-license'
 export * from './get-license-history'
 export * from './get-settings-history'
+export * from './get-idproofings'
+export * from './launch-proofing'
+export * from './self-start-proofing'
+

@@ -59,6 +59,7 @@ const CODESETS = {
   DurationUnit: 'DurationUnit',
   PrescribedStatus: 'PrescribedStatus',
   FileFormatType: 'FileFormatType',
+  ProofingStatus: 'ProofingStatus',
   MedicationStatus: 'MedicationStatus',
 
   // PsychPlusPublic Codesets

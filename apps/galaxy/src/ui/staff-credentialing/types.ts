@@ -7,6 +7,7 @@ enum CredentialingTab {
   DEA = 'DEA',
   CDS = 'CDS',
   PrescriberSettings = 'Prescriber Settings',
+  EPCS = 'EPCS Manger'
 }
 
 enum LicenseType {
@@ -24,6 +25,9 @@ type StaffData = {
   staffId: number
   userId: number
   legalName: LegalName
+  firstName:string
+  middleName:string
+  lastName:string
 } | null
 
 enum LicenseStatus {
@@ -36,6 +40,12 @@ enum RecordStatus {
   Active = 'Active',
   InActive = 'InActive',
 }
+
+enum ProofingType {
+  web = 'WebcamAuthentication',
+  mobile = 'MobileAuthentication',
+}
+
 
 interface DEA {
   metadata?: Metadata
@@ -150,7 +160,54 @@ interface PrescriberSettingResponse {
 }
 type LicenseHistoryRow = Row<LicenseHistory>
 
-export { CredentialingTab, LicenseStatus, LicenseType, RecordStatus }
+
+interface GetLicensesActionResponse {
+  licenses: GetLicensesResponse
+  total: number
+}
+interface GetIdProofingActionResponse {
+ userProofings: GetIdProofingResponse[]
+ total: number
+}
+
+interface GetIdProofingResponse {
+  startedAt:string
+  proofingStatus:string
+  validFrom:string
+  validUntil:string
+  requestByStaffname?:StaffData
+}
+
+interface StartSelfProofingResponse {
+  clientRef: string
+  userRef: string
+  proofingRef: string
+  proofType: string
+  status: string
+  startedAt: string
+  pendingUserAction: boolean
+  canResetToResume: boolean
+  successfulProofing: boolean
+  endedAt: string
+  shouldAbandonProofType: boolean
+  validFrom: string
+  validUntil: string
+}
+
+interface LaunchProofingPayload{
+  callBackUrl:string
+}
+
+interface GetIdProofingActionPayload{
+  userId:string
+}
+
+
+interface LaunchProofingResponse{
+  launchScreenUrl:string
+}
+
+export { CredentialingTab, LicenseStatus, LicenseType, RecordStatus, ProofingType }
 
 export type {
   DEA,
@@ -168,4 +225,11 @@ export type {
   AddLicensePayload,
   UpdateLicensePayload,
   NearToExpireLicenseResponse,
+  GetLicensesActionResponse,
+  StartSelfProofingResponse,
+  LaunchProofingPayload,
+  GetIdProofingActionPayload,
+  LaunchProofingResponse,
+  GetIdProofingActionResponse,
+  GetIdProofingResponse
 }
