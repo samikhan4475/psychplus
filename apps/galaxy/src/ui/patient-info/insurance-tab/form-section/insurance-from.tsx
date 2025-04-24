@@ -23,7 +23,6 @@ import { useStore } from '../store'
 import { transformOut } from '../transform'
 import {
   getInsuranceFormDefaultValues,
-  getMinMaxDates,
   registerPolicyHolderFields,
   unregisterPolicyHolderFields,
 } from '../utils'
@@ -71,17 +70,6 @@ const InsuranceForm = memo(
     const [policyBackImage, setPolicyBackImage] = useState<File | undefined>(
       undefined,
     )
-
-    const [maxDate, setMaxDate] = useState<string>('')
-    const [minDate, setMinDate] = useState<string>('')
-
-    useEffect(() => {
-      const { maxDate, minDate } = getMinMaxDates()
-
-      setMaxDate(maxDate)
-
-      setMinDate(minDate)
-    }, [])
 
     const form = useForm<InsuranceSchemaType>({
       reValidateMode: 'onChange',
@@ -248,8 +236,8 @@ const InsuranceForm = memo(
 
               <MemberIDInput />
               <GroupNumberInput />
-              <EffectiveDatePicker maxDate={maxDate} />
-              <TerminationDatePicker minDate={minDate} />
+              <EffectiveDatePicker />
+              <TerminationDatePicker />
               <Flex className="col-span-full">
                 <InsuranceHolderSwitch />
               </Flex>

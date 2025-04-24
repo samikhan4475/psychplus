@@ -9,10 +9,7 @@ import {
 } from '@/components'
 import { InsuranceSchemaType } from './schema'
 
-interface TerminationDatePickerProps {
-  minDate: string
-}
-const TerminationDatePicker = ({ minDate }: TerminationDatePickerProps) => {
+const TerminationDatePicker = () => {
   const form = useFormContext<InsuranceSchemaType>()
   return (
     <FormFieldContainer className="w-full">
@@ -22,7 +19,6 @@ const TerminationDatePicker = ({ minDate }: TerminationDatePickerProps) => {
       <TextField.Root
         type="date"
         size="1"
-        min={minDate}
         pattern="\d{4}-\d{2}-\d{2}"
         data-testid="terminationDate-date-input"
         {...form.register('terminationDate')}
