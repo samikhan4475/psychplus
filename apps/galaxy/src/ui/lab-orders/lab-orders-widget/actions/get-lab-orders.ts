@@ -9,21 +9,23 @@ interface GetLabOrdersActionProps {
   appointmentId: string | null
   payload?: LabOrderPayload
   page?: number
+  limit?: number
 }
 
 const getLabOrdersAction = async ({
   appointmentId,
   payload,
   page = 1,
+  limit = LABS_ORDER_TABLE_PAGE_SIZE,
 }: GetLabOrdersActionProps): Promise<
   api.ActionResult<LabOrderResponseList>
 > => {
   const url = appointmentId
     ? new URL(api.GET_LAB_ORDERS(appointmentId))
     : new URL(api.GET_LAB_ORDERS_SEARCH)
-  const offset = (page - 1) * LABS_ORDER_TABLE_PAGE_SIZE
+  const offset = (page - 1) * limit
 
-  url.searchParams.append('limit', String(LABS_ORDER_TABLE_PAGE_SIZE))
+  url.searchParams.append('limit', String(limit))
   url.searchParams.append('offset', String(offset))
 
   const response = await api.POST<LabOrders[]>(`${url}`, payload)

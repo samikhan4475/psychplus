@@ -13,8 +13,10 @@ import { useStore } from './store'
 
 const ReviewAllButton = () => {
   const [loading, setLoading] = useState(false)
-  const { selectedRows } = useStore((state) => ({
+  const { selectedRows, fetch, payload } = useStore((state) => ({
     selectedRows: state.selectedRows,
+    fetch: state.fetch,
+    payload: state.payload ?? {},
   }))
 
   const placeOrder = async (order: LabOrders) => {
@@ -59,6 +61,7 @@ const ReviewAllButton = () => {
           }
         }),
       )
+      fetch(null, payload)
       setLoading(false)
     }
   }
