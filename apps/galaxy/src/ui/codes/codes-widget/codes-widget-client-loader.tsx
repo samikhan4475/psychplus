@@ -1,8 +1,9 @@
 'use client'
 
 import { Flex } from '@radix-ui/themes'
-import { useShallow } from 'zustand/react/shallow'
+import { dequal } from 'dequal'
 import { Appointment, QuickNoteSectionItem } from '@/types'
+import { useStore as useQuestionnaireStore } from '@/ui/questionnaires/store'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { useStore } from '@/ui/quicknotes/store'
 import { CodesWidget } from './codes-widget'
@@ -24,15 +25,17 @@ const CodesWidgetClientLoader = ({
   data = [],
 }: CodesWidgetLoaderProps) => {
   const { tcmData, codesData } = useStore(
-    useShallow((state) => ({
+    (state) => ({
       codesData:
         state.actualNotewidgetsData?.[
           QuickNoteSectionName.QuicknoteSectionCodes
         ] ?? data,
       tcmData:
         state.actualNotewidgetsData?.[QuickNoteSectionName.QuicknoteSectionTcm],
-    })),
+    }),
+    dequal,
   )
+  const questionnaires = useQuestionnaireStore((state) => state.histories)
 
   const initialValues = transformIn(codesData)
   return (
@@ -41,6 +44,7 @@ const CodesWidgetClientLoader = ({
         <CodesWidget
           patientId={patientId}
           initialValues={initialValues}
+          questionairesCount={Object.keys(questionnaires)?.length}
           appointmentId={appointmentId}
           appointment={appointment}
           isCodesHeader={isCodesHeader}

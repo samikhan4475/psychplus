@@ -30,6 +30,7 @@ const visitSpecificCodes: CodesWidgetItem[] = [
 ]
 
 const restrictedCodesTCM = new Set(['99495', '99496'])
+const therapySessionCodes = ['90833', '90836', '90838']
 
 const restrictedVisitsForAddOnCodes = ['Spravato Visit']
 const allowedDuplicateCodes = ['96127']
@@ -222,6 +223,7 @@ const getCptCodesConditions = (
 function getModifiedCptCodes(
   initialValues: CodesWidgetSchemaType,
   appointment: Appointment,
+  questionairesCount = 0,
 ): { isChanged: boolean; updatedCodes: CodesWidgetSchemaType } {
   const defaultCodes = getDefaultSelectedCptCodes(appointment)
   let isChanged = false
@@ -246,6 +248,25 @@ function getModifiedCptCodes(
     isVisitAfterWorkingHours(appointment)
   ) {
     cptAddonCodes.push('99050')
+    isChanged = true
+  }
+
+  if (
+    cptAddonCodes.some((code) => therapySessionCodes.includes(code)) &&
+    cptAddonCodes?.includes('96127')
+  ) {
+    for (let i = cptAddonCodes.length; i--; ) {
+      if (cptAddonCodes[i] === '96127') cptAddonCodes.splice(i, 1)
+    }
+    isChanged = true
+  } else if (
+    !cptAddonCodes.some((code) => therapySessionCodes.includes(code)) &&
+    !cptAddonCodes?.includes('96127') &&
+    questionairesCount > 0
+  ) {
+    ;[...Array(questionairesCount)].forEach((_, index) => {
+      index < 2 && cptAddonCodes.push('96127')
+    })
     isChanged = true
   }
 

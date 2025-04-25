@@ -4,7 +4,6 @@ import { ComponentType, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Box } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import { WidgetFormContainer, WidgetSaveButton } from '@/components'
 import { Appointment, QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
@@ -28,6 +27,7 @@ interface CodesWidgetProps {
   initialValues: CodesWidgetSchemaType
   appointment: Appointment
   tcmData?: QuickNoteSectionItem[]
+  questionairesCount?: number
 }
 
 const CodesWidget = ({
@@ -37,6 +37,7 @@ const CodesWidget = ({
   initialValues,
   appointment,
   tcmData,
+  questionairesCount,
 }: CodesWidgetProps) => {
   const params = useSearchParams()
   const form = useCodesWidgetForm(initialValues)
@@ -51,6 +52,7 @@ const CodesWidget = ({
     const { isChanged, updatedCodes } = getModifiedCptCodes(
       initialValues,
       appointment,
+      questionairesCount,
     )
     if (isChanged) {
       form.reset(updatedCodes)
@@ -58,7 +60,7 @@ const CodesWidget = ({
         handleDefaultSubmission(patientId, appointmentId, updatedCodes)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [patientId, appointmentId, appointment, initialValues])
+  }, [patientId, appointmentId, appointment, initialValues, questionairesCount])
 
   const {
     primaryCodeOptions,
@@ -81,13 +83,7 @@ const CodesWidget = ({
         tags={isCodesHeader ? [QuickNoteSectionName.QuicknoteSectionCodes] : []}
         getData={transformOut(patientId, appointmentId)}
         headerRight={
-          <>
-            {!isCodesHeader && (
-              <>
-                <WidgetSaveButton shouldCheckPermission />
-              </>
-            )}
-          </>
+          !isCodesHeader && <WidgetSaveButton shouldCheckPermission />
         }
         topHeader={isCodesHeader && <CodesHeader />}
         isResetDisabled

@@ -33,7 +33,14 @@ const TherapyPsychoAnalysisBlock = ({
       gap="2"
     >
       <Flex align="center" gap="2">
-        <CheckboxInput field="therapy" checked={watch('therapy')} />
+        <CheckboxInput
+          field="therapy"
+          checked={watch('therapy')}
+          onCheckedChange={(check) => {
+            setValue('therapy', check)
+            !check && setValue('therapyTimeSpent', '')
+          }}
+        />
         <Text className="cursor-default" weight="medium">
           Therapy/Psychoanalysis
         </Text>
