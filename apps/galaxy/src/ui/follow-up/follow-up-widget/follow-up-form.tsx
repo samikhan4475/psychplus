@@ -10,6 +10,7 @@ import { FormContainer } from '@/components'
 import { VisitMediumEnum } from '@/enum'
 import { Appointment, BookVisitPayload } from '@/types'
 import { getBookedAppointmentsAction } from '@/ui/schedule/client-actions'
+import { getStaffAction } from '@/ui/staff-credentialing/actions'
 import { bookVisitAction } from '@/ui/visit/client-actions'
 import { AlertDialog } from './alert-dialog'
 import { CalenderView } from './calender-view'
@@ -104,8 +105,15 @@ const FollowUpForm = ({
   }, [appointmentData])
 
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
+    if (!appointment) return
     setIsSubmitting(true)
-    const response = await getProviderDefaultDuration(appointment!)
+    const staffResult = await getStaffAction(`${appointment?.providerId}`)
+    if (staffResult.state === 'error') {
+      toast.error(staffResult.error || 'Failed to fetch staff details')
+      return
+    }
+    const userId = staffResult.data?.userId
+    const response = await getProviderDefaultDuration(appointment, userId)
     if (response.state === 'error') {
       setIsSubmitting(false)
       return
@@ -116,7 +124,7 @@ const FollowUpForm = ({
       appointment?.appointmentDate ?? new Date().toISOString(),
     )
 
-    const transformedAppointment = transformIn(appointment!, duration)
+    const transformedAppointment = transformIn(appointment, duration)
     const payload: BookVisitPayload = {
       ...transformedAppointment,
       startDate: offsetStartDate,

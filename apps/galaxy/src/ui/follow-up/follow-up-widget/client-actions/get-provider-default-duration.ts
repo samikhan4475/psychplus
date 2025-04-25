@@ -3,6 +3,7 @@
 import toast from 'react-hot-toast'
 import * as api from '@/api/api.client'
 import { GET_PROVIDER_SETTINGS_ENDPOINT } from '@/api/endpoints'
+import { LevelCode } from '@/constants'
 import { Appointment, Metadata } from '@/types'
 import { getVisitSequence } from '../utils'
 
@@ -19,16 +20,17 @@ interface UserSetting {
 
 const getProviderDefaultDuration = async (
   appointment: Appointment,
+  userId: string,
 ): Promise<api.ActionResult<string | undefined>> => {
-  const userId = appointment.providerId
   const visitSequence = getVisitSequence(appointment)
   const name = `${appointment.visitTypeCode}_${visitSequence}_${appointment.visitMedium}`
   const response = await api.POST<UserSetting[]>(
     GET_PROVIDER_SETTINGS_ENDPOINT,
     {
+      isHierarchicalQuery: true,
       categoryValue: 'ProviderDefaults',
       settingStatusCode: 'Active',
-      levelCodes: ['System'],
+      levelCodes: [LevelCode.User, LevelCode.System],
       name,
       userId,
     },
