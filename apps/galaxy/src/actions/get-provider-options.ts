@@ -9,6 +9,7 @@ const getProvidersOptionsAction = async (
   payload: {
     providerType?: string
     practicesIds?: string[]
+    isResultsForNameList?: boolean
   } = {},
 ): Promise<api.ActionResult<{ label: string; value: string }[]>> => {
   const body = {

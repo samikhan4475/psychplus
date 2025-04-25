@@ -1,33 +1,47 @@
 'use client'
 
-import { useState } from 'react'
-import { useFormContext } from 'react-hook-form'
-import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
+import { useEffect, useState } from 'react'
+import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
+import { SelectOptionType } from '@/types'
 import { PermissionAlert } from '@/ui/schedule/shared'
 import { getOrganizationOptionsAction } from './actions'
-import { useStore } from './store'
 
-const OrganizationSelect = () => {
-  const form = useFormContext()
-  const staffOrganizations = useStore((state) => state.staffOrganizations)
+interface OrganizationSelectProps {
+  userId: string
+}
+
+const OrganizationSelect = ({ userId }: OrganizationSelectProps) => {
+  const [organizations, setOrganizations] = useState<SelectOptionType[]>([])
+  const [loading, setLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
 
-  const onValueChange = (value: string) => {
-    if (staffOrganizations?.includes(value)) {
-      form.setValue('organizationId', value)
-    } else {
-      setIsOpen(true)
-    }
-  }
+  useEffect(() => {
+    ;(async () => {
+      if (userId) {
+        setLoading(true)
+        const result = await getOrganizationOptionsAction({
+          userId,
+        })
+        if (result.state === 'success') {
+          setOrganizations(result.data)
+        }
+        setLoading(false)
+      }
+    })()
+  }, [userId])
 
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel className="!text-1">Organization</FormFieldLabel>
-      <AsyncSelect
+
+      <SelectInput
         field="organizationId"
-        fetchOptions={getOrganizationOptionsAction}
+        options={organizations}
+        placeholder="Select"
         buttonClassName="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none] w-[200px]"
-        onValueChange={onValueChange}
+        className="w-full"
+        loading={loading}
+        disabled={loading}
       />
 
       <PermissionAlert

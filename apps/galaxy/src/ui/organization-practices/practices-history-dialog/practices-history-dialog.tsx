@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useParams } from 'next/navigation'
 import { CounterClockwiseClockIcon } from '@radix-ui/react-icons'
 import { Flex, Heading, Popover } from '@radix-ui/themes'
@@ -6,14 +6,12 @@ import { X } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { PropsWithRow, SelectCell } from '@/components'
 import { Practice } from '@/ui/organization-practice/types'
-import { getAllPracticeHxListAction, updatePracticeAction } from '../actions'
+import { updatePracticeAction } from '../actions'
 import { STATUS_CODESET } from '../constants'
 import { HistoryDataTable } from './history-table'
 
 const PracticesHistoryDialog = ({ row }: PropsWithRow<Practice>) => {
   const [currentStatus, setCurrentStatus] = useState(row.original.recordStatus)
-  const [practiceHx, setPracticeHx] = useState<Practice[]>([])
-  const [loading, setLoading] = useState(false)
   const { id } = useParams<{ id: string }>()
 
   const handleStatusChange = async (status: string) => {
@@ -35,23 +33,6 @@ const PracticesHistoryDialog = ({ row }: PropsWithRow<Practice>) => {
     toast.success('Status updated successfully')
   }
 
-  useEffect(() => {
-    const fetchPracticeHistory = async () => {
-      setLoading(true)
-      if (!row.original.id) return
-
-      const response = await getAllPracticeHxListAction(row.original.id)
-      if (response.state === 'success') {
-        setPracticeHx(response.data)
-        setLoading(false)
-      } else {
-        setLoading(false)
-      }
-    }
-
-    fetchPracticeHistory()
-  }, [row.original.id])
-
   return (
     <Flex>
       <Popover.Root>
@@ -71,7 +52,7 @@ const PracticesHistoryDialog = ({ row }: PropsWithRow<Practice>) => {
                   />
                 </Popover.Close>
               </Flex>
-              <HistoryDataTable data={practiceHx} loading={loading} />
+              <HistoryDataTable id={row.original.id} />
             </Flex>
           </Popover.Content>
         </Flex>

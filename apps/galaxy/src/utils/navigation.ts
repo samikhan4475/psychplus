@@ -299,10 +299,10 @@ const getManagementNavLinks = (
         label: 'Practice',
         href: `${orgBase}/organization-practices`,
       },
-      {
-        label: 'Policies',
-        href: `${orgBase}/organization-policies`,
-      },
+      // {
+      //   label: 'Policies',
+      //   href: `${orgBase}/organization-policies`, // will be enabled when the BE part is ready
+      // },
       {
         label: 'Staff',
         href: `${orgBase}/organization-staff`,

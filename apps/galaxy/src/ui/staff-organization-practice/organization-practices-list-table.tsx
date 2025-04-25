@@ -14,7 +14,7 @@ import { ActionsCell } from './cells'
 import { useStore } from './store'
 import { Practice } from './types'
 
-const columns = (userId: string): ColumnDef<Practice>[] => [
+const columns: ColumnDef<Practice>[] = [
   {
     id: 'organizationDisplayName',
     accessorKey: 'organizationDisplayName',
@@ -86,7 +86,7 @@ const columns = (userId: string): ColumnDef<Practice>[] => [
   {
     id: 'actions',
     header: () => <ColumnHeader label="Actions" />,
-    cell: ({ row }) => <ActionsCell row={row} userId={userId} />,
+    cell: ({ row }) => <ActionsCell row={row} />,
   },
 ]
 
@@ -116,7 +116,7 @@ const OrganizationPracticesListTable = ({ userId }: { userId: string }) => {
       <ScrollArea className="rounded p-1">
         <DataTable
           data={data || []}
-          columns={columns(userId)}
+          columns={columns}
           disablePagination
           tableClass="bg-white [&_.rt-ScrollAreaScrollbar]:!hidden"
         />

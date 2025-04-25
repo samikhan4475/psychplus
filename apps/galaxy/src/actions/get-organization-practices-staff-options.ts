@@ -30,7 +30,7 @@ const getOrganizationStaffOptionsAction = async (
   }
 
   const transformedData = response.data.map((data) => ({
-    value: `${data.id}`,
+    value: `${data.userId}`,
     label: data.legalName.firstName + ' ' + data.legalName.lastName,
   }))
 

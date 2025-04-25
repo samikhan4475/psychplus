@@ -19,7 +19,12 @@ const PracticeSelect = () => {
 
   useEffect(() => {
     ;(async () => {
-      const response = await getPracticeOptionsAction()
+      const organizationId = form.getValues('organizationIds')[0] ?? ''
+      const response = await getPracticeOptionsAction({
+        payload: {
+          organizationId,
+        },
+      })
       if (response.state === 'success') {
         setOptions(response.data)
       }
@@ -39,6 +44,7 @@ const PracticeSelect = () => {
         }
         defaultValues={form.watch('practiceIds')}
         options={options}
+        loading={loading}
       />
       <FormFieldError name="practiceIds" />
     </FormFieldContainer>

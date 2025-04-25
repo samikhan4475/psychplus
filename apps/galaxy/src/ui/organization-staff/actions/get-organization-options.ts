@@ -14,14 +14,20 @@ interface Organization {
   id: string
   displayName: string
 }
+interface OrganizationPayload {
+  payload: {
+    organizationId?: string
+  }
+}
 
-const getOrganizationOptionsAction = async (): Promise<
-  api.ActionResult<SelectOptionType[]>
-> => {
+const getOrganizationOptionsAction = async ({
+  payload,
+}: OrganizationPayload): Promise<api.ActionResult<SelectOptionType[]>> => {
   const response = await api.POST<Organization[]>(
     api.GET_ORGANIZATIONS_ENDPOINT,
     {
       ...defaultPayload,
+      ...payload,
     },
   )
 

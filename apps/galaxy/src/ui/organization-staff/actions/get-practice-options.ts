@@ -8,6 +8,13 @@ const defaultPayload = {
   isIncludeMetadataResourceIds: true,
   isIncludeMetadataResourceStatus: false,
   isIncludeLocations: false,
+  includeUsers: false,
+  includeOrganization: false,
+  includeRoles: false,
+  includeLocations: false,
+  isIncludePracticeAddressLocation: false,
+  isIncludePaymentAddressLocation: false,
+  includePermissions: false,
 }
 
 interface Practice {
@@ -15,11 +22,19 @@ interface Practice {
   displayName: string
 }
 
-const getPracticeOptionsAction = async (): Promise<
-  api.ActionResult<SelectOptionType[]>
-> => {
+interface PracticePayoad {
+  payload: {
+    organizationId?: string
+    practiceId?: string
+  }
+}
+
+const getPracticeOptionsAction = async ({
+  payload,
+}: PracticePayoad): Promise<api.ActionResult<SelectOptionType[]>> => {
   const response = await api.POST<Practice[]>(api.GET_PRACTICES_ENDPOINT, {
     ...defaultPayload,
+    ...payload,
   })
 
   if (response.state === 'error') {

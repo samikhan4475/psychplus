@@ -40,7 +40,7 @@ const PracticesHeading = ({ userId }: { userId: string }) => {
           form={form}
           onSubmit={onSubmit}
         >
-          <OrganizationSelect />
+          <OrganizationSelect userId={userId} />
           <PracticeSelect userId={userId} />
         </FormContainer>
       </Flex>

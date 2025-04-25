@@ -24,6 +24,9 @@ const defaultPayload: OrganizationsSearchParams = {
   isIncludeMetadataResourceStatus: true,
   isIncludeLocations: true,
   includePractices: true,
+  includeUsers: false,
+  includeRoles: false,
+  includePermissions: false,
   recordStatuses: DEFAULT_STATUSES,
 }
 

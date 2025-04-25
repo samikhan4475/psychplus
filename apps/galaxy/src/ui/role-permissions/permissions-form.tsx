@@ -57,12 +57,12 @@ const ProfileForm = () => {
     resolver: zodResolver(Schema),
     reValidateMode: 'onSubmit',
     defaultValues: {
-      permissionSection: 'all',
+      permissionSection: '',
       organizationId: id,
     },
     mode: 'onChange',
   })
-  const selectedPermissionsId = form.watch('permissionSection') ?? 'all'
+  let selectedPermissionsId = form.watch('permissionSection') ?? ''
 
   useEffect(() => {
     ;(async () => {
@@ -90,6 +90,7 @@ const ProfileForm = () => {
           }
         })
         setSelectedPermissions(compiled)
+        selectedPermissionsId = 'all'
         setLoading(false)
       }
     })()
@@ -136,8 +137,6 @@ const ProfileForm = () => {
 
     const hasError = results.some((res) => res.state === 'error')
 
-    console.log('results', results)
-
     results.forEach((res) => {
       if (res.state === 'error') {
         toast.error(res.error)
@@ -175,7 +174,7 @@ const ProfileForm = () => {
       <ProfileHeader />
       <OrganizationInfoFields selectedPermissionsId={selectedPermissionsId} />
 
-      {selectedPermissionsId === 'all' ? (
+      {selectedPermissionsId === 'all' &&
         options.map((option) => (
           <Flex className="mt-4" key={option.value} direction="column">
             <PermissionsListTable
@@ -183,8 +182,9 @@ const ProfileForm = () => {
               title={option.label}
             />
           </Flex>
-        ))
-      ) : (
+        ))}
+
+      {selectedPermissionsId && selectedPermissionsId !== 'all' && (
         <PermissionsListTable
           permissionId={selectedPermissionsId}
           title={getPermissionSectionTitle(selectedPermissionsId, options)}

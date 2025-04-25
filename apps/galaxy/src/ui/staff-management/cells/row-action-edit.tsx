@@ -13,7 +13,7 @@ const RowActionEdit = ({ row: { original: record } }: PropsWithRow<Staff>) => {
   const addTab = useRootStore((state) => state.addTab)
   const onEdit = (e: React.MouseEvent<HTMLButtonElement | SVGElement>) => {
     e.stopPropagation()
-    const href = `/staff/${record.id}/profile`
+    const href = `/staff/${record.id}/profile?id=${record.userId}`
     addTab({
       href,
       label: `${record?.legalName?.firstName} ${record.legalName?.lastName} - ${record?.id}`,

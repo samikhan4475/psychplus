@@ -1,28 +1,41 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
+import { useFormContext } from 'react-hook-form'
 import {
   FormFieldContainer,
   FormFieldLabel,
   MultiSelectField,
 } from '@/components'
 import { SelectOptionType } from '@/types'
-import { useEffect, useState } from 'react'
-import { useFormContext } from 'react-hook-form'
 import { getPracticesOptionsAction } from '../patient-lookup/actions'
 import { SchemaType } from './organization-users-list-filter-form'
 
 const PracticeSelect = () => {
+  const { id } = useParams<{ id: string }>()
   const form = useFormContext<SchemaType>()
-
+  const [loading, setLoading] = useState(true)
   const [practicesOptions, setPracticesOptions] = useState<SelectOptionType[]>(
     [],
   )
   useEffect(() => {
-    getPracticesOptionsAction().then((practiceResult) => {
-      if (practiceResult.state === 'success') {
-        setPracticesOptions(practiceResult.data)
+    ;(async () => {
+      setLoading(true)
+      const response = await getPracticesOptionsAction({
+        payload: {
+          organizationId: id,
+        },
+      })
+
+      if (response.state === 'error') {
+        setLoading(false)
+        return
       }
-    })
+
+      setPracticesOptions(response.data)
+      setLoading(false)
+    })()
   }, [])
 
   const practices = form.watch('practices')
@@ -33,7 +46,9 @@ const PracticeSelect = () => {
         options={practicesOptions}
         defaultValues={practices}
         onChange={(values) => form.setValue('practices', values)}
-        className="flex-1 min-w-[112px]"
+        className="min-w-[112px] flex-1"
+        loading={loading}
+        disabled={loading}
       />
     </FormFieldContainer>
   )

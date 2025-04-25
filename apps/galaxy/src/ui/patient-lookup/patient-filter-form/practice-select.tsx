@@ -18,7 +18,7 @@ const PracticeSelect = () => {
     [],
   )
   useEffect(() => {
-    getPracticesOptionsAction().then((practiceResult) => {
+    getPracticesOptionsAction({}).then((practiceResult) => {
       if (practiceResult.state === 'success') {
         setPracticesOptions(practiceResult.data)
       }

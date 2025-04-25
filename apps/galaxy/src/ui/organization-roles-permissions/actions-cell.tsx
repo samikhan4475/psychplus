@@ -22,7 +22,11 @@ interface ActionsCellProps {
 }
 
 const ActionsCell = ({ row }: ActionsCellProps) => {
-  return <AdaptiveRowActionsCell actions={rowActions} row={row} />
+  return (
+    row.original.organizationId && (
+      <AdaptiveRowActionsCell actions={rowActions} row={row} />
+    )
+  )
 }
 
 export { ActionsCell }

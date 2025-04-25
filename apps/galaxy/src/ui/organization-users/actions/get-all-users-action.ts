@@ -15,14 +15,13 @@ const defaultPayload = {
   isIncludeInsuranceVerification: true,
   isIncludeCardVerification: true,
   isIncludeConsentVerification: true,
-  isIncludeMostUpcomingAppointment: true,
-  isIncludeMostRecentAppointment: true,
+  isIncludeMostUpcomingAppointment: false,
+  isIncludeMostRecentAppointment: false,
 }
 
 const searchOrganizationUsersAction = async ({
   ...payload
 }: UsersSearchParam): Promise<api.ActionResult<Users[]>> => {
-
   const url = new URL(api.SEARCH_PATIENTS_ENDPOINT)
 
   const response = await api.POST<Users[]>(url.toString(), {
@@ -39,8 +38,8 @@ const searchOrganizationUsersAction = async ({
 
   return {
     state: 'success',
-    data: response.data
+    data: response.data,
   }
 }
 
-export { searchOrganizationUsersAction,  type GetUsersDataListParam }
+export { searchOrganizationUsersAction, type GetUsersDataListParam }

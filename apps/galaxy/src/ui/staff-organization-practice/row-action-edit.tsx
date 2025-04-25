@@ -6,9 +6,8 @@ import { Practice } from './types'
 
 const RowActionEdit = ({
   row: { original: record },
-  userId,
-}: PropsWithRow<Practice> & { userId: string }) => {
-  return <OrganizationStaffDialog data={record} userId={userId} />
+}: PropsWithRow<Practice>) => {
+  return <OrganizationStaffDialog data={record} />
 }
 
 export { RowActionEdit }

@@ -3,10 +3,19 @@
 import * as api from '@/api'
 import { Practice, SelectOptionType } from '@/types'
 
-const getPracticesOptionsAction = async (): Promise<
-  api.ActionResult<SelectOptionType[]>
-> => {
-  const response = await api.POST<Practice[]>(api.GET_PRACTICES_ENDPOINT, {})
+interface PracticesPayload {
+  payload?: {
+    organizationId?: string
+  }
+}
+
+const getPracticesOptionsAction = async ({
+  payload,
+}: PracticesPayload): Promise<api.ActionResult<SelectOptionType[]>> => {
+  const response = await api.POST<Practice[]>(
+    api.GET_PRACTICES_ENDPOINT,
+    payload,
+  )
 
   if (response.state === 'error') {
     return {

@@ -10,12 +10,11 @@ import { SelectOptionType } from '@/types'
 import { getPracticesOptionsAction } from '@/ui/patient-lookup/actions'
 
 const PracticeSelect = () => {
-
   const [practicesOptions, setPracticesOptions] = useState<SelectOptionType[]>(
     [],
   )
   useEffect(() => {
-    getPracticesOptionsAction().then((practiceResult) => {
+    getPracticesOptionsAction({ payload: {} }).then((practiceResult) => {
       if (practiceResult.state === 'success') {
         setPracticesOptions(practiceResult.data)
       }

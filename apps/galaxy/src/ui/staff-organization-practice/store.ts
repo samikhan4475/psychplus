@@ -14,6 +14,7 @@ interface Store {
   loading?: boolean
   dialogTableLoading?: boolean
   error?: string
+  currentUserId?: number
   setStaff: (setStaff: StaffResource) => void
   search: (payload: Partial<Practice>) => void
   searchStaffOrganizations: (userId: string) => void
@@ -50,10 +51,12 @@ const useStore = create<Store>((set, get) => ({
     const result = await getStaffOrganizationsAction(userId)
     if (result.state === 'error') {
       return set({
+        currentUserId: parseInt(userId),
         staffOrganizations: [],
       })
     }
     set({
+      currentUserId: parseInt(userId),
       staffOrganizations: result.data,
     })
   },

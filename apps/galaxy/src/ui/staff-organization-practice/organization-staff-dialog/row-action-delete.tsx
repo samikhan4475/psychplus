@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { useParams } from 'next/navigation'
 import { TrashIcon } from '@radix-ui/react-icons'
 import { IconButton } from '@radix-ui/themes'
 import { toast } from 'react-hot-toast'
@@ -12,22 +11,25 @@ import { Practice } from '../types'
 
 const RowActionDeletePractice = ({
   row: { original: record },
-  userId,
-}: PropsWithRow<Practice> & { userId: string }) => {
-  const { staff, searchDialogPractices } = useStore((state) => ({
+}: PropsWithRow<Practice>) => {
+  const { staff, searchDialogPractices, currentUserId } = useStore((state) => ({
     staff: state.staff,
     searchDialogPractices: state.searchDialogPractices,
+    currentUserId: state.currentUserId,
   }))
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const deleteRecord = async () => {
+    if (!currentUserId) {
+      return
+    }
     setLoading(true)
     const response = await detachPracticeAction(
       {
         roleIds: staff?.staffUserRoleIds ?? [],
       },
-      userId,
+      `${currentUserId}`,
       record.id,
     )
 
@@ -37,7 +39,7 @@ const RowActionDeletePractice = ({
     }
     searchDialogPractices({
       organizationId: record.organizationId,
-      staffuserId: parseInt(userId),
+      staffuserId: currentUserId,
     })
     setOpen(false)
     setLoading(false)

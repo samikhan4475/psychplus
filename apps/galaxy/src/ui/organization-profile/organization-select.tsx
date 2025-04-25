@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
 import {
   FormFieldContainer,
   FormFieldError,
@@ -7,8 +9,6 @@ import {
   SelectInput,
 } from '@/components'
 import { SelectOptionType } from '@/types'
-import { useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
 import { getAllOrganizationsOptionsListAction } from './actions'
 
 const OrganizationSelect = () => {
@@ -18,7 +18,11 @@ const OrganizationSelect = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await getAllOrganizationsOptionsListAction({})
+      const result = await getAllOrganizationsOptionsListAction({
+        payload: {
+          organizationId: id,
+        },
+      })
       if (result.state === 'success') {
         setOrganizations(result.data)
         const matchingOption = result.data.find((option) => option.value === id)
@@ -38,7 +42,7 @@ const OrganizationSelect = () => {
         value={selectedOption}
         field="id"
         disabled
-        placeholder='Loading...'
+        placeholder="Select"
         buttonClassName="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
       />
       <FormFieldError name="organizationIds.[0]" />

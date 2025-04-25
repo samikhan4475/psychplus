@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useParams } from 'next/navigation'
 import { Box, Flex, ScrollArea } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
 import {
@@ -14,7 +13,7 @@ import { useStore } from '../store'
 import { Practice } from '../types'
 import { RowActionDeletePractice } from './row-action-delete'
 
-const columns = (userId: string): ColumnDef<Practice>[] => [
+const columns: ColumnDef<Practice>[] = [
   {
     id: 'displayName',
     header: ({ column }) => (
@@ -70,28 +69,32 @@ const columns = (userId: string): ColumnDef<Practice>[] => [
   {
     id: 'actions',
     header: () => <ColumnHeader label="" />,
-    cell: ({ row }) => <RowActionDeletePractice row={row} userId={userId} />,
+    cell: ({ row }) => <RowActionDeletePractice row={row} />,
   },
 ]
 
 interface PracticesListTableProps {
   data: Practice
-  userId: string
 }
-const PracticesListTable = ({ data, userId }: PracticesListTableProps) => {
-  const { searchDialogPractices, dialogTableData, dialogTableLoading } =
-    useStore((state) => ({
-      dialogTableData: state.dialogTableData,
-      dialogTableLoading: state.dialogTableLoading,
-      searchDialogPractices: state.searchDialogPractices,
-    }))
+const PracticesListTable = ({ data }: PracticesListTableProps) => {
+  const {
+    searchDialogPractices,
+    dialogTableData,
+    dialogTableLoading,
+    currentUserId,
+  } = useStore((state) => ({
+    dialogTableData: state.dialogTableData,
+    dialogTableLoading: state.dialogTableLoading,
+    searchDialogPractices: state.searchDialogPractices,
+    currentUserId: state.currentUserId,
+  }))
 
   useEffect(() => {
     searchDialogPractices({
       organizationId: data?.organizationId ?? '',
-      staffuserId: parseInt(userId),
+      staffuserId: currentUserId,
     })
-  }, [data?.organizationId])
+  }, [data.organizationId])
 
   if (dialogTableLoading) {
     return (
@@ -106,7 +109,7 @@ const PracticesListTable = ({ data, userId }: PracticesListTableProps) => {
       <ScrollArea className="rounded p-1">
         <DataTable
           data={dialogTableData || []}
-          columns={columns(userId)}
+          columns={columns}
           tableClass="bg-white [&_.rt-ScrollAreaScrollbar]:!hidden"
         />
       </ScrollArea>

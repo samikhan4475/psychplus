@@ -15,7 +15,8 @@ interface Organization {
 }
 
 interface Payload {
-  organizationId: string
+  organizationId?: string
+  userId?: string
 }
 
 const getOrganizationOptionsAction = async (

@@ -2,12 +2,10 @@
 
 import * as api from '@/api'
 import { SelectOptionType, Sort } from '@/types'
-import {
-  DEFAULT_STATUSES
-} from '../../organization-practice/constants'
+import { DEFAULT_STATUSES } from '../../organization-practice/constants'
 import type {
   Organization,
-  OrganizationsSearchParams
+  OrganizationsSearchParams,
 } from '../../organization-practice/types'
 
 interface GetOrganizationsListParams {
@@ -20,10 +18,10 @@ const defaultPayload: OrganizationsSearchParams = {
   isIncludeMetadataResourceStatus: true,
   isIncludeLocations: true,
   recordStatuses: DEFAULT_STATUSES,
-  includePractices: true,
-  includeUsers: true,
-  includeRoles: true,
-  includePermissions: true,
+  includePractices: false,
+  includeUsers: false,
+  includeRoles: false,
+  includePermissions: false,
 }
 
 const getAllOrganizationsOptionsListAction = async ({

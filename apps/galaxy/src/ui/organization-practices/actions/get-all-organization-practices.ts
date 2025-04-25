@@ -1,6 +1,7 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { GET_ORGANIZATION_PRACTICES_ENDPOINT } from '@/api/endpoints'
 import { Sort } from '@/types'
 import { DEFAULT_STATUSES } from '../../organization-practice/constants'
 import type {
@@ -31,9 +32,9 @@ const getAllOrganizationPracticesListAction = async ({
   payload,
   sort,
 }: GetOrganizationsListParams): Promise<api.ActionResult<Practice[]>> => {
-  const url = new URL(api.GET_ORGANIZATION_PRACTICES_ENDPOINT)
+  let url = GET_ORGANIZATION_PRACTICES_ENDPOINT
   if (sort) {
-    url.searchParams.append('orderBy', `${sort.column} ${sort.direction}`)
+    url = url + '?orderBy=' + `${sort.column} ${sort.direction}`
   }
 
   const response = await api.POST<Practice[]>(`${url}`, {

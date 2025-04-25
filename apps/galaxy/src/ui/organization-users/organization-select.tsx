@@ -1,43 +1,50 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useParams } from 'next/navigation'
 import toast from 'react-hot-toast'
-import {
-  FormFieldContainer,
-  FormFieldLabel,
-  MultiSelectField,
-} from '@/components'
+import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
 import { SelectOptionType } from '@/types'
 import { getAllOrganizationsListAction } from '../organization-practice/actions'
-import { SchemaType } from './organization-users-list-filter-form'
 
 const OrganizationSelect = () => {
   const [organizations, setOrganizations] = useState<SelectOptionType[]>([])
-  const form = useFormContext<SchemaType>()
+  const [loading, setLoading] = useState(true)
+  const { id } = useParams<{ id: string }>()
+
   useEffect(() => {
-    getAllOrganizationsListAction({}).then((result) => {
-      if (result.state === 'success') {
-        const organizationSelect = result.data?.organizations.map((org) => ({
-          value: org.id,
-          label: org.displayName,
-        }))
-        setOrganizations(organizationSelect)
-      } else if (result.state === 'error') {
-        toast.error(result.error)
+    ;(async () => {
+      setLoading(true)
+      const response = await getAllOrganizationsListAction({
+        payload: {
+          organizationId: id,
+        },
+      })
+
+      if (response.state === 'error') {
+        toast.error(response.error)
+        setLoading(false)
+        return
       }
-    })
-  }, [])
-  const organization = form.watch('organizations')
+      const organizationSelect = response.data?.organizations.map((org) => ({
+        value: org.id,
+        label: org.displayName,
+      }))
+      setOrganizations(organizationSelect)
+      setLoading(false)
+    })()
+  }, [id])
 
   return (
     <FormFieldContainer className="flex-row items-center gap-2">
       <FormFieldLabel className="!text-1">Organization</FormFieldLabel>
-      <MultiSelectField
+      <SelectInput
         options={organizations}
-        defaultValues={organization}
-        onChange={(values) => form.setValue('organizations', values)}
-        className="h-6 min-w-[108px] flex-1"
+        value={id}
+        field="organizations"
+        buttonClassName="h-6 min-w-[108px] flex-1"
+        disabled
+        loading={loading}
       />
     </FormFieldContainer>
   )

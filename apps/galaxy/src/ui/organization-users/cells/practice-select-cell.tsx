@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { PropsWithRow, SelectCell } from '@/components'
 import { SelectOptionType } from '@/types'
@@ -15,12 +16,19 @@ const PracticeSelectCell = ({
     [],
   )
   const [selectedValue, setSelectedValue] = useState(patient?.practiceId)
+  const { id } = useParams<{ id: string }>()
+
   useEffect(() => {
-    getPracticesOptionsAction().then((practiceResult) => {
-      if (practiceResult.state === 'success') {
-        setPracticesOptions(practiceResult.data)
+    ;(async () => {
+      const response = await getPracticesOptionsAction({
+        payload: {
+          organizationId: id,
+        },
+      })
+      if (response.state === 'success') {
+        setPracticesOptions(response.data)
       }
-    })
+    })()
   }, [])
   const associateUserStatus = async (value: string) => {
     setSelectedValue(value)

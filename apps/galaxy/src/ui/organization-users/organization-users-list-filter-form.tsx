@@ -66,7 +66,7 @@ const schema = z
       .optional(),
     email: z.string().optional(),
     ssn: z.string().optional(),
-    organizations: z.array(z.string()).optional(),
+    organizations: z.string().optional(),
     practices: z.array(z.string()).optional(),
     patientStatuses: z.array(z.string()).optional(),
     verificationStatuses: z.array(z.string()).optional(),
@@ -146,7 +146,7 @@ const OrganizationUsersListFilterForm = () => {
       pastVisitStatus: '',
       visitHistoryPastDays: '',
       insurancePolicyIds: [],
-      organizations: [],
+      organizations: '',
       practices: [],
     },
   })

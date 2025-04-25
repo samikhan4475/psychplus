@@ -1,4 +1,3 @@
-import { useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
@@ -15,12 +14,12 @@ import { SubmitFormButton } from './submit-form-button'
 interface FormProps {
   data: Practice
   onClose: (open: boolean) => void
-  userId: string
 }
 
-const OrganizationStaffForm = ({ data, onClose, userId }: FormProps) => {
-  const { search } = useStore((state) => ({
+const OrganizationStaffForm = ({ data, onClose }: FormProps) => {
+  const { search, currentUserId } = useStore((state) => ({
     search: state.search,
+    currentUserId: state.currentUserId,
   }))
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -30,7 +29,7 @@ const OrganizationStaffForm = ({ data, onClose, userId }: FormProps) => {
   const onSave = async () => {
     onClose(false)
     search({
-      staffuserId: parseInt(userId),
+      staffuserId: currentUserId,
     })
   }
 
@@ -39,8 +38,8 @@ const OrganizationStaffForm = ({ data, onClose, userId }: FormProps) => {
       <Box className="ml-1 mr-1 mt-2 pl-2 pr-2">
         <OrganizationSelect />
         <Box className="border-pp-gray-8 mb-2 mt-2 gap-3 rounded-[4px] border p-2">
-          <SearchAddPracticeSelect userId={userId} />
-          <PracticesListTable data={data} userId={userId} />
+          <SearchAddPracticeSelect />
+          <PracticesListTable data={data} />
         </Box>
       </Box>
       <SubmitFormButton />

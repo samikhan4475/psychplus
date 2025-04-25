@@ -9,9 +9,10 @@ import { SelectOptionType } from '@/types'
 import { useStore } from './store'
 
 const OrganizationSelect = () => {
-  const { search, setSelectedStaffId } = useStore((state) => ({
+  const { search, setSelectedStaffId, selectedStaffId } = useStore((state) => ({
     search: state.search,
     setSelectedStaffId: state.setSelectedStaffId,
+    selectedStaffId: state.selectedStaffId,
   }))
   const { id } = useParams<{ id: string }>()
   const [loading, setLoading] = useState(false)
@@ -42,6 +43,7 @@ const OrganizationSelect = () => {
         options={options}
         onValueChange={onValueChage}
         loading={loading}
+        value={selectedStaffId}
       />
     </Flex>
   )
