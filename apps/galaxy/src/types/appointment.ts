@@ -1,6 +1,7 @@
 import {
   Clinic,
   Cosigner,
+  LegalName,
   Metadata,
   ServiceGroup,
   ServiceRoom,
@@ -167,13 +168,8 @@ interface Appointment {
   providerFullName?: string
   isQuickNoteSigned?: boolean
   isFollowupCreatedforTimedService?: boolean
-  lastSeenByProvider?:string
-  lastSeenByProviderName?:{
-    firstName?: string
-    middleName?: string
-    lastName?: string
-    honors?:string
-  }
+  lastSeenByProvider?: string
+  lastSeenByProviderName?: LegalName
 }
 
 interface BookVisitPayload {
@@ -217,6 +213,7 @@ interface BookVisitPayload {
   unitId?: string
   visitSequenceType?: string
   visitTypeId?: string
+  parentAppointmentId?: number
 }
 
 interface BookVisitResponse {

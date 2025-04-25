@@ -1,11 +1,14 @@
 'use client'
 
+import { useFormContext } from 'react-hook-form'
 import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
 import { Appointment } from '@/types'
 import { NEXT_OPTIONS, NEXT_OPTIONS_UNTIMED } from '../constants'
+import { SchemaType } from '../schema'
 import { useStore } from '../store'
 
 const NextDropdown = ({ appointment }: { appointment?: Appointment }) => {
+  const form = useFormContext<SchemaType>()
   const isFollowupDenied = useStore((state) => state.isFollowupDenied)
 
   return (
@@ -13,7 +16,6 @@ const NextDropdown = ({ appointment }: { appointment?: Appointment }) => {
       <FormFieldLabel>Next</FormFieldLabel>
       <SelectInput
         field="next"
-        defaultValue={appointment?.isServiceTimeDependent ? '4 week' : '2 day'}
         placeholder="Select"
         disabled={isFollowupDenied}
         options={
@@ -23,6 +25,9 @@ const NextDropdown = ({ appointment }: { appointment?: Appointment }) => {
         }
         buttonClassName="w-full h-6"
         className="w-[90px]"
+        onValueChange={(value) => {
+          if (value) form.setValue('next', value)
+        }}
       />
     </FormFieldContainer>
   )

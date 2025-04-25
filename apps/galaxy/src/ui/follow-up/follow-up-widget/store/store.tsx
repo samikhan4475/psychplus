@@ -13,11 +13,19 @@ import {
 } from '../utils'
 
 interface StoreState {
+  quickNoteAppointment?: Appointment
   data?: Appointment[]
-  setData: (data: Appointment[]) => void
+  setData: (
+    appointmentData: Appointment | undefined,
+    data: Appointment[],
+  ) => void
   loading: boolean
   error?: string
   isFollowupDenied: boolean
+  fetchQuickNoteAppointment: (
+    patientId: string,
+    appointmentId: string,
+  ) => Promise<void>
   followupDenialReason: string
   followupDenialReasonError?: string
   isFollowupExists: boolean
@@ -48,6 +56,7 @@ interface StoreState {
 }
 
 const useStore = create<StoreState>((set, get) => ({
+  quickNoteAppointment: undefined,
   data: [],
   loading: false,
   error: undefined,
@@ -56,11 +65,38 @@ const useStore = create<StoreState>((set, get) => ({
   followupDenialReasonError: undefined,
   isFollowupExists: false,
   appointmentDate: undefined,
-  setData: (data) =>
+  setData: (appointmentData, data) =>
     set({
       data,
-      isFollowupExists: isFollowupScheduled(data),
+      isFollowupExists: isFollowupScheduled(appointmentData, data),
     }),
+  fetchQuickNoteAppointment: async (
+    patientId: string,
+    appointmentId: string,
+  ) => {
+    set({ error: undefined, loading: true })
+    const result = await getBookedAppointmentsAction({
+      patientIds: [Number(patientId)],
+      appointmentIds: [Number(appointmentId)],
+    })
+
+    if (result.state === 'error') {
+      toast.error(result.error || 'Failed to fetch appointment data')
+      return set({
+        error: result.error,
+        loading: false,
+        data: [],
+      })
+    }
+    const appointment = result.data[0]
+    set({
+      quickNoteAppointment: appointment,
+      appointmentDate: appointment.appointmentDate,
+      followupDenialReason: appointment.followUpDenialReason ?? '',
+      isFollowupDenied: appointment.isFollowupDenied ?? false,
+      loading: false,
+    })
+  },
 
   search: async (payload: AppointmentParams) => {
     set({ error: undefined, loading: true, payload })
@@ -78,11 +114,14 @@ const useStore = create<StoreState>((set, get) => ({
         data: [],
       })
     }
-
+    const { quickNoteAppointment } = get()
+    const isFollowupExists = quickNoteAppointment
+      ? isFollowupScheduled(quickNoteAppointment, result.data)
+      : false
     set({
       data: result.data,
       loading: false,
-      isFollowupExists: isFollowupScheduled(result.data),
+      isFollowupExists,
     })
   },
 

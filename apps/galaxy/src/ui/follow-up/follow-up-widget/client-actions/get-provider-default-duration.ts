@@ -1,9 +1,10 @@
 'use client'
 
 import toast from 'react-hot-toast'
-import { GET_PROVIDER_SETTINGS_ENDPOINT } from '@/api/endpoints'
 import * as api from '@/api/api.client'
+import { GET_PROVIDER_SETTINGS_ENDPOINT } from '@/api/endpoints'
 import { Appointment, Metadata } from '@/types'
+import { getVisitSequence } from '../utils'
 
 interface UserSetting {
   id: string
@@ -20,7 +21,8 @@ const getProviderDefaultDuration = async (
   appointment: Appointment,
 ): Promise<api.ActionResult<string | undefined>> => {
   const userId = appointment.providerId
-  const name = `${appointment.visitTypeCode}_${appointment.visitSequence}_${appointment.visitMedium}`
+  const visitSequence = getVisitSequence(appointment)
+  const name = `${appointment.visitTypeCode}_${visitSequence}_${appointment.visitMedium}`
   const response = await api.POST<UserSetting[]>(
     GET_PROVIDER_SETTINGS_ENDPOINT,
     {

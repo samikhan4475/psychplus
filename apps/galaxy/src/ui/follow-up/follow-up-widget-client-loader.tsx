@@ -8,11 +8,13 @@ import { getBookedAppointmentsAction } from '../schedule/client-actions'
 import { QuicknotesFollowUpWidget } from './quicknotes-follow-up-widget'
 
 interface FollowUpWidgetLoaderProps {
+  appointment: Appointment
   patientId: string
   appointmentId?: string
 }
 
 const FollowUpWidgetLoader = ({
+  appointment,
   patientId,
   appointmentId = '',
 }: FollowUpWidgetLoaderProps) => {
@@ -50,6 +52,7 @@ const FollowUpWidgetLoader = ({
   return (
     <QuicknotesFollowUpWidget
       patientId={patientId}
+      appointment={appointment}
       appointmentId={appointmentId}
       initialValue={data ?? []}
     />

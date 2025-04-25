@@ -83,14 +83,10 @@ const QuickNotesSignButton = ({
   const {
     isFollowupDeniedWithoutReason,
     updateFollowupDenialStatus,
-    isFollowupRequired,
-    getAutoFollowupDate,
     refetchFollowup,
   } = useFollowupStore((state) => ({
     isFollowupDeniedWithoutReason: state.isFollowupDeniedWithoutReason,
     updateFollowupDenialStatus: state.updateFollowupDenialStatus,
-    isFollowupRequired: state.isFollowupRequired,
-    getAutoFollowupDate: state.getAutoFollowupDate,
     refetchFollowup: state.search,
   }))
 
@@ -191,16 +187,6 @@ const QuickNotesSignButton = ({
     return false
   }
 
-  const updateSignPayloadForAutoFollowup = () => {
-    if (isFollowupRequired()) {
-      signPayload.isAllowedFollowupForNextAvailableSlot = true
-      signPayload.autoFollowUpDate = getAutoFollowupDate(
-        appointment.visitTypeCode ?? '',
-        appointment.isServiceTimeDependent,
-      )
-    }
-  }
-
   const saveFollowupDeniedStatus = () => {
     updateFollowupDenialStatus({
       appointmentId: Number(appointmentId),
@@ -210,7 +196,6 @@ const QuickNotesSignButton = ({
 
   const handleAutoFollowupGeneration = () => {
     saveFollowupDeniedStatus()
-    updateSignPayloadForAutoFollowup()
   }
 
   const signNoteHandler = async () => {

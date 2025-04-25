@@ -1,4 +1,5 @@
 import { Text } from '@radix-ui/themes'
+import { Appointment } from '@/types'
 import { getBookedAppointmentsAction } from '../schedule/actions'
 import { QuicknotesFollowUpWidget } from './quicknotes-follow-up-widget'
 
@@ -27,6 +28,7 @@ const FollowUpWidgetLoader = async ({
   return (
     <QuicknotesFollowUpWidget
       patientId={patientId}
+      appointment={{} as Appointment}
       appointmentId={appointmentId}
       initialValue={response.data}
     />

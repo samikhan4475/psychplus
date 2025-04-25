@@ -26,8 +26,6 @@ interface SignPayloadProps {
   signedByUserId?: number
   appointment: Appointment
   noteTypeCode?: string
-  isAllowedFollowupForNextAvailableSlot?: boolean
-  autoFollowUpDate?: string
   signedDate?: string
   noteTitleCode?: string
   coSignedByUserId?: string

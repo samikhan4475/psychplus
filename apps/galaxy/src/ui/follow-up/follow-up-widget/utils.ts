@@ -2,6 +2,7 @@ import {
   getLocalTimeZone,
   parseAbsolute,
   parseAbsoluteToLocal,
+  parseDateTime,
   toCalendarDateTime,
 } from '@internationalized/date'
 import {
@@ -10,7 +11,12 @@ import {
   VisitSequenceTypes,
   VisitTypes,
 } from '@/types'
-import { isHospitalCareVisit, VisitTypeEnum } from '@/utils'
+import {
+  getDateDifference,
+  getLocalCalendarDate,
+  isHospitalCareVisit,
+  VisitTypeEnum,
+} from '@/utils'
 import { NEXT_OPTIONS } from './constants'
 
 const removeEmptyValues = (obj: Record<string, any>): Record<string, any> => {
@@ -218,16 +224,35 @@ const getDefaultNext = (visitType: string, isServiceTimeDependent: boolean) => {
   }
 }
 
-const isFollowupScheduled = (data: Appointment[]): boolean => {
+const isFollowupScheduled = (
+  appointmentData: Appointment | undefined,
+  data: Appointment[],
+): boolean => {
   let isFollowupExists = false
 
-  if (data.length > 0) {
-    if (data[0].isFollowupCreatedforTimedService) {
-      isFollowupExists = true
+  if (data.length > 0 && appointmentData) {
+    if (appointmentData.isServiceTimeDependent) {
+      const timedFollowupVisit = data.find((followup) => {
+        const datesDifference = calculateDatesDifference(
+          followup.appointmentDate,
+          appointmentData.startDate as string,
+        )
+        return (
+          followup.service === appointmentData.service && datesDifference <= 90
+        )
+      })
+      isFollowupExists = !!timedFollowupVisit
     } else {
-      const tcmFollowupVisit = data.find(
-        (followup) => followup.visitTypeCode === VisitTypeEnum.TransitionalCare,
-      )
+      const tcmFollowupVisit = data.find((followup) => {
+        const datesDifference = calculateDatesDifference(
+          followup.appointmentDate,
+          appointmentData.startDate as string,
+        )
+        return (
+          followup.visitTypeCode === VisitTypeEnum.TransitionalCare &&
+          datesDifference <= 7
+        )
+      })
       isFollowupExists = !!tcmFollowupVisit
     }
   }
@@ -235,9 +260,19 @@ const isFollowupScheduled = (data: Appointment[]): boolean => {
   return isFollowupExists
 }
 
+const calculateDatesDifference = (
+  followupAppointmentDate: string,
+  appointmentStartDate: string,
+) => {
+  const followupDate = getLocalCalendarDate(followupAppointmentDate)
+  const appointmentDate = getLocalCalendarDate(appointmentStartDate)
+  return getDateDifference(followupDate, appointmentDate)
+}
+
 export {
   removeEmptyValues,
   getEndDate,
+  getVisitSequence,
   transformIn,
   getOffsetStartDate,
   sanitizeFormData,

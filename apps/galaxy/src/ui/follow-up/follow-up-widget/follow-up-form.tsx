@@ -34,13 +34,15 @@ import {
 } from './utils'
 
 const FollowUpForm = ({
+  appointmentData,
   patientId,
   appointmentId,
 }: {
+  appointmentData: Appointment | undefined
   patientId: string
   appointmentId: string
 }) => {
-  const [loading, setLoading] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [appointment, setAppointment] = useState<Appointment>()
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
@@ -52,13 +54,17 @@ const FollowUpForm = ({
     statusCode: 0,
   })
   const {
+    loading,
     search,
+    fetchQuickNoteAppointment,
     setAppointmentDate,
     setFollowupDenialReason,
     setIsFollowupDenied,
   } = useStore(
     useShallow((state) => ({
+      loading: state.loading,
       search: state.search,
+      fetchQuickNoteAppointment: state.fetchQuickNoteAppointment,
       setAppointmentDate: state.setAppointmentDate,
       setFollowupDenialReason: state.setFollowupDenialReason,
       setIsFollowupDenied: state.setIsFollowupDenied,
@@ -76,43 +82,34 @@ const FollowUpForm = ({
     },
   })
 
-  const fetchAppointmentData = async () => {
-    setLoading(true)
-    const response = await getBookedAppointmentsAction({
-      patientIds: [Number(patientId)],
-      appointmentIds: [Number(appointmentId)],
-    })
-
-    if (response.state === 'error') {
-      setLoading(false)
-      return setError(response.error || 'Failed to fetch appointment data')
-    }
-
-    const data = response.data?.[0] || {}
-    setAppointment(data)
-    setAppointmentDate(data.appointmentDate)
-    setFollowupDenialReason(data.followUpDenialReason ?? '')
-    setIsFollowupDenied(data.isFollowupDenied ?? false)
-    if (data.isServiceTimeDependent) {
-      form.resetField('providerId', { defaultValue: `${data.providerId}` })
+  useEffect(() => {
+    const appointmentId = appointmentData?.id || appointmentData?.appointmentId
+    if (!appointmentId) return
+    setAppointment(appointmentData)
+    setAppointmentDate(appointmentData.appointmentDate)
+    setFollowupDenialReason(appointmentData.followUpDenialReason ?? '')
+    setIsFollowupDenied(appointmentData.isFollowupDenied ?? false)
+    if (appointmentData.isServiceTimeDependent) {
+      form.resetField('providerId', {
+        defaultValue: `${appointmentData.providerId}`,
+      })
     }
     form.resetField('next', {
       defaultValue: getDefaultNext(
-        data.visitTypeCode ?? '',
-        data.isServiceTimeDependent,
+        appointmentData.visitTypeCode ?? '',
+        appointmentData.isServiceTimeDependent,
       ),
     })
-    form.setValue('location', data.locationId)
-    setLoading(false)
-  }
-
-  useEffect(() => {
-    fetchAppointmentData()
-  }, [patientId, appointmentId])
+    form.setValue('location', appointmentData.locationId)
+  }, [appointmentData])
 
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
+    setIsSubmitting(true)
     const response = await getProviderDefaultDuration(appointment!)
-    if (response.state === 'error') return
+    if (response.state === 'error') {
+      setIsSubmitting(false)
+      return
+    }
     const duration = response.data
     const offsetStartDate = getOffsetStartDate(
       data.next,
@@ -128,6 +125,7 @@ const FollowUpForm = ({
       isOverridePermissionProvided: data.isOverridePermissionProvided,
       isProceedPermissionProvided: data.isProceedPermissionProvided,
       patientId: Number(patientId),
+      parentAppointmentId: Number(appointmentId),
     }
     const sanitizedData = sanitizeFormData(payload)
 
@@ -140,6 +138,7 @@ const FollowUpForm = ({
         ? sanitizedData.type
         : data.type,
     }).then((res) => {
+      setIsSubmitting(false)
       if (res.state === 'error') {
         if (res.status) {
           setIsAlertOpen(true)
@@ -184,21 +183,30 @@ const FollowUpForm = ({
         <NextDropdown appointment={appointment} />
         {!appointment?.isServiceTimeDependent && (
           <>
-            <LocationDropdown appointment={appointment} disabled={loading} />
+            <LocationDropdown
+              appointment={appointment}
+              disabled={loading || isSubmitting}
+            />
             <VisitMediumDropdown />
-            <ProviderDropdown appointment={appointment} disabled={loading} />
+            <ProviderDropdown
+              appointment={appointment}
+              disabled={loading || isSubmitting}
+            />
           </>
         )}
 
-        <CreateFollowUpButton loading={loading} onSubmit={onSubmit} />
+        <CreateFollowUpButton
+          loading={loading || isSubmitting}
+          onSubmit={onSubmit}
+        />
         <CalenderView
           appointmentDate={appointment?.appointmentDate}
           onVisitAdd={() => {
+            fetchQuickNoteAppointment(patientId, appointmentId)
             search({
               patientIds: [Number(patientId)],
               appointmentIds: [Number(appointmentId)],
             })
-            fetchAppointmentData()
           }}
           patient={{
             accessToken: `${appointment?.patientId}`,
