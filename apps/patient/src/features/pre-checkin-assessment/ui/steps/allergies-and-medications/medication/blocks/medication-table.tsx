@@ -1,11 +1,11 @@
-"use client"
+'use client'
 
 import React from 'react'
 import { cn } from '@psychplus-v2/utils'
 import { Table } from '@radix-ui/themes'
-import { format } from 'date-fns'
 import { EmptyFileIcon, FeatureEmpty } from '@/components-v2'
 import { PatientMedication } from '@/features/medications/types/medications'
+import { formatDateManually } from '../utils'
 
 const ColumnHeader = ({ children }: { children: React.ReactNode }) => (
   <Table.ColumnHeaderCell className="border-pp-gray-2 h-auto border-r py-2 font-medium last:border-r-0">
@@ -56,10 +56,10 @@ const MedicationTable = ({ medications }: medicationTableProps) => {
                 {row.quantityValue}
               </Table.Cell>
               <Table.Cell className="border-pp-gray-2 border-r">
-                {format(new Date(row.writtenDate), 'MM/dd/yyyy')}
+                {formatDateManually(row.writtenDate)}
               </Table.Cell>
               <Table.Cell className="border-pp-gray-2">
-                {format(new Date(row.endDateTime), 'MM/dd/yyyy')}
+                {formatDateManually(row.endDateTime)}
               </Table.Cell>
             </Table.Row>
           ))
