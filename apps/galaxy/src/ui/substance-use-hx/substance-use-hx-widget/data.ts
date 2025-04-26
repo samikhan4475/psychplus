@@ -178,6 +178,7 @@ const transformOut =
     const diagnosisSections = await getDiagnosisSections(
       schema,
       patientId,
+      appointmentId,
       diagnosisData,
       updateCptCodes ? true : false,
       isHospitalDischargeView,
@@ -195,6 +196,7 @@ const transformOut =
 const getDiagnosisSections = async (
   schema: Record<string, undefined>,
   patientId: string,
+  appointmentId: string,
   diagnosisData: QuickNoteSectionItem[] = [],
   isQuicknoteView?: boolean,
   isHospitalDischargeView?: boolean,
@@ -204,7 +206,12 @@ const getDiagnosisSections = async (
     : QuickNoteSectionName.QuickNoteSectionDiagnosis
   let data: QuickNoteSectionItem[] = diagnosisData
   if (!isQuicknoteView) {
-    const response = await getQuickNoteDetailAction(patientId, [sectionName])
+    const response = await getQuickNoteDetailAction(
+      patientId,
+      [sectionName],
+      undefined,
+      isHospitalDischargeView ? appointmentId : undefined,
+    )
     if (response.state === 'error') {
       return []
     }
@@ -255,6 +262,7 @@ const getDiagnosisSections = async (
       sectionName,
       sectionItem: 'diagnosis',
       sectionItemValue: sectionItemValue,
+      ...(isHospitalDischargeView ? { appId: Number(appointmentId) } : {}),
     },
   ]
   return diagnosisCodesToAddSet

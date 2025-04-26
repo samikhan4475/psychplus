@@ -76,7 +76,7 @@ const DiagnosisWidget = ({
   }, [isQuickNoteView, patientId, workingDiagnosisData])
 
   useEffect(() => {
-    workingDiagnosis && updateWorkingDiagnosisData(workingDiagnosis)
+    updateWorkingDiagnosisData(workingDiagnosis ?? [])
     favouriteDiagnosis && updateFavoritesDiagnosis(favouriteDiagnosis)
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

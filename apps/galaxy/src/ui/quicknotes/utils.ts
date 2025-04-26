@@ -116,6 +116,7 @@ const widgets: Array<WidgetType> = [
     component: DischargeDiagnosisClientLoader,
     id: QuickNoteSectionName.QuicknoteSectionWorkingDischargeDiagnosis,
     actualNoteComponent: WorkingDischargeDiagnosisClientView,
+    isPatientAndAppointmentDependent: true,
   },
   {
     component: AddOnClientLoader,

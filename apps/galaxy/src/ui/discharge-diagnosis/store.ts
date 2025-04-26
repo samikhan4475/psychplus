@@ -35,6 +35,7 @@ interface Store {
   encodeId: (id: string) => string
   saveWorkingDischargeDiagnosis: (
     patientId: string,
+    appId: string,
     setWidgetsData: (data: QuickNoteSectionItem[]) => void,
     showToast?: boolean,
   ) => Promise<void>
@@ -85,6 +86,7 @@ const useStore = create<Store>((set, get) => ({
 
   saveWorkingDischargeDiagnosis: async (
     patientId,
+    appId,
     setWidgetsData,
     showToast = true,
   ) => {
@@ -103,6 +105,7 @@ const useStore = create<Store>((set, get) => ({
           sectionName:
             QuickNoteSectionName.QuicknoteSectionWorkingDischargeDiagnosis,
           sectionItem: 'diagnosis',
+          appId: Number(appId),
           sectionItemValue: codes.toString() || 'empty',
         },
       ],
@@ -119,6 +122,7 @@ const useStore = create<Store>((set, get) => ({
           sectionName:
             QuickNoteSectionName.QuicknoteSectionWorkingDischargeDiagnosis,
           sectionItem: 'diagnosis',
+          appId: Number(appId),
           sectionItemValue: codes.toString() || 'empty',
         },
       ])

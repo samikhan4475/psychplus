@@ -16,11 +16,17 @@ const SubstanceUseHxClientLoader = ({
   patientId,
   data,
 }: SubstanceUseHxWidgetLoaderProps) => {
-  const diagnosisData = useStore(
-    (state) =>
-      state.actualNotewidgetsData[
-        QuickNoteSectionName.QuickNoteSectionDiagnosis
-      ],
+  const { diagnosis, workingDischargeDiagnosis } = useStore(
+    (state) => ({
+      workingDischargeDiagnosis:
+        state.actualNotewidgetsData[
+          QuickNoteSectionName.QuicknoteSectionWorkingDischargeDiagnosis
+        ],
+      diagnosis:
+        state.actualNotewidgetsData[
+          QuickNoteSectionName.QuickNoteSectionDiagnosis
+        ],
+    }),
     dequal,
   )
   const initialValue = transformIn(data ?? [])
@@ -29,7 +35,8 @@ const SubstanceUseHxClientLoader = ({
     <SubstanceUseHxWidget
       patientId={patientId}
       initialValue={initialValue}
-      diagnosisData={diagnosisData}
+      diagnosisData={diagnosis}
+      workingDiagnosisData={workingDischargeDiagnosis}
     />
   )
 }

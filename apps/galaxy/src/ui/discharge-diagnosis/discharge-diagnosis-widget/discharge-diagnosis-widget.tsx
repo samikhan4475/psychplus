@@ -48,7 +48,7 @@ const DischargeDiagnosisWidget = ({
   )
 
   useEffect(() => {
-    if (isQuickNoteView) {
+    if (isQuickNoteView && workingDiagnosis !== undefined) {
       handleDiagnosischange([
         {
           pid: Number(patientId),
@@ -70,7 +70,7 @@ const DischargeDiagnosisWidget = ({
   }, [isQuickNoteView, patientId, workingDischargeDiagnosisData, appointmentId])
 
   useEffect(() => {
-    workingDiagnosis && updateWorkingDischargeDiagnosisData(workingDiagnosis)
+    updateWorkingDischargeDiagnosisData(workingDiagnosis ?? [])
     favouriteDiagnosis && updateFavoritesDiagnosis(favouriteDiagnosis)
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

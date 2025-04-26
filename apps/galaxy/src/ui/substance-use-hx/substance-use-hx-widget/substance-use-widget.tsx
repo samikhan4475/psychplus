@@ -23,6 +23,7 @@ interface SocialHxWidgetProps {
   patientId: string
   initialValue: SubstanceUseHxWidgetSchemaType
   diagnosisData?: QuickNoteSectionItem[]
+  workingDiagnosisData?: QuickNoteSectionItem[]
   isHistoryHeader?: boolean
 }
 
@@ -31,6 +32,7 @@ const SubstanceUseHxWidget = ({
   initialValue,
   isHistoryHeader = false,
   diagnosisData,
+  workingDiagnosisData,
 }: SocialHxWidgetProps) => {
   const { initializeQuestionnaires } = useStore((state) => ({
     initializeQuestionnaires: state.initializeQuestionnaires,
@@ -78,7 +80,7 @@ const SubstanceUseHxWidget = ({
         getData={transformOut(
           patientId,
           appointmentId,
-          diagnosisData,
+          isHospitalDischargeView ? workingDiagnosisData : diagnosisData,
           isHospitalDischargeView,
         )}
         toggleable={!isHistoryHeader}

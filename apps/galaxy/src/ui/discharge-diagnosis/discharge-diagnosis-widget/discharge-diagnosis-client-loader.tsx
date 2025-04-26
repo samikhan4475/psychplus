@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { dequal } from 'dequal'
 import toast from 'react-hot-toast'
-import { useShallow } from 'zustand/react/shallow'
 import { useDeepCompareMemo } from '@/hooks/use-deep-compare-memo'
 import { useStore } from '@/store'
 import { DiagnosisIcd10Code, FavouriteDiagnosisData } from '@/types'
@@ -26,19 +26,19 @@ const DischargeDiagnosisClientLoader = ({
     staffId: state.user.staffId,
   }))
   const data = useQuicknoteStore(
-    useShallow(
-      (state) =>
-        state.actualNotewidgetsData?.[
-          QuickNoteSectionName.QuicknoteSectionWorkingDischargeDiagnosis
-        ],
-    ),
+    (state) =>
+      state.actualNotewidgetsData?.[
+        QuickNoteSectionName.QuicknoteSectionWorkingDischargeDiagnosis
+      ],
+    dequal,
   )
+  console.log({ data })
   const [favouritesData, setFavouritesData] = useState<
     Array<FavouriteDiagnosisData>
   >([])
-  const [DiagnosisData, setDiagnosisData] = useState<Array<DiagnosisIcd10Code>>(
-    [],
-  )
+  const [diagnosisData, setDiagnosisData] = useState<
+    Array<DiagnosisIcd10Code> | undefined
+  >(undefined)
   const DiagnosisCodes = useDeepCompareMemo(() => {
     const sectionItem = data?.filter(
       (item) => item.sectionItemValue !== 'empty',
@@ -73,7 +73,7 @@ const DischargeDiagnosisClientLoader = ({
 
   return (
     <DischargeDiagnosisWidget
-      workingDiagnosis={DiagnosisData}
+      workingDiagnosis={diagnosisData}
       favouriteDiagnosis={favouritesData}
       patientId={patientId}
       appointmentId={appointmentId}

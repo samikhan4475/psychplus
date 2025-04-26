@@ -10,10 +10,12 @@ const DiagnosisSaveButton = () => {
     (state) => state.saveWorkingDischargeDiagnosis,
   )
   const setWidgetsData = quicknoteStore((state) => state.setWidgetsData)
-  const patientId = useParams().id as string
-
+  const { id: patientId, apptId = '' } = useParams<{
+    id: string
+    apptId: string
+  }>()
   const handleSaveDiagnosis = () => {
-    saveWorkingDischargeDiagnosis(patientId, setWidgetsData)
+    saveWorkingDischargeDiagnosis(patientId, apptId, setWidgetsData)
   }
   return (
     <Button
