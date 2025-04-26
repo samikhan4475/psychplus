@@ -152,7 +152,16 @@ const columns = (
         {
           id: 'couples_rate',
 
-          header: () => <ColumnHeader label="Rate" />,
+          header: ({ column }) => (
+            <ColumnHeader
+              sortable
+              sortDir={getSortDir(column.id, sort)}
+              onClick={() => {
+                onSort?.(column.id)
+              }}
+              label="Rate"
+            />
+          ),
           cell: ({ row }) => <TextCell>--</TextCell>,
         },
       ],
