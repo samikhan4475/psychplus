@@ -5,7 +5,7 @@ const defaultValues = (data?: Organization) => {
     id: data?.id ?? '',
     name: data?.shortName ?? '',
     displayName: data?.displayName ?? '',
-    recordStatus: data?.recordStatus ?? '',
+    recordStatus: data?.recordStatus ?? 'Active',
     address1: data?.organizationAddress?.street1 ?? '',
     address2: data?.organizationAddress?.street2 ?? '',
     city: data?.organizationAddress?.city ?? '',

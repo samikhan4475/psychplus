@@ -7,7 +7,12 @@ const schema = z.object({
   middleName: z.string().optional(),
   credentials: z.string().optional(),
   password: z.string().min(1, { message: 'Password is required' }),
-  npi: z.string().min(1, { message: 'Individual NPI is required' }),
+  npi: z.preprocess(
+    (val) => (val !== '' ? Number(val) : undefined), // convert string to number
+    z
+      .number({ invalid_type_error: 'Enter a valid number' })
+      .min(1, { message: 'NPI is required' }),
+  ),
   providerAttributions: z.array(z.string()).optional(),
   staffRoleId: z.string().optional(),
   dateOfBirth: z.custom<DateValue>().optional(),
@@ -36,6 +41,7 @@ const schema = z.object({
   isMailingAddressSameAsHome: z.string().optional().default('no'),
   staffUserRoleIds: z.string().min(1, { message: 'Staff Role is required' }),
   staffType: z.string().min(1, { message: 'Staff Type is required' }),
+  isTest: z.boolean(),
 })
 
 type SchemaType = z.infer<typeof schema>

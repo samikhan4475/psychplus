@@ -12,7 +12,7 @@ const defaultValues = (data?: Staff, organizationId?: string) => {
     city: data?.contactInfo.addresses[0].city ?? '',
     state: data?.contactInfo.addresses[0].state ?? '',
     zip: data?.contactInfo.addresses[0].postalCode ?? '',
-    status: data?.status ?? '',
+    status: data?.status ?? 'Active',
     isMailingAddressSameAsHome: data?.isMailingAddressSameAsPrimary
       ? 'yes'
       : 'no',
@@ -28,31 +28,32 @@ const defaultValues = (data?: Staff, organizationId?: string) => {
     staffType: data?.staffTypes ? data?.staffUserRoleIds[0] : '',
     staffUserRoleIds: data?.staffUserRoleIds ? data?.staffUserRoleIds[0] : '',
     providerAttributions: data?.providerAttributions ?? [],
-    npi: data?.npi ?? '',
+    npi: data?.npi ? parseInt(data?.npi) : undefined,
     credentials: data?.legalName.honors ?? '',
     mailing: {
       street1:
         data && data?.contactInfo?.addresses?.length > 0
-          ? data?.contactInfo.addresses[1].street1
+          ? data?.contactInfo.addresses[1]?.street1
           : '',
       street2:
         data && data?.contactInfo?.addresses?.length > 0
-          ? data?.contactInfo.addresses[1].street2
+          ? data?.contactInfo.addresses[1]?.street2
           : '',
       city:
         data && data?.contactInfo?.addresses?.length > 0
-          ? data?.contactInfo.addresses[1].city
+          ? data?.contactInfo.addresses[1]?.city
           : '',
       state:
         data && data?.contactInfo?.addresses?.length > 0
-          ? data?.contactInfo.addresses[1].state
+          ? data?.contactInfo.addresses[1]?.state
           : '',
       postalCode:
         data && data?.contactInfo?.addresses?.length > 0
-          ? data?.contactInfo.addresses[1].postalCode
+          ? data?.contactInfo.addresses[1]?.postalCode
           : '',
     },
     staffRoleId: data?.staffRoleId ?? '1',
+    isTest: data?.isTest ?? false,
   }
 }
 

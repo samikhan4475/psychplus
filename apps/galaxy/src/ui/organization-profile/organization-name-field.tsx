@@ -1,0 +1,27 @@
+import React from 'react'
+import { TextField } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
+import {
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+} from '@/components'
+import { ProfileSchemaType } from './profile-form'
+
+const OrganizationNameField = () => {
+  const form = useFormContext<ProfileSchemaType>()
+  return (
+    <FormFieldContainer>
+      <FormFieldLabel>Organization Name</FormFieldLabel>
+      <TextField.Root
+        size="1"
+        className="border-pp-gray-2 w-full border border-solid !outline-none [box-shadow:none] "
+        {...form.register('displayName')}
+        placeholder="Organization Name"
+      />
+      <FormFieldError name="displayName" />
+    </FormFieldContainer>
+  )
+}
+
+export { OrganizationNameField }

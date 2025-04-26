@@ -6,7 +6,7 @@ import { ProfileSchemaType } from './profile-form'
 
 const DefaultProviderSelect = () => {
   const form = useFormContext<ProfileSchemaType>()
-  const { id, defaultProviderStaffId } = form.watch()
+  const { id } = form.watch()
 
   const fetchOptions = useCallback(() => {
     if (!id) return Promise.resolve({ state: 'success' as const, data: [] })
@@ -14,7 +14,7 @@ const DefaultProviderSelect = () => {
   }, [id])
   return (
     <FormFieldContainer>
-      <FormFieldLabel className="!text-1">Def. Provider {defaultProviderStaffId}</FormFieldLabel>
+      <FormFieldLabel className="!text-1">Def. Provider</FormFieldLabel>
       <AsyncSelect
         field="defaultProviderStaffId"
         placeholder="Select"

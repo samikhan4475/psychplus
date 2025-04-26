@@ -1,9 +1,9 @@
 import { useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Box, Grid } from '@radix-ui/themes'
+import { Box, Flex, Grid } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FormContainer } from '@/components'
+import { CheckboxInput, FormContainer } from '@/components'
 import { PatientAddress } from '@/types'
 import { formatUTCDate, sanitizeFormData } from '@/utils'
 import { addStaffAction, updateStaffAction } from '../../actions'
@@ -94,10 +94,12 @@ const OrganizationStaffForm = ({ data, onCloseModal }: FormProps) => {
       },
       preferredLanguage: formData.language[0],
       staffUserRoleIds: [formData.staffUserRoleIds],
+      npi: `${formData.npi}`,
     }
 
     if (data) {
       reqPayload = {
+        isTest: data.isTest,
         staffId: Number(data?.id),
         userId: data.userId,
         staffRoleId: formData.staffRoleId,
@@ -125,7 +127,7 @@ const OrganizationStaffForm = ({ data, onCloseModal }: FormProps) => {
         virtualRoomLink: formData.virtualRoomLink,
         biography: data.bio,
         title: formData.credentials,
-        npi: formData.npi,
+        npi: `${formData.npi}`,
         gender: formData.gender,
         email: formData.email,
         phoneContact: formData.phone,
@@ -188,6 +190,13 @@ const OrganizationStaffForm = ({ data, onCloseModal }: FormProps) => {
   return (
     <FormContainer onSubmit={onSave} form={form}>
       <Box className="ml-1 mr-1 mt-2 pl-2 pr-2">
+        <Flex justify="end">
+          <CheckboxInput
+            label="Add as test provider"
+            field="isTest"
+            defaultChecked={data?.isTest ?? false}
+          />
+        </Flex>
         <Grid columns="4" className="mb-2 mt-2 gap-3">
           <FirstNameField />
           <MiddleNameField />

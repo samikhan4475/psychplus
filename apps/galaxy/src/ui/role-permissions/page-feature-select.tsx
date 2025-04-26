@@ -2,7 +2,11 @@
 
 import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
+import {
+  DropdownMenuClientSideSearch,
+  FormFieldContainer,
+  FormFieldLabel,
+} from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 
@@ -27,11 +31,10 @@ const PageFeatureSelect = () => {
   return (
     <FormFieldContainer className="flex-row items-center">
       <FormFieldLabel>Page/Feature</FormFieldLabel>
-      <SelectInput
-        field="permissionSection"
+      <DropdownMenuClientSideSearch
+        initialValue={form.watch('permissionSection')}
         options={options}
-        buttonClassName="min-w-[200px]"
-        defaultValue={form.watch('permissionSection')}
+        field="permissionSection"
       />
     </FormFieldContainer>
   )

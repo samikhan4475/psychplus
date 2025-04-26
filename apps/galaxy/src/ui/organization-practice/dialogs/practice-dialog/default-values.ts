@@ -12,7 +12,7 @@ const defaultValues = (data?: Partial<Organization>) => {
     city: city ?? '',
     state: state ?? '',
     zip: postalCode ?? '',
-    recordStatus: data?.recordStatus ?? '',
+    recordStatus: data?.recordStatus ?? 'Active',
     practicePaymentAddress: {
       street1: street1 ?? '',
       street2: street2 ?? '',
