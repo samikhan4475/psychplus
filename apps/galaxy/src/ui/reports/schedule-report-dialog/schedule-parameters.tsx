@@ -4,9 +4,12 @@ import { useStore as useGlobalStore } from '@/store'
 import { useStore } from '../store'
 import { TemplateCosignerSelect } from '../template-cosigner-select'
 import { TemplateInsuranceSelect } from '../template-insurance-select'
+import { TemplateLocationSelect } from '../template-location-select'
 import { TemplatePatientSelect } from '../template-patients-select'
+import { TemplateProviderSelect } from '../template-provider-select'
 import { TemplateSelect } from '../template-select'
 import { TemplateStaffSelect } from '../template-staff-select'
+import { TemplateStateSelect } from '../template-state-select'
 import {
   CODE_PARAM_ATTRIBUTES,
   STAFF_SELECTION,
@@ -124,11 +127,38 @@ const ScheduleParameters = () => {
               />
             )}
 
+            {isSelect && param.parameterCode === 'LocationList' && (
+              <TemplateLocationSelect
+                title={param.displayName}
+                name={`parameters.${i}.scheduleParameterValue`}
+                isMultiple={isMultiple}
+              />
+            )}
+
+            {isSelect && param.parameterCode === 'StateList' && (
+              <TemplateStateSelect
+                title={param.displayName}
+                name={`parameters.${i}.scheduleParameterValue`}
+                isMultiple={isMultiple}
+              />
+            )}
+
+            {isSelect && param.parameterCode === 'ProviderList' && (
+              <TemplateProviderSelect
+                title={param.displayName}
+                name={`parameters.${i}.scheduleParameterValue`}
+                isMultiple={isMultiple}
+              />
+            )}
+
             {isSelect &&
               param.parameterCode !== 'StaffList' &&
               param.parameterCode !== 'PatientList' &&
               param.parameterCode !== 'CosignerList' &&
-              param.parameterCode !== 'InsuranceList' && (
+              param.parameterCode !== 'InsuranceList' &&
+              param.parameterCode !== 'LocationList' &&
+              param.parameterCode !== 'StateList' &&
+              param.parameterCode !== 'ProviderList' && (
                 <TemplateSelect
                   title={param.displayName}
                   isMultiple={isMultiple}

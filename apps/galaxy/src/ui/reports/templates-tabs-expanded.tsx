@@ -31,6 +31,15 @@ const ExpandedSidebar = () => {
     resetScheduledReportPageCache()
     resetPageCache()
   }
+  let templateName = ''
+
+  if (selectedTemplate?.displayName) {
+    if (selectedTemplate.resourceStatus === 'Active') {
+      templateName = selectedTemplate.displayName
+    } else {
+      templateName = selectedTemplate.displayName + ' - (Inactive)'
+    }
+  }
 
   return (
     <Box className="bg-white relative flex h-full w-[224px] flex-col transition-all duration-300">
@@ -40,7 +49,7 @@ const ExpandedSidebar = () => {
             <Flex align="center">
               <MedicalReportIcon />
               <Text className="text-pp-black-3 ml-1 font-medium">
-                {selectedReport?.displayName}
+                {templateName}
               </Text>
             </Flex>
             <AddTemplateButton />
@@ -48,7 +57,11 @@ const ExpandedSidebar = () => {
           {filteredTemplates.map((item) => (
             <TabItem
               key={item.id}
-              displayName={item.displayName}
+              displayName={
+                item?.resourceStatus === 'Active'
+                  ? item?.displayName
+                  : item?.displayName + ' - (Inactive)'
+              }
               isActive={selectedTemplate?.id === item.id}
               onClick={() => handleTemplateClick(item)}
             />

@@ -17,9 +17,12 @@ import { TemplateCosignerSelect } from './template-cosigner-select'
 import { TemplateFilterDatePicker } from './template-filter-datepicker'
 import { TemplateFilterInput } from './template-filter-input'
 import { TemplateInsuranceSelect } from './template-insurance-select'
+import { TemplateLocationSelect } from './template-location-select'
 import { TemplatePatientSelect } from './template-patients-select'
+import { TemplateProviderSelect } from './template-provider-select'
 import { TemplateSelect } from './template-select'
 import { TemplateStaffSelect } from './template-staff-select'
+import { TemplateStateSelect } from './template-state-select'
 import {
   CODE_PARAM_ATTRIBUTES,
   REPORT_PARAMETER_CODE,
@@ -254,12 +257,37 @@ const DynamicTemplateFilters = () => {
                     isMultiple={isMultiple}
                   />
                 )}
+                {isSelect && item.parameterCode === 'LocationList' && (
+                  <TemplateLocationSelect
+                    title={item.displayName}
+                    name={`reportTemplateParameters.${i}.runValue`}
+                    isMultiple={isMultiple}
+                  />
+                )}
+                {isSelect && item.parameterCode === 'StateList' && (
+                  <TemplateStateSelect
+                    title={item.displayName}
+                    name={`reportTemplateParameters.${i}.runValue`}
+                    isMultiple={isMultiple}
+                  />
+                )}
+
+                {isSelect && item.parameterCode === 'ProviderList' && (
+                  <TemplateProviderSelect
+                    title={item.displayName}
+                    name={`reportTemplateParameters.${i}.runValue`}
+                    isMultiple={isMultiple}
+                  />
+                )}
 
                 {isSelect &&
                   item.parameterCode !== 'StaffList' &&
                   item.parameterCode !== 'PatientList' &&
                   item.parameterCode !== 'CosignerList' &&
-                  item.parameterCode !== 'InsuranceList' && (
+                  item.parameterCode !== 'InsuranceList' &&
+                  item.parameterCode !== 'LocationList' &&
+                  item.parameterCode !== 'StateList' &&
+                  item.parameterCode !== 'ProviderList' && (
                     <TemplateSelect
                       title={item.displayName}
                       isMultiple={isMultiple}

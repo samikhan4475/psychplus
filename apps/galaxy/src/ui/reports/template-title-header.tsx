@@ -11,6 +11,10 @@ import { VIEW_TYPE } from './types'
 
 const TemplateTitleHeader = () => {
   const { selectedTemplate, templateFilters, viewType } = useStore()
+  const templateName =
+    selectedTemplate?.resourceStatus === 'Active'
+      ? selectedTemplate?.displayName
+      : selectedTemplate?.displayName + ' - (Inactive)'
 
   return (
     <>
@@ -21,7 +25,7 @@ const TemplateTitleHeader = () => {
       >
         <Flex className="gap-2">
           <Text className="" weight="medium">
-            {selectedTemplate?.displayName || 'No template selected'}
+            {templateName || 'No template selected'}
           </Text>
           <ReportViewButton />
           <ScheduleViewButton />

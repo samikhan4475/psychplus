@@ -20,6 +20,7 @@ interface Template {
   isAdhocAllowed?: boolean
   parameters?: TemplateParameter[]
   permittedRoles?: string[]
+  resourceStatus?: string
 }
 
 interface CodeAttributes {
