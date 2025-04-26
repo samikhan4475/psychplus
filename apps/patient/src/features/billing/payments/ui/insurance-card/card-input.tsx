@@ -21,83 +21,83 @@ const CardInput = ({
 }: CardInputProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [previewImage, setPreviewImage] = useState<string | null>(null)
-  const [imgView, setImgView] = useState(false)
 
   const handleImageInput = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click()
-    }
+    if (fileInputRef.current) fileInputRef.current.click()
   }
 
   const onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
-    if (!file) {
-      return
-    }
-    const objectUrl = file ? URL.createObjectURL(file) : null
-
+    if (!file) return
+    const objectUrl = URL.createObjectURL(file)
     setPreviewImage(objectUrl)
     onImageChanged(file)
   }
 
-  const hasPreviewImage = !!previewImage
-  let imageSrc: string | undefined | null = previewImage
-
-  if (!imageSrc) {
-    imageSrc = savedImg
+  const clearImage = () => {
+    setPreviewImage(null)
+    if (fileInputRef.current) fileInputRef.current.value = ''
+    onImageChanged(undefined)
   }
 
-  const handleViewImage = () => {
-    setImgView(false);
-  }
+  const imageSrc = previewImage || savedImg
+  const hasImage = !!imageSrc
 
   return (
     <Box className="flex-1">
-      <Flex
-        align="center"
-        justify="center"
-        className={cn(
-          "h-[230px] cursor-pointer items-center justify-center rounded-[5px] border border-dashed border-[#bebebe] text-accent-12 sm:flex-1",
-          disabled && "cursor-not-allowed opacity-50",
-        )}
+      <div
         onClick={handleImageInput}
+        className={cn(
+          'bg-white relative flex h-[230px] w-full cursor-pointer items-center justify-center rounded-[5px] border border-dashed border-[#bebebe]',
+          disabled && 'cursor-not-allowed opacity-50',
+        )}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleImageInput();
+          }
+        }}
       >
-        {imageSrc ? (
-          <Box width="100%" height="100%" className="relative">
+        {hasImage ? (
+          <div className="relative h-full w-full">
             <Image
               loader={() => imageSrc as string}
               src={imageSrc}
               alt="insurance card preview"
               fill
-              className={cn(
-                'bg-white rounded-[5px] transition-transform object-fill aspect-[4/6]',
-                imgView && 'z-[1000] scale-[1.3] shadow-3'
-              )}
-              onMouseLeave={handleViewImage} 
+              className="rounded-md object-contain"
             />
-            
-            {hasPreviewImage ? (
+
+            {previewImage && (
               <IconButton
                 onClick={(e) => {
                   e.stopPropagation()
                   e.preventDefault()
-                  setPreviewImage(null)
-                  fileInputRef.current?.value && (fileInputRef.current.value = '')
-                  onImageChanged(undefined)
+                  clearImage()
                 }}
                 color="gray"
                 variant="outline"
-                className="rounded-full text-white absolute -right-2 -top-2 h-[20px] w-[20px] cursor-pointer bg-accent-12"
+                className="rounded-full text-white shadow-md absolute -right-2 -top-2 z-10 h-[20px] w-[20px] bg-accent-12"
               >
                 <XIcon strokeWidth={1.5} className="h-[18px] w-[18px]" />
               </IconButton>
-            ) : null}
-          </Box>
+            )}
+          </div>
         ) : (
-          <Flex height="100%" direction="column" align="center" justify="center">
-            
+          <Flex
+            height="100%"
+            direction="column"
+            align="center"
+            justify="center"
+          >
             <ImagePlaceholderIcon />
-            <Text className="text-sm text[#151B4A] w-[92px] leading-[20px] pt-2" align="center" size="1">{label}</Text>
+            <Text
+              className="text-sm w-[92px] pt-2 leading-[20px] text-[#151B4A]"
+              align="center"
+              size="1"
+            >
+              {label}
+            </Text>
           </Flex>
         )}
 
@@ -109,14 +109,11 @@ const CardInput = ({
           accept="image/png, image/jpeg, image/jpg"
           disabled={disabled}
         />
-      </Flex>
+      </div>
+
       <Flex gap="3" align="center" className="pt-2">
-       
-        {(savedImg || hasPreviewImage) && (
-          <CardImgViewDialog imageSrc={imageSrc} />
-        )}
-        
-        <Box onClick={handleImageInput}>
+        {hasImage && <CardImgViewDialog imageSrc={imageSrc} />}
+        <Box onClick={handleImageInput} className="cursor-pointer">
           <EditCameraIcon />
         </Box>
       </Flex>

@@ -11,6 +11,7 @@ import {
   getUserFullName,
 } from '@psychplus-v2/utils'
 import { Button, Container, Flex, Text } from '@radix-ui/themes'
+import { addMinutes } from 'date-fns'
 import AddToCalendar from 'react-add-to-calendar'
 import { BookingConfirmedIcon, ProviderAvatar } from '@/components-v2'
 import {
@@ -36,11 +37,11 @@ const ConfirmAppointment = ({
   const specialistName = `${getUserFullName(specialist.legalName)}${
     specialist.legalName.honors ? `, ${specialist.legalName.honors}` : ''
   }`
-
+  const startDate = slot?.startDate
   const calenderEvent = {
     title: `Appointment with ${specialistName}`,
-    startTime: slot.startDate,
-    endTime: slot.endDate,
+    startTime: new Date(startDate),
+    endTime: addMinutes(new Date(startDate), slot.duration),
     description: '',
     location:
       appointmentType === AppointmentType.InPerson

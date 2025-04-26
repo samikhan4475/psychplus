@@ -1,7 +1,7 @@
-import { Dialog, Button, Box } from '@radix-ui/themes'
-import { CloseDialogIcon } from '@/components-v2'
-import { ViewPictureIcon } from '@/components'
 import Image from 'next/image'
+import { Box, Button, Dialog } from '@radix-ui/themes'
+import { ViewPictureIcon } from '@/components'
+import { CloseDialogIcon } from '@/components-v2'
 
 interface CardImgViewDialogProps {
   imageSrc: string | undefined | null
@@ -10,27 +10,29 @@ interface CardImgViewDialogProps {
 const CardImgViewDialog = ({ imageSrc }: CardImgViewDialogProps) => {
   return (
     <Dialog.Root>
-      <Dialog.Trigger >
+      <Dialog.Trigger>
         <Button className="bg-transparent p-0">
           <ViewPictureIcon />
         </Button>
       </Dialog.Trigger>
-      <Dialog.Content className="relative max-w-[780px] p-0">
-        <Box className="after:bg-white after:w-9 after:h-9 after:rounded-full after:absolute after:top-3 after:right-3 after:shadow-3">
-          <Box className="relative z-10"><CloseDialogIcon /></Box>
+      <Dialog.Content className="relative w-full max-w-[780px] p-0">
+        <Box className="after:bg-white after:rounded-full after:absolute after:right-3 after:top-2 after:h-9 after:w-9 after:shadow-3">
+          <Box className="relative z-10">
+            <CloseDialogIcon />
+          </Box>
         </Box>
         {imageSrc ? (
-          <Image
-            src={imageSrc}
-            alt="insurance card preview"
-            className="w-[780px] h-[492px]"
-            width={780}   
-            height={492} 
-          />
+          <Box className="relative h-[80vh] w-full">
+            <Image
+              src={imageSrc}
+              alt="insurance card preview"
+              fill
+              className="object-contain"
+            />
+          </Box>
         ) : (
-          <p>No image to display</p>
+          <p className="p-4 text-center">No image to display</p>
         )}
-       
       </Dialog.Content>
     </Dialog.Root>
   )
