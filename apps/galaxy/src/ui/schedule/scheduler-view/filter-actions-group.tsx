@@ -36,8 +36,10 @@ import { getCurrentWeekStart } from './utils'
 
 const SchedulerFilterGroup = ({
   isFollowup = false,
+  selectedProviderId,
 }: {
   isFollowup: boolean
+  selectedProviderId: string | undefined
 }) => {
   const [isPartialFilterView, setIsPartialFilterView] =
     useState<boolean>(isFollowup)
@@ -53,7 +55,8 @@ const SchedulerFilterGroup = ({
     isSettingsSaving,
   } = useStore()
   const [hasHydrated, setHasHydrated] = useState<boolean>(false)
-  const providerId = useProviderId()
+  const loggedInProviderId = useProviderId()
+  const providerId = selectedProviderId ?? loggedInProviderId
   const defaultValues = getDefaultValues(providerId)
 
   const form = useForm<SchemaType>({

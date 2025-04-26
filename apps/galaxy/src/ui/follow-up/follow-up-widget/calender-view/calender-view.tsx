@@ -29,10 +29,12 @@ const CloseDialogIcon = () => (
 const CalenderView = ({
   onVisitAdd,
   patient,
+  selectedProviderId,
   appointmentDate,
 }: {
   onVisitAdd: () => void
   patient: undefined | NewPatient
+  selectedProviderId: undefined | string
   appointmentDate: undefined | string
 }) => {
   const form = useFormContext<SchemaType>()
@@ -86,6 +88,7 @@ const CalenderView = ({
           consultationDate={appointmentDate}
           noOfDays={6}
           patient={patient}
+          selectedProviderId={selectedProviderId}
           onVisitAdd={onVisitAdd}
           offsetStartDate={offsetStartDate}
         />

@@ -9,7 +9,6 @@ import { useShallow } from 'zustand/react/shallow'
 import { FormContainer } from '@/components'
 import { VisitMediumEnum } from '@/enum'
 import { Appointment, BookVisitPayload } from '@/types'
-import { getBookedAppointmentsAction } from '@/ui/schedule/client-actions'
 import { getStaffAction } from '@/ui/staff-credentialing/actions'
 import { bookVisitAction } from '@/ui/visit/client-actions'
 import { AlertDialog } from './alert-dialog'
@@ -165,6 +164,7 @@ const FollowUpForm = ({
       }
     })
   }
+  const isLoading = loading || isSubmitting
 
   return (
     <FormContainer form={form} onSubmit={onSubmit}>
@@ -191,22 +191,13 @@ const FollowUpForm = ({
         <NextDropdown appointment={appointment} />
         {!appointment?.isServiceTimeDependent && (
           <>
-            <LocationDropdown
-              appointment={appointment}
-              disabled={loading || isSubmitting}
-            />
+            <LocationDropdown appointment={appointment} disabled={isLoading} />
             <VisitMediumDropdown />
-            <ProviderDropdown
-              appointment={appointment}
-              disabled={loading || isSubmitting}
-            />
+            <ProviderDropdown appointment={appointment} disabled={isLoading} />
           </>
         )}
 
-        <CreateFollowUpButton
-          loading={loading || isSubmitting}
-          onSubmit={onSubmit}
-        />
+        <CreateFollowUpButton loading={isLoading} onSubmit={onSubmit} />
         <CalenderView
           appointmentDate={appointment?.appointmentDate}
           onVisitAdd={() => {
@@ -216,6 +207,7 @@ const FollowUpForm = ({
               appointmentIds: [Number(appointmentId)],
             })
           }}
+          selectedProviderId={form.watch('providerId')}
           patient={{
             accessToken: `${appointment?.patientId}`,
             user: {

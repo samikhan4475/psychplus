@@ -13,12 +13,14 @@ const SchedulerView = ({
   consultationDate,
   noOfDays = 13,
   patient,
+  selectedProviderId,
   onVisitAdd,
   offsetStartDate,
 }: {
   isFollowup?: boolean
   noOfDays?: number
   patient?: NewPatient
+  selectedProviderId?: string
   onVisitAdd?: () => void
   offsetStartDate?: string
   consultationDate?: string
@@ -36,7 +38,10 @@ const SchedulerView = ({
           top="0"
           className="bg-white z-10"
         >
-          <SchedulerFilterGroup isFollowup={isFollowup} />
+          <SchedulerFilterGroup
+            isFollowup={isFollowup}
+            selectedProviderId={selectedProviderId}
+          />
 
           <DayHeader noOfDays={noOfDays} offsetStartDate={offsetStartDate} />
         </Flex>
