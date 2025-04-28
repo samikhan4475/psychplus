@@ -25,6 +25,7 @@ const PatientMedicationsWidget = () => {
     setPmpReviewed,
     fetchPatientMedication,
     fetchScriptSureSessionToken,
+    fetchExternalScriptsurePatientId,
   } = useStore()
 
   useEffect(() => {
@@ -37,8 +38,9 @@ const PatientMedicationsWidget = () => {
         true,
         isQuickNoteSection,
       ),
+      fetchExternalScriptsurePatientId(patientId),
     ])
-  }, [patientId, fetchPatientMedication, fetchScriptSureSessionToken])
+  }, [patientId])
 
   const path = usePathname()
   const tabViewEnabled = path.includes('medications')
