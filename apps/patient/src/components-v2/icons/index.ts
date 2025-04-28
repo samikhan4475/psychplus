@@ -1,2 +1,4 @@
 export * from './booking-cancel-icon'
 export * from './booking-confirmation-icon'
+export * from './star-icon'
+export * from './info-icon'
