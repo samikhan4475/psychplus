@@ -9,8 +9,6 @@ import {
   WidgetContainer,
   WidgetSaveButton,
 } from '@/components'
-import { FEATURE_FLAGS } from '@/constants'
-import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { AddMedicationButton } from './add-medication-button'
 import { PatientMedicationsDataTable } from './patient-medications-data-table'
 import { PatientMedicationsTabView } from './patient-medications-tab-view'
@@ -21,9 +19,6 @@ const PatientMedicationsWidget = () => {
   const { id: patientId = '' } = useParams<{ id: string }>()
   const pathname = usePathname()
   const isQuickNoteSection = pathname.includes('quicknotes')
-  const isFeatureFlagEnabled = useFeatureFlagEnabled(
-    FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
-  )
 
   const {
     isPmpReviewed,
@@ -34,17 +29,16 @@ const PatientMedicationsWidget = () => {
 
   useEffect(() => {
     if (!patientId) return
-    const promises: Promise<void>[] = [
-      fetchPatientMedication({ patientIds: [Number(patientId)] }, 1, true, isQuickNoteSection),
-    ]
-    if (isFeatureFlagEnabled) promises.push(fetchScriptSureSessionToken())
-    Promise.all(promises)
-  }, [
-    patientId,
-    fetchPatientMedication,
-    fetchScriptSureSessionToken,
-    isFeatureFlagEnabled,
-  ])
+    Promise.all([
+      fetchScriptSureSessionToken(),
+      fetchPatientMedication(
+        { patientIds: [Number(patientId)] },
+        1,
+        true,
+        isQuickNoteSection,
+      ),
+    ])
+  }, [patientId, fetchPatientMedication, fetchScriptSureSessionToken])
 
   const path = usePathname()
   const tabViewEnabled = path.includes('medications')

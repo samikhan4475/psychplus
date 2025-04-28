@@ -3,25 +3,50 @@
 import { useState } from 'react'
 import { useParams, usePathname } from 'next/navigation'
 import { IconButton, Tooltip } from '@radix-ui/themes'
+import { Row } from '@tanstack/react-table'
 import { CircleX } from 'lucide-react'
 import toast from 'react-hot-toast'
-import { PropsWithRow } from '@/components'
 import { cancelPatientPrescriptions } from '../actions'
 import { useStore } from '../store'
-import { PatientMedication } from '../types'
+import { PatientMedication, PatientPrescriptionStatus } from '../types'
 
-const RowActionCancel = ({ row }: PropsWithRow<PatientMedication>) => {
-  const { refetch } = useStore((state) => ({
-    refetch: state.refetch,
-  }))
-  const { id } = row.original
-  const patientId = useParams().id as string
+interface RowActionRefreshProps {
+  row: Row<PatientMedication>
+}
+
+const RowActionCancel = ({ row }: RowActionRefreshProps) => {
+  const {
+    externalPrescriptionId,
+    externalMessageId,
+    writtenDate,
+    prescriptionStatusTypeId,
+  } = row.original
   const pathname = usePathname()
   const isQuickNoteSection = pathname.includes('quicknotes')
+
+  const { externalPatientId, refetch } = useStore((state) => ({
+    externalPatientId: state.externalPatientId,
+    refetch: state.refetch,
+  }))
+
+  const isDisabled =
+    prescriptionStatusTypeId?.toString() ===
+      PatientPrescriptionStatus.AWAITING_APPROVAL ||
+    prescriptionStatusTypeId?.toString() === PatientPrescriptionStatus.CANCELLED
+
+  const patientId = useParams().id as string
   const [isLoading, setIsLoading] = useState(false)
+
   const onCancel = async () => {
+    if (!externalPatientId) return
     setIsLoading(true)
-    const result = await cancelPatientPrescriptions(Number(patientId), id)
+    const result = await cancelPatientPrescriptions({
+      patientId,
+      externalPatientId,
+      externalPrescriptionId,
+      externalMessageId,
+      writtenDate,
+    })
     if (result.state === 'success') {
       toast.success('Prescription cancelled successfully.')
       refetch(isQuickNoteSection)
@@ -38,7 +63,7 @@ const RowActionCancel = ({ row }: PropsWithRow<PatientMedication>) => {
         color="gray"
         variant="ghost"
         onClick={onCancel}
-        disabled={isLoading}
+        disabled={isDisabled || isLoading}
       >
         <CircleX size={18} color="black" />
       </IconButton>

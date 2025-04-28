@@ -784,6 +784,8 @@ const UPDATE_CODSET_CODE = (
 const ADD_ASSIGNING_AUTHORITY = `${API_URL}/api/codeset/authorities`
 const ADD_CODSET_CODE = (assigningAuthorityId: string, codesetId: string) =>
   `${API_URL}/api/codeset/authorities/${assigningAuthorityId}/codesets/${codesetId}/codes`
+const CANCEL_PATIENT_SCRIPT_SURE_PRESCRIPTIONS = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/scriptsureprescriptions/actions/cancel`
 const CANCEL_PATIENT_PRESCRIPTIONS = (patientId: number, id: string) =>
   `${API_URL}/api/patients/${patientId}/prescriptions/${id}
 `
@@ -904,14 +906,12 @@ const EDIT_SCHEDULE_REPORT_ENDPOINT = (scheduleId: string) =>
 const UPDATE_SCHEDULE_REPORT_JOB_ENDPOINT = (jobId: string) =>
   `${API_URL}/api/jobmanager/jobs/${jobId}`
 const GET_USERS_SELF_PROOFINGS_ENDPOINT = `${API_URL}/api/userproofings/actions/search`
-const START_USERS_PROOFINGS_ENDPOINT = (
-  userId: string,
-) => `${API_URL}/api/users/${userId}/idproofings/actions/start`
+const START_USERS_PROOFINGS_ENDPOINT = (userId: string) =>
+  `${API_URL}/api/users/${userId}/idproofings/actions/start`
 const START_SELF_PROOFINGS_ENDPOINT = `${API_URL}/api/users/self/idproofings/actions/start`
 const LAUNCH_SELF_PROOFINGS_ENDPOINT = `${API_URL}/api/users/self/idproofings/actions/launchUrl`
-const LAUNCH_USERS_PROOFINGS_ENDPOINT = (
-  userId: string,
-) => `${API_URL}/api/users/${userId}/idproofings/actions/launchUrl`
+const LAUNCH_USERS_PROOFINGS_ENDPOINT = (userId: string) =>
+  `${API_URL}/api/users/${userId}/idproofings/actions/launchUrl`
 const GET_LAB_ORDERS_SEARCH = `${API_URL}/api/laborders/actions/search`
 const GET_MEDICATIONS_REFILL = `${API_URL}/api/pharmacynotifications/actions/search`
 const UPDATE_DEFAULT_PAYMENT = (
@@ -1259,6 +1259,7 @@ export {
   UPDATE_PATIENT_PRESCRIPTIONS_MEDICATIONS,
   GET_PATIENT_PRESCRIPTIONS_MEDICATION_ORDER,
   CANCEL_PATIENT_PRESCRIPTIONS,
+  CANCEL_PATIENT_SCRIPT_SURE_PRESCRIPTIONS,
   GET_ACS_INFO,
   ADD_CLAIM_NOTES,
   UPDATE_CLAIM_NOTES,
@@ -1332,5 +1333,5 @@ export {
   GET_LAB_ORDERS_SEARCH,
   GET_MEDICATIONS_REFILL,
   DIS_ASSOCIATE_PERMISSION_ENDPOINT,
-  UPDATE_DEFAULT_PAYMENT
+  UPDATE_DEFAULT_PAYMENT,
 }
