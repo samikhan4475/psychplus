@@ -114,8 +114,7 @@ const EditVisitForm = ({
       timeOfAdmission: timeOfAdmission,
       groupType: visitDetails?.groupTherapyTypeCode ?? '',
       visitStatus: visitDetails?.visitStatus,
-      insuranceVerificationStatus:
-        visitDetails?.patientInsuranceVerificationStatus,
+      insuranceVerificationStatus: visitDetails?.insuranceVerification,
       legal: visitDetails?.legalStatus,
       insuranceAuthorizationNumber: visitDetails?.authorizationNumber,
       authDate: visitDetails?.authorizationDate
