@@ -94,7 +94,10 @@ const schema = z
     socialSecurityNumber: z.string(),
     userRoleId: optionalString,
     contactInfo: ContactInfoSchema,
-    biography: optionalString,
+    biography: z
+      .string()
+      .max(2000, 'Max 2000 characters are allowed')
+      .optional(),
     language: z.array(z.string()).optional(),
     preferredLanguage: z.string(),
     password: z.string().min(1, 'Required'),

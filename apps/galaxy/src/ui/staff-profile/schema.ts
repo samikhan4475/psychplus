@@ -103,7 +103,10 @@ const schema = z
     spokenLanguages: z.array(z.string()).optional().optional(),
     virtualRoomLink: optionalString,
     isVirtualRoomLink: z.boolean().optional(),
-    biography: optionalString,
+    biography: z
+      .string()
+      .max(2000, 'Max 2000 characters are allowed')
+      .optional(),
     npi: z.string().optional(),
     gender: requiredString,
     homeAddress: getAddressSchema('Home'),
