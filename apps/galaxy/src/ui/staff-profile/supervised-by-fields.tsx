@@ -24,7 +24,7 @@ const SupervisedByField = () => {
   }, [isDisabled, supervisedBy])
   return (
     <FormFieldContainer className="w-full">
-      <FormFieldLabel>Supervised By</FormFieldLabel>
+      <FormFieldLabel required>Supervised By</FormFieldLabel>
       <TextField.Root
         size="1"
         disabled={isDisabled}

@@ -12,7 +12,7 @@ const AgeField = () => {
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Age</FormFieldLabel>
+      <FormFieldLabel  required>Age</FormFieldLabel>
       <TextField.Root
         size="1"
         disabled
