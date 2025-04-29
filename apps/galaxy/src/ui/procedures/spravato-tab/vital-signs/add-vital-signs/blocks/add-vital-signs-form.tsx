@@ -8,13 +8,17 @@ import { CancelButton } from './cancel-button'
 import { NumberField } from './number-field'
 import { SaveButton } from './save-button'
 
+interface AddVitalSignsFormProps {
+  closeNewRecord: () => void
+  generateVitalButtons: (vitalSigns: []) => void
+  timeSlot: number
+}
+
 const AddVitalSignsForm = ({
   closeNewRecord,
   generateVitalButtons,
-}: {
-  closeNewRecord: () => void
-  generateVitalButtons: (vitalSigns: []) => void
-}) => {
+  timeSlot,
+}: AddVitalSignsFormProps) => {
   return (
     <Box>
       <Table.Root variant="ghost" size="1">
@@ -29,7 +33,7 @@ const AddVitalSignsForm = ({
         </Table.Header>
 
         <Table.Body>
-          {Object.values(VITAL_TABLE_LABELS).map((label, index) => (
+          {Object.values(VITAL_TABLE_LABELS).map((label) => (
             <Table.Row key={label}>
               <Table.Cell className="border-pp-table-border h-7 border px-1 py-0 align-middle">
                 {label === VITAL_TABLE_LABELS.bloodPressure ? (
@@ -52,6 +56,7 @@ const AddVitalSignsForm = ({
         <SaveButton
           generateVitalButtons={generateVitalButtons}
           onSave={closeNewRecord}
+          timeSlot={timeSlot}
         />
       </Flex>
     </Box>

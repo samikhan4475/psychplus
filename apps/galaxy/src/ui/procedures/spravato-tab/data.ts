@@ -144,6 +144,7 @@ const transformIn = (
     dissociationSymptomsResolved: 'yes',
     dizzinessAndVertigo: 'no',
     increasedInBloodPressure: 'no',
+    isOkToProceed: 'false',
     lethargy: 'no',
     lotNumber: '',
     totalTimeMonitored: '',

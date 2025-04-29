@@ -1,26 +1,38 @@
 import React from 'react'
 import { Flex, Text } from '@radix-ui/themes'
-import { VitalTreatmentConfigType } from '@/ui/procedures/spravato-tab/vital-signs/add-vital-signs/types'
+import {
+  VitalSignData,
+  VitalTime,
+} from '@/ui/procedures/spravato-tab/vital-signs/add-vital-signs/types'
 
-const VitalSignsDetails = ({
-  config,
-}: {
-  config: { [key: number]: VitalTreatmentConfigType }
-}) => {
+interface VitalSignsDetailsProps {
+  vitalSigns: VitalSignData[]
+}
+
+const VitalSignsDetails = ({ vitalSigns }: VitalSignsDetailsProps) => {
+  const uniqueVitals = Array.from(
+    new Map(
+      [...vitalSigns].reverse().map((item) => [item.timeSlot, item]),
+    ).values(),
+  )
+
   return (
     <Flex direction="column" gap="1">
-      {Object.values(config).map((item) => (
-        <React.Fragment key={item.treatmentLabel}>
-          <Text weight="medium" size="1">
-            {item.treatmentLabel}
-          </Text>
-          {item?.showMessage && (
-            <Text className="text-pp-text-sub" weight="regular" size="1">
-              {item.information}
-            </Text>
-          )}
-        </React.Fragment>
-      ))}
+      {uniqueVitals.map(
+        (item) =>
+          item?.timeSlot && (
+            <React.Fragment key={item.timeSlot}>
+              <Text weight="medium" size="1">
+                {item.label}
+              </Text>
+              {Number(item.timeSlot) !== VitalTime.Minutes40 && (
+                <Text className="text-pp-text-sub" weight="regular" size="1">
+                  {item.information}
+                </Text>
+              )}
+            </React.Fragment>
+          ),
+      )}
     </Flex>
   )
 }

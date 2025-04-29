@@ -35,6 +35,20 @@ enum VitalTime {
   Minutes180 = 180,
 }
 
+type VitalSignData = {
+  vitalSignDateTime: string
+  systolic: string
+  diastolic: string
+  heartRate: string
+  respiratoryRate: string
+  pulseOximetry: string
+  timeSlot?: string
+  isOkToProceed?: string
+  label?: string
+  information?: string
+  appId?: number | string
+}
+
 export {
   VITAL_TABLE_LABELS,
   TREATMENT_STATUS,
@@ -42,4 +56,5 @@ export {
   VitalsStatus,
   type VitalTreatmentConfigType,
   VitalTime,
+  type VitalSignData,
 }

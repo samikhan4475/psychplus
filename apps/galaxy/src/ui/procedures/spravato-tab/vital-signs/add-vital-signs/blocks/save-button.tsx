@@ -4,14 +4,19 @@ import { useFormContext } from 'react-hook-form'
 import { formatDateTime, getTimeLabel } from '@/utils'
 import { SpravatoWidgetSchemaType } from '../../../spravato-widget-schema'
 
+interface SaveButtonProps {
+  onSave: () => void
+  generateVitalButtons: (vitalSigns: []) => void
+  timeSlot: number
+}
+
 const SaveButton = ({
   onSave,
   generateVitalButtons,
-}: {
-  onSave: () => void
-  generateVitalButtons: (vitalSigns: []) => void
-}) => {
+  timeSlot,
+}: SaveButtonProps) => {
   const form = useFormContext<SpravatoWidgetSchemaType>()
+  const isOkToProceed = form.watch('isOkToProceed') ?? 'false'
 
   const appId = Number(useSearchParams().get('id'))
 
@@ -25,7 +30,9 @@ const SaveButton = ({
       ...newVitalSign,
       vitalSignDateTime: formatDateTime(new Date().toISOString(), false),
       appId,
-      // timeSlot: `${timeSlot}`,
+      isOkToProceed:
+        isOkToProceed === 'true' && timeSlot === 0 ? 'true' : 'false',
+      timeSlot: `${timeSlot}`,
     })
     if (vitalSigns.length === 1) {
       form.setValue(

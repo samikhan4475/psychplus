@@ -2,19 +2,14 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { useFormContext } from 'react-hook-form'
 import { getTimeLabel } from '@/utils'
-import { VitalsStatus, VitalTreatmentConfigType } from '../types'
+import { VitalSignData, VitalsStatus, VitalTreatmentConfigType } from '../types'
 import { evaluateVitals } from '../utils'
 
-export default (vitalSigns: any, form?: any, isActualNoteView = false) => {
+export default (vitalSigns: VitalSignData[]) => {
+  const form = useFormContext()
   const isFirstTime = useRef<boolean>(true)
-
-  const isCurrentVitalsGood = (systolic: number, diastolic: number) => {
-    if (systolic >= 140 || diastolic >= 90) {
-      return VitalsStatus.NOT_GOOD
-    }
-    return VitalsStatus.GOOD
-  }
 
   const currentTimeSlot = useRef(0)
   const prevAppId = useRef(0)
@@ -31,6 +26,21 @@ export default (vitalSigns: any, form?: any, isActualNoteView = false) => {
     },
   })
 
+  const isCurrentVitalsGood = (
+    systolic: number,
+    diastolic: number,
+    isOkToProceed: string,
+  ) => {
+    if (isOkToProceed === 'true' && currentTimeSlot.current === 0) {
+      return VitalsStatus.GOOD
+    } else {
+      if (systolic >= 140 || diastolic >= 90) {
+        return VitalsStatus.NOT_GOOD
+      }
+      return VitalsStatus.GOOD
+    }
+  }
+
   const setCurrentTimeSlot = (value: number) => {
     currentTimeSlot.current = value
   }
@@ -38,12 +48,14 @@ export default (vitalSigns: any, form?: any, isActualNoteView = false) => {
   const generateVitalsAddButton = (
     vitalTreatmentConfigAction: { [key: number]: VitalTreatmentConfigType },
     isVitalsGood: VitalsStatus,
+    isOkToProceed: boolean,
   ) => {
     const previousTimeSLot = currentTimeSlot.current
     const nextConfig = evaluateVitals(
       currentTimeSlot.current,
       isVitalsGood,
       setCurrentTimeSlot,
+      isOkToProceed,
     )
     const newConfig = { ...vitalTreatmentConfigAction }
 
@@ -62,6 +74,17 @@ export default (vitalSigns: any, form?: any, isActualNoteView = false) => {
       }
     }
 
+    if (form) {
+      const vitalSigns: VitalSignData[] = form.getValues('vitalSigns')
+      if (vitalSigns.length > 0) {
+        vitalSigns[0].label =
+          newConfig[Number(vitalSigns[0].timeSlot)].treatmentLabel
+        vitalSigns[0].information =
+          newConfig[Number(vitalSigns[0].timeSlot)].information
+        form.setValue('vitalSigns', [...vitalSigns])
+      }
+    }
+
     if (nextConfig.discharge && form) {
       form.setValue(
         'dischargeTime',
@@ -76,7 +99,12 @@ export default (vitalSigns: any, form?: any, isActualNoteView = false) => {
   const generateVitalMessages = (_vitalSigns: any) => {
     const newConfig = generateVitalsAddButton(
       { ...buttonConfig },
-      isCurrentVitalsGood(+_vitalSigns[0].systolic, +_vitalSigns[0].diastolic),
+      isCurrentVitalsGood(
+        +_vitalSigns[0].systolic,
+        +_vitalSigns[0].diastolic,
+        _vitalSigns[0].isOkToProceed,
+      ),
+      _vitalSigns[0].isOkToProceed === 'true',
     )
     setButtonConfig({ ...newConfig })
   }
@@ -101,22 +129,23 @@ export default (vitalSigns: any, form?: any, isActualNoteView = false) => {
     }
   }, [appId])
 
+  const shouldUseVitalsFirstTime = () =>
+    vitalSigns.length > 0 && isFirstTime.current
+
   useEffect(() => {
-    if (isActualNoteView || (vitalSigns.length > 0 && isFirstTime.current)) {
+    if (shouldUseVitalsFirstTime()) {
       prevAppId.current = appId
-      let nextConfig = isActualNoteView
-        ? {
-            0: {
-              showMessage: false,
-              treatmentLabel: 'Prior to Treatment',
-            },
-          }
-        : { ...buttonConfig }
-      vitalSigns.reverse().forEach((item: any, index: any) => {
-        if (item.appId === appId) {
+      let nextConfig = { ...buttonConfig }
+      vitalSigns.toReversed().forEach((item, index) => {
+        if (item?.appId === appId) {
           const newConfig = generateVitalsAddButton(
             { ...nextConfig },
-            isCurrentVitalsGood(+item.systolic, +item.diastolic),
+            isCurrentVitalsGood(
+              +item.systolic,
+              +item.diastolic,
+              item?.isOkToProceed ?? 'false',
+            ),
+            item?.isOkToProceed === 'true',
           )
           nextConfig = { ...nextConfig, ...newConfig }
           isFirstTime.current = vitalSigns.length - 1 !== index

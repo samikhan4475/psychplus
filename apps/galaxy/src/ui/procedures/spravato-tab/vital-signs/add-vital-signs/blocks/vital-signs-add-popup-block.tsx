@@ -5,13 +5,17 @@ import { cn } from '@/utils'
 import { AddVitalSignsForm } from './add-vital-signs-form'
 import { AddVitalSignsTable } from './add-vital-signs-table'
 
+interface VitalSignsAddPopupProps {
+  disabled?: boolean
+  generateVitalButtons: (vitalSigns: []) => void
+  timeSlot: number
+}
+
 const VitalSignsAddPopup = ({
   disabled = false,
   generateVitalButtons,
-}: {
-  disabled?: boolean
-  generateVitalButtons: (vitalSigns: []) => void
-}) => {
+  timeSlot,
+}: VitalSignsAddPopupProps) => {
   const [addNewRecord, setAddNewRecord] = useState(false)
 
   return (
@@ -56,6 +60,7 @@ const VitalSignsAddPopup = ({
               <AddVitalSignsForm
                 generateVitalButtons={generateVitalButtons}
                 closeNewRecord={() => setAddNewRecord(false)}
+                timeSlot={timeSlot}
               />
             )}
           </Flex>

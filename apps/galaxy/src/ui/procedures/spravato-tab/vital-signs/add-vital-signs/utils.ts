@@ -39,8 +39,12 @@ export const evaluateVitals = (
   currentTimeSlot: number,
   isCurrentVitalsGood: VitalsStatus,
   setCurrentTimeSlot: (value: number) => void,
+  isOkToProceed: boolean,
 ) => {
   const isGood = isCurrentVitalsGood === VitalsStatus.GOOD
+  const priorToTreatmentInfo = isGood
+    ? "Prior to treatment, the patient's vital signs were assessed and it was determined safe to proceed with treatment."
+    : 'Prior to treatment, the patient’s vital signs were assessed and it was determined UNSAFE to proceed with treatment.'
 
   switch (currentTimeSlot) {
     case VitalTime.PriorTreatment:
@@ -51,9 +55,9 @@ export const evaluateVitals = (
         treatmentLabel: isGood
           ? '40 Minutes into Treatment'
           : 'Prior to Treatment',
-        information: isGood
-          ? "Prior to treatment, the patient's vital signs were assessed and it was determined safe to proceed with treatment."
-          : 'Prior to treatment, the patient’s vital signs were assessed and it was determined UNSAFE to proceed with treatment.',
+        information: isOkToProceed
+          ? "The patient's elevated blood pressure was reviewed with the provider, who determined that the benefits of continuing treatment outweigh the risks. The potential risks were discussed with the patient, and the patient agreed to proceed with treatment"
+          : priorToTreatmentInfo,
         treatmentStatus: isGood
           ? TREATMENT_STATUS.Success
           : TREATMENT_STATUS.Error,

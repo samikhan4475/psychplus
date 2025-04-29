@@ -39,6 +39,7 @@ const spravatoWidgetSchema = z
     otherText: z.string().optional(),
     eventResolution: z.string().optional(),
     plan: z.array(z.string()),
+    isOkToProceed: z.string().optional(),
     continueWithCurrentProtocolBlock: z
       .object({
         treatmentFrequency: z.string().optional(),
@@ -75,6 +76,10 @@ const spravatoWidgetSchema = z
         heartRate: z.string(),
         respiratoryRate: z.string(),
         pulseOximetry: z.string(),
+        timeSlot: z.string().optional(),
+        isOkToProceed: z.string().optional(),
+        label: z.string().optional(),
+        information: z.string().optional(),
       }),
     ),
     newVitalSign: z
