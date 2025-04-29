@@ -8,9 +8,10 @@ import { useHasPermission } from '@/hooks'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { useStore } from '@/store'
 import { cn } from '@/utils'
+import { InboxLink } from './inbox-link'
 import { PatientLookupDropdown } from './patient-lookup-dropdown'
 
-const NavigationLinks = () => {
+const NavigationLinks = ({ count }: { count: number }) => {
   const hasPermission = useHasPermission('mainTabManagementPermission')
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr11786EnableGalaxySecondPhaseFeatures,
@@ -23,32 +24,42 @@ const NavigationLinks = () => {
   const isRCMFlagEnabled = useFeatureFlagEnabled(
     MAIN_PAGE_FEATURE_FLAGS.ehr7246EnableClaimManagementTab,
   )
+
   return (
-    <Flex>
-      <NavigationLink href="/" label="Schedule" />
-      <NavigationLink href="/patient-lookup" label="Patient Lookup" />
-      <NavigationLink href="/rx" label="Rx" />
-      {hasPermission && (
-        <NavigationLink href="/management" label="Management" />
-      )}
-      {isRCMFlagEnabled && (
-        <NavigationLink href="/revenue-cycle" label="Revenue Cycle" />
-      )}
+    <Flex
+      align="center"
+      justify="between"
+      py="1"
+      px="5"
+      className="text-white bg-accent-11"
+    >
+      <Flex>
+        <NavigationLink href="/" label="Schedule" />
+        <NavigationLink href="/patient-lookup" label="Patient Lookup" />
+        <NavigationLink href="/rx" label="Rx" />
+        {hasPermission && (
+          <NavigationLink href="/management" label="Management" />
+        )}
+        {isRCMFlagEnabled && (
+          <NavigationLink href="/revenue-cycle" label="Revenue Cycle" />
+        )}
 
-      {isFeatureFlagEnabled && (
-        <>
-          <NavigationLink href="/experience" label="Experience" />
-          <NavigationLink
-            href="/pre-visit-assessment"
-            label="Pre-visit Assessment"
-          />
-        </>
-      )}
-      <NavigationLink href="/auto-text" label="Auto Text" />
+        {isFeatureFlagEnabled && (
+          <>
+            <NavigationLink href="/experience" label="Experience" />
+            <NavigationLink
+              href="/pre-visit-assessment"
+              label="Pre-visit Assessment"
+            />
+          </>
+        )}
+        <NavigationLink href="/auto-text" label="Auto Text" />
 
-      {isAvfeatureFlagEnabled && (
-        <NavigationLink href="/call" label="Audio/Video" />
-      )}
+        {isAvfeatureFlagEnabled && (
+          <NavigationLink href="/call" label="Audio/Video" />
+        )}
+      </Flex>
+      <InboxLink href="/inbox" label="Inbox" inboxCountTotal={count} />
     </Flex>
   )
 }

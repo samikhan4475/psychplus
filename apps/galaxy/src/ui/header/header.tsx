@@ -2,9 +2,9 @@ import { PlusCircledIcon } from '@radix-ui/react-icons'
 import { Button, Flex } from '@radix-ui/themes'
 import { getUserInitialInformationAction } from '@/actions/get-users-initial-information'
 import { NavLogo } from '@/components'
+import { NotificationProvider } from '@/providers/notification-listener'
 import { AddPatient } from '../patient/add-patient'
 import { AddVisit } from '../visit/add-visit'
-import { InboxLink } from './inbox-link'
 import { NavigationLinks } from './navigation-links'
 import { NavigationTabs } from './navigation-tabs'
 import { ScrollAlert } from './scroll-alert'
@@ -56,17 +56,10 @@ const Header = async () => {
           </Flex>
         </Flex>
       </header>
-      <Flex
-        align="center"
-        justify="between"
-        py="1"
-        px="5"
-        className="text-white bg-accent-11"
-      >
-        <NavigationLinks />
-        <InboxLink href="/inbox" label="Inbox" inboxCountTotal={count} />
-      </Flex>
+
+      <NavigationLinks count={count} />
       <NavigationTabs />
+      <NotificationProvider />
     </>
   )
 }

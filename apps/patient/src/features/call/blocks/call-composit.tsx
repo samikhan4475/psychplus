@@ -47,7 +47,7 @@ const CallCompositeContainer = ({ acsInfo, username }: Props) => {
       patientName: { firstName, lastName },
       callSessionId: acsInfo.callSessionId,
     })
-  }, 1000)
+  }, 3000)
 
   useEffect(() => {
     callAdapter?.onStateChange((state) => {
@@ -60,6 +60,8 @@ const CallCompositeContainer = ({ acsInfo, username }: Props) => {
         if (connected && remoteParticipants.length === 0) {
           router.push('/')
         }
+      } else if (state?.call?.state === 'Disconnecting') {
+        router.push('/')
       }
     })
   }, [

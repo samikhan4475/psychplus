@@ -84,7 +84,7 @@ const AppointmentInfo = ({
           className="bg-pp-bg-accent"
         />
         <Flex direction={'column'}>
-          <Text className="inline-block select-none text-[11px] font-bold">
+          <Text className="inline-block select-none text-[11px] font-bold max-w-[150px] truncate">
             {appointment.sv}
           </Text>
           <JoinTime appointment={appointment} />

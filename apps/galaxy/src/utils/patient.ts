@@ -184,6 +184,14 @@ const getMaskedSSN = (ssn?: string): string | undefined => {
   return ssn.replace(/\D/g, '').replace(/(\d{3})(\d{3})(\d{3})/, '$1-$2-$3')
 }
 
+const getTruncatedName = (name: string | undefined, length = 30): string => {
+  if (!name) return ''
+  if (name.length > length) {
+    return name.slice(0, length - 3) + '...'
+  }
+  return name
+}
+
 export {
   getPatientFirstName,
   getPatientLastName,
@@ -205,4 +213,5 @@ export {
   getPatientStreet,
   filterDefaultCosigner,
   getMaskedSSN,
+  getTruncatedName,
 }
