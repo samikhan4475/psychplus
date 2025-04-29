@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import * as React from 'react'
@@ -103,14 +104,15 @@ const ConfirmationPage = () => {
                 </Text>
               )}
             </Flex>
-            <Flex className="w-1/2" justify="end" align="end">
+            
+            {/* <Flex className="w-1/2" justify="end" align="end">
               <button
                 className="w-[70%] rounded-[100px] border py-[10px] text-[14px] sm:w-[50%]"
                 onClick={() => window.open(googleEventLink, '_blank')}
               >
                 Add to Calendar
               </button>
-            </Flex>
+            </Flex> */}
           </Flex>
           {bookedSlotState?.type === 'In-Person' &&
             NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN && (

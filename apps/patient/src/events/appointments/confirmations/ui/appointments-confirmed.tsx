@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import React, { useMemo } from 'react'
@@ -77,7 +78,7 @@ const AppointmentsConfirmed = ({ mapKey }: AppointmentsConfirmedProps) => {
           gap="3"
         >
           <AppointmentLocationDetails />
-          {appointment.type === AppointmentType.Virtual && (
+          {/* {appointment.type === AppointmentType.Virtual && (
             <Flex
               justify="start"
               align="end"
@@ -91,7 +92,7 @@ const AppointmentsConfirmed = ({ mapKey }: AppointmentsConfirmedProps) => {
                 listItems={CALENDER_ITEMS}
               />
             </Flex>
-          )}
+          )} */}
         </Flex>
 
         {appointment.type === AppointmentType.InPerson && (

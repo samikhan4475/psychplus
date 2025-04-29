@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import NextLink from 'next/link'
@@ -26,7 +27,8 @@ const ConfirmAppointment = ({
   bookedSlot,
   mapKey,
 }: ConfirmedAppointmentProps) => {
-  const { specialist, clinic, slot, appointmentType, newProviderType } = bookedSlot
+  const { specialist, clinic, slot, appointmentType, newProviderType } =
+    bookedSlot
 
   const appointmentConfirmationNotes =
     CONFIRMATION_NOTES.find((c) => c.appointmentType === appointmentType)
@@ -38,6 +40,7 @@ const ConfirmAppointment = ({
     specialist.legalName.honors ? `, ${specialist.legalName.honors}` : ''
   }`
   const startDate = slot?.startDate
+
   const calenderEvent = {
     title: `Appointment with ${specialistName}`,
     startTime: new Date(startDate),
@@ -79,7 +82,9 @@ const ConfirmAppointment = ({
 
             <Flex gap="5">
               <Text weight="medium" className="text-[13px] text-[#194595]">
-                {getNewProviderTypeLabel(newProviderType || '').toLocaleUpperCase()}
+                {getNewProviderTypeLabel(
+                  newProviderType || '',
+                ).toLocaleUpperCase()}
               </Text>
               <Text weight="medium" className="text-[13px] text-[#194595]">
                 {getAppointmentTypeLabel(appointmentType).toLocaleUpperCase()}
@@ -123,7 +128,7 @@ const ConfirmAppointment = ({
               )}
             </Flex>
 
-            <Flex className="w-1/2" justify="end" align="end">
+            {/* <Flex className="w-1/2" justify="end" align="end">
               <AddToCalendar
                 event={calenderEvent}
                 buttonLabel="Add to Calendar"
@@ -131,7 +136,7 @@ const ConfirmAppointment = ({
                 dropdownClass="absolute poopover bg-[white] mt-2 border border-gray-6 rounded-5 px-4 py-2 w-[151px] z-10"
                 listItems={CALENDER_ITEMS}
               />
-            </Flex>
+            </Flex> */}
           </Flex>
 
           <Flex
