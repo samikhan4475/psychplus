@@ -26,7 +26,7 @@ import {
   CoinsuranceDueCell,
 } from './table-cells'
 
-const columns : ColumnDef<Appointment>[] = 
+const columns : ColumnDef<Appointment>[] =
    [
     {
       id: 'appointment-date',
@@ -76,6 +76,20 @@ const columns : ColumnDef<Appointment>[] =
         />
       ),
       cell: ({ row }) => <TimeCell row={row} />,
+      enableHiding: true,
+    },
+    {
+      id: 'duration',
+      accessorKey: 'appointmentDuration',
+      header: ({ column }) => (
+        <ColumnHeader
+          clientSideSort
+          className="!text-black justify-center !font-medium"
+          column={column}
+          label="Duration"
+        />
+      ),
+      cell: ({ row }) => <TextCell>{row.original.appointmentDuration}</TextCell> ,
       enableHiding: true,
     },
     {
