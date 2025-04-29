@@ -70,24 +70,6 @@ const DelusionHallucinationSection = ({
                 disabled={!!result}
               />
             </Flex>
-            <Flex
-              align="center"
-              className="bg-pp-focus-bg-2 rounded-1 pl-1"
-              gap="1"
-            >
-              <BlockLabel>{'Types'}</BlockLabel>
-              <MultiSelectField
-                onChange={(vals) =>
-                  form.setValue(multiSelectField, vals, {
-                    shouldDirty: true,
-                  })
-                }
-                options={multiSelectOptions}
-                defaultValues={chipDate as string[]}
-                hideSelectedCount={true}
-                disabled={!!result}
-              />
-            </Flex>
           </Flex>
           <ChipList
             data={chipDate as string[]}
