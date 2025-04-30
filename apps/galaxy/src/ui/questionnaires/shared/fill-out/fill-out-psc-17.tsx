@@ -13,6 +13,7 @@ import {
   transformIn,
   transformOut,
 } from '@/ui/questionnaires/psc-17-tab/form-psc-17/data'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { FilloutCurrentTab } from '..'
 
 type FilloutPsc17Props = React.PropsWithChildren<{
@@ -40,6 +41,7 @@ const FilloutPsc17 = ({ sectionName, data }: FilloutPsc17Props) => {
           <FilloutCurrentTab
             max={Object.keys(initialValue).length}
             value={totalFilledQuestions}
+            widgetId={sectionName as QuickNoteSectionName}
           >
             <QuestionnairesFormPsc17
               labels={PSC_17_LABELS}

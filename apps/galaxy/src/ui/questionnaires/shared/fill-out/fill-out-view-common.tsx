@@ -49,6 +49,7 @@ const FilloutCommon = ({ data, sectionName }: FilloutCommonProps) => {
           <FilloutCurrentTab
             max={Object.keys(initialValue).length}
             value={totalFilledQuestions}
+            widgetId={sectionName}
           >
             <QuestionnairesForm
               data={questions}

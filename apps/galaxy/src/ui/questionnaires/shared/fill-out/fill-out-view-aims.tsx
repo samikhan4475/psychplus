@@ -38,6 +38,7 @@ const FilloutAims = ({ sectionName, data }: FilloutAimsProps) => {
           <FilloutCurrentTab
             max={Object.keys(initialValue).length}
             value={totalFilledQuestions}
+            widgetId={sectionName}
           >
             <QuestionnairesFormAims
               labels={AIMS_LABELS}

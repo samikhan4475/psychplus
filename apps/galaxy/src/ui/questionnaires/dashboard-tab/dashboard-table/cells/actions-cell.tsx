@@ -1,7 +1,20 @@
+import { useParams } from 'next/navigation'
 import { Flex, Text } from '@radix-ui/themes'
 import { SendHorizontalIcon } from 'lucide-react'
+import { PropsWithRow } from '@/components'
+import {
+  QuestionnaireQuestionToSectionName,
+  sendToPatient,
+} from '@/ui/questionnaires/utils'
 
-const ActionsCell = () => {
+interface Questionnaire {
+  id: string
+  question: string
+}
+
+const ActionsCell = ({ row }: PropsWithRow<Questionnaire>) => {
+  const { id } = useParams<{ id: string }>()
+
   return (
     <Flex
       direction="row"
@@ -10,6 +23,9 @@ const ActionsCell = () => {
       px="1"
       align="center"
       gap="1"
+      onClick={() =>
+        sendToPatient(id, QuestionnaireQuestionToSectionName[row.original.id])
+      }
     >
       <SendHorizontalIcon
         height={13}

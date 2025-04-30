@@ -1,18 +1,25 @@
 import React from 'react'
+import { useParams } from 'next/navigation'
 import { Button, Flex } from '@radix-ui/themes'
 import { Input, Label } from 'react-aria-components'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { sendToPatient } from '../../utils'
 import { SaveButton } from '../save-button'
 
 type FilloutCurrentTabProps = React.PropsWithChildren<{
   max: number
   value?: number
+  widgetId: QuickNoteSectionName
 }>
 
 const FilloutCurrentTab = ({
   max,
   value,
+  widgetId,
   children,
 }: FilloutCurrentTabProps) => {
+  const { id } = useParams<{ id: string }>()
+
   return (
     <Flex maxWidth="100%" className="bg-white" px="3" py="1" direction="column">
       <Flex mt="2" direction="column">
@@ -30,7 +37,7 @@ const FilloutCurrentTab = ({
         {children}
       </Flex>
       <Flex gap="2" justify="end" mt="2">
-        {/* <Button
+        <Button
           size="1"
           color="gray"
           variant="surface"
@@ -38,10 +45,11 @@ const FilloutCurrentTab = ({
           className="h-auto p-2 text-[12px] font-[500]"
           onClick={(e) => {
             e.preventDefault()
+            sendToPatient(id, widgetId)
           }}
         >
           Request Patient to Fill
-        </Button> */}
+        </Button>
         <SaveButton isGhost />
       </Flex>
     </Flex>

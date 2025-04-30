@@ -905,6 +905,11 @@ const EDIT_SCHEDULE_REPORT_ENDPOINT = (scheduleId: string) =>
   `${API_URL}/api/reporting/schedules/${scheduleId}`
 const UPDATE_SCHEDULE_REPORT_JOB_ENDPOINT = (jobId: string) =>
   `${API_URL}/api/jobmanager/jobs/${jobId}`
+const SEND_QUESTIONNAIRE_TO_PATIENT = (
+  patientId: string,
+  questionnaireType: string,
+) =>
+  `${API_URL}/api/patients/${patientId}/questionnaires/${questionnaireType}/actions/sendnotice`
 const GET_USERS_SELF_PROOFINGS_ENDPOINT = `${API_URL}/api/userproofings/actions/search`
 const START_USERS_PROOFINGS_ENDPOINT = (userId: string) =>
   `${API_URL}/api/users/${userId}/idproofings/actions/start`
@@ -1325,6 +1330,7 @@ export {
   ENABLE_SCHEDULE_REPORT_JOB,
   EDIT_SCHEDULE_REPORT_ENDPOINT,
   UPDATE_SCHEDULE_REPORT_JOB_ENDPOINT,
+  SEND_QUESTIONNAIRE_TO_PATIENT,
   GET_USERS_SELF_PROOFINGS_ENDPOINT,
   START_USERS_PROOFINGS_ENDPOINT,
   START_SELF_PROOFINGS_ENDPOINT,

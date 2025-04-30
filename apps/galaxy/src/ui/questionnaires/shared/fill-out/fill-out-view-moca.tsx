@@ -39,6 +39,7 @@ const FilloutMoca = ({ sectionName, data }: FilloutMocaProps) => {
           <FilloutCurrentTab
             max={Object.keys(initialValue).length}
             value={totalFilledQuestions}
+            widgetId={sectionName}
           >
             <QuestionnairesFormMoca
               labels={MOCA_LABELS}

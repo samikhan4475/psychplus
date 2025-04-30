@@ -39,6 +39,7 @@ const FilloutCssrs = ({ sectionName, data }: FilloutCssrsProps) => {
           <FilloutCurrentTab
             max={Object.keys(initialValue).length}
             value={totalFilledQuestions}
+            widgetId={sectionName as QuickNoteSectionName}
           >
             <QuestionnairesFormCssrs
               labels={CSSRS_LABELS}

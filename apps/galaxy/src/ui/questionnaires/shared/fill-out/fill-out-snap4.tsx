@@ -13,6 +13,7 @@ import {
   transformIn,
   transformOut,
 } from '@/ui/questionnaires/snap-iv-tab/form-snap-iv/data'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { FilloutCurrentTab } from '../../shared'
 
 type FilloutSnap4Props = React.PropsWithChildren<{
@@ -40,6 +41,7 @@ const FilloutSnap4 = ({ sectionName, data }: FilloutSnap4Props) => {
           <FilloutCurrentTab
             max={Object.keys(initialValue).length}
             value={totalFilledQuestions}
+            widgetId={sectionName as QuickNoteSectionName}
           >
             <QuestionnairesFormSnapIv
               labels={SNAP_IV_LABELS}

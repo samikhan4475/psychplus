@@ -48,6 +48,7 @@ const FilloutYboc = ({ data, sectionName }: FillOutButtonYBocsProps) => {
           <FilloutCurrentTab
             max={Object.keys(initialValue).length}
             value={totalFilledQuestions}
+            widgetId={sectionName as QuickNoteSectionName}
           >
             <Flex maxWidth="100%" className="bg-white" p="3">
               <Flex className="flex-col">
