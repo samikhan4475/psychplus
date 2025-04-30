@@ -16,7 +16,7 @@ const AddStaffRating = async ({
 }: AddStaffRatingParams) => {
   const result = await api.POST(
     `${API_URL}/api/appointments/${appointmentId}/staffratings`,
-    { appointmentId: Number(appointmentId), rating, comment },
+    { appointmentId, rating, comment },
   )
 
   if (result.state === 'error') {
