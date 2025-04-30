@@ -1,8 +1,9 @@
 import { DateValue } from 'react-aria-components'
 import { SelectOptionType, SharedCode } from '@/types'
+import { FEATURE_TYPES } from './constants'
 import { SchemaType } from './dialogs'
 
-const getInitialValues = (): SchemaType => ({
+const getInitialValues = (id?: string, type?: string): SchemaType => ({
   bioVideo: null,
   dateOfBirth: null as unknown as DateValue,
   biography: '',
@@ -21,7 +22,7 @@ const getInitialValues = (): SchemaType => ({
   virtualRoomLink: '',
   providerAttributions: [],
   staffUserRoleIds: [''],
-  organizationIds: [''],
+  organizationIds: type === FEATURE_TYPES.ORGANIZATION ? [id ?? ''] : [''],
   practiceIds: [''],
   isTest: false,
   staffType: '',

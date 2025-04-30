@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import {
   FormFieldContainer,
@@ -6,27 +6,58 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
-import { getOptionLabel } from '@/utils'
-import { useStore } from '../../store'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
+import { SelectOptionType } from '@/types'
+import { getOrganizationStaffRolesOptionsAction } from '../../actions'
 import { SchemaType } from './schema'
 
 const StaffTypeSelect = () => {
   const form = useFormContext<SchemaType>()
-  const staffs = useStore((state) => state.dropDownOptions.staffs)
-  const staffRole = form.watch('staffUserRoleIds.0')
-  const filteredOptions = staffs.filter((staff) => staff.value === staffRole)
+  const codes = useCodesetCodes(CODESETS.UserActorCategory)
+  const [organizations, setOrganizations] = useState<SelectOptionType[]>([])
+  const [loading, setLoading] = useState(false)
+  const [disabled, setDisabled] = useState(true)
+  const staffUserRoleIds = form.watch('staffUserRoleIds.0')
+
+  useEffect(() => {
+    ;(async () => {
+      if (staffUserRoleIds) {
+        setDisabled(false)
+        setLoading(true)
+        const result = await getOrganizationStaffRolesOptionsAction({
+          payload: {
+            roleIds: [staffUserRoleIds],
+          },
+          category: true,
+        })
+        if (result.state === 'success') {
+          form.setValue('staffType', result.data[0].value, {
+            shouldValidate: true,
+          })
+          const match = codes.find(
+            (code) => code.value === result.data[0].value,
+          )
+          if (match) {
+            result.data[0].label = match.display
+          }
+          setOrganizations(result.data)
+        }
+        setLoading(false)
+      }
+    })()
+  }, [staffUserRoleIds])
+
   return (
     <FormFieldContainer>
       <FormFieldLabel required>Staff Type</FormFieldLabel>
       <SelectInput
-        options={filteredOptions}
+        options={organizations}
         field="staffType"
-        onValueChange={(val) => {
-          const label = getOptionLabel(filteredOptions, val)
-          form.setValue('staffType', val)
-          form.setValue('staffTypeLabel', label)
-        }}
-        disabled={!filteredOptions?.length || !staffRole}
+        placeholder="Select"
+        loading={loading}
+        disabled={disabled}
+        className="w-full"
         buttonClassName="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
       />
       <FormFieldError name="staffType" />

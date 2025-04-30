@@ -95,6 +95,8 @@ interface Staff {
   hasBioVideo?: boolean
   timeZonePreference: string
   isMailingAddressSameAsPrimary?: boolean
+  organizationsIds?: string[]
+  practicesIds?: string[]
 }
 
 interface StaffSearchParams extends Staff {

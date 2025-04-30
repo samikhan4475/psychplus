@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex } from '@radix-ui/themes'
 import { DateValue } from 'react-aria-components'
@@ -9,6 +10,7 @@ import z from 'zod'
 import { FormContainer } from '@/components'
 import { formatDate, formatDateToISOString, sanitizeFormData } from '@/utils'
 import ClearButton from './clear-button'
+import { FEATURE_TYPES } from './constants'
 import { transformOut } from './data'
 import { Filters } from './filters'
 import { FiltersToggleButton } from './filters-toggle-button'
@@ -40,6 +42,7 @@ const schema = z.object({
 type SchemaType = z.infer<typeof schema>
 
 const StaffFilterForm = () => {
+  const { id, type } = useParams<{ id: string; type: string }>()
   const { search, showFilters } = useStore((state) => ({
     search: state.search,
     showFilters: state.showFilters,
@@ -65,8 +68,8 @@ const StaffFilterForm = () => {
       staffType: '',
       spokenLanguage: '',
       providerType: '',
-      organizationsIds: [''],
-      practicesIds: [''],
+      organizationsIds: type === FEATURE_TYPES.ORGANIZATION ? [id] : [''],
+      practicesIds: type === FEATURE_TYPES.ORGANIZATION ? [id] : [''],
       providerAttributionCodes: [],
     },
   })

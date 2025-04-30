@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'
@@ -15,6 +15,7 @@ import { useStore as useRootStore } from '@/store'
 import { Sort } from '@/types'
 import { getSortDir } from '@/utils'
 import { ActionsCell, CollapseCell } from './cells'
+import { FEATURE_TYPES } from './constants'
 import { useStore } from './store'
 import { Staff } from './types'
 
@@ -348,7 +349,7 @@ const columns = (
 
 const StaffListTable = () => {
   const router = useRouter()
-
+  const { id, type } = useParams<{ id: string; type: string }>()
   const addTab = useRootStore((state) => state.addTab)
 
   const { data, search, loading, sort, sortData, getDropDownOptions } =
@@ -362,7 +363,10 @@ const StaffListTable = () => {
     }))
 
   useEffect(() => {
-    search({})
+    search({
+      organizationsIds: type === FEATURE_TYPES.ORGANIZATION ? [id] : [],
+      practicesIds: type === FEATURE_TYPES.PRACTICE ? [id] : [],
+    })
     getDropDownOptions()
   }, [])
   if (loading) {

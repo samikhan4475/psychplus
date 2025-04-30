@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
 import { useFormContext } from 'react-hook-form'
 import {
   FormFieldContainer,
@@ -6,12 +7,33 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
-import { useStore } from '../../store'
+import { SelectOptionType } from '@/types'
+import { getOrganizationStaffRolesOptionsAction } from '../../actions'
 import { SchemaType } from './schema'
 
 const StaffRoleSelect = () => {
   const form = useFormContext<SchemaType>()
-  const roles = useStore((state) => state.dropDownOptions.roles)
+  const { id } = useParams<{ id: string }>()
+  const [organizations, setOrganizations] = useState<SelectOptionType[]>([])
+  const [loading, setLoading] = useState(false)
+  const [disabled, setDisabled] = useState(true)
+
+  useEffect(() => {
+    ;(async () => {
+      setDisabled(false)
+      setLoading(true)
+      const result = await getOrganizationStaffRolesOptionsAction({
+        payload: {
+          organizationId: id,
+          IsIncludeOrganizationSpecific: !!id,
+        },
+      })
+      if (result.state === 'success') {
+        setOrganizations(result.data)
+      }
+      setLoading(false)
+    })()
+  }, [])
   return (
     <FormFieldContainer>
       <FormFieldLabel required>Role</FormFieldLabel>
@@ -20,8 +42,10 @@ const StaffRoleSelect = () => {
           form.setValue('staffUserRoleIds.0', value)
           form.setValue('staffType', '')
         }}
-        options={roles}
+        options={organizations}
         buttonClassName="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
+        loading={loading}
+        disabled={disabled}
       />
       <FormFieldError name="staffUserRoleIds.[0]" />
     </FormFieldContainer>

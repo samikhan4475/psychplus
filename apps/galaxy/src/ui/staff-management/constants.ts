@@ -2,8 +2,14 @@ const STAFF_LIST_TABLE_PAGE_SIZE = 10
 const STAFF_BIO_VIDEO_MAX_SIZE = 4
 const STAFF_BIO_VIDEO_SIZE_ERROR = `Video size exceeds the allowed limit of ${STAFF_BIO_VIDEO_MAX_SIZE}MB.`
 
+enum FEATURE_TYPES {
+  ORGANIZATION = 'organizations',
+  PRACTICE = 'practices',
+}
+
 export {
   STAFF_LIST_TABLE_PAGE_SIZE,
   STAFF_BIO_VIDEO_MAX_SIZE,
   STAFF_BIO_VIDEO_SIZE_ERROR,
+  FEATURE_TYPES,
 }

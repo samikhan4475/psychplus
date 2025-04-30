@@ -14,6 +14,7 @@ type OrganizationsSearchParams = {
   payload: {
     organizationId?: string
     roleIds?: string[]
+    IsIncludeOrganizationSpecific?: boolean
   }
   category?: boolean
 }

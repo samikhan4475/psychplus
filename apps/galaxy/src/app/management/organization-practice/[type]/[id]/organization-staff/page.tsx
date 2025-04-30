@@ -1,8 +1,8 @@
 import { GOOGLE_MAPS_API_KEY } from '@/constants'
-import { OrganizationStaffView } from '@/ui/organization-staff'
+import { StaffManagementView } from '@/ui/staff-management'
 
 const OrganizationStaffPage = () => {
-  return <OrganizationStaffView googleApiKey={GOOGLE_MAPS_API_KEY} />
+  return <StaffManagementView googleApiKey={GOOGLE_MAPS_API_KEY} />
 }
 
 export default OrganizationStaffPage

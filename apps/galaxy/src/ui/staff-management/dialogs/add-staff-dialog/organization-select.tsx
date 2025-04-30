@@ -1,23 +1,27 @@
 'use client'
 
 import React from 'react'
+import { useParams } from 'next/navigation'
 import {
+  AsyncSelect,
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
-  SelectInput,
 } from '@/components'
-import { useStore } from '../../store'
+import { getOrganizationOptionsAction } from '../../actions'
+import { FEATURE_TYPES } from '../../constants'
 
 const OrganizationSelect = () => {
-  const organizations = useStore((state) => state.dropDownOptions.organizations)
+  const { id, type } = useParams<{ id: string; type: string }>()
 
   return (
     <FormFieldContainer>
       <FormFieldLabel required>Primary Organization</FormFieldLabel>
-      <SelectInput
-        options={organizations}
-        disabled={organizations.length === 0}
+      <AsyncSelect
+        disabled={FEATURE_TYPES.ORGANIZATION === type}
+        fetchOptions={() =>
+          getOrganizationOptionsAction({ payload: { organizationId: id } })
+        }
         field="organizationIds.[0]"
         buttonClassName="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
       />
