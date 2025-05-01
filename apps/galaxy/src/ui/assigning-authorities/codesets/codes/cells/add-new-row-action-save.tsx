@@ -18,13 +18,7 @@ const AddNewRowActionSave = () => {
   const form = useFormContext<SchemaType>()
   const newCodesetCode = form?.watch('newCodesetCode')
 
-  if (
-    !selectedAssigningAuthority ||
-    !newCodesetCode ||
-    !selectedCodesetCodes ||
-    !form
-  )
-    return
+  if (!selectedAssigningAuthority || !newCodesetCode || !form) return
 
   const onSave = async () => {
     const isValid = await form.trigger('newCodesetCode')
@@ -57,10 +51,10 @@ const AddNewRowActionSave = () => {
     form.reset({ ...form.getValues(), newCodesetCode: undefined })
     setSaving(false)
 
-    await updateCurrentPageData({
-      ...selectedCodesetCodes,
-      codes: [response.data, ...(selectedCodesetCodes?.codes ?? [])],
-    })
+    await updateCurrentPageData([
+      response.data,
+      ...(selectedCodesetCodes ?? []),
+    ])
 
     toast.success('saved')
   }

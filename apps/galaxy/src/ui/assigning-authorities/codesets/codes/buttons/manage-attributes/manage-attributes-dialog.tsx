@@ -11,7 +11,6 @@ import { ManageAttributesForm } from './manage-attributes-form'
 const ManageAttributesButton = ({ code }: { code: Code }) => {
   const { setSelectedCode } = useStore()
   const [isOpen, setIsOpen] = useState(false)
-  const handleClose = () => setIsOpen(false)
 
   return (
     <Dialog.Root
@@ -42,7 +41,7 @@ const ManageAttributesButton = ({ code }: { code: Code }) => {
           </Dialog.Close>
         </Flex>
 
-        <ManageAttributesForm onClose={handleClose} />
+        <ManageAttributesForm />
       </Dialog.Content>
     </Dialog.Root>
   )

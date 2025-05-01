@@ -57,7 +57,7 @@ const EditableRowActionSave = ({ row }: PropsWithRow<Code>) => {
     if (response.state === 'error')
       return toast.error(response.error ?? 'Error while updating code')
 
-    const updatedCodes = selectedCodesetCodes.codes.map((code) =>
+    const updatedCodes = selectedCodesetCodes.map((code) =>
       code.id === editableCodesetCode.id
         ? { ...code, displayName: editableCodesetCode.displayName }
         : code,
@@ -65,10 +65,7 @@ const EditableRowActionSave = ({ row }: PropsWithRow<Code>) => {
 
     form.reset({ ...form.getValues(), editableCodesetCode: undefined })
 
-    await updateCurrentPageData({
-      ...selectedCodesetCodes,
-      codes: updatedCodes,
-    })
+    await updateCurrentPageData(updatedCodes)
 
     toast.success('saved')
   }

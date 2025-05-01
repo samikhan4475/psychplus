@@ -20,6 +20,7 @@ const CodesetsDropdown = ({
     setSelectedCodeset,
     selectedAssigningAuthority,
     fetchSelectedCodesetCodes,
+    pageSize,
   } = useStore()
 
   const [loading, setLoading] = useState<boolean>()
@@ -44,7 +45,7 @@ const CodesetsDropdown = ({
   }, [selectedAssigningAuthority])
 
   useEffect(() => {
-    if (selectedCodeset) fetchSelectedCodesetCodes()
+    if (selectedCodeset) fetchSelectedCodesetCodes(1, pageSize, true)
   }, [selectedCodeset])
 
   return (

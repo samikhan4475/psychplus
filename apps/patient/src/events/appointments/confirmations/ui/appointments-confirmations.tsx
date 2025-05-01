@@ -121,7 +121,7 @@ const AppointmentsConfirmations = () => {
 
       <FormContainer form={form} onSubmit={() => {}}>
         {appointment.isPatientNeedsToAcceptPolicies && (
-          <Flex gap="2" direction="column" my="4">
+          <Flex gap="2" direction="column" mt="4">
             <FormFieldContainer>
               <Flex direction="row" gap="2" align="center">
                 <Checkbox
@@ -151,7 +151,10 @@ const AppointmentsConfirmations = () => {
           </Flex>
         )}
 
-        <Flex className="w-full flex-col-reverse items-center justify-between gap-3 sm:flex-row">
+        <Flex
+          className="w-full flex-col-reverse items-center justify-between gap-3 sm:flex-row"
+          mt="4"
+        >
           <Box className="w-full">
             <Button
               className="text-black w-full"

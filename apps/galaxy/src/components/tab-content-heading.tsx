@@ -20,8 +20,10 @@ const TabContentHeading = ({
       p="2"
       className={cn('bg-white -mt-[1px] border border-gray-5', className)}
     >
-      {beforeTitle && <Flex mr="2">{beforeTitle}</Flex>}
-      <Text className="text-[16px] font-[600] text-accent-12">{title}</Text>
+      <Flex>
+        {beforeTitle && <Flex mr="2">{beforeTitle}</Flex>}
+        <Text className="text-[16px] font-[600] text-accent-12">{title}</Text>
+      </Flex>
       {children}
     </Flex>
   )

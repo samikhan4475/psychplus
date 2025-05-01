@@ -1,6 +1,7 @@
 import toast from 'react-hot-toast'
 import { create } from 'zustand'
-import { getCodesetCodes, GetCodesetCodesResponse } from './actions'
+import { getCodesetCodes } from './actions'
+import { CODESET_CODES_TABLE_PAGE_SIZE } from './codesets'
 import { AssigningAuthority, Code, Codeset } from './types'
 
 interface Store {
@@ -13,23 +14,28 @@ interface Store {
   assigningAuthorities: AssigningAuthority[]
   selectedAssigningAuthority: AssigningAuthority | undefined
   selectedCodeset: Codeset | undefined
-  selectedCodesetCodes: GetCodesetCodesResponse | undefined
+  selectedCodesetCodes: Code[]
   selectedCode: Code | undefined
   page: number
-  pageCache: Record<number, GetCodesetCodesResponse | undefined>
+  pageSize: number
+  total?: number
+  pageCache: Record<number, Code[] | undefined>
   next: () => void
   prev: () => void
   jumpToPage: (page: number) => void
+  onPageSizeChange: (pageSize: number) => void
   setAssigningAuthorities: (assigningAuthorities: AssigningAuthority[]) => void
   setSelectedAssigningAuthority: (
     selectedAssigningAuthority: AssigningAuthority | undefined,
   ) => void
   setSelectedCodeset: (selectedCodeset: Codeset | undefined) => void
   setSelectedCode: (selectedCode: Code | undefined) => void
-  fetchSelectedCodesetCodes: (page?: number, reset?: boolean) => void
-  updateCurrentPageData: (
-    updatedCodesetCodes: GetCodesetCodesResponse | undefined,
-  ) => Promise<void>
+  fetchSelectedCodesetCodes: (
+    page?: number,
+    pageSize?: number,
+    reset?: boolean,
+  ) => void
+  updateCurrentPageData: (updatedCodesetCodes: Code[]) => Promise<void>
 }
 
 const useStore = create<Store>((set, get) => ({
@@ -42,9 +48,11 @@ const useStore = create<Store>((set, get) => ({
   manageAttributes: [],
   selectedAssigningAuthority: undefined,
   selectedCodeset: undefined,
-  selectedCodesetCodes: undefined,
+  selectedCodesetCodes: [],
   selectedCode: undefined,
   page: 1,
+  total: undefined,
+  pageSize: CODESET_CODES_TABLE_PAGE_SIZE,
   pageCache: {},
   setError: (error) => set({ error }),
   setSaving: (saving) => set({ saving }),
@@ -55,26 +63,39 @@ const useStore = create<Store>((set, get) => ({
   setSelectedCodeset: (selectedCodeset) => set({ selectedCodeset }),
   setSelectedCode: (selectedCode) => set({ selectedCode }),
   updateCurrentPageData: async (updatedCodesetCodes) => {
-    const { page, pageCache } = get()
+    const { page, pageCache, total, selectedCodesetCodes } = get()
     set({
       selectedCodesetCodes: updatedCodesetCodes,
       pageCache: {
         ...pageCache,
         [page]: updatedCodesetCodes,
       },
+      total:
+        updatedCodesetCodes?.length > selectedCodesetCodes?.length && total
+          ? total + 1
+          : total,
     })
   },
-  fetchSelectedCodesetCodes: async (page = 1, reset = false) => {
+  fetchSelectedCodesetCodes: async (
+    page = 1,
+    pageSize = CODESET_CODES_TABLE_PAGE_SIZE,
+    reset = false,
+  ) => {
     const { selectedAssigningAuthority, selectedCodeset } = get()
     if (!selectedAssigningAuthority || !selectedCodeset)
       return set({ loading: false })
 
-    set({ loading: true, error: '' })
+    set({
+      loading: true,
+      page: 1,
+      pageSize: CODESET_CODES_TABLE_PAGE_SIZE,
+    })
 
     const response = await getCodesetCodes({
       assigningAuthorityId: selectedAssigningAuthority?.id,
       codesetId: selectedCodeset?.id,
       page,
+      pageSize,
     })
 
     if (response.state === 'error') {
@@ -88,11 +109,17 @@ const useStore = create<Store>((set, get) => ({
     set({
       selectedCodesetCodes: response.data,
       loading: false,
+      total: response.total,
       pageCache: reset
         ? { [page]: response.data }
         : { ...get().pageCache, [page]: response.data },
       page,
+      pageSize,
     })
+  },
+  onPageSizeChange: (pageSize: number) => {
+    set({ pageSize, page: 1, pageCache: {} })
+    get().fetchSelectedCodesetCodes(1, get().pageSize)
   },
   next: () => {
     const page = get().page + 1
@@ -102,17 +129,18 @@ const useStore = create<Store>((set, get) => ({
         page,
       })
     }
-    get().fetchSelectedCodesetCodes(page)
+    get().fetchSelectedCodesetCodes(page, get().pageSize)
   },
   prev: () => {
     const page = get().page - 1
+    if (page < 1) return
     if (get().pageCache[page]) {
       return set({
         selectedCodesetCodes: get().pageCache[page],
         page,
       })
     }
-    get().fetchSelectedCodesetCodes(page)
+    get().fetchSelectedCodesetCodes(page, get().pageSize)
   },
   jumpToPage: (page: number) => {
     if (page < 1) {
@@ -126,7 +154,7 @@ const useStore = create<Store>((set, get) => ({
       })
     }
 
-    get().fetchSelectedCodesetCodes(page)
+    get().fetchSelectedCodesetCodes(page, get().pageSize)
   },
 }))
 

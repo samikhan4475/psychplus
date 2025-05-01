@@ -27,9 +27,9 @@ const CodesTable = () => {
   const editableCodesetCode = form.watch('editableCodesetCode')
 
   const memoizedData = useMemo(() => {
-    const codes = selectedCodesetCodes?.codes || []
+    const codes = selectedCodesetCodes || []
     return newCodesetCode !== undefined ? [newCodesetCode, ...codes] : codes
-  }, [newCodesetCode, selectedCodesetCodes?.codes])
+  }, [newCodesetCode, selectedCodesetCodes])
 
   const columns = useMemo(
     () => createColumns(editableCodesetCode),

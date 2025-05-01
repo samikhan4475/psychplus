@@ -40,11 +40,7 @@ const schema = z.object({
 
 type SchemaType = z.infer<typeof schema>
 
-interface AddAssigningAuthorityFormProps {
-  onClose: () => void
-}
-
-const ManageAttributesForm = ({ onClose }: AddAssigningAuthorityFormProps) => {
+const ManageAttributesForm = () => {
   const {
     selectedCode,
     saving,
@@ -117,17 +113,13 @@ const ManageAttributesForm = ({ onClose }: AddAssigningAuthorityFormProps) => {
             ),
     }
 
-    const updatedCodesetCodes = (selectedCodesetCodes?.codes ?? []).map(
-      (code) => (code.id === selectedCode?.id ? updatedCode : code),
+    const updatedCodesetCodes = (selectedCodesetCodes ?? []).map((code) =>
+      code.id === selectedCode?.id ? updatedCode : code,
     )
 
     setSelectedCode(updatedCode)
 
-    await updateCurrentPageData({
-      ...selectedCodesetCodes,
-      codes: updatedCodesetCodes,
-      total: selectedCodesetCodes?.total ?? 0,
-    })
+    await updateCurrentPageData(updatedCodesetCodes)
 
     form.reset({ id: '', value: '', name: '' })
   }
