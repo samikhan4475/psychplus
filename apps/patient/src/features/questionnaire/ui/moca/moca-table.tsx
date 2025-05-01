@@ -28,7 +28,7 @@ const MocaTable = ({
         {labels.map((label, index) => (
           <Box
             key={label}
-            className={index === 0 ? 'w-1/2' : 'flex-1 text-left'}
+            className={index === 0 ? 'w-full sm:w-1/2' : 'flex-1 text-left'}
           >
             <Text weight="medium" size="2" className="line-clamp-4">
               {label}
@@ -56,7 +56,7 @@ const MocaTable = ({
 
           <Flex className="space-x-9 px-2 py-1">
             {rowItems.map((item) => (
-              <Flex key={item.id} className="w-1/2" gap="1">
+              <Flex key={item.id} className="w-full sm:w-1/2" gap="1">
                 <Text className="text-[13px]">
                   {item.question.split('.')[0]}.
                 </Text>
@@ -82,7 +82,10 @@ const MocaTable = ({
                 className="space-x-9 px-2 py-1"
               >
                 {rowItems.map((item) => (
-                  <Box key={`${item.id}-${optionIndex}`} className="flex w-1/2">
+                  <Box
+                    key={`${item.id}-${optionIndex}`}
+                    className="flex w-full sm:w-1/2"
+                  >
                     {item.options?.[optionIndex]?.value && (
                       <RadioButton
                         field={item.id}

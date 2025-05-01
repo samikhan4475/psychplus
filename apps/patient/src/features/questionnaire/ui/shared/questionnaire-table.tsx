@@ -1,6 +1,7 @@
 import React from 'react'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { cn } from '@psychplus/ui/cn'
+import { isMobile } from '@psychplus/utils/client'
 import { NoteData } from '@/features/note/types'
 import { RadioButton } from './radio-button'
 
@@ -22,19 +23,33 @@ const QuestionnaireTable = ({
   let questionNumber = 1
   return (
     <Box className="w-full">
-      <Flex>
+      <Flex className="w-full gap-x-4">
         <Box className="w-1/2">
-          <Text weight="medium" size="2" className="line-clamp-4">
+          <Text weight="medium" size="2" className="line-clamp-6">
             {labels?.[0]}
           </Text>
         </Box>
-        {labels?.slice(1).map((label) => (
-          <Box key={label} className="flex-1 justify-center text-center">
-            <Text weight="medium" size="2" className="line-clamp-4">
-              {label}
-            </Text>
-          </Box>
-        ))}
+
+        <Flex className="w-1/2 gap-x-4">
+          {labels?.slice(1).map((label) => {
+            const isSingleWord = label.trim().split(/\s+/).length === 1
+            return (
+              <Box key={label} className="flex-1 text-center">
+                <Text
+                  weight="medium"
+                  size="2"
+                  className={
+                    isSingleWord
+                      ? 'line-clamp-6 break-all'
+                      : 'line-clamp-6 break-words'
+                  }
+                >
+                  {label}
+                </Text>
+              </Box>
+            )
+          })}
+        </Flex>
       </Flex>
 
       {data.map((item, index) => {
@@ -53,11 +68,11 @@ const QuestionnaireTable = ({
             {item.headingLabels && (
               <Flex
                 my="2"
-                className="w-full rounded-1 bg-[#EEF2F6] px-2 py-1"
+                className="w-full gap-x-4 rounded-1 bg-[#EEF2F6] px-2 py-1"
                 align="center"
               >
                 <Flex className="w-1/2">
-                  <Text className="text-center text-[13px]" weight="medium">
+                  <Text className="text-[13px]" weight="medium">
                     {item.headingLabels?.[0]}
                   </Text>
                 </Flex>
@@ -66,7 +81,13 @@ const QuestionnaireTable = ({
                     key={label}
                     className="flex-1 justify-center text-center"
                   >
-                    <Text className="line-clamp-4 text-[13px]" weight="medium">
+                    <Text
+                      className={cn(
+                        'line-clamp-8 text-[13px]',
+                        isMobile() && 'break-all',
+                      )}
+                      weight="medium"
+                    >
                       {label}
                     </Text>
                   </Flex>

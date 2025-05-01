@@ -68,13 +68,13 @@ const MocaTableToggle = ({
       {headingLabels && headingLabels?.length > 0 && (
         <Flex
           className={cn(
-            isSingleColumn ? 'w-[43%]' : 'w-[75%]',
+            isSingleColumn ? 'w-full sm:w-[43%]' : 'w-full sm:w-[75%]',
             'rounded-t-1 border border-b-0 border-[#DDDDE3] bg-[#F0F4FF]',
           )}
         >
           <Box
             className={cn(
-              isSingleColumn ? 'w-[26%]' : 'w-[15%]',
+              isSingleColumn ? 'w-1/3 sm:w-[43%]' : 'w-1/3 sm:w-[15%]',
               'border-r border-[#DDDDE3] px-2',
             )}
           />
@@ -95,7 +95,7 @@ const MocaTableToggle = ({
         <Flex
           key={label}
           className={cn(
-            isSingleColumn ? 'w-[43%]' : 'w-[75%]',
+            isSingleColumn ? 'w-full sm:w-[43%]' : 'w-full sm:w-[75%]',
             'flex border border-b-0 border-[#DDDDE3] last:rounded-b-1 last:border-b',
             !headingLabels && rowIndex === 0 && 'rounded-t-1',
           )}
@@ -103,7 +103,7 @@ const MocaTableToggle = ({
           <Flex
             className={cn(
               !headingLabels && 'bg-[#F0F4FF]',
-              isSingleColumn ? 'w-[26%]' : 'w-[15%]',
+              isSingleColumn ? 'w-1/3 sm:w-[43%]' : 'w-1/3 sm:w-[15%]',
               'border-r border-[#DDDDE3] text-left',
             )}
           >

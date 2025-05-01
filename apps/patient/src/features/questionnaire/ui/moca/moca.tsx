@@ -1,5 +1,6 @@
 import React from 'react'
 import { Flex } from '@radix-ui/themes'
+import { isMobile } from '@psychplus/utils/client'
 import {
   ABSTRACTION,
   ATTENTION,
@@ -26,7 +27,7 @@ const Moca = () => {
       <MocaTable
         labels={LABELS}
         data={[...VISUOSPATIAL_EXECUTIVE, ...NAMING]}
-        questionsPerRow={3}
+        questionsPerRow={isMobile() ? 1 : 3}
       />
       <MocaTableToggle
         title="Memory"
@@ -35,8 +36,11 @@ const Moca = () => {
         data={MEMORY}
         heading={MEMORY_HEADING}
       />
-      <MocaTable data={[...ATTENTION, ...LANGUAGE]} questionsPerRow={2} />
-      <MocaTable data={ABSTRACTION} questionsPerRow={2} />
+      <MocaTable
+        data={[...ATTENTION, ...LANGUAGE]}
+        questionsPerRow={isMobile() ? 1 : 2}
+      />
+      <MocaTable data={ABSTRACTION} questionsPerRow={isMobile() ? 1 : 2} />
       <MocaTableToggle
         title="Delayed recall"
         labels={MEMORY_LABELS}

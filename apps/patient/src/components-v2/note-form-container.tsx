@@ -6,6 +6,7 @@ import { addNoteDetails } from '@/features/note/actions'
 import { NoteSectionName } from '@/features/note/constants'
 import { useNoteStore } from '@/features/note/store'
 import { NoteSectionItem } from '@/features/note/types'
+import { addNoteDetailsUnauthenticated } from '@/features/questionnaire/actions'
 import { customToast, useToast } from '@/providers'
 import { ToggleableForm } from './toggleable-form'
 
@@ -16,6 +17,8 @@ type NoteFormContainerProps = React.PropsWithChildren<{
   isEdit?: boolean
   isExternalSavePressed?: boolean
   allowExternalSave?: boolean
+  isUnauthenticated?: boolean
+  noteType?: string
 }>
 
 const NoteFormContainer = ({
@@ -25,6 +28,8 @@ const NoteFormContainer = ({
   isEdit,
   isExternalSavePressed,
   allowExternalSave,
+  isUnauthenticated = false,
+  noteType,
   children,
 }: NoteFormContainerProps) => {
   const { toast } = useToast()
@@ -53,20 +58,24 @@ const NoteFormContainer = ({
         ].includes(item.sectionName as NoteSectionName),
     )
 
-    return addNoteDetails(notes)
+    return isUnauthenticated
+      ? addNoteDetailsUnauthenticated(notes, noteType ?? '')
+      : addNoteDetails(notes)
   }
 
   const onSuccess = async (data: NoteSectionItem[]) => {
-    if (!allowExternalSave)
+    if (!allowExternalSave && !isUnauthenticated)
       toast({
         type: 'success',
         title: 'Saved',
       })
 
+    if (!isUnauthenticated)
+      await saveNoteData(data, data[0].sectionName as NoteSectionName)
+
     await Promise.all([
-      saveNoteData(data, data[0].sectionName as NoteSectionName),
-      handleNoteDetails(noteCodesRef.current),
-      handleNoteDetails(noteDiagnosisRef.current),
+      handleNoteDetails(noteCodesRef.current, isUnauthenticated, noteType),
+      handleNoteDetails(noteDiagnosisRef.current, isUnauthenticated, noteType),
     ])
 
     onSave?.()
@@ -87,11 +96,18 @@ const NoteFormContainer = ({
   )
 }
 
-const handleNoteDetails = async (data: NoteSectionItem[]) => {
+const handleNoteDetails = async (
+  data: NoteSectionItem[],
+  isUnauthenticated?: boolean,
+  noteType?: string,
+) => {
   if (data.length === 0) return
-  const response = await addNoteDetails(data)
 
-  if (response.state === 'error')
+  const response = isUnauthenticated
+    ? await addNoteDetailsUnauthenticated(data, noteType ?? '')
+    : await addNoteDetails(data)
+
+  if (response.state === 'error' && !isUnauthenticated)
     customToast({
       type: 'error',
       title: response.error ?? 'Error while saving codes',

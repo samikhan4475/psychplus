@@ -1,4 +1,4 @@
-import { UpdateCptCodes } from '@/features/codes/types'
+import { CptCodeKeys, UpdateCptCodes } from '@/features/codes/types'
 import { NoteSectionName } from '@/features/note/constants'
 import { NoteSectionItem } from '@/features/note/types'
 import { getCodes } from './cpt-code-map'
@@ -26,7 +26,11 @@ const transformIn = (
 }
 
 const transformOut =
-  (patientId: string, NoteSectionName: NoteSectionName) =>
+  (
+    patientId: string,
+    sectionName: NoteSectionName,
+    isUnAuthenticated?: boolean,
+  ) =>
   async (
     schema: QuestionnaireSchemaType,
     updateCptCodes?: UpdateCptCodes,
@@ -38,14 +42,20 @@ const transformOut =
       if (value !== '') {
         result.push({
           pid: Number(patientId),
-          sectionName: NoteSectionName,
+          sectionName: sectionName,
           sectionItem: key,
           sectionItemValue: value?.toString() || '',
         })
       }
     })
-
-    codesResult = await getCodes(patientId, updateCptCodes)
+    if (isUnAuthenticated)
+      codesResult.push({
+        pid: Number(patientId),
+        sectionName: NoteSectionName.NoteSectionCodes,
+        sectionItem: CptCodeKeys.ADD_ONS_KEY,
+        sectionItemValue: '96127',
+      })
+    else codesResult = await getCodes(patientId, updateCptCodes)
 
     return [...result, ...codesResult]
   }

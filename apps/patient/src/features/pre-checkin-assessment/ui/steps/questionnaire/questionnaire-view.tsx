@@ -88,4 +88,4 @@ const sectionComponents = [
   },
 ]
 
-export { QuestionnaireView }
+export { QuestionnaireView, sectionComponents }
