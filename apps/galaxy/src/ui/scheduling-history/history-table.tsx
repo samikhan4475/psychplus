@@ -11,10 +11,13 @@ import {
   LoadingPlaceholder,
   TextCell,
 } from '@/components'
+import { formatDateCell, formatTimeCell } from '../schedule/utils'
 import { useStore } from './store'
 import { PatientTransactionHistory } from './types'
 
-const columns: ColumnDef<PatientTransactionHistory>[] = [
+const columns: (
+  locationTimeZoneId: string,
+) => ColumnDef<PatientTransactionHistory>[] = (locationTimeZoneId) => [
   {
     id: 'metadata.createdOn',
     accessorKey: 'metadata.createdOn',
@@ -28,10 +31,8 @@ const columns: ColumnDef<PatientTransactionHistory>[] = [
     ),
     cell: ({ row }) => (
       <TextCell>
-        {format(
-          new Date(row?.original?.metadata.createdOn),
-          'MM/dd/yyyy HH:mm',
-        )}
+        {formatDateCell(row.original?.metadata.createdOn, locationTimeZoneId)}{' '}
+        {formatTimeCell(row.original?.metadata.createdOn, locationTimeZoneId)}
       </TextCell>
     ),
   },
@@ -165,7 +166,13 @@ const columns: ColumnDef<PatientTransactionHistory>[] = [
     ],
   },
 ]
-const HistoryTable = ({ appointmentId }: { appointmentId: number }) => {
+const HistoryTable = ({
+  appointmentId,
+  locationTimeZoneId,
+}: {
+  appointmentId: number
+  locationTimeZoneId: string
+}) => {
   const { id } = useParams<{ id: string }>()
 
   const {
@@ -184,7 +191,11 @@ const HistoryTable = ({ appointmentId }: { appointmentId: number }) => {
           <LoadingPlaceholder />
         </Flex>
       ) : (
-        <DataTable columns={columns} data={data ?? []} isRowSpan />
+        <DataTable
+          columns={columns(locationTimeZoneId)}
+          data={data ?? []}
+          isRowSpan
+        />
       )}
     </ScrollArea>
   )

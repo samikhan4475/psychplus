@@ -11,10 +11,13 @@ import {
   LoadingPlaceholder,
   TextCell,
 } from '@/components'
+import { formatDateCell, formatTimeCell } from '../schedule/utils'
 import { useStore } from './store'
 import { PatientFacilityHistory } from './types'
 
-const columns: ColumnDef<PatientFacilityHistory>[] = [
+const columns: (
+  locationTimeZoneId: string,
+) => ColumnDef<PatientFacilityHistory>[] = (locationTimeZoneId) => [
   {
     id: 'metadata.createdOn',
     accessorKey: 'metadata.createdOn',
@@ -23,11 +26,18 @@ const columns: ColumnDef<PatientFacilityHistory>[] = [
     ),
     cell: ({ row }) => (
       <TextCell>
-        {row?.original?.metadata &&
-          format(
-            new Date(row?.original?.metadata.createdOn),
-            'MM/dd/yyyy HH:mm',
-          )}
+        {row?.original?.metadata?.createdOn && (
+          <>
+            {formatDateCell(
+              row.original?.metadata.createdOn,
+              locationTimeZoneId,
+            )}{' '}
+            {formatTimeCell(
+              row.original?.metadata.createdOn,
+              locationTimeZoneId,
+            )}
+          </>
+        )}
       </TextCell>
     ),
   },
@@ -84,8 +94,10 @@ const columns: ColumnDef<PatientFacilityHistory>[] = [
 ]
 const FacilityAdmissionTable = ({
   appointmentId,
+  locationTimeZoneId,
 }: {
   appointmentId: number
+  locationTimeZoneId: string
 }) => {
   const { id } = useParams<{ id: string }>()
 
@@ -106,7 +118,7 @@ const FacilityAdmissionTable = ({
           <LoadingPlaceholder />
         </Flex>
       ) : (
-        <DataTable columns={columns} data={data ?? []} />
+        <DataTable columns={columns(locationTimeZoneId)} data={data ?? []} />
       )}
     </>
   )

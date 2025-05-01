@@ -32,7 +32,10 @@ const FacilityAdmissionCell = ({
               />
             </Popover.Close>
           </Flex>
-          <FacilityAdmissionTable appointmentId={row.original.appointmentId} />
+          <FacilityAdmissionTable
+            appointmentId={row.original.appointmentId}
+            locationTimeZoneId={row.original.locationTimeZoneId}
+          />
         </Flex>
       </Popover.Content>
     </Popover.Root>

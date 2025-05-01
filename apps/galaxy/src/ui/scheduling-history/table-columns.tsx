@@ -540,10 +540,17 @@ const getSchedulingColumns = (
             <TextCell>
               {row.original.facilityAdmissionId !==
                 FACILITY_ADMISION_ID_CHECK &&
-                row.original.dischargeVisitSequenceDate &&
-                format(
-                  new Date(row.original.dischargeVisitSequenceDate),
-                  'MM/dd/yyyy HH:mm',
+                row.original?.dischargeVisitSequenceDate && (
+                  <>
+                    {formatDateCell(
+                      row.original.dischargeVisitSequenceDate,
+                      row.original.locationTimeZoneId,
+                    )}{' '}
+                    {formatTimeCell(
+                      row.original.dischargeVisitSequenceDate,
+                      row.original.locationTimeZoneId,
+                    )}
+                  </>
                 )}
             </TextCell>
           ),

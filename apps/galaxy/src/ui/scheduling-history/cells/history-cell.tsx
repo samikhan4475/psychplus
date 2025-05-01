@@ -30,7 +30,10 @@ const HistoryCell = ({ row }: PropsWithRow<SchedulingHistoryData>) => {
                 />
               </Popover.Close>
             </Flex>
-            <HistoryTable appointmentId={row.original.appointmentId} />
+            <HistoryTable
+              appointmentId={row.original.appointmentId}
+              locationTimeZoneId={row.original.locationTimeZoneId}
+            />
           </Flex>
         </Popover.Content>
       </Flex>
