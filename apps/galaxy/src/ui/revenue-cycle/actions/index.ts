@@ -25,3 +25,4 @@ export * from './resolve-denial-action'
 export * from './add-claim'
 export * from './get-practice'
 export * from "./get-payer-plan-option"
+export * from './download-edi-files'

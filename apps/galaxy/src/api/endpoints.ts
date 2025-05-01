@@ -399,6 +399,8 @@ const UPDATE_ORGANIZATION_ENDPOINT = (organizationId: string) =>
   `${API_URL}/api/organizations/${organizationId}`
 const GET_INSURANCE_PAYERS_LIST_ENDPOINT = `${API_URL}/api/insurance/plans/actions/search`
 const IMPORT_ERA_ENDPOINT = `${API_URL}/api/receivers/responses/actions/claimeraimport`
+const DOWNLOAD_EDI_FILES_ENDPOINT = (practiceId: string) =>
+  `${API_URL}/api/practices/${practiceId}/edifiles/action/process`
 const GET_PAYMENT_SERVICELINES_ENDPOINT = `${API_URL}/api/claimservicelinepayments/actions/search`
 const GET_PRACTICES_ENDPOINT = `${API_URL}/api/practices/actions/search`
 const GET_ORGANIZATION_PRACTICES_ROLES_ENDPOINT = `${API_URL}/api/userroles/action/search`
@@ -976,6 +978,7 @@ export {
   FEATURE_FLAGS,
   STATES_BY_COUNTRY_ENDPOINT,
   ADD_VACATION,
+  DOWNLOAD_EDI_FILES_ENDPOINT,
   EDIT_VACATION_ENDPOINT,
   GET_PATIENT_NOTIFICATIONS_ENDPOINT,
   SENT_TO_COSIGNER_NOTE_ENDPOINT,
