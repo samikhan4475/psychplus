@@ -8,24 +8,33 @@ import { DateValue } from 'react-aria-components'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 import { FormContainer } from '@/components'
-import { formatDateToISOString, sanitizeFormData } from '@/utils'
+import { STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
+import { useStore as useGlobalStore } from '@/store'
+import {
+  formatDateToISOString,
+  getPaddedDateString,
+  sanitizeFormData,
+} from '@/utils'
+import { OrderFromDateField } from '../lab-order-results-widget/order-from-date-field'
+import { OrderToDateField } from '../lab-order-results-widget/order-to-date-field'
+import { PatientField } from '../lab-order-results-widget/patient-field'
 import { LocationSelect } from './location-select'
 import { OrderBySelect } from './order-by-select'
-import { OrderDateField } from './order-date-field'
 import { StatusSelect } from './status-select'
 import { useStore } from './store'
 import { TestField } from './test-field'
 import { LabOrderPayload } from './types'
-import { useStore as useGlobalStore } from '@/store'
-import { STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
 
 const schema = z.object({
+  orderCreatedFromDate: z.custom<DateValue | null>().nullable(),
+  orderCreatedToDate: z.custom<DateValue | null>().nullable(),
   orderCreatedDate: z.custom<DateValue | null>().nullable(),
   orderingStaffId: z.string().optional(),
   labTestName: z.string().trim().optional(),
   orderingLab: z.string().optional(),
   orderStatus: z.string().optional(),
   labTestCode: z.string().trim().optional(),
+  patientName: z.string().trim().optional(),
 })
 
 export type SchemaType = z.infer<typeof schema>
@@ -40,7 +49,7 @@ const LabOrdersFilterForm = ({
   const searchParams = useSearchParams()
   const { fetch } = useStore()
   const appointmentId = !isInboxLabOrder ? searchParams.get('id') ?? '0' : null
-  
+
   const { id } = useParams<{ id: string }>()
   const { staffId, staffRoleCode } = useGlobalStore((state) => ({
     staffId: state.user.staffId,
@@ -53,24 +62,30 @@ const LabOrdersFilterForm = ({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
     defaultValues: {
+      orderCreatedFromDate: null,
+      orderCreatedToDate: null,
       orderCreatedDate: undefined,
       orderingStaffId: defaultOrderingStaffId,
       labTestName: '',
       orderingLab: '',
       orderStatus: '',
       labTestCode: '',
+      patientName: '',
     },
   })
 
   const onClear = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     form.reset({
+      orderCreatedFromDate: null,
+      orderCreatedToDate: null,
       orderCreatedDate: undefined,
       orderingStaffId: defaultOrderingStaffId,
       labTestName: '',
       orderingLab: '',
       orderStatus: '',
       labTestCode: '',
+      patientName: '',
     })
     fetch(appointmentId, {
       ...defaultPayload,
@@ -88,6 +103,12 @@ const LabOrdersFilterForm = ({
       orderCreatedDate: formatDateToISOString(data.orderCreatedDate)?.split(
         'T',
       )[0],
+      orderCreatedFromDate: data.orderCreatedFromDate
+        ? getPaddedDateString(data.orderCreatedFromDate)
+        : null,
+      orderCreatedToDate: data.orderCreatedToDate
+        ? getPaddedDateString(data.orderCreatedToDate)
+        : null,
     }
     const sanitizedData = sanitizeFormData(formattedData)
     const payload = {
@@ -108,7 +129,13 @@ const LabOrdersFilterForm = ({
       form={form}
       onSubmit={onSubmit}
     >
-      <OrderDateField />
+      {isInboxLabOrder && (
+        <>
+          <OrderFromDateField />
+          <OrderToDateField />
+          <PatientField />
+        </>
+      )}
       <OrderBySelect />
       <LocationSelect />
       <TestField />

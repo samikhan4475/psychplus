@@ -28,8 +28,7 @@ const LabOrdersWidget = ({
   const fetchData = () => {
     setAppointmentId(appointmentId)
     const payload = {
-      patientId: [id],
-      ...(appointmentId !== '0' ? { appointmentIds: [appointmentId] } : {}),
+      patientId: [id]
     }
     fetch(appointmentId, payload)
   }

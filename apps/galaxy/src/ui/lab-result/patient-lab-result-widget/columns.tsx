@@ -91,7 +91,7 @@ const columnsForTableView = (): ColumnDef<LabResult>[] => [
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="Test" />
     ),
-    cell: ({ row }) => <TextCell>{row.original?.testName}</TextCell>,
+    cell: ({ row }) => <TextCell>{row.original?.resultName}</TextCell>,
     size: 150,
   },
   {

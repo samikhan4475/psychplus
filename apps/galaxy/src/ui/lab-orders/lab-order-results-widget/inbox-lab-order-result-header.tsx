@@ -19,7 +19,8 @@ const InboxLabOrderResultHeader = () => {
     isReviewDialogOpen,
     closeReviewDialog,
     openReviewDialog,
-    payload
+    payload,
+    data
   } = useStore((state) => ({
     fetchLabOrderResults: state.fetchLabOrderResults,
     loading: state.loading,
@@ -28,6 +29,7 @@ const InboxLabOrderResultHeader = () => {
     closeReviewDialog: state.closeReviewDialog,
     openReviewDialog: state.openReviewDialog,
     payload: state.payload,
+    data: state.data,
   }))
 
   const fetchLabOrders = useCallback(() => {
@@ -63,7 +65,7 @@ const InboxLabOrderResultHeader = () => {
   }
 
   return (
-    <TabContentHeading title="Lab Results">
+    <TabContentHeading title={`Lab Results (${data?.total ?? 0})`}>
       <Flex align="center" justify="end" gap="2" className="flex-1">
         <Button
           className="border-pp-grey bg-white h-6 flex-row gap-1 rounded-2 border border-solid align-middle"

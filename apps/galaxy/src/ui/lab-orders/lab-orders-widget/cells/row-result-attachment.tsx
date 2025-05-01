@@ -21,7 +21,7 @@ const RowResultAttachment = ({ row }: { row: Row<LabOrders> }) => {
   const requisitionPdfDetails = labDocuments.find(
     (item: LabDocument) => item?.documentType === RequisitionPdf,
   )
-
+  
   const isDisabled = () =>
     orderStatus === LabOrderStatusEnum.SignedSent ||
     orderStatus === LabOrderStatusEnum.ResultReceived

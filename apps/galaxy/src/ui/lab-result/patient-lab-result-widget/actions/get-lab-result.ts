@@ -6,8 +6,10 @@ import { LabResultResponse, LabResultsPayload } from '../types'
 const fetchLabResultsAction = async (
   payload: LabResultsPayload,
 ): Promise<api.ActionResult<LabResultResponse[]>> => {
-  const endpoint = api.GET_LAB_RESULTS_ENDPOINT(payload.patientId)
-  const response = await api.POST<LabResultResponse[]>(endpoint, payload)
+  const defaultPayload = { isIncludeDnrResults: false }
+  const finalPayload = { ...defaultPayload, ...payload }
+  const endpoint = api.GET_LAB_RESULTS_ENDPOINT(finalPayload.patientId)
+  const response = await api.POST<LabResultResponse[]>(endpoint, finalPayload)
   if (response.state === 'error') {
     return {
       state: 'error',

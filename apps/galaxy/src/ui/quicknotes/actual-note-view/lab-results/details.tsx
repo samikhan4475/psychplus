@@ -9,7 +9,7 @@ const Details = ({ data }: { data: LabResult[] }) => {
       {data?.map((item) => (
         <Flex direction="row" align="center" gap="1" key={item?.resultId}>
           <Text size="1" weight="regular" wrap="nowrap">
-            {`${item?.testName ?? ''} |`}
+            {`${item?.resultName ?? ''} |`}
           </Text>
           {item?.observationTime && (
             <Text size="1" weight="regular" wrap="nowrap">

@@ -18,9 +18,10 @@ const labOrderPayload = {
 }
 
 const LabOrdersInboxView = () => {
-  const { fetch, setAppointmentId } = useStore((state) => ({
+  const { fetch, setAppointmentId, data } = useStore((state) => ({
     fetch: state.fetch,
     setAppointmentId: state.setAppointmentId,
+    data: state.data,
   }))
 
   const fetchData = () => {
@@ -35,7 +36,7 @@ const LabOrdersInboxView = () => {
   return (
     <>
       <WidgetContainer
-        title={'Lab Orders'}
+        title={`Lab Orders (${data?.total ?? 0})`}
         headerRight={
           <Flex direction="row" gap="3">
             <AddLabOrdersButton onRefresh={fetchData} />

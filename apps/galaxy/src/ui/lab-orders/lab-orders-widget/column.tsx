@@ -6,6 +6,7 @@ import { TableHeaderCheckboxCell } from '../lab-order-results-widget/cells/table
 import { TableRowCheckboxCell } from '../lab-order-results-widget/cells/table-row-checkbox-cell'
 import { LabTestCell, ResultsCell, StatusCell } from './cells'
 import { ActionsCell } from './cells/actions-cell'
+import { InboxOrderActionsCell } from './cells/inbox-order-actions-cell'
 
 const getColumns: (
   appointmentId: string | null,
@@ -138,6 +139,12 @@ const getColumns: (
             size: 20,
           },
           ...columns,
+          {
+            id: 'actions',
+            size: 100,
+            header: () => <ColumnHeader label="Actions" />,
+            cell: ({ row }) => <InboxOrderActionsCell row={row} />,
+          },
         ]
   }
 }
