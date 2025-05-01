@@ -14,6 +14,7 @@ import {
 } from '@/features/appointments/search/constants'
 import type {
   AppointmentAvailability,
+  CurrentBookingAppointmentData,
   CurrentLocation,
 } from '@/features/appointments/search/types'
 import { transformResponseData } from '../actions/data'
@@ -50,6 +51,8 @@ interface Store {
   prev: () => void
   next: () => void
   cache: { [key: string]: AppointmentAvailability[] | undefined }
+  currentBookingAppointmentData?: CurrentBookingAppointmentData
+  setCurrentBookingAppointmentData: (data: CurrentBookingAppointmentData) => void
 }
 
 const useStore = create<Store>()(
@@ -67,6 +70,8 @@ const useStore = create<Store>()(
       startingDate: getStartOfWeek(new Date()),
       careTeam: [],
       stateCode: '',
+      currentBookingAppointmentData: undefined,
+      setCurrentBookingAppointmentData: (data) => set({ currentBookingAppointmentData: data }),
       setStateCode: (stateCode) => set({ stateCode }),
       setStartingDate: (startingDate) => set({ startingDate }),
       setCareTeam: (careTeam) => set({ careTeam }),

@@ -1,28 +1,20 @@
 import { useEffect, useMemo, useState } from 'react'
-import NextLink from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { CalendarDate, parseAbsoluteToLocal } from '@internationalized/date'
-import { GlobeIcon } from '@psychplus-v2/components'
+import { CalendarDate } from '@internationalized/date'
 import { AppointmentType } from '@psychplus-v2/constants'
-import { Consent } from '@psychplus-v2/types'
+import { Clinic, Consent } from '@psychplus-v2/types'
 import {
   getCalendarDate,
   getCalendarDateLabel,
   getDayOfWeekLabel,
   getMonthLabel,
   getNewProviderTypeLabel,
-  getProviderTypeLabel,
   getTimeLabel,
   getUserFullName,
 } from '@psychplus-v2/utils'
 import { StarFilledIcon, StarIcon } from '@radix-ui/react-icons'
 import { Box, Button, Flex, Text } from '@radix-ui/themes'
-import {
-  DistanceIcon,
-  EmptyFileIcon,
-  FeatureEmpty,
-  ProviderAvatar,
-} from '@/components-v2'
+import { EmptyFileIcon, FeatureEmpty, ProviderAvatar } from '@/components-v2'
 import { useProfileStore } from '@/features/account/profile/store'
 import { useStore } from '@/features/appointments/search/store'
 import type {
@@ -43,7 +35,7 @@ import { ClinicSelector } from './clinic-selector'
 
 interface DialogAction {
   isOpen: boolean
-  navigation: { queryString: string }
+  clinic: Clinic
 }
 
 interface AvailabilityListProps {
@@ -54,16 +46,6 @@ interface AvailabilityListProps {
 interface PrimaryProviderAvailabilityCardProps {
   userConsents: Consent[]
   setShowDifferentStateDialog: (action: DialogAction) => void
-}
-
-type RedirectUrlQueryParams = {
-  appointmentId?: string
-  appointmentType: string
-  providerType: string
-  slot: string
-  specialist: string
-  clinic: string
-  newProviderType?: string
 }
 
 const getNextAvailableDateLabel = (nextSlotDate: CalendarDate) => {
@@ -225,7 +207,7 @@ const ProviderAvailabilityCard = ({
                 weight="medium"
                 className="text-pp-gray-1 text-[12px] uppercase"
               >
-                {getNewProviderTypeLabel(data.providerType ?? "")}
+                {getNewProviderTypeLabel(data.providerType ?? '')}
               </Text>
               <Flex align="center">
                 {Array.from({ length: 5 }, (_, index) => index + 1).map(
@@ -255,7 +237,7 @@ const ProviderAvailabilityCard = ({
               onChange={setSelectedClinic}
             />
           ) : null}
-          <Flex gap="2" justify="between" direction={"column"}>
+          <Flex gap="2" justify="between" direction={'column'}>
             {renderSpokenLanguages(data)}
             {renderDistance(data.clinics[selectedClinic])}
           </Flex>
@@ -358,13 +340,15 @@ const AppointmentTimeSlots = ({
   specialist: AppointmentSpecialist
   showMore: boolean
   clinic: AppointmentClinic
-  providerType?: string|null
+  providerType?: string | null
   setShowDifferentStateDialog: (action: DialogAction) => void
 }) => {
-  const { appointmentType, providerType } = useStore((state) => ({
-    appointmentType: state.appointmentType,
-    providerType: state.providerType,
-  }))
+  const { appointmentType, providerType, setCurrentBookingAppointmentData } =
+    useStore((state) => ({
+      appointmentType: state.appointmentType,
+      providerType: state.providerType,
+      setCurrentBookingAppointmentData: state.setCurrentBookingAppointmentData,
+    }))
 
   const router = useRouter()
 
@@ -383,43 +367,37 @@ const AppointmentTimeSlots = ({
   const handleSlotClick = (slot: AppointmentSlot) => {
     const profileState = profile.contactDetails.addresses?.[0]?.state
     const clinicState = rest.clinic.contact.addresses?.[0]?.state
-
-    const queryParams: RedirectUrlQueryParams = {
+    const bookingData = {
       appointmentId: searchParams.get('appointmentId')?.toString(),
-      appointmentType: JSON.stringify(appointmentType).toString(),
-      providerType: JSON.stringify(providerType).toString(),
-      newProviderType: JSON.stringify(rest.providerType),
-      slot: JSON.stringify(slot).toString(),
-      specialist: JSON.stringify(rest.specialist).toString(),
-      clinic: JSON.stringify({
+      appointmentType,
+      providerType: providerType,
+      newProviderType: rest.providerType || '',
+      slot,
+      specialist: rest.specialist,
+      clinic: {
         id:
           appointmentType === AppointmentType.InPerson
             ? rest.clinic.id
-            : slot.clinicId,
+            : slot.clinicId || '',
         name: rest.clinic.name,
-        isTest: rest.clinic.isTest,
+        isTest: rest.clinic.isTest || false,
         contact: rest.clinic.contact,
         distanceInMiles: rest.clinic.distanceInMiles,
-      }).toString(),
+      },
     }
-
-    if (!queryParams.appointmentId) {
-      delete queryParams.appointmentId
-    }
-
-    const queryString = new URLSearchParams(queryParams).toString()
+    setCurrentBookingAppointmentData(bookingData)
 
     if (appointmentType === AppointmentType.InPerson) {
       if (profileState !== clinicState) {
         setShowDifferentStateDialog({
           isOpen: true,
-          navigation: { queryString },
+          clinic: bookingData.clinic,
         })
         return
       }
     }
 
-    router.push(`book?${queryString}`)
+    router.push(`book`)
   }
 
   return (
@@ -449,10 +427,8 @@ const renderSpokenLanguages = (data: AppointmentAvailability) => {
 
   return (
     <Flex gap="2">
-      <Text className='text-[12px] font-[500]'>
-        Language:
-      </Text>
-      <Text className="text-[12px] font-[500] text-pp-gray-1">
+      <Text className="text-[12px] font-[500]">Language:</Text>
+      <Text className="text-pp-gray-1 text-[12px] font-[500]">
         {spokenLanguages.join(', ')}
       </Text>
     </Flex>
@@ -466,8 +442,8 @@ const renderDistance = (clinic: AppointmentClinic) => {
 
   return (
     <Flex align="center" gap="2">
-      <Text className='text-[12px] font-[500]'>Distance:</Text>
-      <Text className="text-[12.5px] font-[500] text-pp-gray-1">
+      <Text className="text-[12px] font-[500]">Distance:</Text>
+      <Text className="text-pp-gray-1 text-[12.5px] font-[500]">
         {Math.round(clinic.distanceInMiles * 10) / 10} mi
       </Text>
     </Flex>

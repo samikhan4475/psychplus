@@ -1,69 +1,64 @@
 'use client'
 
-import { useState } from 'react'
-import {
-  AppointmentType,
-  PaymentType,
-  ProviderType,
-} from '@psychplus-v2/constants'
-import { CareTeamMember, Clinic } from '@psychplus-v2/types'
+import { useEffect, useState } from 'react'
+import { PaymentType } from '@psychplus-v2/constants'
+import { CareTeamMember } from '@psychplus-v2/types'
 import { Box, Flex } from '@radix-ui/themes'
-import {
-  AppointmentSlot,
-  AppointmentSpecialist,
-} from '@/features/appointments/search/types'
+import { useStore } from '@/features/appointments/search/store'
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { Insurance } from '@/features/billing/payments/types'
 import { InsurancePayer } from '@/features/billing/payments/types/insurance'
+import { BookedSlot } from '../types'
 import { AppointmentDetails, PaymentMethods } from './book-appointment'
 import { BookAppointmentButton } from './book-appointment/book-appointment-button'
 import { ConfirmAppointment } from './book-appointment/confirm-appointment'
+import { redirect } from 'next/navigation'
 
 const BookAppointmentView = ({
-  appointmentType,
-  providerType,
-  slot,
-  clinic,
-  specialist,
   mapKey,
   stripeApiKey,
   creditCards,
   careTeam,
   patientInsurances,
   insurancePayers,
-  appointmentId,
-  specialistId,
-  newProviderType
 }: {
-  appointmentId?: string
-  specialistId?: string
-  appointmentType: AppointmentType
-  providerType: ProviderType
-  slot: AppointmentSlot
-  clinic: Clinic
-  specialist: AppointmentSpecialist
   mapKey: string
   stripeApiKey: string
   creditCards: CreditCard[]
   careTeam: CareTeamMember[]
   patientInsurances: Insurance
   insurancePayers: InsurancePayer[]
-  newProviderType: string | null
 }) => {
+  const currentBookingData = useStore(
+    (state) => state.currentBookingAppointmentData,
+  )
+
   const [bookingSuccessful, setBookingSuccessful] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState<PaymentType>(
     PaymentType.Insurance,
   )
 
   const bookedSlot = {
-    specialist,
-    clinic,
-    slot,
-    appointmentType,
-    providerType,
-    newProviderType
-  }
+    specialist: currentBookingData?.specialist,
+    clinic: currentBookingData?.clinic,
+    slot: currentBookingData?.slot,
+    appointmentType: currentBookingData?.appointmentType,
+    providerType: currentBookingData?.providerType,
+    newProviderType: currentBookingData?.newProviderType,
+  } as BookedSlot
 
+  if (!currentBookingData) {
+    redirect('/')
+  }
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault()
+      e.returnValue = '' // Required for Chrome to show prompt
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [])
   return (
     <Flex direction="column" className="h-full w-full px-24" py="9">
       {!bookingSuccessful ? (
@@ -76,12 +71,11 @@ const BookAppointmentView = ({
             setPaymentMethod={setPaymentMethod}
             patientInsurances={patientInsurances}
             insurancePayers={insurancePayers}
-            appointmentType={appointmentType}
+            appointmentType={currentBookingData?.appointmentType}
           />
           <Box mt="5">
             <BookAppointmentButton
-              appointmentId={appointmentId}
-              specialistId={specialistId}
+              appointmentId={currentBookingData?.appointmentId}
               bookedSlot={bookedSlot}
               careTeam={careTeam}
               setBookingSuccessful={setBookingSuccessful}

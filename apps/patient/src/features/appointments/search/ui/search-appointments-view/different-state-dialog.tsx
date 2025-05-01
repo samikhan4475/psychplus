@@ -11,7 +11,7 @@ const DifferentStateDialog = ({
   setOpen,
   onClose,
   myState,
-  providerState,
+  clinic,
   onConfirm,
 }: DifferentStateDialogProps) => {
   const stateCodeMap = useCodesetCodes(CODESETS.UsStates).reduce(
@@ -22,13 +22,12 @@ const DifferentStateDialog = ({
     {} as Record<string, string>,
   )
 
-  const clinic =
-    providerState &&
-    JSON.parse(new URLSearchParams(providerState).get('clinic') || '{}')
+ 
 
   const clinicState = clinic?.contact?.addresses?.[0]?.state
+
   const stateLabels = {
-    provider: stateCodeMap[clinicState] || 'Unknown',
+    provider: clinicState ? stateCodeMap[clinicState] : 'Unknown',
     user: stateCodeMap[myState] || 'Unknown',
   }
 

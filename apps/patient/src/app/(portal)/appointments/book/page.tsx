@@ -1,7 +1,5 @@
-import { redirect } from 'next/navigation'
 import { CODESETS } from '@psychplus-v2/constants'
 import { GOOGLE_MAPS_API_KEY, STRIPE_PUBLISHABLE_KEY } from '@psychplus-v2/env'
-import { SearchParams } from '@psychplus/utils/url'
 import { getCodesets, getProfile } from '@/api'
 import { BookAppointmentView } from '@/features/appointments/book/ui/book-appointment-view'
 import { getCreditCards } from '@/features/billing/credit-debit-cards/api'
@@ -14,31 +12,7 @@ import { getCareTeam } from '@/features/care-team/api'
 import { CodesetStoreProvider, GooglePlacesContextProvider } from '@/providers'
 import { ProfileStoreProvider } from '@/features/account/profile/store'
 
-const SearchAppointmentsPage = async ({
-  searchParams,
-}: {
-  searchParams: SearchParams
-}) => {
-  if (
-    !searchParams.appointmentType ||
-    !searchParams.providerType ||
-    !searchParams.slot ||
-    !searchParams.clinic ||
-    !searchParams.specialist
-  ) {
-    redirect('/')
-  }
-
-  const {
-    appointmentType,
-    providerType,
-    newProviderType,
-    slot,
-    clinic,
-    specialist,
-    appointmentId,
-    specialistId,
-  } = searchParams
+const SearchAppointmentsPage = async () => {
 
   const [
     creditCardResponse,
@@ -86,20 +60,12 @@ const SearchAppointmentsPage = async ({
       <CodesetStoreProvider codesets={codesets}>
         <GooglePlacesContextProvider apiKey={GOOGLE_MAPS_API_KEY}>
           <BookAppointmentView
-            appointmentType={JSON.parse(appointmentType)}
-            providerType={JSON.parse(providerType)}
-            newProviderType={newProviderType ? JSON.parse(newProviderType): null}
-            slot={JSON.parse(slot)}
-            clinic={JSON.parse(clinic)}
-            specialist={JSON.parse(specialist)}
             mapKey={GOOGLE_MAPS_API_KEY}
             stripeApiKey={STRIPE_PUBLISHABLE_KEY}
             creditCards={sortCreditCardsByPrimary(creditCardResponse.data)}
             careTeam={careTeamResposne.data.careTeam}
             patientInsurances={patientInsurancesResponse.data}
             insurancePayers={insurancePayerResponse.data}
-            appointmentId={appointmentId}
-            specialistId={specialistId}
           />
         </GooglePlacesContextProvider>
       </CodesetStoreProvider>

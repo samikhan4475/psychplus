@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { AppointmentType } from '@psychplus-v2/constants'
-import { CareTeamMember, Consent } from '@psychplus-v2/types'
+import { CareTeamMember, Clinic, Consent } from '@psychplus-v2/types'
 import { getProviderTypeLabel } from '@psychplus-v2/utils'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { clickTrack } from '@psychplus/utils/tracking'
@@ -40,19 +40,19 @@ const SearchAppointmentsView = ({
 
   const [dialogState, setDialogState] = useState<{
     isOpen: boolean
-    navigation: { queryString: string } | null
+    clinic: Clinic | undefined
   }>({
     isOpen: false,
-    navigation: null,
+    clinic: undefined,
   })
 
   const handleDialogClose = () => {
-    setDialogState({ isOpen: false, navigation: null })
+    setDialogState({ isOpen: false, clinic: undefined })
   }
 
   const handleDialogConfirm = () => {
-    if (dialogState.navigation) {
-      router.push(`book?${dialogState.navigation.queryString}`)
+    if (dialogState.clinic) {
+      router.push(`book`)
     }
     handleDialogClose()
   }
@@ -217,7 +217,7 @@ const SearchAppointmentsView = ({
           onClose={handleDialogClose}
           onConfirm={handleDialogConfirm}
           myState={profile?.contactDetails?.addresses?.[0]?.state ?? 'Unknown'}
-          providerState={dialogState.navigation?.queryString ?? 'Unknown'}
+          clinic={dialogState.clinic}
         />
       )}
     </Flex>

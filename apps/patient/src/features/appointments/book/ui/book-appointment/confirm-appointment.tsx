@@ -45,11 +45,8 @@ const ConfirmAppointment = ({
     title: `Appointment with ${specialistName}`,
     startTime: new Date(startDate),
     endTime: addMinutes(new Date(startDate), slot.duration),
-    description: '',
-    location:
-      appointmentType === AppointmentType.InPerson
-        ? getClinicAddressLabel(clinic.contact?.addresses)
-        : '',
+    description: 'Appointment Scheduled',
+    location: 'Psych+',
   }
 
   return (

@@ -83,10 +83,24 @@ interface DifferentStateDialogProps {
   setOpen: (open: boolean) => void
   onClose: (open: boolean) => void
   myState: string
-  providerState: string
+  clinic: Clinic | undefined
   onConfirm?: () => void
 }
-
+interface CurrentBookingAppointmentData {
+  appointmentId?: string
+  appointmentType: AppointmentType
+  providerType: ProviderType
+  newProviderType: string
+  slot: AppointmentSlot
+  specialist: AppointmentSpecialist
+  clinic: {
+    id: string
+    name: string
+    isTest: boolean
+    contact: ClinicContactDetails
+    distanceInMiles?: number
+  }
+}
 export type {
   AppointmentSpecialist,
   CurrentLocation,
@@ -96,4 +110,5 @@ export type {
   AppointmentClinic,
   AppointmentsSearchApiResponse,
   DifferentStateDialogProps,
+  CurrentBookingAppointmentData,
 }
