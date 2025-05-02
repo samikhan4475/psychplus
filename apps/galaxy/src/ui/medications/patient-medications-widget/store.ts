@@ -121,7 +121,15 @@ const useStore = create<StoreState>((set, get) => ({
     showOnlyActiveMedications,
   ) => {
     const patientId = formValues?.patientIds?.[0]
-    set({ error: undefined, loading: true, formValues, patientId })
+    set({
+      error: undefined,
+      loading: true,
+      formValues,
+      patientId,
+      data: [],
+      total: 0,
+      pageCache: {},
+    })
     const result = await getPatientMedicationsAction({
       page,
       formValues: {
@@ -138,7 +146,7 @@ const useStore = create<StoreState>((set, get) => ({
       },
     })
     if (result.state === 'error') {
-      return set({ error: result.error, loading: false })
+      return set({ error: result.error, loading: false, data: [] })
     }
     if (get().patientId !== patientId) {
       return
