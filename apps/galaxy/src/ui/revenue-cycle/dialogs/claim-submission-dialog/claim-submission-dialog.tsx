@@ -17,6 +17,7 @@ interface ClaimSubmissionDialogProps {
   clearingHouse?: string
   claims?: Claim[]
   isScrubOnly?: boolean
+  onFormClose?: () => Promise<void>
 }
 const ClaimSubmissionDialog = ({
   children,
@@ -24,6 +25,7 @@ const ClaimSubmissionDialog = ({
   clearingHouse,
   claims,
   isScrubOnly,
+  onFormClose,
 }: PropsWithChildren<ClaimSubmissionDialogProps>) => {
   const [selectedTab, selectedRows] = useStore((state) => [
     state.selectedTab,
@@ -129,7 +131,7 @@ const ClaimSubmissionDialog = ({
     <Dialog.Root open={isOpenDialog} onOpenChange={handleOpenDialog}>
       <Dialog.Trigger>{children}</Dialog.Trigger>
       <Dialog.Content className="relative max-w-[800px]">
-        <CloseDialogTrigger />
+        <CloseDialogTrigger onClick={onFormClose} />
         <Dialog.Title className="flex items-end gap-1 font-sans -tracking-[0.25px]">
           <ReportIcon /> {DIALOG_TITLE}
         </Dialog.Title>
