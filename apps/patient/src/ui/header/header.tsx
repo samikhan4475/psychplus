@@ -1,6 +1,7 @@
 import { User } from '@psychplus-v2/auth'
 import { PsychPlusNavLogo } from '@psychplus-v2/components'
 import { CODESETS } from '@psychplus-v2/constants'
+import { STRIPE_PUBLISHABLE_KEY } from '@psychplus-v2/env'
 import { Container, Flex } from '@radix-ui/themes'
 import { getCodesets, getIsFeatureFlagEnabled, getProfile } from '@/api'
 import { FeatureFlags } from '@/constants'
@@ -30,7 +31,6 @@ const Header = async () => {
   }
 
   const codesets = await getCodesets([CODESETS.UsStates])
-
   return (
     <>
       <header className="bg-white fixed top-0 z-50 w-full border border-transparent border-b-gray-6">
@@ -56,7 +56,11 @@ const Header = async () => {
           </Flex>
         </Container>
       </header>
-      <ResponsiveMenu user={user} codesets={codesets} />
+      <ResponsiveMenu
+        stripeApiKey={STRIPE_PUBLISHABLE_KEY}
+        user={user}
+        codesets={codesets}
+      />
     </>
   )
 }

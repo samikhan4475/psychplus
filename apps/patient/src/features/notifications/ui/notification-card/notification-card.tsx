@@ -1,17 +1,20 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { cn } from '@psychplus-v2/utils'
 import { Box, Button, Flex, Text } from '@radix-ui/themes'
+import { PreCheckinAssessmentTabs } from '@/features/pre-checkin-assessment/constants'
+import { useStore } from '@/features/pre-checkin-assessment/store'
 import { NotificationItem } from '../../types'
-import { getPurposeCodeIconPath, getTimeAgo } from '../utils'
+import { useStore as useNotificationStore } from '../store'
+import { getPurposeCodeMeta, getTimeAgo, Purpose_Code_Types } from '../utils'
 
 interface NotificationCardProps extends NotificationItem {
   onCancel?: () => void
-  onConfirm?: () => void
   className?: string
-  confirmLabel?: string
+  popoverToggle?: () => void
   cancelLabel?: string
   readOn?: string
   onMark: (notificationId: string) => void
@@ -23,29 +26,74 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
   createdOn,
   readOn,
   id,
-  onConfirm,
   onMark,
   cancelLabel,
-  confirmLabel,
   onCancel,
   className,
+  popoverToggle,
 }) => {
-  const iconPath = getPurposeCodeIconPath(purposeCode)
+  const { iconPath, route, label } = getPurposeCodeMeta(purposeCode)
 
-  const [isRead, setIsRead] = useState(false)
+  const router = useRouter()
+  const [isRead, setIsRead] = useState(!!readOn)
+  const cardRef = useRef<HTMLDivElement>(null)
+  const setIsAssessmentDialogOpen = useNotificationStore(
+    (state) => state.setIsDialogOpen,
+  )
+  const setActiveAssessmentTab = useStore((state) => state.setActiveTab)
   const onRead = async () => {
     if (isRead) return
     setIsRead(true)
     onMark(id)
   }
 
+  const onConfirm = async () => {
+    if (route) {
+      await onRead()
+      onNavigate()
+      return
+    }
+
+    if (purposeCode === Purpose_Code_Types.Questionnaire) {
+      setActiveAssessmentTab(PreCheckinAssessmentTabs.Questionnaire)
+      setIsAssessmentDialogOpen(true)
+    }
+  }
+
+  const onNavigate = () => {
+    if (!route) return
+    router.push(route)
+    popoverToggle && popoverToggle()
+  }
+
   useEffect(() => {
-    setIsRead(!!readOn)
-  }, [readOn])
+    const node = cardRef.current
+    if (!node || isRead) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          onRead()
+          observer.unobserve(entry.target)
+        }
+      },
+      { threshold: 0.8 },
+    )
+
+    observer.observe(node)
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [isRead])
 
   return (
     <Flex
-      onClick={onRead}
+      ref={cardRef}
+      onClick={async () => {
+        await onRead()
+        onNavigate()
+      }}
       className={cn(
         `min-w-56 bg-white mx-2 items-start gap-x-4 border-b border-b-gray-4 p-3`,
         className,
@@ -85,9 +133,9 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
               {cancelLabel}
             </Button>
           )}
-          {confirmLabel && (
+          {label && (
             <Button onClick={onConfirm} className="bg-pp-blue-3 w-fit" size="2">
-              {confirmLabel}
+              {label}
             </Button>
           )}
         </Flex>

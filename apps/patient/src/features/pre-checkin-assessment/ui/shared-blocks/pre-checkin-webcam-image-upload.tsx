@@ -1,12 +1,20 @@
+'use client'
+
 import { useCallback, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Avatar, Button, Dialog, Flex, Text, Tooltip } from '@radix-ui/themes'
 import Webcam from 'react-webcam'
 import { CloseDialogIcon } from '@/components-v2'
 import CameraIcon from '@/components-v2/icons/camera-icon'
 import { updateProfileImage } from '@/features/account/profile/ui/account-profile-view/avatar/api'
-import { useRouter } from 'next/navigation'
 
-const PreCheckinWebcamImageUpload = ({ setAvatarKey }: { setAvatarKey:(value: number | ((prev: number) => number)) => void  }) => {
+interface PreCheckinWebcamImageUploadProps {
+  setAvatarKey: (value: number | ((prev: number) => number)) => void
+}
+
+const PreCheckinWebcamImageUpload = ({
+  setAvatarKey,
+}: PreCheckinWebcamImageUploadProps) => {
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState(false)
   const [imgSrc, setImgSrc] = useState<string | null>(null)

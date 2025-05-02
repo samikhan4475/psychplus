@@ -1,6 +1,7 @@
 'use client'
 
 import { ChangeEvent, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import {
   Avatar,
   Box,
@@ -15,9 +16,14 @@ import { CloseDialogIcon } from '@/components-v2'
 import CameraEditIcon from '@/components-v2/icons/camera-edit-icon'
 import { updateProfileImage } from '@/features/account/profile/ui/account-profile-view/avatar/api'
 import { useToast } from '@/providers'
-import { useRouter } from 'next/navigation'
 
-const PreCheckinImageUpload = ({ setAvatarKey }: { setAvatarKey:(value: number | ((prev: number) => number)) => void  }) => {
+interface PreCheckinImageUploadProps {
+  setAvatarKey: (value: number | ((prev: number) => number)) => void
+}
+
+const PreCheckinImageUpload = ({
+  setAvatarKey,
+}: PreCheckinImageUploadProps) => {
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState(false)
   const [previewImage, setPreviewImage] = useState<string | null>(null)

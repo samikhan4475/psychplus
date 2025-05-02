@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect } from 'react'
 import { GOOGLE_MAPS_API_KEY } from '@psychplus-v2/env'
 import { FeatureCard, FeatureContainer } from '@/components-v2'

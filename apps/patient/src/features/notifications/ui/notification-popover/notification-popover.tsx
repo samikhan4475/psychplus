@@ -23,6 +23,7 @@ const NotificationPopover = () => {
   const [notificationList, setNotificationList] = useState<NotificationItem[]>(
     [],
   )
+
   const [isLoading, setIsLoading] = useState(true)
 
   const onOpen = () => {
@@ -100,6 +101,7 @@ const NotificationPopover = () => {
             >
               <Box>
                 <BellIcon width={24} height={24} color="#1C2024" />
+
                 {inboxCount > 0 && (
                   <Box className="min-w-2 min-h-2 rounded-full absolute right-[10px] top-2 bg-red-11" />
                 )}
@@ -115,6 +117,7 @@ const NotificationPopover = () => {
               />
               <NotificationContent
                 isLoading={isLoading}
+                onOpen={onOpen}
                 onInboxCount={onInboxCount}
                 inboxCount={inboxCount}
                 notificationList={notificationList}
@@ -145,6 +148,7 @@ const NotificationPopover = () => {
                 onMarkAll={onMarkAll}
               />
               <NotificationContent
+                onOpen={onOpen}
                 isLoading={isLoading}
                 onInboxCount={onInboxCount}
                 inboxCount={inboxCount}

@@ -7,21 +7,82 @@ const PurposeCodePaths: Record<string, string> = {
   rating: `${DEFAULT_ICON_PATH}/rating.svg`,
 }
 
-const iconMapping = {
-  draft: ['OtpCode', 'ConsentRequest'],
-  logo: ['Staff', 'TemplateMessage', 'Appointment'],
-  rating: ['PatientSignup'],
-  card: ['Subscription', 'SubscriptionRenewed', 'SubscriptionCancel'],
+enum Purpose_Code_Types {
+  CreditCardRequest = 'CreditCardRequest',
+  Appointment = 'Appointment',
+  InsuranceRequest = 'InsuranceRequest',
+  Questionnaire = 'Questionnaire',
+  Subscription = 'Subscription',
+  OtpCode = 'OtpCode',
+  ConsentRequest = 'ConsentRequest',
+  PatientSignup = 'PatientSignup',
+  Staff = 'Staff',
+  TemplateMessage = 'TemplateMessage',
 }
 
-const getPurposeCodeIconPath = (purposeCode: string): string => {
-  for (const [iconCategory, codes] of Object.entries(iconMapping)) {
-    if (codes.some((item) => purposeCode.startsWith(item))) {
-      return PurposeCodePaths[iconCategory]
+const iconMapping = {
+  draft: [
+    Purpose_Code_Types.OtpCode,
+    Purpose_Code_Types.ConsentRequest,
+    Purpose_Code_Types.Questionnaire,
+    Purpose_Code_Types.InsuranceRequest,
+  ],
+  logo: [
+    Purpose_Code_Types.Staff,
+    Purpose_Code_Types.TemplateMessage,
+    Purpose_Code_Types.Appointment,
+  ],
+  rating: [Purpose_Code_Types.PatientSignup],
+  card: [
+    Purpose_Code_Types.CreditCardRequest,
+    Purpose_Code_Types.Subscription,
+    `${Purpose_Code_Types.Subscription}Renewed`,
+    `${Purpose_Code_Types.Subscription}Cancel`,
+  ],
+}
+
+const appointmentCodes = [
+  `${Purpose_Code_Types.Appointment}Reminder`,
+  `${Purpose_Code_Types.Appointment}Rescheduled`,
+  `${Purpose_Code_Types.Appointment}Cancel`,
+  `${Purpose_Code_Types.Appointment}NoShow`,
+  `${Purpose_Code_Types.Appointment}Checkout`,
+]
+
+const purposeCodePaths = {
+  ['home']: appointmentCodes,
+  ['billing/credit-debit-cards']: [Purpose_Code_Types.CreditCardRequest],
+  ['billing/insurance']: [Purpose_Code_Types.InsuranceRequest],
+}
+
+const purposeLabels: Record<string, string> = Object.fromEntries([
+  ...appointmentCodes.map((code) => [code, 'Open Appointments']),
+  [Purpose_Code_Types.CreditCardRequest, 'Update Card'],
+  [Purpose_Code_Types.InsuranceRequest, 'Update Insurance'],
+  [Purpose_Code_Types.Questionnaire, 'Go to Questionnaire'],
+])
+
+const getPurposeCodeMeta = (
+  purposeCode: string,
+): { route?: string; iconPath: string; label: string | undefined } => {
+  let route: string | undefined = undefined
+
+  for (const [path, codes] of Object.entries(purposeCodePaths)) {
+    if (codes.includes(purposeCode as Purpose_Code_Types)) {
+      route = `/${path}`
+      break
     }
   }
 
-  return PurposeCodePaths.logo
+  let iconPath = PurposeCodePaths.logo
+  for (const [category, codes] of Object.entries(iconMapping)) {
+    if (codes.some((prefix) => purposeCode.startsWith(prefix))) {
+      iconPath = PurposeCodePaths[category]
+      break
+    }
+  }
+  const label = purposeLabels[purposeCode]
+  return { route, iconPath, label }
 }
 
 const createScrollRestorer = (container: HTMLElement | null) => {
@@ -66,4 +127,9 @@ const getTimeAgo = (date: Date): string => {
   return `${years} year${years === 1 ? '' : 's'} ago`
 }
 
-export { getPurposeCodeIconPath, getTimeAgo, createScrollRestorer }
+export {
+  getPurposeCodeMeta,
+  getTimeAgo,
+  createScrollRestorer,
+  Purpose_Code_Types,
+}

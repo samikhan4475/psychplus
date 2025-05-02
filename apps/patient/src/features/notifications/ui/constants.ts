@@ -1,3 +1,4 @@
+
 enum NotificationTab {
   All = 'All',
   Appointments = 'Appointments',
@@ -6,4 +7,7 @@ enum NotificationTab {
 
 const NOTIFICATION_PAGINATION_SIZE = 10
 
-export { NotificationTab, NOTIFICATION_PAGINATION_SIZE }
+export {
+  NotificationTab,
+  NOTIFICATION_PAGINATION_SIZE,
+}

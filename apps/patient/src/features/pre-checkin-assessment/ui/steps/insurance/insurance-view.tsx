@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect } from 'react'
 import { GOOGLE_MAPS_API_KEY } from '@psychplus-v2/env'
 import { FeatureCard } from '@/components-v2'
@@ -19,7 +21,10 @@ const InsuranceView = ({
 
   useEffect(() => {
     if (isSaveButtonPressed)
-      save({ isTabCompleted: patientInsurances?.policies?.length > 0, patientId })
+      save({
+        isTabCompleted: patientInsurances?.policies?.length > 0,
+        patientId,
+      })
   }, [isSaveButtonPressed])
 
   return (

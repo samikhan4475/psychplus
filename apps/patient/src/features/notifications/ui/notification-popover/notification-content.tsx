@@ -11,11 +11,13 @@ interface NotificationContentProps {
   isLoading: boolean
   onInboxCount: (count: number) => void
   inboxCount: number
+  onOpen: () => void
 }
 
 const NotificationContent = ({
   notificationList,
   onInboxCount,
+  onOpen,
   inboxCount,
   isLoading,
 }: NotificationContentProps) => {
@@ -42,7 +44,12 @@ const NotificationContent = ({
   return notificationList.length > 0 ? (
     <ScrollArea className="max-h-[calc(100vh-66px)] min-h-[350px] sm:max-h-[calc(100vh-325px)]">
       {notificationList.map((note) => (
-        <NotificationCard onMark={onMark} key={note.id} {...note} />
+        <NotificationCard
+          popoverToggle={onOpen}
+          onMark={onMark}
+          key={note.id}
+          {...note}
+        />
       ))}
     </ScrollArea>
   ) : (

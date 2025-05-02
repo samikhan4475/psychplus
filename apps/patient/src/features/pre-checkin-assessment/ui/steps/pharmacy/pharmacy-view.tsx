@@ -1,4 +1,4 @@
-'user client'
+'use client'
 
 import React, { useEffect } from 'react'
 import { FeatureCard, FeatureContainer } from '@/components-v2'
