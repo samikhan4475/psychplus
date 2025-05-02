@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Grid, Text } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { getPracticeIdsAction } from '@/actions'
+import { getUserAuthAction } from '@/actions'
 import { FormContainer } from '@/components'
 import {
   formatDateToISOString,
@@ -38,7 +37,6 @@ const InsurancePaymentForm = ({
   data,
   onCloseModal,
 }: InsurancePaymentFormProps) => {
-  const [practiceId, setPracticeId] = useState('')
   const { search } = useStore((state) => ({
     search: state.search,
   }))
@@ -59,93 +57,78 @@ const InsurancePaymentForm = ({
     },
   })
 
-  useEffect(() => {
-    getPracticeIdsAction().then((result) => {
-      if (result.state === 'success') {
-        setPracticeId(result.data[0].value) // first practice id
-      }
-    })
-  }, [])
+  async function onSave(formData: SchemaType) {
+    const user = await getUserAuthAction()
 
-  const onSave = async (formData: SchemaType) => {
-    const fileNamesList = form.getValues('attachments') || []
+    const attachmentsList = form.getValues('attachments') ?? []
 
-    if (fileNamesList.length === 0) {
+    if (attachmentsList.length === 0) {
       toast.error('Please upload at least one attachment file')
       return
     }
 
     const formDataObj = new FormData()
-    fileNamesList.forEach((item) => {
+    attachmentsList.forEach((item) => {
       if (item.file) formDataObj.append('files', item.file)
     })
 
     const attachmentFiles: PaymentAttachments[] = []
     if (data?.id) {
-      fileNamesList.forEach((item) => {
+      attachmentsList.forEach((item) => {
         if (!item.isNewUpload) attachmentFiles.push(item)
       })
     }
 
-    delete formData.attachments
+    const { attachments, ...restFormData } = formData
 
-    let reqPayload: Partial<InsurancePayment> = {
-      ...formData,
-      checkDate: formatDateToISOString(formData.checkDate) || '',
-      receivedDate: formatDateToISOString(formData.receivedDate) || '',
-      depositDate: formatDateToISOString(formData.depositDate) || '',
+    const reqPayload: Partial<InsurancePayment> = {
+      ...restFormData,
+      checkDate: formatDateToISOString(formData.checkDate) ?? '',
+      receivedDate: formatDateToISOString(formData.receivedDate) ?? '',
+      depositDate: formatDateToISOString(formData.depositDate) ?? '',
       paymentAttachments: attachmentFiles,
-      practiceId: practiceId,
+      practiceId: user?.practiceId,
     }
 
-    if (data && data?.id) {
-      reqPayload = {
-        ...data,
-        ...reqPayload,
-      }
-    } else {
-      reqPayload = {
-        ...reqPayload,
-        status: 'NeedPosted',
-        paymentType: 'Eob',
-      }
-    }
+    const { claimPayments, ...cleanedPayload } = reqPayload
+    const finalPayload = data?.id
+      ? {
+          ...data,
+          ...cleanedPayload,
+        }
+      : {
+          ...cleanedPayload,
+          status: 'NeedPosted',
+          paymentType: 'Eob',
+        }
 
-    delete reqPayload['claimPayments']
+    const sanitizedPayload = sanitizeFormData(finalPayload)
 
-    const sanitizedPayload = sanitizeFormData(reqPayload)
-
-    const response =
-      data && data.id
-        ? await updateInsurancePaymentAction(sanitizedPayload, data?.id)
-        : await addInsurancePaymentAction(sanitizedPayload)
+    const response = data?.id
+      ? await updateInsurancePaymentAction(sanitizedPayload, data?.id)
+      : await addInsurancePaymentAction(sanitizedPayload)
 
     if (response.state === 'error') {
       toast.error(response.error)
       return
     }
 
-    if (response.data) {
-      if (formDataObj.getAll('files').length > 0) {
-        const attachmentsResponse =
-          await createInsurancePaymentAttachmentsAction(
-            formDataObj,
-            response.data.id,
-          )
+    if (formDataObj.getAll('files').length > 0) {
+      const attachmentsResponse = await createInsurancePaymentAttachmentsAction(
+        formDataObj,
+        response.data.id,
+      )
 
-        if (attachmentsResponse.state === 'error') {
-          toast.error(attachmentsResponse.error)
-          return
-        }
+      if (attachmentsResponse.state === 'error') {
+        toast.error(attachmentsResponse.error)
+        return
       }
-
-      onCloseModal(false)
-      form.reset()
-      toast.success('Record has been saved successfully')
-      search({})
-    } else {
-      toast.error('Unable to save record')
     }
+
+    onCloseModal(false)
+    form.reset()
+    toast.success('Record has been saved successfully')
+    search()
   }
 
   return (

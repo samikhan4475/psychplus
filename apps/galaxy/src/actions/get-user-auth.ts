@@ -1,9 +1,8 @@
 'use server'
 
-import { AuthSession } from '@/types'
 import { getAuthCookies } from '@/utils/auth'
 
-const getUserAuthAction = (): AuthSession | undefined => {
+const getUserAuthAction = async () => {
   return getAuthCookies()
 }
 

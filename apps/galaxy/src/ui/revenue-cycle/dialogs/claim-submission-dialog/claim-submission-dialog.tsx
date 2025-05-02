@@ -27,10 +27,13 @@ const ClaimSubmissionDialog = ({
   isScrubOnly,
   onFormClose,
 }: PropsWithChildren<ClaimSubmissionDialogProps>) => {
-  const [selectedTab, selectedRows] = useStore((state) => [
-    state.selectedTab,
-    state.selectedRows,
-  ])
+  const [selectedTab, selectedRows, filteredInsurancePolicyPriority] = useStore(
+    (state) => [
+      state.selectedTab,
+      state.selectedRows,
+      state.filteredInsurancePolicyPriority,
+    ],
+  )
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [claimErrorResponses, setClaimErrorResponses] = useState<
@@ -53,7 +56,8 @@ const ClaimSubmissionDialog = ({
       claimType: 'Professional',
       claimIds: selectedRows,
       isScrubOnly: isScrubOnly ?? false,
-      insurancePolicyPriority: InsurancePolicyPriority.Primary,
+      insurancePolicyPriority:
+        filteredInsurancePolicyPriority ?? InsurancePolicyPriority.Primary,
       clearingHouseReceiverId: clearingHouse ?? '',
     }
     setIsLoading(true)

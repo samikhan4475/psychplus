@@ -8,9 +8,9 @@ import { useStore } from './store'
 
 const ViewHcfaButton = () => {
   const [loading, setLoading] = useState(false)
-  const [selectedRows, filterInsurancePolicyPriority] = useStore((state) => [
+  const [selectedRows, filteredInsurancePolicyPriority] = useStore((state) => [
     state.selectedRows,
-    state.filterInsurancePolicyPriority,
+    state.filteredInsurancePolicyPriority,
   ])
 
   const { setSelectedPdfFileUrl, setActiveTab, selectedPdfFileUrl } =
@@ -29,7 +29,7 @@ const ViewHcfaButton = () => {
     try {
       const payload = {
         claimIds: selectedRows,
-        insurancePolicyPriority: filterInsurancePolicyPriority,
+        insurancePolicyPriority: filteredInsurancePolicyPriority,
         claimType: 'Professional',
       }
       const url = await previewFile(

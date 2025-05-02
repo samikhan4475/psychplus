@@ -11,12 +11,12 @@ const insuranceTypeOptions = [
 ]
 const InsuranceTypeSelect = () => {
   const form = useFormContext<SchemaType>()
-  const { setFilterInsurancePolicyPriority } = useStore((state) => state)
+  const { setFilteredInsurancePolicyPriority } = useStore((state) => state)
 
   const onValueChange = (value: string) => {
     form.setValue('insurancePolicyPriority', value)
     // Based on this state value we send request to download HCFA file
-    setFilterInsurancePolicyPriority(value)
+    setFilteredInsurancePolicyPriority(value)
   }
 
   return (
