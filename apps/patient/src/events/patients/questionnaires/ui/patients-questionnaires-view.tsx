@@ -17,7 +17,7 @@ const PatientsQuestionnairesView = async ({
 }: PatientsQuestionnairesViewProps) => {
   const questionnaireSection = QuestionnaireType[questionnaireType]
   const response = await getQuestionnaireStatus({
-    pId: Number(patientId),
+    pId: patientId,
     sectionName: [questionnaireSection],
   })
 

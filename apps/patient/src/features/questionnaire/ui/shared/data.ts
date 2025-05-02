@@ -37,11 +37,12 @@ const transformOut =
   ): Promise<NoteSectionItem[]> => {
     const result: NoteSectionItem[] = []
     let codesResult: NoteSectionItem[] = []
-
+    // Explicitly set pid to zero in case of an anonymous call
+    const pid = isUnAuthenticated ? 0 : Number(patientId)
     Object.entries(schema).forEach(([key, value]) => {
       if (value !== '') {
         result.push({
-          pid: Number(patientId),
+          pid,
           sectionName: sectionName,
           sectionItem: key,
           sectionItemValue: value?.toString() || '',
@@ -50,7 +51,7 @@ const transformOut =
     })
     if (isUnAuthenticated)
       codesResult.push({
-        pid: Number(patientId),
+        pid,
         sectionName: NoteSectionName.NoteSectionCodes,
         sectionItem: CptCodeKeys.ADD_ONS_KEY,
         sectionItemValue: '96127',

@@ -5,7 +5,7 @@ import { NoteSectionName } from '@/features/note/constants'
 import { NoteSectionItem } from '../../note/types'
 
 interface QuestionnaireStatusPayload {
-  pId: number
+  pId: string
   appId?: number
   sectionName: NoteSectionName[]
 }
