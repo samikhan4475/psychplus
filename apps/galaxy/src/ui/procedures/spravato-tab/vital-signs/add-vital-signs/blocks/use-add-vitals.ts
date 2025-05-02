@@ -64,13 +64,13 @@ export default (vitalSigns: VitalSignData[]) => {
     } else {
       newConfig[previousTimeSLot] = {
         ...newConfig[previousTimeSLot],
-        information: nextConfig.information,
+        information: nextConfig?.information ?? '',
         showMessage: nextConfig.showMessage,
         treatmentStatus: nextConfig.treatmentStatus,
       }
       newConfig[currentTimeSlot.current] = {
         showMessage: false,
-        treatmentLabel: nextConfig.treatmentLabel,
+        treatmentLabel: nextConfig?.treatmentLabel ?? '',
       }
     }
 
@@ -78,9 +78,9 @@ export default (vitalSigns: VitalSignData[]) => {
       const vitalSigns: VitalSignData[] = form.getValues('vitalSigns')
       if (vitalSigns.length > 0) {
         vitalSigns[0].label =
-          newConfig[Number(vitalSigns[0].timeSlot)].treatmentLabel
+          newConfig[Number(vitalSigns[0].timeSlot)]?.treatmentLabel ?? ''
         vitalSigns[0].information =
-          newConfig[Number(vitalSigns[0].timeSlot)].information
+          newConfig[Number(vitalSigns[0].timeSlot)]?.information ?? ''
         form.setValue('vitalSigns', [...vitalSigns])
       }
     }
