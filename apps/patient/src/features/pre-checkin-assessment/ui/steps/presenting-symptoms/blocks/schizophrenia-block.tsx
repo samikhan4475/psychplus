@@ -17,27 +17,27 @@ const SCHIZOPHRENIA_BLOCK_OPTIONS = [
     value: 'schHallucination',
   },
   {
-    label: 'Disorganized',
+    label: 'Confused Thoughts or Behavior',
     value: 'schDisorganized',
   },
   {
-    label: 'Anhedonia',
+    label: 'No Joy or Pleasure in Life',
     value: 'schAnhedonia',
   },
   {
-    label: 'Avolition',
+    label: 'AvoNo Motivation or Interestlition',
     value: 'schAvolition',
   },
   {
-    label: 'Catatonia',
+    label: 'Still or Rigid Movement',
     value: 'schCatatonia',
   },
   {
-    label: 'Suicidal Thoughts',
+    label: 'Thinking About Ending Life',
     value: 'schSuicidalThoughts',
   },
   {
-    label: 'Homicidal Thoughts',
+    label: 'Thinking About Hurting Others',
     value: 'schHomicidalThoughts',
   },
 ]

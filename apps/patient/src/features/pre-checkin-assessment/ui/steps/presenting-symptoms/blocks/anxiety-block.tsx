@@ -15,7 +15,7 @@ const anxietyOptions = [
   { label: 'Social Anxiety', value: 'anxSocialAnxiety' },
   { label: 'Panic Attacks', value: 'anxPanicAttacks' },
   { label: 'Phobia', value: 'anxPhobia' },
-  { label: 'Abnormal Fear', value: 'anxAbnormalFear' },
+  { label: 'Unusual or Intense Fears', value: 'anxAbnormalFear' },
 ]
 
 const AnxietyBlock = () => {

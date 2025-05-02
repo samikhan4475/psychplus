@@ -42,9 +42,6 @@ const VitalsInfoSection = ({
     [eventVitals, initialVitals],
   )
 
-  const formatHeightInInches = (heightCm?: number) =>
-    heightCm ? (heightCm * 0.39).toFixed(2) : undefined
-
   return (
     <>
       <LabelAndValue
@@ -65,13 +62,7 @@ const VitalsInfoSection = ({
       />
       <LabelAndValue
         label="Height/Weight"
-        value={
-          vital?.heightCm && vital.weightPounds
-            ? `${formatHeightInInches(
-                vital?.heightCm,
-              )} / ${vital?.weightPounds?.toFixed(2)} lb`
-            : undefined
-        }
+        value={`${vital?.heightInches}/${vital?.weightPounds}`}
       />
       <BmiValue vital={vital} />
     </>

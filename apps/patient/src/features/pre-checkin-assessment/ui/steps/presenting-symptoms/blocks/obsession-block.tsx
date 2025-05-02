@@ -6,16 +6,16 @@ import { useFormContext } from 'react-hook-form'
 import PillBlock from '../../../shared-blocks/pill-block'
 
 const obsessionOptions = [
-  { label: 'Contamination', value: 'obsContamination' },
-  { label: 'Doubt', value: 'obsDoubt' },
-  { label: 'Somatic', value: 'obsSomatic' },
-  { label: 'Aggression', value: 'obsAggression' },
-  { label: 'Sexual', value: 'obsSexual' },
-  { label: 'Checking', value: 'obsChecking' },
-  { label: 'Washing', value: 'obsWashing' },
-  { label: 'Counting', value: 'obsCounting' },
-  { label: 'Hoarding', value: 'obsHoarding' },
-  { label: 'Picking', value: 'obsPicking' },
+  { label: 'Fear of Germs or Dirt', value: 'obsContamination' },
+  { label: 'Constant Uncertainty', value: 'obsDoubt' },
+  { label: 'Worry About Body or Health', value: 'obsSomatic' },
+  { label: 'Scary Thoughts of Hurting Others', value: 'obsAggression' },
+  { label: 'Unwanted Sexual Thoughts', value: 'obsSexual' },
+  { label: 'Checking Things Repeatedly', value: 'obsChecking' },
+  { label: 'Washing Hands or Things Too Much', value: 'obsWashing' },
+  { label: 'Counting Things Over and Over', value: 'obsCounting' },
+  { label: 'Keeping Too Many Things', value: 'obsHoarding' },
+  { label: 'Skin or Hair Picking', value: 'obsPicking' },
 ]
 
 const ObsessionBlock = () => {

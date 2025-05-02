@@ -6,15 +6,18 @@ import { useFormContext } from 'react-hook-form'
 import PillBlock from '../../../shared-blocks/pill-block'
 
 const maniaOptions = [
-  { label: 'Elevated Mood', value: 'manElevatedMood' },
-  { label: 'Distractibility', value: 'manDistractibility' },
-  { label: 'Goal Directed', value: 'manGoalDirected' },
-  { label: 'Grandiose Delusions', value: 'manGrandioseDelusions' },
-  { label: 'Flight of ideas', value: 'manFlightOfIdeas' },
-  { label: 'Lack of Sleep', value: 'manLackOfSleep' },
-  { label: 'Pressured Speech', value: 'manPressuredSpeech' },
+  { label: 'Feeling Too Good or “High”', value: 'manElevatedMood' },
+  { label: 'Easily Distracted', value: 'manDistractibility' },
+  { label: 'Over-Focused on Tasks or Projects', value: 'manGoalDirected' },
   {
-    label: 'Impulsive/Reckless Behavior',
+    label: 'Unrealistic Beliefs About Yourself',
+    value: 'manGrandioseDelusions',
+  },
+  { label: 'Thoughts Jump Quickly', value: 'manFlightOfIdeas' },
+  { label: 'Lack of Sleep', value: 'manLackOfSleep' },
+  { label: 'Talking Too Fast', value: 'manPressuredSpeech' },
+  {
+    label: 'Doing Risky Things Without Thinking',
     value: 'manImpulsiveRecklessBehavior',
   },
 ]

@@ -6,16 +6,19 @@ import { useFormContext } from 'react-hook-form'
 import PillBlock from '../../../shared-blocks/pill-block'
 
 const ptsdOptions = [
-  { label: 'Traumatic Event', value: 'ptsTraumaticEvent' },
-  { label: 'Intrusive Memories', value: 'ptsIntrusiveMemories' },
+  { label: 'Bad or Scary Experience', value: 'ptsTraumaticEvent' },
+  { label: 'Unwanted Thoughts or Flashbacks', value: 'ptsIntrusiveMemories' },
   { label: 'Nightmares', value: 'ptsNightmares' },
-  { label: 'Night Terrors', value: 'ptsNightTerrors' },
+  { label: 'Waking Up Very Scared', value: 'ptsNightTerrors' },
   { label: 'Flashbacks', value: 'ptsFlashbacks' },
-  { label: 'Dissociative Episodes', value: 'ptsDissociativeEpisodes' },
-  { label: 'Hypervigilance', value: 'ptsHypervigilance' },
-  { label: 'Avoidance', value: 'ptsAvoidance' },
-  { label: 'Startled', value: 'ptsStartled' },
-  { label: 'Detachment', value: 'ptsDetachment' },
+  {
+    label: 'Feeling Disconnected or “Spaced Out”',
+    value: 'ptsDissociativeEpisodes',
+  },
+  { label: 'Always On Alert', value: 'ptsHypervigilance' },
+  { label: 'Avoiding People or Places', value: 'ptsAvoidance' },
+  { label: 'Jumping Easily', value: 'ptsStartled' },
+  { label: 'Feeling Numb or Emotionally Distant', value: 'ptsDetachment' },
 ]
 
 const PtsdBlock = () => {

@@ -8,13 +8,13 @@ import PillBlock from '../../../shared-blocks/pill-block'
 const autismData = {
   title: 'Autism',
   options: [
-    { label: 'Delayed Milestones', value: 'autDelayedMilestones' },
-    { label: 'Repetitive/Restrictive Behaviors', value: 'autRepetitive' },
-    { label: 'Regression', value: 'autRegression' },
-    { label: 'Social/Communication Issues', value: 'autSocial' },
-    { label: 'Aversions/Special Interests', value: 'autAversions' },
-    { label: 'Masking', value: 'autMasking' },
-    { label: 'Emotional Dysregulations', value: 'autEmotionalDysregulation' },
+    { label: 'Late in Talking/Walking etc.', value: 'autDelayedMilestones' },
+    { label: 'Same Actions Over and Over', value: 'autRepetitive' },
+    { label: 'Losing Skills Already Learned', value: 'autRegression' },
+    { label: 'Trouble Talking or Making Friends', value: 'autSocial' },
+    { label: 'Strong Likes/Dislikes', value: 'autAversions' },
+    { label: 'Hiding True Feelings or Behaviors', value: 'autMasking' },
+    { label: 'Big Reactions to Feelings', value: 'autEmotionalDysregulation' },
   ],
 }
 

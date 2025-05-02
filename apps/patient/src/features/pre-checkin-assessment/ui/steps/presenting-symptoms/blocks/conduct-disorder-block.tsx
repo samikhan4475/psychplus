@@ -8,16 +8,16 @@ import PillBlock from '../../../shared-blocks/pill-block'
 const conductDisorderData = {
   title: 'Conduct Disorder',
   options: [
-    { label: 'Discipline Issues', value: 'cdDisciplineIssues' },
-    { label: 'Defiance', value: 'cdDefiance' },
-    { label: 'Argumentative', value: 'cdArgumentative' },
-    { label: 'Vengeful', value: 'cdVengeful' },
-    { label: 'Deceitful', value: 'cdDeceitful' },
-    { label: 'Destructive', value: 'cdDestructive' },
-    { label: 'Disproportionate Anger', value: 'cdDisproportionateAnger' },
-    { label: 'Animal Cruelty', value: 'cdAnimalCruelty' },
-    { label: 'Manipulative', value: 'cdManipulative' },
-    { label: 'Sudden Outbursts', value: 'cdSuddenOutbursts' },
+    { label: 'Breaks Rules Often', value: 'cdDisciplineIssues' },
+    { label: 'Refuses to Follow Rules', value: 'cdDefiance' },
+    { label: 'Likes to Argue', value: 'cdArgumentative' },
+    { label: 'VengSeeks Revenge or Holds Grudgeseful', value: 'cdVengeful' },
+    { label: 'Lies or Cheats', value: 'cdDeceitful' },
+    { label: 'Breaks or Damages Things', value: 'cdDestructive' },
+    { label: 'Gets Too Angry Easily', value: 'cdDisproportionateAnger' },
+    { label: 'Hurts Animals', value: 'cdAnimalCruelty' },
+    { label: 'Tries to Control Others', value: 'cdManipulative' },
+    { label: 'Explosive Behavior', value: 'cdSuddenOutbursts' },
   ],
 }
 

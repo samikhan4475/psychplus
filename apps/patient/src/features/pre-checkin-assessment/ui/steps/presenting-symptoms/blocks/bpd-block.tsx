@@ -6,13 +6,16 @@ import { useFormContext } from 'react-hook-form'
 import PillBlock from '../../../shared-blocks/pill-block'
 
 const bpdOptions = [
-  { label: 'Fear of Abandonment', value: 'bpdFearOfAbandonment' },
-  { label: 'Unstable Self-Image', value: 'bpdUnstableSelfImage' },
-  { label: 'Unstable Relationships', value: 'bpdUnstableRelationships' },
-  { label: 'Mood Swings', value: 'bpdMoodSwings' },
-  { label: 'Black/White Thinking', value: 'bpdBlackWhiteThinking' },
-  { label: 'Impulsiveness', value: 'bpdImpulsiveness' },
-  { label: 'Self-Harm', value: 'bpdSelfHarm' },
+  { label: 'Afraid People Will Leave You', value: 'bpdFearOfAbandonment' },
+  { label: 'Not Sure Who You Are', value: 'bpdUnstableSelfImage' },
+  {
+    label: 'Ups and Downs in Relationships',
+    value: 'bpdUnstableRelationships',
+  },
+  { label: 'Quick Emotional Changes', value: 'bpdMoodSwings' },
+  { label: 'All or Nothing Thinking', value: 'bpdBlackWhiteThinking' },
+  { label: 'Doing Things Without Thinking', value: 'bpdImpulsiveness' },
+  { label: 'Hurting Yourself on Purpose', value: 'bpdSelfHarm' },
 ]
 
 const BpdBlock = () => {

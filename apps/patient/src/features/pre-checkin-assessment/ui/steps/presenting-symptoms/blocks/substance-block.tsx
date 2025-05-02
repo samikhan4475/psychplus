@@ -7,15 +7,15 @@ import { DetailsType } from '@/components-v2/selectable-chip-details'
 import PillBlock from '../../../shared-blocks/pill-block'
 
 const substanceOptions = [
-  { label: 'Tobacco', value: 'subTobacco' },
-  { label: 'Alcohol', value: 'subAlcohol' },
-  { label: 'Opioids', value: 'subOpioids' },
-  { label: 'Marijuana', value: 'subMarijuana' },
-  { label: 'Benzos', value: 'subBenzos' },
+  { label: 'Smoking or Chewing Tobacco', value: 'subTobacco' },
+  { label: 'Drinking Too Much Alcohol', value: 'subAlcohol' },
+  { label: 'Pain Medications Like Oxycodone', value: 'subOpioids' },
+  { label: 'Weed/Cannabis', value: 'subMarijuana' },
+  { label: 'Anxiety Pills', value: 'subBenzos' },
   { label: 'Cocaine', value: 'subCocaine' },
-  { label: 'Amphetamine', value: 'subAmphetamine' },
-  { label: 'PCP', value: 'subPcp' },
-  { label: 'Inhalant', value: 'subInhalant' },
+  { label: 'Stimulant Like Adderall or Meth', value: 'subAmphetamine' },
+  { label: 'Hallucinogen', value: 'subPcp' },
+  { label: 'Sniffing Chemicals or Gases', value: 'subInhalant' },
   {
     label: 'Other',
     value: 'subOther',

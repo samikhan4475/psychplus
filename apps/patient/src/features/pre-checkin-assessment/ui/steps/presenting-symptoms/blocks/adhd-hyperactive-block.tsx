@@ -6,16 +6,19 @@ import { useFormContext } from 'react-hook-form'
 import PillBlock from '../../../shared-blocks/pill-block'
 
 const hyperactiveOptions = [
-  { label: 'Fidgeting', value: 'adhFidgeting' },
-  { label: 'Leaves Assigned Space', value: 'adhLeavesAssignedSpace' },
-  { label: 'Restless', value: 'adhRestless' },
-  { label: 'Hard to Enjoy Relaxing', value: 'adhHardToEnjoyRelaxing' },
-  { label: 'On the Go', value: 'adhOnTheGo' },
-  { label: 'Excessive Talking', value: 'adhExcessiveTalking' },
-  { label: 'Blurt Out Answers', value: 'adhBlurtsOutAnswers' },
-  { label: 'Impatient', value: 'adhImpatient' },
-  { label: 'Interrupts', value: 'adhInterrupts' },
-  { label: 'Behavior Outbursts', value: 'adhBehaviorOutbursts' },
+  { label: 'Can’t Stay Still', value: 'adhFidgeting' },
+  { label: 'Gets Up When Shouldn’t', value: 'adhLeavesAssignedSpace' },
+  { label: 'Feels Like Moving All the Time', value: 'adhRestless' },
+  { label: 'Can’t Sit and Relax', value: 'adhHardToEnjoyRelaxing' },
+  { label: 'Always Active', value: 'adhOnTheGo' },
+  { label: 'Talks a Lot', value: 'adhExcessiveTalking' },
+  { label: 'Interrupts or Talks Over Others', value: 'adhBlurtsOutAnswers' },
+  { label: 'Can’t Wait', value: 'adhImpatient' },
+  {
+    label: 'InterruptsCuts People Off in Conversation',
+    value: 'adhInterrupts',
+  },
+  { label: 'Sudden Anger or Actions', value: 'adhBehaviorOutbursts' },
 ]
 
 const AdhdHyperactiveBlock = () => {

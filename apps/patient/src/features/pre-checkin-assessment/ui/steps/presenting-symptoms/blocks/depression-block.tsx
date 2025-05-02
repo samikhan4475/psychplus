@@ -7,18 +7,18 @@ import PillBlock from '../../../shared-blocks/pill-block'
 
 const depressionOptions = [
   { label: 'Low Mood', value: 'depLowMood' },
-  { label: 'Sleep Concerns', value: 'depSleepConcerns' },
-  { label: 'Low Interest', value: 'depLowInterest' },
-  { label: 'Guilt', value: 'depGuilt' },
+  { label: 'Trouble Sleeping', value: 'depSleepConcerns' },
+  { label: 'Loss of Interest in Activities', value: 'depLowInterest' },
+  { label: 'Feeling Guilty', value: 'depGuilt' },
   { label: 'Poor Energy', value: 'depPoorEnergy' },
   { label: 'Poor Concentration', value: 'depPoorConcentration' },
   { label: 'Poor Motivation', value: 'depPoorMotivation' },
-  { label: 'Appetite Concerns', value: 'depAppetiteConcerns' },
+  { label: 'Eating More or Less Than Usual', value: 'depAppetiteConcerns' },
   { label: 'Hopeless', value: 'depHopeless' },
-  { label: 'Slowing', value: 'depSlowing' },
-  { label: 'Agitation', value: 'depAgitation' },
-  { label: 'Suicidal Thoughts', value: 'depSuicidalThoughts' },
-  { label: 'Anger', value: 'depAnger' },
+  { label: 'Moving or Thinking Slowly', value: 'depSlowing' },
+  { label: 'Feeling Restless or On Edge', value: 'depAgitation' },
+  { label: 'Thoughts of Ending Life', value: 'depSuicidalThoughts' },
+  { label: 'Getting Mad Easily', value: 'depAnger' },
 ]
 
 const DepressionBlock = () => {

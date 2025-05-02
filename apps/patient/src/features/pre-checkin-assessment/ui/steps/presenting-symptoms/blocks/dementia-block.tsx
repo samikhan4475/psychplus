@@ -6,17 +6,17 @@ import { useFormContext } from 'react-hook-form'
 import PillBlock from '../../../shared-blocks/pill-block'
 
 const dementiaOptions = [
-  { label: 'Memory Loss', value: 'demMemoryLoss' },
-  { label: 'Confusion', value: 'demConfusion' },
+  { label: 'Forgets People or Things', value: 'demMemoryLoss' },
+  { label: 'Gets Mixed Up Easily', value: 'demConfusion' },
   {
-    label: 'Difficulty with Activities of Daily Living',
+    label: 'Needs Help with Daily Tasks',
     value: 'demDifficultyWithAdls',
   },
-  { label: 'Wandering', value: 'demWandering' },
-  { label: 'Agitation', value: 'demAgitation' },
-  { label: 'Auditory Hallucinations', value: 'demAh' },
-  { label: 'Visual Hallucinations', value: 'demVh' },
-  { label: 'Parkinson Symptoms', value: 'demParkinsonSymptoms' },
+  { label: 'Gets Lost or Roams Around', value: 'demWandering' },
+  { label: 'Gets Upset Easily', value: 'demAgitation' },
+  { label: 'Hears Things That Aren’t There', value: 'demAh' },
+  { label: 'Sees Things That Aren’t There', value: 'demVh' },
+  { label: 'Shaky or Stiff Movements', value: 'demParkinsonSymptoms' },
 ]
 
 const DementiaBlock = () => {

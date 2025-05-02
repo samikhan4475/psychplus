@@ -8,19 +8,16 @@ import PillBlock from '../../../shared-blocks/pill-block'
 const BLOCK_TITLE = 'ADHD Inattentive'
 
 const BLOCK_OPTIONS = [
-  { label: 'Careless Mistakes', value: 'adiCarelessMistakes' },
-  { label: 'Decreased Attention', value: 'adiDecreasedAttention' },
-  { label: "Doesn't Listen", value: 'adiDoesntListen' },
-  { label: 'Hard to Follow Instruction', value: 'adiHardToFollowInstruction' },
-  { label: 'Difficulty Organizing', value: 'adiDifficultyOrganizing' },
-  {
-    label: 'Difficulty to do Detail Oriented Tasks',
-    value: 'adiDifficultyToDoDetailOrientedTasks',
-  },
-  { label: 'Loses Things', value: 'adiLosesThings' },
-  { label: 'Easily Distracted', value: 'adiEasilyDistracted' },
-  { label: 'Forgetful', value: 'adiForgetful' },
-]
+  ['Careless Mistakes', 'adiCarelessMistakes'],
+  ['Decreased Attention', 'adiDecreasedAttention'],
+  ["Doesn't Listen", 'adiDoesntListen'],
+  ['Hard to Follow Instruction', 'adiHardToFollowInstruction'],
+  ['Messy or Disorganized', 'adiDifficultyOrganizing'],
+  ['Avoids Hard Tasks', 'adiDifficultyToDoDetailOrientedTasks'],
+  ['Misplaces Items Often', 'adiLosesThings'],
+  ['Easily Distracted', 'adiEasilyDistracted'],
+  ['Forgets Daily Tasks', 'adiForgetful'],
+].map(([label, value]) => ({ label, value }))
 
 const AdhdInattentiveBlock = () => {
   const { watch } = useFormContext()
