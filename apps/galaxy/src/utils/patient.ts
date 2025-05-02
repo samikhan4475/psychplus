@@ -192,6 +192,14 @@ const getTruncatedName = (name: string | undefined, length = 30): string => {
   return name
 }
 
+const formatPatientVitalHeightWeight = (
+  height?: number,
+  weight?: number,
+): string => {
+  if (!height && !weight) return 'N/A'
+  return `${height ?? 'N/A'}/${weight ?? 'N/A'}`
+}
+
 export {
   getPatientFirstName,
   getPatientLastName,
@@ -214,4 +222,5 @@ export {
   filterDefaultCosigner,
   getMaskedSSN,
   getTruncatedName,
+  formatPatientVitalHeightWeight,
 }

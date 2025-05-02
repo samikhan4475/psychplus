@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { genericEventBus } from '@/lib/generic-event-bus'
 import { GenericPayload } from '@/types'
+import { formatPatientVitalHeightWeight } from '@/utils'
 import { PatientVital } from '../vitals'
 import { BmiValue } from './bmi-value'
 import { LabelAndValue } from './label-and-value'
@@ -62,7 +63,10 @@ const VitalsInfoSection = ({
       />
       <LabelAndValue
         label="Height/Weight"
-        value={`${vital?.heightInches}/${vital?.weightPounds}`}
+        value={formatPatientVitalHeightWeight(
+          vital?.heightInches,
+          vital?.weightPounds,
+        )}
       />
       <BmiValue vital={vital} />
     </>
