@@ -8,13 +8,12 @@ import { NoteSectionItem } from '@/features/note/types'
 const addNoteDetailsUnauthenticated = async (
   noteDetails: NoteSectionItem[],
   questionnaireType: string,
+  patientId?: string,
 ): Promise<ActionResult<NoteSectionItem[]>> => {
-  const pid = noteDetails?.[0].pid
   const result = await api.POST<NoteSectionItem[]>(
-    `${API_URL}/api/patients/${pid}/questionnaires/${questionnaireType}`,
+    `${API_URL}/api/patients/${patientId}/questionnaires/${questionnaireType}`,
     noteDetails?.length ? [...noteDetails] : [],
   )
-
   if (result.state === 'error') {
     return {
       state: 'error',

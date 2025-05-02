@@ -63,6 +63,7 @@ const PatientsQuestionnairesSection = ({
             isUnauthenticated={true}
             onSave={handleSave}
             noteType={type}
+            patientId={id}
           >
             <Text size="6" className="font-[600]">
               {title}

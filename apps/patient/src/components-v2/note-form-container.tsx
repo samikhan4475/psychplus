@@ -19,6 +19,7 @@ type NoteFormContainerProps = React.PropsWithChildren<{
   allowExternalSave?: boolean
   isUnauthenticated?: boolean
   noteType?: string
+  patientId?: string
 }>
 
 const NoteFormContainer = ({
@@ -30,6 +31,7 @@ const NoteFormContainer = ({
   allowExternalSave,
   isUnauthenticated = false,
   noteType,
+  patientId,
   children,
 }: NoteFormContainerProps) => {
   const { toast } = useToast()
@@ -59,7 +61,7 @@ const NoteFormContainer = ({
     )
 
     return isUnauthenticated
-      ? addNoteDetailsUnauthenticated(notes, noteType ?? '')
+      ? addNoteDetailsUnauthenticated(notes, noteType ?? '', patientId)
       : addNoteDetails(notes)
   }
 
@@ -74,8 +76,18 @@ const NoteFormContainer = ({
       await saveNoteData(data, data[0].sectionName as NoteSectionName)
 
     await Promise.all([
-      handleNoteDetails(noteCodesRef.current, isUnauthenticated, noteType),
-      handleNoteDetails(noteDiagnosisRef.current, isUnauthenticated, noteType),
+      handleNoteDetails(
+        noteCodesRef.current,
+        isUnauthenticated,
+        noteType,
+        patientId,
+      ),
+      handleNoteDetails(
+        noteDiagnosisRef.current,
+        isUnauthenticated,
+        noteType,
+        patientId,
+      ),
     ])
 
     onSave?.()
@@ -100,11 +112,16 @@ const handleNoteDetails = async (
   data: NoteSectionItem[],
   isUnauthenticated?: boolean,
   noteType?: string,
+  patientId?: string,
 ) => {
   if (data.length === 0) return
 
   const response = isUnauthenticated
-    ? await addNoteDetailsUnauthenticated(data, noteType ?? '')
+    ? await addNoteDetailsUnauthenticated(
+        data,
+        noteType ?? '',
+        patientId,
+      )
     : await addNoteDetails(data)
 
   if (response.state === 'error' && !isUnauthenticated)
