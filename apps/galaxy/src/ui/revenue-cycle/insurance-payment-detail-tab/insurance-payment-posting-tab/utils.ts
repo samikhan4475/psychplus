@@ -14,7 +14,17 @@ const validatePayment = ({
   claimPayment,
   paymentDetail,
 }: ValidatePaymentParams): string => {
+
   if (!claimPayment.claimServiceLinePayments) return ''
+
+  // Need to check sum of paid amounts should not exceed unapplied amount
+  const totalPaidAmount = claimPayment.claimServiceLinePayments.reduce(
+    (prev, curr) => (!curr.rectificationId ? prev + +curr.paidAmount : prev),
+    0,
+  )
+
+  if (totalPaidAmount > +paymentDetail.unPostedAmount)
+    return 'The applied amount must not exceed the check amount.'
 
   const checkAmount = paymentDetail.amount
   let totalPaid = 0
