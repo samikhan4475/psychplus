@@ -927,6 +927,8 @@ const UPDATE_DEFAULT_PAYMENT = (
   isSelfPay: boolean,
 ) =>
   `${API_URL}/api/patients/${patientId}/financialdata/${finanicalDataId}/actions/selfpay/${isSelfPay}`
+const GET_MEDICATIONS_HISTORY = (pharmacyNotificationId: string) =>
+  `${API_URL}/api/pharmacynotifications/${pharmacyNotificationId}/history/actions/search`
 
 export {
   PATIENT_MEDICATION_SIGN_IN,
@@ -1343,4 +1345,5 @@ export {
   GET_MEDICATIONS_REFILL,
   DIS_ASSOCIATE_PERMISSION_ENDPOINT,
   UPDATE_DEFAULT_PAYMENT,
+  GET_MEDICATIONS_HISTORY,
 }

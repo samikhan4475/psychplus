@@ -362,7 +362,30 @@ function formatDateManually(isoString: string): string {
   const [year, month, day] = datePart.split('-')
   return `${month}/${day}/${year}`
 }
+const dateValueToDateOnly = (dateValue: DateValue): Date => {
+  const date = new Date(dateValue.toString())
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate())
+}
+const isValidDateRange = (
+  from: DateValue | null,
+  to: DateValue | null,
+): boolean => {
+  if (!from || !to) return true
+  const fromDate = dateValueToDateOnly(from)
+  const toDate = dateValueToDateOnly(to)
+  return toDate >= fromDate
+}
 
+const formatEndOfDay = (date: DateValue) => {
+  const d = new Date(Date.UTC(date.year, date.month - 1, date.day))
+  d.setUTCHours(23, 59, 59, 999) // Set time to end of day (23:59:59.999)
+  return d.toISOString()
+}
+const formatStartOfDay = (date: DateValue): string => {
+  const d = new Date(Date.UTC(date.year, date.month - 1, date.day))
+  d.setUTCHours(0, 0, 0, 0)
+  return d.toISOString()
+}
 export {
   getCalendarDate,
   getLocalCalendarDate,
@@ -393,4 +416,7 @@ export {
   formatUTCDate,
   concatDateTimeAndFormat,
   formatDateManually,
+  isValidDateRange,
+  formatStartOfDay,
+  formatEndOfDay,
 }

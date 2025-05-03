@@ -69,6 +69,7 @@ interface MedicationRefill {
   drugList?: PharmacyNotificationDrugModel[] | null
   notes?: string
   staff?: StaffResource
+  pharmacyNotificationId: string
 }
 
 interface MedicationRefillResponseList {
@@ -136,10 +137,32 @@ interface PatientPersonInfo {
 enum RefillMedicationType {
   MedicationType = 'Dispensed',
 }
+
+interface MedicationHistoryPayload {
+  id: string
+  dateFrom?: string
+  dateTo?: string
+  isIncludeCreateHistory?: boolean
+  isIncludeMetadataResourceChangeControl?: boolean
+  isIncludeMetadataResourceIds?: boolean
+  isIncludeMetadataResourceStatus?: boolean
+}
+interface MedicationHistoryResponse {
+  metadata: Metadata
+  sectionName: string
+  fieldName: string
+  actionType: string
+  oldValue: string
+  newValue: string
+  keyValue: string
+  id: string
+}
 export {
   RefillMedicationType,
   type MedicationRefill,
   type MedicationRefillResponseList,
   type MedicationRefillAPIRequest,
   type PatientPersonInfo,
+  type MedicationHistoryPayload,
+  type MedicationHistoryResponse,
 }
