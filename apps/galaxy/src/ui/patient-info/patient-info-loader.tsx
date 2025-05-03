@@ -5,7 +5,6 @@ import {
   getPatientConsentsAction,
   getPatientFacesheet,
   getPatientPoliciesAction,
-  getPatientPreferredPartnersAction,
   getPatientProfileAction,
   getPatientRelationshipsAction,
   getPatientVisitsAction,
@@ -27,7 +26,6 @@ const PatientInfoLoader = async ({
     profileResult,
     consentsResult,
     patientRelationshipsResult,
-    preferredPartnerResult,
     patientCardsResult,
     patientFacesheetResult,
     insurancePayersResult,
@@ -37,7 +35,6 @@ const PatientInfoLoader = async ({
     getPatientProfileAction(patientId),
     getPatientConsentsAction(patientId),
     getPatientRelationshipsAction(patientId),
-    getPatientPreferredPartnersAction(patientId),
     getPatientCreditCards(patientId),
     getPatientFacesheet(patientId),
     getInsurancePayersAction(),
@@ -55,9 +52,6 @@ const PatientInfoLoader = async ({
 
   if (patientRelationshipsResult.state === 'error') {
     return <Flex>{patientRelationshipsResult.error}</Flex>
-  }
-  if (preferredPartnerResult?.state === 'error') {
-    return <Flex>{preferredPartnerResult.error}</Flex>
   }
 
   if (patientCardsResult?.state === 'error') {
@@ -84,7 +78,7 @@ const PatientInfoLoader = async ({
       patientId={patientId}
       stripeApiKey={stripeApiKey}
       patientProfile={profileResult.data}
-      patientPreferredPartners={preferredPartnerResult.data}
+      patientPreferredPartners={[]}
       patientRelationships={patientRelationshipsResult.data}
       patientConsents={consentsResult.data}
       patientCards={patientCardsResult.data}
