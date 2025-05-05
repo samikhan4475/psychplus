@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { getProvidersOptionsAction } from '@/actions'
 import { SelectOptionType } from '@/types'
+import { getProvidersOptionsAction } from './client-actions'
 import { TemplateSelect } from './template-select'
 
 type TemplateCosignerSelectProps = {
@@ -22,20 +22,37 @@ const TemplateCosignerSelect = ({
   )
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    const fetchCosignerData = async () => {
-      setLoading(true)
-      const cosignerResult = await getProvidersOptionsAction()
+  const fetchCosignerData = useCallback(async (signal: AbortSignal) => {
+    setLoading(true)
+    try {
+      const cosignerResult = await getProvidersOptionsAction(signal)
       if (cosignerResult.state === 'success') {
         setCosignerData(cosignerResult.data)
-      } else {
+      } else if (cosignerResult.error !== 'AbortError') {
         toast.error(cosignerResult.error ?? 'Failed to fetch cosigner data')
       }
       setLoading(false)
+    } catch (error) {
+      if (!(error instanceof DOMException && error.name === 'AbortError')) {
+        toast.error('Failed to fetch cosigner data')
+      }
+    } finally {
+      if (!signal.aborted) {
+        setLoading(false)
+      }
     }
-
-    fetchCosignerData()
+    setLoading(false)
   }, [])
+
+  useEffect(() => {
+    const controller = new AbortController()
+
+    fetchCosignerData(controller.signal)
+
+    return () => {
+      controller.abort()
+    }
+  }, [fetchCosignerData])
 
   return (
     <TemplateSelect

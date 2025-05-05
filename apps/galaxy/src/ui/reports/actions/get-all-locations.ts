@@ -1,10 +1,13 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { LOCATION_ENDPOINT } from '@/api/endpoints'
 import { Location } from '@/types'
 
-const getAllLocations = async (): Promise<api.ActionResult<Location[]>> => {
-  const response = await api.POST<Location[]>(api.LOCATION_ENDPOINT, {})
+const getAllLocations = async (
+  signal: AbortSignal,
+): Promise<api.ActionResult<Location[]>> => {
+  const response = await api.POST<Location[]>(LOCATION_ENDPOINT, { signal })
 
   if (response.state === 'error') {
     return {

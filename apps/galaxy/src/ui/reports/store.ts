@@ -1,17 +1,11 @@
 import toast from 'react-hot-toast'
 import { create } from 'zustand'
+import { Code, SelectOptionType } from '@/types'
 import {
-  getInsurancePayersOptionsAction,
-  getProvidersOptionsAction,
-} from '@/actions'
-import { Code, SelectOptionType, StaffResource } from '@/types'
-import {
-  getPatientsOptionsAction,
   getReportParametersTypeAction,
   getReportsAction,
   getRunReportAction,
   getScheduledReportsListAction,
-  getStaffAction,
   getTemplatesAction,
 } from './actions'
 import {
@@ -19,7 +13,6 @@ import {
   GetScheduleReportListResponse,
   Parameter,
   ReportFilterParameters,
-  ScheduledReport,
   ScheduleReportListParams,
   StaffDataOptions,
   Template,
@@ -81,7 +74,6 @@ interface Store {
   nextScheduledReport: () => void
   prevScheduledReport: () => void
   jumpToPageScheduleReport: (page: number) => void
-  fetchStaffData: () => void
 }
 
 const useStore = create<Store>((set, get) => ({
@@ -304,43 +296,6 @@ const useStore = create<Store>((set, get) => ({
       toast.error(templatesResult.error ?? 'Failed to fetch data')
       set({
         fetchTemplateLoading: false,
-      })
-    }
-  },
-
-  fetchStaffData: async () => {
-    set({ error: null })
-
-    const [staffResult, insuranceResult, patientResult, cosignerResult] =
-      await Promise.all([
-        getStaffAction(),
-        getInsurancePayersOptionsAction(),
-        getPatientsOptionsAction(),
-        getProvidersOptionsAction(),
-      ])
-
-    if (
-      staffResult.state === 'success' &&
-      insuranceResult.state === 'success' &&
-      patientResult.state === 'success' &&
-      cosignerResult.state === 'success'
-    ) {
-      const transformedStaffData = staffResult?.data.map(
-        (staff: StaffResource) => ({
-          value: String(staff.id),
-          label: `${staff.legalName.firstName} ${staff.legalName.lastName}`,
-        }),
-      )
-
-      set({
-        staffData: transformedStaffData || null,
-        insuranceData: insuranceResult.data || null,
-        patientData: patientResult.data || null,
-        cosignerData: cosignerResult.data || null,
-      })
-    } else {
-      set({
-        error: 'Failed to fetch parameters options data',
       })
     }
   },

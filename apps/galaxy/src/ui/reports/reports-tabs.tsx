@@ -17,7 +17,6 @@ const ReportsTabs = () => {
     setSelectedReport,
     setGeneratedReport,
     setSelectedTemplate,
-    fetchStaffData,
     setScheduleReports,
     resetPageCache,
     resetScheduledReportPageCache,
@@ -26,8 +25,7 @@ const ReportsTabs = () => {
 
   useEffect(() => {
     fetchReportsAndTemplates()
-    fetchStaffData()
-  }, [fetchReportsAndTemplates, fetchStaffData])
+  }, [fetchReportsAndTemplates])
 
   const filteredReports = reports.filter(
     (report) =>

@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { getInsurancePayersOptionsAction } from '@/actions'
 import { SelectOptionType } from '@/types'
+import { getInsurancePayersOptionsAction } from './client-actions'
 import { TemplateSelect } from './template-select'
 
 type TemplateInsuranceSelectProps = {
@@ -22,20 +22,38 @@ const TemplateInsuranceSelect = ({
   )
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    const fetchInsuranceData = async () => {
-      setLoading(true)
-      const insuranceResult = await getInsurancePayersOptionsAction()
+  const fetchInsuranceData = useCallback(async (signal: AbortSignal) => {
+    setLoading(true)
+    try {
+      const insuranceResult = await getInsurancePayersOptionsAction(signal)
       if (insuranceResult.state === 'success') {
         setInsuranceData(insuranceResult.data)
-      } else {
-        toast.error(insuranceResult.error ?? 'Failed to fetch Insurance data')
+      } else if (insuranceResult.error !== 'AbortError') {
+        toast.error(insuranceResult.error ?? 'Failed to fetch insurance data')
       }
       setLoading(false)
+    } catch (error) {
+      if (!(error instanceof DOMException && error.name === 'AbortError')) {
+        toast.error('Failed to fetch insurance data')
+      }
+    } finally {
+      if (!signal.aborted) {
+        setLoading(false)
+      }
     }
 
-    fetchInsuranceData()
+    setLoading(false)
   }, [])
+
+  useEffect(() => {
+    const controller = new AbortController()
+
+    fetchInsuranceData(controller.signal)
+
+    return () => {
+      controller.abort()
+    }
+  }, [fetchInsuranceData])
 
   return (
     <TemplateSelect

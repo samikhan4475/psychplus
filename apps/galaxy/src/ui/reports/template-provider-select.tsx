@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { getProvidersOptionsAction } from '@/actions'
 import { SelectOptionType } from '@/types'
+import { getProvidersOptionsAction } from './client-actions'
 import { TemplateSelect } from './template-select'
 
 type TemplateProviderSelectProps = {
@@ -22,22 +22,37 @@ const TemplateProviderSelect = ({
   )
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    const fetchProviderData = async () => {
-      setLoading(true)
-      const providerResult = await getProvidersOptionsAction()
+  const fetchProviderData = useCallback(async (signal: AbortSignal) => {
+    setLoading(true)
+    try {
+      const providerResult = await getProvidersOptionsAction(signal)
 
       if (providerResult.state === 'success') {
         setProviderData(providerResult.data)
-      } else {
-        toast.error(providerResult.error ?? 'Failed to fetch state data')
+      } else if (providerResult.error !== 'AbortError') {
+        toast.error(providerResult.error ?? 'Failed to fetch provider data')
       }
-
       setLoading(false)
+    } catch (error) {
+      if (!(error instanceof DOMException && error.name === 'AbortError')) {
+        toast.error('Failed to fetch provider data')
+      }
+    } finally {
+      if (!signal.aborted) {
+        setLoading(false)
+      }
     }
-
-    fetchProviderData()
   }, [])
+
+  useEffect(() => {
+    const controller = new AbortController()
+
+    fetchProviderData(controller.signal)
+
+    return () => {
+      controller.abort()
+    }
+  }, [fetchProviderData])
 
   return (
     <TemplateSelect

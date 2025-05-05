@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { getUsStatesOptionsAction } from '@/actions'
 import { SelectOptionType } from '@/types'
+import { getUsStatesOptionsAction } from './client-actions'
 import { TemplateSelect } from './template-select'
 
 type TemplateStateSelectProps = {
@@ -20,10 +20,10 @@ const TemplateStateSelect = ({
   const [stateData, setStateData] = useState<SelectOptionType[] | null>([])
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    const fetchStateData = async () => {
-      setLoading(true)
-      const stateResult = await getUsStatesOptionsAction()
+  const fetchStateData = useCallback(async (signal: AbortSignal) => {
+    setLoading(true)
+    try {
+      const stateResult = await getUsStatesOptionsAction(signal)
 
       if (stateResult.state === 'success') {
         setStateData(stateResult.data)
@@ -32,10 +32,25 @@ const TemplateStateSelect = ({
       }
 
       setLoading(false)
+    } catch (error) {
+      if (!(error instanceof DOMException && error.name === 'AbortError')) {
+        toast.error('Failed to fetch state data')
+      }
+    } finally {
+      if (!signal.aborted) {
+        setLoading(false)
+      }
     }
-
-    fetchStateData()
   }, [])
+
+  useEffect(() => {
+    const controller = new AbortController()
+    fetchStateData(controller.signal)
+
+    return () => {
+      controller.abort()
+    }
+  }, [fetchStateData])
 
   return (
     <TemplateSelect

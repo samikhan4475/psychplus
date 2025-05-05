@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { SelectOptionType } from '@/types'
 import { transformInStaffOptions } from '../staff-comments/tranform'
-import { getStaffAction } from './actions'
+import { getStaffAction } from './client-actions'
 import { TemplateSelect } from './template-select'
 
 type TemplateStaffSelectProps = {
@@ -18,33 +18,51 @@ const TemplateStaffSelect = ({
   name,
   isMultiple,
 }: TemplateStaffSelectProps) => {
-  const [staffData, setStaffData] = useState<SelectOptionType[] | null>([])
+  const [staffData, setStaffData] = useState<SelectOptionType[]>([])
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    const fetchStaffData = async () => {
-      setLoading(true)
-      const staffResult = await getStaffAction()
+  const fetchStaffData = useCallback(async (signal: AbortSignal) => {
+    setLoading(true)
+
+    try {
+      const staffResult = await getStaffAction(signal)
+
       if (staffResult.state === 'success') {
         const transformedData = staffResult.data
           ? transformInStaffOptions(staffResult.data)
           : []
         setStaffData(transformedData)
-      } else {
+      } else if (staffResult.error !== 'AbortError') {
         toast.error(staffResult.error ?? 'Failed to fetch staff data')
       }
       setLoading(false)
+    } catch (error) {
+      if (!(error instanceof DOMException && error.name === 'AbortError')) {
+        toast.error('Failed to fetch staff data')
+      }
+    } finally {
+      if (!signal.aborted) {
+        setLoading(false)
+      }
     }
-
-    fetchStaffData()
   }, [])
+
+  useEffect(() => {
+    const controller = new AbortController()
+
+    fetchStaffData(controller.signal)
+
+    return () => {
+      controller.abort()
+    }
+  }, [fetchStaffData])
 
   return (
     <TemplateSelect
       title={title}
       name={name}
       isMultiple={isMultiple}
-      options={staffData || []}
+      options={staffData}
       isLoading={loading}
     />
   )
