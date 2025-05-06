@@ -18,6 +18,7 @@ export interface LabResultResponse {
   results: LabResult[]
   orderId: string
   patientId: string
+  labName?: string
 }
 
 export interface LabResultTableData {

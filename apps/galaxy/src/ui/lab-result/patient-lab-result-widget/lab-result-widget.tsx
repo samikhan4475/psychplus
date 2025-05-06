@@ -19,7 +19,6 @@ interface LabResultWidgetProps {
 
 const LabResultWidget = ({ isQuickNoteView = true }: LabResultWidgetProps) => {
   const [activeTab, setActiveTab] = useState('TableView')
-
   const patientId = useParams().id as string
 
   const { fetchLabResults } = useStore((state) => ({
@@ -48,12 +47,12 @@ const LabResultWidget = ({ isQuickNoteView = true }: LabResultWidgetProps) => {
           setActiveTab={setActiveTab}
           isQuickNoteView={isQuickNoteView}
         />
-        {!isQuickNoteView && <LabResultFilterForm />}
+        {!isQuickNoteView && <LabResultFilterForm  />}
       </Flex>
 
       <Tabs.Root value={activeTab} onValueChange={setActiveTab}>
         <TabsContent value="TableView">
-          {activeTab === 'TableView' && <LabResultTable />}
+          {activeTab === 'TableView' && <LabResultTable  isQuickNoteView={isQuickNoteView}/>}
         </TabsContent>
         <TabsContent value="SheetView">
           {activeTab === 'SheetView' && <LabResultSheet />}

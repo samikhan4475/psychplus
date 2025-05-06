@@ -5,34 +5,39 @@ import { LabOrderRow } from '../types'
 import { RowActionDelete } from './row-action-delete'
 import { RowResultAttachment } from './row-result-attachment'
 
-const rowActions: RowAction<LabOrders>[] = [
-  {
-    id: 'row-results-attachment',
-    render: RowResultAttachment,
-  },
-  {
-    id: 'row-results-edit',
-    render: ({ row }) => (
-      <AddLabOrderView isEdit={true} labOrderData={row.original} />
-    ),
-  },
-  {
-    id: 'lab-orders-row-action-delete',
-    render: ({ row }) => (
-      <RowActionDelete
-        orderId={row.original?.id ?? ''}
-        orderStatus={row.original.orderStatus}
-      />
-    ),
-  },
-]
-
 interface ActionsCellProps {
   row: LabOrderRow
+  afterSummaryVisit?: boolean
 }
 
-const ActionsCell = ({ row }: ActionsCellProps) => {
-  return <AdaptiveRowActionsCell actions={rowActions} row={row} />
+const ActionsCell = ({ row, afterSummaryVisit }: ActionsCellProps) => {
+  const { original } = row
+
+  const resultAttachmentAction: RowAction<LabOrders> = {
+    id: 'row-results-attachment',
+    render: RowResultAttachment,
+  }
+
+  const editAction: RowAction<LabOrders> = {
+    id: 'row-results-edit',
+    render: () => <AddLabOrderView isEdit={true} labOrderData={original} />,
+  }
+
+  const deleteAction: RowAction<LabOrders> = {
+    id: 'lab-orders-row-action-delete',
+    render: () => (
+      <RowActionDelete
+        orderId={original?.id ?? ''}
+        orderStatus={original.orderStatus}
+      />
+    ),
+  }
+
+  const actions = afterSummaryVisit
+    ? [resultAttachmentAction]
+    : [resultAttachmentAction, editAction, deleteAction]
+
+  return <AdaptiveRowActionsCell actions={actions} row={row} />
 }
 
 export { ActionsCell }

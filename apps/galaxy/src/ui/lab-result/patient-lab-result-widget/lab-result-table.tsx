@@ -1,12 +1,13 @@
-'use client'
-
 import { ScrollArea } from '@radix-ui/themes'
 import { DataTable, LoadingPlaceholder } from '@/components'
-import { columnsForTableView } from './columns'
+import { columnsForTableView, columnsGroupedByTestName } from './columns'
 import { useStore } from './store'
-import { getTableData } from './utils'
+import { getGroupedTestData, getTableData } from './utils'
 
-const LabResultTable = () => {
+interface LabResultTableProps {
+  isQuickNoteView?: boolean
+}
+const LabResultTable = ({ isQuickNoteView }: LabResultTableProps) => {
   const { data, loading } = useStore((state) => ({
     data: state.data,
     loading: state.loading,
@@ -16,7 +17,13 @@ const LabResultTable = () => {
     return <LoadingPlaceholder className="bg-white h-full" />
   }
 
-  const processedData = getTableData(data ?? [])
+  const processedData = isQuickNoteView
+    ? getGroupedTestData(data ?? [])
+    : getTableData(data ?? [])
+
+  const columns = isQuickNoteView
+    ? columnsGroupedByTestName()
+    : columnsForTableView()
 
   return (
     <ScrollArea
@@ -25,9 +32,15 @@ const LabResultTable = () => {
     >
       <DataTable
         data={processedData}
-        columns={columnsForTableView()}
+        columns={columns}
         disablePagination
         sticky
+        isRowSpan={isQuickNoteView}
+        tableClass={
+          isQuickNoteView ? '[&_.rt-ScrollAreaScrollbar]:!hidden' : ''
+        }
+        tRowClass={isQuickNoteView ? 'bg-gray-3' : ''}
+        defaultExpanded={true}
       />
     </ScrollArea>
   )

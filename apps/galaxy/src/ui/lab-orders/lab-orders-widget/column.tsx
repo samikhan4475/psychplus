@@ -6,7 +6,6 @@ import { TableHeaderCheckboxCell } from '../lab-order-results-widget/cells/table
 import { TableRowCheckboxCell } from '../lab-order-results-widget/cells/table-row-checkbox-cell'
 import { LabTestCell, ResultsCell, StatusCell } from './cells'
 import { ActionsCell } from './cells/actions-cell'
-import { InboxOrderActionsCell } from './cells/inbox-order-actions-cell'
 
 const getColumns: (
   appointmentId: string | null,
@@ -53,7 +52,7 @@ const getColumns: (
         </TextCell>
       ),
     },
-  ]
+  ];
 
   if (afterSummaryVisit) {
     baseColumns.push({
@@ -65,7 +64,7 @@ const getColumns: (
       cell: ({ row }) => (
         <TextCell>{row.original?.metadata?.createdByFullName ?? ''}</TextCell>
       ),
-    })
+    });
   }
 
   const remainingColumns: ColumnDef<LabOrders>[] = [
@@ -98,55 +97,64 @@ const getColumns: (
       ),
       cell: ({ row }) => <StatusCell row={row} />,
     },
-  ]
+  ];
 
-  const columns = [...baseColumns, ...remainingColumns]
+  const columns = [...baseColumns, ...remainingColumns];
 
-  if (appointmentId === '0' || afterSummaryVisit) {
-    return columns
-  } else {
-    return !isInboxLabOrder
-      ? [
-          ...columns,
-          {
-            id: 'results',
-            size: 150,
-            header: () => <ColumnHeader label="Result" />,
-            cell: ({ row }) => <ResultsCell row={row} />,
-          },
-          {
-            id: 'actions',
-            size: 100,
-            header: () => <ColumnHeader label="Actions" />,
-            cell: ({ row }) => <ActionsCell row={row} />,
-          },
-        ]
-      : [
-          {
-            id: 'select',
-            header: ({ table }) => (
-              <TableHeaderCheckboxCell
-                checked={table.getIsAllPageRowsSelected()}
-                onCheckedChange={table.toggleAllPageRowsSelected}
-              />
-            ),
-            cell: ({ row }) => (
-              <TableRowCheckboxCell
-                checked={row.getIsSelected()}
-                onCheckedChange={row.toggleSelected}
-              />
-            ),
-            size: 20,
-          },
-          ...columns,
-          {
-            id: 'actions',
-            size: 100,
-            header: () => <ColumnHeader label="Actions" />,
-            cell: ({ row }) => <InboxOrderActionsCell row={row} />,
-          },
-        ]
+  if (appointmentId === '0') {
+    return columns;
   }
-}
+
+  if (afterSummaryVisit) {
+    return [
+      ...columns,
+      {
+        id: 'actions',
+        size: 100,
+        header: () => <ColumnHeader label="Actions" />,
+        cell: ({ row }) => <ActionsCell row={row}  afterSummaryVisit={afterSummaryVisit} />,
+      },
+    ];
+  }
+
+  if (!isInboxLabOrder) {
+    return [
+      ...columns,
+      {
+        id: 'results',
+        size: 150,
+        header: () => <ColumnHeader label="Result" />,
+        cell: ({ row }) => <ResultsCell row={row} />,
+      },
+      {
+        id: 'actions',
+        size: 100,
+        header: () => <ColumnHeader label="Actions" />,
+        cell: ({ row }) => <ActionsCell row={row} />,
+      },
+    ];
+  }
+
+  return [
+    {
+      id: 'select',
+      header: ({ table }) => (
+        <TableHeaderCheckboxCell
+          checked={table.getIsAllPageRowsSelected()}
+          onCheckedChange={table.toggleAllPageRowsSelected}
+        />
+      ),
+      cell: ({ row }) => (
+        <TableRowCheckboxCell
+          checked={row.getIsSelected()}
+          onCheckedChange={row.toggleSelected}
+        />
+      ),
+      size: 20,
+    },
+    ...columns,
+  ];
+};
+
 
 export { getColumns }

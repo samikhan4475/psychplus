@@ -45,4 +45,19 @@ const removeEmptyValues = (obj: FormattedData) => {
   )
 }
 
-export { updateResultsKey, removeEmptyValues, getTableData }
+const getGroupedTestData = (labResults: LabResultResponse[] = []) => {
+  return labResults.map((entry) => ({
+    testName: entry.testName ?? '',
+    subRows: entry.results.map((res) => ({
+      ...res,
+      testName: entry.testName ?? '',
+    })),
+  }))
+}
+
+const getTextColorClass = (code: string | undefined) => {
+  if (!code || code.trim() === '' || code === 'N') return ''
+  return 'text-red-9'
+}
+
+export { updateResultsKey, removeEmptyValues, getTableData, getGroupedTestData, getTextColorClass }

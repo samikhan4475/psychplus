@@ -3,6 +3,7 @@ import { ColumnHeader, DateTimeCell, TextCell } from '@/components'
 import { LabResult } from '@/types'
 import { formatDate, formatUTCDate } from '@/utils/date'
 import { CollapseCell } from './cells/collapse-cell'
+import { ResultNameCell } from './cells/result-name-cell'
 import { GroupedResultsByDate, LabResultResponseTransformed } from './types'
 
 const processSubRows = (subRows: LabResult[]) => {
@@ -137,6 +138,61 @@ const columnsForTableView = (): ColumnDef<LabResult>[] => [
       </TextCell>
     ),
     size: 50,
+  },
+]
+
+export const columnsGroupedByTestName = (): ColumnDef<any>[] => [
+  {
+    id: 'test-name',
+    header: () => <ColumnHeader clientSideSort label="Test" />,
+    cell: ({ row }) =>
+      row.depth === 0 ? (
+        <CollapseCell row={row} />
+      ) : (
+        <ResultNameCell row={row} />
+      ),
+    size: 150,
+  },
+  {
+    id: 'dateTime',
+    header: () => <ColumnHeader clientSideSort label="Date/Time" />,
+    cell: ({ row }) =>
+      row.depth > 0 &&
+      row.original?.observationTime && (
+        <DateTimeCell>
+          {formatUTCDate(row.original.observationTime, 'MM/dd/yy HH:mm')}
+        </DateTimeCell>
+      ),
+    size: 100,
+  },
+  {
+    id: 'location',
+    header: () => <ColumnHeader clientSideSort label="Location" />,
+    cell: ({ row }) =>
+      row.depth > 0 && <TextCell>{row.original?.labName}</TextCell>,
+    size: 100,
+  },
+  {
+    id: 'results',
+    header: () => <ColumnHeader clientSideSort label="Results" />,
+    cell: ({ row }) =>
+      row.depth > 0 && (
+        <TextCell>
+          {row.original?.resultValue} {row.original?.resultUnit}
+        </TextCell>
+      ),
+    size: 100,
+  },
+  {
+    id: 'referenceRange',
+    header: () => <ColumnHeader clientSideSort label="Reference Range" />,
+    cell: ({ row }) =>
+      row.depth > 0 && (
+        <TextCell>
+          {row.original?.recomendedValue} {row.original?.resultUnit}
+        </TextCell>
+      ),
+    size: 100,
   },
 ]
 
