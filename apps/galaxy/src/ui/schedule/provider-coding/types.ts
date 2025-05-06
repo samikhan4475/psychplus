@@ -1,4 +1,4 @@
-import { Appointment, Diagnosis, Metadata } from '@/types'
+import { Appointment, Metadata } from '@/types'
 
 type DayString = 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | 'Sun'
 
@@ -23,7 +23,7 @@ interface GroupResource {
 interface AppointmentRecord {
   facilityAdmissionDetailId?: string
   facilityAdmissionId?: number
-  diagnosis: Diagnosis[]
+  diagnosis: string
   visitMedium?: string
   visitSequence?: string
   visitStatus?: string
@@ -88,11 +88,11 @@ interface MergedRecord
     | 'cptCodes'
     | 'noteSignedStatus'
   > {
-    weekDays: Record<string, WeekdayData>
-  }
+  weekDays: Record<string, WeekdayData>
+}
 
 interface WeekdayData {
-  diagnosis: Diagnosis[]
+  diagnosis: string
   visitMedium: string
   visitSequence: string
   isPrimaryProviderType: boolean
@@ -108,11 +108,4 @@ interface WeekDay {
   label: string
 }
 
-export type {
-  DayString,
-  WeekdayData,
-  MergedRecord,
-  AppointmentRecord,
-  WeekDay,
-  Diagnosis,
-}
+export type { DayString, WeekdayData, MergedRecord, AppointmentRecord, WeekDay }

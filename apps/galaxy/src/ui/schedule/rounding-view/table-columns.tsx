@@ -343,12 +343,7 @@ const columns: ColumnDef<Appointment>[] = [
         label="Diagnosis"
       />
     ),
-    cell: ({ row }) => (
-      <TextCell>
-        {row.original.diagnosis[row.original.diagnosis.length - 1]?.icd10Code ??
-          ''}
-      </TextCell>
-    ),
+    cell: ({ row }) => <TextCell>{row.original.diagnosis ?? ''}</TextCell>,
     enableHiding: false,
   },
   {

@@ -259,7 +259,7 @@ const useStore = create<Store>()(
           isSettingsSaving: false,
         })
       },
-      
+
       setPersistedFormData: (data) => {
         set({
           persistedFormData: data,
@@ -327,7 +327,7 @@ const mergeDataByFacilityAdmissionId = (
       ...otherFields,
       weekDays: {
         [weekdayName]: {
-          diagnosis: diagnosis ? [...diagnosis] : [],
+          diagnosis,
           visitMedium,
           visitSequence,
           appointmentId,
@@ -347,9 +347,7 @@ const mergeDataByFacilityAdmissionId = (
 
       if (existingRecord) {
         if (existingRecord.weekDays[weekdayName]) {
-          existingRecord.weekDays[weekdayName].diagnosis.push(
-            ...(diagnosis || []),
-          )
+          existingRecord.weekDays[weekdayName].diagnosis = diagnosis
           existingRecord.weekDays[weekdayName].visitMedium = visitMedium
           existingRecord.weekDays[weekdayName].visitSequence = visitSequence
           existingRecord.weekDays[weekdayName].appointmentId = appointmentId
@@ -362,7 +360,7 @@ const mergeDataByFacilityAdmissionId = (
           existingRecord.weekDays[weekdayName].cptCodes = cptCodes || []
         } else {
           existingRecord.weekDays[weekdayName] = {
-            diagnosis: diagnosis ? [...diagnosis] : [],
+            diagnosis,
             visitMedium,
             visitSequence,
             appointmentId,

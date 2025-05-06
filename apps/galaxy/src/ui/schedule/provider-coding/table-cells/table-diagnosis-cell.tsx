@@ -9,11 +9,8 @@ const DiagnosisCodesCell = ({
   row: { original: appointment },
   day,
 }: CptCodeCellProps) => {
-  const diagnosis = appointment.weekDays[day.id]?.diagnosis || []
-
-  const diaCodeString = diagnosis.map((d) => d.icd10Code).join(', ')
-
-  return <TextCell>{diaCodeString || ''}</TextCell>
+  const { diagnosis = '' } = appointment.weekDays[day.id] || {}
+  return <TextCell>{diagnosis || ''}</TextCell>
 }
 
 export { DiagnosisCodesCell }

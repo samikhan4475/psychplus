@@ -125,7 +125,7 @@ interface Appointment {
   groupResource: ServiceGroup
   physicianStaffId?: string
   room: string
-  diagnosis: Diagnosis[]
+  diagnosis: string
   cptCodes: string[]
   legalStatus: string
   authorizationNumber: string
