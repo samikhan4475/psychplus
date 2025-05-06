@@ -156,6 +156,9 @@ importers:
       '@types/eslint':
         specifier: ^8.44.3
         version: 8.44.3
+      '@types/node':
+        specifier: ^20.10.4
+        version: 20.10.4
       '@types/react':
         specifier: ^18.3.3
         version: 18.3.3
