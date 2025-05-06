@@ -84,6 +84,7 @@ export enum OrderingLabName {
 export enum OrderStatus {
   OrderCompleted = 'OrderCompleted',
   ResultReceived = 'ResultReceived',
+  Unsigned = 'Unsigned',
 }
 
 export type {

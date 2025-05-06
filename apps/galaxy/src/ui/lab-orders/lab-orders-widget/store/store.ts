@@ -1,5 +1,6 @@
 import { create } from 'zustand'
-import { LabOrderResponseList, LabOrders, LabResult } from '@/types'
+import { LabOrderResponseList, LabOrders, LabResult, Sort } from '@/types'
+import { getNewSortDir } from '@/utils'
 import { getLabOrdersAction } from '../actions'
 import { LabOrdersTabs } from '../constant'
 import { LabOrderPayload } from '../types'
@@ -11,6 +12,7 @@ interface StoreState {
   payload?: LabOrderPayload
   activeTab: string
   viewedTabs: Set<string>
+  sort?: Sort
   fetch: (
     appointmentId: string | null,
     payload: LabOrderPayload,
@@ -40,6 +42,7 @@ interface StoreState {
   fetchLabOrderByIds: (appointmentId: string, payload: LabOrderPayload) => void
   setSelectedRows: (value: LabOrders[]) => void
   selectedRows: LabOrders[]
+  sortData: (column: string) => void
 }
 
 const useStore = create<StoreState>((set, get) => ({
@@ -131,19 +134,24 @@ const useStore = create<StoreState>((set, get) => ({
 
   fetch: async (appointmentId, payload, page = 1, reset = false) => {
     set({ error: undefined, loading: true, payload })
-    const result = await getLabOrdersAction({ appointmentId, payload, page })
+    const result = await getLabOrdersAction({
+      appointmentId,
+      payload,
+      page,
+      sort: get().sort,
+    })
     if (result.state === 'error') {
       set({
         error: result.error,
         loading: false,
       })
     } else {
-      const labOrders = result.data.labOrders; 
+      const labOrders = result.data.labOrders
 
       const labOrdersData = {
         ...result.data,
         labOrders,
-      };
+      }
 
       set({
         data: labOrdersData,
@@ -151,7 +159,7 @@ const useStore = create<StoreState>((set, get) => ({
         pageCache: reset
           ? { [page]: labOrdersData }
           : { ...get().pageCache, [page]: labOrdersData },
-      });
+      })
     }
   },
 
@@ -290,36 +298,45 @@ const useStore = create<StoreState>((set, get) => ({
     })
   },
   next: () => {
-    const nextPage = get().page + 1;
-    
-    set({ page: nextPage });
-  
+    const nextPage = get().page + 1
+
+    set({ page: nextPage })
+
     if (get().pageCache[nextPage]) {
       set({
         data: get().pageCache[nextPage],
-      });
+      })
     } else {
-      get().fetch(get().appointmentId!, get().payload!, nextPage);
+      get().fetch(get().appointmentId!, get().payload!, nextPage)
     }
   },
   prev: () => {
-    const prevPage = get().page - 1;
+    const prevPage = get().page - 1
     if (prevPage >= 1) {
-      set({ page: prevPage });
+      set({ page: prevPage })
       if (get().pageCache[prevPage]) {
         set({
           data: get().pageCache[prevPage],
-        });
+        })
       }
     }
   },
+  sortData: (column) => {
+    set({
+      sort: {
+        column,
+        direction: getNewSortDir(column, get().sort),
+      },
+    })
+    get().fetch(get().appointmentId!, get().payload!, 1)
+  },
   jumpToPage: (page: number) => {
-    if (page < 1) return;
-    set({ page });
+    if (page < 1) return
+    set({ page })
     if (get().pageCache[page]) {
       set({
         data: get().pageCache[page],
-      });
+      })
     } else {
       get().fetch(get().appointmentId, get().payload!, page)
     }

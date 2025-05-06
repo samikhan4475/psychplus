@@ -17,10 +17,11 @@ const LabOrderTable = ({
   afterSummaryVisit?: boolean
 }) => {
   const searchParams = useSearchParams()
-  const { data, loading, setSelectedRows } = useStore((state) => ({
+  const { data, loading, setSelectedRows, sortData } = useStore((state) => ({
     data: state.data,
     loading: state.loading,
     setSelectedRows: state.setSelectedRows,
+    sortData: state.sortData,
   }))
 
   const appointmentId = isInboxLabOrder ? null : searchParams.get('id') ?? '0'
@@ -45,7 +46,12 @@ const LabOrderTable = ({
     <ScrollArea>
       <DataTable
         data={data?.labOrders ?? []}
-        columns={getColumns(appointmentId, isInboxLabOrder, afterSummaryVisit)}
+        columns={getColumns({
+          appointmentId,
+          isInboxLabOrder,
+          afterSummaryVisit,
+          onSort: sortData,
+        })}
         disablePagination
         sticky
         onRowSelectionChange={onRowSelectionChange}

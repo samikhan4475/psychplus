@@ -1,14 +1,17 @@
 'use client'
 
+import { useEffect } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
-import { Button } from '@radix-ui/themes'
+import { Button, Flex } from '@radix-ui/themes'
 import { DateValue } from 'react-aria-components'
 import { useForm, type SubmitHandler } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { z } from 'zod'
 import { FormContainer } from '@/components'
 import { STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
+import { useHasPermission } from '@/hooks'
 import { useStore as useGlobalStore } from '@/store'
 import {
   formatDateToISOString,
@@ -18,12 +21,13 @@ import {
 import { OrderFromDateField } from '../lab-order-results-widget/order-from-date-field'
 import { OrderToDateField } from '../lab-order-results-widget/order-to-date-field'
 import { PatientField } from '../lab-order-results-widget/patient-field'
+import { StatusSelectFilter } from '../lab-order-results-widget/status-select-filter'
 import { LocationSelect } from './location-select'
 import { OrderBySelect } from './order-by-select'
 import { StatusSelect } from './status-select'
 import { useStore } from './store'
 import { TestField } from './test-field'
-import { LabOrderPayload } from './types'
+import { LabOrderPayload, OrderStatus } from './types'
 
 const schema = z.object({
   orderCreatedFromDate: z.custom<DateValue | null>().nullable(),
@@ -57,6 +61,7 @@ const LabOrdersFilterForm = ({
   }))
   const isPrescriber = staffRoleCode === STAFF_ROLE_CODE_PRESCRIBER
   const defaultOrderingStaffId = isPrescriber ? String(staffId) : ''
+  const canOrderBy = useHasPermission('changeOrderByProviderLabResultView')
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -68,11 +73,20 @@ const LabOrdersFilterForm = ({
       orderingStaffId: defaultOrderingStaffId,
       labTestName: '',
       orderingLab: '',
-      orderStatus: '',
+      orderStatus: isInboxLabOrder ? OrderStatus.Unsigned : '',
       labTestCode: '',
       patientName: '',
     },
   })
+
+  const orderByStaff = form.watch('orderingStaffId')
+
+  useEffect(() => {
+    if (orderByStaff && orderByStaff !== String(staffId) && !canOrderBy) {
+      form.setValue('orderingStaffId', defaultOrderingStaffId)
+      toast.error('You do not have permission to change the ordering staff')
+    }
+  }, [orderByStaff, staffId, canOrderBy, defaultOrderingStaffId])
 
   const onClear = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
@@ -83,7 +97,7 @@ const LabOrdersFilterForm = ({
       orderingStaffId: defaultOrderingStaffId,
       labTestName: '',
       orderingLab: '',
-      orderStatus: '',
+      orderStatus: isInboxLabOrder ? OrderStatus.Unsigned : '',
       labTestCode: '',
       patientName: '',
     })
@@ -94,7 +108,7 @@ const LabOrdersFilterForm = ({
         : {}),
       ...(!isInboxLabOrder ? { patientId: [id] } : {}),
       ...(isInboxLabOrder ? { resourceStatusList: ['Active'] } : {}),
-    })
+    },1,true)
   }
 
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
@@ -120,7 +134,7 @@ const LabOrdersFilterForm = ({
       ...(isInboxLabOrder ? { resourceStatusList: ['Active'] } : {}),
       ...sanitizedData,
     }
-    fetch(appointmentId, payload)
+    fetch(appointmentId, payload,1,true)
   }
 
   return (
@@ -129,31 +143,34 @@ const LabOrdersFilterForm = ({
       form={form}
       onSubmit={onSubmit}
     >
-      {isInboxLabOrder && (
-        <>
-          <OrderFromDateField />
-          <OrderToDateField />
-          <PatientField />
-        </>
-      )}
-      <OrderBySelect />
-      <LocationSelect />
-      <TestField />
-      {!isInboxLabOrder && <StatusSelect />}
+      <Flex gap="2" wrap="wrap">
+        {isInboxLabOrder && (
+          <>
+            <OrderFromDateField />
+            <OrderToDateField />
+            <PatientField />
+            <StatusSelectFilter isInboxLabOrder={isInboxLabOrder} />
+          </>
+        )}
+        <OrderBySelect />
+        <LocationSelect />
+        <TestField />
+        {!isInboxLabOrder && <StatusSelect />}
 
-      <Button
-        color="gray"
-        className="text-black"
-        size="1"
-        variant="outline"
-        type="button"
-        onClick={onClear}
-      >
-        Clear
-      </Button>
-      <Button highContrast size="1" type="submit">
-        <MagnifyingGlassIcon strokeWidth={2} />
-      </Button>
+        <Button
+          color="gray"
+          className="text-black"
+          size="1"
+          variant="outline"
+          type="button"
+          onClick={onClear}
+        >
+          Clear
+        </Button>
+        <Button highContrast size="1" type="submit">
+          <MagnifyingGlassIcon strokeWidth={2} />
+        </Button>
+      </Flex>
     </FormContainer>
   )
 }

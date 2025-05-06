@@ -1,27 +1,37 @@
 import { type ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, DateTimeCell, TextCell } from '@/components'
-import { LabOrders } from '@/types'
-import { formatUTCDate } from '@/utils'
+import { LabOrders, Sort } from '@/types'
+import { formatUTCDate, getSortDir } from '@/utils'
 import { TableHeaderCheckboxCell } from '../lab-order-results-widget/cells/table-header-checkbox-cell'
 import { TableRowCheckboxCell } from '../lab-order-results-widget/cells/table-row-checkbox-cell'
 import { LabTestCell, ResultsCell, StatusCell } from './cells'
 import { ActionsCell } from './cells/actions-cell'
 
-const getColumns: (
-  appointmentId: string | null,
-  isInboxLabOrder: boolean,
-  afterSummaryVisit: boolean,
-) => ColumnDef<LabOrders>[] = (
+const getColumns = ({
   appointmentId,
   isInboxLabOrder,
   afterSummaryVisit,
-) => {
+  sort,
+  onSort,
+}: {
+  appointmentId: string | null
+  isInboxLabOrder: boolean
+  afterSummaryVisit: boolean
+  sort?: Sort
+  onSort?: (column: string) => void
+}): ColumnDef<LabOrders>[] => {
   const baseColumns: ColumnDef<LabOrders>[] = [
     {
       id: 'labOrderDate',
       accessorKey: 'labOrderDate',
       header: ({ column }) => (
-        <ColumnHeader column={column} clientSideSort label="Date/Time" />
+        <ColumnHeader
+          column={column}
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => onSort?.(column.id)}
+          label="Date/Time"
+        />
       ),
       cell: ({ row }) => (
         <DateTimeCell>
@@ -33,15 +43,27 @@ const getColumns: (
       id: 'labOrderNumber',
       accessorKey: 'labOrderNumber',
       header: ({ column }) => (
-        <ColumnHeader column={column} clientSideSort label="Lab Order Number" />
+        <ColumnHeader
+          column={column}
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => onSort?.(column.id)}
+          label="Lab Order Number"
+        />
       ),
       cell: ({ row }) => <TextCell>{row.original.labOrderNumber}</TextCell>,
     },
     {
-      id: 'orderingStaffName',
-      accessorKey: 'orderingStaffName',
+      id: 'orderedBy',
+      accessorKey: 'orderedBy',
       header: ({ column }) => (
-        <ColumnHeader column={column} clientSideSort label="Provider" />
+        <ColumnHeader
+          column={column}
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => onSort?.(column.id)}
+          label="Provider"
+        />
       ),
       cell: ({ row }) => (
         <TextCell>
@@ -52,35 +74,74 @@ const getColumns: (
         </TextCell>
       ),
     },
-  ];
+  ]
+
+  if (isInboxLabOrder) {
+    baseColumns.splice(2, 0, {
+      id: 'patientName',
+      accessorKey: 'patientName',
+      header: ({ column }) => (
+        <ColumnHeader
+          column={column}
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => onSort?.(column.id)}
+          label="Patient Name"
+        />
+      ),
+      cell: ({ row }) => (
+        <TextCell
+          className={row.original?.isResultAbnormal ? 'text-red-9' : ''}
+        >{`${row.original.patient?.legalName?.firstName} ${row.original.patient?.legalName?.lastName}`}</TextCell>
+      ),
+    })
+  }
 
   if (afterSummaryVisit) {
     baseColumns.push({
       id: 'initiated',
       accessorKey: 'initiated',
       header: ({ column }) => (
-        <ColumnHeader column={column} clientSideSort label="Initiated" />
+        <ColumnHeader
+          column={column}
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => onSort?.(column.id)}
+          label="Initiated"
+        />
       ),
       cell: ({ row }) => (
         <TextCell>{row.original?.metadata?.createdByFullName ?? ''}</TextCell>
       ),
-    });
+    })
   }
 
   const remainingColumns: ColumnDef<LabOrders>[] = [
     {
-      id: 'labTests',
-      accessorKey: 'labTests',
+      id: 'testPanel',
+      accessorKey: 'testPanel',
       header: ({ column }) => (
-        <ColumnHeader column={column} clientSideSort label="Test" />
+        <ColumnHeader
+          column={column}
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => onSort?.(column.id)}
+          label="Test"
+        />
       ),
       cell: ({ row }) => <LabTestCell row={row} />,
     },
     {
-      id: 'orderingLab.name',
-      accessorKey: 'orderingLab.name',
+      id: 'orderingLab',
+      accessorKey: 'orderingLab',
       header: ({ column }) => (
-        <ColumnHeader column={column} clientSideSort label="Location" />
+        <ColumnHeader
+          column={column}
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => onSort?.(column.id)}
+          label="Location"
+        />
       ),
       cell: ({ row }) => <TextCell>{row.original?.orderingLab?.name}</TextCell>,
     },
@@ -92,17 +153,19 @@ const getColumns: (
           label="Lab Status"
           column={column}
           className="!text-black p-1 !font-medium"
-          clientSideSort
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => onSort?.(column.id)}
         />
       ),
       cell: ({ row }) => <StatusCell row={row} />,
     },
-  ];
+  ]
 
-  const columns = [...baseColumns, ...remainingColumns];
+  const columns = [...baseColumns, ...remainingColumns]
 
   if (appointmentId === '0') {
-    return columns;
+    return columns
   }
 
   if (afterSummaryVisit) {
@@ -112,9 +175,11 @@ const getColumns: (
         id: 'actions',
         size: 100,
         header: () => <ColumnHeader label="Actions" />,
-        cell: ({ row }) => <ActionsCell row={row}  afterSummaryVisit={afterSummaryVisit} />,
+        cell: ({ row }) => (
+          <ActionsCell row={row} afterSummaryVisit={afterSummaryVisit} />
+        ),
       },
-    ];
+    ]
   }
 
   if (!isInboxLabOrder) {
@@ -132,7 +197,7 @@ const getColumns: (
         header: () => <ColumnHeader label="Actions" />,
         cell: ({ row }) => <ActionsCell row={row} />,
       },
-    ];
+    ]
   }
 
   return [
@@ -153,8 +218,7 @@ const getColumns: (
       size: 20,
     },
     ...columns,
-  ];
-};
-
+  ]
+}
 
 export { getColumns }
