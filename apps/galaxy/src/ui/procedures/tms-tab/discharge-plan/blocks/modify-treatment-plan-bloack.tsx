@@ -19,6 +19,10 @@ const TREATMENT_PLAN_OPTIONS = [
     label: 'Theta-Burst Stimulation',
     value: 'thetaBurstStimulation',
   },
+  {
+    label: 'DTMS',
+    value: 'dtms',
+  },
 ]
 
 const ModifyTreatmentPlanBlock = () => {
