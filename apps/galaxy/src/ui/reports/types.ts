@@ -173,6 +173,8 @@ export enum STATUS {
 }
 
 export enum INTERVAL {
+  MINUTE = 'minute',
+  HOUR = 'hour',
   DAY = 'day',
   WEEK = 'week',
   MONTH = 'month',
@@ -220,4 +222,5 @@ export type {
   ScheduledReport,
   GetScheduleReportListResponse,
   ParsedCron,
+  DistributionGroup,
 }

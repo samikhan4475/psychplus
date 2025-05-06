@@ -5,13 +5,19 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
-import { monthRepeatCountOptions, repeatCountOptions } from './constants'
+import { repeatCountOptions } from './constants'
 
 const RepeatCountSelect = () => {
-  const { watch } = useFormContext()
-  const repeatInterval = watch('repeatInterval')
-  const intervaloptions =
-    repeatInterval === 'month' ? monthRepeatCountOptions : repeatCountOptions
+  const { watch, setValue } = useFormContext()
+  const handleIntervalChange = (newValue: string) => {
+    setValue('monthSelection', [])
+    setValue('monthDateSelection', [])
+    setValue('weekdaysSelection', [])
+    setValue('hourSelection', [])
+    setValue('minuteSelection', [])
+    setValue('repeatInterval', '')
+    setValue('repeatCount', newValue)
+  }
   return (
     <FormFieldContainer className="flex-row items-center ">
       <FormFieldLabel className="!text-1">Repeat Schedule Every</FormFieldLabel>
@@ -19,7 +25,8 @@ const RepeatCountSelect = () => {
         field="repeatCount"
         className="w-full"
         buttonClassName="min-w-[120px] h-6 border-pp-gray-2 rounded-2 !outline-none"
-        options={intervaloptions}
+        options={repeatCountOptions}
+        onValueChange={handleIntervalChange}
         defaultValue={watch('repeatCount')}
       />
       <FormFieldError name="repeatCount" />

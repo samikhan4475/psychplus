@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import z from 'zod'
+import { converter, PeriodType } from 'react-js-cron'
 import { FormContainer } from '@/components'
 import { ActionResult, SelectOptionType } from '@/types'
 import { formatDateToISOString } from '@/utils'
@@ -15,68 +14,19 @@ import {
   updateScheduleJobAction,
 } from '../actions'
 import { useStore } from '../store'
-import { ScheduledReport, ScheduleJob, SchedulingReport } from '../types'
 import {
-  formatJobData,
-  generateCronExpression,
-  processParameters,
-} from '../utils'
+  DistributionGroup,
+  ScheduledReport,
+  ScheduleJob,
+  SchedulingReport,
+} from '../types'
+import { convertToNumber, formatJobData, processParameters } from '../utils'
 import { defaultValues } from './default-values'
 import { DistributionGroupsSelect } from './distribution-groups'
 import { ScheduleReportButton } from './schedule-report-button'
 import { ScheduleReportIntervals } from './schedule-report-intervals'
+import { ScheduleTemplateSchemaType, schema } from './schema'
 
-const schema = z
-  .object({
-    beginOn: z
-      .custom<DateValue>()
-      .refine((value) => value !== null && value !== undefined, {
-        message: 'Required',
-      }),
-    terminateOn: z.custom<DateValue>(),
-    repeatCount: z.string().min(1, 'Required'),
-    repeatInterval: z.string().optional(),
-    forDuration: z.string().min(1, 'Required'),
-    numberOfDuration: z.string().optional(),
-    durationInterval: z.string().min(1, 'Required'),
-    scheduleDays: z.array(z.string()).optional(),
-    intervalOption: z.string().optional(),
-    isSchedule: z.boolean().optional(),
-    parameters: z
-      .array(
-        z.object({
-          id: z.string(),
-          scheduleParameterValue: z
-            .union([z.string(), z.array(z.string())])
-            .optional(),
-          reportTemplateId: z.string().optional(),
-          parameterCode: z.string().optional(),
-        }),
-      )
-      .optional(),
-    distributionGroups: z.array(z.string()).min(1, 'required'),
-    isEnabled: z.boolean().optional(),
-  })
-  .refine(
-    (data) =>
-      data.forDuration !== 'last' ||
-      (data.numberOfDuration && data.numberOfDuration.trim() !== ''),
-    {
-      path: ['numberOfDuration'],
-      message: 'Required',
-    },
-  )
-  .refine(
-    (data) =>
-      data.repeatCount === 'notrepeat' ||
-      (data.repeatInterval && data.repeatInterval.trim() !== ''),
-    {
-      path: ['repeatInterval'],
-      message: 'Required',
-    },
-  )
-
-type ScheduleTemplateSchemaType = z.infer<typeof schema>
 interface ScheduleReportFormProps {
   onSuccess?: () => void
   scheduleData?: ScheduledReport
@@ -90,14 +40,32 @@ const ScheduleReportForm = ({
     SelectOptionType[]
   >([])
   const [loading, setLoading] = useState(false)
+  const internalValueRef = useRef<string>('')
 
   const form = useForm<ScheduleTemplateSchemaType>({
     resolver: zodResolver(schema),
-    defaultValues: defaultValues(selectedTemplate, scheduleData),
+    defaultValues: defaultValues(
+      internalValueRef,
+      selectedTemplate,
+      scheduleData,
+    ),
     mode: 'onChange',
   })
 
   const onSubmit: SubmitHandler<ScheduleTemplateSchemaType> = async (data) => {
+    const transformedData = convertToNumber(data)
+
+    const cronScheduleDefinition = converter.getCronStringFromValues(
+      (transformedData?.repeatInterval as PeriodType) ?? 'week',
+      transformedData.monthSelection,
+      transformedData.monthDateSelection,
+      transformedData.weekdaysSelection,
+      transformedData.hourSelection,
+      transformedData.minuteSelection,
+      true,
+      undefined,
+    )
+
     const transformedDistributionGroups =
       data.distributionGroups.length > 0
         ? data.distributionGroups.map((id) => ({
@@ -107,18 +75,31 @@ const ScheduleReportForm = ({
           }))
         : []
 
-    const beginDate = new Date(
-      data.beginOn.year,
-      data.beginOn.month - 1,
-      data.beginOn.day,
+    const findExistingDistributionGroup = (
+      existingGroups: DistributionGroup[],
+      newGroupId: string,
+    ) => {
+      return existingGroups.find(
+        (group) => group.distributionGroupId === newGroupId,
+      )
+    }
+
+    // If the existing distribution group is found, merge the new data with existing one
+    const updatedDistributionGroups = transformedDistributionGroups.map(
+      (newDistributionGroup) => {
+        const existingDistributionGroup = findExistingDistributionGroup(
+          scheduleData?.distributionGroups || [],
+          newDistributionGroup.id,
+        )
+
+        if (existingDistributionGroup) {
+          const { metadata, ...rest } = existingDistributionGroup
+          return { ...newDistributionGroup, ...rest }
+        }
+
+        return newDistributionGroup
+      },
     )
-    const cronScheduleDefinition = generateCronExpression({
-      beginDate,
-      repeatInterval: data.repeatInterval,
-      scheduleDays: data.scheduleDays,
-      intervalOption: data.intervalOption,
-      repeatCount: data.repeatCount,
-    })
 
     const formattedJobData = formatJobData(
       cronScheduleDefinition,
@@ -153,7 +134,7 @@ const ScheduleReportForm = ({
           ? formatDateToISOString(data.terminateOn)
           : null,
         parameters: updatedParameters,
-        distributionGroups: transformedDistributionGroups,
+        distributionGroups: updatedDistributionGroups,
         jobId: jobResponse.data.id,
         isEnabled: data.isEnabled,
       }

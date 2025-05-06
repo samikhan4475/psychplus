@@ -31,6 +31,12 @@ const TemplateSelect = ({
     getValues(name),
   )
 
+  useEffect(() => {
+    if (!isLoading && getValues(name)?.[0] === 'all') {
+      setSelectedOptions(options.map((option) => option.value))
+    }
+  }, [isLoading, options, getValues(name), setValue, name])
+
   const handleOnChange = (values: string[]) => {
     const allValues = options.map((option) => option.value)
 
@@ -65,7 +71,7 @@ const TemplateSelect = ({
             loading={isLoading}
             disabled={isLoading}
             includeAllOption
-            defaultValues={selectedOptions}
+            defaultValues={isLoading ? [] : selectedOptions}
             className="border-pp-gray-2 h-6  w-full min-w-[120px] text-left"
             onChange={handleOnChange}
           />

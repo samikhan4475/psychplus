@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { Box, Flex } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
 import {
@@ -6,7 +6,6 @@ import {
   DataTable,
   DateCell,
   LoadingPlaceholder,
-  LongTextCell,
   TextCell,
 } from '@/components'
 import { formatDate } from '@/utils'
@@ -14,7 +13,6 @@ import { ActionsCell, StatusCell } from './cells'
 import { SchedulesListTablePagination } from './schedules-list-table-pagination'
 import { useStore } from './store'
 import { ScheduledReport, VIEW_TYPE } from './types'
-import { decryptCronExpression, getScheduleText } from './utils'
 
 const columns: ColumnDef<ScheduledReport>[] = [
   {
@@ -31,19 +29,6 @@ const columns: ColumnDef<ScheduledReport>[] = [
     cell: ({ row }) => (
       <TextCell>{row.original.cronExpressionDescription || 'N/A'}</TextCell>
     ),
-  },
-  {
-    id: 'scheduled-on',
-    accessorKey: 'scheduledOn',
-    header: () => <ColumnHeader label="Scheduled On" />,
-    cell: ({ row }) => {
-      const { repeatInterval, scheduleDays } = decryptCronExpression(
-        row.original.cronScheduleJobDefinition || '',
-      )
-      const scheduleText = getScheduleText(repeatInterval, scheduleDays)
-
-      return <TextCell>{scheduleText}</TextCell>
-    },
   },
   {
     id: 'terminateOn',
@@ -110,7 +95,6 @@ const SchedulesListTable = () => {
       </Flex>
     )
   }
-  console.log('DATA==', scheduleReports?.scheduleReports)
 
   return (
     <>

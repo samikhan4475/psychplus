@@ -1,6 +1,7 @@
 import toast from 'react-hot-toast'
 import { addTemplateReportAction } from './actions'
-import { ParameterCodeSet, ParsedCron, ReportFilterParameters } from './types'
+import { ScheduleTemplateSchemaType } from './schedule-report-dialog/schedule-report-form'
+import { ParameterCodeSet, ParsedCron } from './types'
 
 export const parseGeneratedReport = (report: string) => {
   const lines = report.trim().split('\n')
@@ -210,7 +211,10 @@ const processParameters = (
         param.scheduleParameterValue.includes('::'))
     ) {
       return {
-        templateParameterId: param.id,
+        ...param,
+        templateParameterId: param.templateParameterId
+          ? param.templateParameterId
+          : param.id,
         reportTemplateId: selectedTemplateId,
         scheduleParameterValue: `${forDuration}::${
           forDuration === 'last' ? numberOfDuration : 0
@@ -218,11 +222,14 @@ const processParameters = (
       }
     }
     return {
-      templateParameterId: param.id,
+      ...param,
+      templateParameterId: param.templateParameterId
+        ? param.templateParameterId
+        : param.id,
       reportTemplateId: selectedTemplateId,
       scheduleParameterValue: Array.isArray(param.scheduleParameterValue)
         ? param.scheduleParameterValue.join(', ')
-        : param.scheduleParameterValue ?? '',
+        : param.scheduleParameterValue,
     }
   })
 }
@@ -343,6 +350,44 @@ const getScheduleText = (repeatInterval: string, scheduleDays: string[]) => {
   return 'Not scheduled'
 }
 
+const convertToNumber = (data: ScheduleTemplateSchemaType) => {
+  return {
+    ...data,
+    monthSelection: data.monthSelection.map(Number),
+    monthDateSelection: data.monthDateSelection.map(Number),
+    weekdaysSelection: data.weekdaysSelection.map(Number),
+    hourSelection: data.hourSelection.map(Number),
+    minuteSelection: data.minuteSelection.map(Number),
+  }
+}
+
+const getPeriodFromCronString = (cronString: string): string => {
+  const cronParts = cronString.split(' ')
+
+  const [minute, hour, dayOfMonth, month, weekday] = cronParts
+
+  if (weekday && weekday !== '*' && weekday !== '?') {
+    return 'week'
+  }
+
+  if (dayOfMonth && dayOfMonth !== '*' && dayOfMonth !== '?') {
+    return 'month'
+  }
+
+  if (
+    month &&
+    month !== '*' &&
+    month !== '?' &&
+    dayOfMonth === '1' &&
+    hour === '0' &&
+    minute === '0'
+  ) {
+    return 'year'
+  }
+
+  return 'day'
+}
+
 export {
   truncateFileName,
   getFieldType,
@@ -353,4 +398,6 @@ export {
   formatJobData,
   decryptCronExpression,
   getScheduleText,
+  convertToNumber,
+  getPeriodFromCronString,
 }
