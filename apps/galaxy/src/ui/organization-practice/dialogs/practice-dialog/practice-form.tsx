@@ -4,10 +4,8 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { FormContainer } from '@/components'
 import { updatePracticeAction } from '@/ui/organization-practices/actions'
-import { useStore as practiceStore } from '@/ui/organization-practices/store'
 import { sanitizeFormData } from '@/utils'
 import { addOrganizationPracticeAction } from '../../actions'
-import { useStore } from '../../organizations/store'
 import { Organization, Practice } from '../../types'
 import { CliaField } from './clia-field'
 import { DefProviderField } from './def-provider-field'
@@ -29,15 +27,15 @@ interface FormProps {
   data: Organization
   practiceData?: Practice
   onCloseModal: (open: boolean) => void
+  refetch?: () => void
 }
 
-const PracticeForm = ({ data, onCloseModal, practiceData }: FormProps) => {
-  const { search } = useStore((state) => ({
-    search: state.search,
-  }))
-  const { search: practiceSearchStore } = practiceStore((state) => ({
-    search: state.search,
-  }))
+const PracticeForm = ({
+  data,
+  onCloseModal,
+  practiceData,
+  refetch,
+}: FormProps) => {
   const newData = {
     ...data,
     practiceAddress: data.organizationAddress,
@@ -49,6 +47,9 @@ const PracticeForm = ({ data, onCloseModal, practiceData }: FormProps) => {
   })
 
   const onSave = async (formData: SchemaType) => {
+    if (!data) {
+      return
+    }
     const requestPayload: Partial<Practice> = {
       ...formData,
       shortName: formData.displayName,
@@ -71,14 +72,9 @@ const PracticeForm = ({ data, onCloseModal, practiceData }: FormProps) => {
     }
 
     const sanitizedPayload = sanitizeFormData(requestPayload)
-    const response =
-      data && practiceData
-        ? await updatePracticeAction(
-            sanitizedPayload,
-            data.id,
-            practiceData?.id,
-          )
-        : await addOrganizationPracticeAction(data.id, sanitizedPayload)
+    const response = practiceData
+      ? await updatePracticeAction(sanitizedPayload, data.id, practiceData?.id)
+      : await addOrganizationPracticeAction(data.id, sanitizedPayload)
 
     if (response.state === 'error') {
       toast.error(response.error)
@@ -89,11 +85,7 @@ const PracticeForm = ({ data, onCloseModal, practiceData }: FormProps) => {
       onCloseModal(false)
       form.reset()
       toast.success('Record has been saved successfully')
-      if (practiceData) {
-        practiceSearchStore()
-      } else {
-        search()
-      }
+      refetch && refetch()
     } else {
       toast.error('Unable to save record')
     }

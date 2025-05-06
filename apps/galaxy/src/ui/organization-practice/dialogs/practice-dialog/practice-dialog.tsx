@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Dialog, Flex } from '@radix-ui/themes'
 import { LoadingPlaceholder } from '@/components'
 import { CloseDialogTrigger } from '@/components/close-dialog-trigger'
+import { getAllOrganizationsListAction } from '../../actions'
 import { Organization, Practice } from '../../types'
 import { AddOrganizationPracticeButton } from './add-organization-practice-button'
 import { PracticeForm } from './practice-form'
@@ -11,20 +12,53 @@ import { PracticeForm } from './practice-form'
 interface DialogProps {
   organizationId?: string
   practiceData?: Practice
-  data: Organization
+  data?: Organization
+  refetch?: () => void
+  isAddPractice?: boolean
 }
 
-const PracticeDialog = ({ practiceData, data }: DialogProps) => {
+const PracticeDialog = ({
+  practiceData,
+  data,
+  refetch,
+  organizationId,
+  isAddPractice,
+}: DialogProps) => {
   const [open, setOpen] = useState(false)
+  const [organization, setOrganization] = useState<Organization>()
 
   const onOpenChange = (open: boolean) => {
     setOpen(open)
   }
-  const [loading] = useState(false)
+
+  useEffect(() => {
+    ;(async () => {
+      if (data) {
+        setOrganization(data)
+        return
+      }
+
+      if (!organizationId) {
+        return
+      }
+
+      const response = await getAllOrganizationsListAction({
+        payload: { organizationId },
+      })
+
+      if (response.state === 'success') {
+        const organization = response.data.organizations[0]
+        setOrganization(organization)
+      }
+    })()
+  }, [data])
 
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
-      <AddOrganizationPracticeButton practiceData={practiceData} />
+      <AddOrganizationPracticeButton
+        practiceData={practiceData}
+        isAddPractice={isAddPractice}
+      />
 
       <Dialog.Content className="relative max-w-[800px]">
         <CloseDialogTrigger />
@@ -33,15 +67,16 @@ const PracticeDialog = ({ practiceData, data }: DialogProps) => {
           Add Practice
         </Dialog.Title>
 
-        {loading ? (
+        {!organization ? (
           <Flex height="100%" width="100%" align="center" justify="center">
             <LoadingPlaceholder />
           </Flex>
         ) : (
           <PracticeForm
-            data={data}
+            data={organization}
             practiceData={practiceData}
             onCloseModal={onOpenChange}
+            refetch={refetch}
           />
         )}
       </Dialog.Content>

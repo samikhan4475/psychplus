@@ -1,13 +1,33 @@
-'use client';
+'use client'
 
-import { Flex, Text } from '@radix-ui/themes';
+import { useParams } from 'next/navigation'
+import { Flex, Text } from '@radix-ui/themes'
+import { PracticeDialog } from '@/ui/organization-practice/dialogs'
+import { useStore } from './store'
 
 const PracticesHeading = () => {
-  return (
-    <Flex className="px-2 py-1 gap-1 h-[32px] w-full bg-white" align="center" justify="between">
-      <Text className="text-[16px] text-black" weight="medium">Practices</Text>
-    </Flex>
-  );
-};
+  const { id } = useParams<{ id: string }>()
+  const { search } = useStore((state) => ({
+    search: state.search,
+  }))
 
-export { PracticesHeading };
+  const refetch = () => {
+    search({
+      organizationId: id,
+    })
+  }
+  return (
+    <Flex
+      className="bg-white h-[32px] w-full gap-1 px-2 py-1"
+      align="center"
+      justify="between"
+    >
+      <Text className="text-black text-[16px]" weight="medium">
+        Practices
+      </Text>
+      <PracticeDialog organizationId={id} isAddPractice refetch={refetch} />
+    </Flex>
+  )
+}
+
+export { PracticesHeading }
