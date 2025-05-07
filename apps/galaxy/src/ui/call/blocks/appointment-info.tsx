@@ -1,10 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { CallAdapterState } from '@azure/communication-react'
 import { Avatar, Flex, Text } from '@radix-ui/themes'
+import { useStore } from '@/store'
 import { WebSocketEvents, WebSocketEventType } from '@/types'
 import { cn, getNameInitials } from '@/utils'
+import { AcsInfo } from '../types'
 import { CallInfo } from './call-info'
 
 export const getTimerFromNow = (date: Date): string => {
@@ -25,21 +26,23 @@ export const getTimerFromNow = (date: Date): string => {
 const JoinTime = ({
   appointment,
 }: {
-  appointment: WebSocketEvents[WebSocketEventType.CallWaiting]
+  appointment?: WebSocketEvents[WebSocketEventType.CallWaiting]
 }) => {
   const [duration, setDuration] = useState('')
   useEffect(() => {
-    if (!appointment.joinedAt) return
+    const joinedAt = appointment?.joinedAt
+    if (!joinedAt) return
+    setDuration(getTimerFromNow(joinedAt))
     const timer = setInterval(() => {
-      if (appointment.joinedAt) {
-        setDuration(getTimerFromNow(appointment.joinedAt))
+      if (joinedAt) {
+        setDuration(getTimerFromNow(joinedAt))
       }
     }, 10000)
 
     return () => clearInterval(timer)
-  }, [appointment.joinedAt])
+  }, [appointment?.joinedAt])
 
-  if (!appointment.joinedAt) return null
+  if (!appointment?.joinedAt) return null
   return (
     <Text className="inline-block select-none text-[11px]">{duration}</Text>
   )
@@ -47,18 +50,15 @@ const JoinTime = ({
 
 interface ApointmentInfoProps {
   appointment: WebSocketEvents[WebSocketEventType.CallWaiting]
-  appointmentId?: string
-  setAppointmentId: (appointmentId: string) => void
-  callAdapterState?: CallAdapterState
+  acsInfo: AcsInfo
 }
 
-const AppointmentInfo = ({
-  appointment,
-  appointmentId,
-  setAppointmentId,
-  callAdapterState,
-}: ApointmentInfoProps) => {
-  const isSelected = appointment.gv === appointmentId
+const AppointmentInfo = ({ appointment, acsInfo }: ApointmentInfoProps) => {
+  const { currentCall } = useStore((state) => ({
+    currentCall: state.currentCall,
+  }))
+
+  const isSelected = appointment.gv === currentCall?.appointment?.gv
 
   const initials = getNameInitials(appointment.sv)
 
@@ -84,19 +84,14 @@ const AppointmentInfo = ({
           className="bg-pp-bg-accent"
         />
         <Flex direction={'column'}>
-          <Text className="inline-block select-none text-[11px] font-bold max-w-[150px] truncate">
+          <Text className="inline-block max-w-[150px] select-none truncate text-[11px] font-bold">
             {appointment.sv}
           </Text>
           <JoinTime appointment={appointment} />
         </Flex>
       </Flex>
 
-      <CallInfo
-        appointment={appointment}
-        setAppointmentId={setAppointmentId}
-        appointmentId={appointmentId}
-        callAdapterState={callAdapterState}
-      />
+      <CallInfo appointment={appointment} acsInfo={acsInfo} />
     </Flex>
   )
 }

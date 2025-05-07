@@ -1,6 +1,7 @@
 'use client'
 
 import { createContext, useContext, useRef } from 'react'
+import { CallAdapter } from '@azure/communication-react'
 import { useStore as zustandUseStore, type StoreApi } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { createStore as zustandCreateStore } from 'zustand/vanilla'
@@ -13,7 +14,10 @@ import type {
   RolePermission,
   StaffResource,
   UserResponse as User,
+  WebSocketEvents,
+  WebSocketEventType,
 } from '@/types'
+import { AcsInfo } from '@/ui/call/types'
 
 interface NavigationTab {
   href: string
@@ -33,6 +37,24 @@ interface Store {
   updateTab: (tab: NavigationTab) => void
   checkFeatureFlag: (shortName: string) => boolean | undefined
   fetchFeatureFlag: (shortName: string) => Promise<boolean>
+
+  // calling feature states
+  currentCall: {
+    acsInfo: AcsInfo
+    appointment?: WebSocketEvents[WebSocketEventType.CallWaiting]
+  } | null
+  setCurrentCall: (
+    callInfo: {
+      acsInfo: AcsInfo
+      appointment?: WebSocketEvents[WebSocketEventType.CallWaiting]
+    } | null,
+  ) => void
+  callAdapter: CallAdapter | undefined
+  setCallAdapter: (callAdapter?: CallAdapter) => void
+  appoinmentList: WebSocketEvents[WebSocketEventType.CallWaiting][] | undefined
+  setAppoinmentList: (
+    appoinmentList: WebSocketEvents[WebSocketEventType.CallWaiting][],
+  ) => void
 }
 
 interface StoreInitialState {
@@ -78,12 +100,20 @@ const createStore = (initialState: StoreInitialState) =>
 
           return enabled
         },
+        appoinmentList: undefined,
+        setAppoinmentList: (appoinmentList) => set(() => ({ appoinmentList })),
+        currentCall: null,
+        setCurrentCall: (currentCall) => set(() => ({ currentCall })),
+        callAdapter: undefined,
+        setCallAdapter: (callAdapter) => set(() => ({ callAdapter })),
+       
       }),
       {
         name: GALAXY_APP_LOCAL_STORAGE_KEY,
         storage: createJSONStorage(() => localStorage),
         partialize: (state) => ({
           tabs: state.tabs,
+          currentCall: state.currentCall,
         }),
       },
     ),

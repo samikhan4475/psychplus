@@ -21,6 +21,7 @@ import {
 } from '@/constants'
 import { WebSocketConnector } from '@/providers/websocket-provider'
 import { StoreProvider } from '@/store'
+import { MiniPlayer } from '@/ui/call/blocks'
 import { Header } from '@/ui/header'
 import { LockScreenProvider } from '@/ui/lock-screen-context'
 import { cn } from '@/utils'
@@ -61,6 +62,7 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
               <>
                 <WebSocketConnector />
                 <LockScreenProvider>{children}</LockScreenProvider>
+                <MiniPlayer />
               </>
             ) : (
               children

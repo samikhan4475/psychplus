@@ -1,23 +1,19 @@
 'use client'
 
-import { CallAdapterState } from '@azure/communication-react'
 import { Flex, Text } from '@radix-ui/themes'
-import {  WebSocketEvents, WebSocketEventType } from '@/types'
+import { useStore } from '@/store'
+import { AcsInfo } from '../types'
 import { AppointmentInfo } from './appointment-info'
 
 interface AppointmentsListProps {
-  appointments: WebSocketEvents[WebSocketEventType.CallWaiting][]
-  appointmentId?: string
-  setAppointmentId: (appointmentId: string) => void
-  callAdapterState?: CallAdapterState
+  acsInfo: AcsInfo
 }
 
-const AppointmentsList = ({
-  appointments,
-  appointmentId,
-  setAppointmentId,
-  callAdapterState,
-}: AppointmentsListProps) => {
+const AppointmentsList = ({ acsInfo }: AppointmentsListProps) => {
+  const { appoinmentList } = useStore((state) => ({
+    appoinmentList: state.appoinmentList,
+  }))
+
   return (
     <Flex
       direction="column"
@@ -32,20 +28,14 @@ const AppointmentsList = ({
         mx="2"
         pb="2"
         gap="2"
-        className="text-pp-bg-accent border-b border-whiteA-4"
+        className="text-pp-bg-accent border-whiteA-4 border-b"
       >
         <Text className="inline-block select-none text-[11px] font-[500]">
           PATIENT QUEUE
         </Text>
       </Flex>
-      {appointments?.map((item) => (
-        <AppointmentInfo
-          key={item.gv}
-          appointment={item}
-          appointmentId={appointmentId}
-          setAppointmentId={setAppointmentId}
-          callAdapterState={callAdapterState}
-        />
+      {appoinmentList?.map((item) => (
+        <AppointmentInfo key={item.gv} appointment={item} acsInfo={acsInfo} />
       ))}
     </Flex>
   )

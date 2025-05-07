@@ -3,13 +3,13 @@
 import { useEffect, useState } from 'react'
 import { CallAdapterState } from '@azure/communication-react'
 import { Button, Text } from '@radix-ui/themes'
+import { useStore } from '@/store'
 import { WebSocketEvents, WebSocketEventType } from '@/types'
+import { AcsInfo } from '../types'
 
 interface CallInfoProps {
   appointment: WebSocketEvents[WebSocketEventType.CallWaiting]
-  appointmentId?: string
-  setAppointmentId: (appointmentId: string) => void
-  callAdapterState?: CallAdapterState
+  acsInfo: AcsInfo
 }
 
 const getTimeFromNow = (startTime: Date) => {
@@ -43,13 +43,29 @@ const CallTime = ({
   return <Text className="text-[11px]">{duration}</Text>
 }
 
-const CallInfo = ({
-  appointment,
-  setAppointmentId,
-  appointmentId,
-  callAdapterState,
-}: CallInfoProps) => {
-  const isSelected = appointment.gv === appointmentId
+const CallInfo = ({ appointment, acsInfo }: CallInfoProps) => {
+  const { currentCall, callAdapter, setCurrentCall } = useStore((state) => ({
+    currentCall: state.currentCall,
+    setCurrentCall: state.setCurrentCall,
+    callAdapter: state.callAdapter,
+  }))
+
+  const [callAdapterState, setCallAdapterState] = useState<CallAdapterState>()
+
+  const isSelected = appointment.gv === currentCall?.appointment?.gv
+
+  useEffect(() => {
+    if (callAdapter) {
+      callAdapter?.onStateChange((state) => setCallAdapterState(state))
+    }
+  }, [callAdapter, setCallAdapterState])
+
+  const handleJoinCall = () => {
+    setCurrentCall({
+      acsInfo,
+      appointment,
+    })
+  }
 
   if (!isSelected) {
     return (
@@ -57,7 +73,7 @@ const CallInfo = ({
         size="1"
         highContrast
         className="bg-pp-link-text text-white"
-        onClick={() => setAppointmentId(appointment?.gv)}
+        onClick={handleJoinCall}
       >
         Join
       </Button>
@@ -75,12 +91,7 @@ const CallInfo = ({
   }
 
   return (
-    <Button
-      size="1"
-      highContrast
-      className="bg-pp-link-text text-white"
-      onClick={() => setAppointmentId('')}
-    >
+    <Button size="1" highContrast className="bg-pp-link-text text-white">
       close
     </Button>
   )

@@ -2,7 +2,6 @@ import { PlusCircledIcon } from '@radix-ui/react-icons'
 import { Button, Flex } from '@radix-ui/themes'
 import { getUserInitialInformationAction } from '@/actions/get-users-initial-information'
 import { NavLogo } from '@/components'
-import { NotificationProvider } from '@/providers/notification-listener'
 import { AddPatient } from '../patient/add-patient'
 import { AddVisit } from '../visit/add-visit'
 import { NavigationLinks } from './navigation-links'
@@ -59,7 +58,6 @@ const Header = async () => {
 
       <NavigationLinks count={count} />
       <NavigationTabs />
-      <NotificationProvider />
     </>
   )
 }

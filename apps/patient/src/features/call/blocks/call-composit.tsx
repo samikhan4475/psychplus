@@ -52,14 +52,7 @@ const CallCompositeContainer = ({ acsInfo, username }: Props) => {
   useEffect(() => {
     callAdapter?.onStateChange((state) => {
       if (state?.call?.state === 'Connected') {
-        const remoteParticipants = Object.values(state.call?.remoteParticipants)
-        if (remoteParticipants.length > 0) {
-          setConnected(true)
-        }
         debouncedNotify()
-        if (connected && remoteParticipants.length === 0) {
-          router.push('/')
-        }
       } else if (state?.call?.state === 'Disconnecting') {
         router.push('/')
       }
