@@ -81,7 +81,6 @@ interface Appointment {
   name: string
   age: number
   patientId: number
-  clinicLocation: string
   state: string
   stateCode: string
   gender: string

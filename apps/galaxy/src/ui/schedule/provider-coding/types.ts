@@ -37,7 +37,6 @@ interface AppointmentRecord {
   appointmentDate: string
   name?: string
   age?: number
-  clinicLocation?: string
   state?: string
   gender?: string
   dob?: string

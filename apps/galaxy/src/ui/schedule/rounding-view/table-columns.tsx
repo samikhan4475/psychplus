@@ -141,7 +141,7 @@ const columns: ColumnDef<Appointment>[] = [
   },
   {
     id: 'location',
-    accessorKey: 'clinicLocation',
+    accessorKey: 'locationName',
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort

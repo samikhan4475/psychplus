@@ -215,7 +215,7 @@ const columns = (
     },
     {
       id: 'location',
-      accessorKey: 'clinicLocation',
+      accessorKey: 'locationName',
       header: ({ column }) => (
         <ColumnHeader
           sortable
@@ -225,7 +225,7 @@ const columns = (
           label="Location"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.clinicLocation}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.locationName}</TextCell>,
       enableHiding: true,
     },
 
