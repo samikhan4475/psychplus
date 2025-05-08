@@ -11,7 +11,6 @@ import {
   adjustmentStatusMapping,
   DEFAULT_ADJUSTMENT_TYPE,
   PROCESSED_AS_REVERSAL,
-  WRITE_OFF_ADJUSTMENT,
 } from '../constants'
 import { SchemaType } from '../schema'
 import { AdjustmentAddButton } from './adj-add-button'
@@ -24,7 +23,6 @@ import { RectifyPaymentButton } from './rectify-payment-button'
 import { RemarkCodeField } from './remark-code-field'
 import {
   getAdjustmentStatus,
-  getOtherWriteOff,
   updateOrAddAdjustment,
 } from './utils'
 
@@ -121,27 +119,6 @@ const AdjustmentReasonRemarkCell = ({
         updatedServiceLineAdjustments,
       )
 
-      if (
-        adjustmentCode === WRITE_OFF_ADJUSTMENT.adjustmentGroupCode &&
-        reasonCode === WRITE_OFF_ADJUSTMENT.adjustmentReasonCode
-      ) {
-        const allowedAmount = String(+billedAmount - +adjustmentAmount)
-
-        const finalAllowedAmount =
-          processedAsCode === PROCESSED_AS_REVERSAL
-            ? -+allowedAmount
-            : +allowedAmount
-        const otherAdjustments = getOtherWriteOff(serviceLinePaymentAdjustments)
-        form.setValue(
-          `claimServiceLinePayments.${row.index}.writeOffAmount`,
-          `${+finalAdjustmentAmount + +otherAdjustments}`,
-        )
-        form.setValue(
-          `claimServiceLinePayments.${row.index}.allowedAmount`,
-          `${finalAllowedAmount}`,
-        )
-      }
-
       setAdjustment({
         adjustmentCode: '',
         adjustmentAmount: '',
@@ -152,7 +129,6 @@ const AdjustmentReasonRemarkCell = ({
   }
 
   const onBlur = async () => {
-    const { writeOffAmount } = row.original
     const { adjustmentCode, adjustmentAmount, reasonCode, remarkCode } =
       adjustment
     if (
@@ -192,14 +168,6 @@ const AdjustmentReasonRemarkCell = ({
         `claimServiceLinePayments.${row.index}.serviceLinePaymentAdjustments`,
         updatedServiceLineAdjustments,
       )
-
-      const otherAdjustments = getOtherWriteOff(serviceLinePaymentAdjustments)
-
-      if (adjustmentStatus === 'WriteOff')
-        form.setValue(
-          `claimServiceLinePayments.${row.index}.writeOffAmount`,
-          `${+finalAdjustmentAmount + +writeOffAmount + +otherAdjustments}`,
-        )
 
       setIsLoading(false)
     } else if (result.state === 'error') {
