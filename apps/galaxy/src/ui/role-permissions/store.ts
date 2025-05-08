@@ -9,12 +9,20 @@ interface Store {
   setPermissions: (column: PermissionList) => void
   roleProfile?: Role
   setRoleProfile: (column: Role) => void
+  refresh: boolean
+  setRefresh: (column: boolean) => void
 }
 
 const useStore = create<Store>((set) => ({
   selectedPermissions: {},
   permissions: {},
   roleProfile: undefined,
+  refresh: false,
+  setRefresh: (refresh) => {
+    set({
+      refresh,
+    })
+  },
   setRoleProfile: (roleProfile) => {
     set({
       roleProfile,

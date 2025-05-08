@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Flex } from '@radix-ui/themes'
+import { Button } from '@radix-ui/themes'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { useStore } from './store'
@@ -42,7 +42,7 @@ const SelectionButtons = ({ selectedPermissionsId }: Props) => {
   }
 
   return (
-    <Flex gap="2" align="center" className="m-auto">
+    <>
       <Button
         color="gray"
         className="text-black"
@@ -65,7 +65,7 @@ const SelectionButtons = ({ selectedPermissionsId }: Props) => {
       >
         Disable All
       </Button>
-    </Flex>
+    </>
   )
 }
 

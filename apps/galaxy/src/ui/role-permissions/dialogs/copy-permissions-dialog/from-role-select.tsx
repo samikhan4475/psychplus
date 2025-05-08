@@ -9,24 +9,25 @@ import {
   SelectInput,
 } from '@/components'
 import { SelectOptionType } from '@/types'
-import { getRoleOptionsAction } from '../../actions'
+import { getAllRolesListOptionsAction } from '../../actions'
 
 const FromRoleSelect = () => {
   const form = useFormContext()
   const [organizations, setOrganizations] = useState<SelectOptionType[]>([])
   const [loading, setLoading] = useState(false)
   const [disabled, setDisabled] = useState(true)
-  const practiceId = form.watch('fromPracticeId')
-  const userId = form.watch('fromUserId')
+  const fromOrganizationId = form.watch('fromOrganizationId')
 
   useEffect(() => {
     ;(async () => {
-      if (practiceId && userId) {
+      if (fromOrganizationId) {
         setDisabled(false)
         setLoading(true)
-        const result = await getRoleOptionsAction({
-          userId,
-          practiceId,
+        const result = await getAllRolesListOptionsAction({
+          payload: {
+            organizationId: fromOrganizationId,
+            isIncludeOrganizationSpecific: true,
+          },
         })
         if (result.state === 'success') {
           setOrganizations(result.data)
@@ -34,8 +35,7 @@ const FromRoleSelect = () => {
         setLoading(false)
       }
     })()
-  }, [practiceId, userId])
-
+  }, [fromOrganizationId])
   return (
     <FormFieldContainer className="flex-row items-center gap-2">
       <FormFieldLabel>Role</FormFieldLabel>

@@ -37,11 +37,13 @@ const ProfileForm = () => {
     setRoleProfile,
     roleProfile,
     selectedPermissions,
+    refresh,
   } = useStore((state) => ({
     setSelectedPermissions: state.setSelectedPermissions,
     setRoleProfile: state.setRoleProfile,
     roleProfile: state.roleProfile,
     selectedPermissions: state.selectedPermissions,
+    refresh: state.refresh,
   }))
   const [loading, setLoading] = useState(true)
   const { id, roleId } = useParams<{ id: string; roleId: string }>()
@@ -94,7 +96,7 @@ const ProfileForm = () => {
         setLoading(false)
       }
     })()
-  }, [roleId])
+  }, [roleId, refresh])
 
   const onSubmit = async () => {
     const existingPermissions = new Set(

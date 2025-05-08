@@ -12,6 +12,8 @@ const defaultPayload = {
 interface Payload {
   payload: {
     roleIds?: string[]
+    organizationId?: string
+    isIncludeOrganizationSpecific?: boolean
   }
 }
 

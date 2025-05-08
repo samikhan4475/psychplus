@@ -4,26 +4,24 @@ import { Box, Flex, Grid, Text } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FormContainer } from '@/components'
-import { associatePermissionAction, getPracticeAction } from '../../actions'
+import { associatePermissionAction, getRoleProfileAction } from '../../actions'
 import { useStore } from '../../store'
 import { FromOrganizationSelect } from './from-organization-select'
-import { FromPracticeSelect } from './from-practice-select'
 import { FromRoleSelect } from './from-role-select'
-import { FromStaffSelect } from './from-staff-select'
 import { schema, type SchemaType } from './schema'
 import { SubmitFormButton } from './submit-form-button'
 import { ToOrganizationSelect } from './to-organization-select'
-import { ToPracticeSelect } from './to-practice-select'
 import { ToRoleSelect } from './to-role-select'
-import { ToStaffSelect } from './to-staff-select'
 
 interface FormProps {
   onCloseModal: (open: boolean) => void
 }
 
 const RoleForm = ({ onCloseModal }: FormProps) => {
-  const { roleProfile } = useStore((state) => ({
+  const { roleProfile, refresh, setRefresh } = useStore((state) => ({
     roleProfile: state.roleProfile,
+    setRefresh: state.setRefresh,
+    refresh: state.refresh,
   }))
   const { id, roleId } = useParams<{ id: string; roleId: string }>()
   const form = useForm<SchemaType>({
@@ -31,64 +29,52 @@ const RoleForm = ({ onCloseModal }: FormProps) => {
     defaultValues: {
       toOrganizationId: id ?? '',
       toRoleId: roleId ?? '',
-      toPracticeId: 'all',
-      toUserId: 'all',
     },
   })
 
   const onSave = async (formData: SchemaType) => {
-    const fromUserId = parseInt(formData.fromUserId)
-    const practiceResponse = await getPracticeAction({
+    const response = await getRoleProfileAction({
       payload: {
-        practiceId: formData.fromPracticeId,
-        staffuserId: fromUserId,
+        roleIds: [formData.fromRoleId],
       },
     })
+    if (response.state === 'success') {
+      const role = response.data[0]
 
-    if (practiceResponse.state === 'error') {
-      toast.error(practiceResponse.error)
-      return
-    }
+      if (role?.rolePermissions?.length) {
+        const rolePermissions: string[] = []
+        roleProfile?.rolePermissions?.forEach((permission) => {
+          rolePermissions.push(permission.userPermissionId)
+        })
 
-    const practice = practiceResponse.data[0]
+        const permissionPromises = role.rolePermissions
+          .filter(
+            (record) => !rolePermissions.includes(record.userPermissionId),
+          )
+          .map((record) =>
+            associatePermissionAction({
+              userRoleId: roleId,
+              userPermissionId: record.userPermissionId,
+            }),
+          )
+        const results = await Promise.all(permissionPromises)
+        const hasError = results.some((res) => res?.state === 'error')
 
-    const selectedFromUser = practice.users?.find(
-      (user) => parseInt(user.id) === fromUserId,
-    )
+        results.forEach((res) => {
+          if (res?.state === 'error') {
+            toast.error(res.error)
+          }
+        })
 
-    const selectedRole = selectedFromUser?.userRoles?.find(
-      (role) => role.id === formData.fromRoleId,
-    )
-
-    if (selectedRole?.rolePermissions?.length) {
-      const rolePermissions: string[] = []
-      roleProfile?.rolePermissions?.forEach((permission) => {
-        rolePermissions.push(permission.userPermissionId)
-      })
-
-      const permissionPromises = selectedRole.rolePermissions
-        .filter((record) => !rolePermissions.includes(record.userPermissionId))
-        .map((record) =>
-          associatePermissionAction({
-            userRoleId: roleId,
-            userPermissionId: record.userPermissionId,
-          }),
-        )
-      const results = await Promise.all(permissionPromises)
-      const hasError = results.some((res) => res?.state === 'error')
-
-      results.forEach((res) => {
-        if (res?.state === 'error') {
-          toast.error(res.error)
+        if (hasError) {
+          toast.error('Some permissions could not be copied.')
+        } else {
+          toast.success('Permissions copied successfully.')
         }
-      })
-
-      if (hasError) {
-        toast.error('Some permissions could not be copied.')
-      } else {
-        toast.success('Permissions copied successfully.')
+        setRefresh(!refresh)
       }
     }
+
     onCloseModal(false)
   }
 
@@ -103,8 +89,6 @@ const RoleForm = ({ onCloseModal }: FormProps) => {
               </Text>
             </Flex>
             <FromOrganizationSelect />
-            <FromPracticeSelect />
-            <FromStaffSelect />
             <FromRoleSelect />
           </Flex>
           <Flex direction="column" className="gap-2 border border-gray-5 p-2">
@@ -114,8 +98,6 @@ const RoleForm = ({ onCloseModal }: FormProps) => {
               </Text>
             </Flex>
             <ToOrganizationSelect />
-            <ToPracticeSelect />
-            <ToStaffSelect />
             <ToRoleSelect />
           </Flex>
         </Grid>

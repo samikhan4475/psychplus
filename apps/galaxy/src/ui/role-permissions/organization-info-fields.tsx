@@ -1,6 +1,7 @@
 'use client'
 
-import { Grid } from '@radix-ui/themes'
+import { Flex, Grid } from '@radix-ui/themes'
+import { RoleDialog } from './dialogs'
 import { OrganizationSelect } from './organization-select'
 import { PracticeSelect } from './practice-select'
 import { RoleSelect } from './role-select'
@@ -18,7 +19,10 @@ const OrganizationInfoFields = ({ selectedPermissionsId }: Props) => {
       <PracticeSelect />
       <RoleSelect />
       <StaffSelect />
-      <SelectionButtons selectedPermissionsId={selectedPermissionsId} />
+      <Flex gap="2">
+        <RoleDialog />
+        <SelectionButtons selectedPermissionsId={selectedPermissionsId} />
+      </Flex>
     </Grid>
   )
 }
