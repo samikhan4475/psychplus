@@ -13,6 +13,9 @@ const useSchedulerPermissions = () => {
   const canChangeVisitStatusToCheckedOut = useHasPermission(
     'changeVisitStatusToCheckedOutWithOutNote',
   )
+  const canChangeVisitStatusFromCheckedOut = useHasPermission(
+    'changeVisitStatusFromCheckedOutForTimedVisit',
+  )
   const canChangeVisitStatusToInRoom = useHasPermission(
     'changeVisitStatusToInRoom',
   )
@@ -45,11 +48,17 @@ const useSchedulerPermissions = () => {
     'changeNonTimedServiceVisitMedium',
   )
 
-  const canChangeVisitStatusToNoShowForSelfAppointments = useHasPermission('changeVisitStatusToNoShowForSelfAppointments')
+  const canChangeVisitStatusToNoShowForSelfAppointments = useHasPermission(
+    'changeVisitStatusToNoShowForSelfAppointments',
+  )
 
-  const canChangeVisitStatusToNoShowForOtherProviders = useHasPermission('changeVisitStatusToNoShowForOtherProviderAppointments')
+  const canChangeVisitStatusToNoShowForOtherProviders = useHasPermission(
+    'changeVisitStatusToNoShowForOtherProviderAppointments',
+  )
 
-  const canChangeVisitStatusToNoShowAfterVisitStart = useHasPermission('visitStatusToNoShowForOtherProviderAppointmentsAfterStartTime')
+  const canChangeVisitStatusToNoShowAfterVisitStart = useHasPermission(
+    'visitStatusToNoShowForOtherProviderAppointmentsAfterStartTime',
+  )
   const changeRoomPermission = useHasPermission('changeRoom')
 
   return {
@@ -57,6 +66,7 @@ const useSchedulerPermissions = () => {
     canChangeVisitStatusToCheckedInOfOtherProviders,
     canChangeVisitStatusToCheckedInOfSelfAppointments,
     canChangeVisitStatusToCheckedOut,
+    canChangeVisitStatusFromCheckedOut,
     canChangeVisitStatusToInRoom,
     canChangeVisitStatusToConfirmedS,
     canChangeVisitStatusToCancelledSForSelfAppointments,

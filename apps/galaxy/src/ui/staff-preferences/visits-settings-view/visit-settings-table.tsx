@@ -68,7 +68,13 @@ const VisitSettingsTable = () => {
         scrollbars="horizontal"
         className="w-full max-w-[calc(100vw_-_210px)]"
       >
-        <DataTable columns={columns} data={fields} tdClass="p-0" isRowSpan />
+        <DataTable
+          columns={columns}
+          data={fields}
+          tdClass="p-0"
+          isRowSpan
+          disablePagination
+        />
       </ScrollArea>
     </Box>
   )

@@ -21,6 +21,9 @@ import { UpdateVisitAlert } from '../update-visit-alert'
 const VISIT_STATUS_PERMISSION =
   'You do not have permission to change the visit status to this. Please contact your supervisor if you need any further assistance.'
 
+const VISIT_STATUS_FROM_CHECKED_OUT_PERMISSION =
+  'The visit status is checked out, please contact your supervisor to modify the visit status'
+
 const RESCHEDULE_ALERT_MESSAGE =
   "The Visit Status cannot be manually changed to 'Rescheduled.'"
 
@@ -55,6 +58,7 @@ const TimedVisitStatusSelect = ({
     canChangeVisitStatusToCancelledSForSelfAppointments,
     canChangeVisitStatusToCancelledSForOtherProviders,
     canChangeVisitStatusToCheckedOut,
+    canChangeVisitStatusFromCheckedOut,
     canChangeVisitStatusToConfirmedS,
     canChangeVisitStatusToInRoom,
     canChangeVisitStatusToNoShowForSelfAppointments,
@@ -134,6 +138,14 @@ const TimedVisitStatusSelect = ({
   }
 
   const onChange = async (val: string) => {
+    if (
+      visitStatus === 'CheckedOut' &&
+      val !== 'CheckedOut' &&
+      !canChangeVisitStatusFromCheckedOut
+    ) {
+      setAlertMessage(VISIT_STATUS_FROM_CHECKED_OUT_PERMISSION)
+      return setIsAlertOpen(true)
+    }
     if (hasPermissionToChangeStatus(val)) {
       if (val === 'Rescheduled') {
         setAlertMessage(RESCHEDULE_ALERT_MESSAGE)

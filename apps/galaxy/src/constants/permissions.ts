@@ -157,6 +157,8 @@ const USER_PERMISSIONS = {
     'changeVisitStatusToCheckInOfOtherProviderAppointments',
   changeVisitStatusToCheckedOutWithOutNote:
     'changeVisitStatusToCheckedOutWithOutNote',
+  changeVisitStatusFromCheckedOutForTimedVisit:
+    'changeVisitStatusFromCheckedOutForTimedVisit',
   changeVisitStatusToCancelledStaffForOtherProviderAppointments:
     'changeVisitStatusToCancelledStaffForOtherProviderAppointments',
   editOtherProviderAppointments: 'editOtherProviderAppointments',
@@ -238,7 +240,7 @@ const USER_PERMISSIONS = {
     'clickApproveMangStaffPrefAdminViewNonAdmin',
   canUploadSignedPolicy: 'canUploadSignedPolicy',
   mainTabManagementPermission: 'mainTabManagementPermission',
-  changeOrderByProviderLabResultView: 'changeOrderByProviderLabResultView'
+  changeOrderByProviderLabResultView: 'changeOrderByProviderLabResultView',
 }
 
 export { USER_PERMISSIONS }
