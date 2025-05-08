@@ -167,6 +167,11 @@ enum CategoryValue {
   ProviderCodingView = 'FieldValue_Sch_ProviderCodingView',
 }
 
+enum TIMEZONE_TYPES {
+  PROVIDER_PREFERRED = 'ProviderPreferred',
+  LOCATION_PREFERRED = 'LocationPreferred',
+}
+
 const CACHED_FILTERS_KEY = 'cached-filters-key'
 
 const EXCLUDED_PROVIDER_TYPES: string[] = [
@@ -209,4 +214,5 @@ export {
   PROVIDER_CODING_VIEW_FILTERS_KEY,
   CACHED_FILTERS_KEY,
   EXCLUDED_PROVIDER_TYPES,
+  TIMEZONE_TYPES,
 }

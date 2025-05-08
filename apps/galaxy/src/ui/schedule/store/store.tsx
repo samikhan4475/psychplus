@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { CACHED_FILTERS_KEY } from '../constants'
+import { CACHED_FILTERS_KEY, TIMEZONE_TYPES } from '../constants'
 import { TabValue } from '../types'
 
 interface Store {
@@ -10,6 +10,8 @@ interface Store {
   cachedFiltersList: string[]
   tableFilters: string[]
   providerCodingFilters: string[]
+  timezoneType: TIMEZONE_TYPES
+  setTimezoneType: (timeZone: TIMEZONE_TYPES) => void
   setActiveTab?: (tab: string) => void
   saveRoundingFilters: (filter: string[]) => void
   saveListFilters: (filters: string[]) => void
@@ -26,6 +28,10 @@ const useStore = create<Store>()(
       cachedFiltersList: [],
       providerCodingFilters: [],
       tableFilters: [],
+      timezoneType: TIMEZONE_TYPES.LOCATION_PREFERRED,
+      setTimezoneType: (timeZone) => {
+        set({ timezoneType: timeZone })
+      },
       setActiveTab: (activeTab) => {
         const visitedTabs = get().visitedTabs
         visitedTabs.add(activeTab)

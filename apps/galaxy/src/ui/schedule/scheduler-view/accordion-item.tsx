@@ -11,7 +11,9 @@ import { AddVisit } from '@/ui/visit/add-visit'
 import { cn, getCodesetDisplayName } from '@/utils'
 import { CLICK_AVAILABLE_SLOTS } from '../constants'
 import { PermissionAlert } from '../shared'
+import { useStore as useScheduleStore } from '../store/store'
 import { AvailableSlots } from '../types'
+import { getPreferredTimezone } from '../utils'
 import { useStore } from './store'
 import { AppointmentAvailability, SlotsByDay } from './types'
 import { currentWeekTotalSlots, extractTime, nextWeekTotalSlots } from './utils'
@@ -77,6 +79,8 @@ const AccordionItem = ({
   )
   const providerState = provider.clinic?.contact?.addresses?.[0]?.state ?? ''
   const stateLabel = getCodesetDisplayName(providerState, stateCodes)
+  const timezoneType = useScheduleStore((state) => state.timezoneType)
+  const providerTimezonePreference = provider.specialist.timeZonePreference
 
   const specialistTypeIndex: Record<string, string> = useMemo(
     () =>
@@ -194,54 +198,62 @@ const AccordionItem = ({
                 <Flex direction="column" className="gap-y-2 px-[1.5px]">
                   {provider.allSlotsByDay[`${day.monthAndDay}`]
                     ? provider.allSlotsByDay[`${day.monthAndDay}`]?.map(
-                      (slot) => {
-                        const slotTime = extractTime(slot.startDate, slot.timeZoneId);
-                        if (!hasPermissionToClickOnAvailableSlots) {
-                          return (
-                            <Button
-                              variant="outline"
-                              size="1"
-                              color="gray"
-                              onClick={() => setIsAlertOpen(true)}
-                              key={slot.startDate}
-                              className="text-black text-[12px]"
-                            >
-                              {slotTime}
-                            </Button>
+                        (slot) => {
+                          const timezoneId = getPreferredTimezone(
+                            timezoneType,
+                            slot.timeZoneId,
+                            providerTimezonePreference,
                           )
-                        }
+                          const slotTime = extractTime(
+                            slot.startDate,
+                            timezoneId,
+                          )
+                          if (!hasPermissionToClickOnAvailableSlots) {
+                            return (
+                              <Button
+                                variant="outline"
+                                size="1"
+                                color="gray"
+                                onClick={() => setIsAlertOpen(true)}
+                                key={slot.startDate}
+                                className="text-black text-[12px]"
+                              >
+                                {slotTime}
+                              </Button>
+                            )
+                          }
 
-                        return (
-                          <AddVisit
-                            dateTime={slot.startDate}
-                            timezone={slot.timeZoneId}
-                            onAdd={() => {
-                              fetchData(formData)
-                              onVisitAdd?.()
-                            }}
-                            slotDetails={getSlotDetails(
-                              slot,
-                              provider,
-                              specialistTypeIndex,
-                            )}
-                            isTimed
-                            key={slot.startDate}
-                            patient={patient}
-                            isFollowup={isFollowup}
-                            consultationDate={consultationDate}
-                          >
-                            <Button
-                              variant="outline"
-                              size="1"
-                              color="gray"
-                              className="text-black text-[12px]"
+                          return (
+                            <AddVisit
+                              dateTime={slot.startDate}
+                              timezone={slot.timeZoneId}
+                              onAdd={() => {
+                                fetchData(formData)
+                                onVisitAdd?.()
+                              }}
+                              slotDetails={getSlotDetails(
+                                slot,
+                                provider,
+                                specialistTypeIndex,
+                              )}
+                              isTimed
+                              key={slot.startDate}
+                              patient={patient}
+                              isFollowup={isFollowup}
+                              consultationDate={consultationDate}
                             >
-                              {slotTime}
-                            </Button>
-                          </AddVisit>
-                        )
-                      },
-                    )
+                              <Button
+                                variant="outline"
+                                size="1"
+                                color="gray"
+                                className="text-black text-[12px]"
+                              >
+                                {slotTime}
+                              </Button>
+                            </AddVisit>
+                          )
+                        },
+                      )
                     : null}
                 </Flex>
               </Box>

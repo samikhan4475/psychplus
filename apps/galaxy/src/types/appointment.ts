@@ -169,6 +169,7 @@ interface Appointment {
   isFollowupCreatedforTimedService?: boolean
   lastSeenByProvider?: string
   lastSeenByProviderName?: LegalName
+  staffTimezonePreference?: string
 }
 
 interface BookVisitPayload {

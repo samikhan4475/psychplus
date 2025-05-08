@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { getLocalTimeZone } from '@internationalized/date'
 import { Flex, IconButton, Text } from '@radix-ui/themes'
 import format from 'date-fns/format'
@@ -19,6 +19,8 @@ import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { useHasPermission } from '@/hooks'
 import { CLICK_PLUS_BUTTON_CALENDAR } from '../constants'
 import { PermissionAlert } from '../shared'
+import { useStore as useScheduleStore } from '../store/store'
+import { convertToZonedDate, getPreferredTimezone } from '../utils'
 import { useStore } from './store'
 
 const locales = {
@@ -47,7 +49,6 @@ const CustomTimeSlot = (props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   if (props.resource === undefined) return props.children
-
   return (
     <>
       <PermissionAlert
@@ -130,6 +131,28 @@ const BigCalendar = () => {
     weekStartDate: state.weekStartDate,
     events: state.data,
   }))
+  const timezoneType = useScheduleStore((state) => state.timezoneType)
+
+  const transformedEvents = useMemo(
+    () =>
+      events.map((event) => {
+        const timeZoneId = getPreferredTimezone(
+          timezoneType,
+          event.data.locationTimezoneId,
+          event.data.staffTimezonePreference,
+        )
+        const duration = event.data.appointmentDuration ?? 20
+        const start = convertToZonedDate(event.data.appointmentDate, timeZoneId)
+        const end = new Date(start.getTime() + duration * 60000)
+
+        return {
+          ...event,
+          start,
+          end,
+        }
+      }),
+    [events, timezoneType],
+  )
 
   return (
     <Flex direction="column" className="mt-1.5 flex-1 overflow-y-auto px-2.5">
@@ -138,7 +161,7 @@ const BigCalendar = () => {
           localizer={localizer}
           view="week"
           toolbar={false}
-          events={events}
+          events={transformedEvents}
           components={CalendarComponent}
           startAccessor="start"
           endAccessor="end"

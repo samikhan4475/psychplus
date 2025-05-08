@@ -67,6 +67,7 @@ interface AppointmentSpecialist {
   legalName: LegalName
   spokenLanguages?: string[]
   rating?: number
+  timeZonePreference?: string
 }
 
 interface AppointmentClinic {
