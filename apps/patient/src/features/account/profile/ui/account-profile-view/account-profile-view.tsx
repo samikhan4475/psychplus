@@ -51,7 +51,7 @@ const AccountProfileView = async () => {
             <FeatureContainer>
               <PersonalInfoCard />
               <AddressCard />
-              <PreferredPartnerCard />
+              {/* <PreferredPartnerCard /> */}
               <EmergencyContactCard relationshipData={relationshipResponse.data}/>
               <AdditionalContactCard />
               <AlternateInfoCard />
