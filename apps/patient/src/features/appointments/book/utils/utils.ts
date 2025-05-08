@@ -3,12 +3,16 @@ import {
   getLocalTimeZone,
   isToday,
 } from '@internationalized/date'
+import { AppointmentType } from '@psychplus-v2/constants'
 import { CareTeamMember, Specialist } from '@psychplus-v2/types'
 import {
+  getAppointmentTypeLabel,
   getDayOfWeekLabel,
   getMonthLabel,
   getTimeLabel,
 } from '@psychplus-v2/utils'
+import { NoteSectionItem } from '@/features/note/types'
+import { INSURANCE_DEPENDENT_DIAGNOSIS } from '../constants'
 
 function isProviderMemberOfCareTeam(
   careTeam: CareTeamMember[],
@@ -36,4 +40,25 @@ function getAppointmentDateTimeLabel(
   }
 }
 
-export { isProviderMemberOfCareTeam, getAppointmentDateTimeLabel }
+const isInsuranceDisabledBasedOnDiagnosisCodes = (
+  diagnosisCodes: NoteSectionItem[],
+) => {
+  const codes = diagnosisCodes?.[0].sectionItemValue
+  return INSURANCE_DEPENDENT_DIAGNOSIS.every((code) => codes.includes(code))
+}
+
+const insuranceMayNotCoverMessage = (appointmentType: AppointmentType) =>
+  `Patient has working diagnosis ${INSURANCE_DEPENDENT_DIAGNOSIS.join(
+    ', ',
+  )} due to which insurance may
+    not cover this visit, if this visit is schedule, patient may be
+    charged selfpay for ${getAppointmentTypeLabel(
+      appointmentType,
+    ).toLocaleLowerCase()} `
+
+export {
+  isProviderMemberOfCareTeam,
+  getAppointmentDateTimeLabel,
+  isInsuranceDisabledBasedOnDiagnosisCodes,
+  insuranceMayNotCoverMessage,
+}

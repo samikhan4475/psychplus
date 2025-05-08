@@ -7,6 +7,7 @@ import { CareTeamMember, Clinic, Consent } from '@psychplus-v2/types'
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { Insurance } from '@/features/billing/payments/types'
 import { InsurancePayer } from '@/features/billing/payments/types/insurance'
+import { NoteSectionItem } from '@/features/note/types'
 import { AppointmentSlot, AppointmentSpecialist } from '../../search/types'
 
 interface ConfirmationNote {
@@ -64,6 +65,7 @@ interface PaymentMethodProps {
   patientInsurances: Insurance
   insurancePayers: InsurancePayer[]
   appointmentType?: AppointmentType
+  diagnosisCodes: NoteSectionItem[]
 }
 
 interface BookedAppointmentProps {

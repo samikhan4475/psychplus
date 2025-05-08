@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { AppointmentType, PaymentType } from '@psychplus-v2/constants'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import {
@@ -7,6 +8,8 @@ import {
   PaymentMethodToggleButtons,
 } from '@/components-v2'
 import { PaymentMethodProps } from '@/features/appointments/book/types'
+import { isInsuranceDisabledBasedOnDiagnosisCodes } from '../../utils'
+import { InsuranceNotCoverDialog } from '../insurance-not-cover-dialog'
 
 const PaymentMethods = ({
   creditCards,
@@ -16,12 +19,23 @@ const PaymentMethods = ({
   patientInsurances,
   insurancePayers,
   appointmentType,
+  diagnosisCodes,
 }: PaymentMethodProps) => {
   const optionalText = `${
     paymentMethod === PaymentType.Insurance ? 'Insurance' : 'Credit/Debit Cards'
   } ${
     appointmentType === AppointmentType.InPerson ? '(Optional)' : '(Required)'
   }`
+  const [openInsuranceNotCover, setOpenInsuranceNotCover] = useState(false)
+  const [disableInsurance, setDisableInsurance] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (isInsuranceDisabledBasedOnDiagnosisCodes(diagnosisCodes)) {
+      setPaymentMethod(PaymentType.SelfPay)
+      setDisableInsurance(true)
+      setOpenInsuranceNotCover(true)
+    }
+  }, [diagnosisCodes])
 
   return (
     <Box>
@@ -33,6 +47,7 @@ const PaymentMethods = ({
           <PaymentMethodToggleButtons
             value={paymentMethod}
             onChange={setPaymentMethod}
+            disableInsurance={disableInsurance}
           />
         </Flex>
         <Text size="5" weight="medium" className="mt-7 text-[#151B4A]">
@@ -47,6 +62,13 @@ const PaymentMethods = ({
         patientInsurances={patientInsurances}
         insurancePayers={insurancePayers}
       />
+
+      {disableInsurance && openInsuranceNotCover && (
+        <InsuranceNotCoverDialog
+          open={openInsuranceNotCover}
+          setOpen={setOpenInsuranceNotCover}
+        />
+      )}
     </Box>
   )
 }

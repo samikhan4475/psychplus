@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { redirect } from 'next/navigation'
 import { PaymentType } from '@psychplus-v2/constants'
 import { CareTeamMember } from '@psychplus-v2/types'
 import { Box, Flex } from '@radix-ui/themes'
@@ -8,11 +9,11 @@ import { useStore } from '@/features/appointments/search/store'
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { Insurance } from '@/features/billing/payments/types'
 import { InsurancePayer } from '@/features/billing/payments/types/insurance'
+import { NoteSectionItem } from '@/features/note/types'
 import { BookedSlot } from '../types'
 import { AppointmentDetails, PaymentMethods } from './book-appointment'
 import { BookAppointmentButton } from './book-appointment/book-appointment-button'
 import { ConfirmAppointment } from './book-appointment/confirm-appointment'
-import { redirect } from 'next/navigation'
 
 const BookAppointmentView = ({
   mapKey,
@@ -21,6 +22,7 @@ const BookAppointmentView = ({
   careTeam,
   patientInsurances,
   insurancePayers,
+  diagnosisCodes,
 }: {
   mapKey: string
   stripeApiKey: string
@@ -28,6 +30,7 @@ const BookAppointmentView = ({
   careTeam: CareTeamMember[]
   patientInsurances: Insurance
   insurancePayers: InsurancePayer[]
+  diagnosisCodes: NoteSectionItem[]
 }) => {
   const currentBookingData = useStore(
     (state) => state.currentBookingAppointmentData,
@@ -72,6 +75,7 @@ const BookAppointmentView = ({
             patientInsurances={patientInsurances}
             insurancePayers={insurancePayers}
             appointmentType={currentBookingData?.appointmentType}
+            diagnosisCodes={diagnosisCodes}
           />
           <Box mt="5">
             <BookAppointmentButton

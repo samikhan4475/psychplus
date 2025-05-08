@@ -5,17 +5,23 @@ import { useRouter } from 'next/navigation'
 import { PaymentType } from '@psychplus-v2/constants'
 import { Appointment } from '@psychplus-v2/types'
 import { DialogClose } from '@radix-ui/react-dialog'
-import { Button, Dialog, Flex, Text, Tooltip } from '@radix-ui/themes'
+import { Box, Button, Dialog, Flex, Text, Tooltip } from '@radix-ui/themes'
 import {
   CloseDialogIcon,
   EditIcon,
   FormError,
+  FormInfo,
   PaymentMethodAccordion,
   PaymentMethodToggleButtons,
 } from '@/components-v2'
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
+import { NoteSectionItem } from '@/features/note/types'
 import { useToast } from '@/providers'
+import {
+  insuranceMayNotCoverMessage,
+  isInsuranceDisabledBasedOnDiagnosisCodes,
+} from '../../book/utils'
 import { changeAppointmentPaymentMethod } from '../actions/change-appointment-payment-method'
 
 const ChangePaymentMethodDialog = ({
@@ -24,12 +30,14 @@ const ChangePaymentMethodDialog = ({
   stripeApiKey,
   patientInsurances,
   insurancePayers,
+  diagnosisCodes,
 }: {
   appointment: Appointment
   creditCards: CreditCard[]
   stripeApiKey: string
   patientInsurances: Insurance
   insurancePayers: InsurancePayer[]
+  diagnosisCodes: NoteSectionItem[]
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState<PaymentType>(
@@ -37,18 +45,33 @@ const ChangePaymentMethodDialog = ({
   )
 
   const [error, setError] = useState<string>()
+  const [warning, setWarning] = useState<string>()
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
+  const [disableInsurance, setDisableInsurance] = useState<boolean>(false)
 
   useEffect(() => {
     setError('')
   }, [paymentMethod, patientInsurances])
 
+  useEffect(() => {
+    if (
+      isInsuranceDisabledBasedOnDiagnosisCodes(diagnosisCodes) &&
+      appointment.isSelfPay
+    ) {
+      setDisableInsurance(true)
+      setWarning(insuranceMayNotCoverMessage(appointment.type))
+    }
+  }, [diagnosisCodes, appointment])
+
   const onSave = async () => {
     setLoading(true)
 
-    if (paymentMethod === PaymentType.Insurance && !patientInsurances?.policies?.length) {
+    if (
+      paymentMethod === PaymentType.Insurance &&
+      !patientInsurances?.policies?.length
+    ) {
       setError('Please add insurance or choose self-pay to book an appointment')
       setLoading(false)
       return
@@ -97,6 +120,9 @@ const ChangePaymentMethodDialog = ({
         >
           Payment Method
         </Dialog.Title>
+        <Box mt="5">
+          <FormInfo message={warning} />
+        </Box>
         <Flex
           className="rounded-t-3 border border-b-0 border-[#D9E2FC] bg-[#FCFDFF]"
           mt="5"
@@ -110,6 +136,7 @@ const ChangePaymentMethodDialog = ({
             <PaymentMethodToggleButtons
               value={paymentMethod}
               onChange={setPaymentMethod}
+              disableInsurance={disableInsurance}
             />
           </Flex>
         </Flex>

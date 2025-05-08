@@ -323,6 +323,11 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                           stripeApiKey={STRIPE_PUBLISHABLE_KEY}
                           patientInsurances={patientInsurancesResponse.data}
                           insurancePayers={insurancePayerResponse.data}
+                          diagnosisCodes={noteDetailsResponse.data.filter(
+                            (note) =>
+                              note.sectionName ===
+                              NoteSectionName.NoteSectionDiagnosis,
+                          )}
                         />
                       </Flex>
 

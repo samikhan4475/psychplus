@@ -1,6 +1,8 @@
 import { CODESETS } from '@psychplus-v2/constants'
 import { GOOGLE_MAPS_API_KEY, STRIPE_PUBLISHABLE_KEY } from '@psychplus-v2/env'
+import { Text } from '@radix-ui/themes'
 import { getCodesets, getProfile } from '@/api'
+import { ProfileStoreProvider } from '@/features/account/profile/store'
 import { BookAppointmentView } from '@/features/appointments/book/ui/book-appointment-view'
 import { getCreditCards } from '@/features/billing/credit-debit-cards/api'
 import { sortCreditCardsByPrimary } from '@/features/billing/credit-debit-cards/utils'
@@ -9,11 +11,11 @@ import {
   getPatientInsurances,
 } from '@/features/billing/payments/api'
 import { getCareTeam } from '@/features/care-team/api'
+import { getNoteDetails } from '@/features/note/api'
+import { NoteSectionName } from '@/features/note/constants'
 import { CodesetStoreProvider, GooglePlacesContextProvider } from '@/providers'
-import { ProfileStoreProvider } from '@/features/account/profile/store'
 
 const SearchAppointmentsPage = async () => {
-
   const [
     creditCardResponse,
     careTeamResposne,
@@ -55,6 +57,14 @@ const SearchAppointmentsPage = async () => {
     CODESETS.InsurancePolicyPriority,
   ])
 
+  const diagnosisCodesResponse = await getNoteDetails({
+    patientId: profileResponse.data.id,
+    sectionName: [NoteSectionName.NoteSectionDiagnosis],
+  })
+
+  if (diagnosisCodesResponse.state === 'error')
+    return <Text>{diagnosisCodesResponse.error}</Text>
+
   return (
     <ProfileStoreProvider profile={profileResponse.data}>
       <CodesetStoreProvider codesets={codesets}>
@@ -66,6 +76,7 @@ const SearchAppointmentsPage = async () => {
             careTeam={careTeamResposne.data.careTeam}
             patientInsurances={patientInsurancesResponse.data}
             insurancePayers={insurancePayerResponse.data}
+            diagnosisCodes={diagnosisCodesResponse.data}
           />
         </GooglePlacesContextProvider>
       </CodesetStoreProvider>
