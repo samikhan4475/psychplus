@@ -11,9 +11,9 @@
     "lint:fix": "tsc --noEmit && eslint --fix \"src/**/*.ts*\""
   },
   "dependencies": {
-    "@azure/communication-calling": "^1.33.1",
+    "@azure/communication-calling": "^1.35.1",
     "@azure/communication-common": "^2.3.1",
-    "@azure/communication-react": "^1.24.0",
+    "@azure/communication-react": "^1.26.0",
     "@hookform/resolvers": "^3.3.2",
     "@internationalized/date": "^3.5.2",
     "@psychplus-v2/api": "^0.1.0",
