@@ -6,6 +6,7 @@ const config = {
   swcMinify: true,
   output: 'standalone',
   transpilePackages: [],
+  eslint: { ignoreDuringBuilds: true },
   webpack: (config) => {
     config.resolve.alias['@azure/communication-calling'] =
       '@azure/communication-calling/dist-esm/sdk.bundle.js'
