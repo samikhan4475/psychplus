@@ -90,20 +90,19 @@ const InsurancePaymentForm = ({
       practiceId: user?.practiceId,
     }
 
-    const { claimPayments, ...cleanedPayload } = reqPayload
     const finalPayload = data?.id
       ? {
           ...data,
-          ...cleanedPayload,
+          ...reqPayload,
         }
       : {
-          ...cleanedPayload,
+          ...reqPayload,
           status: 'NeedPosted',
           paymentType: 'Eob',
         }
 
+    delete finalPayload['claimPayments']
     const sanitizedPayload = sanitizeFormData(finalPayload)
-
     const response = data?.id
       ? await updateInsurancePaymentAction(sanitizedPayload, data?.id)
       : await addInsurancePaymentAction(sanitizedPayload)
