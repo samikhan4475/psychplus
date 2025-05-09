@@ -43,8 +43,8 @@ function getAppointmentDateTimeLabel(
 const isInsuranceDisabledBasedOnDiagnosisCodes = (
   diagnosisCodes: NoteSectionItem[],
 ) => {
-  const codes = diagnosisCodes?.[0].sectionItemValue
-  return INSURANCE_DEPENDENT_DIAGNOSIS.every((code) => codes.includes(code))
+  const codes = diagnosisCodes?.[0]?.sectionItemValue
+  return INSURANCE_DEPENDENT_DIAGNOSIS.every((code) => codes?.includes(code))
 }
 
 const insuranceMayNotCoverMessage = (appointmentType: AppointmentType) =>
