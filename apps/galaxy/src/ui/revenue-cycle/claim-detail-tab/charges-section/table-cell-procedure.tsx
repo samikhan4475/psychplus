@@ -105,7 +105,7 @@ const TableCellProcedure: React.FC<TableCellProcedureProps> = ({
   }
 
   return (
-    <Flex direction={'column'}>
+    <Flex direction={'column'} className='flex-1'>
       <SearchProcedureCodes
         fieldName={`claimServiceLines.${rowIndex}.cptCode`}
         onChange={handleProcedureCodeSelected}
