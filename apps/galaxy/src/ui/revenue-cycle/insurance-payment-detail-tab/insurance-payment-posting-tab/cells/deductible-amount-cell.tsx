@@ -55,6 +55,7 @@ const DeductibleAmountCell = ({
           adjustmentGroupCode: DEDUCTIBLE_ADJUSTMENT.adjustmentGroupCode,
           adjustmentReasonCode: DEDUCTIBLE_ADJUSTMENT.adjustmentReasonCode,
           serviceLinePaymentAdjustments: serviceLinePaymentAdjustments ?? [],
+          adjustmentStatus: DEDUCTIBLE_ADJUSTMENT.adjustmentStatus,
           claimPayment: row.original,
         })
 

@@ -2,7 +2,6 @@ import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { PropsWithRow } from '@/components'
-import { formatValueWithDecimals } from '@/utils'
 import { ClaimServiceLinePayment } from '../../../types'
 import { PaymentListTypes } from '../../types'
 import {
@@ -95,6 +94,7 @@ const AllowedAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
               adjustmentAmount: finalAdjustmentAmount,
               adjustmentGroupCode: WRITE_OFF_ADJUSTMENT.adjustmentGroupCode,
               adjustmentReasonCode: WRITE_OFF_ADJUSTMENT.adjustmentReasonCode,
+              adjustmentStatus: WRITE_OFF_ADJUSTMENT.adjustmentStatus,
               serviceLinePaymentAdjustments:
                 serviceLinePaymentAdjustments ?? [],
               claimPayment: row.original,

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Cross1Icon } from '@radix-ui/react-icons'
-import { Box, Text } from '@radix-ui/themes'
+import { Box, Text, Tooltip } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { ServiceLinePaymentAdjustment } from '@/ui/revenue-cycle/types'
 import { PaymentListTypes } from '../../types'
@@ -71,20 +71,26 @@ const AdjustmentPill = ({
   }
   if (recordStatus === 'Inactive') return ''
   return (
-    <Box className="rounded-full flex min-w-fit items-center bg-blue-4 px-2 py-[2px]">
-      <Text className="text-[10px]" weight="medium">
-        {adjustmentGroupCode}-{adjustmentReasonCode}
-        {remarkCode && `-${remarkCode}`} - {`$${adjustmentAmount}`}
-      </Text>
-      {(isRectifiedRow || paymentStatus === PaymentListTypes.Unposted) && (
-        <Cross1Icon
-          onClick={removeAdjustment}
-          className="ml-1"
-          width="11"
-          height="11"
-        />
-      )}
-    </Box>
+    <Tooltip
+      delayDuration={250}
+      content={adjustmentStatus}
+      className={!adjustmentStatus ? 'hidden' : 'block'}
+    >
+      <Box className="rounded-full flex min-w-fit cursor-default items-center bg-blue-4 px-2 py-[2px]">
+        <Text className="text-[10px]" weight="medium">
+          {adjustmentGroupCode}-{adjustmentReasonCode}
+          {remarkCode && `-${remarkCode}`} - {`$${adjustmentAmount}`}
+        </Text>
+        {(isRectifiedRow || paymentStatus === PaymentListTypes.Unposted) && (
+          <Cross1Icon
+            onClick={removeAdjustment}
+            className="ml-1 cursor-pointer"
+            width="11"
+            height="11"
+          />
+        )}
+      </Box>
+    </Tooltip>
   )
 }
 

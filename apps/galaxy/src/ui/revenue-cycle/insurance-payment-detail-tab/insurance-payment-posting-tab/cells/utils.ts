@@ -146,6 +146,7 @@ const handleAdjustment = ({
   adjustmentGroupCode,
   adjustmentReasonCode,
   adjustmentAmount,
+  adjustmentStatus,
   remarkCode,
   claimPaymentId,
 }: AdjustmentType) => {
@@ -159,6 +160,7 @@ const handleAdjustment = ({
   const newAdjustment = {
     adjustmentGroupCode,
     adjustmentReasonCode,
+    adjustmentStatus,
     adjustmentAmount: adjustmentAmount ?? 0,
     claimServiceLinePaymentId: claimPaymentId ?? '',
     remarkCode: remarkCode ?? '',
@@ -181,6 +183,7 @@ const addInsuranceAdjustment = ({
   serviceLinePaymentAdjustments,
   adjustmentGroupCode,
   adjustmentReasonCode,
+  adjustmentStatus,
   remarkCode,
   adjustmentAmount,
 }: AdjustmentType) => {
@@ -190,6 +193,7 @@ const addInsuranceAdjustment = ({
     adjustmentGroupCode,
     adjustmentReasonCode,
     remarkCode,
+    adjustmentStatus,
     adjustmentAmount,
   })
 }

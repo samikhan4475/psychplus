@@ -52,6 +52,7 @@ const CopayAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
           adjustmentGroupCode: CO_PAY_ADJUSTMENT.adjustmentGroupCode,
           adjustmentReasonCode: CO_PAY_ADJUSTMENT.adjustmentReasonCode,
           serviceLinePaymentAdjustments: serviceLinePaymentAdjustments ?? [],
+          adjustmentStatus: CO_PAY_ADJUSTMENT.adjustmentStatus,
           claimPayment: row.original,
         })
 

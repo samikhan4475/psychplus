@@ -52,6 +52,7 @@ const CoInsuranceAmountCell = ({
           adjustmentGroupCode: CO_INSURANCE_ADJUSTMENT.adjustmentGroupCode,
           adjustmentReasonCode: CO_INSURANCE_ADJUSTMENT.adjustmentReasonCode,
           serviceLinePaymentAdjustments: serviceLinePaymentAdjustments ?? [],
+          adjustmentStatus:CO_INSURANCE_ADJUSTMENT.adjustmentStatus,
           claimPayment: row.original,
         })
 
