@@ -12,11 +12,16 @@ const defaultPayload = {
 interface Payload {
   organizationsIds?: string[]
   practicesIds?: string[]
+  name?: string
+}
+
+interface StaffOptions extends SelectOptionType {
+  id?: string
 }
 
 const getOrganizationStaffOptionsAction = async (
   payload?: Payload,
-): Promise<api.ActionResult<SelectOptionType[]>> => {
+): Promise<api.ActionResult<StaffOptions[]>> => {
   const response = await api.POST<StaffResource[]>(api.GET_PROVIDERS_ENDPOINT, {
     ...defaultPayload,
     ...payload,

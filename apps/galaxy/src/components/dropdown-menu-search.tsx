@@ -23,6 +23,7 @@ interface DropdownMenuSearchProps<T> {
   initialValue?: T
   placeholder?: string
   disabled?: boolean
+  initialFetchAll?: boolean
   defaultData?: T[]
   fetchResults: (input: string) => Promise<ActionResult<T[]>>
   renderItem: (value: T) => React.ReactNode
@@ -39,22 +40,26 @@ const DropdownMenuSearch = <T extends MaybeID>({
   renderTrigger,
   onChange,
   defaultData,
+  initialFetchAll,
 }: DropdownMenuSearchProps<T>) => {
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState('')
   const [debouncedInput] = useDebounce(input, 500)
   const [results, setResults] = useState<T[] | undefined>(defaultData || [])
   const [value, setValue] = useState<T | undefined>(initialValue)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const controller = new AbortController()
 
-    if (debouncedInput) {
+    if (debouncedInput || initialFetchAll) {
+      setLoading(true)
       fetchResults(debouncedInput).then((res) => {
         if (res.state === 'error') {
           return toast.error(res.error)
         }
         setResults(res.data)
+        setLoading(false)
       })
     }
 
@@ -82,14 +87,21 @@ const DropdownMenuSearch = <T extends MaybeID>({
           </TextField.Slot>
         </TextField.Root>
         {results ? <Separator color="gray" size="4" /> : null}
-        {results?.length === 0 ? (
+        {loading && (
+          <Flex py="4" justify="center">
+            <Text size="2" color="gray" align="center">
+              Loading...
+            </Text>
+          </Flex>
+        )}
+        {!loading && results?.length === 0 && (
           <Flex py="4" justify="center">
             <Text size="2" color="gray" align="center">
               No results
             </Text>
           </Flex>
-        ) : null}
-        {results?.length ? (
+        )}
+        {!loading && results?.length ? (
           <Flex direction="column" py="1" gap="1">
             <ScrollArea scrollbars="vertical" style={{ maxHeight: 250 }}>
               {results.map((item, idx) => (

@@ -18,8 +18,8 @@ const VirtualWaitRoomField = () => {
               size="1"
               checked={!!isVirtualRoomLink}
               onCheckedChange={(val) => {
-                form.setValue('isVirtualRoomLink', val);
-                !val && form.setValue('virtualRoomLink', '')
+                form.setValue('isVirtualRoomLink', val)
+                !val && form.setValue('virtualRoomLink', 'no')
               }}
               highContrast
             />
