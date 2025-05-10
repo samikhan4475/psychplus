@@ -241,6 +241,7 @@ const USER_PERMISSIONS = {
   canUploadSignedPolicy: 'canUploadSignedPolicy',
   mainTabManagementPermission: 'mainTabManagementPermission',
   changeOrderByProviderLabResultView: 'changeOrderByProviderLabResultView',
+  clickResetStaffProfilePage: 'clickResetStaffProfilePage',
 }
 
 export { USER_PERMISSIONS }

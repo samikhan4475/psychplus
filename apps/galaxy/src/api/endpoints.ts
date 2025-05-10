@@ -930,6 +930,9 @@ const UPDATE_DEFAULT_PAYMENT = (
 const GET_MEDICATIONS_HISTORY = (pharmacyNotificationId: string) =>
   `${API_URL}/api/pharmacynotifications/${pharmacyNotificationId}/history/actions/search`
 
+const VALIDATE_CURRENT_PASSWORD = `${AUTH_URL}/credentials/actions/validate`
+const CHANGE_PASSWORD = `${API_URL}/api/users/self/changepassword`
+
 export {
   PATIENT_MEDICATION_SIGN_IN,
   GET_PATIENT_MEDICATION_ENDPOINT,
@@ -1345,5 +1348,7 @@ export {
   GET_MEDICATIONS_REFILL,
   DIS_ASSOCIATE_PERMISSION_ENDPOINT,
   UPDATE_DEFAULT_PAYMENT,
+  VALIDATE_CURRENT_PASSWORD,
+  CHANGE_PASSWORD,
   GET_MEDICATIONS_HISTORY,
 }

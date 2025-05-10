@@ -29,6 +29,7 @@ import { OrganizationSelect } from './organization-select'
 import { PhoneField } from './phone-field'
 import { PracticeSelect } from './practice-select'
 import { ProviderPreferenceSelect } from './provider-preference-select'
+import { ResetButton } from './reset-button'
 import { SaveStaffButton } from './save-staff-button'
 import { schema, SchemaType } from './schema'
 import { StaffRoleSelect } from './staff-role-select'
@@ -82,6 +83,7 @@ const StaffProfileForm = ({
       <FormContainer className="bg-white" form={form} onSubmit={onSubmit}>
         <TabContentHeading title="Profile">
           <Flex align="center" gap="2">
+            <ResetButton />
             <TestStaffCheckbox />
             <SaveStaffButton />
           </Flex>

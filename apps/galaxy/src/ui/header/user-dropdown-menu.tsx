@@ -7,6 +7,7 @@ import { CircleUser, LogOutIcon, type LucideIcon } from 'lucide-react'
 import { logoutAction } from '@/actions'
 import { useStore } from '@/store'
 import { getUserFullName, getUserInitials } from '@/utils'
+import { ResetButton } from './reset-button'
 
 const UserDropdownMenu = () => {
   const router = useRouter()
@@ -63,6 +64,8 @@ const UserDropdownMenu = () => {
         >
           Profile
         </MenuItem>
+        <DropdownMenu.Separator className="m-1" />
+        <ResetButton />
         <DropdownMenu.Separator className="m-1" />
         <MenuItem
           Icon={LogOutIcon}
