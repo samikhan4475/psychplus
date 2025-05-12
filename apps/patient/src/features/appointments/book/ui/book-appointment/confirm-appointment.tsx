@@ -23,6 +23,7 @@ import {
 import { ConfirmedAppointmentProps } from '@/features/appointments/book/types'
 import { getAppointmentDateTimeLabel } from '@/features/appointments/book/utils'
 import { ClinicsMapView } from '@/features/appointments/search/ui/search-appointments-view/clinics-map-view'
+import { formatLocalToCustom } from '@psychplus/utils/time'
 
 const ConfirmAppointment = ({
   bookedSlot,
@@ -44,8 +45,8 @@ const ConfirmAppointment = ({
 
   const calenderEvent = {
     title: `Appointment with ${specialistName}`,
-    startTime: new Date(startDate),
-    endTime: addMinutes(new Date(startDate), slot.duration),
+    startTime: formatLocalToCustom(new Date(startDate)),
+    endTime: formatLocalToCustom(addMinutes(new Date(startDate), slot.duration)), 
     description: 'Appointment Scheduled',
     location: 'Psych+',
   }
@@ -128,7 +129,7 @@ const ConfirmAppointment = ({
               )}
             </Flex>
 
-            {/* <Flex className="w-1/2" justify="end" align="end">
+            <Flex className="w-1/2" justify="end" align="end">
               <AddToCalendar
                 event={calenderEvent}
                 buttonLabel="Add to Calendar"
@@ -136,7 +137,7 @@ const ConfirmAppointment = ({
                 dropdownClass="absolute poopover bg-[white] mt-2 border border-gray-6 rounded-5 px-4 py-2 w-[151px] z-10"
                 listItems={CALENDER_ITEMS}
               />
-            </Flex> */}
+            </Flex>
           </Flex>
 
           <Flex

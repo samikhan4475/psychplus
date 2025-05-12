@@ -94,6 +94,20 @@ const formatLocaleDate = (date: Date) => {
   return date.toLocaleString('en-US', options)
 }
 
+function formatLocalToCustom(dateString: Date): string {
+  const pad = (n: number) => n.toString().padStart(2, '0');
+
+  return (
+    dateString.getFullYear().toString() +
+    pad(dateString.getMonth() + 1) +
+    pad(dateString.getDate()) +
+    'T' +
+    pad(dateString.getHours()) +
+    pad(dateString.getMinutes()) +
+    pad(dateString.getSeconds())
+  );
+}
+
 const formatDateTime = (date: Date) => `${formatDate(date)} ${formatTime(date)}`
 
 const calculateAge = (date?: string | Date) => {
@@ -173,4 +187,5 @@ export {
   parseDateString,
   getLastDayOfWeek,
   convertToLocalISOString,
+  formatLocalToCustom
 }

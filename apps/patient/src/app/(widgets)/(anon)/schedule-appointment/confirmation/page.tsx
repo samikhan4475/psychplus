@@ -5,10 +5,10 @@ import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { getMaskedPhoneNumber } from '@psychplus-v2/utils'
 import { Container, Flex, Text } from '@radix-ui/themes'
-import { addMinutes, format } from 'date-fns'
+import { addMinutes } from 'date-fns'
 import { NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN } from '@psychplus/utils/constants'
 import { usePubsub } from '@psychplus/utils/event'
-import { formatDateToCst, formatLocaleDate } from '@psychplus/utils/time'
+import { formatLocaleDate, formatLocalToCustom } from '@psychplus/utils/time'
 import { SCHEDULE_APPOINTMENT_LIST } from '@psychplus/widgets'
 import { usePublishSize } from '@psychplus/widgets/hooks'
 import AppointmentDetailCard from '@/components/appointment-detail-card/appointment-detail-card'
@@ -41,13 +41,13 @@ const ConfirmationPage = () => {
   const calendarAppointmentTitle = `Appointment with${renderStaffName(
     bookedSlotState?.specialist,
   )}`
-  const startDate = formatDateToCst(bookedSlot?.startDate ?? new Date())
+
+  const startDate = new Date(bookedSlot?.startDate ?? new Date())
   const endDate = addMinutes(startDate, 30)
 
-  const googleEventLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${calendarAppointmentTitle}&dates=${format(
+  const googleEventLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${calendarAppointmentTitle}&dates=${formatLocalToCustom(
     startDate,
-    "yyyyMMdd'T'HHmmss'Z'",
-  )}/${format(endDate, "yyyyMMdd'T'HHmmss'Z'")}`
+  )}/${formatLocalToCustom(endDate)}`
 
   return (
     <Flex direction="column" className="w-full" ref={ref}>
@@ -108,14 +108,14 @@ const ConfirmationPage = () => {
               )}
             </Flex>
 
-            {/* <Flex className="w-1/2" justify="end" align="end">
+            <Flex className="w-1/2" justify="end" align="end">
               <button
                 className="w-[70%] rounded-[100px] border py-[10px] text-[14px] sm:w-[50%]"
                 onClick={() => window.open(googleEventLink, '_blank')}
               >
                 Add to Calendar
               </button>
-            </Flex> */}
+            </Flex>
           </Flex>
           {bookedSlotState?.type === 'In-Person' &&
             NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN && (
