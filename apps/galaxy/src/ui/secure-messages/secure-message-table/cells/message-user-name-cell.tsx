@@ -8,15 +8,14 @@ import { getFullName } from '../../utils'
 const MessageUserNameCell = ({ row }: { row: Row<SecureMessage> }) => {
   const { activeTab } = useStore((state) => state)
 
-  const { channels, senderName } = row.original || {}
+  const { channels, senderName } = row.original ?? {}
 
   const getFirstChannelName = () => {
     if (!channels || channels.length === 0) return '-'
 
     const firstChannel = channels[0]
-    const remainingCount = channels.length - 1
 
-    const { sendMode, externalEmail, receiverName } = firstChannel || {}
+    const { sendMode, externalEmail, receiverName } = firstChannel ?? {}
 
     let firstChannelName = '-'
     if (sendMode === SendMode.EXTERNAL && externalEmail) {
@@ -41,9 +40,7 @@ const MessageUserNameCell = ({ row }: { row: Row<SecureMessage> }) => {
       )
     }
 
-    return remainingCount > 0
-      ? `${firstChannelName}, ${remainingCount}+`
-      : firstChannelName
+    return firstChannelName
   }
 
   const fullName = getFirstChannelName()
