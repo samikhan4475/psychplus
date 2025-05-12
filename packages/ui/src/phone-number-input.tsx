@@ -38,7 +38,7 @@ const PhoneNumberInput = React.forwardRef<
         getInputRef={ref}
         type="tel"
         inputMode="tel"
-        format="(###)-###-####"
+        format="(###) ###-####"
         mask="_"
         allowEmptyFormatting
         name={name}

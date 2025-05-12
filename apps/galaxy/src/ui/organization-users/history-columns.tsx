@@ -3,7 +3,12 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, TextCell } from '@/components'
 import { Gender } from '@/types'
-import { formatDate, formatDateTime, getPatientGender } from '@/utils'
+import {
+  formatDate,
+  formatDateTime,
+  getMaskedPhoneNumber,
+  getPatientGender,
+} from '@/utils'
 import { Users } from './types'
 
 export const columns: ColumnDef<Users>[] = [
@@ -43,7 +48,11 @@ export const columns: ColumnDef<Users>[] = [
     id: 'phone',
     accessorKey: 'phone',
     header: ({ column }) => <ColumnHeader column={column} label="Phone" />,
-    cell: ({ row }) => <TextCell>{row.original.phoneNumber}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell className="truncate">
+        {getMaskedPhoneNumber(row?.original?.phoneNumber ?? '')}
+      </TextCell>
+    ),
   },
   {
     id: 'email',

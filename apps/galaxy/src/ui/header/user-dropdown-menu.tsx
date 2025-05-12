@@ -32,7 +32,14 @@ const UserDropdownMenu = () => {
             />
           </button>
           <Text weight="medium" size="1">
-            {getUserFullName(user.legalName)}
+            {getUserFullName(
+              {
+                firstName: user.legalName.firstName,
+                middleName: user.legalName.middleName,
+                lastName: user.legalName.lastName,
+              },
+              true,
+            )}
           </Text>
           <TriangleDownIcon />
         </Flex>

@@ -13,7 +13,7 @@ import {
 } from '@/components'
 import { useStore as useRootStore } from '@/store'
 import { Sort } from '@/types'
-import { getSortDir } from '@/utils'
+import { getMaskedPhoneNumber, getSortDir } from '@/utils'
 import { ActionsCell, CollapseCell } from './cells'
 import { FEATURE_TYPES } from './constants'
 import { useStore } from './store'
@@ -297,7 +297,9 @@ const columns = (
         />
       ),
       cell: ({ row }) => (
-        <TextCell className="w-[100px]">{row.original.phoneContact}</TextCell>
+        <TextCell className="w-[100px] truncate">
+          {getMaskedPhoneNumber(row?.original?.phoneContact ?? '')}
+        </TextCell>
       ),
     },
     {
@@ -380,7 +382,7 @@ const StaffListTable = () => {
     <ScrollArea className="bg-white max-w-[calc(100vw-188px)]">
       <DataTable
         tableRowClass="h-[28px]"
-        data={data?.staff ?? []}
+        data={data ?? []}
         onRowClick={(row) => {
           const href = `/staff/${row.original.id}/profile?id=${row.original.userId}`
           addTab({

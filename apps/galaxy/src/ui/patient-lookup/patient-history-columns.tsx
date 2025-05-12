@@ -2,6 +2,7 @@
 
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
+import { getMaskedPhoneNumber } from '@/utils'
 import { GuardianCell, UpdatedDateTimeCell, UserStatusCell } from './cells'
 import { StatusIcon } from './status-icon'
 import { Patient } from './types'
@@ -40,7 +41,9 @@ const columns: ColumnDef<Patient>[] = [
     id: 'phone',
     header: () => <ColumnHeader label="Phone" />,
     cell: ({ row: { original: patient } }) => (
-      <TextCell className="truncate">{patient?.phoneNumber}</TextCell>
+      <TextCell className="truncate">
+        {getMaskedPhoneNumber(patient?.phoneNumber ?? '')}
+      </TextCell>
     ),
   },
   {

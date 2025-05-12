@@ -3,6 +3,7 @@
 
 import * as React from 'react'
 import { useEffect, useState } from 'react'
+import { getMaskedPhoneNumber } from '@psychplus-v2/utils'
 import { Container, Flex, Text } from '@radix-ui/themes'
 import { addMinutes, format } from 'date-fns'
 import { NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN } from '@psychplus/utils/constants'
@@ -91,7 +92,9 @@ const ConfirmationPage = () => {
                 <Text className="text-[12px] text-[#575759]" as="p">
                   Tel:{' '}
                   <Text className="text-[#194595]">
-                    {bookedSlotState.clinic.contact.phoneNumbers[0].number}
+                    {getMaskedPhoneNumber(
+                      bookedSlotState.clinic.contact.phoneNumbers[0].number,
+                    )}
                   </Text>
                 </Text>
               )}
@@ -104,7 +107,7 @@ const ConfirmationPage = () => {
                 </Text>
               )}
             </Flex>
-            
+
             {/* <Flex className="w-1/2" justify="end" align="end">
               <button
                 className="w-[70%] rounded-[100px] border py-[10px] text-[14px] sm:w-[50%]"

@@ -3,7 +3,12 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
 import { PatientReferral } from '@/types'
-import { formatDate, formatDateTime, getPatientFullName } from '@/utils'
+import {
+  formatDate,
+  formatDateTime,
+  getMaskedPhoneNumber,
+  getPatientFullName,
+} from '@/utils'
 import {
   GenderLabelCell,
   ServiceNameCell,
@@ -75,7 +80,9 @@ const columns: ColumnDef<PatientReferral>[] = [
     header: () => <ColumnHeader label="Phone" />,
     cell: ({ row: { original } }) => (
       <TextCell className="truncate">
-        {original?.contactDetails?.phoneNumbers?.[0]?.number ?? ''}
+        {getMaskedPhoneNumber(
+          original?.contactDetails?.phoneNumbers?.[0]?.number ?? '',
+        ) ?? ''}
       </TextCell>
     ),
   },

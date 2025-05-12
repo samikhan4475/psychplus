@@ -2,6 +2,7 @@ import React from 'react'
 import { ScrollArea } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, DataTable, TextCell } from '@/components'
+import { getMaskedPhoneNumber } from '@/utils'
 import { PatientPersonInfo } from '../types'
 
 const columns: ColumnDef<PatientPersonInfo>[] = [
@@ -27,7 +28,11 @@ const columns: ColumnDef<PatientPersonInfo>[] = [
     id: 'phone',
     accessorKey: 'phone',
     header: () => <ColumnHeader label="Phone" />,
-    cell: ({ row }) => <TextCell>{row.original?.phone}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell className="truncate">
+        {getMaskedPhoneNumber(row?.original?.phone ?? '')}
+      </TextCell>
+    ),
   },
   {
     id: 'email',

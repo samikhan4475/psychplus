@@ -1,7 +1,7 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
 import { Location, Sort } from '@/types'
-import { getSortDir } from '@/utils'
+import { getMaskedPhoneNumber, getSortDir } from '@/utils'
 import { ActionCell, GMBCell, StateCell, StatusCell } from './cells'
 
 const columns = (
@@ -121,7 +121,11 @@ const columns = (
         <ColumnHeader label="Phone" column={column} clientSideSort />
       ),
       cell: ({ row: { original } }) => (
-        <LongTextCell>{original?.phone?.number ?? 'N/A'}</LongTextCell>
+        <LongTextCell className="truncate">
+          {original?.phone?.number
+            ? getMaskedPhoneNumber(original.phone.number)
+            : 'N/A'}
+        </LongTextCell>
       ),
     },
     {

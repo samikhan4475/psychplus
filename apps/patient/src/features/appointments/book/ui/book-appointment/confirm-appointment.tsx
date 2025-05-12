@@ -8,6 +8,7 @@ import {
   getAppointmentTypeLabel,
   getClinicAddressLabel,
   getLocalCalendarDate,
+  getMaskedPhoneNumber,
   getNewProviderTypeLabel,
   getUserFullName,
 } from '@psychplus-v2/utils'
@@ -110,7 +111,9 @@ const ConfirmAppointment = ({
                 <Text className="text-[12px] text-[#575759]">
                   Tel:{' '}
                   <Text className="text-[#194595]">
-                    {clinic.contact.phoneNumbers[0].number}
+                    {getMaskedPhoneNumber(
+                      clinic.contact.phoneNumbers[0].number,
+                    )}
                   </Text>
                 </Text>
               )}

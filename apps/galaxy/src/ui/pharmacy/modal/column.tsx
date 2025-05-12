@@ -1,6 +1,7 @@
 import { Flex } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
+import { getMaskedPhoneNumber } from '@/utils'
 import { PharmacyFilter } from '../types'
 import { PlusIconCell } from './plus-icon-cell'
 
@@ -87,8 +88,10 @@ const columns: ColumnDef<PharmacyFilter>[] = [
     ),
     accessorFn: (row) => row.contactDetails?.phoneNumbers?.[0]?.number ?? '',
     cell: ({ row }) => (
-      <LongTextCell className="min-w-24 max-w-32">
-        {row.original.contactDetails?.phoneNumbers?.[0]?.number ?? ''}
+      <LongTextCell className="min-w-24 max-w-32 truncate">
+        {getMaskedPhoneNumber(
+          row.original.contactDetails?.phoneNumbers?.[0]?.number ?? '',
+        )}
       </LongTextCell>
     ),
   },

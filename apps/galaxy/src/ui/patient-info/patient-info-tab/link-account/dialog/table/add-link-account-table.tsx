@@ -8,7 +8,7 @@ import {
   TextCell,
 } from '@/components'
 import { Patient } from '@/ui/patient-lookup/types'
-import { formatDateTime } from '@/utils'
+import { formatDateTime, getMaskedPhoneNumber } from '@/utils'
 import { useStore } from '../../store'
 import { ActionCell } from './action-cell'
 import { CreditCardCell } from './credit-card-cell'
@@ -67,7 +67,11 @@ const columns = (patientId: string): ColumnDef<Patient>[] => {
     {
       id: 'phone',
       header: () => <ColumnHeader label="Phone" />,
-      cell: ({ row }) => <TextCell>{row.original?.phoneNumber}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell className="truncate">
+          {getMaskedPhoneNumber(row?.original?.phoneNumber ?? '')}
+        </TextCell>
+      ),
     },
     {
       id: 'email',
@@ -102,7 +106,7 @@ const columns = (patientId: string): ColumnDef<Patient>[] => {
       cell: ({ row }) => (
         <TextCell>
           {row.original?.patientLastLoginDateTime
-            ? formatDateTime(row.original?.patientLastLoginDateTime,false)
+            ? formatDateTime(row.original?.patientLastLoginDateTime, false)
             : 'NA'}
         </TextCell>
       ),

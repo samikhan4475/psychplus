@@ -2,9 +2,8 @@
 
 import * as api from '@/api'
 import { Sort } from '@/types'
-import { STAFF_LIST_TABLE_PAGE_SIZE } from '../constants'
 import { transformInStaffList } from '../data'
-import type { GetStaffListResponse, Staff } from '../types'
+import type { Staff } from '../types'
 
 const defaultPayload = {
   isIncludeBiography: true,
@@ -20,19 +19,21 @@ interface GetStaffListParams {
   payload?: Partial<Staff>
   page?: number
   sort?: Sort
+  pageSize?: number
 }
 
 const getStaffListAction = async ({
   payload,
   page = 1,
   sort,
-}: GetStaffListParams): Promise<api.ActionResult<GetStaffListResponse>> => {
-  const offset = (page - 1) * STAFF_LIST_TABLE_PAGE_SIZE
-
+  pageSize,
+}: GetStaffListParams): Promise<api.ActionResult<Staff[]>> => {
   const url = new URL(api.GET_STAFF_ENDPOINT)
-  url.searchParams.append('limit', String(STAFF_LIST_TABLE_PAGE_SIZE))
-  url.searchParams.append('offset', String(offset))
-
+  if (page && pageSize) {
+    const offset = (page - 1) * pageSize
+    url.searchParams.append('limit', String(pageSize))
+    url.searchParams.append('offset', String(offset))
+  }
   if (sort) {
     url.searchParams.append('orderBy', `${sort.column} ${sort.direction}`)
   }
@@ -51,10 +52,8 @@ const getStaffListAction = async ({
 
   return {
     state: 'success',
-    data: {
-      staff: await transformInStaffList(response.data),
-      total: Number(response.headers.get('psychplus-totalresourcecount')),
-    },
+    data: await transformInStaffList(response.data),
+    total: Number(response.headers.get('psychplus-totalresourcecount')),
   }
 }
 

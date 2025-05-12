@@ -13,7 +13,7 @@ import {
   TextCell,
 } from '@/components'
 import { Sort } from '@/types'
-import { formatDate, getSortDir } from '@/utils'
+import { formatDate, getMaskedPhoneNumber, getSortDir } from '@/utils'
 import { getScriptSurePermissionAction } from './actions/get-scriptsure-permission-action'
 import {
   ActionsCell,
@@ -138,7 +138,9 @@ const columns = (
         />
       ),
       cell: ({ row }) => (
-        <TextCell>{row.original.location?.phone?.number}</TextCell>
+        <TextCell className="truncate">
+          {getMaskedPhoneNumber(row?.original?.location?.phone?.number ?? '')}
+        </TextCell>
       ),
     },
     {

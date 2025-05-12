@@ -1,6 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
-import { formatDateTime } from '@/utils'
+import { formatDateTime, getMaskedPhoneNumber, getPatientPhone } from '@/utils'
 import { ActionsCell } from './actions-cell'
 import { PrimaryRadioCell } from './primary-radio-cell'
 import { Pharmacy } from './types'
@@ -83,8 +83,11 @@ const columns = (isFeatureFlagEnabled: boolean): ColumnDef<Pharmacy>[] => {
       accessorFn: (row) =>
         row.pharmacyContactDetails?.phoneNumbers?.[0]?.number ?? '',
       cell: ({ row }) => (
-        <LongTextCell className="min-w-24 max-w-32">
-          {row.original.pharmacyContactDetails?.phoneNumbers?.[0]?.number ?? ''}
+        <LongTextCell className="truncate">
+          {getMaskedPhoneNumber(
+            row.original.pharmacyContactDetails?.phoneNumbers?.[0]?.number ??
+              '',
+          )}
         </LongTextCell>
       ),
     },

@@ -1,6 +1,7 @@
 'use client'
 
 import { Box, Flex, Text } from '@radix-ui/themes'
+import { getMaskedPhoneNumber } from '@/utils'
 import { LabelledText } from '../../shared'
 import { useStore } from '../../store'
 import { PatientPolicyStatus } from './patient-policy-status'
@@ -42,7 +43,11 @@ const CreateUserCard = ({ patientPolicyAStatus }: CreateUserCardProps) => {
           title="Date of Birth"
           required
         />
-        <LabelledText content={contactNumber} title="Phone Number" required />
+        <LabelledText
+          content={getMaskedPhoneNumber(contactNumber ?? '')}
+          title="Phone Number"
+          required
+        />
         <LabelledText
           content={selectedRow?.contactDetails?.email}
           title="Email"

@@ -3,20 +3,25 @@ import { SelectOptionType, Sort } from '@/types'
 import { getNewSortDir } from '@/utils'
 import { getStaffListAction } from './actions'
 import { getStaffRolesOrganizationAction } from './actions/get-organization-staff-roles'
-import { GetStaffListResponse, Staff } from './types'
+import { STAFF_LIST_TABLE_PAGE_SIZE } from './constants'
+import { Staff } from './types'
 
 interface Store {
-  data?: GetStaffListResponse
+  data?: Staff[]
   loading?: boolean
   error?: string
   payload?: Partial<Staff>
   page: number
   sort?: Sort
-  pageCache: Record<number, GetStaffListResponse>
+  pageSize: number
+  total?: number
+  pageCache: Record<number, Staff[] | undefined>
+  onPageSizeChange: (pageSize: number) => void
   jumpToPage: (page: number) => void
   search: (
     payload?: Partial<Omit<Staff, 'language'>>,
     page?: number,
+    pageSize?: number,
     reset?: boolean,
   ) => void
   getDropDownOptions: () => void
@@ -33,9 +38,11 @@ interface Store {
 }
 
 const useStore = create<Store>((set, get) => ({
-  data: undefined,
+  data: [],
   page: 1,
   pageCache: {},
+  total: undefined,
+  pageSize: STAFF_LIST_TABLE_PAGE_SIZE,
   sort: undefined,
   showFilters: true,
   dropDownOptions: {
@@ -59,16 +66,24 @@ const useStore = create<Store>((set, get) => ({
     }
   },
   toggleFilters: () => set({ showFilters: !get().showFilters }),
-  search: async (payload, page = 1, reset = false) => {
+  search: async (
+    payload,
+    page = 1,
+    pageSize = STAFF_LIST_TABLE_PAGE_SIZE,
+    reset = false,
+  ) => {
     set({
       error: undefined,
       loading: true,
       payload: payload,
+      page: 1,
+      pageSize: STAFF_LIST_TABLE_PAGE_SIZE,
     })
     const result = await getStaffListAction({
       payload,
       sort: get().sort,
       page,
+      pageSize,
     })
     if (result.state === 'error') {
       return set({
@@ -78,12 +93,18 @@ const useStore = create<Store>((set, get) => ({
     }
     set({
       data: result.data,
+      total: result.total,
       loading: false,
       pageCache: reset
         ? { [page]: result.data }
         : { ...get().pageCache, [page]: result.data },
       page,
+      pageSize,
     })
+  },
+  onPageSizeChange: (pageSize: number) => {
+    set({ pageSize, page: 1, pageCache: {} })
+    get().search(get().payload, 1, get().pageSize)
   },
   next: () => {
     const page = get().page + 1
@@ -95,17 +116,18 @@ const useStore = create<Store>((set, get) => ({
       })
     }
 
-    get().search(get().payload, page)
+    get().search(get().payload, page, get().pageSize)
   },
   prev: () => {
     const page = get().page - 1
+    if (page < 1) return
     if (get().pageCache[page]) {
       set({
         data: get().pageCache[page],
         page,
       })
     }
-    get().search(get().payload, page)
+    get().search(get().payload, page, get().pageSize)
   },
   sortData: (column) => {
     set({
@@ -114,7 +136,7 @@ const useStore = create<Store>((set, get) => ({
         direction: getNewSortDir(column, get().sort),
       },
     })
-    get().search(get().payload, 1, true)
+    get().search(get().payload, 1, get().pageSize, true)
   },
   jumpToPage: (page: number) => {
     if (page < 1) {
@@ -127,7 +149,7 @@ const useStore = create<Store>((set, get) => ({
         page,
       })
     }
-    get().search(get().payload, page)
+    get().search(get().payload, page, get().pageSize)
   },
 }))
 

@@ -11,7 +11,7 @@ import {
   TextCell,
 } from '@/components'
 import { Sort } from '@/types'
-import { getSortDir } from '@/utils'
+import { getMaskedPhoneNumber, getSortDir } from '@/utils'
 import { Practice } from '../organization-practice/types'
 import { ActionsCell } from './cells'
 import { PracticesHistoryDialog } from './practices-history-dialog'
@@ -211,7 +211,11 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.practicePhone}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell className="truncate">
+          {getMaskedPhoneNumber(row?.original?.practicePhone ?? '')}
+        </TextCell>
+      ),
     },
     {
       id: 'practiceFax',

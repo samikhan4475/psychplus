@@ -6,10 +6,13 @@ import { useStore } from './store'
 
 const ClearButton = () => {
   const form = useFormContext<SchemaType>()
-  const search = useStore((state) => state.search)
+  const { search, pageSize } = useStore((state) => ({
+    search: state.search,
+    pageSize: state.pageSize,
+  }))
   const onClear = () => {
     form.reset()
-    return search({}, 1, true)
+    return search({}, 1, pageSize, true)
   }
   return (
     <Button

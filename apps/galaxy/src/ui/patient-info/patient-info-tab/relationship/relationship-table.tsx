@@ -7,6 +7,7 @@ import {
   TextCell,
 } from '@/components'
 import { Relationship } from '@/types'
+import { getMaskedPhoneNumber } from '@/utils'
 import { getAddressLabel } from '@/utils/address'
 import {
   ActionsCell,
@@ -64,8 +65,10 @@ const columns: ColumnDef<Relationship>[] = [
     id: 'home-phone',
     header: () => <ColumnHeader label="Home Phone" />,
     cell: ({ row }) => (
-      <TextCell>
-        {row.original?.contactDetails?.phoneNumbers?.[0]?.number}
+      <TextCell className="truncate">
+        {getMaskedPhoneNumber(
+          row.original?.contactDetails?.phoneNumbers?.[0]?.number ?? '',
+        )}
       </TextCell>
     ),
   },
@@ -88,8 +91,10 @@ const columns: ColumnDef<Relationship>[] = [
     id: 'cell-phone',
     header: () => <ColumnHeader label="Cell Phone" />,
     cell: ({ row }) => (
-      <TextCell>
-        {row?.original?.contactDetails?.phoneNumbers?.[0]?.number}
+      <TextCell className="truncate">
+        {getMaskedPhoneNumber(
+          row?.original?.contactDetails?.phoneNumbers?.[0]?.number ?? '',
+        )}
       </TextCell>
     ),
   },

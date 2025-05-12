@@ -11,7 +11,7 @@ import {
   TextCell,
 } from '@/components'
 import { Sort } from '@/types'
-import { getSortDir } from '@/utils'
+import { getMaskedPhoneNumber, getSortDir } from '@/utils'
 import { ClearingHouseSubmitter } from '../types'
 import { ActionsCell } from './actions-cell'
 import { StateNameCell } from './state-name-cell'
@@ -181,7 +181,11 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.phone}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell className="truncate">
+          {getMaskedPhoneNumber(row?.original?.phone ?? '')}
+        </TextCell>
+      ),
     },
 
     {

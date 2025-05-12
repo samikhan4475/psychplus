@@ -2,6 +2,7 @@
 
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
+import { getMaskedPhoneNumber } from '@/utils'
 import {
   ActionCell,
   CollapseCell,
@@ -112,7 +113,9 @@ const columns: ColumnDef<Patient>[] = [
     id: 'phone',
     header: () => <ColumnHeader label="Phone" />,
     cell: ({ row: { original } }) => (
-      <TextCell className="truncate">{original?.phoneNumber}</TextCell>
+      <TextCell className="truncate">
+        {getMaskedPhoneNumber(original?.phoneNumber ?? '')}
+      </TextCell>
     ),
   },
   {

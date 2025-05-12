@@ -1,6 +1,7 @@
 'use client'
 
 import { Box, Flex, Text } from '@radix-ui/themes'
+import { getMaskedPhoneNumber } from '@/utils'
 import { LabelledText } from '../shared'
 import { useStore } from '../store'
 
@@ -22,10 +23,16 @@ const AdditionalInfoCard = () => {
         </Text>
       </Box>
       <Flex gapX="4" gapY="3" wrap="wrap" p="2">
-        <LabelledText title="Home Phone" content={homeNumber?.number} />
+        <LabelledText
+          title="Home Phone"
+          content={getMaskedPhoneNumber(homeNumber?.number ?? '')}
+        />
         <LabelledText title="Ext" content={homeNumber?.extension} />
         <LabelledText title="Comment" content={homeNumber?.comment} />
-        <LabelledText title="Home Phone" content={workNumber?.number} />
+        <LabelledText
+          title="Home Phone"
+          content={getMaskedPhoneNumber(workNumber?.number ?? '')}
+        />
         <LabelledText title="Ext" content={workNumber?.extension} />
         <LabelledText title="Comment" content={workNumber?.comment} />
       </Flex>

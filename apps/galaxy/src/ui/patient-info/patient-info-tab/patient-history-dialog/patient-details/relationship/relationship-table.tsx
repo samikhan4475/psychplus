@@ -3,6 +3,7 @@
 import { ScrollArea } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, DataTable, LongTextCell, TextCell } from '@/components'
+import { getMaskedPhoneNumber } from '@/utils'
 import {
   EmergencyContactCell,
   GuardianCell,
@@ -58,7 +59,9 @@ const columns: ColumnDef<DummyRelationship>[] = [
     id: 'homePhone',
     header: () => <ColumnHeader label="Home Phone" />,
     cell: ({ row }) => (
-      <TextCell className="truncate">{row.original.homePhone}</TextCell>
+      <TextCell className="truncate">
+        {getMaskedPhoneNumber(row?.original?.homePhone ?? '')}
+      </TextCell>
     ),
   },
   {

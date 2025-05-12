@@ -1,7 +1,7 @@
 import { type ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, TextCell } from '@/components'
 import { Sort } from '@/types'
-import { getSortDir } from '@/utils'
+import { getMaskedPhoneNumber, getSortDir } from '@/utils'
 import { Organization } from '../types'
 import { getPracticeName } from '../utils'
 import { ActionsCell } from './actions-cell'
@@ -77,7 +77,11 @@ const columns = (
               }}
             />
           ),
-          cell: ({ row }) => <TextCell>{row.original.contactPhone}</TextCell>,
+          cell: ({ row }) => (
+            <TextCell className="truncate">
+              {getMaskedPhoneNumber(row?.original?.contactPhone ?? '')}
+            </TextCell>
+          ),
         },
         {
           id: 'contactEmail',

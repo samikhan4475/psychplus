@@ -1,4 +1,5 @@
 import { withSuspense } from '@psychplus-v2/utils'
+import { Text } from '@radix-ui/themes'
 import { CardContainer, LoadingPlaceholder } from '@/components-v2'
 import { getPreferredPartnerList } from './api.ts'
 import { PreferredPartnerTable as Client } from './preferred-partner-table.tsx'
@@ -14,7 +15,7 @@ const PreferredPartnerTableServer = async (
   const preferredPartnersResponse = await getPreferredPartnerList()
 
   if (preferredPartnersResponse.state === 'error') {
-    throw new Error(preferredPartnersResponse.error)
+    return <Text>{preferredPartnersResponse.error}</Text>
   }
 
   return <Client data={preferredPartnersResponse.data} {...props} />

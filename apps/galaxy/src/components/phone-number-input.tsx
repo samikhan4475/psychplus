@@ -22,7 +22,7 @@ const PhoneNumberInput = ({
   label,
   field: fieldName,
   placeholder = '',
-  format = '(###)-###-####',
+  format = '(###) ###-####',
   className,
   autoFocus,
   isFormattedValue,

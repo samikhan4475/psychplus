@@ -43,9 +43,10 @@ type SchemaType = z.infer<typeof schema>
 
 const StaffFilterForm = () => {
   const { id, type } = useParams<{ id: string; type: string }>()
-  const { search, showFilters } = useStore((state) => ({
+  const { search, showFilters, pageSize } = useStore((state) => ({
     search: state.search,
     showFilters: state.showFilters,
+    pageSize: state.pageSize,
   }))
 
   const form = useForm<SchemaType>({
@@ -84,7 +85,7 @@ const StaffFilterForm = () => {
         : '',
     }
     const cleanedData = sanitizeFormData(finalModel)
-    return search(transformOut(cleanedData), 1, true)
+    return search(transformOut(cleanedData), 1, pageSize, true)
   }
   return (
     <FormContainer
