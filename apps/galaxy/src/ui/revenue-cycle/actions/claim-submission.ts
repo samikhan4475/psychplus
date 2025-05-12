@@ -4,7 +4,7 @@ import * as api from '@/api'
 import { ClaimSubmissionPayload, ClaimSubmissionResponse } from '../types'
 
 const claimSubmissionAction = async (
-  payload: ClaimSubmissionPayload,
+  payload: Partial<ClaimSubmissionPayload>,
 ): Promise<api.ActionResult<ClaimSubmissionResponse>> => {
   const response = await api.POST<ClaimSubmissionResponse>(
     api.CLAIM_SUBMIT_ENDPOINT,
