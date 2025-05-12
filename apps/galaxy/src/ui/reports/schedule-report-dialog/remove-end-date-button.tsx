@@ -9,7 +9,7 @@ const RemoveEndDateButton = () => {
   const endDate = form.watch('terminateOn')
 
   const handleClearEndDate = () => {
-    form.resetField('terminateOn')
+    form.setValue('terminateOn', null)
   }
 
   if (!endDate) return null
@@ -17,6 +17,7 @@ const RemoveEndDateButton = () => {
   return (
     <Button
       size="1"
+      type="button"
       variant="ghost"
       className="text-pp-blue ml-1 w-[130px] cursor-pointer"
       onClick={handleClearEndDate}

@@ -140,7 +140,9 @@ const defaultValues = (
 
   return {
     beginOn: data ? getCalendarDate(data.beginOn) : undefined,
-    terminateOn: data ? getCalendarDate(data.terminateOn) : undefined,
+    terminateOn: data?.terminateOn
+      ? getCalendarDate(data.terminateOn)
+      : undefined,
     repeatCount,
     intervalOption: data ? data.intervalOption : '',
     forDuration,

@@ -8,7 +8,7 @@ import {
   LoadingPlaceholder,
   TextCell,
 } from '@/components'
-import { formatDate } from '@/utils'
+import { getSlashedPaddedDateString } from '@/utils'
 import { ActionsCell, StatusCell } from './cells'
 import { SchedulesListTablePagination } from './schedules-list-table-pagination'
 import { useStore } from './store'
@@ -20,7 +20,7 @@ const columns: ColumnDef<ScheduledReport>[] = [
     accessorKey: 'beginOn',
     header: () => <ColumnHeader label="Start Date" />,
     cell: ({ row }) => (
-      <DateCell>{formatDate(row.original.beginOn) ?? 'N/A'}</DateCell>
+      <DateCell>{getSlashedPaddedDateString(row.original.beginOn)}</DateCell>
     ),
   },
   {
@@ -35,7 +35,9 @@ const columns: ColumnDef<ScheduledReport>[] = [
     accessorKey: 'terminateOn',
     header: () => <ColumnHeader label="End Date" />,
     cell: ({ row }) => (
-      <DateCell>{formatDate(row.original.terminateOn) ?? ''}</DateCell>
+      <DateCell>
+        {getSlashedPaddedDateString(row.original.terminateOn)}
+      </DateCell>
     ),
   },
   {

@@ -3,7 +3,7 @@ import z from 'zod'
 
 const schema = z
   .object({
-    terminateOn: z.custom<DateValue>(),
+    terminateOn: z.custom<DateValue | null>(),
     repeatCount: z.string().min(1, 'Required'),
     repeatInterval: z.string().optional(),
     forDuration: z.string().min(1, 'Required'),

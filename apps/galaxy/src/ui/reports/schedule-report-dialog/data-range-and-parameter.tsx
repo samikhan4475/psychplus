@@ -1,11 +1,15 @@
-import { Box, Text } from '@radix-ui/themes';
-import ReportName from './report-name';
-import ScheduleParameters from './schedule-parameters';
-import { DataDetail } from './data-detail';
+import { Box, Text } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
+import { DataDetail } from './data-detail'
+import ReportName from './report-name'
+import ScheduleParameters from './schedule-parameters'
+import { ScheduleTemplateSchemaType } from './schema'
 
 const DataRangeAndParameter = () => {
+  const form = useFormContext<ScheduleTemplateSchemaType>()
+  const repeatCount = form.watch('repeatCount')
   return (
-    <Box className="rounded-[4px] bg-pp-bg-table-cell px-2 py-1.5 mt-3 mb-2 flex flex-col gap-1.5 border-pp-focus-bg border">
+    <Box className="bg-pp-bg-table-cell border-pp-focus-bg mb-2 mt-3 flex flex-col gap-1.5 rounded-[4px] border px-2 py-1.5">
       <Text className="text-pp-black-3" size="2" weight="medium">
         Data Range & Parameter <Text className="text-pp-red ml-1">*</Text>
       </Text>
@@ -14,9 +18,9 @@ const DataRangeAndParameter = () => {
       </Text>
       <ReportName />
       <ScheduleParameters />
-      <DataDetail />
+      {repeatCount === '1' && <DataDetail />}
     </Box>
-  );
-};
+  )
+}
 
-export { DataRangeAndParameter};
+export { DataRangeAndParameter }

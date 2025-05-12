@@ -929,9 +929,10 @@ const UPDATE_DEFAULT_PAYMENT = (
   `${API_URL}/api/patients/${patientId}/financialdata/${finanicalDataId}/actions/selfpay/${isSelfPay}`
 const GET_MEDICATIONS_HISTORY = (pharmacyNotificationId: string) =>
   `${API_URL}/api/pharmacynotifications/${pharmacyNotificationId}/history/actions/search`
-
 const VALIDATE_CURRENT_PASSWORD = `${AUTH_URL}/credentials/actions/validate`
 const CHANGE_PASSWORD = `${API_URL}/api/users/self/changepassword`
+const GET_TEMPLATE_EMAIL_REPORT = (templateId: string, runId: string) =>
+  `${API_URL}/api/reporting/reports/${templateId}/runs/${runId}/actions/download`
 
 export {
   PATIENT_MEDICATION_SIGN_IN,
@@ -1351,4 +1352,5 @@ export {
   VALIDATE_CURRENT_PASSWORD,
   CHANGE_PASSWORD,
   GET_MEDICATIONS_HISTORY,
+  GET_TEMPLATE_EMAIL_REPORT,
 }
