@@ -44,6 +44,7 @@ const InsurancePaymentForm = ({
     resolver: zodResolver(schema),
     defaultValues: {
       id: data?.id ?? '',
+      postedAmount: data?.postedAmount,
       insuranceName: data?.insuranceName ?? '',
       paymentMethod: data?.paymentMethod ?? 'Check',
       amount: data?.amount,
@@ -101,6 +102,7 @@ const InsurancePaymentForm = ({
           paymentType: 'Eob',
         }
 
+    delete finalPayload['postedAmount']
     delete finalPayload['claimPayments']
     const sanitizedPayload = sanitizeFormData(finalPayload)
     const response = data?.id
