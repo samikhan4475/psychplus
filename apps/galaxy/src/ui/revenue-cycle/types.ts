@@ -37,7 +37,7 @@ enum claimNoteSignedStatuses {
   PENDING = 'pending',
   SIGNED_PENDING = 'signedpending',
   COSIGNED = 'cosigned',
-  ERROR ='error'
+  ERROR = 'error',
 }
 enum ClaimDetailsTab {
   BillingProvider = 'Billing Provider',
@@ -161,7 +161,7 @@ interface ClaimPayment extends Omit<Claim, 'patientName'> {
   billedAmount: string
   allowedAmount: string
   paidAmount: string
-  copayAmount:string
+  copayAmount: string
   patientName?: Partial<PatientName>
   coinsuranceAmount: string
   deductibleAmount: string
@@ -335,7 +335,7 @@ interface ResponseHistoryListResponse {
 
 interface ResponseHistoryPayload {
   receiverId?: string
-  createdOn?: string
+  createdOn?: DateValue
 }
 
 interface DenialListPayload {
