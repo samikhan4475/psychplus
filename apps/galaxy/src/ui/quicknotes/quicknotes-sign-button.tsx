@@ -66,10 +66,13 @@ const QuickNotesSignButton = ({
 
   const { workingDischargeDiagnosisData } = useDischargeDiagnosisStore()
   const { workingDiagnosisData, saveWorkingDiagnosis } = useDiagnosisStore()
-  const { staffId, staffRoleCode } = useGlobalStore((state) => ({
-    staffId: state.user.staffId,
-    staffRoleCode: state.staffResource.staffRoleCode,
-  }))
+  const { staffId, staffRoleCode, staffSpecialistIds, ProviderType } =
+    useGlobalStore((state) => ({
+      staffId: state.user.staffId,
+      staffRoleCode: state.staffResource.staffRoleCode,
+      staffSpecialistIds: state.staffResource.staffSpecialistIds,
+      ProviderType: state.codesets.ProviderType,
+    }))
   const {
     data: medicationData,
     isPmpReviewed,
@@ -109,6 +112,19 @@ const QuickNotesSignButton = ({
     patient: state.patient,
     setMarkedStatus: state.setMarkedStatus,
   }))
+
+  const loggedInUserProviderTypes = staffSpecialistIds
+    ?.map((id) =>
+      ProviderType.codes.find(
+        (code) =>
+          code.attributes?.find((attr) => attr.name === 'ResourceId')?.value ===
+          `${id}`,
+      ),
+    )
+    .filter(Boolean)
+  const isAppointmentProviderType = loggedInUserProviderTypes?.some(
+    (type) => type?.value === appointment.providerType,
+  )
 
   const coSignedByUserId =
     signOptions.coSignedByUserId !== undefined &&
@@ -253,7 +269,16 @@ const QuickNotesSignButton = ({
       return
     }
 
-    if (!isAppointmentProvider && isPrescriber) {
+    if (appointment.isServiceTimeDependent) {
+      if (!isAppointmentProvider && isPrescriber) {
+        showAlert({
+          title: 'Error',
+          message: SIGN_PROVIDER_NOTE_WARNING,
+          disableClose: true,
+        })
+        return
+      }
+    } else if (!isAppointmentProviderType && isPrescriber) {
       showAlert({
         title: 'Error',
         message: SIGN_PROVIDER_NOTE_WARNING,
