@@ -19,6 +19,7 @@ const getVisitTypesAction = async (): Promise<
   const transformedData = result?.data?.map((item) => ({
     label: item.encounterName,
     value: String(item.id),
+    servicesOffered: item.encounterToServices?.[0]?.serviceOffered,
   }))
 
   return {

@@ -21,6 +21,7 @@ const getNavLinks = (
     },
     // { label: 'Rating', href: '/rating' },
     { label: 'Notifications', href: '/notifications' },
+    { label: 'Engagement', href: '/engagement' },
     // { label: 'Patient Tracking', href: '/patient-tracking' },
   ]
   const baseLinks = [
@@ -406,6 +407,10 @@ const getManagementNavLinks = (
     {
       label: 'Assigning Authorities',
       href: `${baseHref}/assigning-authorities`,
+    },
+    {
+      label: 'Engagement',
+      href: `${baseHref}/engagement`,
     },
   ]
 }

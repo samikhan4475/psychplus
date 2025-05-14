@@ -934,6 +934,20 @@ const CHANGE_PASSWORD = `${API_URL}/api/users/self/changepassword`
 const GET_TEMPLATE_EMAIL_REPORT = (templateId: string, runId: string) =>
   `${API_URL}/api/reporting/reports/${templateId}/runs/${runId}/actions/download`
 
+const GET_WAITLISTS_ENDPOINT = `${API_URL}/api/waitlists/actions/search`
+
+const CREATE_WAITLIST_ENDPOINT = (patientId: number) =>
+  `${API_URL}/api/patients/${patientId}/waitlists`
+
+const UPDATE_WAITLIST_ENDPOINT = (patientId: number, waitlistId: number | undefined) =>
+  `${API_URL}/api/patients/${patientId}/waitlists/${waitlistId}`
+
+const DELETE_WAITLIST_ENDPOINT = (patientId: number, waitlistId: number) =>
+  `${API_URL}/api/patients/${patientId}/waitlists/${waitlistId}`
+
+const GET_WAITLIST_HISTORY_ENDPOINT = (waitlistId: number) =>
+  `${API_URL}/api/waitlists/${waitlistId}/history/actions/search`
+
 export {
   PATIENT_MEDICATION_SIGN_IN,
   GET_PATIENT_MEDICATION_ENDPOINT,
@@ -1326,6 +1340,10 @@ export {
   DELETE_STAFF_VIDEO_ENDPOINT,
   SIGN_PATIENT_REFERRAL_ENDPOINT,
   GET_STAFF_ORGANIZATIONS_ENDPOINT,
+  GET_WAITLISTS_ENDPOINT,
+  CREATE_WAITLIST_ENDPOINT,
+  UPDATE_WAITLIST_ENDPOINT,
+  DELETE_WAITLIST_ENDPOINT,
   GET_PRACTICES_LICENSE_MANAGERS_ENDPOINT,
   ADD_PRACTICES_LICENSE_MANAGERS_ENDPOINT,
   UPDATE_PRACTICES_LICENSE_MANAGERS_ENDPOINT,
@@ -1351,6 +1369,7 @@ export {
   UPDATE_DEFAULT_PAYMENT,
   VALIDATE_CURRENT_PASSWORD,
   CHANGE_PASSWORD,
+  GET_WAITLIST_HISTORY_ENDPOINT,
   GET_MEDICATIONS_HISTORY,
   GET_TEMPLATE_EMAIL_REPORT,
 }

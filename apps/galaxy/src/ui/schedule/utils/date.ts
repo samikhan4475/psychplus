@@ -81,6 +81,16 @@ const getUtcDateWithoutTime = (date?: DateValue | null): string | undefined => {
   }
 }
 
+const getLocalDateWithoutTime = (date?: DateValue | null): string | undefined => {
+  if (date) {
+    const dateObj = date.toDate(getLocalTimeZone())
+    const utcDate = `${dateObj.getDate()}`.padStart(2, '0')
+    const utcMonth = `${dateObj.getMonth() + 1}`.padStart(2, '0')
+    const utcYear = `${dateObj.getFullYear()}`
+    return `${utcYear}-${utcMonth}-${utcDate}`
+  }
+}
+
 const getCalendarDateLabel = (date?: DateValue): string | undefined => {
   if (date) {
     const day = `${date.day}`.padStart(2, '0')
@@ -161,4 +171,5 @@ export {
   getUtcDateWithoutTime,
   getLocalTime,
   getCalendarDateFromUtc,
+  getLocalDateWithoutTime
 }

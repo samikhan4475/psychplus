@@ -4,10 +4,12 @@ import {
   getDayOfWeek,
   parseAbsolute,
   parseDate,
+  today,
   type DateValue,
 } from '@internationalized/date'
 import { differenceInCalendarDays, format } from 'date-fns'
 import { Period, SelectOptionType } from '@/types'
+import { TimeValue } from 'react-aria-components'
 
 const MONTH_LABELS = [
   'January',
@@ -357,6 +359,41 @@ const concatDateTimeAndFormat = (date: string, time?: string) => {
   return formatDateTime(dateTimeString, false)
 }
 
+const isDateValue = (val: unknown): val is DateValue =>
+  !!val && typeof val === 'object' && 'calendar' in val
+
+const isTimeValue = (val: unknown): val is TimeValue =>
+  !!val && typeof val === 'object' && 'hour' in val
+
+const isLaterDate = (
+  a: DateValue | null | undefined,
+  b: DateValue | null | undefined,
+): boolean => {
+  if (!a || !b) return false
+
+  if (a.year !== b.year) return a.year >= b.year
+  if (a.month !== b.month) return a.month >= b.month
+  return a.day >= b.day
+}
+
+const isLaterTime = (a: TimeValue, b: TimeValue): boolean => {
+  const aTotal = a.hour * 3600 + a.minute * 60 + a.second
+  const bTotal = b.hour * 3600 + b.minute * 60 + b.second
+  return aTotal > bTotal
+}
+
+const isWithinNextDays = (date: DateValue | null | undefined, days: number): boolean => {
+  if (!date) return false
+
+  const max = today('UTC').add({ days })
+
+  if (date.year > max.year) return false
+  if (date.year === max.year && date.month > max.month) return false
+  if (date.year === max.year && date.month === max.month && date.day > max.day) return false
+
+  return true
+}
+
 function formatDateManually(isoString: string): string {
   const [datePart] = isoString?.split('T') ?? []
   const [year, month, day] = datePart.split('-')
@@ -415,8 +452,13 @@ export {
   isDateInRange,
   formatUTCDate,
   concatDateTimeAndFormat,
+  isDateValue,
+  isTimeValue,
+  isLaterDate,
+  isLaterTime,
   formatDateManually,
   isValidDateRange,
   formatStartOfDay,
   formatEndOfDay,
+  isWithinNextDays,
 }
