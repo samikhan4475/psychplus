@@ -56,6 +56,8 @@ interface LegalName {
 }
 
 interface Staff {
+  ppName: string
+  ppId: string
   id: string
   userId: string
   otpCode: string

@@ -186,6 +186,41 @@ const getStaffNavLinks = ({
   ]
 }
 
+const getPreferredPartnerNavLinks = ({ ppId }: { ppId?: string | null }) => {
+  const baseHref = `/preferred-partner/${ppId}`
+
+  return [
+    {
+      label: 'Profile',
+      href: `${baseHref}/profile`,
+    },
+    {
+      label: 'Financial Info',
+      href: `${baseHref}/financial-info`,
+    },
+    {
+      label: 'Fee Schedule',
+      href: `${baseHref}/fee-schedule`,
+    },
+    {
+      label: 'Users',
+      href: `${baseHref}/users`,
+    },
+    {
+      label: 'Credentialing',
+      href: `${baseHref}/credentialing`,
+    },
+    {
+      label: 'Preferences',
+      href: `${baseHref}/preferences`,
+    },
+    {
+      label: 'Clinic Schedule',
+      href: `${baseHref}/clinic-schedule`,
+    },
+  ]
+}
+
 const getInboxNavLinks = ({
   isFeatureFlagEnabled,
   unreadCount,
@@ -420,6 +455,7 @@ export {
   getNavLinks,
   isHospitalCareVisit,
   getStaffNavLinks,
+  getPreferredPartnerNavLinks,
   getManagementNavLinks,
   getInboxNavLinks,
 }
