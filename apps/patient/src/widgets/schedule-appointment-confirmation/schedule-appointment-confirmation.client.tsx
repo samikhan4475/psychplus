@@ -3,6 +3,7 @@
 import React from 'react'
 import { Box, Button, Flex, Heading, Text } from '@radix-ui/themes'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { enums, PSYCHPLUS_LIVE_URL } from '@/constants'
 
 const ScheduleAppointmentConfirmationClient = () => {
   const router = useRouter()
@@ -12,6 +13,12 @@ const ScheduleAppointmentConfirmationClient = () => {
   const providerState = searchParams.get('providerState')
 
   const handleConfirm = () => {
+    postMessage(
+      {
+        event: enums.APPOINTMENT_SELECTED,
+      },
+      PSYCHPLUS_LIVE_URL,
+    )
     router.push(`/schedule-appointment/personal-details`)
   }
 

@@ -31,6 +31,7 @@ import { getCodeSet } from '@psychplus/codeset/api.client'
 import { Code } from '@psychplus/codeset'
 import { Select } from '@psychplus/ui/select'
 import { ChevronDownIcon } from 'lucide-react'
+import { enums, PSYCHPLUS_LIVE_URL } from '@/constants'
 
 const schema = z
   .object({
@@ -177,6 +178,24 @@ const PersonalDetailsForm = () => {
               }
 
               publish(`${OTP_DIALOG}:closed`)
+
+              postMessage(
+                {
+                  event: enums.ACCOUNT_CREATED,
+                  user_data: {
+                    email_address: form.getValues().email,
+                    phone_number: form.getValues().phoneNumber,
+                    first_name: form.getValues().firstName,
+                    last_name: form.getValues().lastName,
+                    gender: form.getValues().gender,
+                    date_of_birth: form.getValues().dateOfBirth,
+                    city: address?.primaryCity,
+                    state: address?.primaryState,
+                    zip_code: address?.primaryPostalCode,
+                  },
+                },
+                PSYCHPLUS_LIVE_URL,
+              )
 
               clickTrack({
                 productArea: 'Patient',

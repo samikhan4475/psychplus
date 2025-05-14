@@ -18,6 +18,7 @@ import { confirmationNotes } from '@/widgets/schedule-appointment-list/constants
 import { useStore } from '@/widgets/schedule-appointment-list/store'
 import { BookedSlot } from '@/widgets/schedule-appointment-list/store/types'
 import { renderStaffName } from '@/widgets/schedule-appointment-list/utils'
+import { enums, PSYCHPLUS_LIVE_URL } from '@/constants'
 
 const ConfirmationPage = () => {
   const ref = React.useRef<HTMLDivElement>(null)
@@ -32,6 +33,7 @@ const ConfirmationPage = () => {
 
   useEffect(() => {
     setBookedSlotState(bookedSlot)
+    postMessage({ event: enums.APPOINTMENT_SCHEDULED }, PSYCHPLUS_LIVE_URL)
   }, [bookedSlot])
 
   const appointmentConfirmationNotes =

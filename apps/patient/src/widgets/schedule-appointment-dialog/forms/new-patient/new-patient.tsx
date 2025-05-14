@@ -22,6 +22,7 @@ import { SCHEDULE_APPOINTMENT_DIALOG } from '@psychplus/widgets'
 import { useGooglePlacesContext } from '@/providers'
 import { useStore } from '@/widgets/schedule-appointment-list/store'
 import WebPlacesAutocomplete from './web-places-autocomplete'
+import { enums, PSYCHPLUS_LIVE_URL } from '@/constants'
 
 interface NewPatientProps {
   onclose?: () => void
@@ -196,6 +197,19 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
       primaryState: form.getValues().primaryState,
       primaryPostalCode: form.getValues().primaryPostalCode,
     })
+
+    postMessage(
+      {
+        event: enums.SCHEDULE_START,
+        user_data: {
+          date_of_birth: form.getValues().dateOfBirth,
+          city: form.getValues().primaryCity,
+          state: form.getValues().primaryState,
+          zip_code: form.getValues().zipCode,
+        },
+      },
+      PSYCHPLUS_LIVE_URL,
+    )
 
     clickTrack({
       productArea: 'Patient',

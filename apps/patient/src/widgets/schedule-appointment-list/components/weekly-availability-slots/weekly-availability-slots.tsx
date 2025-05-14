@@ -11,6 +11,7 @@ import { clickTrack } from '@psychplus/utils/tracking'
 import { useStore } from '../../store'
 import type { ClinicWithSlots } from '../../types'
 import { organizeSlotsByDate } from '../../utils'
+import { enums, PSYCHPLUS_LIVE_URL } from '@/constants'
 
 const WeeklyAvailabilitySlots = ({
   staff,
@@ -85,6 +86,13 @@ const SlotComponent = ({
         return
       }
     }
+
+    postMessage(
+      {
+        event: enums.APPOINTMENT_SELECTED,
+      },
+      PSYCHPLUS_LIVE_URL,
+    )
 
     clickTrack({
       productArea: 'Patient',
