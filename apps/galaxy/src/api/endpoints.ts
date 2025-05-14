@@ -933,7 +933,6 @@ const VALIDATE_CURRENT_PASSWORD = `${AUTH_URL}/credentials/actions/validate`
 const CHANGE_PASSWORD = `${API_URL}/api/users/self/changepassword`
 const GET_TEMPLATE_EMAIL_REPORT = (templateId: string, runId: string) =>
   `${API_URL}/api/reporting/reports/${templateId}/runs/${runId}/actions/download`
-
 const GET_WAITLISTS_ENDPOINT = `${API_URL}/api/waitlists/actions/search`
 
 const CREATE_WAITLIST_ENDPOINT = (patientId: number) =>
@@ -947,7 +946,14 @@ const DELETE_WAITLIST_ENDPOINT = (patientId: number, waitlistId: number) =>
 
 const GET_WAITLIST_HISTORY_ENDPOINT = (waitlistId: number) =>
   `${API_URL}/api/waitlists/${waitlistId}/history/actions/search`
-
+const SEARCH_EXTERNAL_REFERRAL_PATIENTS_ENDPOINT = `${API_URL}/api/externalreferrals/actions/search`
+const UPDATE_EXTERNAL_REFERRAL_PATIENT_ENDPOINT = (
+  externalreferralId: number,
+) => `${API_URL}/api/externalreferrals/${externalreferralId}`
+const GET_EXTERNAL_REFERRAL_PATIENTS_INFO_HISTORY = (
+  externalreferralId: string,
+) =>
+  `${API_URL}/api/externalreferrals/${externalreferralId}/history/actions/search`
 export {
   PATIENT_MEDICATION_SIGN_IN,
   GET_PATIENT_MEDICATION_ENDPOINT,
@@ -1372,4 +1378,7 @@ export {
   GET_WAITLIST_HISTORY_ENDPOINT,
   GET_MEDICATIONS_HISTORY,
   GET_TEMPLATE_EMAIL_REPORT,
+    SEARCH_EXTERNAL_REFERRAL_PATIENTS_ENDPOINT,
+  UPDATE_EXTERNAL_REFERRAL_PATIENT_ENDPOINT,
+  GET_EXTERNAL_REFERRAL_PATIENTS_INFO_HISTORY,
 }

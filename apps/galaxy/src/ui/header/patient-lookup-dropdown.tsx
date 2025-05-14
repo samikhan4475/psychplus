@@ -57,6 +57,21 @@ const PatientLookupDropdown = ({ isActive }: { isActive: boolean }) => {
             INT Referrals
           </NextLink>
         </DropdownMenu.Item>
+        <DropdownMenu.Separator className="m-1" />
+        <DropdownMenu.Item asChild>
+          <NextLink
+            href="/external-referral"
+            className="hover:text-black hover:bg-pp-bg-accent whitespace-nowrap text-[13px]"
+            onClick={() => {
+              addTab({
+                href: '/external-referral',
+                label: 'External Referral',
+              })
+            }}
+          >
+            External Referrals
+          </NextLink>
+        </DropdownMenu.Item>
       </DropdownMenu.Content>
     </DropdownMenu.Root>
   )

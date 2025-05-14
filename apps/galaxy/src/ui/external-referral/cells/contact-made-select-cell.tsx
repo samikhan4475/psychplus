@@ -7,9 +7,9 @@ import { PropsWithRow, SelectCell } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { ContactMadeStatuses } from '@/types'
-import { updatePatientAction } from '../actions'
+import { sortCodesetBySortAttribute } from '@/ui/patient-lookup/utils'
+import { updateExternalReferralAction } from '../actions'
 import { Patient } from '../types'
-import { sortCodesetBySortAttribute } from '../utils'
 
 const ContactMadeSelectCell = ({
   row: { original: patient },
@@ -20,12 +20,12 @@ const ContactMadeSelectCell = ({
   const codes = useCodesetCodes(CODESETS.ContactMadeStatus)
   const updateContactMadeStatus = async (value: string) => {
     setSelectedValue(value)
-    const result = await updatePatientAction(patient.id, {
-      contactMadeStatus: value,
+    const result = await updateExternalReferralAction(patient.id, {
+      contactStatus: value,
     })
     if (result.state === 'success') {
       toast.success('Successfully updated!')
-    } else {
+    } else if (result.state === 'error') {
       setSelectedValue(patient?.contactMadeStatus ?? '')
       toast.error(result.error ?? 'Failed to update!')
     }

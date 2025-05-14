@@ -85,7 +85,7 @@ interface PatientProfile {
   upcomingAppointmentDate?: string
   practice?: string
   dateOfBirth?: string
-  patientLastLoginDateTime?:string
+  patientLastLoginDateTime?: string
   patientTypeEstablishedOrNew?: string
   referralName?: string
   referralSource?: string
@@ -140,5 +140,5 @@ export type {
   PatientProfileRaw,
   PatientHistoryParams,
   NewPatient,
-  LinkAccountType
+  LinkAccountType,
 }
