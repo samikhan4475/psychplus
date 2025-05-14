@@ -9,7 +9,7 @@ import {
 } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
-import { SelectOptionType } from '@/types'
+import { SelectOptionType, SharedCode } from '@/types'
 import { getLocationServicesAction } from '@/ui/clinic-schedule/clinic-time-tab/actions'
 import { useStore } from '@/ui/clinic-schedule/clinic-time-tab/store'
 import { SchemaType } from '../schema'
@@ -39,7 +39,7 @@ const ServiceSelect = () => {
   const specialistTypes = useCodesetCodes(CODESETS.SpecialistType)
   const specialistType = specialistTypes.find(
     (specialist) =>
-      specialist.value === staff?.staffSpecialistIds?.[0].toString(),
+      specialist.value === staff?.staffSpecialistIds?.[0]?.toString(),
   )
 
   const timeDependentServicesForProvider = useCodesetCodes(
@@ -69,6 +69,15 @@ const ServiceSelect = () => {
     cosignerName && setValue('primaryStateCosignerName', '')
   }
 
+  const findMatchingService = (
+    serviceOffered: string,
+    timeDependentServicesForProvider: SharedCode[],
+  ) => {
+    return timeDependentServicesForProvider.find(
+      (el) => el.value === serviceOffered,
+    )
+  }
+
   useEffect(() => {
     if (!location) {
       if (serviceId) setValue('serviceId', '')
@@ -76,6 +85,7 @@ const ServiceSelect = () => {
       if (maxBookingsPerSlot) setValue('maxBookingsPerSlot', 0)
       return
     }
+
     const fetchServices = async () => {
       setLoading(true)
       const response = await getLocationServicesAction([location])
@@ -86,15 +96,17 @@ const ServiceSelect = () => {
 
       const filteredServices = response.data
         .filter((service) =>
-          timeDependentServicesForProvider.find(
-            (el) => el.value === service.serviceOffered,
+          findMatchingService(
+            service.serviceOffered,
+            timeDependentServicesForProvider,
           ),
         )
         .map((service) => ({
           value: service.id,
           label:
-            timeDependentServicesForProvider.find(
-              (code) => code.value === service.serviceOffered,
+            findMatchingService(
+              service.serviceOffered,
+              timeDependentServicesForProvider,
             )?.display ?? service.serviceOffered,
           serviceOffered: service.serviceOffered,
           maxBookingsPerSlot: service.maxBookingFrequencyInSlot,
@@ -111,6 +123,7 @@ const ServiceSelect = () => {
       setServices(filteredServices)
       setLoading(false)
     }
+
     fetchServices()
   }, [location, staff, specialistType])
 
