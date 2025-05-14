@@ -15,6 +15,7 @@ import {
   useVisitStatusCodeset,
 } from '../../hooks'
 import { transformIn, updateVisit } from '../../utils'
+import { CancelAppointmentAlert } from '../cancel-appointment-alert'
 import { PermissionAlert } from '../permission-alert'
 import { UpdateVisitAlert } from '../update-visit-alert'
 
@@ -49,6 +50,7 @@ const TimedVisitStatusSelect = ({
   const { alertState, onUpdateVisitConfirm, onUpdateVisitError } =
     useConfirmVisitUpdate()
   const refetch = useRefetchAppointments()
+  const [isCancelAlertOpen, setIsCancelAlertOpen] = useState<boolean>(false)
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false)
   const [alertMessage, setAlertMessage] = useState<string>('')
   const nonTimedVisitStatusCodes = useVisitStatusCodeset('NonTimed')
@@ -152,6 +154,10 @@ const TimedVisitStatusSelect = ({
         return setIsAlertOpen(true)
       }
       setVisitStatus(val)
+      if (val === 'CancelledS') {
+        setIsCancelAlertOpen(true)
+        return
+      }
       const transformedBody = transformIn(appointment)
       transformedBody.appointmentStatus = val
 
@@ -183,6 +189,25 @@ const TimedVisitStatusSelect = ({
     }
   }
 
+  const handleCancellation = async (noRebookReason: string): Promise<void> => {
+    setIsCancelAlertOpen(false)
+    const transformedBody = {
+      ...transformIn(appointment),
+      appointmentStatus: visitStatus,
+      noRebookReason,
+    }
+    updateVisit({
+      body: transformedBody,
+      onSuccess: refetch,
+      onError: onUpdateVisitError,
+    })
+  }
+
+  const onCancelAlertClose = () => {
+    setIsCancelAlertOpen(false)
+    setVisitStatus(appointment.visitStatus)
+  }
+
   return (
     <Flex
       width="100%"
@@ -198,6 +223,12 @@ const TimedVisitStatusSelect = ({
           setAlertMessage('')
         }}
         message={alertMessage}
+      />
+      <CancelAppointmentAlert
+        appointment={appointment}
+        isOpen={isCancelAlertOpen}
+        onClose={onCancelAlertClose}
+        onSave={handleCancellation}
       />
       <CodesetSelectCell
         codeset={CODESETS.AppointmentStatus}

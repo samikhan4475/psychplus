@@ -56,6 +56,7 @@ interface TransformedAppointment {
   isOverridePermissionProvided: boolean
   isProceedPermissionProvided: boolean
   appointmentStatus: string
+  noRebookReason?: string
   unitId?: string
   groupId?: string
   roomId?: string

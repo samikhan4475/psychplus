@@ -106,6 +106,7 @@ interface Appointment {
   visitMedium: string
   visitStatus: string
   visitNoteTitle?: string
+  frequency: string
   insuranceVerification: string
   primaryInsuranceName: string
   secondaryInsuranceName: string

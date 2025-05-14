@@ -67,6 +67,7 @@ interface SchedulingHistoryData {
   primaryInsuranceDescription: string
   primaryInsurancePolicyId: string
   secondaryInsuranceDescription: string
+  noRebookReason: string
   coPayDue: number
   coPayPaid: number
   coInsDue: number

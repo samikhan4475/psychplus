@@ -239,6 +239,19 @@ const getSchedulingColumns = (
       ),
       cell: VisitStatusCell,
     },
+    {
+      id: 'noRebookReason',
+      accessorKey: 'noRebookReason',
+      header: ({ column }) => (
+        <ColumnHeader
+          clientSideSort
+          column={column}
+          label="Reason"
+          className="!text-black p-1 !font-medium"
+        />
+      ),
+      cell: ({ row }) => <TextCell>{row.original.noRebookReason} </TextCell>,
+    },
 
     {
       id: 'insurance',
