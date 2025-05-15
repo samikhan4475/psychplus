@@ -1,6 +1,7 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { GET_ORGANIZATION_PRACTICES_ROLES_ENDPOINT } from '@/api/endpoints'
 import { Role, SelectOptionType } from '@/types'
 
 const defaultPayloadPracticeList = {
@@ -23,7 +24,7 @@ const getOrganizationRolesAction = async ({
   payload,
 }: GetPracticeProps): Promise<api.ActionResult<SelectOptionType[]>> => {
   const response = await api.POST<Role[]>(
-    api.GET_ORGANIZATION_PRACTICES_ROLES_ENDPOINT,
+    GET_ORGANIZATION_PRACTICES_ROLES_ENDPOINT,
     {
       ...defaultPayloadPracticeList,
       ...payload,

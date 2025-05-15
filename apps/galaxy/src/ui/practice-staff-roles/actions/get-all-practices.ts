@@ -3,6 +3,10 @@
 import * as api from '@/api'
 import { Practice } from '@/types'
 
+const defaultPayloadPracticeList = {
+  IncludeOrganization: true,
+}
+
 interface Payload {
   payload: {
     practiceId: string
@@ -13,7 +17,10 @@ const getAllPracticesAction = async ({
 }: Payload): Promise<api.ActionResult<Practice[]>> => {
   const response = await api.POST<Practice[]>(
     api.GET_PRACTICE_IDS_LIST_ENDPOINT,
-    payload,
+    {
+      ...defaultPayloadPracticeList,
+      ...payload,
+    },
   )
 
   if (response.state === 'error') {
