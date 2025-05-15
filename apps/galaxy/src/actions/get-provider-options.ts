@@ -7,6 +7,7 @@ import { sanitizeFormData } from '@/utils'
 
 const getProvidersOptionsAction = async (
   payload: {
+    name?: string
     providerType?: string
     practicesIds?: string[]
     isResultsForNameList?: boolean

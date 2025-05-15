@@ -1,20 +1,28 @@
 'use client'
 
 import { DataTablePagination } from '@/components'
-import { VISITS_TABLE_PAGE_SIZE } from './constant'
 import { useStore } from './store'
 
 const VisitsTablePagination = () => {
-  const { visitsData, loadingVisits, page, next, prev, jumpToPage } = useStore(
-    (state) => ({
-      visitsData: state.visitsData,
-      loadingVisits: state.loadingVisits,
-      page: state.page,
-      next: state.next,
-      prev: state.prev,
-      jumpToPage: state.jumpToPage,
-    }),
-  )
+  const {
+    visitsData,
+    loadingVisits,
+    page,
+    next,
+    prev,
+    jumpToPage,
+    onPageSizeChange,
+    pageSize,
+  } = useStore((state) => ({
+    visitsData: state.visitsData,
+    loadingVisits: state.loadingVisits,
+    page: state.page,
+    next: state.next,
+    prev: state.prev,
+    jumpToPage: state.jumpToPage,
+    onPageSizeChange: state.onPageSizeChange,
+    pageSize: state.pageSize,
+  }))
 
   if (!visitsData) {
     return null
@@ -22,14 +30,16 @@ const VisitsTablePagination = () => {
 
   return (
     <DataTablePagination
-      total={visitsData.total}
-      loading={loadingVisits ?? false}
-      page={page}
-      pageSize={VISITS_TABLE_PAGE_SIZE}
-      next={next}
-      prev={prev}
-      jumpToPage={jumpToPage}
       className="border-0 border-t"
+      jumpToPage={jumpToPage}
+      loading={loadingVisits ?? false}
+      next={next}
+      onPageSizeChange={onPageSizeChange}
+      page={page}
+      pageSize={pageSize}
+      prev={prev}
+      showTotal
+      total={visitsData.total}
     />
   )
 }

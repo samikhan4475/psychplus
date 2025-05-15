@@ -86,6 +86,7 @@ const PATCH = async <T>(
     method: 'PATCH',
     body: isBodyFormData ? body : JSON.stringify(body),
     ...rest,
+    headers: { 'Content-Type': 'application/json' },
   })
 
   const data = getResponseData(await response.text())

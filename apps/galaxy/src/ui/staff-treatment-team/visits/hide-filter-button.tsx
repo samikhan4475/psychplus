@@ -9,6 +9,7 @@ const HideFiltersButton = ({
       variant="ghost"
       className="text-pp-text-primary-base text-[12px]"
       onClick={onClick}
+      type="button"
     >
       Hide Filters
     </Button>

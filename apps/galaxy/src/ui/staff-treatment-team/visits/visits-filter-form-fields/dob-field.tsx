@@ -12,7 +12,11 @@ const DobField = () => {
     <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel>DOB</FormFieldLabel>
       <I18nProvider locale="en-US">
-        <DatePickerInput field="dateOfBirth" className="w-[190px]" />
+        <DatePickerInput
+          field="dateOfBirth"
+          yearFormat="YYYY"
+          className="w-[190px]"
+        />
       </I18nProvider>
     </FormFieldContainer>
   )

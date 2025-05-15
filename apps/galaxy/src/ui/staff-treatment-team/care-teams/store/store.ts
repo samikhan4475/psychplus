@@ -1,14 +1,13 @@
 import toast from 'react-hot-toast'
 import { create } from 'zustand'
-import { getClinicalStaffAction } from '../actions'
-import { getAdminsAction } from '../actions/get-admins'
-import { AdminList, ClinicalStaffList } from '../types'
+import { getProviderCareTeams } from '../actions'
+import { CareTeam } from '../types'
 
 interface Store {
-  clinicalStaffData: ClinicalStaffList[]
-  adminData: AdminList[]
-  loadingClinicalstaff: boolean
-  loadingadmin: boolean
+  clinicalStaffData: CareTeam[]
+  adminData: CareTeam[]
+  loadingClinicalStaff: boolean
+  loadingAdmin: boolean
   fetchClinicalStaff: (staffId: number) => void
   fetchAdmin: (staffId: number) => void
 }
@@ -16,39 +15,45 @@ interface Store {
 const useStore = create<Store>((set) => ({
   clinicalStaffData: [],
   adminData: [],
-  loadingClinicalstaff: false,
-  loadingadmin: false,
-  fetchAdmin: async (staffId: number) => {
-    set({ loadingadmin: true })
+  loadingClinicalStaff: false,
+  loadingAdmin: false,
+  fetchAdmin: async (staffId) => {
+    set({ loadingAdmin: true })
 
-    const result = await getAdminsAction({
+    const result = await getProviderCareTeams({
       staffId: staffId,
+      isOnlyCareManagers: true,
+      isOnlyMedicalAssistants: false,
     })
     if (result.state === 'error') {
       toast.error(result.error ?? 'Error while fetching data')
-      return set({ loadingadmin: false })
+      set({ loadingAdmin: false })
+      return
     }
 
     set({
       adminData: result.data,
-      loadingadmin: false,
+      loadingAdmin: false,
     })
   },
-  fetchClinicalStaff: async (staffId: number) => {
-    set({ loadingClinicalstaff: true })
+  fetchClinicalStaff: async (staffId) => {
+    set({ loadingClinicalStaff: true })
 
-    const result = await getClinicalStaffAction({
-      staffId: staffId,
+    const result = await getProviderCareTeams({
+      staffId,
+      isOnlyCareManagers: false,
+      isOnlyMedicalAssistants: true,
     })
 
     if (result.state === 'error') {
       toast.error(result.error ?? 'Error while fetching data')
-      return set({ loadingClinicalstaff: false })
+      set({ loadingClinicalStaff: false })
+      return
     }
 
     set({
       clinicalStaffData: result.data,
-      loadingClinicalstaff: false,
+      loadingClinicalStaff: false,
     })
   },
 }))

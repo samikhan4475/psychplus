@@ -1,12 +1,28 @@
-interface ClinicalStaffList {
-  clinicalStaff: string
-  addedOn: string
-  status: string
+import { LegalName, Metadata } from '@/types'
+
+interface CareTeam {
+  careTeamId: number
+  staffId: number
+  metadata: Metadata
+  staffName: LegalName
+  isCareManager: boolean
+  isMedicalAssistant: boolean
+  recordStatus: RecordStatus
 }
 
-interface AdminList {
-  admin: string
-  addedOn: string
-  status: string
+enum RecordStatus {
+  Active = 'Active',
+  Inactive = 'Inactive',
+  Deleted = 'Deleted',
+  Archived = 'Archived',
 }
-export type { ClinicalStaffList, AdminList }
+
+interface AddCareTeamMember {
+  staffId: number
+  providerStaffId: number
+  isCareManager: boolean
+  isMedicalAssistant: boolean
+  recordStatus: RecordStatus
+}
+
+export { type CareTeam, type AddCareTeamMember, RecordStatus }

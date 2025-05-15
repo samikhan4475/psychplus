@@ -1,6 +1,5 @@
 'use client'
 
-import { useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Button, Flex } from '@radix-ui/themes'
@@ -8,11 +7,12 @@ import { DateValue } from 'react-aria-components'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 import { FormContainer } from '@/components'
-import { getDateString } from '@/ui/schedule/utils'
+import { getCalendarDateLabel, getDateString } from '@/ui/schedule/utils'
 import { sanitizeFormData } from '@/utils'
-import { useStore } from './store'
 import { ClearButton } from './clear-button'
 import { HideFiltersButton } from './hide-filter-button'
+import { useStore } from './store'
+import { VisitListPayload } from './types'
 import {
   DobField,
   FromDateField,
@@ -31,7 +31,7 @@ const schema = z.object({
   endingDate: z.custom<DateValue | null>().nullable(),
   name: z.string().optional(),
   dateOfBirth: z.custom<DateValue | null>().nullable(),
-  patientIds: z.string().optional(),
+  patientId: z.string().optional(),
   appointmentId: z.string().optional(),
   gender: z.string().optional(),
   visitType: z.string().optional(),
@@ -42,13 +42,15 @@ const schema = z.object({
 export type VisitsSchemaType = z.infer<typeof schema>
 
 interface Props {
+  staffId: string
   isPartialFilterView: boolean
   onHide: () => void
 }
 
-const VisitsFilterForm = ({ isPartialFilterView, onHide }: Props) => {
-  const { id } = useParams()
-  const { fetchVistsList } = useStore()
+const VisitsFilterForm = ({ isPartialFilterView, onHide, staffId }: Props) => {
+  const { fetchVisitsList } = useStore((state) => ({
+    fetchVisitsList: state.fetchVisitsList,
+  }))
   const form = useForm<VisitsSchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
@@ -57,7 +59,7 @@ const VisitsFilterForm = ({ isPartialFilterView, onHide }: Props) => {
       endingDate: undefined,
       name: '',
       dateOfBirth: undefined,
-      patientIds: '',
+      patientId: '',
       appointmentId: '',
       visitType: '',
       appointmentStatus: '',
@@ -67,18 +69,28 @@ const VisitsFilterForm = ({ isPartialFilterView, onHide }: Props) => {
   })
 
   const onSubmit: SubmitHandler<VisitsSchemaType> = (data) => {
-    const formattedData = {
-      ...data,
+    const formattedData: VisitListPayload = {
       startingDate: getDateString(data.startingDate),
       endingDate: getDateString(data.endingDate),
-      dateOfBirth: getDateString(data.dateOfBirth),
-      appointmentStatus: data.appointmentStatus || 'Scheduled',
-      providerIds: [Number(id)],
-      ...(data.patientIds !== '' && { patientIds: [Number(data.patientIds)] }),
+      dateOfBirth: data.dateOfBirth
+        ? getCalendarDateLabel(data.dateOfBirth)
+        : undefined,
+      appointmentStatuses: data.appointmentStatus
+        ? [data.appointmentStatus]
+        : undefined,
+      providerIds: [Number(staffId)],
+      patientIds: data.patientId ? [Number(data.patientId)] : undefined,
+      appointmentIds: data.appointmentId
+        ? [Number(data.appointmentId)]
+        : undefined,
+      name: data.name,
+      gender: data.gender,
+      visitTypes: data.visitType ? [data.visitType] : undefined,
+      locationIds: data.locationId ? [data.locationId] : undefined,
     }
 
     const sanatizedData = sanitizeFormData(formattedData)
-    fetchVistsList(sanatizedData)
+    fetchVisitsList(sanatizedData, 1, undefined, true)
   }
 
   return (
@@ -87,7 +99,7 @@ const VisitsFilterForm = ({ isPartialFilterView, onHide }: Props) => {
       form={form}
       onSubmit={onSubmit}
     >
-      <Flex gap={'4'} className="flex-wrap items-center">
+      <Flex gap="4" className="flex-wrap items-center">
         <>
           <FromDateField />
           <ToDateField />

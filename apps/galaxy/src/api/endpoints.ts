@@ -629,8 +629,6 @@ const ADD_LAB_ORDERS_RESULT_ENDPOINT = (
 ) =>
   `${API_URL}/api/appointments/${appointmentId}/laborders/${orderId}/labresults`
 
-const GET_TREATMENT_TEAM_VISITS = `${API_URL}/api/appointments/actions/search`
-
 const GET_CLAIM_SUBMISSION_RESPONSE = (claimId: string) =>
   `${API_URL}/api/claimssubmissions/${claimId}/responses/actions/search`
 const GET_SEARCHED_LAB_TESTS = `${API_URL}/api/labcompendiums/actions/search`
@@ -927,6 +925,24 @@ const UPDATE_DEFAULT_PAYMENT = (
   isSelfPay: boolean,
 ) =>
   `${API_URL}/api/patients/${patientId}/financialdata/${finanicalDataId}/actions/selfpay/${isSelfPay}`
+const GET_CARE_TEAM = `${API_URL}/api/providercareteams/actions/search`
+const ADD_CARE_TEAM_MEMBER = (staffId: string) =>
+  `${API_URL}/api/staff/${staffId}/careteams`
+const UPDATE_CARE_TEAM_MEMBER_STATUS = (
+  staffId: string,
+  careTeamId: string,
+  recordStatus: string,
+) =>
+  `${API_URL}/api/staff/${staffId}/careteams/${careTeamId}/statuses/${recordStatus}`
+const GET_CARE_TEAM_MEMBER_STATUS_HISTORY = (
+  staffId: string,
+  careTeamId: number,
+) =>
+  `${API_URL}/api/staff/${staffId}/careteams/${careTeamId}/history/actions/search`
+const GET_CARE_TEAM_PROVIDERS = (staffId: string, isPrimary: boolean) =>
+  `${API_URL}/api/patients/careteam/providers/${staffId}/actions/primaryrole/${isPrimary}`
+const TRANSFER_PROVIDER = (staffId: string, primaryRole: string) =>
+  `${API_URL}/api/patients/careteam/providers/${staffId}/actions/makeprimary/${primaryRole}`
 const GET_MEDICATIONS_HISTORY = (pharmacyNotificationId: string) =>
   `${API_URL}/api/pharmacynotifications/${pharmacyNotificationId}/history/actions/search`
 const VALIDATE_CURRENT_PASSWORD = `${AUTH_URL}/credentials/actions/validate`
@@ -1218,7 +1234,6 @@ export {
   GET_PATIENT_LINKS,
   DELETE_PATIENT_LINKS,
   ADD_LAB_ORDERS_RESULT_ENDPOINT,
-  GET_TREATMENT_TEAM_VISITS,
   ADD_ORGANIZATION_ENDPOINT,
   UPDATE_ORGANIZATION_ENDPOINT,
   GET_ORGANIZATION_HX_STATUS_ENDPOINT,
@@ -1373,6 +1388,12 @@ export {
   GET_MEDICATIONS_REFILL,
   DIS_ASSOCIATE_PERMISSION_ENDPOINT,
   UPDATE_DEFAULT_PAYMENT,
+  GET_CARE_TEAM,
+  ADD_CARE_TEAM_MEMBER,
+  UPDATE_CARE_TEAM_MEMBER_STATUS,
+  GET_CARE_TEAM_MEMBER_STATUS_HISTORY,
+  GET_CARE_TEAM_PROVIDERS,
+  TRANSFER_PROVIDER,
   VALIDATE_CURRENT_PASSWORD,
   CHANGE_PASSWORD,
   GET_WAITLIST_HISTORY_ENDPOINT,

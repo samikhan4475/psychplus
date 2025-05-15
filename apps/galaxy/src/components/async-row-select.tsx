@@ -27,20 +27,30 @@ interface AsyncRowSelectProps
   allowMultiple?: boolean
   label?: string
   defaultWidth?: `w-[${number}${Unit}]` | `w-${number}`
+  disabledOptions?: string[]
 }
 
 interface RowOptionProps {
   option: Option
   onOptionClick: (option: Option) => void
+  disabledOptions?: string[]
 }
 
-const RowOption = ({ option, onOptionClick }: RowOptionProps) => (
+const RowOption = ({
+  option,
+  onOptionClick,
+  disabledOptions,
+}: RowOptionProps) => (
   <Flex
     justify="between"
     align="center"
     p="1"
     onClick={() => onOptionClick(option)}
-    className="hover:bg-pp-bg-accent cursor-default rounded-2"
+    className={cn(
+      'hover:bg-pp-bg-accent cursor-default rounded-2',
+      disabledOptions?.includes(option.value) &&
+        'pointer-events-none opacity-40',
+    )}
   >
     <Text className="w-[85%] text-[11px]">{option.label}</Text>
     <PlusCircleIcon stroke="#194595" strokeWidth="2" height="15" width="15" />
@@ -57,14 +67,16 @@ const AsyncRowSelect = ({
   allowMultiple,
   defaultValue,
   defaultWidth,
+  disabledOptions,
   ...textFieldProps
 }: AsyncRowSelectProps) => {
   const [showOptions, setShowOptions] = useState(false)
+  const [value, setValue] = useState(defaultValue ?? '')
   const [loading, setLoading] = useState(true)
   const [options, setOptions] = useState<Option[]>()
   const [selectedOptions, setSelectedOptions] = useState<Option[]>([])
-  const debouncedFetch = useDebouncedCallback(async (value: string) => {
-    const result = await fetchOptions(value)
+  const debouncedFetch = useDebouncedCallback(async (searchTerm: string) => {
+    const result = await fetchOptions(searchTerm)
     if (result?.state === 'success') {
       setOptions(result.data)
     } else if (result?.state === 'error') {
@@ -74,10 +86,11 @@ const AsyncRowSelect = ({
   }, 500)
 
   const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target
     setLoading(true)
     setShowOptions(true)
-    debouncedFetch(value)
+    const searchTerm = e.target.value
+    debouncedFetch(searchTerm)
+    setValue(searchTerm)
   }
 
   useEffect(() => {
@@ -96,6 +109,7 @@ const AsyncRowSelect = ({
 
   const ref = useOnclickOutside(() => {
     setSelectedOptions([])
+    setValue('')
     setShowOptions(false)
   })
 
@@ -114,6 +128,7 @@ const AsyncRowSelect = ({
             disabled ? 'bg-gray-3 text-gray-11' : 'bg-[white]',
             className,
           )}
+          value={value}
           defaultValue={defaultValue}
           disabled={disabled}
           placeholder={placeholder ?? 'Search'}
@@ -160,7 +175,11 @@ const AsyncRowSelect = ({
                   }`}
                   key={`${option.label}-${index}`}
                 >
-                  <RowOption onOptionClick={onOptionClick} option={option} />
+                  <RowOption
+                    onOptionClick={onOptionClick}
+                    option={option}
+                    disabledOptions={disabledOptions}
+                  />
                 </Box>
               ))}
           </ScrollArea>

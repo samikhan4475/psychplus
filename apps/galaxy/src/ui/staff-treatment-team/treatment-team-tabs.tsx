@@ -1,18 +1,24 @@
 'use client'
 
+import { useParams } from 'next/navigation'
 import * as Tabs from '@radix-ui/react-tabs'
-import { Box, Flex, Text } from '@radix-ui/themes'
+import { Box, Flex } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
+import { useStore as useGlobalStore } from '@/store'
 import { CareTeamsView } from './care-teams/care-teams-view'
 import { useStore } from './store'
 import { TreatmentTeamTab } from './types'
 import { VisitsView } from './visits/visit-view'
 
 const TreatmentTeamTabs = (props: { isProfileView?: boolean }) => {
+  const params = useParams<{ id: string }>()
+  const { user } = useGlobalStore((state) => ({ user: state.user }))
   const { activeTab, setActiveTab } = useStore((state) => ({
     activeTab: state.activeTab,
     setActiveTab: state.setActiveTab,
   }))
+  const staffId =
+    props.isProfileView && !params.id ? `${user.staffId}` : params.id || ''
 
   return (
     <Box className="flex-1 px-1">
@@ -38,11 +44,14 @@ const TreatmentTeamTabs = (props: { isProfileView?: boolean }) => {
             </TabsTrigger>
           </Tabs.List>
         </Flex>
-        <TabsContent value={TreatmentTeamTab.Visits}>
-          <VisitsView isProfileView={props.isProfileView} />
-        </TabsContent>
         <TabsContent value={TreatmentTeamTab.Care_Teams}>
-          <CareTeamsView />
+          <CareTeamsView
+            isProfileView={props.isProfileView}
+            staffId={staffId}
+          />
+        </TabsContent>
+        <TabsContent value={TreatmentTeamTab.Visits}>
+          <VisitsView isProfileView={props.isProfileView} staffId={staffId} />
         </TabsContent>
       </Tabs.Root>
     </Box>

@@ -1,21 +1,20 @@
 'use client'
 
-import { TextField } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
-import { FormFieldContainer, FormFieldLabel } from '@/components'
-import { VisitsSchemaType } from '../visits-filter-form'
+import { FormFieldContainer, FormFieldLabel, NumericInput } from '@/components'
 
 const SearchByMRNField = () => {
-  const form = useFormContext<VisitsSchemaType>()
-
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel>MRN</FormFieldLabel>
-      <TextField.Root
-        size="1"
+      <NumericInput
+        field="patientId"
+        allowNegative={false}
+        prefix=""
         placeholder="Search by MRN"
+        decimalScale={0}
+        maxLimit={Number('9'.repeat(8))}
+        containerClassName="w-full"
         className="border-pp-gray-2 h-6 w-[200px] border border-solid !outline-none [box-shadow:none]"
-        {...form.register('patientIds')}
       />
     </FormFieldContainer>
   )

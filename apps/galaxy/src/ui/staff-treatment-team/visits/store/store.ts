@@ -1,14 +1,18 @@
+import { getLocalTimeZone, today } from '@internationalized/date'
 import toast from 'react-hot-toast'
 import { create } from 'zustand'
+import { getDateString } from '@/ui/schedule/utils'
 import { getVisitsListAction } from '../actions'
+import { VISITS_TABLE_PAGE_SIZE } from '../constant'
 import { GetVisitListData, VisitListPayload } from '../types'
 
 interface Store {
   visitsData?: GetVisitListData
   loadingVisits: boolean
-  fetchVistsList: (
+  fetchVisitsList: (
     payload: VisitListPayload,
     page?: number,
+    pageSize?: number,
     reset?: boolean,
   ) => void
   pageCache: Record<number, GetVisitListData>
@@ -17,23 +21,39 @@ interface Store {
   prev: () => void
   jumpToPage: (page: number) => void
   payload?: VisitListPayload
+  pageSize: number
+  onPageSizeChange: (pageSize: number) => void
 }
 
 const useStore = create<Store>((set, get) => ({
   page: 1,
   pageCache: {},
   visitsData: undefined,
+  pageSize: VISITS_TABLE_PAGE_SIZE,
   loadingVisits: false,
-  fetchVistsList: async (payload, page = 1, reset = false) => {
-    set({ loadingVisits: true, payload: payload })
+  fetchVisitsList: async (
+    payload,
+    page = 1,
+    pageSize = VISITS_TABLE_PAGE_SIZE,
+    reset = false,
+  ) => {
+    payload.startingDate = payload?.startingDate
+      ? payload.startingDate
+      : getDateString(today(getLocalTimeZone()))
 
+    set({
+      loadingVisits: true,
+      payload: payload,
+      page,
+      pageSize,
+    })
     const result = await getVisitsListAction(payload, page)
-
     if (result.state === 'error') {
-      toast.error(result.error ?? 'Error while fetching data')
+      let error = 'Failed to fetch visits'
+      if (result.error) error = result.error
+      toast.error(error)
       return set({ loadingVisits: false })
     }
-
     set({
       visitsData: result.data,
       loadingVisits: false,
@@ -42,7 +62,10 @@ const useStore = create<Store>((set, get) => ({
         : { ...get().pageCache, [page]: result.data },
     })
   },
-
+  onPageSizeChange: (pageSize: number) => {
+    set({ pageSize, page: 1, pageCache: {} })
+    get().fetchVisitsList(get().payload as VisitListPayload, 1, get().pageSize)
+  },
   next: () => {
     const page = get().page + 1
 
@@ -53,7 +76,11 @@ const useStore = create<Store>((set, get) => ({
       })
     }
 
-    get().fetchVistsList(get().payload!, page)
+    get().fetchVisitsList(
+      get().payload as VisitListPayload,
+      page,
+      get().pageSize,
+    )
   },
   prev: () => {
     const page = get().page - 1
@@ -63,7 +90,11 @@ const useStore = create<Store>((set, get) => ({
         page,
       })
     }
-    get().fetchVistsList(get().payload!, page)
+    get().fetchVisitsList(
+      get().payload as VisitListPayload,
+      page,
+      get().pageSize,
+    )
   },
   jumpToPage: (page: number) => {
     if (page < 1) {
@@ -75,7 +106,11 @@ const useStore = create<Store>((set, get) => ({
         page,
       })
     }
-    get().fetchVistsList(get().payload!, page)
+    get().fetchVisitsList(
+      get().payload as VisitListPayload,
+      page,
+      get().pageSize,
+    )
   },
 }))
 

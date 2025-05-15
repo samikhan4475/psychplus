@@ -241,6 +241,9 @@ const USER_PERMISSIONS = {
   canUploadSignedPolicy: 'canUploadSignedPolicy',
   mainTabManagementPermission: 'mainTabManagementPermission',
   changeOrderByProviderLabResultView: 'changeOrderByProviderLabResultView',
+  clickAddStaffButtonTreament: 'clickAddStaffButtonTreament',
+  clickEditOrganizationBtn: 'clickEditOrganizationBtn',
+  clickEditStatusBtn: 'clickEditStatusBtn',
   clickResetStaffProfilePage: 'clickResetStaffProfilePage',
 }
 

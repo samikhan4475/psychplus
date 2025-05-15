@@ -46,11 +46,18 @@ const formatDate = (date: DateValue): string => {
   }).format(date.toDate(getLocalTimeZone()))
 }
 
-const formatDateCell = (date: string, timezoneId: string) => {
+const formatDateCell = (
+  date: string,
+  timezoneId: string,
+  showFullYear = true,
+) => {
   const zonedDate = parseAbsolute(date, timezoneId)
   const month = `${zonedDate.month}`.padStart(2, '0')
   const day = `${zonedDate.day}`.padStart(2, '0')
-  return `${month}/${day}/${zonedDate.year}`
+  const year = showFullYear
+    ? zonedDate.year
+    : String(zonedDate.year % 100).padStart(2, '0')
+  return `${month}/${day}/${year}`
 }
 
 const formatTimeCell = (date: string, timezoneId: string) => {

@@ -10,8 +10,8 @@ const ClearButton = () => {
   const form = useFormContext<VisitsSchemaType>()
   const { id } = useParams()
 
-  const { fetchVistsList } = useStore((state) => ({
-    fetchVistsList: state.fetchVistsList,
+  const { fetchVisitsList } = useStore((state) => ({
+    fetchVisitsList: state.fetchVisitsList,
   }))
 
   const onClear = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -20,7 +20,7 @@ const ClearButton = () => {
     const payload = {
       providerIds: [Number(id)],
     }
-    return fetchVistsList(payload)
+    return fetchVisitsList(payload)
   }
 
   return (

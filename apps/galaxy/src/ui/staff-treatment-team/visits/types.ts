@@ -1,34 +1,22 @@
-import { Metadata } from '@/types'
-
-interface VisitsList {
-  metadata: Metadata
-  dateTime: string
-  patientName: string
-  gender: string
-  dob: string
-  patientId: string
-  visitId: string
-  locationName: string
-  visitType: string
-  visitStatus: string
-}
+import { Appointment } from '@/types'
 
 interface GetVisitListData {
-  visitsListData: VisitsList[]
+  visitsListData: Appointment[]
   total: number
 }
 interface VisitListPayload {
-  providerIds: number[]
-  status?: string
   startingDate?: string
   endingDate?: string
   name?: string
   dateOfBirth?: string
+  patientIds?: number[]
+  appointmentStatuses?: string[]
+  locationIds?: string[]
+  providerIds: number[]
+  appointmentIds?: number[]
   gender?: string
-  searchByMRN?: string
-  visitId?: string
-  visitType?: string
-  visitStatus?: string
+  visitTypes?: string[]
+  isShowActiveVisits?: boolean
 }
 
-export type { VisitsList, VisitListPayload, GetVisitListData }
+export type { GetVisitListData, VisitListPayload }

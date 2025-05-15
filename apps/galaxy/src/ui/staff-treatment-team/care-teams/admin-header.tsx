@@ -3,13 +3,23 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { SearchAddMemberSelect } from './search-add-member'
 
-const AdminHeader = () => {
+const AdminHeader = ({
+  staffId,
+  setAlertInfo,
+}: {
+  staffId: string
+  setAlertInfo: (alertInfo: { message: string; isOpen: boolean }) => void
+}) => {
   return (
-    <Flex className="bg-white items-center justify-between gap-3 pb-2">
+    <Flex className="bg-white w-[90%] items-center justify-between gap-3 pb-2 sm:w-[80%] md:w-[50%]">
       <Text size="4" weight="medium" className=" whitespace-nowrap">
         Admin
       </Text>
-      <SearchAddMemberSelect />
+      <SearchAddMemberSelect
+        isAdmin
+        staffId={staffId}
+        setAlertInfo={setAlertInfo}
+      />
     </Flex>
   )
 }
