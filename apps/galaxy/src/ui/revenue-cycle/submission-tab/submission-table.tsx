@@ -15,6 +15,8 @@ import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { Claim, Sort } from '@/types'
 import { formatDate, getSortDir } from '@/utils'
+import { useStore as useTabStore } from '../store'
+import { RevenueCycleTab } from '../types'
 import { getInsurancePayerName } from '../utils'
 import { TableHeaderCheckboxCell, TableRowCheckboxCell } from './cells'
 import { transformInSubmissions } from './data'
@@ -251,19 +253,24 @@ const defaultPayload = {
   isIncludePatientInsurancePolicy: true,
 }
 const SubmissionTable = () => {
-  const { data, loading, sort, sortData, search } = useStore((state) => ({
-    data: state.data,
-    loading: state.loading,
-    sort: state.sort,
-    sortData: state.sortData,
-    search: state.search,
-  }))
+  const { data, loading, sort, sortData, search, setSelectedRows } = useStore(
+    (state) => ({
+      data: state.data,
+      loading: state.loading,
+      sort: state.sort,
+      sortData: state.sortData,
+      search: state.search,
+      setSelectedRows: state.setSelectedRows,
+    }),
+  )
+  const currentTab = useTabStore((state) => state.activeTab)
 
   const claimStatusCodes = useCodesetCodes(CODESETS.ClaimStatus)
-
   useEffect(() => {
+    if (currentTab !== RevenueCycleTab.Submission) return
+    setSelectedRows([])
     search(defaultPayload)
-  }, [])
+  }, [currentTab])
   if (loading) {
     return (
       <Flex height="100%" align="center" justify="center">
