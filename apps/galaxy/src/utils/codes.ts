@@ -69,6 +69,44 @@ const fetchCodes = async (patientId: string, appointmentId?: string) => {
   )
 }
 
+const fetchCodesSections = async (
+  patientId: string,
+  appointmentId?: string,
+) => {
+  const [codesResult, appointmentCodeResult] = await Promise.all([
+    getQuickNoteDetailAction(
+      patientId,
+      [QuickNoteSectionName.QuicknoteSectionCodes],
+      false,
+      undefined,
+      true,
+    ),
+
+    getQuickNoteDetailAction(
+      patientId,
+      [QuickNoteSectionName.QuicknoteSectionCodes],
+      false,
+      appointmentId,
+      false,
+    ),
+  ])
+
+  if (
+    codesResult.state === 'error' ||
+    appointmentCodeResult.state === 'error'
+  ) {
+    return {
+      state: 'error',
+      error: 'Something went wrong. Please try again.',
+    }
+  }
+
+  return {
+    state: 'success',
+    data: [...codesResult.data, ...appointmentCodeResult.data],
+  }
+}
+
 const getCodesetDisplayName = (value: string, codes: SharedCode[]): string =>
   codes.find((code) => code.value === value)?.display ?? ''
 
@@ -90,4 +128,9 @@ const codesetAttributesOptions = (data: {
   return res
 }
 
-export { manageCodes, getCodesetDisplayName, codesetAttributesOptions }
+export {
+  manageCodes,
+  getCodesetDisplayName,
+  codesetAttributesOptions,
+  fetchCodesSections,
+}

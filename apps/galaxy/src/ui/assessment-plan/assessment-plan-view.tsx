@@ -1,24 +1,25 @@
 'use client'
 
+import { useEffect, useMemo } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
-import { Appointment, QuickNoteSectionItem } from '@/types'
+import { Appointment, QuickNoteSectionItem, Relationship } from '@/types'
+import { validateYesNoEnum } from '../mse/mse-widget/utils'
+import { QuickNoteSectionName } from '../quicknotes/constants'
 import { AlertDialog } from './alert-dialog'
 import { AssessmentPlanTabs } from './constants'
 import { FamilyInternalMedicineAssessmentPlanTab } from './family-internal-medicine-assessment-plan-tab'
 import { PsychiatryAssessmentPlanTab } from './psychiatry-assessment-plan-tab'
+import { SafetyPlanningAndInterventionTab } from './safety-planning-and-intervention-tab'
 import { useStore } from './store'
 import { TherapyAssessmentPlanTab } from './therapy-assessment-plan-tab'
 
 interface AssessmentPlanViewProps {
   patientId: string
-  psychiatryAssessmentPlanData: QuickNoteSectionItem[]
-  therapyAssessmentPlanData: QuickNoteSectionItem[]
-  familyInternalMedicineAssessmentPlanData: QuickNoteSectionItem[]
-  addOnAssessementPlanData: QuickNoteSectionItem[]
-  tcmData: QuickNoteSectionItem[]
   appointment: Appointment
+  patientRelationships: Relationship[]
+  sectionsData: QuickNoteSectionItem[]
 }
 
 enum ProviderType {
@@ -27,31 +28,93 @@ enum ProviderType {
   InternalMedicine = 'InternalMedicine',
   FamilyMedicine = 'FamilyMedicine',
 }
+const getSectionsData = (
+  sectionsData: QuickNoteSectionItem[],
+  sectionName: QuickNoteSectionName,
+) => {
+  return sectionsData?.filter((section) => section.sectionName === sectionName)
+}
 
 const AssessmentPlanView = ({
-  patientId,
-  psychiatryAssessmentPlanData,
-  therapyAssessmentPlanData,
-  familyInternalMedicineAssessmentPlanData,
   appointment,
+  patientId,
+  patientRelationships,
+  sectionsData,
 }: AssessmentPlanViewProps) => {
   const { activeTab, setActiveTab } = useStore((state) => ({
     activeTab: state.activeTab,
     setActiveTab: state.setActiveTab,
   }))
 
+  const psychiatryAssessmentPlanData = getSectionsData(
+    sectionsData,
+    QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
+  )
+
+  const therapyAssessmentPlanData = getSectionsData(
+    sectionsData,
+    QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan,
+  )
+
+  const familyInternalMedicineAssessmentPlanData = getSectionsData(
+    sectionsData,
+    QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,
+  )
+
+  const mseData = getSectionsData(
+    sectionsData,
+    QuickNoteSectionName.QuicknoteSectionMse,
+  )
+
+  const safetyPlanningBoolean =
+    psychiatryAssessmentPlanData?.find(
+      (item) => item.sectionItem === 'safetyPlanningIntervention',
+    )?.sectionItemValue === 'true'
+
+  const isEnabled = useMemo(() => {
+    const tcsiYesNo =
+      mseData?.find((item) => item.sectionItem === 'tcsiYesNo')
+        ?.sectionItemValue ?? ''
+    return validateYesNoEnum(tcsiYesNo) === 'yes'
+  }, [mseData])
+
+  const shouldShowSafety = safetyPlanningBoolean || isEnabled
+
+  useEffect(() => {
+    if (
+      !shouldShowSafety &&
+      appointment.providerType === ProviderType.Psychiatry
+    ) {
+      setActiveTab(AssessmentPlanTabs.PAP)
+    }
+  }, [shouldShowSafety, setActiveTab])
+
   let renderTab = null
   switch (appointment.providerType) {
     case ProviderType.Psychiatry:
       renderTab = (
-        <TabsContent value={AssessmentPlanTabs.PAP}>
-          <PsychiatryAssessmentPlanTab
-            patientId={patientId}
-            psychiatryAssessmentPlanData={psychiatryAssessmentPlanData}
-            isPsychiatryAssessmentPlanTab={true}
-          />
+        <>
+          <TabsContent value={AssessmentPlanTabs.PAP}>
+            <PsychiatryAssessmentPlanTab
+              sectionsData={sectionsData}
+              appointment={appointment}
+              patientId={patientId}
+              isPsychiatryAssessmentPlanTab={true}
+            />
+          </TabsContent>
+          {shouldShowSafety && (
+            <TabsContent value={AssessmentPlanTabs.SPAI}>
+              <SafetyPlanningAndInterventionTab
+                patientRelationships={patientRelationships}
+                mseData={mseData}
+                patientId={patientId}
+                psychiatryAssessmentPlanData={psychiatryAssessmentPlanData}
+                isSafetyPlanningAndInterventionTab={true}
+              />
+            </TabsContent>
+          )}
           <AlertDialog />
-        </TabsContent>
+        </>
       )
       break
     case ProviderType.Therapy:
@@ -86,8 +149,9 @@ const AssessmentPlanView = ({
         <>
           <TabsContent value={AssessmentPlanTabs.PAP}>
             <PsychiatryAssessmentPlanTab
+              appointment={appointment}
               patientId={patientId}
-              psychiatryAssessmentPlanData={psychiatryAssessmentPlanData}
+              sectionsData={sectionsData}
               isPsychiatryAssessmentPlanTab={true}
             />
             <AlertDialog />
@@ -127,6 +191,13 @@ const AssessmentPlanView = ({
               {AssessmentPlanTabs.PAP}
             </TabsTrigger>
           )}
+          {appointment.providerType === ProviderType.Psychiatry &&
+            shouldShowSafety && (
+              <TabsTrigger value={AssessmentPlanTabs.SPAI}>
+                {AssessmentPlanTabs.SPAI}
+              </TabsTrigger>
+            )}
+
           {appointment.providerType === ProviderType.Therapy && (
             <TabsTrigger value={AssessmentPlanTabs.TAP}>
               {AssessmentPlanTabs.TAP}

@@ -11,11 +11,13 @@ import { RelationshipTable } from './relationship-table'
 interface RelationshipCardProps {
   patientRelationships: Relationship[]
   patientId: string
+  title?: string
 }
 
 const RelationshipCard = ({
   patientRelationships,
   patientId,
+  title= "Relationship"
 }: RelationshipCardProps) => {
   const [relationships, setRelationships] = useState<Relationship[]>(
     patientRelationships ?? [],
@@ -35,7 +37,7 @@ const RelationshipCard = ({
   return (
     <Flex direction="column" className="bg-white overflow-hidden rounded-1">
       <PatientRelationshipContext.Provider value={ctxValue}>
-        <CardHeading title="Relationship">
+        <CardHeading title={title}>
           <Flex justify="end" flexGrow="1">
             <AddRelationshipDialog patientId={patientId} />
           </Flex>

@@ -9,6 +9,7 @@ type WidgetComponent = React.ComponentType<{
   patient: PatientProfile
   visitType: string
   visitSequence: string
+  widgetsData?: QuickNoteSectionItem[]
 }>
 type WidgetType = {
   component?: WidgetComponent

@@ -97,6 +97,7 @@ export function QuickNotesClientView({
                   appointment={appointment}
                   patient={patient}
                   data={widgetsData?.filter((item) => item?.sectionName === id)}
+                  widgetsData={widgetsData}
                   patientId={patientId}
                   visitType={visitType}
                   appointmentId={appointmentId}

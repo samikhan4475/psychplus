@@ -21,6 +21,8 @@ interface GroupSelectSectionProps<T extends string> {
   editable?: boolean
   chipClassName?: string
   errorField?: string
+  blockLabelProps?: React.ComponentProps<typeof BlockLabel>
+
 }
 
 interface GroupSelectOption<T extends string> {
@@ -41,6 +43,7 @@ const GroupSelectSection = <T extends string>({
   editable = true,
   chipClassName,
   errorField,
+  blockLabelProps
 }: GroupSelectSectionProps<T>) => {
   const form = useFormContext()
 
@@ -108,7 +111,7 @@ const GroupSelectSection = <T extends string>({
 
   return (
     <Flex align="center" gap="1" wrap="wrap">
-      {label && <BlockLabel>{label}</BlockLabel>}
+      {label && <BlockLabel {...blockLabelProps}>{label}</BlockLabel>}
       {options.map((option) => (
         <SelectableChip
           key={option.value}

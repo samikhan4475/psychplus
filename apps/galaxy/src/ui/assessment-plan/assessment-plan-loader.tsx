@@ -1,7 +1,8 @@
 import { Text } from '@radix-ui/themes'
+import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import { getAppointment } from '@/api'
+import { getPatientRelationshipsAction } from '@/ui/patient-info/patient-info-tab/actions'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { getAssessmentPlanAction } from './actions'
 import { AssessmentPlanView } from './assessment-plan-view'
 
 interface AssessmentPlanLoaderProps {
@@ -15,69 +16,70 @@ const AssessmentPlanLoader = async ({
 }: AssessmentPlanLoaderProps) => {
   const [
     appointment,
-    psychiatryAssessmentPlanResponse,
-    therapyAssessmentPlanResponse,
-    familyInternalMedicineAssessmentPlanResponse,
-    addOnAssessementPlanData,
-    tcmDataResponse,
+    patientRelationshipsResponse,
+    sectionsResponse,
+    codesResult,
+    appointmentCodeResult,
   ] = await Promise.all([
-    getAppointment({ id: appointmentId }),
-    getAssessmentPlanAction({
+    getAppointment({ id: appointmentId, isIncludeCodes: true }),
+    getPatientRelationshipsAction(patientId),
+
+    getQuickNoteDetailAction(patientId, [
+      QuickNoteSectionName.QuicknoteSectionMse,
+      QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
+      QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan,
+      QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,
+      QuickNoteSectionName.Addon,
+      QuickNoteSectionName.QuicknoteSectionTcm,
+    ]),
+    getQuickNoteDetailAction(
       patientId,
-      sectionName:
-        QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
-    }),
-    getAssessmentPlanAction({
+      [QuickNoteSectionName.QuicknoteSectionCodes],
+      false,
+      undefined,
+      true,
+    ),
+    getQuickNoteDetailAction(
       patientId,
-      sectionName: QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan,
-    }),
-    getAssessmentPlanAction({
-      patientId,
-      sectionName:
-        QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,
-    }),
-    getAssessmentPlanAction({
-      patientId,
-      sectionName: QuickNoteSectionName.Addon,
-    }),
-    getAssessmentPlanAction({
-      patientId,
-      sectionName: QuickNoteSectionName.QuicknoteSectionTcm,
-    }),
+      [QuickNoteSectionName.QuicknoteSectionCodes],
+      false,
+      appointmentId,
+      false,
+    ),
   ])
 
   if (appointment.state === 'error') {
     return <Text>{appointment.error}</Text>
   }
 
-  if (psychiatryAssessmentPlanResponse.state === 'error') {
-    return <Text>{psychiatryAssessmentPlanResponse.error}</Text>
+  if (patientRelationshipsResponse.state === 'error') {
+    return <Text>{patientRelationshipsResponse.error}</Text>
   }
 
-  if (therapyAssessmentPlanResponse.state === 'error') {
-    return <Text>{therapyAssessmentPlanResponse.error}</Text>
+  if (sectionsResponse.state === 'error') {
+    return <Text>{sectionsResponse.error}</Text>
   }
-  if (familyInternalMedicineAssessmentPlanResponse.state === 'error') {
-    return <Text>{familyInternalMedicineAssessmentPlanResponse.error}</Text>
+
+  if (codesResult.state === 'error') {
+    return <Text>{codesResult.error}</Text>
   }
-  if (addOnAssessementPlanData.state === 'error') {
-    return <Text>{addOnAssessementPlanData.error}</Text>
+
+  if (appointmentCodeResult.state === 'error') {
+    return <Text>{appointmentCodeResult.error}</Text>
   }
-  if (tcmDataResponse.state === 'error') {
-    return <Text>{tcmDataResponse.error}</Text>
-  }
+
+  const sectionsData = [
+    ...sectionsResponse.data,
+    ...codesResult.data,
+    ...appointmentCodeResult.data,
+  ]
 
   return (
     <AssessmentPlanView
       patientId={patientId}
-      psychiatryAssessmentPlanData={psychiatryAssessmentPlanResponse.data}
-      therapyAssessmentPlanData={therapyAssessmentPlanResponse.data}
-      familyInternalMedicineAssessmentPlanData={
-        familyInternalMedicineAssessmentPlanResponse.data
-      }
-      addOnAssessementPlanData={addOnAssessementPlanData.data}
-      tcmData={tcmDataResponse.data}
       appointment={appointment.data}
+      patientRelationships={patientRelationshipsResponse.data}
+      sectionsData={sectionsData}
     />
   )
 }

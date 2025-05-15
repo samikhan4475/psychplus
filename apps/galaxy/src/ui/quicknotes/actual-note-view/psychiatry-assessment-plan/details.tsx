@@ -1,22 +1,33 @@
-import { Flex } from '@radix-ui/themes'
+import { Box } from '@radix-ui/themes'
+import { Appointment, QuickNoteSectionItem, Relationship } from '@/types'
 import { PsychiatryAssessmentPlanTabSchemaType } from '@/ui/assessment-plan/psychiatry-assessment-plan-tab/psychiatry-assessment-plan-tab-schema'
-import { BlockContainer, LabelAndValue } from '../shared'
+import { PsychiatristAssessmentPlanBlock, SafetyPlanningBlock } from './block'
 
 interface Props<T> {
   data: T
+  patientRelationships: Relationship[]
+  appointment: Appointment
+  codesData: QuickNoteSectionItem[]
 }
 
-const Details = ({ data }: Props<PsychiatryAssessmentPlanTabSchemaType>) => {
+const Details = ({
+  data,
+  patientRelationships,
+  appointment,
+  codesData,
+}: Props<PsychiatryAssessmentPlanTabSchemaType>) => {
   return (
-    <BlockContainer heading="Psychiatrist Assessment/Plan">
-      <Flex direction="column" gap="2">
-        <LabelAndValue value={data.assessmentTreatmentPlanNotes} />
-
-        {data.patientDiscussionCompleted === 'yes' && (
-          <LabelAndValue value="Treatment/Therapy options, labs, medications risks/SE, safety plan, & emergency procedures discussed with the patient." />
-        )}
-      </Flex>
-    </BlockContainer>
+    <Box>
+      <PsychiatristAssessmentPlanBlock
+        data={data}
+        appointment={appointment}
+        codesData={codesData}
+      />
+      <SafetyPlanningBlock
+        data={data}
+        patientRelationships={patientRelationships}
+      />
+    </Box>
   )
 }
 

@@ -67,6 +67,7 @@ const CodesWidgetLoader = async ({
     codesResult.data,
     appointmentCodeResult.data,
   )
+
   const questionairesCount = Object.keys(
     transformHistories(questionairesResult.data),
   )?.length

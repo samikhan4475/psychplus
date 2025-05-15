@@ -4,6 +4,7 @@ enum AssessmentPlanTabs {
   FIMAP = 'Family/Internal Medicine Assessment/Plan',
   AOAP = 'Add On',
   TCM = 'TCM',
+  SPAI = 'Safety Planning Intervention',
 }
 
 enum AssessmentPlanTabsId {
