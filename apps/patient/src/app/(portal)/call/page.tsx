@@ -12,19 +12,26 @@ const CallView = dynamic(
 
 interface Props {
   searchParams: {
-    staffId: string
+    email: string
     appointmentId: string
   }
 }
 
-const Call = async (props: Props) => {
+const Call = async ({ searchParams: { email, appointmentId } }: Props) => {
   const [acsResponse, profileResponse] = await Promise.all([
-    getAcsInfo(props.searchParams),
+    getAcsInfo({
+      staffEmail: email,
+      appointmentId,
+    }),
     getProfile(),
   ])
 
   if (acsResponse.state === 'error') {
     return <Text>{acsResponse.error}</Text>
+  }
+
+  if (!email) {
+    return <Text>No email found</Text>
   }
 
   const user: User | undefined =

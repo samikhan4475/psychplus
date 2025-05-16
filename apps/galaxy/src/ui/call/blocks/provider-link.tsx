@@ -4,11 +4,11 @@ import toast from 'react-hot-toast'
 import { useStore } from '@/store'
 
 export const ProviderLink = () => {
-  const { user } = useStore((state) => ({
-    user: state.user,
+  const { staffResource } = useStore((state) => ({
+    staffResource: state.staffResource,
   }))
 
-  const providerLink = `${window.location.origin}/call?staffId=${user?.staffId}`
+  const providerLink = `${window.location.origin}/call?email=${staffResource?.contactInfo?.email}`
 
   const handleCopy = () => {
     navigator.clipboard.writeText(providerLink)
@@ -24,7 +24,8 @@ export const ProviderLink = () => {
     >
       <Flex direction="column" mb="4" gap="1">
         <Heading>
-          Welcome, {user?.legalName.firstName}. {user?.legalName.lastName}
+          Welcome, {staffResource?.legalName.firstName}.{' '}
+          {staffResource?.legalName.lastName}
         </Heading>
         <Text color="gray">
           Please invite someone to your waiting room, share this link

@@ -1,7 +1,7 @@
 import { LegalName } from '@psychplus-v2/types'
 
 interface AcsInfoPayload {
-  staffId: string
+  staffEmail: string
   appointmentId: string
 }
 interface AcsInfo {
@@ -14,7 +14,7 @@ interface AcsInfo {
 }
 
 interface NotifyProviderPayload {
-  staffId: number
+  staffEmail: string
   appointmentId?: string
   patientName: LegalName
   callSessionId: string

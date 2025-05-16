@@ -1,12 +1,13 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { AzureCommunicationTokenCredential } from '@azure/communication-common'
 import {
   CallComposite,
   useAzureCommunicationCallAdapter,
 } from '@azure/communication-react'
+import { Text } from '@radix-ui/themes'
 import { useDebouncedCallback } from 'use-debounce'
 import { LoadingPlaceholder } from '@/components-v2'
 import { notifyProvider } from '../api/notify-provider'
@@ -20,6 +21,8 @@ interface Props {
 
 const CallCompositeContainer = ({ acsInfo, username }: Props) => {
   const router = useRouter()
+
+  const email = useSearchParams().get('email')
   const [connected, setConnected] = useState(false)
   const credential = useMemo(() => {
     return new AzureCommunicationTokenCredential(acsInfo.token)
@@ -42,8 +45,9 @@ const CallCompositeContainer = ({ acsInfo, username }: Props) => {
 
   const debouncedNotify = useDebouncedCallback(async () => {
     const [firstName = '', lastName = '.'] = username.split(' ')
+
     notifyProvider({
-      staffId: acsInfo.staffId,
+      staffEmail: email ?? '',
       patientName: { firstName, lastName },
       callSessionId: acsInfo.callSessionId,
     })
@@ -68,6 +72,9 @@ const CallCompositeContainer = ({ acsInfo, username }: Props) => {
     setConnected,
   ])
 
+  if (!email) {
+    return <Text>No email found</Text>
+  }
   if (!callAdapter) {
     return <LoadingPlaceholder />
   }
