@@ -42,6 +42,7 @@ interface PrimaryAddress {
   primaryCity: string
   primaryState: string
   primaryPostalCode: string
+  primaryZipLast4?: string
   primaryCountry?: string
 }
 

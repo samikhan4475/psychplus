@@ -2,28 +2,27 @@ import { forwardRef } from 'react'
 import { TextFieldInput } from '@radix-ui/themes'
 import { PatternFormat } from 'react-number-format'
 
-interface ZipcodeInputProps
+interface ZipLast4InputProps
   extends React.ComponentProps<typeof TextFieldInput> {
   value?: string
   defaultValue?: string
 }
 
-const ZipcodeInput = forwardRef<HTMLInputElement, ZipcodeInputProps>(
-  ({ type, className, ...rest }, ref) => (
+const ZipLast4Input = forwardRef<HTMLInputElement, ZipLast4InputProps>(
+  ({ type, ...rest }, ref) => (
     <PatternFormat
       size="3"
       type="text"
       inputMode="numeric"
-      format="#####"
-      placeholder="Zip"
+      format="####"
+      placeholder="Area Code"
       customInput={TextFieldInput}
       getInputRef={ref}
-      className={className}
       {...rest}
     />
   ),
 )
 
-ZipcodeInput.displayName = 'ZipcodeInput'
+ZipLast4Input.displayName = 'ZipLast4Input'
 
-export { ZipcodeInput }
+export { ZipLast4Input }

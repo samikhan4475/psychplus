@@ -1,19 +1,26 @@
 'use client'
 
 import { useCallback, useState, type ChangeEvent } from 'react'
-import { Box, Flex, Text, TextFieldInput } from '@radix-ui/themes'
+import { cn } from '@psychplus-v2/utils'
+import { Box, Flex, Responsive, Text, TextFieldInput } from '@radix-ui/themes'
 import useOnclickOutside from 'react-cool-onclickoutside'
-import { useFormContext, type FieldValues } from 'react-hook-form'
+import {
+  useFormContext,
+  UseFormReturn,
+  type FieldValues,
+} from 'react-hook-form'
 import usePlacesAutocomplete, {
   getDetails,
   type DetailsResult,
   type Suggestion,
 } from 'use-places-autocomplete'
+import { FormTextInput } from '@psychplus/form'
 import {
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
   ZipcodeInput,
+  ZipLast4Input,
 } from '@/components-v2'
 import { getPlaceholder } from '@/features/account/profile/utils'
 
@@ -25,6 +32,7 @@ interface AddressForm {
   city?: string
   state?: string
   postalCode?: string
+  zipLast4?: string
   country?: string
 }
 
@@ -33,6 +41,10 @@ interface PlacesAutocompleteProps {
   editable?: boolean
   label?: string
   includeState?: boolean
+  direction?: Responsive<'column' | 'row' | 'row-reverse' | 'column-reverse'>
+  className?: string
+  containerClassName?: string
+  isSelfScheduling?: boolean
 }
 
 const PlacesAutocomplete = ({
@@ -40,6 +52,10 @@ const PlacesAutocomplete = ({
   editable,
   label,
   includeState = true,
+  direction = 'column',
+  className,
+  containerClassName,
+  isSelfScheduling = false,
 }: PlacesAutocompleteProps) => {
   const street1Field = `${name}Street1`
   const street2Field = `${name}Street2`
@@ -48,6 +64,7 @@ const PlacesAutocomplete = ({
   const cityField = `${name}City`
   const stateField = `${name}State`
   const postalCodeField = `${name}PostalCode`
+  const zipLast4Field = `${name}ZipLast4`
   const countryField = `${name}Country`
 
   const form = useFormContext()
@@ -77,6 +94,9 @@ const PlacesAutocomplete = ({
     debounce: 300,
   })
 
+  const InputComponent = isSelfScheduling ? FormTextInput : TextFieldInput
+  const ZipCodeInputComponent = isSelfScheduling ? FormTextInput : ZipcodeInput
+
   const setFormValues = useCallback(
     (address?: AddressForm) => {
       form.setValue(street1Field, address?.street1)
@@ -90,7 +110,10 @@ const PlacesAutocomplete = ({
       form.trigger(stateField)
       form.setValue(postalCodeField, address?.postalCode)
       form.trigger(postalCodeField)
+      form.setValue(zipLast4Field, address?.zipLast4 ?? '')
+      form.trigger(zipLast4Field)
       form.setValue(countryField, address?.country)
+      form.trigger(countryField)
     },
     [
       form,
@@ -101,6 +124,7 @@ const PlacesAutocomplete = ({
       cityField,
       stateField,
       postalCodeField,
+      zipLast4Field,
       countryField,
     ],
   )
@@ -172,27 +196,37 @@ const PlacesAutocomplete = ({
     })
 
   return (
-    <Flex direction="column" width="100%" gap="3">
-      <Flex ref={ref} gap="3" className="w-full">
+    <Flex
+      direction="column"
+      width="100%"
+      gap="3"
+      className={containerClassName}
+    >
+      <Flex
+        ref={ref}
+        gap="3"
+        direction={direction}
+        className={cn('w-full', direction === 'row' ? 'flex-col' : 'flex-row')}
+      >
         <Box className="flex-1" position="relative">
           <FormFieldContainer>
-            <FormFieldLabel required>{label || name} Address 1</FormFieldLabel>
-            <TextFieldInput
+            <FormFieldLabel required>{label} Address 1</FormFieldLabel>
+            <InputComponent
+              label=""
               size="3"
               {...form.register(street1Field)}
-              value={value}
               onChange={handleInput}
               onFocus={() => {
                 setShowSuggestions(true)
               }}
-              className="text-[15px]"
+              className={cn('text-[15px]', className)}
               disabled={!ready || editable}
               placeholder={getPlaceholder(
-                `${label?.toLocaleLowerCase()}Address 1`,
+                `${label?.toLocaleLowerCase() ?? ''}Address 1`,
                 !editable,
               )}
             />
-            <FormFieldError name={street1Field} />
+            {!isSelfScheduling && <FormFieldError name={street1Field} />}
           </FormFieldContainer>
           {status === 'OK' && showSuggestions ? (
             <ul className="bg-white absolute top-full z-50 w-full rounded-2 shadow-3">
@@ -201,75 +235,101 @@ const PlacesAutocomplete = ({
           ) : null}
         </Box>
         <FormFieldContainer className="flex-1">
-          <FormFieldLabel>{label || name} Address 2</FormFieldLabel>
-          <TextFieldInput
+          <FormFieldLabel>{label} Address 2</FormFieldLabel>
+          <InputComponent
+            label=""
             size="3"
-            className="text-[15px]"
+            className={cn('text-[15px]', className)}
             {...form.register(street2Field)}
             disabled={editable}
             placeholder={getPlaceholder(
-              `${label?.toLocaleLowerCase()}Address 2`,
+              `${label?.toLocaleLowerCase() ?? ''}Address 2`,
               !editable,
             )}
           />
-          <FormFieldError name={street2Field} />
+          {!isSelfScheduling && <FormFieldError name={street2Field} />}
         </FormFieldContainer>
       </Flex>
 
       <Flex className="w-full" gap="4">
         <FormFieldContainer className="flex-1">
           <FormFieldLabel required>City</FormFieldLabel>
-          <TextFieldInput
+          <InputComponent
+            label=""
             size="3"
-            radius="full"
+            className={className}
             {...form.register(cityField)}
             disabled={true}
             placeholder={getPlaceholder('city', !editable)}
           />
-          <FormFieldError name={cityField} />
+          {!isSelfScheduling && <FormFieldError name={cityField} />}
         </FormFieldContainer>
 
         {includeState && (
           <FormFieldContainer className="flex-1">
             <FormFieldLabel required>State</FormFieldLabel>
-            <TextFieldInput
+            <InputComponent
+              label=""
               size="3"
-              radius="full"
+              className={className}
               {...form.register(stateField)}
               disabled={true}
               placeholder={getPlaceholder('state', !editable)}
             />
-            <FormFieldError name={stateField} />
+            {!isSelfScheduling && <FormFieldError name={stateField} />}
           </FormFieldContainer>
         )}
 
         <FormFieldContainer className="flex-1">
           <FormFieldLabel required>Zip</FormFieldLabel>
-          <ZipcodeInput
+          <ZipCodeInputComponent
+            label=""
             size="3"
             {...form.register(postalCodeField)}
             value={form.getValues(postalCodeField)}
             disabled={true}
             placeholder={getPlaceholder('zip', !editable)}
+            className={className}
           />
-          <FormFieldError name={postalCodeField} />
+          {!isSelfScheduling && <FormFieldError name={postalCodeField} />}
         </FormFieldContainer>
+        {!includeState &&
+          renderZipLast4Field(
+            form,
+            zipLast4Field,
+            !editable,
+            isSelfScheduling,
+            className,
+          )}
       </Flex>
+      {includeState && (
+        <Flex className="w-full">
+          {renderZipLast4Field(
+            form,
+            zipLast4Field,
+            !editable,
+            isSelfScheduling,
+            className,
+          )}
+        </Flex>
+      )}
     </Flex>
   )
 }
 
-const getInitialAutocompleteValue = (address: FieldValues) => {
-  if (
-    !address.street1 ||
-    !address.city ||
-    !address.state ||
-    !address.postalCode
-  ) {
+const getInitialAutocompleteValue = (
+  address: FieldValues,
+  includeState?: boolean,
+) => {
+  const { street1, city, state, postalCode, zipLast4 } = address
+  if (!street1 || !city || !postalCode || (includeState && !state)) {
     return undefined
   }
-
-  return `${address.street1}, ${address.city}, ${address.state} ${address.postalCode}`
+  const parts = [street1, city]
+  if (includeState) parts.push(state)
+  parts.push(postalCode)
+  if (zipLast4) parts.push(zipLast4)
+  return parts.join(', ')
 }
 
 const getAddressFromPlacesResult = (
@@ -289,6 +349,7 @@ const getAddressFromPlacesResult = (
   let city: string | undefined
   let state: string | undefined
   let postalCode: string | undefined
+  let zipLast4: string | undefined
   let country: string | undefined
 
   for (const component of result.address_components) {
@@ -301,6 +362,15 @@ const getAddressFromPlacesResult = (
                 postalCode = component.long_name
               } else if (component.short_name) {
                 postalCode = component.short_name
+              }
+            }
+            break
+          case 'postal_code_suffix':
+            if (!zipLast4) {
+              if (component.long_name) {
+                zipLast4 = component.long_name
+              } else if (component.short_name) {
+                zipLast4 = component.short_name
               }
             }
             break
@@ -370,8 +440,37 @@ const getAddressFromPlacesResult = (
     city,
     state,
     postalCode,
+    zipLast4,
     country,
   }
+}
+
+const renderZipLast4Field = (
+  form: UseFormReturn,
+  zipLast4Field: string,
+  editable: boolean,
+  isSelfScheduling: boolean,
+  className?: string,
+) => {
+  const ZipLast4InputComponent = isSelfScheduling
+    ? FormTextInput
+    : ZipLast4Input
+
+  return (
+    <FormFieldContainer className="flex-1">
+      <FormFieldLabel>Area Code</FormFieldLabel>
+      <ZipLast4InputComponent
+        label=""
+        size="3"
+        {...form.register(zipLast4Field)}
+        value={form.getValues(zipLast4Field)}
+        disabled
+        placeholder={getPlaceholder('areaCode', editable)}
+        className={className}
+      />
+      {!isSelfScheduling && <FormFieldError name={zipLast4Field} />}
+    </FormFieldContainer>
+  )
 }
 
 const isCompleteAddress = (address?: AddressForm) =>

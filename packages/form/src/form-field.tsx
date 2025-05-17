@@ -35,7 +35,7 @@ const FormField = ({ children, name, id, label, required, isLabelBold = true}: F
       }
       {children}
       {state.error && (
-        <Text size="2" color="red">
+        <Text size="2" color="red" weight="regular">
           {state.error.message}
         </Text>
       )}

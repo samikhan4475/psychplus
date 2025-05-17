@@ -49,6 +49,7 @@ export const usePatientForm = () => {
         primaryCity: homeAddress.city,
         primaryState: homeAddress.state,
         primaryPostalCode: homeAddress.postalCode,
+        primaryZipLast4: homeAddress.zipLast4,
       }),
       ...(mailingAddress && {
         secondaryStreet1: mailingAddress.street1,
@@ -56,6 +57,7 @@ export const usePatientForm = () => {
         secondaryCity: mailingAddress.city,
         secondaryState: mailingAddress.state,
         secondaryPostalCode: mailingAddress.postalCode,
+        secondaryZipLast4: mailingAddress.zipLast4,
       }),
       primaryCountry: 'US',
       secondaryCountry: 'US',
@@ -103,6 +105,7 @@ export const usePatientForm = () => {
       'secondaryCity',
       'secondaryState',
       'secondaryPostalCode',
+      'secondaryZipLast4',
     ])
   }, [mailingSameAsPrimary])
 

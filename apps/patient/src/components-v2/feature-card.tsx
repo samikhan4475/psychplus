@@ -3,7 +3,7 @@ import { Flex, Text } from '@radix-ui/themes'
 
 interface FeatureCardProps {
   id?: string
-  title: string
+  title: string | React.ReactNode
   containerClassName?: string
   contentClassName?: string
   showTitleInsideCard?: boolean

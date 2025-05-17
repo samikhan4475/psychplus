@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FormContainer } from '@psychplus-v2/components'
 import { AppointmentType, ProviderType } from '@psychplus-v2/constants'
 import { PatientAddress } from '@psychplus-v2/types'
-import { zipCodeSchema } from '@psychplus-v2/utils'
+import { zipCodeSchema, zipLast4Schema } from '@psychplus-v2/utils'
 import { Button, Flex, Heading } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
@@ -39,6 +39,7 @@ const schema = z.object({
   primaryCity: z.string().min(1, 'Required'),
   primaryState: z.string().min(1, 'Required'),
   primaryPostalCode: zipCodeSchema,
+  primaryZipLast4: zipLast4Schema,
   primaryCountry: z.string().optional(),
 })
 
@@ -68,6 +69,7 @@ const ScheduleVisitView = ({ googleAPIkey }: { googleAPIkey: string }) => {
         primaryCity: true,
         primaryState: true,
         primaryPostalCode: true,
+        primaryZipLast4: true,
         primaryCountry: true,
       })
     : schema
@@ -99,6 +101,7 @@ const ScheduleVisitView = ({ googleAPIkey }: { googleAPIkey: string }) => {
       primaryCity: '',
       primaryState: '',
       primaryPostalCode: '',
+      primaryZipLast4: '',
     },
   })
 
@@ -201,6 +204,7 @@ const ScheduleVisitView = ({ googleAPIkey }: { googleAPIkey: string }) => {
         city: data.primaryCity,
         state: data.primaryState,
         postalCode: data.primaryPostalCode,
+        zipLast4: data?.primaryZipLast4 ?? '',
         country: 'US',
       }
       const res = await updateProfileAction({
@@ -210,6 +214,7 @@ const ScheduleVisitView = ({ googleAPIkey }: { googleAPIkey: string }) => {
           addresses: [primaryAddressData],
         },
       })
+
       if (res.state === 'success') {
         setProfile(res.data)
         const appointmentData = {
@@ -297,7 +302,7 @@ const ScheduleVisitView = ({ googleAPIkey }: { googleAPIkey: string }) => {
                   value={form.watch('zipCode')}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      e.preventDefault(); // Prevent default form submission on Enter
+                      e.preventDefault() // Prevent default form submission on Enter
                     }
                   }}
                 />

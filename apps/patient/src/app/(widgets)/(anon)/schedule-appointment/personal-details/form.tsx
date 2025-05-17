@@ -3,12 +3,14 @@
 import { useEffect, useState } from 'react'
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
-import { zipCodeSchema } from '@psychplus-v2/utils'
 import { Flex, Link, Text } from '@radix-ui/themes'
+import { ChevronDownIcon } from 'lucide-react'
 import { type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 import { sendOtp } from '@psychplus/auth/otp'
 import { signup } from '@psychplus/auth/signup'
+import { Code } from '@psychplus/codeset'
+import { getCodeSet } from '@psychplus/codeset/api.client'
 import {
   Form,
   FormFieldError,
@@ -19,6 +21,7 @@ import {
   validate,
 } from '@psychplus/form'
 import { RadioGroup } from '@psychplus/ui/radio-group'
+import { Select } from '@psychplus/ui/select'
 import { usePubsub } from '@psychplus/utils/event'
 import { clickTrack } from '@psychplus/utils/tracking'
 import { OTP_DIALOG, SCHEDULE_APPOINTMENT_LIST } from '@psychplus/widgets'
@@ -27,10 +30,6 @@ import { CrossIcon } from '@/components'
 import { WarningIcon } from '@/components/icons/warning-icon'
 import { useStore } from '@/widgets/schedule-appointment-list/store'
 import { getLoginRedirectUrl } from '@/widgets/schedule-appointment-list/utils'
-import { getCodeSet } from '@psychplus/codeset/api.client'
-import { Code } from '@psychplus/codeset'
-import { Select } from '@psychplus/ui/select'
-import { ChevronDownIcon } from 'lucide-react'
 import { enums, PSYCHPLUS_LIVE_URL } from '@/constants'
 
 const schema = z
@@ -40,7 +39,7 @@ const schema = z
     dateOfBirth: validate.requiredString,
     phoneNumber: validate.phoneNumber,
     email: validate.email,
-    gender:z.string(),
+    gender: z.string(),
     password: validate.passwordStrong,
     isParentOrGuardian: z.boolean().default(false),
     guardianFirstName: z.string().optional(),
@@ -454,6 +453,18 @@ const PersonalDetailsForm = () => {
                 disabled
               />
             </Flex>
+          </Flex>
+
+          <Flex direction="column" gap="1" className="w-full">
+            <Text>Area Code</Text>
+            <FormTextInput
+              type="text"
+              name="zipLast4"
+              label=""
+              className="h-14 w-full"
+              data-testid="area-code-input"
+              defaultValue={address?.primaryZipLast4 || ''}
+            />
           </Flex>
 
           <Flex direction="column" gap="1" className="w-full">

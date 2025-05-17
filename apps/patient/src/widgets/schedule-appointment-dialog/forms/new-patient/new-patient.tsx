@@ -1,7 +1,7 @@
 'use client'
 
 import { ChangeEvent, useRef, useState } from 'react'
-import { zipCodeSchema } from '@psychplus-v2/utils'
+import { zipLast4Schema, zipCodeSchema } from '@psychplus-v2/utils'
 import * as ToggleGroup from '@radix-ui/react-toggle-group'
 import { Button, Flex, Text, TextField } from '@radix-ui/themes'
 import { type SubmitHandler } from 'react-hook-form'
@@ -19,9 +19,9 @@ import { usePubsub } from '@psychplus/utils/event'
 import { getZipcodeInfo } from '@psychplus/utils/map'
 import { clickTrack } from '@psychplus/utils/tracking'
 import { SCHEDULE_APPOINTMENT_DIALOG } from '@psychplus/widgets'
+import { PlacesAutocomplete } from '@/components-v2'
 import { useGooglePlacesContext } from '@/providers'
 import { useStore } from '@/widgets/schedule-appointment-list/store'
-import WebPlacesAutocomplete from './web-places-autocomplete'
 import { enums, PSYCHPLUS_LIVE_URL } from '@/constants'
 
 interface NewPatientProps {
@@ -45,6 +45,7 @@ interface ScheduledAppointment {
   primaryCity: string
   primaryState: string
   primaryPostalCode: string
+  primaryZipLast4: string
   primaryCountry: string
 }
 
@@ -65,6 +66,7 @@ const schema = z
     primaryCity: z.string().min(1, 'Required'),
     primaryState: z.string().min(1, 'Required'),
     primaryPostalCode: zipCodeSchema,
+    primaryZipLast4: zipLast4Schema,
     primaryCountry: z.string().optional(),
   })
   .superRefine(({ dateOfBirth, zipCode }, ctx) => {
@@ -118,6 +120,7 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
     primaryCity: '',
     primaryState: '',
     primaryPostalCode: '',
+    primaryZipLast4: '',
     primaryCountry: '',
   })
 
@@ -196,6 +199,7 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
       primaryCity: form.getValues().primaryCity,
       primaryState: form.getValues().primaryState,
       primaryPostalCode: form.getValues().primaryPostalCode,
+      primaryZipLast4: form.getValues().primaryZipLast4 ?? '',
     })
 
     postMessage(
@@ -359,13 +363,12 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
             </Flex>
           </Flex>
           {loaded && (
-            <Flex direction="column" className="font-regular" mt="2">
-              <WebPlacesAutocomplete
-                name="primary"
-                label="Primary"
-                editable={false}
-              />
-            </Flex>
+            <PlacesAutocomplete
+              name="primary"
+              label="Primary"
+              className="h-[45px] rounded-6 text-4"
+              isSelfScheduling
+            />
           )}
         </Flex>
         <Flex className="gap-6 max-md:w-full" direction="column" mt="5">

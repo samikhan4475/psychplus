@@ -136,6 +136,7 @@ const createAddress = (
     city: data[`${prefix}City`] ?? '',
     state: data[`${prefix}State`] ?? '',
     postalCode: data[`${prefix}PostalCode`] ?? '',
+    zipLast4: data[`${prefix}ZipLast4`] ?? '',
     country: data[`${prefix}Country`] ?? 'US',
   }
 }

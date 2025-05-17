@@ -6,10 +6,10 @@ import { Flex, TextFieldInput } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import {
-  AlternativeAddressAutocomplete,
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
+  PlacesAutocomplete,
   ToggleableForm,
 } from '@/components-v2'
 import { updateProfileAction } from '@/features/account/profile/actions'
@@ -41,13 +41,17 @@ const AlternateInfoForm = ({
       title: profile.alternateOrPreviousName?.title,
       suffix: profile.alternateOrPreviousName?.suffix,
       honors: profile.alternateOrPreviousName?.honors,
-      street1:
+      primaryStreet1:
         profile.alternateOrPreviousContactDetails?.addresses?.[0]?.street1,
-      street2:
+      primaryStreet2:
         profile.alternateOrPreviousContactDetails?.addresses?.[0]?.street2,
-      city: profile.alternateOrPreviousContactDetails?.addresses?.[0]?.city,
-      postalCode:
+      primaryCity:
+        profile.alternateOrPreviousContactDetails?.addresses?.[0]?.city,
+      primaryPostalCode:
         profile.alternateOrPreviousContactDetails?.addresses?.[0]?.postalCode,
+      primaryZipLast4:
+        profile.alternateOrPreviousContactDetails?.addresses?.[0]?.zipLast4 ??
+        '',
     },
   })
 
@@ -65,10 +69,11 @@ const AlternateInfoForm = ({
       alternateOrPreviousContactDetails: {
         addresses: [
           {
-            street1: data.street1 ?? '',
-            street2: data.street2,
-            city: data.city ?? '',
-            postalCode: data.postalCode ?? '',
+            street1: data.primaryStreet1 ?? '',
+            street2: data.primaryStreet2,
+            city: data.primaryCity ?? '',
+            postalCode: data.primaryPostalCode ?? '',
+            zipLast4: data.primaryZipLast4 ?? '',
           },
         ],
       },
@@ -161,9 +166,11 @@ const AlternateInfoForm = ({
           </FormFieldContainer>
         </Flex>
 
-        <Flex className="w-full" gap="3">
-          <AlternativeAddressAutocomplete editable={!isEdit} />
-        </Flex>
+        <PlacesAutocomplete
+          name="primary"
+          editable={!isEdit}
+          includeState={false}
+        />
       </Flex>
     </ToggleableForm>
   )

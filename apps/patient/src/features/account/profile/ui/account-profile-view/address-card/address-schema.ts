@@ -1,4 +1,4 @@
-import { zipCodeSchema } from '@psychplus-v2/utils'
+import { zipCodeSchema, zipLast4Schema } from '@psychplus-v2/utils'
 import z from 'zod'
 
 const addressSchema = z
@@ -10,6 +10,7 @@ const addressSchema = z
     primaryCity: z.string().min(1, 'Required'),
     primaryState: z.string().min(1, 'Required'),
     primaryPostalCode: zipCodeSchema,
+    primaryZipLast4: zipLast4Schema,
     primaryCountry: z.string().optional(),
     isMailingAddressSameAsPrimary: z.boolean(),
     secondaryStreet1: z.string().optional(),
@@ -19,6 +20,7 @@ const addressSchema = z
     secondaryCity: z.string().optional(),
     secondaryState: z.string().optional(),
     secondaryPostalCode: z.string().trim().optional(),
+    secondaryZipLast4: zipLast4Schema,
     secondaryCountry: z.string().optional(),
   })
   .superRefine((data, ctx) => {

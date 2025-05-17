@@ -1,5 +1,6 @@
 'use client'
 
+import { zipCodeSchema, zipLast4Schema } from '@psychplus-v2/utils'
 import { z } from 'zod'
 
 const schema = z.object({
@@ -9,10 +10,11 @@ const schema = z.object({
   title: z.string().trim().optional(),
   suffix: z.string().trim().optional(),
   honors: z.string().trim().optional(),
-  street1: z.string().min(1, 'Required'),
-  street2: z.string().optional(),
-  city: z.string().min(1, 'Required'),
-  postalCode: z.string().min(1, 'Required'),
+  primaryStreet1: z.string().min(1, 'Required'),
+  primaryStreet2: z.string().optional(),
+  primaryCity: z.string().min(1, 'Required'),
+  primaryPostalCode: zipCodeSchema,
+  primaryZipLast4: zipLast4Schema,
 })
 
 export { schema }

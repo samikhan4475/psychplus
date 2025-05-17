@@ -3,9 +3,8 @@
 import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { PatientAddress, PatientProfile } from '@psychplus-v2/types'
-import { areAddressesEqual } from '@psychplus-v2/utils'
 import * as RadioGroup from '@radix-ui/react-radio-group'
-import { Flex, Text } from '@radix-ui/themes'
+import { Flex } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import {
   FormFieldContainer,
@@ -50,6 +49,7 @@ const AddressForm = ({
             primaryCity: homeAddress.city,
             primaryState: homeAddress.state,
             primaryPostalCode: homeAddress.postalCode,
+            primaryZipLast4: homeAddress.zipLast4 ?? '',
           }
         : undefined),
       ...(mailingAddress
@@ -59,6 +59,7 @@ const AddressForm = ({
             secondaryCity: mailingAddress.city,
             secondaryState: mailingAddress.state,
             secondaryPostalCode: mailingAddress.postalCode,
+            secondaryZipLast4: mailingAddress.zipLast4 ?? '',
           }
         : undefined),
       primaryCountry: 'US',
@@ -75,12 +76,14 @@ const AddressForm = ({
       form.register('secondaryCity')
       form.register('secondaryState')
       form.register('secondaryPostalCode')
+      form.register('secondaryZipLast4')
       form.register('secondaryStreet1')
       form.register('secondaryStreet2')
     } else {
       form.unregister('secondaryCity')
       form.unregister('secondaryState')
       form.unregister('secondaryPostalCode')
+      form.unregister('secondaryZipLast4')
       form.unregister('secondaryStreet1')
       form.unregister('secondaryStreet2')
     }
@@ -89,6 +92,7 @@ const AddressForm = ({
         'secondaryCity',
         'secondaryState',
         'secondaryPostalCode',
+        'secondaryZipLast4',
         'secondaryStreet1',
         'secondaryStreet2',
       ])
@@ -102,6 +106,7 @@ const AddressForm = ({
       city: data.primaryCity,
       state: data.primaryState,
       postalCode: data.primaryPostalCode,
+      zipLast4: data.primaryZipLast4 ?? '',
       country: 'US',
     }
 
@@ -114,6 +119,7 @@ const AddressForm = ({
           city: data.secondaryCity,
           state: data.secondaryState,
           postalCode: data.secondaryPostalCode,
+          zipLast4: data.secondaryZipLast4 ?? '',
           country: 'US',
         }
 
