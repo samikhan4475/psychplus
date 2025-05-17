@@ -17,7 +17,7 @@ interface Store {
     patientId: string,
     payload?: AllergiesSearchParams,
     reset?: boolean,
-  ) => void
+  ) => Promise<void>
 }
 
 const useStore = create<Store>((set, get) => ({

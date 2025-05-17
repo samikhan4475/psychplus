@@ -30,18 +30,23 @@ interface AllergyDataResponse {
   onsetBegan: string
   onsetEnded: string
   archive: number | string
-  severity?: string
-  comment?: string
   status: AllergyStatus
+  recordStatus: string
+  id: string
+  reactionId: string
+  appointmentId?: number
+  comment?: string
+  staffId?: number
+  providerId?: number
 }
 
 interface AllergiesSearchParams {
-  observationDate?: string | null
-  endDate?: string | null
-  name?: string
-  allergyType?: string
-  status?: string
-  severity?: string
+  onsetStartDate?: string | null
+  onsetEndDate?: string | null
+  allergyName?: string
+  allergyTypeCode?: string
+  recordStatuses?: string[]
+  severityCode?: string
   patientIds?: string[]
 }
 
@@ -56,6 +61,43 @@ interface GetPatientAllergiesParams {
   sort?: Sort
 }
 
+interface PropsWithIndex {
+  index: number
+}
+
+interface AllergyPayload {
+  id: string
+  patientId: number
+  allergyName: string
+  encounterId: number
+  rxNormCode: string
+  allergyType: string
+  severityCode: string
+  onsetBegan: string
+  onsetEnded: string
+  reactionId: string
+  staffId: number
+  providerId: number
+  recordStatus: string
+  appointmentId: number
+  comment?: string
+
+  nationalDrugCode?: string
+  adverseEventCode?: string
+  scriptSureAllergyId?: number
+  scriptSurePatientId?: number
+  dataSource?: string
+  incomingState?: string
+}
+
+type CreateAllergyPayload = Omit<AllergyPayload, 'id'>
+
+interface SearchAllergiesResponse {
+  picklistId: number
+  picklistDesc: string
+  picklistConceptType: string
+}
+
 export type {
   PatientAllergy,
   PatientAllergyRow,
@@ -63,4 +105,8 @@ export type {
   AllergiesSearchParams,
   AllergyDataResponse,
   GetPatientAllergiesParams,
+  PropsWithIndex,
+  SearchAllergiesResponse,
+  AllergyPayload,
+  CreateAllergyPayload,
 }

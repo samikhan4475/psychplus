@@ -1,22 +1,33 @@
 'use client'
 
+import { useMemo } from 'react'
 import { Flex } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
-import { BlockLabel, MultiSelectField } from '@/components'
-import { AddAllergySchemaType } from './add-allergy'
-import { OPTIONS } from './constant'
+import { BlockLabel, FormFieldError, SelectInput } from '@/components'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
+import { PropsWithIndex } from './types'
 
-const SeverityField = () => {
-  const form = useFormContext<AddAllergySchemaType>()
+const SeverityField = ({ index }: PropsWithIndex) => {
+  const codes = useCodesetCodes(CODESETS.AllergySeverity)
+  const options = useMemo(
+    () =>
+      codes.map((code) => ({
+        value: code.value,
+        label: code.display,
+      })),
+    [],
+  )
+
   return (
     <Flex direction="column" width="30%">
       <BlockLabel name="Severity">Severity</BlockLabel>
-      <MultiSelectField
-        options={OPTIONS}
-        defaultValues={form.watch('severity')}
-        onChange={(values) => form.setValue('severity', values)}
+      <SelectInput
+        field={`allergies.${index}.severityCode`}
+        options={options}
         className="w-full"
+        buttonClassName="flex-1"
       />
+      <FormFieldError name={`allergies.${index}.severityCode`} />
     </Flex>
   )
 }

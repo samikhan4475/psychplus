@@ -1,10 +1,9 @@
 const DAWSYS = 'DAWSYS'
 
 const OPTIONS = [
-  { value: 'food_intolerance', label: 'Food Intolerance' },
-  { value: 'food_allergy', label: 'Food Allergy' },
-  { value: 'drug_allergy', label: 'Drug Allergy' },
-  { value: 'drug_intolerance', label: 'Drug Intolerance' },
+  { value: 'Active', label: 'Active' },
+  { value: 'Archived', label: 'Archived' },
+  { value: 'Discontinued', label: 'Discontinued' },
 ]
 
 export { DAWSYS, OPTIONS }

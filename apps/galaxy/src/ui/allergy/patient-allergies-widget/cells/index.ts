@@ -1,2 +1,5 @@
 export * from './actions-cell'
 export * from './severity-cell'
+export * from './allergy-type'
+export * from './reaction'
+export * from './status-cell'

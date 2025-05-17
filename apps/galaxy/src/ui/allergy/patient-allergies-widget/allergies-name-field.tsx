@@ -15,7 +15,7 @@ const AllergiesNameField = () => {
         size="1"
         placeholder="Search by name"
         className="border-pp-gray-2 h-6 w-[122px] border border-solid !outline-none [box-shadow:none]"
-        {...form.register('name')}
+        {...form.register('allergyName')}
       />
     </FormFieldContainer>
   )

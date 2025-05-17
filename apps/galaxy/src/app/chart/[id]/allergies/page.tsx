@@ -7,6 +7,7 @@ interface PatientAllergiesPageProps {
 }
 
 const PatientAllergiesPage = async ({ params }: PatientAllergiesPageProps) => {
+  // TODO: TBD with pmo
   return (
     <PatientAllergiesView patientId={params.id} isPatientAllergiesTab={true} />
   )

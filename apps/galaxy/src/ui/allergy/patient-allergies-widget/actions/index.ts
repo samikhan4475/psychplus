@@ -1,1 +1,5 @@
 export * from './get-patient-allergies'
+export * from './search-allergy'
+export * from './create-allergy'
+export * from './update-allergy'
+export * from './delete-allergy'

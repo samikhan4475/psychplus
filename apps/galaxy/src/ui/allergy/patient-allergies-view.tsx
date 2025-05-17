@@ -4,11 +4,13 @@ import { PatientAllergiesWidget } from './patient-allergies-widget'
 
 interface PatientAllergiesViewProps {
   patientId: string
+  appointmentId?: string
   isPatientAllergiesTab?: boolean
 }
 
 const PatientAllergiesView = async ({
   patientId,
+  appointmentId,
   isPatientAllergiesTab,
 }: PatientAllergiesViewProps) => {
   return (
@@ -16,6 +18,7 @@ const PatientAllergiesView = async ({
       <Flex direction="column" gap="2">
         <PatientAllergiesWidget
           patientId={patientId}
+          appointmentId={appointmentId}
           isPatientAllergiesTab={isPatientAllergiesTab}
           scriptSureAppUrl={SCRIPTSURE_BASE_APPLICATION_URL}
         />

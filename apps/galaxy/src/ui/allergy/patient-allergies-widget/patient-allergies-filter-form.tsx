@@ -13,18 +13,18 @@ import { AllergiesNameField } from './allergies-name-field'
 import { AllergiesStatusSelect } from './allergies-status-select'
 import { AllergiesTypeSelect } from './allergies-type-select'
 import { ObservationDateField } from './observation-date-field'
-import { ResetButton } from './reset-button'
 import { SeveritySelect } from './severity-select'
+import { useStore } from './store'
 
 type SchemaType = z.infer<typeof schema>
 
 const schema = z.object({
-  observationDate: z.custom<DateValue>().nullable(),
-  endDate: z.custom<DateValue>().nullable(),
-  name: z.string().trim().optional(),
-  allergyType: z.string().optional(),
-  status: z.string().trim().optional(),
-  severity: z.string().trim().optional(),
+  onsetStartDate: z.custom<DateValue>().nullable(),
+  onsetEndDate: z.custom<DateValue>().nullable(),
+  allergyName: z.string().trim().optional(),
+  allergyTypeCode: z.string().optional(),
+  recordStatuses: z.string().trim().optional(),
+  severityCode: z.string().trim().optional(),
 })
 
 const PatientAllergiesFilterForm = ({ patientId }: { patientId: string }) => {
@@ -32,22 +32,31 @@ const PatientAllergiesFilterForm = ({ patientId }: { patientId: string }) => {
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
     defaultValues: {
-      observationDate: undefined,
-      endDate: undefined,
-      name: '',
-      allergyType: '',
-      status: '',
-      severity: '',
+      onsetStartDate: undefined,
+      onsetEndDate: undefined,
+      allergyName: '',
+      allergyTypeCode: '',
+      recordStatuses: '',
+      severityCode: '',
     },
   })
+  const { allergiesListSearch } = useStore()
 
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
     const formattedData = {
       ...data,
-      observationDate: formatDateToISOString(data.observationDate),
-      endDate: formatDateToISOString(data.endDate, true),
+      onsetStartDate: formatDateToISOString(data.onsetStartDate),
+      onsetEndDate: formatDateToISOString(data.onsetEndDate, true),
+      recordStatuses: data.recordStatuses ? [data.recordStatuses] : undefined,
     }
     const _cleanedData = sanitizeFormData(formattedData)
+    allergiesListSearch(patientId, { ..._cleanedData }, true)
+  }
+
+  const handleReset = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    form.reset()
+    allergiesListSearch(patientId, {}, true)
   }
 
   return (
@@ -62,7 +71,16 @@ const PatientAllergiesFilterForm = ({ patientId }: { patientId: string }) => {
       <AllergiesTypeSelect />
       <SeveritySelect />
       <AllergiesStatusSelect />
-      <ResetButton />
+      <Button
+        color="gray"
+        className="text-black ml-10"
+        size="1"
+        variant="outline"
+        type="button"
+        onClick={handleReset}
+      >
+        Clear
+      </Button>
       <Button highContrast size="1" type="submit">
         <MagnifyingGlassIcon strokeWidth={2} />
       </Button>

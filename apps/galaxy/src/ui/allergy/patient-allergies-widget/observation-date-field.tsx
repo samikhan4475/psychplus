@@ -12,7 +12,7 @@ const ObservationDateField = () => {
     <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel>Observation Date</FormFieldLabel>
       <I18nProvider locale="en-US">
-        <DatePickerInput field="observationDate" className="w-[101px]" />
+        <DatePickerInput field="onsetStartDate" className="w-[101px]" />
       </I18nProvider>
     </FormFieldContainer>
   )

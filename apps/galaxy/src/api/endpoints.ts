@@ -905,6 +905,10 @@ const EDIT_SCHEDULE_REPORT_ENDPOINT = (scheduleId: string) =>
   `${API_URL}/api/reporting/schedules/${scheduleId}`
 const UPDATE_SCHEDULE_REPORT_JOB_ENDPOINT = (jobId: string) =>
   `${API_URL}/api/jobmanager/jobs/${jobId}`
+
+const POST_SEARCH_ALLERGIES = `${API_URL}/api/drugs/allergenpicklists/actions/search`
+const CREATE_ALLERGY = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/allergies`
 const SEND_QUESTIONNAIRE_TO_PATIENT = (
   patientId: string,
   questionnaireType: string,
@@ -951,11 +955,19 @@ const GET_TEMPLATE_EMAIL_REPORT = (templateId: string, runId: string) =>
   `${API_URL}/api/reporting/reports/${templateId}/runs/${runId}/actions/download`
 const GET_WAITLISTS_ENDPOINT = `${API_URL}/api/waitlists/actions/search`
 
+const UPDATE_ALLERGY = (patientId: string, allergyId: string) =>
+  `${API_URL}/api/patients/${patientId}/allergies/${allergyId}`
+
+const DELETE_ALLERGY = (patientId: number, allergyId: string) =>
+  `${API_URL}/api/patients/${patientId}/allergies/${allergyId}`
+
 const CREATE_WAITLIST_ENDPOINT = (patientId: number) =>
   `${API_URL}/api/patients/${patientId}/waitlists`
 
-const UPDATE_WAITLIST_ENDPOINT = (patientId: number, waitlistId: number | undefined) =>
-  `${API_URL}/api/patients/${patientId}/waitlists/${waitlistId}`
+const UPDATE_WAITLIST_ENDPOINT = (
+  patientId: number,
+  waitlistId: number | undefined,
+) => `${API_URL}/api/patients/${patientId}/waitlists/${waitlistId}`
 
 const DELETE_WAITLIST_ENDPOINT = (patientId: number, waitlistId: number) =>
   `${API_URL}/api/patients/${patientId}/waitlists/${waitlistId}`
@@ -1347,6 +1359,7 @@ export {
   GET_SHARED_POLICY_FILE,
   GET_CURRENT_USER_SETTINGS_SEARCH,
   ADD_STAFF_COMMENT_ENDPOINT,
+  POST_SEARCH_ALLERGIES,
   GET_PROVIDER_PRESCRIBING_DATA,
   SEARCH_PATIENT_APPOINTMENTS,
   LINK_CLAIM,
@@ -1378,6 +1391,8 @@ export {
   ENABLE_SCHEDULE_REPORT_JOB,
   EDIT_SCHEDULE_REPORT_ENDPOINT,
   UPDATE_SCHEDULE_REPORT_JOB_ENDPOINT,
+  CREATE_ALLERGY,
+  UPDATE_ALLERGY,
   SEND_QUESTIONNAIRE_TO_PATIENT,
   GET_USERS_SELF_PROOFINGS_ENDPOINT,
   START_USERS_PROOFINGS_ENDPOINT,
@@ -1386,6 +1401,7 @@ export {
   LAUNCH_USERS_PROOFINGS_ENDPOINT,
   GET_LAB_ORDERS_SEARCH,
   GET_MEDICATIONS_REFILL,
+  DELETE_ALLERGY,
   DIS_ASSOCIATE_PERMISSION_ENDPOINT,
   UPDATE_DEFAULT_PAYMENT,
   GET_CARE_TEAM,
@@ -1399,7 +1415,7 @@ export {
   GET_WAITLIST_HISTORY_ENDPOINT,
   GET_MEDICATIONS_HISTORY,
   GET_TEMPLATE_EMAIL_REPORT,
-    SEARCH_EXTERNAL_REFERRAL_PATIENTS_ENDPOINT,
+  SEARCH_EXTERNAL_REFERRAL_PATIENTS_ENDPOINT,
   UPDATE_EXTERNAL_REFERRAL_PATIENT_ENDPOINT,
   GET_EXTERNAL_REFERRAL_PATIENTS_INFO_HISTORY,
 }

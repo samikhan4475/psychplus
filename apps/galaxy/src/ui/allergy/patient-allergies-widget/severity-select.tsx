@@ -1,23 +1,27 @@
 'use client'
 
+import { useMemo } from 'react'
 import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 
 const SeveritySelect = () => {
-  const options = [
-    { value: 'fatal', label: 'Fatal' },
-    { value: 'severe', label: 'Severe' },
-    { value: 'moderate_to_severe', label: 'Moderate to severe' },
-    { value: 'moderate', label: 'Moderate' },
-    { value: 'mild_to_moderate', label: 'Mild to moderate' },
-    { value: 'mild', label: 'Mild' },
-  ]
+  const codes = useCodesetCodes(CODESETS.AllergySeverity)
+  const options = useMemo(
+    () =>
+      codes.map((code) => ({
+        value: code.value,
+        label: code.display,
+      })),
+    [],
+  )
 
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel>Severity</FormFieldLabel>
       <SelectInput
         options={options}
-        field="severity"
+        field="severityCode"
         buttonClassName="w-[101px] h-6"
       />
     </FormFieldContainer>

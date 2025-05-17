@@ -14,7 +14,7 @@ const AllergiesStatusSelect = () => {
       <FormFieldLabel>Status</FormFieldLabel>
       <SelectInput
         options={options}
-        field="status"
+        field="recordStatuses"
         buttonClassName="w-[101px] h-6"
       />
     </FormFieldContainer>
