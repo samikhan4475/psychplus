@@ -1,24 +1,17 @@
 import React from 'react'
-import {
-  CodesetSelect,
-  FormFieldContainer,
-  FormFieldError,
-  FormFieldLabel,
-} from '@/components'
-import { CODESETS } from '@/constants'
+import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
+import { MEDICATIONSSTATUS } from './types'
 
 const StatusSelect = () => {
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
-      <FormFieldLabel required>Status</FormFieldLabel>
-      <CodesetSelect
-        name="recordStatuses"
-        codeset={CODESETS.RecordStatus}
-        size="1"
-        exclude={['Deleted', 'Archived']}
+      <FormFieldLabel>Status</FormFieldLabel>
+      <SelectInput
+        options={MEDICATIONSSTATUS}
+        buttonClassName="w-full"
         className="h-full flex-1"
+        field="notificationResponseType"
       />
-      <FormFieldError name="recordStatuses" />
     </FormFieldContainer>
   )
 }

@@ -16,6 +16,7 @@ import MedicineDosageCell from './cells/medicine-dosage-cell'
 import MedicineNameCell from './cells/medicine-name-cell'
 import MedicineQtyCell from './cells/medicine-qty-cell'
 import PatientNameCell from './cells/patient-name-cell'
+import RefillCell from './cells/refills-cell'
 import SigCell from './cells/sig-cell'
 import SubstitutionCell from './cells/substitution-cell'
 import { MedicationRefill } from './types'
@@ -207,6 +208,22 @@ const columns = (
       cell: ({ row }) => <SigCell row={row} />,
     },
     {
+      id: 'refills',
+      accessorKey: 'refills',
+      size: 100,
+      header: ({ column }) => (
+        <ColumnHeader
+          label="Refills"
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+        />
+      ),
+      cell: ({ row }) => <RefillCell row={row} />,
+    },
+    {
       id: 'lastFillDate',
       accessorKey: 'lastFillDate',
       size: 100,
@@ -261,7 +278,7 @@ const columns = (
       id: 'actions',
       size: 100,
       header: () => <ColumnHeader label="Actions" />,
-      cell: ({ row }) => <ActionsCell />,
+      cell: ({ row }) => <ActionsCell row={row} />,
     },
   ]
 }

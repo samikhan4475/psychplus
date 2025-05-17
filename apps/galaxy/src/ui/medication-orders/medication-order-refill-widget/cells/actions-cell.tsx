@@ -1,43 +1,30 @@
-import { type Row } from '@tanstack/react-table'
-import { Pencil, PencilLine } from 'lucide-react'
-import { AdaptiveRowActionsCell, type RowAction } from '@/components'
-import { Button, Flex, Text } from '@radix-ui/themes'
+import { Flex } from '@radix-ui/themes'
+import { Row } from '@tanstack/react-table'
+import { LongTextCell } from '@/components'
+import { DeclineMedicationDialog } from '../dialogs/decline-prescription-request-dialog'
+import { UpdateMedicationDialog } from '../dialogs/update-medication-dialog'
+import { MedicationRefill } from '../types'
 
-type VisitListRow = Row<any>
+interface ActionsCellProps {
+  row: Row<MedicationRefill>
+}
 
-const rowActions: RowAction<any>[] = [
-  {
-    id: 'edit',
-    render: ({ row }) => (
-      <PencilLine size={20} className="text-gray-500 cursor-pointer" />
-    ),
-  },
-  {
-    id: 'decline',
-    render: ({ row }) => (
-      <Button
-      className="border-pp-grey bg-white h-6 flex-row gap-1 rounded-2 border border-solid align-middle"
-      type="button"
-    >
-      <Text className="text-pp-black-3 text-1">Decline</Text>
-    </Button>
-    ),
-  },
-  {
-    id: 'approve',
-    render: ({ row }) => (
-      <Button
-      className="border-pp-grey bg-white h-6 flex-row gap-1 rounded-2 border border-solid align-middle"
-      type="button"
-    >
-      <Text className="text-pp-black-3 text-1">Approve</Text>
-    </Button>
-    ),
-  },
-]
-
-const ActionsCell = (row: any) => {
-  return <AdaptiveRowActionsCell actions={rowActions} row={row} />
+const ActionsCell = ({ row }: ActionsCellProps) => {
+  const { isResponsePending, notificationResponseType } = row.original
+  return (
+    <Flex gap="2" align="center">
+      {isResponsePending ? (
+        <>
+          <DeclineMedicationDialog row={row} />
+          <UpdateMedicationDialog row={row} />
+        </>
+      ) : (
+        <LongTextCell className="w-[150px]">
+          {notificationResponseType}
+        </LongTextCell>
+      )}
+    </Flex>
+  )
 }
 
 export { ActionsCell }

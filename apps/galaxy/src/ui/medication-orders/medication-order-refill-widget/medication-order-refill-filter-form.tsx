@@ -39,15 +39,15 @@ const schema = z.object({
   prescriptionId: z.string().optional(),
   pharmacyNcpdpId: z.string().optional(),
   drugDescriptionStartsWith: z.string().trim().optional(),
-  recordStatuses: z.string().optional(),
+  notificationResponseType: z.string().optional(),
 })
 
-export type SchemaType = z.infer<typeof schema>
+export type MedicationFormFilterSchemaType = z.infer<typeof schema>
 
 const MedicationOrderRefillFilterForm = () => {
   const { searchMedicationsList } = useStore()
 
-  const form = useForm<SchemaType>({
+  const form = useForm<MedicationFormFilterSchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
     defaultValues: {
@@ -57,7 +57,7 @@ const MedicationOrderRefillFilterForm = () => {
       prescriptionId: '',
       pharmacyNcpdpId: '',
       drugDescriptionStartsWith: '',
-      recordStatuses: '',
+      notificationResponseType: '',
     },
   })
 
@@ -70,12 +70,12 @@ const MedicationOrderRefillFilterForm = () => {
       prescriptionId: '',
       pharmacyNcpdpId: '',
       drugDescriptionStartsWith: '',
-      recordStatuses: '',
+      notificationResponseType: '',
     })
     searchMedicationsList({})
   }
 
-  const onSubmit: SubmitHandler<SchemaType> = (data) => {
+  const onSubmit: SubmitHandler<MedicationFormFilterSchemaType> = (data) => {
     const isValid = isValidDateRange(
       data.notificationDateFrom,
       data.notificationDateTo,
@@ -84,13 +84,20 @@ const MedicationOrderRefillFilterForm = () => {
       toast.error('To date must be the same or after From date')
       return
     }
-
+    const { notificationResponseType, ...restData } = data
     const formattedData = {
-      ...data,
+      ...restData,
       notificationDateFrom: formatDateToISOString(data.notificationDateFrom),
       notificationDateTo: formatDateToISOString(data.notificationDateTo, true),
-      recordStatuses: [data.recordStatuses],
+      ...(data.notificationResponseType === 'Pending' && {
+        isResponsePending: true,
+      }),
+      ...(notificationResponseType &&
+        !['Pending', 'All'].includes(notificationResponseType) && {
+          notificationResponseType,
+        }),
     }
+
     const cleanedData = sanitizeFormData(
       formattedData,
     ) as MedicationRefillAPIRequest

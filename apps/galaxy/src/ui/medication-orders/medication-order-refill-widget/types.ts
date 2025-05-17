@@ -15,7 +15,7 @@ interface PharmacyNotificationDrugModel {
   notificationId?: string
   metadata?: Metadata
   drugDescription?: string
-  quantityValue?: number
+  quantityValue?: string
   quantityCodeListQualifier?: string
   quantityUnitOfMeasureCode?: string
   medicationType?: string
@@ -27,7 +27,7 @@ interface PharmacyNotificationDrugModel {
   daysSupply?: number
   writtenDate?: string
   lastFillDate?: string
-  refills?: number
+  refills?: string
   isMedicationAsNeeded?: boolean
   reasonForMedicationAsNeeded?: string
   endDateTime?: string
@@ -35,6 +35,13 @@ interface PharmacyNotificationDrugModel {
   otherMedicationDateQualifier?: string
   drugSignatureList?: DrugSignature[]
   drugDiagnosisList?: DrugDiagnosis[]
+}
+interface PharmacyAddress {
+  type?: string
+  street1?: string
+  city?: string
+  state?: string
+  country?: string
 }
 interface MedicationRefill {
   id: string
@@ -66,10 +73,12 @@ interface MedicationRefill {
   patientStateCode?: string
   patientPostalCode?: string
   patientCountryCode?: string
-  drugList?: PharmacyNotificationDrugModel[] | null
+  drugList?: PharmacyNotificationDrugModel[]
   notes?: string
   staff?: StaffResource
   pharmacyNotificationId: string
+  pharmacyAddress?: PharmacyAddress
+  isResponsePending?: boolean
 }
 
 interface MedicationRefillResponseList {
@@ -89,11 +98,13 @@ interface MedicationRefillAPIRequest {
   notificationType?: string
   rxReferenceNumber?: string
   notificationResponseType?: string
+  isResponsePending?: boolean
   notificationResponseDate?: string
   recordSource?: string
   prescriptionId?: string
   isIncludeStaff?: boolean
   isIncludeDrugList?: boolean
+  isIncludePharmacyData?: boolean
   isIncludeSignatureList?: boolean
   isIncludeDiagnosisList?: boolean
   staffId?: number
@@ -157,6 +168,74 @@ interface MedicationHistoryResponse {
   keyValue: string
   id: string
 }
+enum RenewalResponseTypeEnum {
+  Approved = 'Approved',
+  Denied = 'Denied',
+}
+
+type RenewalResponseType = 'Approved' | 'Denied'
+type denialReasonType = 'UnknownPatient'
+interface RxRenewalResponseDrugDetail {
+  drugDescription?: string
+  quantityValue?: string
+  isSubstitutionsAllowed?: boolean
+  drugCode?: string
+  drugCodeQualifier?: string
+  daysSupply?: string
+}
+
+interface RenewalResponsePayload {
+  responseType: RenewalResponseType
+  referenceNumber?: string
+  note?: string
+  denialReasonType?: denialReasonType | string
+  denialReasonDetail?: string
+  numberOfRefills?: number
+  rxRenewalResponseDrugDetail?: RxRenewalResponseDrugDetail
+}
+const DENIEDOPTIONS = [
+  { value: 'UnknownPatient', label: 'Patient unknown to the Provider' },
+  { value: 'NeverUnderCare', label: 'Patient never under Provider care' },
+  {
+    value: 'NoLongerUnderCare',
+    label: 'Patient no longer under Provider care',
+  },
+  { value: 'RefillTooSoon', label: 'Patient has requested refill too soon' },
+  {
+    value: 'NeverPrescribed',
+    label: 'Medication never prescribed for the patient',
+  },
+  {
+    value: 'ContactProviderFirst',
+    label: 'Patient should contact Provider first',
+  },
+  { value: 'NotAppropriate', label: 'Fill/Refill not appropriate' },
+  { value: 'NeedsAppointment', label: 'Patient needs appointment' },
+  {
+    value: 'PrescriberNotAssociated',
+    label: 'Prescriber not associated with this practice or location',
+  },
+  {
+    value: 'AlreadyResponded',
+    label: 'Request already responded to by other means (e.g. phone or fax)',
+  },
+  { value: 'DeniedAtRequest', label: 'Medication denied at patient request' },
+  {
+    value: 'AllergyToMedication',
+    label: 'Patient had allergy to requested medication',
+  },
+  {
+    value: 'DiscontinuedMedication',
+    label: 'Medication has been discontinued',
+  },
+]
+
+const MEDICATIONSSTATUS = [
+  { value: 'All', label: 'All' },
+  { value: 'Pending', label: 'Pending' },
+  { value: 'Approved', label: 'Approved' },
+  { value: 'Denied', label: 'Denied' },
+]
 export {
   RefillMedicationType,
   type MedicationRefill,
@@ -165,4 +244,9 @@ export {
   type PatientPersonInfo,
   type MedicationHistoryPayload,
   type MedicationHistoryResponse,
+  RenewalResponseTypeEnum,
+  type RenewalResponsePayload,
+  type RxRenewalResponseDrugDetail,
+  DENIEDOPTIONS,
+  MEDICATIONSSTATUS,
 }

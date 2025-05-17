@@ -949,6 +949,8 @@ const TRANSFER_PROVIDER = (staffId: string, primaryRole: string) =>
   `${API_URL}/api/patients/careteam/providers/${staffId}/actions/makeprimary/${primaryRole}`
 const GET_MEDICATIONS_HISTORY = (pharmacyNotificationId: string) =>
   `${API_URL}/api/pharmacynotifications/${pharmacyNotificationId}/history/actions/search`
+const UPDATE_PHARMACY_NOTIFICATIONS = (pharmacyNotificationId: string) =>
+  `${API_URL}/api/pharmacynotifications/${pharmacyNotificationId}/renewalresponses/actions/send`
 const VALIDATE_CURRENT_PASSWORD = `${AUTH_URL}/credentials/actions/validate`
 const CHANGE_PASSWORD = `${API_URL}/api/users/self/changepassword`
 const GET_TEMPLATE_EMAIL_REPORT = (templateId: string, runId: string) =>
@@ -1414,6 +1416,7 @@ export {
   CHANGE_PASSWORD,
   GET_WAITLIST_HISTORY_ENDPOINT,
   GET_MEDICATIONS_HISTORY,
+  UPDATE_PHARMACY_NOTIFICATIONS,
   GET_TEMPLATE_EMAIL_REPORT,
   SEARCH_EXTERNAL_REFERRAL_PATIENTS_ENDPOINT,
   UPDATE_EXTERNAL_REFERRAL_PATIENT_ENDPOINT,

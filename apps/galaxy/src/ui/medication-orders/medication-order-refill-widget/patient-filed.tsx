@@ -3,10 +3,10 @@
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { FormFieldContainer, FormFieldLabel } from '@/components'
-import { SchemaType } from './medication-order-refill-filter-form'
+import { MedicationFormFilterSchemaType } from './medication-order-refill-filter-form'
 
 const PatientField = () => {
-  const form = useFormContext<SchemaType>()
+  const form = useFormContext<MedicationFormFilterSchemaType>()
 
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
