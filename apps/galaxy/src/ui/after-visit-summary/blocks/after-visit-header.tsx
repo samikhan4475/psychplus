@@ -27,7 +27,7 @@ const AfterSummaryHeaderWidgetHeader = ({
         )} ${formatTimeCell(
           appointment.appointmentDate,
           appointment.locationTimezoneId,
-        )}, ${appointment.visitMedium}, ${appointment.visitType}`,
+        )}, ${appointment.visitMedium}, ${appointment.visitType ?? ''}`,
         value: String(appointment.appointmentId),
       })),
     [appointments],

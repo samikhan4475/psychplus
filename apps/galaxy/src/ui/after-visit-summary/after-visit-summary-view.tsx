@@ -52,7 +52,6 @@ const AfterVisitSummaryView = ({
     setAppointmentId(appointmentId)
     const payload = {
       patientId: [patientId],
-      ...(appointmentId !== '0' ? { appointmentIds: [appointmentId] } : {}),
     }
     fetch(appointmentId, payload)
   }
