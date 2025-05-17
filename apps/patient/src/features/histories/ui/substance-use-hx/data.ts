@@ -164,7 +164,8 @@ const transformOut =
           sectionItemValue: 'true',
         })
       }
-      return [...result, ...diagnosisSections]
+      return diagnosisSections.length ? [...result, ...diagnosisSections] : [...result]
+
     }
 
 const getDiagnosisSections = async (
@@ -204,6 +205,10 @@ const getDiagnosisSections = async (
       }
     })
   if (tobacco === 'yes') diagnosisCodesToAdd.push('F17.200')
+
+  if (!diagnosisCodesToAdd.length) {
+    return []
+  }
 
   const sectionItemValue = String(
     diagnosisCodesToAdd.filter(
