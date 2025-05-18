@@ -16,7 +16,9 @@ const ClaimListTable = () => {
     claimsListLoading,
     sort,
     sortData,
+    claimListPayload,
   } = useStore((state) => ({
+    claimListPayload: state.claimsListPayload,
     claimsListData: state.claimsListData,
     claimsListLoading: state.claimsListLoading,
     claimsListSearch: state.claimsListSearch,
@@ -24,10 +26,9 @@ const ClaimListTable = () => {
     sortData: state.sortData,
   }))
 
-
   useEffect(() => {
-    if (activeTab === RevenueCycleTab.Claim) {      
-      claimsListSearch({})
+    if (activeTab === RevenueCycleTab.Claim) {
+      claimsListSearch(claimListPayload)
     }
   }, [activeTab])
 
