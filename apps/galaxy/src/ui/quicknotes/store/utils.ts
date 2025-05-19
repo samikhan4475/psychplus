@@ -2,12 +2,13 @@ import toast from 'react-hot-toast'
 import { saveWidgetClientAction, updateVisitAction } from '@/actions'
 import { CustomToaster as customContentToaster } from '@/components/custom-content-toast'
 import { VisitTypeEnum } from '@/enum'
-import { Appointment, DiagnosisIcd10Code, QuickNoteSectionItem } from '@/types'
+import { Appointment, QuickNoteSectionItem } from '@/types'
 import { ALLERGIES_ERROR_MESSAGE } from '@/ui/allergy/patient-allergies-widget/constants'
 import { AllergyDataResponse } from '@/ui/allergy/patient-allergies-widget/types'
 import { transformVisitUpdatePayload } from '@/ui/assessment-plan/tcm-widget/data'
 import { postEvent, sanitizeFormData, saveAbleWdgets } from '@/utils'
 import { QuickNoteSectionName } from '../constants'
+import { ValidateDiagnosisParams } from '../types'
 import { getWidgetErrorDetails, getWidgetsByVisitType } from '../utils'
 
 const getWidgetData = (providerType: string) => {
@@ -165,10 +166,12 @@ const visitTypeDiagnosisMap: Partial<Record<VisitTypeEnum, string[]>> = {
 const validateDiagnosis = ({
   workingDiagnosisData,
   visitType,
-}: {
-  workingDiagnosisData: DiagnosisIcd10Code[]
-  visitType: string
-}) => {
+  setActualNoteData,
+  encounterNoteDx,
+  patientId,
+  appointmentId,
+  isHospitalDischarge,
+}: ValidateDiagnosisParams) => {
   const requiredCodes = visitTypeDiagnosisMap[visitType as VisitTypeEnum] ?? []
   const hasValidDiagnosis = workingDiagnosisData?.some(({ code }) =>
     requiredCodes.includes(code),
@@ -180,8 +183,28 @@ const validateDiagnosis = ({
     )} to Sign/Send to signature.`
   }
 
-  if (workingDiagnosisData.length === 0) {
+  if (
+    workingDiagnosisData.length === 0 ||
+    (workingDiagnosisData.length === 1 &&
+      workingDiagnosisData[0]?.code === 'empty')
+  ) {
     return 'Select at least one diagnosis to Sign/Send to signature.'
+  }
+  const wCodes = workingDiagnosisData.map(({ code }) => code)?.join(',')
+  //actual note data
+  const enCodes = encounterNoteDx[0]?.sectionItemValue
+  if (wCodes !== enCodes) {
+    setActualNoteData([
+      {
+        pid: +patientId,
+        sectionName: isHospitalDischarge
+          ? QuickNoteSectionName.QuicknoteSectionWorkingDischargeDiagnosis
+          : QuickNoteSectionName.QuickNoteSectionDiagnosis,
+        sectionItem: 'diagnosis',
+        ...(isHospitalDischarge ? { appId: +appointmentId } : {}),
+        sectionItemValue: wCodes,
+      },
+    ])
   }
 
   return ''

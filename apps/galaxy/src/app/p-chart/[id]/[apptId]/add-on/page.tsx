@@ -8,6 +8,7 @@ interface PatientAddOnVisitViewPageProps {
   searchParams: {
     id: string
     visitType: string
+    visitSequence: string
   }
 }
 
@@ -20,6 +21,7 @@ const PatientAddOnVisitViewPage = ({
       patientId={params.id}
       appointmentId={searchParams.id}
       visitType={searchParams.visitType}
+      visitSequence={searchParams.visitSequence}
     />
   )
 }

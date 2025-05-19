@@ -32,13 +32,13 @@ const DischargeDiagnosisClientLoader = ({
       ],
     dequal,
   )
-  console.log({ data })
+
   const [favouritesData, setFavouritesData] = useState<
     Array<FavouriteDiagnosisData>
   >([])
   const [diagnosisData, setDiagnosisData] = useState<
-    Array<DiagnosisIcd10Code> | undefined
-  >(undefined)
+    Array<DiagnosisIcd10Code>
+  >([])
   const DiagnosisCodes = useDeepCompareMemo(() => {
     const sectionItem = data?.filter(
       (item) => item.sectionItemValue !== 'empty',

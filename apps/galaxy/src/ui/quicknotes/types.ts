@@ -1,4 +1,4 @@
-import { Appointment, PatientProfile, QuickNoteSectionItem } from '@/types'
+import { Appointment, DiagnosisIcd10Code, PatientProfile, QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from './constants'
 
 type WidgetComponent = React.ComponentType<{
@@ -32,4 +32,17 @@ interface SignPayloadProps {
   coSignedByUserId?: string
 }
 
-export type { WidgetType, WidgetComponent, SignPayloadProps }
+interface ValidateDiagnosisParams {
+  workingDiagnosisData: DiagnosisIcd10Code[]
+  visitType: string
+  encounterNoteDx: QuickNoteSectionItem[]
+  setActualNoteData: (
+    data: QuickNoteSectionItem[],
+    overwriteExisting?: boolean,
+  ) => void
+  patientId: string
+  appointmentId: string
+  isHospitalDischarge: boolean
+}
+
+export type { WidgetType, WidgetComponent, SignPayloadProps ,ValidateDiagnosisParams}

@@ -36,6 +36,7 @@ const TherapyPsychoAnalysisBlock = ({
         <CheckboxInput
           field="therapy"
           checked={watch('therapy')}
+          disabled={watch('therapyDisabled')}
           onCheckedChange={(check) => {
             setValue('therapy', check)
             !check && setValue('therapyTimeSpent', '')

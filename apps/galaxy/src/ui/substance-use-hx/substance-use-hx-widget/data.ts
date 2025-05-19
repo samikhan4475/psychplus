@@ -256,15 +256,16 @@ const getDiagnosisSections = async (
       (item, index) => diagnosisCodesToAdd.indexOf(item) === index,
     ),
   )
-  const diagnosisCodesToAddSet = [
-    {
+  const diagnosisCodesToAddSet: QuickNoteSectionItem[] = []
+  if (sectionItemValue) {
+    diagnosisCodesToAddSet.push({
       pid: Number(patientId),
       sectionName,
       sectionItem: 'diagnosis',
       sectionItemValue: sectionItemValue,
       ...(isHospitalDischargeView ? { appId: Number(appointmentId) } : {}),
-    },
-  ]
+    })
+  }
   return diagnosisCodesToAddSet
 }
 export { transformIn, transformOut }

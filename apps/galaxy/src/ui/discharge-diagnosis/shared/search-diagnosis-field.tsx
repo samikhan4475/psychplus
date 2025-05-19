@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { useParams } from 'next/navigation'
 import { Box, Flex, ScrollArea, Text, TextField } from '@radix-ui/themes'
 import { PlusCircleIcon } from 'lucide-react'
 import useOnclickOutside from 'react-cool-onclickoutside'
@@ -8,12 +9,28 @@ import { useDebouncedCallback } from 'use-debounce'
 import { LoadingPlaceholder } from '@/components'
 import { useHasPermission } from '@/hooks'
 import { DiagnosisIcd10Code } from '@/types'
+import { useDebouncedDiagnosisQuickNoteSave } from '@/ui/diagnosis/diagnosis/hooks'
+import { getFilteredDiagnosesByCodes } from '@/ui/diagnosis/diagnosis/utils'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
 import { PermissionAlert } from '@/ui/schedule/shared'
 import { cn } from '@/utils'
 import { useStore } from '../store'
 import { SearchButton } from './search-button'
 
 const ServiceDiagnosisList = () => {
+  const { id: patientId, apptId = '' } = useParams<{
+    id: string
+    apptId: string
+  }>()
+  const { isQuickNoteView, updateActualNoteWidgetsData } = useQuickNoteUpdate()
+  const debouncedDiagnosisSave = useDebouncedDiagnosisQuickNoteSave(
+    patientId,
+    updateActualNoteWidgetsData,
+    QuickNoteSectionName.QuicknoteSectionWorkingDischargeDiagnosis,
+    10,
+    apptId,
+  )
   const {
     loadingServicesDiagnosis,
     workingDischargeDiagnosisData,
@@ -26,10 +43,15 @@ const ServiceDiagnosisList = () => {
   }, [workingDischargeDiagnosisData])
 
   const handleValueChange = async (option: DiagnosisIcd10Code) => {
-    updateWorkingDischargeDiagnosisData([
-      ...workingDischargeDiagnosisData,
+    const diagnosis = getFilteredDiagnosesByCodes(
+      workingDischargeDiagnosisData,
       option,
-    ])
+    )
+    const updateDischargeDxCodes = [...diagnosis, option]
+    updateWorkingDischargeDiagnosisData(updateDischargeDxCodes)
+    if (isQuickNoteView) {
+      debouncedDiagnosisSave(updateDischargeDxCodes)
+    }
   }
   if (loadingServicesDiagnosis) {
     return <LoadingPlaceholder className="mt-5" />

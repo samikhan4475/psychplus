@@ -66,6 +66,7 @@ const psychoanalysisSchema = z.object({
 const baseSchema = z.object({
   injection: z.boolean().optional(),
   therapy: z.boolean().optional(),
+  therapyDisabled: z.boolean().optional(),
   ect: z.boolean().optional(),
   interactiveComplexity: z.boolean().optional(),
   therapyPsychoanalysis: z.string().optional(),

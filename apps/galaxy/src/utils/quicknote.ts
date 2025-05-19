@@ -515,4 +515,14 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
   ],
 }
 
-export { visitTypeToWidgets, saveAbleWdgets, VisitTypeEnum }
+function hasSection(
+  visitTypeOrWidgets: VisitTypeEnum | QuickNoteSectionName[],
+  section: QuickNoteSectionName,
+): boolean {
+  const widgets = Array.isArray(visitTypeOrWidgets)
+    ? visitTypeOrWidgets
+    : visitTypeToWidgets[visitTypeOrWidgets] ?? []
+  return widgets.includes(section)
+}
+
+export { visitTypeToWidgets, saveAbleWdgets, hasSection, VisitTypeEnum }

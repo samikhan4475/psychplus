@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useParams } from 'next/navigation'
 import {
   DragDropContext,
   Draggable,
@@ -10,8 +11,11 @@ import { MoveVertical, StarIcon, Trash2 } from 'lucide-react'
 import { LoadingPlaceholder } from '@/components'
 import { useHasPermission } from '@/hooks'
 import { DiagnosisIcd10Code } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
 import { PermissionAlert } from '@/ui/schedule/shared'
 import { useStore } from '../../store'
+import { useDebouncedDiagnosisQuickNoteSave } from '../hooks'
 
 interface WorkingDiagnosisViewProps {
   width?: string
@@ -29,11 +33,23 @@ const WorkingDiagnosisView = ({
   const {
     workingDiagnosisData,
     updateWorkingDiagnosisData,
-    deleteWorkingDiagnosis,
     markDiagnosisFavorites,
     favouriteDiagnosisData,
     loadingWorkingDiagnosis,
   } = useStore()
+
+  const { id: patientId } = useParams<{
+    id: string
+  }>()
+  const { isQuickNoteView, updateActualNoteWidgetsData } = useQuickNoteUpdate()
+
+  const debouncedDiagnosisSave = useDebouncedDiagnosisQuickNoteSave(
+    patientId,
+    updateActualNoteWidgetsData,
+    QuickNoteSectionName.QuickNoteSectionDiagnosis,
+    100,
+  )
+
   const hasPermissionDelete = useHasPermission(
     'deleteDiagnosisWorkingDiagnosisTab',
   )
@@ -58,7 +74,14 @@ const WorkingDiagnosisView = ({
       )
       return
     }
-    deleteWorkingDiagnosis(item)
+
+    const updatedData = workingDiagnosisData?.filter(
+      (diagnose) => diagnose.code !== item.code,
+    )
+    updateWorkingDiagnosisData(updatedData)
+    if (isQuickNoteView) {
+      debouncedDiagnosisSave(updatedData)
+    }
   }
 
   const onFavouriteClick = (item: DiagnosisIcd10Code, isFavourite: boolean) => {
@@ -84,6 +107,9 @@ const WorkingDiagnosisView = ({
     const [movedItem] = updatedData.splice(source.index, 1)
     updatedData.splice(destination.index, 0, movedItem)
     updateWorkingDiagnosisData(updatedData)
+    if (isQuickNoteView) {
+      debouncedDiagnosisSave(updatedData)
+    }
   }
 
   const isItemFavorite = (code: string) => {

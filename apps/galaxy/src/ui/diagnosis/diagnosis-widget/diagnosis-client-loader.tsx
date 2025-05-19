@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { dequal } from 'dequal'
+import { useDebounce } from 'use-debounce'
 import { useStore } from '@/store'
 import { DiagnosisIcd10Code, FavouriteDiagnosisData } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
@@ -29,8 +30,8 @@ const DiagnosisWidgetClientLoader = ({
     staffId: state.user.staffId,
   }))
   const [workingDiagnosisData, setWorkingDiagnosisData] = useState<
-    DiagnosisIcd10Code[] | undefined
-  >(undefined)
+    DiagnosisIcd10Code[]
+  >([])
   const [favouritesDiagnosisData, setFavouritesDiagnosisData] = useState<
     FavouriteDiagnosisData[]
   >([])
@@ -38,31 +39,24 @@ const DiagnosisWidgetClientLoader = ({
     () => data?.[0].sectionItemValue,
     [data?.[0]],
   )
+  const [debouncedValue] = useDebounce(sectionItemValue, 1500)
+  useEffect(() => {
+    if (!staffId) return
+    getFavouriteDiagnosisAction(staffId).then((res) => {
+      if (res.state === 'success') setFavouritesDiagnosisData(res.data)
+    })
+  }, [staffId])
 
   useEffect(() => {
-    let DiagnosisCodes = sectionItemValue?.split(',') || []
-    if (sectionItemValue === 'empty' || DiagnosisCodes?.length === 0) {
-      DiagnosisCodes = []
-    }
-    if (DiagnosisCodes?.length && staffId) {
-      Promise.all([
-        getIcd10DiagnosisAction({
-          DiagnosisCodes,
-        }),
-        getFavouriteDiagnosisAction(staffId),
-      ]).then(([workingResponse, favouritesResponse]) => {
-        if (workingResponse.state === 'error') {
-          return workingResponse?.error
-        }
-        if (favouritesResponse.state === 'error') {
-          return favouritesResponse?.error
-        }
-        setWorkingDiagnosisData(workingResponse.data ?? [])
-        setFavouritesDiagnosisData(favouritesResponse.data ?? [])
-      })
-    }
-  }, [sectionItemValue, staffId])
+    if (!debouncedValue || debouncedValue === 'empty') return
 
+    const codes = debouncedValue.split(',')
+    getIcd10DiagnosisAction({ DiagnosisCodes: codes }).then((res) => {
+      if (res.state === 'success') {
+        setWorkingDiagnosisData(res.data)
+      }
+    })
+  }, [debouncedValue])
   return (
     <DiagnosisWidget
       workingDiagnosis={workingDiagnosisData}

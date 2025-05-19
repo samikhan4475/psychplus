@@ -21,7 +21,7 @@ const AddOnView = async ({ patientId }: AddOnProps) => {
 
   const addOnSections = response.data ?? []
 
-  const data = transformIn(addOnSections)
+  const data = transformIn(addOnSections, undefined)
 
   return (
     <ActualNoteDetailsWrapper sectionName={QuickNoteSectionName.Addon}>

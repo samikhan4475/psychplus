@@ -1,12 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { useParams } from 'next/navigation'
 import { Button } from '@radix-ui/themes'
 import { SaveIcon } from 'lucide-react'
 import { revalidateAction } from '@/actions/revalidate'
 import { Appointment } from '@/types'
-import { useStore as useDiagnosisStore } from '@/ui/diagnosis/store'
 import { SAVE_BUTTON } from './constants'
 import { useQuickNotesPermissions } from './hooks'
 import { PermissionAlert } from './permission-alert'
@@ -17,12 +15,10 @@ const QuickNotesSaveButton = ({
 }: {
   appointment: Appointment
 }) => {
-  const patientId = useParams().id as string
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [alertMessage, setAlertMessage] = useState<string>('')
   const { canSaveButtonQuickNotePage } = useQuickNotesPermissions()
-  const { saveWorkingDiagnosis } = useDiagnosisStore()
-  const { save, loading, setWidgetsData } = useStore((state) => ({
+  const { save, loading } = useStore((state) => ({
     save: state.save,
     loading: state.loading,
     setWidgetsData: state.setWidgetsData,
@@ -35,7 +31,6 @@ const QuickNotesSaveButton = ({
       return
     }
     try {
-      saveWorkingDiagnosis(patientId, setWidgetsData, false)
       await save(appointment)
       revalidateAction(false)
     } catch (error) {

@@ -3,6 +3,7 @@ import { QuestionnaireType } from '@/constants'
 import { capitalizeFirstLetter } from '@/utils'
 import { QuickNoteSectionName } from '../quicknotes/constants'
 import { sendQuestionnaireToPatientClientAction } from './actions'
+import { QuickNoteHistory } from '@/types'
 
 function getQuestionnaireShortNames(name: string) {
   let shortName = name.replace('QuicknoteSectionQuestionnaire', '')
@@ -45,8 +46,22 @@ const sendToPatient = async (
   toast.success('Questionnaire request sent to patient successfully.')
 }
 
+const sumFirstEntryScores = (
+  entries: QuickNoteHistory[] = []
+): number | undefined => {
+  const firstData = entries[0]?.data
+  if (!firstData || firstData.length === 0) return undefined
+
+  return firstData.reduce(
+    (total, { sectionItemValue }) =>
+      total + (Number(sectionItemValue) || 0),
+    0
+  )
+}
+
 export {
   getQuestionnaireShortNames,
   QuestionnaireQuestionToSectionName,
   sendToPatient,
+  sumFirstEntryScores
 }

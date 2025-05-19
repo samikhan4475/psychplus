@@ -1,3 +1,11 @@
+import { QuickNoteSectionItem } from '@/types'
+import {
+  getFirstSectionValue,
+  isDiagnosisCodeExist,
+  NON_INSURANCE_DIAGNOSIS_CODE_SET,
+  QUESTIONNAIRE_DIAGNOSIS_CODE_SET,
+} from '../diagnosis/diagnosis/utils'
+
 enum QuickNoteSectionName {
   QuickNoteSectionDashboard = 'QuicknoteSectionDashboard',
   QuicknoteSectionQuestionnaire = 'QuicknoteSectionQuestionnaire',
@@ -111,6 +119,30 @@ const SIGN_PMP_WARNING =
 const SIGN_FOLLOW_UP_WARNING =
   '"Patient did not want to follow up for this service" reason is required'
 
+const SIGN_DIAGNOSIS_INSURANCE_WARNING = (
+  items: QuickNoteSectionItem[] = [],
+  visitType?: string,
+): string => {
+  const raw = getFirstSectionValue(items)
+
+  if (!raw) return ''
+  const codes = raw.split(',')
+
+  const nonIns = codes.filter((c) =>
+    isDiagnosisCodeExist(c, [
+      ...QUESTIONNAIRE_DIAGNOSIS_CODE_SET,
+      ...NON_INSURANCE_DIAGNOSIS_CODE_SET,
+    ]),
+  )
+  if (nonIns.length === 0) return ''
+
+  const codeList = nonIns.join(', ')
+
+  return `Patient has working diagnosis ${codeList} which insurance may not cover. If this visit is scheduled, the patient may be charged self-pay for ${
+    visitType ?? 'the visit'
+  }.`
+}
+
 export {
   QuickNoteSectionName,
   questionnairesAddToNotesSection,
@@ -133,4 +165,5 @@ export {
   SIGN_CONSENT_WARNING,
   SIGN_PMP_WARNING,
   SIGN_FOLLOW_UP_WARNING,
+  SIGN_DIAGNOSIS_INSURANCE_WARNING,
 }

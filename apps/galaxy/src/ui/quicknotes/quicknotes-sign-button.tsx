@@ -4,6 +4,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { Button } from '@radix-ui/themes'
+import { dequal } from 'dequal'
 import { PenLineIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { revalidateAction } from '@/actions/revalidate'
@@ -18,9 +19,12 @@ import { useStore as useFollowupStore } from '@/ui/follow-up/follow-up-widget/st
 import { useStore as useMedicationStore } from '@/ui/medications/patient-medications-widget/store'
 import { filterDefaultCosigner } from '@/utils'
 import { AlertDialog } from '../alerts'
-import { shouldDisableDiagnosisActions } from '../diagnosis/diagnosis/utils'
+import {
+  shouldDisableDiagnosisActions,
+} from '../diagnosis/diagnosis/utils'
 import { PatientMedication } from '../medications/patient-medications-widget/types'
 import {
+  QuickNoteSectionName,
   SEND_TO_SIGNATURE_BUTTON,
   SIGN_BUTTON,
   SIGN_FOLLOW_UP_WARNING,
@@ -65,7 +69,8 @@ const QuickNotesSignButton = ({
   const [alertInfo, setAlertInfo] = useState(initialAlertInfo)
 
   const { workingDischargeDiagnosisData } = useDischargeDiagnosisStore()
-  const { workingDiagnosisData, saveWorkingDiagnosis } = useDiagnosisStore()
+  const { workingDiagnosisData } = useDiagnosisStore()
+
   const { staffId, staffRoleCode, staffSpecialistIds, ProviderType } =
     useGlobalStore((state) => ({
       staffId: state.user.staffId,
@@ -97,21 +102,34 @@ const QuickNotesSignButton = ({
     loading,
     sign,
     markAsError,
-    setWidgetsData,
     patient,
     isMarkedAsError,
     signOptions,
     setMarkedStatus,
-  } = useStore((state) => ({
-    loading: state.loading,
-    sign: state.sign,
-    setWidgetsData: state.setWidgetsData,
-    markAsError: state.markAsError,
-    isMarkedAsError: state.isMarkedAsError,
-    signOptions: state.signOptions,
-    patient: state.patient,
-    setMarkedStatus: state.setMarkedStatus,
-  }))
+    workingDxData,
+    workingDischargeDxData,
+    setActualNoteData,
+  } = useStore(
+    (state) => ({
+      loading: state.loading,
+      sign: state.sign,
+      markAsError: state.markAsError,
+      isMarkedAsError: state.isMarkedAsError,
+      signOptions: state.signOptions,
+      patient: state.patient,
+      setMarkedStatus: state.setMarkedStatus,
+      setActualNoteData: state.setActualNoteWidgetsData,
+      workingDxData:
+        state.actualNotewidgetsData[
+          QuickNoteSectionName.QuickNoteSectionDiagnosis
+        ],
+      workingDischargeDxData:
+        state.actualNotewidgetsData[
+          QuickNoteSectionName.QuicknoteSectionWorkingDischargeDiagnosis
+        ],
+    }),
+    dequal,
+  )
 
   const loggedInUserProviderTypes = staffSpecialistIds
     ?.map((id) =>
@@ -244,12 +262,17 @@ const QuickNotesSignButton = ({
         ? workingDischargeDiagnosisData
         : workingDiagnosisData,
       visitType,
+      encounterNoteDx: isHospitalDischargeView
+        ? workingDischargeDxData
+        : workingDxData,
+      setActualNoteData,
+      patientId,
+      appointmentId,
+      isHospitalDischarge: isHospitalDischargeView,
     })
     if (diagnosisError) {
       return toast.error(diagnosisError)
     }
-    !isHospitalDischargeView &&
-      saveWorkingDiagnosis(patientId, setWidgetsData, false)
 
     if (isPrescriber && !canSignButtonQuickNotePage) {
       showAlert({
@@ -286,7 +309,6 @@ const QuickNotesSignButton = ({
       })
       return
     }
-
     if (isFutureAppointment) {
       showAlert({
         title: 'Warning',

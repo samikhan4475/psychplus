@@ -351,6 +351,10 @@ const widgetErrorsMap = {
   WorkingDischargeDiagnosis: 'Working Discharge Diagnosis.',
 }
 
+const TherapyVisitTypeNames: Partial<Record<VisitTypeEnum, string>> = {
+  [VisitTypeEnum.IndividualPsychotherapy]: 'Individual Psychotherapy',
+  [VisitTypeEnum.FamilyPsychotherapy]: 'Family Psychotherapy',
+}
 const getWidgetErrorDetails = (
   errorKey: string | undefined,
   widgetError: string,
@@ -374,4 +378,5 @@ export {
   modifyWidgetResponse,
   getWidgetsByVisitType,
   getWidgetErrorDetails,
+  TherapyVisitTypeNames,
 }

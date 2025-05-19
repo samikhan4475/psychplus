@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { useParams } from 'next/navigation'
 import { Box, Flex, ScrollArea, Text, TextField } from '@radix-ui/themes'
 import { PlusCircleIcon } from 'lucide-react'
 import useOnclickOutside from 'react-cool-onclickoutside'
@@ -8,11 +9,27 @@ import { useDebouncedCallback } from 'use-debounce'
 import { LoadingPlaceholder } from '@/components'
 import { useHasPermission } from '@/hooks'
 import { DiagnosisIcd10Code } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
 import { PermissionAlert, SearchButton } from '@/ui/schedule/shared'
 import { cn } from '@/utils'
 import { useStore } from '../../store'
+import { useDebouncedDiagnosisQuickNoteSave } from '../hooks'
+import { getFilteredDiagnosesByCodes } from '../utils'
 
 const ServiceDiagnosisList = () => {
+  const { id: patientId } = useParams<{
+    id: string
+  }>()
+  const { isQuickNoteView, updateActualNoteWidgetsData } = useQuickNoteUpdate()
+
+  const debouncedDiagnosisSave = useDebouncedDiagnosisQuickNoteSave(
+    patientId,
+    updateActualNoteWidgetsData,
+    QuickNoteSectionName.QuickNoteSectionDiagnosis,
+    10,
+  )
+
   const {
     loadingServicesDiagnosis,
     workingDiagnosisData,
@@ -24,8 +41,13 @@ const ServiceDiagnosisList = () => {
     return workingDiagnosisData.map((item) => item.code)
   }, [workingDiagnosisData])
 
-  const handleValueChange = async (option: DiagnosisIcd10Code) => {
-    updateWorkingDiagnosisData([...workingDiagnosisData, option])
+  const handleValueChange = (option: DiagnosisIcd10Code) => {
+    const diagnosis = getFilteredDiagnosesByCodes(workingDiagnosisData, option)
+    const updateDxCodes = [...diagnosis, option]
+    updateWorkingDiagnosisData(updateDxCodes)
+    if (isQuickNoteView) {
+      debouncedDiagnosisSave(updateDxCodes)
+    }
   }
   if (loadingServicesDiagnosis) {
     return <LoadingPlaceholder className="mt-5" />

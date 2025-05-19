@@ -3,11 +3,17 @@ import {
   Appointment,
   CodesWidgetItem,
   CptCodeKeys,
+  QuickNoteHistory,
   QuickNoteSectionItem,
   UpdateCptCodes,
 } from '@/types'
+import {
+  hasNonInsuranceDiagnosis,
+  QUESTIONNAIRE_DIAGNOSIS_CODE_SET,
+} from '@/ui/diagnosis/diagnosis/utils'
+import { sumFirstEntryScores } from '@/ui/questionnaires/utils'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { sanitizeFormData } from '@/utils'
+import { sanitizeFormData, VisitTypeEnum } from '@/utils'
 import { manageCodes } from '@/utils/codes'
 import { AddOnWidgetSchemaType } from './add-on-widget-schema'
 import {
@@ -26,6 +32,11 @@ interface ModalityTransferenceData {
   value: string
   display: string
 }
+
+const psychotherapyTypes: VisitTypeEnum[] = [
+  VisitTypeEnum.IndividualPsychotherapy,
+  VisitTypeEnum.FamilyPsychotherapy,
+]
 
 const INITIAL_ADDON_VALUES: ResultType = {
   injection: false,
@@ -76,12 +87,15 @@ const INITIAL_ADDON_VALUES: ResultType = {
   ectAssessment: '',
   ectContinuePBlock: '',
   providerType: '',
+  therapyDisabled: false,
 }
 
 const transformIn = (
   value: QuickNoteSectionItem[],
-  appointmentData?: Appointment[],
-  visitType?: string,
+  appointmentData: Appointment[] | undefined,
+  visitType = '',
+  diagnosisCodes?: QuickNoteSectionItem[],
+  MOCAQuestionnaire?: QuickNoteHistory[],
 ): AddOnWidgetSchemaType => {
   const therapy = visitType
     ? [
@@ -140,7 +154,24 @@ const transformIn = (
       }
     }
   })
+  const nonIns = hasNonInsuranceDiagnosis(diagnosisCodes, false)
+  const nonInsQ = hasNonInsuranceDiagnosis(
+    diagnosisCodes,
+    false,
+    QUESTIONNAIRE_DIAGNOSIS_CODE_SET,
+  )
+  const mocaScore = sumFirstEntryScores(MOCAQuestionnaire)
 
+  const shouldDisableTherapy =
+    (nonIns && !psychotherapyTypes.includes(visitType as VisitTypeEnum)) ||
+    ((mocaScore === undefined || mocaScore <= 17) && nonInsQ)
+
+  if (shouldDisableTherapy) {
+    result.therapyDisabled = true
+    result.therapy = false
+  } else {
+    result.therapyDisabled = false
+  }
   return result as AddOnWidgetSchemaType
 }
 
