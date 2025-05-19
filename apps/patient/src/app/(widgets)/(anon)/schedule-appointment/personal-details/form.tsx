@@ -178,7 +178,7 @@ const PersonalDetailsForm = () => {
 
               publish(`${OTP_DIALOG}:closed`)
 
-              postMessage(
+              parent.postMessage(
                 {
                   event: enums.ACCOUNT_CREATED,
                   user_data: {

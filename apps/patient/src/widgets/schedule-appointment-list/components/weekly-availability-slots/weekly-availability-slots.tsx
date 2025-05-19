@@ -87,7 +87,7 @@ const SlotComponent = ({
       }
     }
 
-    postMessage(
+    parent.postMessage(
       {
         event: enums.APPOINTMENT_SELECTED,
       },

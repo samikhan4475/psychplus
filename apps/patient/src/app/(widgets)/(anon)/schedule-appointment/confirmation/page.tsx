@@ -31,9 +31,12 @@ const ConfirmationPage = () => {
     BookedSlot | undefined
   >()
 
+  useEffect(()=> {
+    parent.postMessage({ event: enums.APPOINTMENT_SCHEDULED }, PSYCHPLUS_LIVE_URL)
+  },[])
+
   useEffect(() => {
     setBookedSlotState(bookedSlot)
-    postMessage({ event: enums.APPOINTMENT_SCHEDULED }, PSYCHPLUS_LIVE_URL)
   }, [bookedSlot])
 
   const appointmentConfirmationNotes =

@@ -202,7 +202,7 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
       primaryZipLast4: form.getValues().primaryZipLast4 ?? '',
     })
 
-    postMessage(
+    parent.postMessage(
       {
         event: enums.SCHEDULE_START,
         user_data: {

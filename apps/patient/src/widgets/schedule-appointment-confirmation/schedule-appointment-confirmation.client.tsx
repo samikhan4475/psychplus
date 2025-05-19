@@ -13,7 +13,7 @@ const ScheduleAppointmentConfirmationClient = () => {
   const providerState = searchParams.get('providerState')
 
   const handleConfirm = () => {
-    postMessage(
+    parent.postMessage(
       {
         event: enums.APPOINTMENT_SELECTED,
       },
