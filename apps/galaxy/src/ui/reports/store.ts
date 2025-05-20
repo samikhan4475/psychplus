@@ -4,10 +4,10 @@ import { Code, SelectOptionType } from '@/types'
 import {
   getReportParametersTypeAction,
   getReportsAction,
-  getRunReportAction,
   getScheduledReportsListAction,
   getTemplatesAction,
 } from './actions'
+import { getRunReportAction } from './client-actions'
 import {
   GeneratedReportParams,
   GetScheduleReportListResponse,
