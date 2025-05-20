@@ -8,6 +8,7 @@ interface Store {
   allergiesListData?: AllergyDataResponse[]
   allergiesListLoading?: boolean
   allergiesListError?: string
+  allergiesListStatus?: number
   allergiesListPayload?: AllergiesSearchParams
   allergiesError: boolean
   setAllergiesError: (hasAllergies: boolean) => void
@@ -51,6 +52,7 @@ const useStore = create<Store>((set, get) => ({
       return set({
         allergiesListError: result.error,
         allergiesListLoading: false,
+        allergiesListStatus: result.status,
         allergiesListData: [],
       })
     }

@@ -40,6 +40,7 @@ interface StoreState {
   error?: string
   externalPatientId?: number
   isPmpReviewed: boolean
+  errorStatus?: number
   scriptSureSessionToken?: string
   setPmpReviewed: (value: boolean) => void
   setScriptSureSessionToken: (token: string) => void
@@ -146,7 +147,12 @@ const useStore = create<StoreState>((set, get) => ({
       },
     })
     if (result.state === 'error') {
-      return set({ error: result.error, loading: false, data: [] })
+      return set({
+        error: result.error,
+        loading: false,
+        data: [],
+        errorStatus: result.status,
+      })
     }
     if (get().patientId !== patientId) {
       return
@@ -187,7 +193,6 @@ const useStore = create<StoreState>((set, get) => ({
     set({ loadingDrugs: true })
     const response = await fetchDrugs(value)
 
-    console.log('response', response)
     if (response.state === 'error') {
       toast.error('Failed to fetch drugs ')
       set({ loadingDrugs: false })
@@ -204,8 +209,6 @@ const useStore = create<StoreState>((set, get) => ({
     const response = await getScriptSureSessionToken(DAWSYS)
     if (response.state === 'success') {
       set({ scriptSureSessionToken: response.data })
-    } else {
-      toast.error(response.error ?? 'Failed to fetch scriptsure session token')
     }
   },
 

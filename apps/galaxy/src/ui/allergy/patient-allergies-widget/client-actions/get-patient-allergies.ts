@@ -23,6 +23,7 @@ const getPatientAllergiesAction = async ({
   if (response.state === 'error') {
     return {
       state: 'error',
+      status: response.status,
       error: response.error,
     }
   }

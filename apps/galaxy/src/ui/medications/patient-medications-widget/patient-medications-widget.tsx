@@ -2,6 +2,7 @@
 
 import { Fragment, useEffect } from 'react'
 import { useParams, usePathname } from 'next/navigation'
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
 import { Box, Flex } from '@radix-ui/themes'
 import {
   CheckboxCell,
@@ -9,6 +10,7 @@ import {
   WidgetContainer,
   WidgetSaveButton,
 } from '@/components'
+import { ACCESS_UNAVAILABLE_MESSAGE } from '@/constants'
 import { AddMedicationButton } from './add-medication-button'
 import { PatientMedicationsDataTable } from './patient-medications-data-table'
 import { PatientMedicationsTabView } from './patient-medications-tab-view'
@@ -26,6 +28,8 @@ const PatientMedicationsWidget = () => {
     fetchPatientMedication,
     fetchScriptSureSessionToken,
     fetchExternalScriptsurePatientId,
+    error,
+    errorStatus,
   } = useStore()
 
   useEffect(() => {
@@ -44,6 +48,17 @@ const PatientMedicationsWidget = () => {
 
   const path = usePathname()
   const tabViewEnabled = path.includes('medications')
+
+  if (error && errorStatus === 401) {
+    return (
+      <WidgetContainer
+        title="Medication Access Unavailable"
+        titleIcon={<ExclamationTriangleIcon className="text-pp-orange-1" />}
+      >
+        <Box className="p-2">{ACCESS_UNAVAILABLE_MESSAGE}</Box>
+      </WidgetContainer>
+    )
+  }
 
   if (tabViewEnabled) {
     return <PatientMedicationsTabView patientId={patientId} />

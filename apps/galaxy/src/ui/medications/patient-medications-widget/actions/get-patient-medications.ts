@@ -31,6 +31,7 @@ const getPatientMedicationsAction = async ({
     return {
       state: 'error',
       error: response.error,
+      status: response.status,
     }
   }
 

@@ -9,6 +9,7 @@ import { WidgetBlocksContainer } from './widget-blocks-container'
 
 type WidgetContainerProps = React.PropsWithChildren<{
   title?: string
+  titleIcon?: React.ReactNode
   loading?: boolean
   error?: string
   contentHeight?: number
@@ -38,6 +39,7 @@ const WidgetContainer = ({
   children,
   sticky = false,
   className,
+  titleIcon,
 }: WidgetContainerProps) => {
   const form = useFormContext()
   const widgetContainerCheckbox = form?.watch('widgetContainerCheckboxField')
@@ -90,6 +92,11 @@ const WidgetContainer = ({
                 )}
                 disabled={toggleableDiabled}
               />
+            )}
+            {titleIcon && (
+              <Flex align="center" justify="center" className="h-5 w-5">
+                {titleIcon}
+              </Flex>
             )}
             <Text weight="medium" size="3">
               {title}

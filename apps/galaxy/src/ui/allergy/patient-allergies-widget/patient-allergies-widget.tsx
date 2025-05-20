@@ -1,8 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
+import { Box } from '@radix-ui/themes'
 import { WidgetAddButton, WidgetContainer } from '@/components'
-import { FEATURE_FLAGS } from '@/constants'
+import { ACCESS_UNAVAILABLE_MESSAGE, FEATURE_FLAGS } from '@/constants'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { AddAllergy } from './add-allergy'
 import { AddAllergyButton } from './add-allergy-button'
@@ -29,9 +31,14 @@ const PatientAllergiesWidget = ({
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
   )
+  const {
+    allergiesListSearch,
+    allergiesError,
+    allergiesListError,
+    allergiesListStatus,
+  } = useStore()
   const [showAllergyPopup, setShowAllergyPopup] = useState(true)
 
-  const { allergiesListSearch, allergiesError } = useStore()
   useEffect(() => {
     allergiesListSearch(patientId)
   }, [patientId])
@@ -46,6 +53,17 @@ const PatientAllergiesWidget = ({
       setShowAllergyPopup(true)
     }
   }, [showAllergyPopup])
+
+  if (allergiesListError && allergiesListStatus === 401) {
+    return (
+      <WidgetContainer
+        title="Allergies Access Unavailable"
+        titleIcon={<ExclamationTriangleIcon className="text-pp-orange-1" />}
+      >
+        <Box className="p-2">{ACCESS_UNAVAILABLE_MESSAGE}</Box>
+      </WidgetContainer>
+    )
+  }
 
   return (
     <>
