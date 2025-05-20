@@ -25,7 +25,7 @@ const schema = z
     visitType: z.string().min(1, 'Required'),
     visitSequence: z.string().min(1, 'Required'),
     visitMedium: z.string().min(1, 'Required'),
-    paymentResponsibility: z.string().optional(),
+    paymentResponsibility: z.string().min(1, 'Required'),
     isPrimaryProviderType: z.boolean(),
     isOverridePermissionProvided: z.boolean(),
     isProceedPermissionProvided: z.boolean(),

@@ -75,6 +75,7 @@ const EditVisitForm = ({
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     disabled: isFormDisabled,
+    mode: 'onChange',
     defaultValues: {
       appointmentId: visitDetails?.appointmentId,
       patient: {

@@ -24,7 +24,7 @@ const schema = z
     visitType: z.string().min(1, 'Required'),
     visitSequence: z.string().min(1, 'Required'),
     visitMedium: z.string().min(1, 'Required'),
-    paymentResponsibility: z.string().optional(),
+    paymentResponsibility: z.string().min(1, 'Required'),
     visitDate: z.custom<DateValue>().optional(),
     isPrimaryProviderType: z.boolean(),
     isOverridePermissionProvided: z.boolean(),
@@ -115,17 +115,21 @@ const schema = z
         }
       })
 
-      if (data.dischargeDate) {        
-        const isDischargeDateGreaterThanToday = data.dischargeDate.compare(today(getLocalTimeZone())) > 0
-        
-        const admissionDateOffset = data.dateOfAdmission?.compare(today(getLocalTimeZone()))
-        
+      if (data.dischargeDate) {
+        const isDischargeDateGreaterThanToday =
+          data.dischargeDate.compare(today(getLocalTimeZone())) > 0
+
+        const admissionDateOffset = data.dateOfAdmission?.compare(
+          today(getLocalTimeZone()),
+        )
+
         const isAdmissionDateGreaterThanToday = admissionDateOffset
           ? admissionDateOffset > 0
           : false
 
         if (
-          isDischargeDateGreaterThanToday && !isAdmissionDateGreaterThanToday
+          isDischargeDateGreaterThanToday &&
+          !isAdmissionDateGreaterThanToday
         ) {
           _ctx.addIssue({
             code: z.ZodIssueCode.custom,
@@ -136,8 +140,9 @@ const schema = z
       }
 
       if (data.dischargeDate && data.dateOfAdmission) {
-        const isDischargeDateLessThanAdmissionDate = data.dischargeDate.compare(data.dateOfAdmission) < 0
-        
+        const isDischargeDateLessThanAdmissionDate =
+          data.dischargeDate.compare(data.dateOfAdmission) < 0
+
         if (isDischargeDateLessThanAdmissionDate) {
           _ctx.addIssue({
             code: z.ZodIssueCode.custom,
@@ -148,7 +153,8 @@ const schema = z
       }
 
       if (data.dischargeDate && data.dateOfAdmission && data.visitSequence) {
-        const isDischargeDateGreaterThanAdmissionDate = data.dischargeDate.compare(data.dateOfAdmission) !== 0
+        const isDischargeDateGreaterThanAdmissionDate =
+          data.dischargeDate.compare(data.dateOfAdmission) !== 0
 
         if (
           data.visitSequence === VisitSequenceTypes.InitialDischarge &&

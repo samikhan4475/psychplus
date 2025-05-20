@@ -100,6 +100,7 @@ const AddVisitForm = ({
   const refetchProviderCoding = useRefetchProviderCodingAppointments()
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
+    mode: 'onChange',
     defaultValues: {
       patient: patient ?? undefined,
       state: patient?.state ?? slotDetails?.state ?? '',
