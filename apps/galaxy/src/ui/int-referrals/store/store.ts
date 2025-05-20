@@ -7,7 +7,6 @@ import {
   searchPatientReferralsAction,
 } from '@/ui/referrals/patient-referrals-widget/actions'
 import { getNewSortDir } from '@/utils'
-import { IntReferralsPatientLookUpSchemaType } from '../int-patient-filter-form'
 import type {
   GetPatientReferralsResponse,
   PatientReferralsPayload,
@@ -73,6 +72,7 @@ const createStore = () => {
         payload: formValues,
         page,
         IsIncludeInsurance: true,
+        sort: get().sort,
       })
 
       if (result.state === 'error') {

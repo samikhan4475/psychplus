@@ -1,5 +1,5 @@
 import { type Row } from '@tanstack/react-table'
-import { type PatientReferral } from '@/types'
+import { Sort, type PatientReferral } from '@/types'
 
 enum QueryByNextDays {
   NoVisits = 'NoVisits',
@@ -25,6 +25,7 @@ interface GetPatientReferralsParams {
   payload: Partial<PatientReferralsPayload> | object
   page?: number
   IsIncludeInsurance?: boolean
+  sort?: Sort
 }
 export {
   QueryByNextDays,

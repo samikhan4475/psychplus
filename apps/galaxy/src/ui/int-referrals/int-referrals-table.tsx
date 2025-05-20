@@ -4,20 +4,20 @@ import { useEffect } from 'react'
 import { ScrollArea } from '@radix-ui/themes'
 import { useStore as zustandUseStore } from 'zustand'
 import { DataTable, LoadingPlaceholder } from '@/components'
+import { isReferralDeleted } from '../referrals/patient-referrals-widget/utils'
 import { columns } from './columns'
 import { useStore } from './store'
-import { isReferralDeleted } from '../referrals/patient-referrals-widget/utils'
 
 const IntReferralsTable = () => {
   const store = useStore()
-  const { loading, data, fetchPatientReferrals } = zustandUseStore(
-    store,
-    (state) => ({
+  const { loading, data, sort, sortData, fetchPatientReferrals } =
+    zustandUseStore(store, (state) => ({
       data: state.data,
       fetchPatientReferrals: state.fetchPatientReferrals,
       loading: state.loading,
-    }),
-  )
+      sort: state.sort,
+      sortData: state.sortData,
+    }))
 
   useEffect(() => {
     fetchPatientReferrals()
@@ -30,13 +30,11 @@ const IntReferralsTable = () => {
     <ScrollArea scrollbars="both" className="bg-white h-full p-2">
       <DataTable
         data={data?.referrals ?? []}
-        columns={columns}
+        columns={columns(sort, sortData)}
         tableClass="[&_.rt-ScrollAreaScrollbar]:!hidden"
         tableRowClass="relative"
         theadClass="z-[1]"
-        isRowDisabled={(row) =>
-          isReferralDeleted(row.original.resourceStatus)
-        }
+        isRowDisabled={(row) => isReferralDeleted(row.original.resourceStatus)}
         disablePagination
         isRowSpan
         sticky
