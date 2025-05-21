@@ -2,6 +2,7 @@ import { DateValue } from 'react-aria-components'
 import { SelectOptionType, SharedCode } from '@/types'
 import { FEATURE_TYPES } from './constants'
 import { SchemaType } from './dialogs'
+import { Address } from './types'
 
 const getInitialValues = (id?: string, type?: string): SchemaType => ({
   bioVideo: null,
@@ -103,9 +104,14 @@ const getCredentialsOptions = (codes: SharedCode[], role = '') => {
   }, [])
 }
 
+const getAddressData = (addresses: Address[], type: string) => {
+  return addresses.find((address) => address.type === type)
+}
+
 export {
   getInitialValues,
   createOptionsLookup,
   isValidVideoSize,
   getCredentialsOptions,
+  getAddressData,
 }

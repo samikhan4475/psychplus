@@ -75,6 +75,8 @@ const METADATA_CODESET_ENDPOINT = (name: string) =>
 const METADATA_CODESET_ALL_ENDPOINT = `${API_URL}/api/metadata/codesets`
 const GET_PROVIDER_SETTINGS_ENDPOINT = `${API_URL}/api/settings/actions/search`
 const GET_STAFF_ENDPOINT = `${API_URL}/api/staff/search?includeInactive=true`
+const GET_STAFF_HISTORY_ENDPOINT = (staffId: string) =>
+  `${API_URL}/api/staff/${staffId}/history/actions/search`
 const GET_APPOINTMENT_COSIGNERS_ENDPOINT = (appointmentId: number) =>
   `${API_URL}/api/appointments/${appointmentId}?isIncludeCosigners=true`
 
@@ -1418,6 +1420,7 @@ export {
   GET_MEDICATIONS_HISTORY,
   UPDATE_PHARMACY_NOTIFICATIONS,
   GET_TEMPLATE_EMAIL_REPORT,
+  GET_STAFF_HISTORY_ENDPOINT,
   SEARCH_EXTERNAL_REFERRAL_PATIENTS_ENDPOINT,
   UPDATE_EXTERNAL_REFERRAL_PATIENT_ENDPOINT,
   GET_EXTERNAL_REFERRAL_PATIENTS_INFO_HISTORY,

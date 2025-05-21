@@ -1,5 +1,5 @@
 import { DateValue } from 'react-aria-components'
-import { SelectOptionType } from '@/types'
+import { Metadata, SelectOptionType } from '@/types'
 
 interface GeoCoordinates {
   longitude: number
@@ -61,6 +61,7 @@ interface Staff {
   id: string
   userId: string
   otpCode: string
+  metadata: Metadata
   legalName: LegalName
   dateOfBirth: DateValue | string | null
   gender: string
@@ -99,6 +100,8 @@ interface Staff {
   isMailingAddressSameAsPrimary?: boolean
   organizationsIds?: string[]
   practicesIds?: string[]
+  BioVideoLink?: string
+  phoneContacts?: string
 }
 
 interface StaffSearchParams extends Staff {
@@ -170,6 +173,12 @@ enum StaffRole {
   Therapist = 'Therapist',
 }
 
+interface StaffHistoryPayload {
+  historyCreatedFrom: DateValue | null
+  historyCreatedTo: DateValue | null
+  createdById: string
+}
+
 export {
   type Staff,
   type Address,
@@ -177,6 +186,7 @@ export {
   type OrganizationOptionsResponse,
   type StaffSearchParams,
   type OrganizationOptions,
+  type StaffHistoryPayload,
   StaffType,
   StaffRole,
 }
