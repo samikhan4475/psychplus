@@ -65,7 +65,10 @@ const DischargePlanSection = ({ data }: Props<TmsWidgetSchemaType>) => {
   useGenericEventListener({
     onEventTrigger: refetch,
     eventType: 'widget:save',
-    widgetId: QuickNoteSectionName.QuicknoteSectionReferrals,
+    widgetId: [
+      QuickNoteSectionName.QuicknoteSectionReferrals,
+      QuickNoteSectionName.QuicknoteSectionAutoReferrals,
+    ],
   })
 
   return (

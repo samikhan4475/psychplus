@@ -4,6 +4,8 @@ import { useEffect } from 'react'
 import { ScrollArea } from '@radix-ui/themes'
 import { useStore as zustandUseStore } from 'zustand'
 import { DataTable, LoadingPlaceholder } from '@/components'
+import { useGenericEventListener } from '@/hooks'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { columns } from './columns'
 import { useStore } from './store'
 import { isReferralDeleted } from './utils'
@@ -21,6 +23,13 @@ const ReferralsTable = ({ isTabView }: { isTabView?: boolean }) => {
   useEffect(() => {
     fetchPatientReferrals()
   }, [fetchPatientReferrals])
+
+  useGenericEventListener({
+    onEventTrigger: fetchPatientReferrals,
+    eventType: 'widget:save',
+    widgetId: QuickNoteSectionName.QuicknoteSectionAutoReferrals,
+  })
+
   if (loading) {
     return <LoadingPlaceholder className="bg-white min-h-40 h-full" />
   }

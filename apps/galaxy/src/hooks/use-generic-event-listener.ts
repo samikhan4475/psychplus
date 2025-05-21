@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 
 interface UseGenericEventListenerProps {
   eventType: string
-  widgetId: string
+  widgetId: string | string[]
   onEventTrigger: () => void
 }
 
@@ -14,8 +14,12 @@ const useGenericEventListener = ({
   widgetId,
 }: UseGenericEventListenerProps) => {
   useEffect(() => {
+    const ids = Array.isArray(widgetId) ? widgetId : [widgetId]
     const handleMessage = (event: MessageEvent) => {
-      if (event.data?.type === eventType && event.data?.widgetId === widgetId) {
+      if (
+        event.data?.type === eventType &&
+        ids.includes(event.data?.widgetId)
+      ) {
         onEventTrigger()
       }
     }

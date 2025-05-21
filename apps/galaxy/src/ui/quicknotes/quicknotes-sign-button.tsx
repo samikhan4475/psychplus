@@ -17,11 +17,9 @@ import { useStore as useDiagnosisStore } from '@/ui/diagnosis/store'
 import { useStore as useDischargeDiagnosisStore } from '@/ui/discharge-diagnosis/store'
 import { useStore as useFollowupStore } from '@/ui/follow-up/follow-up-widget/store'
 import { useStore as useMedicationStore } from '@/ui/medications/patient-medications-widget/store'
-import { filterDefaultCosigner } from '@/utils'
+import { filterDefaultCosigner, sendEvent } from '@/utils'
 import { AlertDialog } from '../alerts'
-import {
-  shouldDisableDiagnosisActions,
-} from '../diagnosis/diagnosis/utils'
+import { shouldDisableDiagnosisActions } from '../diagnosis/diagnosis/utils'
 import { PatientMedication } from '../medications/patient-medications-widget/types'
 import {
   QuickNoteSectionName,
@@ -328,6 +326,12 @@ const QuickNotesSignButton = ({
     })
   }
 
+  const refetchReferrals = () => {
+    sendEvent({
+      widgetId: QuickNoteSectionName.QuicknoteSectionAutoReferrals,
+      eventType: 'widget:save',
+    })
+  }
   const signNote = async () => {
     const signResults = await sign(signPayload)
 
@@ -335,6 +339,7 @@ const QuickNotesSignButton = ({
       const toastMessage = isPrescriber ? 'signed' : 'send to signed'
       setAlertInfo(initialAlertInfo)
       refetchFollowupOnSign()
+      refetchReferrals()
       toast.success(`Quicknote ${toastMessage}!`)
       revalidateAction(false)
 
@@ -354,7 +359,10 @@ const QuickNotesSignButton = ({
           text: 'Proceed',
           onClick: async () => {
             setAlertInfo(initialAlertInfo)
-            markAsError(signPayload, refetchFollowupOnSign)
+            markAsError(signPayload, () => {
+              refetchFollowupOnSign()
+              refetchReferrals()
+            })
             revalidateAction(false)
           },
         },

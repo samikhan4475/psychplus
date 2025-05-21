@@ -35,7 +35,10 @@ const ReferralsClientView = ({ patientId }: ReferralsClientViewProps) => {
   useGenericEventListener({
     onEventTrigger: refetch,
     eventType: 'widget:save',
-    widgetId: QuickNoteSectionName.QuicknoteSectionReferrals,
+    widgetId: [
+      QuickNoteSectionName.QuicknoteSectionReferrals,
+      QuickNoteSectionName.QuicknoteSectionAutoReferrals,
+    ],
   })
 
   if (error) {
