@@ -1,32 +1,61 @@
 import { useState } from 'react'
 import toast from 'react-hot-toast'
+import { useStore as useGlobalStore } from '@/store'
+import { getProofingTypes } from '../../actions'
 import { launchProofing } from '../../actions/launch-proofing'
 import { selfStartProofing } from '../../actions/self-start-proofing'
-import { useStore as useGlobalStore } from '@/store'
+import { ProofingType } from '../../types'
 
 export const useSelfProofing = () => {
   const [loading, setLoading] = useState(false)
+  const [iframeSrc, setIframeSrc] = useState('')
   const loginUserId = useGlobalStore((state) => state.user.id)
-  const start = async (userId: string,callbackUrl: string) => {
+  const start = async (
+    userId: string,
+    callbackUrl: string,
+    isVerificationInProgress: boolean,
+  ) => {
     setLoading(true)
-    const result = await selfStartProofing(userId,String(loginUserId))
-    if (result.state === 'error') {
-      toast.error(result.error)
-      setLoading(false)
-      return
+    if (!isVerificationInProgress) {
+      let proofingType: ProofingType
+      const proofingTypeResponse = await getProofingTypes(userId)
+      if (proofingTypeResponse.state === 'error') {
+        proofingType = ProofingType.mobile
+      } else if (proofingTypeResponse.data.length) {
+        proofingType =
+          proofingTypeResponse.data[0]?.abandonCount >= 3
+            ? ProofingType.web
+            : ProofingType.mobile
+      } else {
+        proofingType = ProofingType.mobile
+      }
+
+      const result = await selfStartProofing(
+        userId,
+        String(loginUserId),
+        proofingType,
+      )
+
+      if (result.state === 'error') {
+        toast.error(result.error)
+        setLoading(false)
+        return
+      }
+      toast.success('Self-proofing started successfully')
     }
 
-    toast.success('Self-proofing started successfully')
-
-    const launchResult = await launchProofing(callbackUrl,userId,String(loginUserId))
+    const launchResult = await launchProofing(
+      callbackUrl,
+      userId,
+      String(loginUserId),
+    )
     if (launchResult.state === 'error') {
       toast.error(launchResult.error || 'Failed to launch proofing')
       return
     }
-
-    window.open(launchResult.data, '_blank')
+    setIframeSrc(launchResult.data)
     setLoading(false)
   }
 
-  return { start, loading }
+  return { start, loading, iframeSrc, setIframeSrc }
 }

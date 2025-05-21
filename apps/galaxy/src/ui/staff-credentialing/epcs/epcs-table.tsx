@@ -9,13 +9,13 @@ import {
   LoadingPlaceholder,
   TextCell,
 } from '@/components'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { Sort } from '@/types'
 import { formatUTCDate, getSortDir } from '@/utils'
 import { GetIdProofingResponse } from '../types'
 import RequestByStaffCell from './cells/request-by-staff-cell'
 import { useStore } from './store'
-import { useCodesetCodes } from '@/hooks'
-import { CODESETS } from '@/constants'
 
 interface EPCSTableProps {
   userId: string | null
@@ -143,19 +143,22 @@ const EPCSTable = ({ userId }: EPCSTableProps) => {
     [proofingStatusArray],
   )
 
-  const { data, loading, sort, sortData, fetch } = useStore((state) => ({
-    data: state.data,
-    loading: state.loading,
-    sort: state.sort,
-    sortData: state.sortData,
-    fetch: state.fetch,
-  }))
+  const { data, loading, sort, epcsIframeLoaded, sortData, fetch } = useStore(
+    (state) => ({
+      data: state.data,
+      loading: state.loading,
+      sort: state.sort,
+      sortData: state.sortData,
+      fetch: state.fetch,
+      epcsIframeLoaded: state.epcsIframeLoaded,
+    }),
+  )
 
   useEffect(() => {
-    if (userId) {
+    if (userId && !epcsIframeLoaded) {
       fetch({ userId: String(userId) })
     }
-  }, [userId, fetch])
+  }, [userId, fetch, epcsIframeLoaded])
 
   if (loading) {
     return <LoadingPlaceholder className="bg-white min-h-[46vh]" />

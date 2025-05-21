@@ -1,4 +1,5 @@
 import { API_URL, AUTH_URL } from '@/constants'
+import { ProofingType } from '@/ui/staff-credentialing/types'
 
 const USER_ENDPOINT = `${API_URL}/api/users/self`
 const REFRESH_ENDPOINT = `${AUTH_URL}/refresh`
@@ -919,7 +920,8 @@ const SEND_QUESTIONNAIRE_TO_PATIENT = (
 const GET_USERS_SELF_PROOFINGS_ENDPOINT = `${API_URL}/api/userproofings/actions/search`
 const START_USERS_PROOFINGS_ENDPOINT = (userId: string) =>
   `${API_URL}/api/users/${userId}/idproofings/actions/start`
-const START_SELF_PROOFINGS_ENDPOINT = `${API_URL}/api/users/self/idproofings/actions/start`
+const START_SELF_PROOFINGS_ENDPOINT = () =>
+  `${API_URL}/api/users/self/idproofings/actions/start`
 const LAUNCH_SELF_PROOFINGS_ENDPOINT = `${API_URL}/api/users/self/idproofings/actions/launchUrl`
 const LAUNCH_USERS_PROOFINGS_ENDPOINT = (userId: string) =>
   `${API_URL}/api/users/${userId}/idproofings/actions/launchUrl`
@@ -951,6 +953,11 @@ const TRANSFER_PROVIDER = (staffId: string, primaryRole: string) =>
   `${API_URL}/api/patients/careteam/providers/${staffId}/actions/makeprimary/${primaryRole}`
 const GET_MEDICATIONS_HISTORY = (pharmacyNotificationId: string) =>
   `${API_URL}/api/pharmacynotifications/${pharmacyNotificationId}/history/actions/search`
+const GET_PROOFING_TYPES = (userId: string) =>
+  `${API_URL}/api/users/${userId}/proofingtypes`
+const GET_SELF_PROOFING_STATUS = `${API_URL}/api/users/self/idproofings`
+const GET_USER_PROOFING_STATUS = (userId: string) =>
+  `${API_URL}/api/users/${userId}/idproofings`
 const UPDATE_PHARMACY_NOTIFICATIONS = (pharmacyNotificationId: string) =>
   `${API_URL}/api/pharmacynotifications/${pharmacyNotificationId}/renewalresponses/actions/send`
 const VALIDATE_CURRENT_PASSWORD = `${AUTH_URL}/credentials/actions/validate`
@@ -1420,6 +1427,9 @@ export {
   CHANGE_PASSWORD,
   GET_WAITLIST_HISTORY_ENDPOINT,
   GET_MEDICATIONS_HISTORY,
+  GET_PROOFING_TYPES,
+  GET_SELF_PROOFING_STATUS,
+  GET_USER_PROOFING_STATUS,
   UPDATE_PHARMACY_NOTIFICATIONS,
   GET_TEMPLATE_EMAIL_REPORT,
   GET_STAFF_HISTORY_ENDPOINT,

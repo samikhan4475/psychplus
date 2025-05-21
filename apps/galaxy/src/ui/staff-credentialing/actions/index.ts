@@ -10,4 +10,4 @@ export * from './get-settings-history'
 export * from './get-idproofings'
 export * from './launch-proofing'
 export * from './self-start-proofing'
-
+export * from './get-proofing-types'

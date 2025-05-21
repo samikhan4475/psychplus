@@ -7,7 +7,7 @@ enum CredentialingTab {
   DEA = 'DEA',
   CDS = 'CDS',
   PrescriberSettings = 'Prescriber Settings',
-  EPCS = 'EPCS Manger'
+  EPCS = 'EPCS Manger',
 }
 
 enum LicenseType {
@@ -25,9 +25,9 @@ type StaffData = {
   staffId: number
   userId: number
   legalName: LegalName
-  firstName:string
-  middleName:string
-  lastName:string
+  firstName: string
+  middleName: string
+  lastName: string
 } | null
 
 enum LicenseStatus {
@@ -45,7 +45,6 @@ enum ProofingType {
   web = 'WebcamAuthentication',
   mobile = 'MobileAuthentication',
 }
-
 
 interface DEA {
   metadata?: Metadata
@@ -160,22 +159,21 @@ interface PrescriberSettingResponse {
 }
 type LicenseHistoryRow = Row<LicenseHistory>
 
-
 interface GetLicensesActionResponse {
   licenses: GetLicensesResponse
   total: number
 }
 interface GetIdProofingActionResponse {
- userProofings: GetIdProofingResponse[]
- total: number
+  userProofings: GetIdProofingResponse[]
+  total: number
 }
 
 interface GetIdProofingResponse {
-  startedAt:string
-  proofingStatus:string
-  validFrom:string
-  validUntil:string
-  requestByStaffname?:StaffData
+  startedAt: string
+  proofingStatus: string
+  validFrom: string
+  validUntil: string
+  requestByStaffname?: StaffData
 }
 
 interface StartSelfProofingResponse {
@@ -194,20 +192,52 @@ interface StartSelfProofingResponse {
   validUntil: string
 }
 
-interface LaunchProofingPayload{
-  callBackUrl:string
+interface LaunchProofingPayload {
+  callBackUrl: string
 }
 
-interface GetIdProofingActionPayload{
-  userId:string
+interface GetIdProofingActionPayload {
+  userId: string
 }
 
-
-interface LaunchProofingResponse{
-  launchScreenUrl:string
+interface LaunchProofingResponse {
+  launchScreenUrl: string
 }
 
-export { CredentialingTab, LicenseStatus, LicenseType, RecordStatus, ProofingType }
+interface Credential {
+  type: string
+  ref: string
+  activatedAt: string
+  verifiedAt: string
+  status?: string
+  proofType?: string
+  boundAt: string
+  verifyNotAllowed: boolean
+  allowedModes?: (string | null)[]
+}
+
+interface ActiveProofing {
+  proofType: string
+  validFrom: string
+  validUntil: string
+}
+
+interface SelfProofingResponse {
+  clientRef: string
+  userRef: string
+  status: string
+  credentials: Credential[]
+  activeProofing: ActiveProofing
+  proofingTransaction: StartSelfProofingResponse
+}
+
+export {
+  CredentialingTab,
+  LicenseStatus,
+  LicenseType,
+  RecordStatus,
+  ProofingType,
+}
 
 export type {
   DEA,
@@ -231,5 +261,6 @@ export type {
   GetIdProofingActionPayload,
   LaunchProofingResponse,
   GetIdProofingActionResponse,
-  GetIdProofingResponse
+  GetIdProofingResponse,
+  SelfProofingResponse,
 }

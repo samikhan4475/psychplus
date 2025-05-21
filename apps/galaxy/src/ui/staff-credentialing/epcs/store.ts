@@ -16,6 +16,8 @@ interface Store {
   page: number
   pageCache: Record<number, GetIdProofingActionResponse>
   payload?: GetIdProofingActionPayload
+  epcsIframeLoaded: boolean
+  setEpcsIframeLoaded: (loaded: boolean) => void
   fetch: (
     payload: GetIdProofingActionPayload,
     page?: number,
@@ -31,6 +33,10 @@ const useStore = create<Store>((set, get) => ({
   data: {
     userProofings: [],
     total: 0,
+  },
+  epcsIframeLoaded: false,
+  setEpcsIframeLoaded: (loaded: boolean) => {
+    set({ epcsIframeLoaded: loaded })
   },
   loading: false,
   error: undefined,
