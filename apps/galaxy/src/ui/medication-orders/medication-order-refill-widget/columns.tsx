@@ -276,7 +276,7 @@ const columns = (
     },
     {
       id: 'actions',
-      size: 100,
+      size: 6000,
       header: () => <ColumnHeader label="Actions" />,
       cell: ({ row }) => <ActionsCell row={row} />,
     },

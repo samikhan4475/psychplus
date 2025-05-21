@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { DataTable, LoadingPlaceholder } from '@/components'
 import { columns } from './columns'
@@ -19,6 +19,7 @@ const MedicationOrderRefillTable = () => {
   useEffect(() => {
     searchMedicationsList()
   }, [])
+  const memoizedColumns = useMemo(() => columns(sort, sortData), [])
   if (loading) {
     return (
       <Flex height="100%" align="center" justify="center">
@@ -30,7 +31,7 @@ const MedicationOrderRefillTable = () => {
     <ScrollArea>
       <DataTable
         data={data?.refillRequests ?? []}
-        columns={columns(sort, sortData)}
+        columns={memoizedColumns}
         disablePagination
         sticky
       />

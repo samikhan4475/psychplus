@@ -24,6 +24,7 @@ const defaultPayLoad = {
   isIncludeSignatureList: true,
   isIncludeDiagnosisList: true,
   isIncludePharmacyData: true,
+  isIncludePatientData: true,
 }
 
 const getMedicationsListAction = async ({

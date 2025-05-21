@@ -7,7 +7,11 @@ interface DrugSignature {
 
 interface DrugDiagnosis {
   id: string
-  diagnosisCode: string
+  notificationId: string
+  pharmacyNotificationDrugId: string
+  diagnosisCode?: string
+  diagnosisCodeQualifier?: string
+  diagnosisDescription?: string
 }
 
 interface PharmacyNotificationDrugModel {
@@ -42,6 +46,31 @@ interface PharmacyAddress {
   city?: string
   state?: string
   country?: string
+}
+interface PatientData {
+  id: number
+  metadata: Metadata
+  verificationStatus: string
+  userId: number
+  legalName: {
+    firstName: string
+    lastName: string
+  }
+  birthdate: string
+  gender: string
+  medicalRecordNumber: string
+  chargeUserId: string
+  isPlusMember: boolean
+  hasPhoto: boolean
+  contactDetails: {
+    email: string
+    isMailingAddressSameAsPrimary: boolean
+  }
+  status: string
+  hasGuardian: boolean
+  patientVerificationTimeElapsed: number
+  patientTypeEstablishedOrNew: string
+  isSelfPay: boolean
 }
 interface MedicationRefill {
   id: string
@@ -79,6 +108,7 @@ interface MedicationRefill {
   pharmacyNotificationId: string
   pharmacyAddress?: PharmacyAddress
   isResponsePending?: boolean
+  patient?: PatientData
 }
 
 interface MedicationRefillResponseList {
@@ -168,6 +198,16 @@ interface MedicationHistoryResponse {
   keyValue: string
   id: string
 }
+interface MapPatientTypes {
+  mrn?: string
+  firstName?: string
+  lastName?: string
+  dateOfBirth?: string
+  age?: string
+  gender?: string
+  telephone?: string
+}
+
 enum RenewalResponseTypeEnum {
   Approved = 'Approved',
   Denied = 'Denied',
@@ -244,6 +284,7 @@ export {
   type PatientPersonInfo,
   type MedicationHistoryPayload,
   type MedicationHistoryResponse,
+  type MapPatientTypes,
   RenewalResponseTypeEnum,
   type RenewalResponsePayload,
   type RxRenewalResponseDrugDetail,

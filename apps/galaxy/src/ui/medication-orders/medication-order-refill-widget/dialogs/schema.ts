@@ -8,6 +8,10 @@ const drugSignatureSchema = z.object({
 const drugDiagnosisSchema = z.object({
   id: z.string().uuid(),
   diagnosisCode: z.string(),
+  notificationId: z.string().optional(),
+  pharmacyNotificationDrugId: z.string().optional(),
+  diagnosisCodeQualifier: z.string().optional(),
+  diagnosisDescription: z.string().optional(),
 })
 const addressSchema = z.object({
   type: z.string().optional(),

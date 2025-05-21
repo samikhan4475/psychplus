@@ -3,8 +3,10 @@ import { TabContentHeading } from '@/components'
 import { useStore } from './store'
 
 const MedicationOrderRefillHeader = () => {
-  const { searchMedicationsList, loading } = useStore()
-
+  const { searchMedicationsList, loading } = useStore((state) => ({
+    searchMedicationsList: state.searchMedicationsList,
+    loading: state.loading,
+  }))
   return (
     <TabContentHeading title="Refill Requests">
       <Flex align="center" justify="end" gap="2" className="flex-1">

@@ -1,9 +1,12 @@
 import { create } from 'zustand'
-import { Sort } from '@/types'
+import { LinkAccountType, Sort } from '@/types'
+import { searchPatientsAction } from '@/ui/patient-lookup/actions'
+import { Patient, SearchPatientsData } from '@/ui/patient-lookup/types'
 import { getNewSortDir } from '@/utils'
 import { getMedicationsListAction } from '../actions'
 import { MedicationOrdersTabs } from '../constant'
 import {
+  MapPatientTypes,
   MedicationRefill,
   MedicationRefillAPIRequest,
   MedicationRefillResponseList,
@@ -23,6 +26,11 @@ interface StoreState {
     page?: number,
     reset?: boolean,
   ) => Promise<void>
+  loadingPatients: boolean
+  patientsData?: SearchPatientsData
+  searchPatients: (payload?: Partial<MapPatientTypes>, page?: number) => void
+  selectedPatient: Patient | null
+  setSelectedPatient: (patient: Patient | null) => void
   setActiveTab: (tab: string) => void
   pageCache: Record<number, MedicationRefillResponseList>
   next: () => void
@@ -43,6 +51,7 @@ const useStore = create<StoreState>((set, get) => ({
   error: undefined,
   payload: undefined,
   loading: false,
+  loadingPatients: false,
   activeTab: MedicationOrdersTabs.REFILL_REQUESTS,
   viewedTabs: new Set([MedicationOrdersTabs.REFILL_REQUESTS]),
   sort: undefined,
@@ -74,7 +83,27 @@ const useStore = create<StoreState>((set, get) => ({
         : { ...get().pageCache, [page]: result.data },
     })
   },
+  searchPatients: async (payload: Partial<LinkAccountType> = {}, page = 1) => {
+    set({
+      loadingPatients: true,
+    })
+    const result = await searchPatientsAction({
+      ...payload,
+      page,
+      sort: get().sort,
+    })
 
+    if (result.state === 'error') {
+      return set({
+        patientsData: undefined,
+        loadingPatients: false,
+      })
+    }
+    set({
+      patientsData: result.data,
+      loadingPatients: false,
+    })
+  },
   setActiveTab: (activeTab) => {
     const { viewedTabs } = get()
     viewedTabs.add(activeTab)
@@ -136,6 +165,8 @@ const useStore = create<StoreState>((set, get) => ({
     })
     get().searchMedicationsList(get().payload, 1, true)
   },
+  selectedPatient: null,
+  setSelectedPatient: (patient) => set({ selectedPatient: patient }),
 }))
 
 export { useStore }
