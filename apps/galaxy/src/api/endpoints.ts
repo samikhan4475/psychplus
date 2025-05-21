@@ -263,6 +263,8 @@ const UPDATE_INSURANCE_PAYMENT_ENDPOINT = (id: string) =>
 const INSURANCE_PAYMENT_ATTACHMENTS_ENDPOINT = (paymentId: string) =>
   `${API_URL}/api/payments/${paymentId}/attachments`
 const ADD_INSURANCE_PAYMENT_ENDPOINT = `${API_URL}/api/payments`
+const CLAIM_RESUBMIT_ENDPOINT = (claimId: string) =>
+  `${API_URL}/api/claims/${claimId}/markasresubmit`
 const GET_PATIENT_PAYMENT_HISTORY = `${API_URL}/api/patients/all/transactions/search`
 const GET_PATIENT_TRANSACTIONS_HISTORY = (
   patientId: number,
@@ -1268,6 +1270,7 @@ export {
   GET_USER_TYPE,
   GET_FACILITY_ADMISSION_DATA,
   GET_CLAIM_SUBMISSION_RESPONSE,
+  CLAIM_RESUBMIT_ENDPOINT,
   REMOVE_TO_COSIGNER_NOTE_ENDPOINT,
   GET_SEARCHED_LAB_TESTS,
   GET_LABS_LOCATION,
