@@ -45,6 +45,8 @@ interface PatientState {
   address: PrimaryAddress | undefined
   setPatient: (patient: User) => void
   setAddress: (address: PrimaryAddress) => void
+  gMapKey: string
+  setGMapKey: (gMapKey: string) => void
 }
 
 type StoreType = AppointmentState &

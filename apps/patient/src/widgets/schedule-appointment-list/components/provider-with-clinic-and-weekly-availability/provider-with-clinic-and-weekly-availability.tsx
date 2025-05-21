@@ -7,8 +7,6 @@ import { getCodeDisplay } from '@psychplus/codeset'
 import { getStaffProfilePicture } from '@psychplus/staff/api.client'
 import { Popover } from '@psychplus/ui/popover'
 import { DownArrowIcon } from '@/components'
-import { DistanceIcon } from '@/components/icons/distance-icon'
-import { LocationMarkerIcon } from '@/components/icons/location-marker-icon'
 import { WeeklyAvailabilitySlots } from '../../components'
 import { useStore } from '../../store'
 import type {
@@ -49,23 +47,7 @@ const ProviderWithClinicAndWeeklyAvailability = ({
               {renderStaffName(staffWithClinicsAndSlots.staff)}
             </Text>
 
-            <Flex align="center" gap="1">
-              {Array.from({ length: 5 }, (_, index) => index + 1).map(
-                (value) => (
-                  <Box key={value}>
-                    {value <=
-                    (staffWithClinicsAndSlots.staff.rating?.valueOf() ?? 0) ? (
-                      <StarFilledIcon height={16} width={16} color="#FFC700" />
-                    ) : (
-                      <StarIcon height={16} width={16} color="#FFC700" />
-                    )}
-                  </Box>
-                ),
-              )}
-              <Text className="text-xs pt-[1px] font-medium text-[#1C2024]">
-                {staffWithClinicsAndSlots.staff.rating?.valueOf()}
-              </Text>
-            </Flex>
+            <StarRating rating={staffWithClinicsAndSlots.staff.rating?.valueOf()} />
 
             <Flex align="center">
               <Text size="1" className="text-[#194595]" ml="1">
@@ -99,6 +81,31 @@ const ProviderWithClinicAndWeeklyAvailability = ({
     </Flex>
   )
 }
+
+const StarRating = ({ rating }: { rating?: number }) => {
+  const numericRating = rating ?? 0;
+
+  if (!rating || rating <= 0) {
+    return <Text>No reviews yet</Text>;
+  }
+
+  return (
+    <Flex align="center" gap="1">
+      {Array.from({ length: 5 }, (_, index) => (
+        <Box key={index}>
+          {index + 1 <= numericRating ? (
+            <StarFilledIcon height={16} width={16} color="#FFC700" />
+          ) : (
+            <StarIcon height={16} width={16} color="#FFC700" />
+          )}
+        </Box>
+      ))}
+      <Text className="text-xs pt-[1px] font-medium text-[#1C2024]">
+        {numericRating}
+      </Text>
+    </Flex>
+  );
+};
 
 const renderLanguageAndLocation = (
   appointmentType: string,

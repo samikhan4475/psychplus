@@ -35,13 +35,13 @@ interface Address {
 }
 
 interface PrimaryAddress {
-  primaryStreet1: string
+  primaryStreet1?: string
   primaryStreet2?: string
   primaryStreet?: string
   primaryStreetNumber?: string
-  primaryCity: string
-  primaryState: string
-  primaryPostalCode: string
+  primaryCity?: string
+  primaryState?: string
+  primaryPostalCode?: string
   primaryZipLast4?: string
   primaryCountry?: string
 }

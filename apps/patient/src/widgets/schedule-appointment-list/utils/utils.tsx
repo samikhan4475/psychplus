@@ -7,7 +7,6 @@ import {
 import { type Clinic } from '@psychplus/clinics'
 import { type Staff } from '@psychplus/staff'
 import { isMobile } from '@psychplus/utils/client'
-import { APP_ENV } from '@psychplus/utils/constants'
 import {
   convertToLocalISOString,
   formatDateYmd,
@@ -55,6 +54,26 @@ function groupStaffWithClinicsAndSlots(
       }
     },
   )
+
+  resultArray.sort((a, b) => {
+    const getEarliestSlotTime = (entry: StaffWithClinicsAndSlots): number => {
+      const allSlots = entry.clinicWithSlots.flatMap((c) => c.availableSlots);
+      const sorted = allSlots.map((s) => new Date(s.startDate).getTime()).sort((x, y) => x - y);
+      return sorted[0] ?? Infinity;
+    };
+
+    const timeA = getEarliestSlotTime(a);
+    const timeB = getEarliestSlotTime(b);
+
+    if (timeA !== timeB) {
+      return timeA - timeB;
+    }
+
+    const ratingA = a.staff.rating ?? 0;
+    const ratingB = b.staff.rating ?? 0;
+
+    return ratingB - ratingA;
+  });
 
   return resultArray
 }

@@ -210,7 +210,7 @@ const PlacesAutocomplete = ({
       >
         <Box className="flex-1" position="relative">
           <FormFieldContainer>
-            <FormFieldLabel required>{label} Address 1</FormFieldLabel>
+            <FormFieldLabel required={!isSelfScheduling}>{label} Address 1</FormFieldLabel>
             <InputComponent
               label=""
               size="3"
@@ -253,7 +253,7 @@ const PlacesAutocomplete = ({
 
       <Flex className="w-full" gap="4">
         <FormFieldContainer className="flex-1">
-          <FormFieldLabel required>City</FormFieldLabel>
+          <FormFieldLabel required={!isSelfScheduling}>City</FormFieldLabel>
           <InputComponent
             label=""
             size="3"
@@ -267,7 +267,7 @@ const PlacesAutocomplete = ({
 
         {includeState && (
           <FormFieldContainer className="flex-1">
-            <FormFieldLabel required>State</FormFieldLabel>
+            <FormFieldLabel required={!isSelfScheduling}>State</FormFieldLabel>
             <InputComponent
               label=""
               size="3"
@@ -281,7 +281,7 @@ const PlacesAutocomplete = ({
         )}
 
         <FormFieldContainer className="flex-1">
-          <FormFieldLabel required>Zip</FormFieldLabel>
+          <FormFieldLabel required={!isSelfScheduling}>Zip</FormFieldLabel>
           <ZipCodeInputComponent
             label=""
             size="3"

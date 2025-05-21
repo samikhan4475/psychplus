@@ -59,14 +59,14 @@ const schema = z
     dateOfBirth: validate.requiredString,
     zipCode: validate.requiredString,
     state: validate.requiredString,
-    primaryStreet1: z.string().min(1, 'Required'),
+    primaryStreet1: z.string().optional(),
     primaryStreet2: z.string().optional(),
     primaryStreet: z.string().optional(),
     primaryStreetNumber: z.string().optional(),
-    primaryCity: z.string().min(1, 'Required'),
-    primaryState: z.string().min(1, 'Required'),
-    primaryPostalCode: zipCodeSchema,
-    primaryZipLast4: zipLast4Schema,
+    primaryCity: z.string().optional(),
+    primaryState: z.string().optional(),
+    primaryPostalCode: zipCodeSchema.optional(),
+    primaryZipLast4: zipLast4Schema.optional(),
     primaryCountry: z.string().optional(),
   })
   .superRefine(({ dateOfBirth, zipCode }, ctx) => {
@@ -126,7 +126,7 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
 
   const [stateOptions, setStateOptions] = useState<StateOptions[]>([])
 
-  const { setPatient, setAddress } = useStore()
+  const { setPatient, setAddress,setGMapKey } = useStore()
 
   const onScheduleChange = (key: keyof ScheduledAppointment, value: string) => {
     setSchedule((prev) => ({ ...prev, [key]: value }))
@@ -201,6 +201,8 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
       primaryPostalCode: form.getValues().primaryPostalCode,
       primaryZipLast4: form.getValues().primaryZipLast4 ?? '',
     })
+
+    setGMapKey(mapKey)
 
     parent.postMessage(
       {

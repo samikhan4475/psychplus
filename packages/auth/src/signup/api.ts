@@ -26,6 +26,7 @@ interface SignupRequest {
   hipaaConsentOn?: string
   termsOfServiceConsentOn?: string
   privacyPolicyConsentOn?: string
+  aboutPatientDescription?: string
 }
 
 type SignupResponse = {

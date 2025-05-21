@@ -3,9 +3,9 @@
 import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ProviderType } from '@psychplus-v2/constants'
+import { INSURANCE_INFO, ProviderType, SELF_PAY_INFO } from '@psychplus-v2/constants'
 import { cn, getProviderTypeLabel } from '@psychplus-v2/utils'
-import { Flex, Text } from '@radix-ui/themes'
+import { Box, Flex, Text } from '@radix-ui/themes'
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import { z } from 'zod'
 import {
@@ -289,6 +289,13 @@ const InsurancePaymentForm = ({
           </button>
         ))}
       </Flex>
+      <Box className='text-4 bg-pp-gray-2 py-3 px-3 my-3 rounded-3'>
+        {hasInsurance ? (
+          INSURANCE_INFO
+        ): (
+          SELF_PAY_INFO
+        )}
+      </Box>
 
       {hasInsurance && (
         <>

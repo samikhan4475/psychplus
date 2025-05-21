@@ -6,6 +6,8 @@ import { type PatientState } from './types'
 const createPatientStore: StateCreator<PatientState> = (set) => ({
   patient: undefined,
   address: undefined,
+  gMapKey: '',
+  setGMapKey: (gMapKey) => set({ gMapKey }),
   setPatient: (patient) => set({ patient }),
   setAddress: (address) => set({ address }),
 })

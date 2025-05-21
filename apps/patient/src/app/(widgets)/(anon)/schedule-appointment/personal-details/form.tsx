@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Flex, Link, Text } from '@radix-ui/themes'
+import { Flex, Link, Text, TextArea } from '@radix-ui/themes'
 import { ChevronDownIcon } from 'lucide-react'
 import { type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
@@ -31,6 +31,9 @@ import { WarningIcon } from '@/components/icons/warning-icon'
 import { useStore } from '@/widgets/schedule-appointment-list/store'
 import { getLoginRedirectUrl } from '@/widgets/schedule-appointment-list/utils'
 import { enums, PSYCHPLUS_LIVE_URL } from '@/constants'
+import { useGooglePlacesContext } from '@/providers'
+import { PlacesAutocomplete } from '@/components-v2'
+import { zipCodeSchema, zipLast4Schema } from '@psychplus-v2/utils'
 
 const schema = z
   .object({
@@ -44,12 +47,22 @@ const schema = z
     isParentOrGuardian: z.boolean().default(false),
     guardianFirstName: z.string().optional(),
     guardianLastName: z.string().optional(),
+    note: z.string().optional(),
     agreeToTerms: z
       .boolean()
       .default(false)
       .refine((value) => value === true, {
         message: 'Please agree to our terms and conditions',
       }),
+    primaryStreet1: z.string().optional(),
+    primaryStreet2: z.string().optional(),
+    primaryStreet: z.string().optional(),
+    primaryStreetNumber: z.string().optional(),
+    primaryCity: z.string().optional(),
+    primaryState: z.string().optional(),
+    primaryPostalCode: zipCodeSchema.optional(),
+    primaryZipLast4: zipLast4Schema.optional(),
+    primaryCountry: z.string().optional(),
   })
   .superRefine(
     (
@@ -95,16 +108,30 @@ type SchemaType = z.infer<typeof schema>
 
 const PersonalDetailsForm = () => {
   const router = useRouter()
+  const { patient, setPatient, address } = useStore()
+
   const form = useForm({
     schema,
+    defaultValues: {
+      primaryCity: address?.primaryCity,
+      primaryCountry: address?.primaryCountry,
+      primaryPostalCode: address?.primaryPostalCode,
+      primaryState: address?.primaryState,
+      primaryStreet1: address?.primaryStreet1,
+      primaryStreet2: address?.primaryStreet2,
+      primaryStreet: address?.primaryStreet,
+      primaryStreetNumber: address?.primaryStreetNumber,
+      primaryZipLast4: address?.primaryZipLast4,
+    },
     criteriaMode: 'all',
   })
 
-  const { patient, setPatient, address } = useStore()
   const [alertError, setAlertError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const { publish, subscribe } = usePubsub()
   const [genders, setGenders] = useState<Code[]>()
+
+  const { loaded } = useGooglePlacesContext()
 
   useEffect(() => {
     getCodeSet('Gender').then((res) => {
@@ -127,8 +154,8 @@ const PersonalDetailsForm = () => {
         ? {
             guardian: {
               name: {
-                firstName: form.getValues().guardianFirstName || '',
-                lastName: form.getValues().guardianLastName || '',
+                firstName: form.getValues().guardianFirstName ?? '',
+                lastName: form.getValues().guardianLastName ?? '',
               },
             },
           }
@@ -155,6 +182,7 @@ const PersonalDetailsForm = () => {
         password: form.getValues().password,
         passwordConfirm: form.getValues().password,
         gender: form.getValues().gender,
+        aboutPatientDescription: form.getValues().note,
         ...guardianField,
       })
         .then((res) => {
@@ -370,7 +398,7 @@ const PersonalDetailsForm = () => {
                 {...form.register('dateOfBirth')}
                 style={{ marginRight: 12 }}
                 className="h-14 w-full"
-                defaultValue={patient?.dateOfBirth || ''}
+                defaultValue={patient?.dateOfBirth ?? ''}
                 onChange={(e) => {
                   if (isLessThen18(e.target.value)) {
                     form.setValue('isParentOrGuardian', true)
@@ -390,80 +418,23 @@ const PersonalDetailsForm = () => {
               />
             </Flex>
           </Flex>
-          <Flex className="flex-col sm:flex-row" gap="4">
-            <Flex direction="column" gap="1" className="w-full">
-              <Text>Primary Address 1</Text>
-              <FormTextInput
-                type="text"
-                name="primaryAddress"
-                label=""
-                className="h-14 w-full"
-                data-testid="first-name-input"
-                defaultValue={address?.primaryStreet1 || ''}
-                disabled
+          {loaded && (
+              <PlacesAutocomplete
+                name="primary"
+                label="Primary"
+                className="h-[45px] rounded-6 text-4"
+                isSelfScheduling
               />
-            </Flex>
-            <Flex direction="column" gap="1" className="w-full">
-              <Text>Primary Address 2</Text>
-              <FormTextInput
-                type="text"
-                name="primaryAddress2"
-                label=""
-                className="h-14 w-full"
-                data-testid="last-name-input"
-                defaultValue={address?.primaryStreet2 || ''}
-                disabled
-              />
-            </Flex>
-          </Flex>
-          <Flex className="flex-col sm:flex-row" gap="4">
-            <Flex direction="column" gap="1" className="w-full">
-              <Text>City</Text>
-              <FormTextInput
-                type="text"
-                name="city"
-                label=""
-                className="h-14 w-full"
-                data-testid="first-name-input"
-                defaultValue={address?.primaryCity || ''}
-                disabled
-              />
-            </Flex>
-            <Flex direction="column" gap="1" className="w-full">
-              <Text>State</Text>
-              <FormTextInput
-                type="text"
-                name="state"
-                label=""
-                className="h-14 w-full"
-                data-testid="last-name-input"
-                defaultValue={address?.primaryState || ''}
-                disabled
-              />
-            </Flex>
-            <Flex direction="column" gap="1" className="w-full">
-              <Text>Zip</Text>
-              <FormTextInput
-                type="text"
-                name="zip"
-                label=""
-                className="h-14 w-full"
-                data-testid="last-name-input"
-                defaultValue={address?.primaryPostalCode || ''}
-                disabled
-              />
-            </Flex>
-          </Flex>
+            )}
 
           <Flex direction="column" gap="1" className="w-full">
-            <Text>Area Code</Text>
-            <FormTextInput
-              type="text"
-              name="zipLast4"
-              label=""
-              className="h-14 w-full"
-              data-testid="area-code-input"
-              defaultValue={address?.primaryZipLast4 || ''}
+            <Text>What can we help you with?</Text>
+            <TextArea
+              placeholder='Tell us more about what you would like to discuss with your clinician in your first appointment. They will review your note ahead of your first session.'
+              className="w-full"
+              rows={4}
+              data-testid="note-input"
+              {...form.register('note')}
             />
           </Flex>
 

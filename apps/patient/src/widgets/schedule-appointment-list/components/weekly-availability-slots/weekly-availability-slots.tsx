@@ -78,13 +78,13 @@ const SlotComponent = ({
       state: state ?? '',
     })
 
-    if (filters.appointmentType !== "Virtual") {
-      if (
-        address?.primaryState !== state
-      ) {
-        router.push(`/widgets/schedule-appointment-confirmation?myState=${address?.primaryState}&providerState=${state}`)
-        return
-      }
+    if (
+      filters.appointmentType !== "Virtual" &&
+      address?.primaryState &&
+      address.primaryState !== state
+    ) {
+      router.push(`/widgets/schedule-appointment-confirmation?myState=${address?.primaryState}&providerState=${state}`)
+      return
     }
 
     parent.postMessage(

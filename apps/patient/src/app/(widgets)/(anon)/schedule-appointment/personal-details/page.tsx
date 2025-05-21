@@ -6,12 +6,17 @@ import { SCHEDULE_APPOINTMENT_LIST } from '@psychplus/widgets'
 import { usePublishSize } from '@psychplus/widgets/hooks'
 import AppointmentDetailCard from '@/components/appointment-detail-card/appointment-detail-card'
 import { PersonalDetailsForm } from './form'
+import { GooglePlacesContextProvider } from '@/providers'
+import { useStore } from '@/widgets/schedule-appointment-list/store'
 
 const PersonalDetails = () => {
   const ref = useRef<HTMLDivElement>(null)
   usePublishSize(SCHEDULE_APPOINTMENT_LIST, ref)
 
+  const { gMapKey } = useStore()
+
   return (
+    <GooglePlacesContextProvider apiKey={gMapKey}>
     <Flex justify="center" ref={ref} className="px-5">
       <Flex direction="column" gap="6">
         <AppointmentDetailCard />
@@ -27,6 +32,7 @@ const PersonalDetails = () => {
         <PersonalDetailsForm />
       </Flex>
     </Flex>
+    </GooglePlacesContextProvider>
   )
 }
 
