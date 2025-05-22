@@ -35,7 +35,7 @@ const ClaimStatusDropDown = () => {
       <MultiSelectField
         defaultValues={claimStatusCodes}
         options={options}
-        className="flex-1"
+        className="flex-1 w-[100px]"
         onChange={(values) => {
           form.setValue('claimStatusCodes', values, { shouldDirty: true })
         }}

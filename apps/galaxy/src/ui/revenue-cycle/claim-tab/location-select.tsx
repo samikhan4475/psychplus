@@ -13,7 +13,7 @@ const LocationSelect = () => {
         field="locationId"
         placeholder="Select"
         options={locationsData}
-        buttonClassName="w-full h-6"
+        buttonClassName="w-[100px] h-6"
         className="h-full flex-1"
       />
     </FormFieldContainer>
