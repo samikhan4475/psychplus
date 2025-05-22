@@ -288,15 +288,15 @@ const GENERATE_PATIENT_STATEMENTS_ENDPOINT = (fileFormat: string) =>
 const DOWNLOAD_PATIENT_STATEMENTS_ENDPOINT = (fileFormat: string) =>
   `${API_URL}/api/billingstatements/actions/preview/${fileFormat}`
 const DOWNLOAD_CLAIM_SUBMISSION_HISTORY_ENDPOINT = (submissionId: string) =>
-  `${API_URL}/api/claimssubmissions/${submissionId}/actions/download`
+  `${API_URL}/api/claimsubmissions/${submissionId}/actions/download`
 const GET_PATIENT_STATEMENTS_LIST_ENDPOINT = `${API_URL}/api/billingstatements/actions/search`
-const DOWNLOAD_HCFA_FILE_ENDPOINT = `${API_URL}/api/claimssubmissions/actions/previewclaimform`
-const GET_RESPONSE_HISTORY_LIST_ENDPOINT = `${API_URL}/api/claimssubmissions/responses/actions/search`
+const DOWNLOAD_HCFA_FILE_ENDPOINT = `${API_URL}/api/claims/actions/previewclaimform`
+const GET_RESPONSE_HISTORY_LIST_ENDPOINT = `${API_URL}/api/claimsresponses/actions/search`
 const GET_DENIAL_LIST_ENDPOINT = `${API_URL}/api/billingdenials/actions/search`
 const RESOLVE_DENIAL_ENDPOINT = (claimServiceLinePaymentId: string) =>
   `${API_URL}/api/claimservicelinepayments/${claimServiceLinePaymentId}/actions/resolve`
 const GET_RESPONSE_HISTORY_DETAIL_LIST_ENDPOINT = (id: string) =>
-  `${API_URL}/api/claimssubmissions/responses/${id}/details/actions/search`
+  `${API_URL}/api/claimsubmissions/responses/${id}/details/actions/search`
 const GET_CLAIMS_AUDIT_HISTORY_LIST_ENDPOINT = `${API_URL}/api/claims/history`
 const GET_PAYMENTS_HISTORY_LIST_ENDPOINT = (paymentId: string) =>
   `${API_URL}/api/payments/${paymentId}/history/actions/search`
@@ -308,18 +308,18 @@ const EXPORT_CLAIMS_LIST_ENDPOINT = (fileFormat: string) =>
   `${API_URL}/api/claims/actions/export/${fileFormat}`
 const SETTINGS_HISTORY_ENDPOINT = `${API_URL}/api/settings/actions/history/search`
 const EXPORT_SUBMISSIONS_LIST_ENDPOINT = (fileFormat: string) =>
-  `${API_URL}/api/claimssubmissions/actions/export/${fileFormat}`
+  `${API_URL}/api/claimsubmissions/actions/export/${fileFormat}`
 const EXPORT_PAYMENTS_LIST_ENDPOINT = (fileFormat: string) =>
   `${API_URL}/api/payments/actions/export/${fileFormat}`
 const EXPORT_DENIAL_LIST_ENDPOINT = (fileFormat: string) =>
   `${API_URL}/api/billingdenials/actions/export/${fileFormat}`
-const CLAIM_SUBMIT_ENDPOINT = `${API_URL}/api/claimssubmissions/actions/srcubandsubmit`
-const GET_CLAIM_SUBMISSION_LIST = `${API_URL}/api/claimssubmissions/actions/search`
+const CLAIM_SUBMIT_ENDPOINT = `${API_URL}/api/claimsubmissions/actions/srcubandsubmit`
+const GET_CLAIM_SUBMISSION_LIST = `${API_URL}/api/claimsubmissions/actions/search`
 const CLAIM_SUBMISSION_REJECTION_DETAIL_ENDPOINT = (claimId: string) =>
   `${API_URL}/api/claims/${claimId}/claimvalidations/actions/search`
-const GET_CLAIM_SUBMISSION_HISTORY = `${API_URL}/api/claimssubmissions/batches/actions/search`
+const GET_CLAIM_SUBMISSION_HISTORY = `${API_URL}/api/claimsubmissions/batches/actions/search`
 const GET_CLAIM_SUBMISSION_HISTORY_DETAIL = (batchId: string) =>
-  `${API_URL}/api/claimssubmissions/batches/${batchId}/details/actions/search?isIncludeMetadataResourceChangeControl=true`
+  `${API_URL}/api/claimbatches/${batchId}/details/actions/search?isIncludeMetadataResourceChangeControl=true`
 const DELETE_CLAIM_ENDPOINT = (id: string) => `${API_URL}/api/claims/${id}`
 const GET_PATIENT_POLICY_HISTORY_ENDPOINT = (
   patientId: string,
@@ -637,7 +637,7 @@ const ADD_LAB_ORDERS_RESULT_ENDPOINT = (
   `${API_URL}/api/appointments/${appointmentId}/laborders/${orderId}/labresults`
 
 const GET_CLAIM_SUBMISSION_RESPONSE = (claimId: string) =>
-  `${API_URL}/api/claimssubmissions/${claimId}/responses/actions/search`
+  `${API_URL}/api/claims/${claimId}/responses/actions/search`
 const GET_SEARCHED_LAB_TESTS = `${API_URL}/api/labcompendiums/actions/search`
 const GET_LABS_LOCATION = `${API_URL}/api/labs/actions/search`
 const LAB_ORDER = (appointmentId: number) =>

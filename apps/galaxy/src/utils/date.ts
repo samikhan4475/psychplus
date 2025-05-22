@@ -167,7 +167,7 @@ const formatDate = (
   date: Date | null | undefined | string,
   dateFormat = 'MM/dd/yyyy',
 ): string => {
-  if (!date) return ''
+  if (!date || isNaN(new Date(date).getTime())) return ''
   if (typeof date === 'string') date = new Date(date)
   return format(date, dateFormat)
 }
