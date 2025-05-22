@@ -11,6 +11,7 @@ import {
 } from '@/components'
 import { Role } from '@/types'
 import { formatDateTime } from '@/utils'
+import { getAllRolesHistoryListAction } from './actions'
 
 interface HxListTableProps {
   organizationId: string
@@ -18,35 +19,83 @@ interface HxListTableProps {
 
 const columns: ColumnDef<Role>[] = [
   {
+    id: 'metadata.updatedByFullName',
+    accessorKey: 'metadata.updatedByFullName',
+    header: ({ column }) => (
+      <ColumnHeader label="User" sortable clientSideSort column={column} />
+    ),
+    cell: ({ row }) => (
+      <TextCell>{row.original.metadata.updatedByFullName}</TextCell>
+    ),
+  },
+  {
     id: 'shortName',
-    header: () => <ColumnHeader label="Role" sortable />,
+    accessorKey: 'shortName',
+    header: ({ column }) => (
+      <ColumnHeader label="Role" sortable clientSideSort column={column} />
+    ),
     cell: ({ row }) => <TextCell>{row.original.shortName}</TextCell>,
   },
   {
     id: 'actorCategory',
-    header: () => <ColumnHeader label="Staff Type" sortable />,
+    accessorKey: 'actorCategory',
+    header: ({ column }) => (
+      <ColumnHeader
+        label="Staff Type"
+        sortable
+        clientSideSort
+        column={column}
+      />
+    ),
     cell: ({ row }) => <TextCell>{row.original.actorCategory}</TextCell>,
   },
   {
     id: 'displayName',
-    header: () => <ColumnHeader label="Display Name" sortable />,
+    accessorKey: 'displayName',
+    header: ({ column }) => (
+      <ColumnHeader
+        label="Display Name"
+        sortable
+        clientSideSort
+        column={column}
+      />
+    ),
     cell: ({ row }) => <TextCell>{row.original.displayName}</TextCell>,
   },
   {
     id: 'status',
-    header: () => <ColumnHeader label="Status" sortable />,
+    accessorKey: 'recordStatus',
+    header: ({ column }) => (
+      <ColumnHeader label="Status" sortable clientSideSort column={column} />
+    ),
     cell: ({ row }) => <TextCell>{row.original.recordStatus}</TextCell>,
   },
   {
     id: 'metadata.createdOn',
-    header: () => <ColumnHeader label="Created On" sortable />,
+    accessorKey: 'metadata.createdOn',
+    header: ({ column }) => (
+      <ColumnHeader
+        label="Created On"
+        sortable
+        clientSideSort
+        column={column}
+      />
+    ),
     cell: ({ row }) => (
       <TextCell>{formatDateTime(row.original.metadata.createdOn)}</TextCell>
     ),
   },
   {
     id: 'metadata.createdBy',
-    header: () => <ColumnHeader label="Created By" sortable />,
+    accessorKey: 'metadata.createdBy',
+    header: ({ column }) => (
+      <ColumnHeader
+        label="Created By"
+        sortable
+        clientSideSort
+        column={column}
+      />
+    ),
     cell: ({ row }) => (
       <TextCell>{row.original.metadata.createdByFullName}</TextCell>
     ),
@@ -54,13 +103,18 @@ const columns: ColumnDef<Role>[] = [
 ]
 
 const HxListTable = ({ organizationId }: HxListTableProps) => {
-  const [data, setData] = useState([])
+  const [data, setData] = useState<Role[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    setLoading(false)
-    // TODO: need to call action here to fetch data
-    setData([])
+    ;(async () => {
+      setLoading(true)
+      const response = await getAllRolesHistoryListAction(organizationId)
+      if (response.state === 'success') {
+        setData(response.data)
+      }
+      setLoading(false)
+    })()
   }, [organizationId])
 
   if (loading) {

@@ -52,7 +52,7 @@ const HxStatusCell = ({ row }: PropsWithRow<Organization>) => {
             <CounterClockwiseClockIcon className="text-black cursor-pointer" />
           </Popover.Trigger>
 
-          <Popover.Content className="min-w-[373px] rounded-[10px] p-2 shadow-2">
+          <Popover.Content className="min-w-[1000px] rounded-[10px] p-2 shadow-2">
             <Flex className="w-full gap-1.5" direction="column">
               <Flex justify="between" align="center" gap="2">
                 <Heading size="4">Status Hx</Heading>

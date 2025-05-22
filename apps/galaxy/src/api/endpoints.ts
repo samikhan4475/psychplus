@@ -374,6 +374,8 @@ const GET_ORGANIZATION_STAFF_ROLES = (
 ) => `${API_URL}/api/organizations/${organizationId}/users/${staffId}/roles`
 const GET_ORGANIZATION_ROLES = `${API_URL}/api/organizations/actions/search`
 const GET_USER_ROLES = `${API_URL}/api/userroles/action/search`
+const GET_ROLES_HISTORY = (roleId: string) =>
+  `${API_URL}/api/userroles/${roleId}/history/actions/search`
 const Add_USER_ROLES = `${API_URL}/api/userroles`
 const UPDATE_USER_ROLES = (roleId: string) =>
   `${API_URL}/api/userroles/${roleId}`
@@ -1439,5 +1441,6 @@ export {
   SEARCH_EXTERNAL_REFERRAL_PATIENTS_ENDPOINT,
   UPDATE_EXTERNAL_REFERRAL_PATIENT_ENDPOINT,
   GET_EXTERNAL_REFERRAL_PATIENTS_INFO_HISTORY,
-  MAP_PATIENTS
+  GET_ROLES_HISTORY,
+  MAP_PATIENTS,
 }

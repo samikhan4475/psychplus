@@ -40,6 +40,7 @@ const ProfileForm = ({ defaultValues }: ProfileFormProps) => {
   const onSubmit = async (data: ProfileSchemaType) => {
     const reqPayload: Partial<Role> = {
       ...data,
+      organizationId: defaultValues.organizationId,
       id: roleId,
     }
     const sanitizedPayload = sanitizeFormData(reqPayload)

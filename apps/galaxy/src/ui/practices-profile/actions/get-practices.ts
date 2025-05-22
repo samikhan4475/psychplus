@@ -24,6 +24,7 @@ const defaultPayload = {
   includePermissions: false,
   isIncludePracticeAddressLocation: true,
   isIncludePaymentAddressLocation: true,
+  includeOrganization: true,
 }
 
 const getPracticesListAction = async ({
