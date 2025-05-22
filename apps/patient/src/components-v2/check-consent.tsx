@@ -139,4 +139,4 @@ const CheckConsents = ({ userConsents }: CheckConsentsProps) => {
   )
 }
 
-export { CheckConsents }
+export { CheckConsents, CONSENT_DOCUMENT_MAP, type PolicyMeta }

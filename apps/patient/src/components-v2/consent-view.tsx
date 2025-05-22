@@ -2,84 +2,81 @@
 
 import { useEffect, useState } from 'react'
 import { Document, DocumentType } from '@psychplus-v2/types'
+import { cn } from '@psychplus-v2/utils'
+import * as Tabs from '@radix-ui/react-tabs'
 import { Box, Button, Dialog } from '@radix-ui/themes'
 import parse from 'html-react-parser'
 import { getDocument } from '@/actions'
-import { CloseDialogIcon, LoadingPlaceholder } from '@/components-v2'
-import * as Tabs from '@radix-ui/react-tabs'
-import { cn } from '@psychplus-v2/utils'
+import {
+  CloseDialogIcon,
+  CONSENT_DOCUMENT_MAP,
+  LoadingPlaceholder,
+  PolicyMeta,
+} from '@/components-v2'
 
 interface ConsentViewProps {
   open: boolean
   setOpen: (open: boolean) => void
+  activeTab?: DocumentType
   documentType?: DocumentType
+  tabsToShow?: PolicyMeta[]
 }
 
-const ConsentView = ({ open, setOpen }: ConsentViewProps) => {
-  const [activeTab, setActiveTab] = useState(DocumentType.TERMS_AND_CONDITIONS)
-  const tabs = [
-    {
-      id: '1',
-      label: 'Terms of Service',
-      documentType: DocumentType.TERMS_AND_CONDITIONS,
-    },
-    {
-      id: '2',
-      label: 'Privacy Policy',
-      documentType: DocumentType.PRIVACY_POLICY,
-    },
-    {
-      id: '3',
-      label: 'Notice of Privacy Practice',
-      documentType: DocumentType.PRIVACY_PRACTICE,
-    },
-    {
-      id: '4',
-      label: 'Patient Service Agreement',
-      documentType: DocumentType.PATIENT_SERVICE_AGREEMENT,
-    },
-    {
-      id: '5',
-      label: 'Consent for Treatment',
-      documentType: DocumentType.CONSENT_FOR_TREATMENT,
-    },
-  ]
+const ConsentView = ({
+  open,
+  setOpen,
+  activeTab: activeTabProp,
+  tabsToShow,
+}: ConsentViewProps) => {
+  const tabs = tabsToShow ?? Object.values(CONSENT_DOCUMENT_MAP).flat()
+  const [activeTab, setActiveTab] = useState<DocumentType>(
+    activeTabProp ?? tabs[0]?.slug,
+  )
+
+  useEffect(() => {
+    if (activeTabProp) setActiveTab(activeTabProp)
+  }, [activeTabProp])
 
   return (
-    <Dialog.Root
-      open={open}
-      onOpenChange={(open) => {
-        setOpen(open)
-      }}
-    >
-      <Dialog.Content className="relative max-w-[700px] !p-0 !m-0 overflow-hidden">
-      <Dialog.Title className="font-sans -tracking-[0.25px] px-5 pt-4">
-            Policies
-        <CloseDialogIcon />
-          </Dialog.Title>
-        <Tabs.Root value={activeTab} className="w-full">
-            <Tabs.List className="overflow-x-scroll flex gap-2 no-scrollbar px-5 border-b border-pp-gray-4/50 pb-4">
-              {tabs.map((tab) => (
-                <Tabs.Trigger
-                  key={tab.id}
-                  value={tab.id}
-                  className={cn("text-[12px] font-medium border border-pp-gray-4 rounded-5 whitespace-nowrap p-2",
-                    activeTab === tab.documentType && 'text-[12px] bg-pp-blue-3 text-white'
-                  )}
-                  onClick={() => setActiveTab(tab.documentType)}
-                >
-                  {tab.label}
-                </Tabs.Trigger>
-              ))}
-            </Tabs.List>
-            
-            <Tabs.Content value={activeTab}>
-              <ConsentViewContent documentType={activeTab} />
+    <Dialog.Root open={open} onOpenChange={setOpen}>
+      <Dialog.Content className="relative !m-0 max-w-[700px] overflow-hidden !p-0">
+        <Dialog.Title className="px-5 pt-4 font-sans -tracking-[0.25px]">
+          Policies
+          <CloseDialogIcon />
+        </Dialog.Title>
+        <Tabs.Root value={activeTab}>
+          <Tabs.List className="no-scrollbar border-pp-gray-4/50 flex gap-2 overflow-x-scroll border-b px-5 pb-4">
+            {tabs.map((tab) => (
+              <Tabs.Trigger
+                key={tab.name}
+                value={tab.slug}
+                className={cn(
+                  'border-pp-gray-4 whitespace-nowrap rounded-5 border p-2 text-[12px] font-medium',
+                  activeTab === tab.slug && 'bg-pp-blue-3 text-white',
+                )}
+                onClick={() => setActiveTab(tab.slug)}
+              >
+                {tab.name}
+              </Tabs.Trigger>
+            ))}
+          </Tabs.List>
+
+          {tabs.map((tab) => (
+            <Tabs.Content key={tab.name} value={tab.slug}>
+              {activeTab === tab.slug && (
+                <ConsentViewContent documentType={tab.slug} />
+              )}
             </Tabs.Content>
-          </Tabs.Root>
-        <Box className='border-t border-pp-gray-4/50 py-4 px-4'>
-          <Dialog.Close className="">
-            <Button variant="outline" color="gray" highContrast className='w-full'>
+          ))}
+        </Tabs.Root>
+        <Box className="border-pp-gray-4/50 border-t px-4 py-4">
+          <Dialog.Close>
+            <Button
+              variant="outline"
+              color="gray"
+              highContrast
+              className="w-full"
+            >
               Close
             </Button>
           </Dialog.Close>
@@ -109,11 +106,9 @@ const ConsentViewContent = ({
   return (
     <>
       {document ? (
-        <>
-          <Box className="h-96 overflow-y-auto px-5 no-scrollbar">
-            {parse(document.content)}
-          </Box>
-        </>
+        <Box className="no-scrollbar h-96 overflow-y-auto px-5">
+          {parse(document.content)}
+        </Box>
       ) : (
         <LoadingPlaceholder />
       )}
