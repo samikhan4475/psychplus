@@ -28,7 +28,8 @@
     "declarationMap": false,
     "incremental": true,
     "allowJs": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "allowImportingTsExtensions": true
   },
   "include": ["src", "next.config.js", "next-env.d.ts", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]

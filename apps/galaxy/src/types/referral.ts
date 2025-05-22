@@ -24,7 +24,7 @@ enum ReferralStatuses {
   Unsigned = 'Unsigned',
 }
 interface PatientReferral {
-  paitentInsurancePolicies?: Insurance[]
+  patientInsurancePolicies?: Insurance[]
   insurancePolicies: []
   appointmentId?: string
   patientMrn?: string

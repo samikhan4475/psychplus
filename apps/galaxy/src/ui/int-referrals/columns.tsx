@@ -100,7 +100,6 @@ const columns = (
         </TextCell>
       ),
     },
-
     {
       id: 'state',
       header: () => <ColumnHeader label="State" />,
@@ -125,7 +124,7 @@ const columns = (
       header: () => <ColumnHeader label="Primary Insurance" />,
       cell: ({ row: { original } }) => (
         <TextCell>
-          {getPrimaryInsuranceName(original.paitentInsurancePolicies)}
+          {getPrimaryInsuranceName(original.patientInsurancePolicies)}
         </TextCell>
       ),
     },
@@ -134,7 +133,7 @@ const columns = (
       header: () => <ColumnHeader label="Secondary Insurance" />,
       cell: ({ row: { original } }) => (
         <TextCell>
-          {getSecondaryInsuranceName(original.paitentInsurancePolicies)}
+          {getSecondaryInsuranceName(original.patientInsurancePolicies)}
         </TextCell>
       ),
     },
@@ -162,7 +161,6 @@ const columns = (
         </TextCell>
       ),
     },
-
     {
       id: 'visitID',
       header: () => <ColumnHeader label="Visit ID" />,
@@ -183,8 +181,8 @@ const columns = (
       id: 'initiated-by',
       header: () => <ColumnHeader label="Initiated By" />,
       cell: ({ row: { original } }) => (
-        <TextCell className="truncate" wrapperClass="bg-gray-3 w-full">
-          {original?.intiatedByUserRole}
+        <TextCell className="truncate">
+          {original?.metadata?.createdByFullName}
         </TextCell>
       ),
     },
@@ -198,7 +196,6 @@ const columns = (
         </TextCell>
       ),
     },
-
     {
       id: 'contact-made',
       header: () => <ColumnHeader label="Contact Made" />,

@@ -29,7 +29,7 @@ const columns: ColumnDef<PatientReferral>[] = [
     header: () => <ColumnHeader label="Primary Insurance" />,
     cell: ({ row: { original } }) => (
       <TextCell>
-        {getPrimaryInsuranceName(original.paitentInsurancePolicies)}
+        {getPrimaryInsuranceName(original.patientInsurancePolicies)}
       </TextCell>
     ),
   },
@@ -38,7 +38,7 @@ const columns: ColumnDef<PatientReferral>[] = [
     header: () => <ColumnHeader label="Secondary Insurance" />,
     cell: ({ row: { original } }) => (
       <LongTextCell>
-        {getSecondaryInsuranceName(original.paitentInsurancePolicies)}
+        {getSecondaryInsuranceName(original.patientInsurancePolicies)}
       </LongTextCell>
     ),
   },
@@ -65,7 +65,9 @@ const columns: ColumnDef<PatientReferral>[] = [
     id: 'initiated-by',
     header: () => <ColumnHeader label="Initiated By" />,
     cell: ({ row: { original } }) => (
-      <LongTextCell>{original?.metadata?.createdByFullName}</LongTextCell>
+      <TextCell className="truncate">
+        {original?.metadata?.createdByFullName}
+      </TextCell>
     ),
   },
   {

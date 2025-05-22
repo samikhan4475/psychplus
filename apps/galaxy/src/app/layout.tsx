@@ -1,5 +1,6 @@
 import './base.css'
 import { type Metadata } from 'next'
+import dynamic from 'next/dynamic'
 import { Josefin_Sans } from 'next/font/google'
 import { Flex, Theme } from '@radix-ui/themes'
 import { Toaster } from 'react-hot-toast'
@@ -21,7 +22,6 @@ import {
 } from '@/constants'
 import { WebSocketConnector } from '@/providers/websocket-provider'
 import { StoreProvider } from '@/store'
-import { MiniPlayer } from '@/ui/call/blocks'
 import { Header } from '@/ui/header'
 import { LockScreenProvider } from '@/ui/lock-screen-context'
 import { cn } from '@/utils'
@@ -38,6 +38,14 @@ const josefin = Josefin_Sans({
   display: 'swap',
   variable: '--font-josefin',
 })
+
+const DynamicMiniPlayer = dynamic(
+  () =>
+    import('@/ui/call/blocks/mini-player.tsx').then((mod) => mod.MiniPlayer),
+  {
+    ssr: false,
+  },
+)
 
 const RootLayout = async ({ children }: React.PropsWithChildren) => {
   const auth = getAuthCookies()
@@ -62,7 +70,7 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
               <>
                 <WebSocketConnector />
                 <LockScreenProvider>{children}</LockScreenProvider>
-                <MiniPlayer />
+                <DynamicMiniPlayer />
               </>
             ) : (
               children
