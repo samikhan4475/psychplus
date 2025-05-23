@@ -76,7 +76,7 @@ const columns = (
       cell: ({ row: { original } }) => (
         <TextCell className="truncate">
           {original?.patientDateOfBirth &&
-            formatDate(original?.patientDateOfBirth, 'dd/MM/yyyy')}
+            formatDate(original?.patientDateOfBirth, 'MM/dd/yyyy')}
         </TextCell>
       ),
     },
@@ -212,7 +212,7 @@ const columns = (
       header: () => <ColumnHeader label="Next Visit" />,
       cell: ({ row: { original } }) => (
         <TextCell className="truncate" wrapperClass="bg-gray-3 w-full">
-          {formatDate(original?.nextVisit, 'dd/MM/yyyy') ?? 'N/A'}
+          {formatDate(original?.nextVisit, 'MM/dd/yy') ?? 'N/A'}
         </TextCell>
       ),
     },
@@ -221,7 +221,7 @@ const columns = (
       header: () => <ColumnHeader label="Visit Hx" />,
       cell: ({ row: { original } }) => (
         <TextCell className="truncate" wrapperClass="bg-gray-3 w-full">
-          {formatDate(original?.patientVisitHistory, 'dd/MM/yyyy') ?? 'N/A'}
+          {formatDate(original?.patientVisitHistory, 'MM/dd/yy') ?? 'N/A'}
         </TextCell>
       ),
     },

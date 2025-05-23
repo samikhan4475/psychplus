@@ -37,9 +37,9 @@ const columns: ColumnDef<PatientReferral>[] = [
     id: 'secondaryInsurance',
     header: () => <ColumnHeader label="Secondary Insurance" />,
     cell: ({ row: { original } }) => (
-      <LongTextCell>
+      <TextCell>
         {getSecondaryInsuranceName(original.patientInsurancePolicies)}
-      </LongTextCell>
+      </TextCell>
     ),
   },
   {
@@ -75,7 +75,7 @@ const columns: ColumnDef<PatientReferral>[] = [
     header: () => <ColumnHeader label="Next Visit" />,
     cell: ({ row: { original } }) => (
       <TextCell className="truncate">
-        {formatDate(original?.nextVisit, 'dd-MM-yyyy') ?? 'N/A'}
+        {formatDate(original?.nextVisit, 'MM/dd/yy') ?? 'N/A'}
       </TextCell>
     ),
   },
@@ -84,7 +84,7 @@ const columns: ColumnDef<PatientReferral>[] = [
     header: () => <ColumnHeader label="Visit Hx" />,
     cell: ({ row: { original } }) => (
       <TextCell className="truncate">
-        {formatDate(original?.patientVisitHistory, 'dd-MM-yyyy') ?? 'N/A'}
+        {formatDate(original?.patientVisitHistory, 'MM/dd/yy') ?? 'N/A'}
       </TextCell>
     ),
   },
