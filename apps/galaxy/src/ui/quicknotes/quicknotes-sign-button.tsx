@@ -233,7 +233,8 @@ const QuickNotesSignButton = ({
   const signNoteHandler = async () => {
     if (
       appointment?.isRequiredPolicy &&
-      patient.patientConsent === 'Unverifiable'
+      patient.patientConsent === 'Unverifiable' &&
+      policyDescriptions?.length
     ) {
       setIsPolicyAlertOpen(true)
       return

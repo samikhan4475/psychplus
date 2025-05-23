@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
+import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { parseDate } from '@internationalized/date'
 import { Box, Button, Dialog, Flex, Text } from '@radix-ui/themes'
@@ -39,6 +40,7 @@ const PrivacyPolicyDialogContent = ({
   row,
   handleUpdateOpenState,
 }: PrivacyPolicyContentProps) => {
+  const router = useRouter()
   const setConsents = useStore((state) => state.setConsents)
   const patientProfile = useQuickNotesStore((state) => state.patient)
 
@@ -68,6 +70,7 @@ const PrivacyPolicyDialogContent = ({
       handleUpdateOpenState(false)
       form.reset()
       toast.success('Policy Signed!')
+      router.refresh()
     }
   }
 
