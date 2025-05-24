@@ -61,6 +61,7 @@ const PrivacyPolicyDialogContent = ({
         issuanceDate: row.original.issuanceDateWithoutFormatting,
         latestIssuanceDate: row.original.latestIssuanceDateWithoutFormatting,
         signatureName: `${patientProfile?.legalName.firstName} ${patientProfile?.legalName.lastName}`,
+        guardianSignature: row.original.guardianSignature?.trim(),
       }),
     )
     if (response.state === 'error') {
