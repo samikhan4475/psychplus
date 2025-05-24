@@ -9,7 +9,7 @@ export const weekdays = [
   'Saturday',
   'Sunday',
 ]
-
+export const excludedParams = ['StartDate', 'EndDate']
 export const intervalOptions = [
   { label: 'Minute', value: INTERVAL.MINUTE },
   { label: 'Hour', value: INTERVAL.HOUR },

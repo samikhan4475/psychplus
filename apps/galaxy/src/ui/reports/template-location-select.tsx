@@ -10,12 +10,14 @@ type TemplateLocationSelectProps = {
   title: string
   name: string
   isMultiple: boolean
+  isRequired: boolean
 }
 
 const TemplateLocationSelect = ({
   title,
   name,
   isMultiple,
+  isRequired,
 }: TemplateLocationSelectProps) => {
   const [locationData, setLocationData] = useState<SelectOptionType[] | null>(
     [],
@@ -68,6 +70,7 @@ const TemplateLocationSelect = ({
 
   return (
     <TemplateSelect
+      isRequired={isRequired}
       title={title}
       name={name}
       isMultiple={isMultiple}

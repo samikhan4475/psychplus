@@ -10,12 +10,14 @@ type TemplatePatientSelectProps = {
   title: string
   name: string
   isMultiple: boolean
+  isRequired: boolean
 }
 
 const TemplatePatientSelect = ({
   title,
   name,
   isMultiple,
+  isRequired,
 }: TemplatePatientSelectProps) => {
   const [patientData, setPatientData] = useState<SelectOptionType[] | null>([])
   const [loading, setLoading] = useState(false)
@@ -55,6 +57,7 @@ const TemplatePatientSelect = ({
 
   return (
     <TemplateSelect
+      isRequired={isRequired}
       title={title}
       name={name}
       isMultiple={isMultiple}

@@ -1,5 +1,6 @@
 import { DateValue } from '@internationalized/date'
 import z from 'zod'
+import { excludedParams } from './constants'
 
 const schema = z
   .object({
@@ -26,16 +27,42 @@ const schema = z
       }),
     parameters: z
       .array(
-        z.object({
-          id: z.string(),
-          scheduleParameterValue: z
-            .union([z.string(), z.array(z.string())])
-            .optional(),
-          reportTemplateId: z.string().optional(),
-          parameterCode: z.string().optional(),
-          templateParameterId: z.string().optional(),
-          scheduleId: z.string().optional(),
-        }),
+        z
+          .object({
+            isRequired: z.boolean(),
+            id: z.string(),
+            scheduleParameterValue: z
+              .union([z.string(), z.array(z.string())])
+              .optional(),
+            reportTemplateId: z.string().optional(),
+            parameterCode: z.string().optional(),
+          })
+          .superRefine((param, ctx) => {
+            const { isRequired, scheduleParameterValue, parameterCode } = param
+
+            if (!isRequired || excludedParams.includes(parameterCode ?? ''))
+              return
+
+            const isEmptyString =
+              typeof scheduleParameterValue === 'string' &&
+              scheduleParameterValue.trim() === ''
+            const isEmptyArray =
+              Array.isArray(scheduleParameterValue) &&
+              scheduleParameterValue.length === 0
+
+            if (
+              isEmptyString ||
+              isEmptyArray ||
+              scheduleParameterValue === null ||
+              scheduleParameterValue === undefined
+            ) {
+              ctx.addIssue({
+                path: ['scheduleParameterValue'],
+                code: z.ZodIssueCode.custom,
+                message: 'Required',
+              })
+            }
+          }),
       )
       .optional(),
   })

@@ -21,9 +21,11 @@ const EditTemplateForm = ({
 }: EditTemplateFormProps) => {
   const [loading, setLoading] = useState(false)
 
-  const sortedParameters = defaultValues?.parameters?.sort((a, b) => {
-    return (a.displayOrder ?? 0) - (b.displayOrder ?? 0)
-  })
+  const sortedParameters = defaultValues?.parameters
+    ?.map((param) => ({ ...param, isRequired: param.isRequired ?? false }))
+    ?.sort((a, b) => {
+      return (a.displayOrder ?? 0) - (b.displayOrder ?? 0)
+    })
 
   const form = useForm<EditTemplateSchemaType>({
     resolver: zodResolver(editTemplateSchema),

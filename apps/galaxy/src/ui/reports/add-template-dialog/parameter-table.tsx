@@ -1,7 +1,7 @@
 import { useFieldArray, useFormContext } from 'react-hook-form'
 import { DataTable, FormFieldError } from '@/components'
 import { useStore } from '../store'
-import { STATUS } from '../types'
+import { STATUS, TemplateParameter } from '../types'
 import { AddRowButton } from './add-row-button'
 import { createColumns } from './parameter-table-columns'
 import { TemplateSchemaType } from './schema'
@@ -18,14 +18,20 @@ const ParametersTable = () => {
     name: 'parameters',
   })
   const templateID = watch('id')
-  const addRow = () => {
-    append({
-      parameterCode: '',
-      displayName: '',
-      resourceStatus: STATUS.ACTIVE,
-      displayOrder: fields.length,
-    })
+  const addRow = (templateParameter?: TemplateParameter) => {
+    if (!templateParameter) {
+      append({
+        parameterCode: '',
+        displayName: '',
+        isRequired: false,
+        resourceStatus: STATUS.ACTIVE,
+        displayOrder: fields.length,
+      })
+    } else {
+      append(templateParameter)
+    }
   }
+
   const { templateFilters } = useStore()
 
   const selectedFieldCodes = fields.map((field) => field.parameterCode)
@@ -78,7 +84,7 @@ const ParametersTable = () => {
 
   return (
     <>
-      <AddRowButton onAddRow={addRow} disabled={isAddDisabled} />
+      <AddRowButton onAddRow={() => addRow()} disabled={isAddDisabled} />
       <DataTable
         columns={createColumns(
           move,
@@ -86,6 +92,7 @@ const ParametersTable = () => {
           fields.length,
           getFilteredOptionsForRow,
           isRowDisabled,
+          addRow,
         )}
         data={fields}
       />

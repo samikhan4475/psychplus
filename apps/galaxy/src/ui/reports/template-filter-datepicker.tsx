@@ -12,14 +12,24 @@ import { getCalendarDate, getCalendarDateLabel } from '@/utils'
 type TemplateDatePickerProps = {
   title: string
   name: string
+  isRequired: boolean
 }
 
-const TemplateFilterDatePicker = ({ title, name }: TemplateDatePickerProps) => {
+const TemplateFilterDatePicker = ({
+  title,
+  name,
+  isRequired,
+}: TemplateDatePickerProps) => {
   const { register } = useFormContext()
   const today = getCalendarDate()
+  const isScheduleReport = name?.includes('scheduleParameterValue') ?? false
   return (
-    <FormFieldContainer className="w-full flex-row items-baseline justify-start gap-1">
-      <FormFieldLabel className="!text-1" required>
+    <FormFieldContainer
+      className={`w-full ${
+        !isScheduleReport ? 'flex-row items-baseline justify-start' : ''
+      } gap-1`}
+    >
+      <FormFieldLabel className="!text-1" required={isRequired}>
         {title}
       </FormFieldLabel>
       <Flex direction="column">

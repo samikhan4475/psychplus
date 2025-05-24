@@ -1,3 +1,4 @@
+import { Box } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import {
   FormFieldContainer,
@@ -20,7 +21,7 @@ const RepeatCountSelect = () => {
   }
   return (
     <FormFieldContainer className="flex-row items-center ">
-      <FormFieldLabel className="!text-1">Repeat Schedule Every</FormFieldLabel>
+      <FormFieldLabel className="!text-1 mt-1 mr-1">Repeat Schedule Every</FormFieldLabel>
       <SelectInput
         field="repeatCount"
         className="w-full"

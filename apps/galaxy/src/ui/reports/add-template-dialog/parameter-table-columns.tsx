@@ -1,15 +1,18 @@
 import { ColumnDef } from '@tanstack/react-table'
 import {
   FieldArrayWithId,
+  UseFieldArrayAppend,
   UseFieldArrayMove,
   UseFieldArrayRemove,
 } from 'react-hook-form'
 import { ColumnHeader, TextCell } from '@/components'
 import { SelectOptionType } from '@/types'
+import { TemplateParameter } from '../types'
 import {
   DeleteActionCell,
   FieldCodeCell,
   FieldLabelCell,
+  FieldRequiredCell,
   FieldTypeCell,
   MoveActionCell,
   SerialNumberCell,
@@ -22,6 +25,7 @@ const createColumns = (
   totalFields: number,
   getFilteredOptionsForRow: (rowIndex: number) => SelectOptionType[],
   isRowDisabled: (rowIndex: number) => boolean,
+  addRow: (parameter?: TemplateParameter) => void,
 ): ColumnDef<
   FieldArrayWithId<TemplateSchemaType, 'parameters', 'id'>,
   unknown
@@ -50,6 +54,7 @@ const createColumns = (
       cell: ({ row }) => (
         <FieldCodeCell
           rowIndex={row.index}
+          addRow={addRow}
           filteredOptions={getFilteredOptionsForRow(row.index)}
           disabled={isRowDisabled(row.index)}
         />
@@ -73,7 +78,7 @@ const createColumns = (
     {
       id: 'isRequired',
       header: () => <ColumnHeader label="Required" />,
-      cell: () => <TextCell>Yes</TextCell>,
+      cell: ({ row }) => <FieldRequiredCell rowIndex={row.index} />,
     },
     {
       id: 'action',

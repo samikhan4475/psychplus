@@ -17,6 +17,7 @@ type TemplateSelectProps = {
   name: string
   isMultiple: boolean
   isLoading?: boolean
+  isRequired: boolean
 }
 
 const TemplateSelect = ({
@@ -25,11 +26,13 @@ const TemplateSelect = ({
   name,
   isMultiple,
   isLoading,
+  isRequired,
 }: TemplateSelectProps) => {
   const { register, setValue, watch, getValues } = useFormContext()
   const [selectedOptions, setSelectedOptions] = useState<string[]>(
     getValues(name),
   )
+  const isScheduleReport = name?.includes('scheduleParameterValue') ?? false
 
   useEffect(() => {
     if (!isLoading && getValues(name)?.[0] === 'all') {
@@ -59,11 +62,15 @@ const TemplateSelect = ({
   }, [getValues(name)])
 
   return (
-    <FormFieldContainer className="flex-row items-baseline justify-start gap-1">
-      <FormFieldLabel className="!text-1" required>
+    <FormFieldContainer
+      className={`gap-1 ${
+        !isScheduleReport ? 'flex-row items-baseline justify-start' : ''
+      } w-full`}
+    >
+      <FormFieldLabel className="!text-1" required={isRequired}>
         {title}
       </FormFieldLabel>
-      <Flex direction="column">
+      <Flex direction="column" className='w-full'>
         {isMultiple ? (
           <MultiSelectField
             {...register(name)}

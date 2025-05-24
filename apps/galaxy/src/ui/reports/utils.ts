@@ -41,6 +41,22 @@ export const parseGeneratedReport = (report: string) => {
   return { headers, data }
 }
 
+export const matchesAnyReport = (reports: string, input: string): boolean => {
+  const sanitize = (text: string) =>
+    text.toLowerCase().replace(/[^a-z0-9]/g, '')
+  const cleanedInput = sanitize(input)
+  return reports
+    .toLowerCase()
+    .split('|')
+    .some((report) => {
+      const cleanedReport = sanitize(report)
+      return (
+        cleanedReport.includes(cleanedInput) ||
+        cleanedInput.includes(cleanedReport)
+      )
+    })
+}
+
 export const formatHeader = (header: string) => {
   return header.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/_/g, ' ')
 }

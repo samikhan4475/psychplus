@@ -15,7 +15,6 @@ const TemplateTitleHeader = () => {
     selectedTemplate?.resourceStatus === 'Active'
       ? selectedTemplate?.displayName
       : selectedTemplate?.displayName + ' - (Inactive)'
-
   return (
     <>
       <Flex

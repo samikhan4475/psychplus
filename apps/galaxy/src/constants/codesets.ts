@@ -103,6 +103,7 @@ const CODESETS = {
   PatientLinkSection: 'PatientLinkSection',
   CosignerType: 'CosignerType',
   CounsellingOptions: 'PsychPlusPublic.CounsellingOptions',
+  DateFilterType:'PsychPlusPublic.DateFilterType',
   TobaccoTreatment: 'PsychPlusPublic.TobaccoTreatment',
   ReferralTreatment: 'PsychPlusPublic.ReferralTreatment',
   HallucinationType: 'PsychPlusPublic.HallucinationType',

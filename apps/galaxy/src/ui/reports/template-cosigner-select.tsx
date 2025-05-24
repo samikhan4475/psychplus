@@ -10,12 +10,14 @@ type TemplateCosignerSelectProps = {
   title: string
   name: string
   isMultiple: boolean
+  isRequired: boolean
 }
 
 const TemplateCosignerSelect = ({
   title,
   name,
   isMultiple,
+  isRequired,
 }: TemplateCosignerSelectProps) => {
   const [cosignerData, setCosignerData] = useState<SelectOptionType[] | null>(
     [],
@@ -56,6 +58,7 @@ const TemplateCosignerSelect = ({
 
   return (
     <TemplateSelect
+      isRequired={isRequired}
       title={title}
       name={name}
       isMultiple={isMultiple}

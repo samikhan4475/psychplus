@@ -1,6 +1,7 @@
 'use client'
 
 import { Box, Flex, ScrollArea, Text } from '@radix-ui/themes'
+import { LoadingPlaceholder } from '@/components'
 import { MedicalReportIcon } from '@/components/icons'
 import { AddTemplateButton } from './add-template-button'
 import { TabItem } from './reports-tabs-item'
@@ -17,6 +18,7 @@ const ExpandedSidebar = () => {
     setScheduleReports,
     resetPageCache,
     resetScheduledReportPageCache,
+    fetchTemplateLoading,
   } = useStore()
 
   const filteredTemplates = templates.filter(
@@ -40,6 +42,8 @@ const ExpandedSidebar = () => {
       templateName = selectedTemplate.displayName + ' - (Inactive)'
     }
   }
+
+  if (fetchTemplateLoading) return <LoadingPlaceholder />
 
   return (
     <Box className="bg-white relative flex h-full w-[224px] flex-col transition-all duration-300">

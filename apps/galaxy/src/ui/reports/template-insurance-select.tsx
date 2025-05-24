@@ -10,12 +10,14 @@ type TemplateInsuranceSelectProps = {
   title: string
   name: string
   isMultiple: boolean
+  isRequired: boolean
 }
 
 const TemplateInsuranceSelect = ({
   title,
   name,
   isMultiple,
+  isRequired,
 }: TemplateInsuranceSelectProps) => {
   const [insuranceData, setInsuranceData] = useState<SelectOptionType[] | null>(
     [],
@@ -57,6 +59,7 @@ const TemplateInsuranceSelect = ({
 
   return (
     <TemplateSelect
+      isRequired={isRequired}
       title={title}
       name={name}
       isMultiple={isMultiple}

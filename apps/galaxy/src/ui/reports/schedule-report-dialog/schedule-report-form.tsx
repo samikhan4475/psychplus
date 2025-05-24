@@ -53,6 +53,26 @@ const ScheduleReportForm = ({
   })
 
   const onSubmit: SubmitHandler<ScheduleTemplateSchemaType> = async (data) => {
+    const startDateParam = data.parameters?.find(
+      (param) => param.scheduleParameterValue === 'StartDate',
+    )
+    const endDateParam = data.parameters?.find(
+      (param) => param.scheduleParameterValue === 'EndDate',
+    )
+
+    if (
+      startDateParam?.scheduleParameterValue &&
+      endDateParam?.scheduleParameterValue
+    ) {
+      if (
+        endDateParam.scheduleParameterValue <
+        startDateParam.scheduleParameterValue
+      ) {
+        toast.error('End date cannot be before start date')
+        return
+      }
+    }
+
     const transformedData = convertToNumber(data)
 
     const cronScheduleDefinition = converter.getCronStringFromValues(

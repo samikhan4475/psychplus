@@ -11,14 +11,23 @@ import {
 type TemplateInputProps = {
   title: string
   name: string
+  isRequired: boolean
 }
 
-const TemplateFilterInput = ({ title, name }: TemplateInputProps) => {
+const TemplateFilterInput = ({
+  title,
+  name,
+  isRequired,
+}: TemplateInputProps) => {
   const { register } = useFormContext()
-
+  const isScheduleReport = name?.includes('scheduleParameterValue') ?? false
   return (
-    <FormFieldContainer className="w-full flex-row items-center justify-start gap-1">
-      <FormFieldLabel className="!text-1" required>
+    <FormFieldContainer
+      className={`w-full gap-1 ${
+        !isScheduleReport ? 'flex-row items-center justify-start' : ''
+      }`}
+    >
+      <FormFieldLabel className="!text-1" required={isRequired}>
         {title}
       </FormFieldLabel>
       <Flex direction="column">

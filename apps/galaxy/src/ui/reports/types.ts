@@ -5,6 +5,7 @@ export interface TemplateParameter {
   parameterCode: string
   displayName: string
   resourceStatus: string
+  isRequired:boolean
   reportTemplateId?: string
   displayOrder: number
   runValue?: string
@@ -44,8 +45,8 @@ interface Parameter {
 }
 
 interface ReportFilterParameters {
-  id: string
-  runValue: string
+  id: string;
+  runValue: string | null;
 }
 interface StaffDataOptions {
   value: string
@@ -192,6 +193,7 @@ export enum STAFF_SELECTION {
   SPECIALIST_TYPE = 'SpecialistType',
 }
 
+type CodeType = Record<string, Record<string, Record<string, string>>>
 export enum VIEW_TYPE {
   REPORT = 'report',
   SCHEDULE = 'schedule',
@@ -207,6 +209,7 @@ export enum REPORT_PARAMETER_CODE {
 }
 export type {
   Template,
+  CodeType,
   Parameter,
   CodeSetIndex,
   ReportFilterParameters,

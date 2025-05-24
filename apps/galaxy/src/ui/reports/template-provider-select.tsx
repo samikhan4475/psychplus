@@ -10,12 +10,14 @@ type TemplateProviderSelectProps = {
   title: string
   name: string
   isMultiple: boolean
+  isRequired: boolean
 }
 
 const TemplateProviderSelect = ({
   title,
   name,
   isMultiple,
+  isRequired,
 }: TemplateProviderSelectProps) => {
   const [providerData, setProviderData] = useState<SelectOptionType[] | null>(
     [],
@@ -56,6 +58,7 @@ const TemplateProviderSelect = ({
 
   return (
     <TemplateSelect
+      isRequired={isRequired}
       title={title}
       name={name}
       isMultiple={isMultiple}

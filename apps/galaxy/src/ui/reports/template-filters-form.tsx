@@ -25,23 +25,45 @@ import { TemplateStaffSelect } from './template-staff-select'
 import { TemplateStateSelect } from './template-state-select'
 import {
   CODE_PARAM_ATTRIBUTES,
+  CodeType,
   REPORT_PARAMETER_CODE,
   REPORT_TYPE,
   STAFF_SELECTION,
   TemplateParameter,
 } from './types'
+import { matchesAnyReport } from './utils'
 
 const schema = z.object({
   reportTemplateParameters: z.array(
-    z.object({
-      id: z.string(),
-      runValue: z
-        .union([z.string(), z.array(z.string())])
-        .refine((value) => value !== '', {
-          message: 'Required',
-        }),
-      parameterCode: z.string(),
-    }),
+    z
+      .object({
+        id: z.string(),
+        runValue: z.union([z.string(), z.array(z.string())]).optional(),
+        parameterCode: z.string(),
+        isRequired: z.boolean(),
+      })
+      .superRefine((data, ctx) => {
+        const { isRequired, runValue } = data
+
+        if (!isRequired) return
+
+        const isEmptyString =
+          typeof runValue === 'string' && runValue.trim() === ''
+        const isEmptyArray = Array.isArray(runValue) && runValue.length === 0
+
+        if (
+          isEmptyString ||
+          isEmptyArray ||
+          runValue === null ||
+          runValue === undefined
+        ) {
+          ctx.addIssue({
+            path: ['runValue'],
+            code: z.ZodIssueCode.custom,
+            message: 'Required',
+          })
+        }
+      }),
   ),
 })
 
@@ -84,7 +106,6 @@ const DynamicTemplateFilters = () => {
 
   const getFieldTypes = (code: string) => {
     const codeParam = codeParametersType.find((param) => param.code === code)
-
     if (!codeParam)
       return {
         isString: false,
@@ -141,6 +162,19 @@ const DynamicTemplateFilters = () => {
       return []
     }
 
+    if (reportParameterCode === 'DateFilterType') {
+      matchingCodeset = {
+        ...matchingCodeset,
+        codes:
+          matchingCodeset.codes?.filter((code: CodeType) =>
+            matchesAnyReport(
+              code.attributes[0]?.value ?? '',
+              selectedTemplate?.shortName ?? '',
+            ),
+          ) ?? [],
+      }
+    }
+
     switch (reportParameterCode) {
       case REPORT_PARAMETER_CODE.STAFF_SELECTION_LIST:
       case REPORT_PARAMETER_CODE.STAFF_LIST:
@@ -169,7 +203,7 @@ const DynamicTemplateFilters = () => {
       (param) => param.parameterCode === 'EndDate',
     )
 
-    if (startDateParam && endDateParam) {
+    if (startDateParam?.runValue && endDateParam?.runValue) {
       if (endDateParam.runValue < startDateParam.runValue) {
         toast.error('End date cannot be before start date')
         return
@@ -180,7 +214,7 @@ const DynamicTemplateFilters = () => {
       id: param.id,
       runValue: Array.isArray(param.runValue)
         ? param.runValue.join(', ')
-        : param.runValue ?? '',
+        : param.runValue || null,
     }))
 
     if (!selectedTemplate?.id) return
@@ -199,17 +233,19 @@ const DynamicTemplateFilters = () => {
     <>
       <FormContainer form={form} onSubmit={onSubmit}>
         <Flex
-          direction="row"
+          align="start"
           className="bg-white shadow-light-08 mt-1 flex-wrap gap-2 px-2 py-2"
         >
           {sortedParameters.map((item, i) => {
             const { isString, isDate, isSelect, isMultiple } = getFieldTypes(
               item.parameterCode,
             )
+
             return (
-              <Flex key={item.id} direction="row" className="gap-x-1">
+              <Flex key={item.id} className="gap-x-1">
                 {isString && (
                   <TemplateFilterInput
+                    isRequired={item.isRequired}
                     title={item.displayName}
                     {...register(`reportTemplateParameters.${i}.runValue`, {
                       required: 'This field is required',
@@ -219,6 +255,7 @@ const DynamicTemplateFilters = () => {
 
                 {isDate && (
                   <TemplateFilterDatePicker
+                    isRequired={item.isRequired}
                     title={item.displayName}
                     {...register(`reportTemplateParameters.${i}.runValue`, {
                       required: 'This field is required',
@@ -228,6 +265,7 @@ const DynamicTemplateFilters = () => {
 
                 {isSelect && item.parameterCode === 'StaffList' && (
                   <TemplateStaffSelect
+                    isRequired={item.isRequired}
                     title={item.displayName}
                     name={`reportTemplateParameters.${i}.runValue`}
                     isMultiple={isMultiple}
@@ -236,6 +274,7 @@ const DynamicTemplateFilters = () => {
 
                 {isSelect && item.parameterCode === 'PatientList' && (
                   <TemplatePatientSelect
+                    isRequired={item.isRequired}
                     title={item.displayName}
                     name={`reportTemplateParameters.${i}.runValue`}
                     isMultiple={isMultiple}
@@ -244,6 +283,7 @@ const DynamicTemplateFilters = () => {
 
                 {isSelect && item.parameterCode === 'CosignerList' && (
                   <TemplateCosignerSelect
+                    isRequired={item.isRequired}
                     title={item.displayName}
                     name={`reportTemplateParameters.${i}.runValue`}
                     isMultiple={isMultiple}
@@ -252,6 +292,7 @@ const DynamicTemplateFilters = () => {
 
                 {isSelect && item.parameterCode === 'InsuranceList' && (
                   <TemplateInsuranceSelect
+                    isRequired={item.isRequired}
                     title={item.displayName}
                     name={`reportTemplateParameters.${i}.runValue`}
                     isMultiple={isMultiple}
@@ -259,6 +300,7 @@ const DynamicTemplateFilters = () => {
                 )}
                 {isSelect && item.parameterCode === 'LocationList' && (
                   <TemplateLocationSelect
+                    isRequired={item.isRequired}
                     title={item.displayName}
                     name={`reportTemplateParameters.${i}.runValue`}
                     isMultiple={isMultiple}
@@ -266,6 +308,7 @@ const DynamicTemplateFilters = () => {
                 )}
                 {isSelect && item.parameterCode === 'StateList' && (
                   <TemplateStateSelect
+                    isRequired={item.isRequired}
                     title={item.displayName}
                     name={`reportTemplateParameters.${i}.runValue`}
                     isMultiple={isMultiple}
@@ -274,6 +317,7 @@ const DynamicTemplateFilters = () => {
 
                 {isSelect && item.parameterCode === 'ProviderList' && (
                   <TemplateProviderSelect
+                    isRequired={item.isRequired}
                     title={item.displayName}
                     name={`reportTemplateParameters.${i}.runValue`}
                     isMultiple={isMultiple}
@@ -289,6 +333,7 @@ const DynamicTemplateFilters = () => {
                   item.parameterCode !== 'StateList' &&
                   item.parameterCode !== 'ProviderList' && (
                     <TemplateSelect
+                      isRequired={item.isRequired}
                       title={item.displayName}
                       isMultiple={isMultiple}
                       options={computeOptions(codesetIndex, item.parameterCode)}
@@ -300,6 +345,7 @@ const DynamicTemplateFilters = () => {
 
                 {!isString && !isDate && !isSelect && (
                   <TemplateFilterInput
+                    isRequired={item.isRequired}
                     title={item.displayName}
                     {...register(`reportTemplateParameters.${i}.runValue`, {
                       required: 'This field is required',
