@@ -24,12 +24,11 @@ const ClaimSubmissionResponseView = ({
           </Box>
           <Box>
             <Text mx="1" size="2">
-              <span className="font-bold">
+              <Text weight="bold">
                 Claims{' '}
-                {claimCleanResponses.map((response) => response.claimId + ', ')}{' '}
-              </span>
-              were successfully submitted to{' '}
-              <span className="font-bold">clearing house</span>
+                {claimCleanResponses.map((response) => response.claimId + ', ')}
+              </Text>
+              were successfully submitted.
             </Text>
           </Box>
         </Flex>
