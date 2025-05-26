@@ -107,7 +107,20 @@ const columns = (
       ),
       cell: ({ row }) => <TextCell>{row.original.zip}</TextCell>,
     },
-
+    {
+      id: 'areaCode',
+      header: ({ column }) => (
+        <ColumnHeader
+          label="Area Code"
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+        />
+      ),
+      cell: ({ row }) => <TextCell>{row.original.zipLast4 ?? ''}</TextCell>,
+    },
     {
       id: 'phone',
       header: ({ column }) => (

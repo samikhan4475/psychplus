@@ -1,6 +1,7 @@
 import { DateValue } from 'react-aria-components'
 import { z } from 'zod'
 import { PatientAddressType } from '@/types'
+import { zipLast4Schema } from '@/utils'
 import { StaffType } from '../../types'
 
 const nameRegex = /^[^\d]*$/
@@ -46,6 +47,7 @@ const getAddressSchema = (type: PatientAddressType) =>
       state: type === 'Mailing' ? optionalString : requiredString,
       country: optionalString,
       postalCode: type === 'Mailing' ? optionalString : requiredString,
+      zipLast4: zipLast4Schema,
       geoCoordinates: z
         .object({
           longitude: z.number(),

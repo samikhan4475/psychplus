@@ -183,6 +183,22 @@ const columns = (
       ),
     },
     {
+      id: 'organizationAddress.zipLast4',
+      header: ({ column }) => (
+        <ColumnHeader
+          label="Area code"
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+        />
+      ),
+      cell: ({ row }) => (
+        <TextCell>{row.original.organizationAddress?.zipLast4 ?? ''}</TextCell>
+      ),
+    },
+    {
       id: 'recordStatus',
       header: ({ column }) => (
         <ColumnHeader

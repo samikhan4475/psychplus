@@ -93,6 +93,7 @@ const SubmitterListFilterForm = () => {
           isFilter
           fieldContainerClassName="flex-row"
           stateFieldContainerClassName="w-[80%]"
+          addAreaCode={false}
         />
       </Grid>
       <Grid columns="12" gap="2" className="flex">

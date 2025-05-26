@@ -65,9 +65,10 @@ const SubmitterForm = ({ data, onCloseModal }: SubmitterFormProps) => {
       onCloseModal(false)
       form.reset()
       toast.success('Record has been saved successfully')
-      search({
+      const payload = {
         practiceId: practiceId ?? '',
-      })
+      }
+      search(sanitizeFormData(payload))
     }
   }
 
@@ -117,7 +118,7 @@ const SubmitterForm = ({ data, onCloseModal }: SubmitterFormProps) => {
         <Text weight="medium" className="text-pp-black-3 text-[14px]">
           Primary Address
         </Text>
-        <AddressFieldsGroup columnsPerRow="2"/>
+        <AddressFieldsGroup columnsPerRow="2" />
       </Box>
 
       <SubmitFormButton />

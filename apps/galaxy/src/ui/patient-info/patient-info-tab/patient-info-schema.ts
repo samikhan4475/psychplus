@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { zipLast4Schema } from '@/utils'
 
 const patientAddressTypeEnum = z.enum([
   'Home',
@@ -59,7 +60,7 @@ function validatePatientAddress(
 ) {
   if (!data.contactDetails.isMailingAddressSameAsPrimary) {
     const mailingAddressFields: (keyof typeof data.contactDetails.mailingAddress)[] =
-      ['street1', 'city', 'state', 'postalCode']
+      ['street1', 'city', 'state', 'postalCode', 'zipLast4']
 
     for (const field of mailingAddressFields) {
       if (!data.contactDetails.mailingAddress[field]) {
@@ -129,6 +130,7 @@ const patientInfoSchema = z
         state: requiredString,
         country: requiredString.default('US'),
         postalCode: zipCodeValidation,
+        zipLast4: zipLast4Schema,
       }),
       mailingAddress: z.object({
         type: patientAddressTypeEnum.default('Home'),
@@ -138,6 +140,7 @@ const patientInfoSchema = z
         state: optionalString,
         country: optionalString,
         postalCode: zipCodeValidation,
+        zipLast4: zipLast4Schema,
       }),
       isMailingAddressSameAsPrimary: z.boolean().optional(),
     }),
@@ -168,6 +171,7 @@ const patientInfoSchema = z
           state: optionalString,
           country: optionalString,
           postalCode: zipCodeValidation,
+          zipLast4: zipLast4Schema,
         }),
       })
       .nullable(),

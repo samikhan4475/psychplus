@@ -101,6 +101,7 @@ interface MedicationRefill {
   patientCity?: string
   patientStateCode?: string
   patientPostalCode?: string
+  patientZipLast4?: string
   patientCountryCode?: string
   drugList?: PharmacyNotificationDrugModel[]
   notes?: string

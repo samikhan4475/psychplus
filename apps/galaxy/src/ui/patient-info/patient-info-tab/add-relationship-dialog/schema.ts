@@ -1,5 +1,5 @@
 import z from 'zod'
-import { zipCodeSchema } from '@/utils'
+import { zipCodeSchema, zipLast4Schema } from '@/utils'
 
 const MOTHER_CODESET_CODE = 'MTH'
 
@@ -32,6 +32,7 @@ const schema = z
           state: z.string().optional().default(''),
           country: z.string().optional().default(''),
           postalCode: zipCodeSchema,
+          zipLast4: zipLast4Schema,
         }),
       ),
     }),

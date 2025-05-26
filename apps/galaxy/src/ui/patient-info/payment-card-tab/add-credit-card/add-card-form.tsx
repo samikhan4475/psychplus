@@ -16,7 +16,7 @@ import {
 } from '@/components'
 import { CreditCardType } from '@/constants'
 import { AllowedCards, CreditCard } from '@/types'
-import { cn, zipCodeSchema } from '@/utils'
+import { cn, zipCodeSchema, zipLast4Schema } from '@/utils'
 import { beautifyErrorMessage } from '@/utils/error'
 import { addPatientCardAction, setPrimaryPatientCard } from '../actions'
 import { BillingAddress } from './billing-address'
@@ -52,6 +52,7 @@ const schema = z.object({
   city: z.string().min(1, 'Required'),
   state: z.string().min(1, 'Required'),
   zip: zipCodeSchema,
+  zipLast4: zipLast4Schema,
 })
 export type AddCardFormSchemaType = z.infer<typeof schema>
 
@@ -77,6 +78,7 @@ const AddCardForm = ({
       city: '',
       name: '',
       zip: '',
+      zipLast4: '',
       state: '',
     },
   })
@@ -135,6 +137,7 @@ const AddCardForm = ({
         city: data.city,
         state: data.state,
         postalCode: data.zip,
+        zipLast4: data.zipLast4,
       },
     })
 
@@ -164,6 +167,7 @@ const AddCardForm = ({
       city: '',
       state: '',
       zip: '',
+      zipLast4: '',
     })
     onClose?.()
   }

@@ -9,8 +9,22 @@ const PayerAddressGroup = () => {
   const onChange = (value: string) => {
     form.setValue('isMailingAddressSameAsPrimary', value)
     const yesChecked = value === 'yes'
-    const fields = ['street1', 'street2', 'city', 'state', 'postalCode']
-    const primaryFormFields = ['address1', 'address2', 'city', 'state', 'zip']
+    const fields = [
+      'street1',
+      'street2',
+      'city',
+      'state',
+      'postalCode',
+      'zipLast4',
+    ]
+    const primaryFormFields = [
+      'address1',
+      'address2',
+      'city',
+      'state',
+      'zip',
+      'zipLast4',
+    ]
 
     fields.forEach((field, index) => {
       const formValue = yesChecked

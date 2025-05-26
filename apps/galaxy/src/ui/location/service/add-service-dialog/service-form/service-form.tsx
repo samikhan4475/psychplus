@@ -53,6 +53,7 @@ const ServiceForm = ({ location, service, onClose }: ServiceFormProps) => {
     if (response.state === 'error') {
       return toast.error(response?.error)
     }
+
     toast.success(`Service ${service?.id ? 'updated' : 'added'} successfully!`)
     onClose()
   }

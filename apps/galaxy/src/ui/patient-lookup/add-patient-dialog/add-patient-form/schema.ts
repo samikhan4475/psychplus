@@ -1,4 +1,5 @@
 import z from 'zod'
+import { zipLast4Schema } from '@/utils'
 
 const phoneNumberTypeEnum = z.enum(['Contact', 'Home', 'Business'])
 const zipCodeRegex = /(^\d{5}$)|(^\d{5}-\d{4}$)|^$/
@@ -65,6 +66,7 @@ const addPatientSchema = z
               .trim()
               .regex(zipCodeRegex, 'Invalid zip code!')
               .optional(),
+            zipLast4: zipLast4Schema,
           }),
         )
         .optional(),

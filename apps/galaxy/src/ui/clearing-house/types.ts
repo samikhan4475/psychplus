@@ -47,6 +47,7 @@ interface ClearingHouseSubmitter {
   city?: string
   state?: string
   zip?: string
+  zipLast4?: string
   id?: string
   practiceId?: string
   receiverId?: string

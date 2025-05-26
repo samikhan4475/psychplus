@@ -14,6 +14,7 @@ interface Address {
   state: string
   country: string
   postalCode: string
+  zipLast4?: string
   geoCoordinates: GeoCoordinates
   timeZoneId: string
 }
@@ -53,9 +54,9 @@ interface StaffLocation {
   recordStatus: string
   locationId: string
   defaultLocation: boolean
-  location: Location,
-  activeStartTime: string,
-  activeEndTime: string,
+  location: Location
+  activeStartTime: string
+  activeEndTime: string
   serviceLevelCodes: string[]
 }
 
@@ -72,12 +73,12 @@ interface GetStaffLocationListResponse {
 
 interface LocationResult {
   name: string
-  npi:string,
-  phone:PhoneOrFax,
-  address:Address
+  npi: string
+  phone: PhoneOrFax
+  address: Address
 }
 
-interface PrescriberPayload{
+interface PrescriberPayload {
   serviceLevelTypes: string[]
 }
 export {
@@ -86,5 +87,5 @@ export {
   type GetStaffLocationListResponse,
   type PrescriberDirectoryResponse,
   type LocationResult,
-  type PrescriberPayload
+  type PrescriberPayload,
 }

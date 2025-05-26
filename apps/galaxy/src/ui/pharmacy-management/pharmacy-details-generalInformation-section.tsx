@@ -44,6 +44,10 @@ const PharmacyDetailsGeneralInformationSection = ({
           value={pharmacy.contactDetails?.addresses?.[0]?.postalCode}
         />
         <TextInputField
+          label="Area Code"
+          value={pharmacy.contactDetails?.addresses?.[0]?.zipLast4 ?? ''}
+        />
+        <TextInputField
           label="Primary Phone"
           value={getMaskedPhoneNumber(
             pharmacy.contactDetails?.phoneNumbers?.[0]?.number,

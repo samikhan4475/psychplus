@@ -4,6 +4,7 @@ import {
   getPatientPostalCode,
   getPatientState,
   getPatientStreet,
+  getPatientZipLast4,
 } from '@/utils'
 import { LabelAndValue } from './label-and-value'
 
@@ -23,14 +24,16 @@ const PatientContactDetailsSection = ({ patient }: PatientCardContactProps) => {
         }
       />
       <LabelAndValue
-        label="City/State/Zip"
+        label="City/State/Zip/Area Code"
         value={
           patient?.contactDetails.addresses
             ? `${getPatientCity(
                 patient.contactDetails.addresses,
               )}, ${getPatientState(
                 patient.contactDetails.addresses,
-              )} ${getPatientPostalCode(patient.contactDetails.addresses)}`
+              )} ${getPatientPostalCode(
+                patient.contactDetails.addresses,
+              )} ${getPatientZipLast4(patient.contactDetails.addresses)}`
             : undefined
         }
       />

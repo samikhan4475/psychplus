@@ -91,6 +91,11 @@ const columns = (patientId: string): ColumnDef<Patient>[] => {
       cell: ({ row }) => <TextCell>{row.original?.zip}</TextCell>,
     },
     {
+      id: 'areaCode',
+      header: () => <ColumnHeader label="Area Code" />,
+      cell: ({ row }) => <TextCell>{row.original?.zipLast4 ?? ''}</TextCell>,
+    },
+    {
       id: 'insurance',
       header: () => <ColumnHeader label="Insurance (primary)" />,
       cell: ({ row }) => <TextCell>{row.original?.insurance}</TextCell>,

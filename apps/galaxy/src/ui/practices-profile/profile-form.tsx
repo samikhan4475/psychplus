@@ -6,7 +6,7 @@ import { toast } from 'react-hot-toast'
 import z from 'zod'
 import { FormContainer } from '@/components'
 import { Organization, PracticeResource } from '@/types'
-import { sanitizeFormData } from '@/utils'
+import { sanitizeFormData, zipLast4Schema } from '@/utils'
 import { updatePracticeAction } from './actions'
 import { AddressGroup } from './address-group'
 import { defaultValues } from './default-values'
@@ -30,12 +30,14 @@ const ProfileSchema = z.object({
   city: z.string().min(1, { message: 'City is required' }),
   state: z.string().min(1, { message: 'State is required' }),
   zip: z.string().min(1, { message: 'Zip is required' }),
+  zipLast4: zipLast4Schema,
   payer: z.object({
     street1: z.string().min(1, { message: 'Address is required' }),
     street2: z.string().optional(),
     city: z.string().min(1, { message: 'City is required' }),
     state: z.string().min(1, { message: 'State is required' }),
     postalCode: z.string().min(1, { message: 'Zip is required' }),
+    zipLast4: zipLast4Schema,
   }),
   recordStatus: z.string().optional(),
   sameAsOrganizationAddress: z.boolean().optional().default(true),
@@ -75,6 +77,7 @@ const ProfileForm = ({ practice, organization }: ProfileFormProps) => {
         city: formData.city,
         state: formData.state,
         postalCode: formData.zip,
+        zipLast4: formData.zipLast4,
         type: 'Business',
       },
       practicePaymentAddress: {
@@ -83,6 +86,7 @@ const ProfileForm = ({ practice, organization }: ProfileFormProps) => {
         city: formData.payer.city,
         state: formData.payer.state,
         postalCode: formData.payer.postalCode,
+        zipLast4: formData.zipLast4,
         type: 'Business',
       },
       practiceAddressId: practice.practiceAddressId,

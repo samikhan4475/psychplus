@@ -1,4 +1,5 @@
 import z from 'zod'
+import { zipLast4Schema } from '@/utils'
 
 const zipCodeRegex = /(^\d{5}$)|(^\d{5}-\d{4}$)|^$/
 
@@ -32,6 +33,7 @@ const locationSchema = z.object({
       .trim()
       .regex(zipCodeRegex, 'Invalid zip code!')
       .min(1, 'Required'),
+    zipLast4: zipLast4Schema,
   }),
   locationGoogleLink: z.string().url('Invalid link').or(z.literal('')),
 })

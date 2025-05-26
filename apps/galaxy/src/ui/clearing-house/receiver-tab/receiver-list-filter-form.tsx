@@ -88,6 +88,7 @@ const ReceiverListFilterForm = () => {
             isFilter
             fieldContainerClassName="flex-row"
             stateFieldContainerClassName="w-[80%]"
+            addAreaCode={false}
           />
         </Flex>
       </Grid>

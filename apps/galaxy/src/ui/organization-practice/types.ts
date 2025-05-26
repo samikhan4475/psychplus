@@ -13,6 +13,7 @@ interface OrganizationAddress {
   state: string
   country?: string
   postalCode: string
+  zipLast4?: string
   timeZoneId?: string
 }
 
@@ -53,6 +54,7 @@ interface Organization extends OrganizationRoot {
   city: string
   state: string
   zip: string
+  zipLast4?: string
   status: string
   last4: string
   users: User[]

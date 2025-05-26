@@ -1,11 +1,11 @@
 'use client'
 
-import { FormContainer } from '@/components'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Button } from '@radix-ui/themes'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
+import { FormContainer } from '@/components'
 import { AddressGroup } from './address-group-field'
 import { ClearButton } from './clear-button'
 import { NPIField } from './npi-field'
@@ -56,12 +56,11 @@ const VirtualAddressesListFilterForm = () => {
     },
   })
 
-  const onSubmit: SubmitHandler<SchemaType> = (data) => {
-  }
+  const onSubmit: SubmitHandler<SchemaType> = (data) => {}
 
   return (
     <FormContainer
-      className="bg-white flex-row gap-1.5 rounded-b-2 rounded-t-1 px-2 py-1 shadow-2 flex-wrap"
+      className="bg-white flex-row flex-wrap gap-1.5 rounded-b-2 rounded-t-1 px-2 py-1 shadow-2"
       form={form}
       onSubmit={onSubmit}
     >

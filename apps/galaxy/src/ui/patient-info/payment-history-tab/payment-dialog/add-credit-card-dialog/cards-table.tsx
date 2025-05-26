@@ -75,6 +75,18 @@ const columns: ColumnDef<CreditCard>[] = [
     ),
   },
   {
+    id: 'areaCode',
+    accessorKey: 'billingAddress.zipLast4',
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Billing Area code" />
+    ),
+    cell: ({ row }) => (
+      <LongTextCell className="max-w-56">
+        {row?.original?.billingAddress?.zipLast4 ?? ''}
+      </LongTextCell>
+    ),
+  },
+  {
     id: 'status',
     accessorKey: 'isActive',
     header: ({ column }) => (

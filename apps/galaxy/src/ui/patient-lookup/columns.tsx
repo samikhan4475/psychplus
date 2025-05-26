@@ -151,6 +151,13 @@ const columns: ColumnDef<Patient>[] = [
     header: () => <ColumnHeader label="Zip" />,
     cell: ({ row: { original } }) => <TextCell>{original?.zip}</TextCell>,
   },
+  {
+    id: 'zipLast4',
+    header: () => <ColumnHeader label="Area Code" />,
+    cell: ({ row: { original } }) => (
+      <TextCell>{original?.zipLast4 ?? ''}</TextCell>
+    ),
+  },
   //Todo in phase 2
   // {
   //   id: 'practice',

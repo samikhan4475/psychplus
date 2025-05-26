@@ -1,4 +1,5 @@
 import z from 'zod'
+import { zipLast4Schema } from '@/utils'
 
 export const pcpAddressTypeEnum = z.enum([
   'Home',
@@ -39,6 +40,7 @@ const pcpSchema = z
       state: optionalString,
       country: optionalString.default('US'),
       postalCode: zipCodeValidation,
+      zipLast4: zipLast4Schema,
     }),
     mailingAddress: z.object({
       type: pcpAddressTypeEnum.default('Home'),
@@ -52,6 +54,7 @@ const pcpSchema = z
         .regex(zipCodeRegex, 'Invalid zip code!')
         .optional()
         .default(''),
+      zipLast4: zipLast4Schema,
     }),
   })
   .superRefine((data, ctx) => {

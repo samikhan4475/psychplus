@@ -11,6 +11,7 @@ import {
   getPatientPhone,
   getPatientPostalCode,
   getPatientState,
+  getPatientZipLast4,
   getSlashedPaddedDateString,
   sanitizeFormData,
 } from '@/utils'

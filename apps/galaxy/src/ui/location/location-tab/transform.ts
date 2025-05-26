@@ -9,6 +9,7 @@ const transformOutLocation = ({
     address1: street1,
     address2: street2,
     zip: postalCode,
+    zipLast4,
     ...address
   },
   isTestLocation,
@@ -21,6 +22,7 @@ const transformOutLocation = ({
       street1,
       street2,
       postalCode,
+      zipLast4,
       ...address,
     },
     isTestLocation: isTestLocation === 'yes',

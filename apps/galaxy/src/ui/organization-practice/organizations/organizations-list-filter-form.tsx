@@ -117,6 +117,7 @@ const OrganizationsListFilterForm = () => {
           fieldContainerClassName="flex-row"
           stateFieldContainerClassName="w-[80%]"
           fieldLabelClassName="!text-1"
+          addAreaCode={false}
         />
         <Statuselect />
         <Button

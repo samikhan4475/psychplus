@@ -1,6 +1,7 @@
 import { getLocalTimeZone, today } from '@internationalized/date'
 import { DateValue } from 'react-aria-components'
 import { z } from 'zod'
+import { zipLast4Schema } from '@/utils'
 
 const phoneRegex = /^(\+?[1-9]\d{9}|^$)$/
 const nameRegex = /^[^\d]*$/
@@ -34,6 +35,7 @@ const addressSchema = z.object({
     .regex(zipCodeRegex, 'Invalid zip code!')
     .optional()
     .default(''),
+  zipLast4: zipLast4Schema,
 })
 const ContactInfoSchema = z.object({
   addresses: z.array(addressSchema),

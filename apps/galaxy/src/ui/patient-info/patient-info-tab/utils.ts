@@ -37,24 +37,23 @@ const initialAddress = {
   state: '',
   country: '',
   postalCode: '',
+  zipLast4: '',
 }
 
-const  isEmptyDriverLicense = (driverObj:PatientProfile['driversLicense']) =>  {
-  if (!driverObj || typeof driverObj !== 'object') return true;
+const isEmptyDriverLicense = (driverObj: PatientProfile['driversLicense']) => {
+  if (!driverObj || typeof driverObj !== 'object') return true
 
-  const { type, ...rest } = driverObj;
+  const { type, ...rest } = driverObj
 
-  return Object.values(rest).every(value => !value);
+  return Object.values(rest).every((value) => !value)
 }
-
 
 const cleanPayload = (payload: PatientProfile) => {
   if (isEmptyDriverLicense(payload.driversLicense)) {
-    delete payload.driversLicense;
+    delete payload.driversLicense
   }
-  return payload;
+  return payload
 }
-
 
 const getPhoneNumber = (
   phoneNumbers: PhoneNumber[] = [],

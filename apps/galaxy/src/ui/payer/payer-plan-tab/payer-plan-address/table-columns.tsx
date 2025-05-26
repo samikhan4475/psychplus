@@ -9,24 +9,31 @@ const columns = (payerId: string): ColumnDef<PayerPlanAddressResponse>[] => {
     {
       id: 'address1',
       header: () => <ColumnHeader label="Address 1" />,
-      cell: ({ row }) => <TextCell>{row.original?.address?.street1 ?? ''}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original?.address?.street1 ?? ''}</TextCell>
+      ),
     },
     {
       id: 'address2',
       header: () => <ColumnHeader label="Address 2" />,
-      cell: ({ row }) => <TextCell>{row.original?.address?.street2 ?? ''}</TextCell>,
-
+      cell: ({ row }) => (
+        <TextCell>{row.original?.address?.street2 ?? ''}</TextCell>
+      ),
     },
     {
       id: 'city',
       header: () => <ColumnHeader label="City" />,
-      cell: ({ row }) => <TextCell>{row.original?.address?.city??''}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original?.address?.city ?? ''}</TextCell>
+      ),
     },
 
     {
       id: 'state',
       header: () => <ColumnHeader label="State" />,
-      cell: ({ row }) => <TextCell>{row.original?.address?.state??''}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original?.address?.state ?? ''}</TextCell>
+      ),
     },
     {
       id: 'status',
@@ -41,16 +48,23 @@ const columns = (payerId: string): ColumnDef<PayerPlanAddressResponse>[] => {
       ),
     },
     {
+      id: 'areaCode',
+      header: () => <ColumnHeader label="Area Code" />,
+      cell: ({ row }) => (
+        <TextCell>{row.original?.address?.zipLast4 ?? ''}</TextCell>
+      ),
+    },
+    {
       id: 'isDefaultLocation',
       header: () => <ColumnHeader label="Default Address" />,
       cell: ({ row }) => (
-        <TextCell>{row.original?.isDefaultLocation ? "Yes" : 'No'}</TextCell>
+        <TextCell>{row.original?.isDefaultLocation ? 'Yes' : 'No'}</TextCell>
       ),
     },
     {
       id: 'actions',
       header: () => <ColumnHeader label="Actions" />,
-      cell: ({ row }) => <ActionsCell row={row} payerId={payerId}/>,
+      cell: ({ row }) => <ActionsCell row={row} payerId={payerId} />,
     },
   ]
 }

@@ -11,6 +11,7 @@ const defaultValues = (data?: Organization) => {
     city: data?.organizationAddress?.city ?? '',
     state: data?.organizationAddress?.state ?? '',
     zip: data?.organizationAddress?.postalCode ?? '',
+    zipLast4: data?.organizationAddress?.zipLast4 ?? '',
     contactEmail: data?.contactEmail ?? '',
     contactPhone: data?.contactPhone ?? '',
     contactName: data?.contactName ?? '',

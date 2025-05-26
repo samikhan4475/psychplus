@@ -22,6 +22,7 @@ interface Patient extends PatientProfile {
   residence?: string
   city?: string
   zip?: string
+  zipLast4?: string
   state?: string
   userCreated?: string
   insurance?: string
@@ -78,6 +79,7 @@ interface PatientContactDetails {
       state: string
       country: string
       postalCode: string
+      zipLast4?: string
       geoCoordinates?: {
         longitude: number
         latitude: number

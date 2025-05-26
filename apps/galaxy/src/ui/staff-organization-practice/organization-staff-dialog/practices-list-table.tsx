@@ -67,6 +67,15 @@ const columns: ColumnDef<Practice>[] = [
     ),
   },
   {
+    id: 'practiceAddress.zipLast4',
+    header: ({ column }) => (
+      <ColumnHeader label="Area Code" column={column} clientSideSort />
+    ),
+    cell: ({ row }) => (
+      <TextCell>{row.original.practiceAddress?.zipLast4 ?? ''}</TextCell>
+    ),
+  },
+  {
     id: 'actions',
     header: () => <ColumnHeader label="" />,
     cell: ({ row }) => <RowActionDeletePractice row={row} />,

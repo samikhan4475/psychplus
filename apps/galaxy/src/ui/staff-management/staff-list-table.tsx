@@ -12,8 +12,9 @@ import {
   TextCell,
 } from '@/components'
 import { useStore as useRootStore } from '@/store'
-import { Sort } from '@/types'
+import { PatientAddress, PatientAddressType, Sort } from '@/types'
 import { getMaskedPhoneNumber, getSortDir } from '@/utils'
+import { getAddressLabel } from '@/utils/address'
 import { ActionsCell, CollapseCell } from './cells'
 import { FEATURE_TYPES } from './constants'
 import { useStore } from './store'
@@ -329,16 +330,14 @@ const columns = (
         />
       ),
       cell: ({ row }) => {
-        let address = ''
-        if (row.original?.contactInfo?.addresses?.length > 0) {
-          const { street1, city, country, postalCode } =
-            row.original.contactInfo.addresses[0]
-          address = `${street1 ?? ''}, ${country ?? ''}, ${city ?? ''},${
-            postalCode ?? ''
-          }`
-        }
-
-        return <TextCell className="w-[180px]">{address}</TextCell>
+        return (
+          <TextCell className="w-[180px]">
+            {getAddressLabel(
+              'Business',
+              row.original?.contactInfo?.addresses as PatientAddress[],
+            )}
+          </TextCell>
+        )
       },
     },
     {

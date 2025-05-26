@@ -20,6 +20,9 @@ const MailingAddressGroup = () => {
         postalCode: isMailingAddressSameAsPrimary
           ? homeAddress?.postalCode ?? ''
           : '',
+        zipLast4: isMailingAddressSameAsPrimary
+          ? homeAddress?.zipLast4 ?? ''
+          : '',
         type: 'Mailing',
         street1: isMailingAddressSameAsPrimary
           ? homeAddress?.street1 ?? ''

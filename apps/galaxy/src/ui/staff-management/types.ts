@@ -15,6 +15,7 @@ interface Address {
   state?: string
   country?: string
   postalCode?: string
+  zipLast4?: string
   geoCoordinates?: GeoCoordinates
   timeZoneId?: string
 }

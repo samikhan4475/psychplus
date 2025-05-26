@@ -53,6 +53,7 @@ interface Insurance {
   policyHolderCity?: string
   policyHolderState?: string
   policyHolderPostalCode?: string
+  policyHolderZipLast4?: string
   contactInfo?: {
     addresses: PatientAddress[]
   }

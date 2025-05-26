@@ -55,6 +55,7 @@ const transformOutService = (
     coSignerType,
     serviceVisitTypes,
     zip: postalCode,
+    zipLast4,
     address1: street1,
     address2: street2,
     state,
@@ -82,6 +83,7 @@ const transformOutService = (
       street1,
       street2,
       postalCode,
+      zipLast4,
     },
   })
 }

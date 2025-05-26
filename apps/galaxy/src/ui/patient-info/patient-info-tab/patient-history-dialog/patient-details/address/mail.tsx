@@ -34,6 +34,7 @@ const Mail = ({ address, isSameAsPrimary }: MailAddressProps) => {
       <LabelledText title="City" content={address?.city} required />
       <LabelledText title="State" content={address?.state} required />
       <LabelledText title="Zip" content={address?.postalCode} required />
+      <LabelledText title="Area Code" content={address?.zipLast4} />
     </Grid>
   )
 }

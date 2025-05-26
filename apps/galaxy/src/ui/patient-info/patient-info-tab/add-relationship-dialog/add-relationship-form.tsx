@@ -22,6 +22,7 @@ import { RelationshipSelect } from './relationship-select'
 import { SaveButton } from './save-button'
 import { AddRelationshipSchemaType, schema } from './schema'
 import { ZipInput } from './zip-input'
+import { ZipLast4Input } from './zip-last4-input'
 
 interface AddRelationshipFormProps {
   patientId: string
@@ -58,6 +59,7 @@ const AddRelationshipForm = ({
             state: '',
             country: '',
             postalCode: '',
+            zipLast4: '',
           },
         ],
       },
@@ -97,6 +99,7 @@ const AddRelationshipForm = ({
           <EmailInput />
         </Flex>
         <ZipInput />
+        <ZipLast4Input />
         {loaded && <AddressInput />}
         <RelationshipBlock />
       </Grid>

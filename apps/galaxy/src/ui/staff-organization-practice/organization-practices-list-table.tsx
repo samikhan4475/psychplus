@@ -84,6 +84,16 @@ const columns: ColumnDef<Practice>[] = [
     ),
   },
   {
+    id: 'practiceAddress.zipLast4',
+    accessorKey: 'practiceAddress.zipLast4',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label="Area Code" clientSideSort />
+    ),
+    cell: ({ row }) => (
+      <TextCell>{row.original.practiceAddress?.zipLast4 ?? ''}</TextCell>
+    ),
+  },
+  {
     id: 'actions',
     header: () => <ColumnHeader label="Actions" />,
     cell: ({ row }) => <ActionsCell row={row} />,

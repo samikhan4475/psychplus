@@ -44,6 +44,7 @@ interface PharmacySearchParams {
   city?: string
   state?: string
   zip?: string
+  zipLast4?: string
   phone?: string
 }
 

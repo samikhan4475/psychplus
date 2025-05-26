@@ -55,6 +55,19 @@ const columns: ColumnDef<PharmacyFilter>[] = [
     ),
   },
   {
+    accessorKey: 'zipLast4',
+    size: 100,
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Area Code" />
+    ),
+    accessorFn: (row) => row.contactDetails?.addresses?.[0]?.zipLast4 ?? '',
+    cell: ({ row }) => (
+      <TextCell>
+        {row.original.contactDetails?.addresses?.[0]?.zipLast4 ?? ''}
+      </TextCell>
+    ),
+  },
+  {
     accessorKey: 'city',
     size: 100,
     header: ({ column }) => (

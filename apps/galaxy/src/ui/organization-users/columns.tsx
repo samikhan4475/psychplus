@@ -15,6 +15,7 @@ import {
   getPatientPhone,
   getPatientPostalCode,
   getPatientState,
+  getPatientZipLast4,
   getSlashedPaddedDateString,
 } from '@/utils'
 import {
@@ -202,6 +203,16 @@ const columns: ColumnDef<Users>[] = [
     cell: ({ row: { original } }) => (
       <TextCell>
         {getPatientPostalCode(original?.contactDetails?.addresses)}
+      </TextCell>
+    ),
+  },
+  {
+    id: 'areaCode',
+    accessorKey: 'zipLast4',
+    header: () => <ColumnHeader label="Area Code" />,
+    cell: ({ row: { original } }) => (
+      <TextCell>
+        {getPatientZipLast4(original?.contactDetails?.addresses)}
       </TextCell>
     ),
   },

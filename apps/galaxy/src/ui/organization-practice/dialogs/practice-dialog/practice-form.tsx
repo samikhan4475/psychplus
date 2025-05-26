@@ -59,6 +59,7 @@ const PracticeForm = ({
         city: formData.city,
         state: formData.state,
         postalCode: formData.zip,
+        zipLast4: formData.zipLast4,
         type: 'Business',
       },
       practicePaymentAddress: {
@@ -67,6 +68,7 @@ const PracticeForm = ({
         city: formData.practicePaymentAddress.city,
         state: formData.practicePaymentAddress.state,
         postalCode: formData.practicePaymentAddress.postalCode,
+        zipLast4: formData.practicePaymentAddress.zipLast4,
         type: 'Business',
       },
     }

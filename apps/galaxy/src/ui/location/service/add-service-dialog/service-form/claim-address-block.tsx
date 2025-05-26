@@ -23,15 +23,17 @@ const ClaimAddressBlock = ({ claimAddress }: ClaimAddressBlockProps) => {
       form.setValue('city', claimAddress?.city ?? '')
       form.setValue('state', claimAddress?.state ?? '')
       form.setValue('zip', claimAddress?.postalCode ?? '')
+      form.setValue('zipLast4', claimAddress?.zipLast4 ?? '')
       form.setValue('stateId', claimAddress?.stateId ?? '')
       form.setValue('cityId', claimAddress?.cityId ?? '')
-      form.trigger(['address1', 'address2', 'city', 'state', 'zip'])
+      form.trigger(['address1', 'address2', 'city', 'state', 'zip', 'zipLast4'])
     } else {
       form.setValue('address1', '')
       form.setValue('address2', '')
       form.setValue('city', '')
       form.setValue('state', '')
       form.setValue('zip', '')
+      form.setValue('zipLast4', '')
       form.setValue('stateId', '')
       form.setValue('cityId', '')
     }

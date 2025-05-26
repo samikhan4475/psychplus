@@ -1,6 +1,7 @@
 import { CalendarDate } from '@internationalized/date'
 import { z } from 'zod'
 import { PatientAddressType } from '@/types'
+import { zipLast4Schema } from '@/utils'
 import { StaffType } from '../staff-management/types'
 
 const requiredString = z
@@ -40,6 +41,7 @@ const getAddressSchema = (type: PatientAddressType) =>
       state: type === 'Mailing' ? optionalString : requiredString,
       country: optionalString,
       postalCode: type === 'Mailing' ? optionalString : requiredString,
+      zipLast4: zipLast4Schema,
       geoCoordinates: z
         .object({
           longitude: z.number(),

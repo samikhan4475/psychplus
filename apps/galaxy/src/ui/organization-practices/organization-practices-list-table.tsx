@@ -200,6 +200,22 @@ const columns = (
       ),
     },
     {
+      id: 'areaCode',
+      header: ({ column }) => (
+        <ColumnHeader
+          label="Area Code"
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+        />
+      ),
+      cell: ({ row }) => (
+        <TextCell>{row.original.practiceAddress?.zipLast4 ?? ''}</TextCell>
+      ),
+    },
+    {
       id: 'practicePhone',
       header: ({ column }) => (
         <ColumnHeader

@@ -33,6 +33,7 @@ const defaultValues = (data?: ClearingHouseReceiver | null) => {
     city: data?.city ?? '',
     state: data?.state ?? '',
     zip: data?.zip ?? '',
+    zipLast4: data?.zipLast4 ?? '',
     isSupportMultipleDirectory: data?.isSupportMultipleDirectory ? 'yes' : 'no',
   }
 }

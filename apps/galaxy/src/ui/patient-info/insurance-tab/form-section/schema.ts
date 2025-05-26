@@ -1,6 +1,6 @@
 import { parseDate } from '@internationalized/date'
 import z from 'zod'
-import { getAgeFromDate } from '@/utils'
+import { getAgeFromDate, zipLast4Schema } from '@/utils'
 
 const insuranceSchema = z
   .object({
@@ -36,6 +36,7 @@ const insuranceSchema = z
     city: z.string().max(28, 'Max 28 characters are allowed').optional(),
     state: z.string().max(28, 'Max 28 characters are allowed').optional(),
     zip: z.string().max(5, 'Invalid ZIP').optional(),
+    zipLast4: zipLast4Schema,
     verificationStatus: z.string().min(1, 'Required'),
   })
   .superRefine((data, ctx) => {

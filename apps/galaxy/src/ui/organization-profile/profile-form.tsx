@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import z from 'zod'
 import { FormContainer } from '@/components'
-import { sanitizeFormData } from '@/utils'
+import { sanitizeFormData, zipLast4Schema } from '@/utils'
 import { updateOrganizationAction } from '../organization-practice/actions'
 import { Organization } from '../organization-practice/types'
 import { AddressGroup } from './address-group'
@@ -29,6 +29,7 @@ const ProfileSchema = z.object({
   city: z.string().min(1, { message: 'Required' }),
   state: z.string().min(1, { message: 'Required' }),
   zip: z.string().min(1, { message: 'Required' }),
+  zipLast4: zipLast4Schema,
 })
 
 type ProfileSchemaType = z.infer<typeof ProfileSchema>
@@ -50,6 +51,7 @@ const ProfileForm = ({ defaultValues }: ProfileFormProps) => {
         : '',
       address2: defaultValues.organizationAddress?.street2 ?? '',
       zip: defaultValues.organizationAddress?.postalCode ?? '',
+      zipLast4: defaultValues.organizationAddress?.zipLast4 ?? '',
       state: defaultValues.organizationAddress?.state ?? '',
       city: defaultValues.organizationAddress?.city ?? '',
     },
@@ -66,6 +68,7 @@ const ProfileForm = ({ defaultValues }: ProfileFormProps) => {
         city: data.city,
         state: data.state,
         postalCode: data.zip,
+        zipLast4: data.zipLast4,
         type: 'Business',
       },
     }

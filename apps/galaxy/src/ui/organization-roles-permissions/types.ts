@@ -24,6 +24,7 @@ interface Staff extends StaffResource {
   city: string
   state: string
   zip: string
+  zipLast4?: string
 }
 
 interface GetStaffListResponse {

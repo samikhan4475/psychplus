@@ -1,6 +1,6 @@
 import { PatientAddress as Address } from '@/types'
 
-type AddressType = 'Home' | 'Mailing' | 'Work'
+type AddressType = 'Home' | 'Mailing' | 'Work' | 'Business'
 
 const getAddressLabel = (addressType: AddressType, addresses?: Address[]) => {
   const address = addresses?.find((address) => address.type === addressType)
@@ -11,9 +11,9 @@ const getAddressLabel = (addressType: AddressType, addresses?: Address[]) => {
 
   const stateAbbreviation = getStateAbbreviation(address.state ?? '')
 
-  return `${address.street1} ${address.city ?? ''}, ${stateAbbreviation} ${
-    address.postalCode
-  }`
+  return `${address.street1 ?? ''} ${
+    address.city ?? ''
+  }, ${stateAbbreviation} ${address.postalCode} ${address.zipLast4}`.trim()
 }
 
 const getStateAbbreviation = (name: string) => {

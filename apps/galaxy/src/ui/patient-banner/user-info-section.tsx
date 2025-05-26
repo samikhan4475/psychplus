@@ -17,6 +17,7 @@ import {
   getSlashedPaddedDateString,
   getUserFullName,
 } from '@/utils'
+import { getAddressLabel } from '@/utils/address'
 import { LabelAndValue } from './label-and-value'
 
 interface PatientBannerProps {
@@ -29,20 +30,6 @@ const UserInfoSection = ({ user }: PatientBannerProps) => {
   const patientStatus = statusOptions?.find(
     (item) => item?.value === user.status,
   )
-
-  const address = `
-            ${
-              user?.contactDetails?.addresses
-                ? getPatientStreet(user?.contactDetails?.addresses)
-                : undefined
-            }
-                ${getPatientCity(
-                  user?.contactDetails?.addresses,
-                )}, ${getPatientState(
-    user?.contactDetails?.addresses,
-  )} ${getPatientPostalCode(user?.contactDetails?.addresses)}
-            
-         `
 
   return (
     <>
@@ -82,7 +69,11 @@ const UserInfoSection = ({ user }: PatientBannerProps) => {
           )}
         />
         <LabelAndValue label="Email" value={user?.contactDetails?.email} />
-        <LabelAndValue label="Address" value={address} showValueInsideTooltip />
+        <LabelAndValue
+          label="Address"
+          value={getAddressLabel('Home', user?.contactDetails?.addresses)}
+          showValueInsideTooltip
+        />
       </Flex>
     </>
   )

@@ -47,6 +47,20 @@ const columns = (isFeatureFlagEnabled: boolean): ColumnDef<Pharmacy>[] => {
       ),
     },
     {
+      accessorKey: 'areaCode',
+      size: 100,
+      header: ({ column }) => (
+        <ColumnHeader column={column} clientSideSort label="Area Code" />
+      ),
+      accessorFn: (row) =>
+        row.pharmacyContactDetails?.addresses?.[0]?.zipLast4 ?? '',
+      cell: ({ row }) => (
+        <TextCell>
+          {row.original.pharmacyContactDetails?.addresses?.[0]?.zipLast4 ?? ''}
+        </TextCell>
+      ),
+    },
+    {
       accessorKey: 'city',
       size: 100,
       header: ({ column }) => (

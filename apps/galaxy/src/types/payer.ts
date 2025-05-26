@@ -90,6 +90,7 @@ interface PayerPlanAddress {
   city: string
   state: string
   postalCode: string
+  zipLast4?: string
   status: string
 }
 
@@ -100,6 +101,7 @@ interface Address {
   city?: string
   state?: string
   postalCode?: string
+  zipLast4?: string
 }
 
 interface PayerPlanAddressResponse {

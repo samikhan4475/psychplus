@@ -99,6 +99,23 @@ const getPatientPostalCode = (
   return address.postalCode
 }
 
+const getPatientZipLast4 = (
+  addresses?: PatientAddress[],
+  type: PatientAddressType = 'Home',
+) => {
+  if (!addresses || addresses.length === 0) {
+    return undefined
+  }
+
+  const address = addresses.find((addr) => addr.type === type)
+
+  if (!address) {
+    return addresses[0].zipLast4
+  }
+
+  return address.zipLast4 ?? ''
+}
+
 const getPatientCity = (
   addresses?: PatientAddress[],
   type: PatientAddressType = 'Home',
@@ -223,4 +240,5 @@ export {
   getMaskedSSN,
   getTruncatedName,
   formatPatientVitalHeightWeight,
+  getPatientZipLast4,
 }

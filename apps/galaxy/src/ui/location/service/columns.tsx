@@ -124,6 +124,16 @@ const columns = (googleApiKey: string): ColumnDef<Service>[] => [
     ),
   },
   {
+    id: 'areaCode',
+    accessorKey: 'address.zipLast4',
+    header: ({ column }) => (
+      <ColumnHeader clientSideSort column={column} label="Area Code" />
+    ),
+    cell: ({ row: { original } }) => (
+      <TextCell>{original?.address?.zipLast4 || 'N/A'}</TextCell>
+    ),
+  },
+  {
     id: 'isPolicyRequired',
     accessorKey: 'isPolicyRequired',
     header: ({ column }) => (

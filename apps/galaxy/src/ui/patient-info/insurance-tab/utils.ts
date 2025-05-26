@@ -28,6 +28,7 @@ const getAddressDefaults = (insurance?: Insurance) => {
     city: address?.city ?? '',
     state: address?.state ?? '',
     zip: address?.postalCode ?? '',
+    zipLast4: address?.zipLast4 ?? '',
   }
 }
 
@@ -75,6 +76,7 @@ const policyHolderFields: Array<keyof InsuranceSchemaType> = [
   'city',
   'state',
   'zip',
+  'zipLast4',
 ]
 const registerPolicyHolderFields = (
   register: UseFormRegister<InsuranceSchemaType>,

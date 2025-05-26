@@ -8,6 +8,7 @@ interface PatientAddress {
   state: string
   country?: string
   postalCode: string
+  zipLast4?: string
   geoCoordinates?: {
     longitude: number
     latitude: number
@@ -29,6 +30,7 @@ interface ClinicAddress {
   state: string
   country: string
   postalCode: string
+  zipLast4: string
   geoCoordinates: GeoCoordinates
   timeZoneId: string
 }

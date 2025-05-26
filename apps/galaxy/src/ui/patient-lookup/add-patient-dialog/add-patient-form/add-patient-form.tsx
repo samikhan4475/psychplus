@@ -59,6 +59,7 @@ const AddPatientForm = ({ closeDialog }: AddPatientFormProps) => {
             state: '',
             country: '',
             postalCode: '',
+            zipLast4: '',
           },
         ],
         isMailingAddressSameAsPrimary: true,

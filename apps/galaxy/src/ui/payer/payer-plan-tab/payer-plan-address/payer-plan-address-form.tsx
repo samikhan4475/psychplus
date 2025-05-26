@@ -14,7 +14,7 @@ import {
 } from '@/components'
 import { PayerPlanAddressResponse } from '@/types'
 import { ConfirmationDialog } from '@/ui/revenue-cycle/dialogs/confirmation-dialog'
-import { sanitizeFormData } from '@/utils'
+import { sanitizeFormData, zipLast4Schema } from '@/utils'
 import {
   addPayerPlanAddressAction,
   getPayerPlanAddressById,
@@ -30,6 +30,7 @@ const addressSchema = z.object({
   city: z.string().min(1, { message: 'City is required' }),
   state: z.string().min(1, { message: 'State is required' }),
   zip: z.string().min(1, { message: 'Zip is required' }),
+  zipLast4: zipLast4Schema,
   status: z.boolean(),
   isDefaultLocation: z.boolean(),
 })
@@ -61,6 +62,7 @@ const PayerPlanAddressForm = ({
       city: '',
       state: '',
       zip: '',
+      zipLast4: '',
       status: true,
       isDefaultLocation: addressData.length === 0,
     },
@@ -72,7 +74,7 @@ const PayerPlanAddressForm = ({
         setLoading(true)
         const result = await getPayerPlanAddressById(payerId, data?.id)
         if (result.state === 'success') {
-          const { street1, street2, postalCode } = result.data.address
+          const { street1, street2, postalCode, zipLast4 } = result.data.address
 
           form.reset({
             ...result.data.address,
@@ -81,6 +83,7 @@ const PayerPlanAddressForm = ({
             address1: street1,
             address2: street2,
             zip: postalCode,
+            zipLast4: zipLast4,
           })
         } else if (result.state === 'error') {
           toast.error(result.error ?? 'Failed to get payer plan address')
@@ -114,6 +117,7 @@ const PayerPlanAddressForm = ({
           city: formData.city,
           state: formData.state,
           postalCode: formData.zip,
+          zipLast4: formData.zipLast4 ?? '',
         },
       }
 

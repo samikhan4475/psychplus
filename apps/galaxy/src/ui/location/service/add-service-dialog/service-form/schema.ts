@@ -1,4 +1,5 @@
 import z from 'zod'
+import { zipLast4Schema } from '@/utils'
 
 const schema = z.object({
   id: z.ostring(),
@@ -28,6 +29,7 @@ const schema = z.object({
   city: z.string().min(1, 'Required'),
   state: z.string().min(1, 'Required'),
   zip: z.string().max(5, 'Invalid ZIP').min(1, 'Required'),
+  zipLast4: zipLast4Schema,
   serviceVisitTypes: z.array(z.string()).min(1, 'Required'),
   cosigner: z.string().optional(),
   cityId: z.string().optional(),

@@ -9,6 +9,7 @@ interface AddressForm {
   city?: string
   state?: string
   postalCode?: string
+  zipLast4?: string
   country?: string
 }
 
@@ -42,6 +43,7 @@ const getAddressFromPlacesResult = (
   let city: string | undefined
   let state: string | undefined
   let postalCode: string | undefined
+  let zipLast4: string | undefined
   let country: string | undefined
 
   for (const component of result.address_components) {
@@ -50,6 +52,9 @@ const getAddressFromPlacesResult = (
       switch (t) {
         case 'postal_code':
           postalCode ||= component.long_name || component.short_name
+          break
+        case 'postal_code_suffix':
+          zipLast4 ||= component.long_name || component.short_name
           break
 
         case 'country':
@@ -86,6 +91,7 @@ const getAddressFromPlacesResult = (
     city,
     state,
     postalCode,
+    zipLast4,
     country,
   }
 }

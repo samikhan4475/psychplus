@@ -21,6 +21,7 @@ interface AddressProps {
   isFilter?: boolean
   fieldContainerClassName?: string
   stateFieldContainerClassName?: string
+  addAreaCode?: boolean
 }
 const AddressFieldsGroup = ({
   title,
@@ -36,6 +37,7 @@ const AddressFieldsGroup = ({
   isFilter = false,
   fieldContainerClassName,
   stateFieldContainerClassName,
+  addAreaCode = true,
 }: AddressProps) => {
   const { loaded } = useGooglePlacesContext()
 
@@ -83,7 +85,7 @@ const AddressFieldsGroup = ({
           fieldContainerClassName={fieldContainerClassName}
         />
       </Grid>
-      <Grid columns="3" gap="3" className="flex-1">
+      <Grid columns={addAreaCode ? '4' : '3'} gap="3" className="flex-1">
         <AddressTextField
           label="City"
           field={fieldName('city', prefix)}
@@ -117,6 +119,19 @@ const AddressFieldsGroup = ({
           fieldContainerClassName={fieldContainerClassName}
           isZip
         />
+        {addAreaCode && (
+          <AddressTextField
+            label="Area Code"
+            field={fieldName('zipLast4', prefix)}
+            placeholder="Area Code"
+            type="number"
+            maxLength={4}
+            disabled={disabled}
+            className={fieldClassName}
+            labelClassName={fieldLabelClassName}
+            fieldContainerClassName={fieldContainerClassName}
+          />
+        )}
       </Grid>
     </Flex>
   )

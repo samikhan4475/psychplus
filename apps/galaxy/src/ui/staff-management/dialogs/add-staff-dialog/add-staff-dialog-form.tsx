@@ -54,6 +54,7 @@ const AddStaffDialogForm = ({ onClose }: AddStaffDialogFormProps) => {
   })
   const onSubmit: SubmitHandler<SchemaType> = async ({ bioVideo, ...data }) => {
     const result = await addStaffAction(transformOut(data))
+
     if (result.state === 'error') {
       return toast.error(result.error)
     }

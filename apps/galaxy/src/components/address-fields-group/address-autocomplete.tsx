@@ -29,6 +29,7 @@ interface AddressForm {
   city?: string
   state?: string
   postalCode?: string
+  zipLast4?: string
   country?: string
 }
 
@@ -71,6 +72,7 @@ const GooglePlacesAutocomplete = ({
   const cityField = fieldName('city', prefix)
   const stateField = fieldName('state', prefix)
   const zipField = zipFieldName
+  const zipLast4Field = fieldName('zipLast4', prefix)
   const countryField = fieldName('country', prefix)
 
   const state = form?.getFieldState(address1Field, form?.formState)
@@ -86,6 +88,7 @@ const GooglePlacesAutocomplete = ({
       city: form.watch(cityField),
       state: form.watch(stateField),
       postalCode: form.watch(zipField),
+      zipLast4: form.watch(zipLast4Field),
     }),
     requestOptions: {
       types: ['address'],
@@ -113,6 +116,7 @@ const GooglePlacesAutocomplete = ({
         form.setValue(cityField, address?.city ?? '')
         form.setValue(stateField, address?.state ?? '')
         form.setValue(zipField, address?.postalCode ?? '')
+        form.setValue(zipLast4Field, address?.zipLast4 ?? '')
         form.setValue(countryField, address?.country ?? '')
         form.trigger([
           address1Field,
@@ -120,6 +124,7 @@ const GooglePlacesAutocomplete = ({
           cityField,
           stateField,
           zipField,
+          zipLast4Field,
           countryField,
         ])
       }
@@ -211,7 +216,7 @@ const GooglePlacesAutocomplete = ({
         </Popover.Root>
 
         {state?.error && (
-          <Text size="1" mt='2' color="red">
+          <Text size="1" mt="2" color="red">
             {state.error.message}
           </Text>
         )}

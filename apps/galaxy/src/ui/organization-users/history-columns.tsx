@@ -89,6 +89,12 @@ export const columns: ColumnDef<Users>[] = [
     cell: ({ row }) => <TextCell>{row.original.zip}</TextCell>,
   },
   {
+    id: 'areaCode',
+    accessorKey: 'zipLast4',
+    header: ({ column }) => <ColumnHeader column={column} label="Area code" />,
+    cell: ({ row }) => <TextCell>{row.original?.zipLast4 ?? ''}</TextCell>,
+  },
+  {
     id: 'hasGuardian',
     accessorKey: 'hasGuardian',
     header: ({ column }) => <ColumnHeader column={column} label="Guardian" />,

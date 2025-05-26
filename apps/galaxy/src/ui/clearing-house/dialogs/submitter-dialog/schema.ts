@@ -1,4 +1,5 @@
 import z from 'zod'
+import { zipLast4Schema } from '@/utils'
 
 const schema = z.object({
   id: z.string(),
@@ -17,6 +18,7 @@ const schema = z.object({
   city: z.string().min(1, { message: 'City is required' }),
   state: z.string().min(1, { message: 'State is required' }),
   zip: z.string().min(1, { message: 'Zip is required' }),
+  zipLast4: zipLast4Schema,
 })
 
 type SchemaType = z.infer<typeof schema>

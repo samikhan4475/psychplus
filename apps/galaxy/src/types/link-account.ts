@@ -63,6 +63,7 @@ interface Address {
   state: string
   country: string
   postalCode: string
+  zipLast4: string
 }
 
 interface PatientLink {
@@ -78,7 +79,6 @@ interface PatientLink {
   recordStatus: string
   survivorPatientName: Name
   nonSurvivorPatientName: Name
-
 }
 
 export {

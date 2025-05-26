@@ -120,6 +120,13 @@ const columns = (
       cell: ({ row: { original } }) => <TextCell>{original?.zip}</TextCell>,
     },
     {
+      id: 'areaCode',
+      header: () => <ColumnHeader label="Area Code" />,
+      cell: ({ row: { original } }) => (
+        <TextCell>{original?.zipLast4 ?? ''}</TextCell>
+      ),
+    },
+    {
       id: 'primaryInsurance',
       header: () => <ColumnHeader label="Primary Insurance" />,
       cell: ({ row: { original } }) => (
@@ -206,7 +213,6 @@ const columns = (
       header: () => <ColumnHeader label="Referral Status" />,
       cell: ReferralStatusCell,
     },
-
     {
       id: 'next-visit',
       header: () => <ColumnHeader label="Next Visit" />,

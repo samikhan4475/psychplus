@@ -115,6 +115,16 @@ const columns = (
       ),
     },
     {
+      id: 'areaCode',
+      accessorKey: 'address.zipLast4',
+      header: ({ column }) => (
+        <ColumnHeader label="Area Code" column={column} clientSideSort />
+      ),
+      cell: ({ row: { original } }) => (
+        <TextCell>{original?.address?.zipLast4 || 'N/A'}</TextCell>
+      ),
+    },
+    {
       id: 'phone',
       accessorKey: 'phone.number',
       header: ({ column }) => (

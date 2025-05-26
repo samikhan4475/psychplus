@@ -54,6 +54,7 @@ const CreatePcpForm = ({
       country: 'US',
       postalCode:
         initialValue?.contactDetails?.addresses?.[0]?.postalCode || '',
+      zipLast4: initialValue?.contactDetails?.addresses?.[0]?.zipLast4 || '',
     },
     mailingAddress: {
       type: (initialValue?.contactDetails?.addresses?.[1]?.type ||
@@ -65,6 +66,7 @@ const CreatePcpForm = ({
       country: 'US',
       postalCode:
         initialValue?.contactDetails?.addresses?.[1]?.postalCode || '',
+      zipLast4: initialValue?.contactDetails?.addresses?.[0]?.zipLast4 || '',
     },
   }
 

@@ -34,7 +34,7 @@ const AddressFields = () => {
             placeholder="Enter Address 2"
           />
         </Grid>
-        <Grid columns="4" gap="3" className="flex-1">
+        <Grid columns="5" gap="3" className="flex-1">
           <AddressTextField
             label="City"
             field="city"
@@ -50,6 +50,13 @@ const AddressFields = () => {
             type="number"
             maxLength={5}
             required
+          />
+          <AddressTextField
+            label="Area Code"
+            field="zipLast4"
+            placeholder="Area code"
+            type="number"
+            maxLength={4}
           />
           <EhrPartnerField />
         </Grid>

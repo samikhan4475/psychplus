@@ -83,6 +83,13 @@ const columns: ColumnDef<Patient>[] = [
     ),
   },
   {
+    id: 'areaCode',
+    header: () => <ColumnHeader label="AreaCode" />,
+    cell: ({ row: { original: patient } }) => (
+      <TextCell>{patient?.zipLast4 ?? ''}</TextCell>
+    ),
+  },
+  {
     id: 'gaurdian',
     header: () => <ColumnHeader label="Gaurdian" />,
     cell: ({ row }) => <GuardianCell row={row} />,

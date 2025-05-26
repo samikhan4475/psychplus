@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { zipLast4Schema } from '@/utils'
 
 const legalNameSchema = z.object({
   firstName: z.string().optional(),
@@ -24,6 +25,7 @@ const clinicAddress = z.object({
   state: z.string().optional(),
   country: z.string().optional(),
   postalCode: z.string().optional(),
+  zipLast4: zipLast4Schema,
   geoCoordinates: geoCoordinates.optional(),
   timeZoneId: z.string().optional(),
 })

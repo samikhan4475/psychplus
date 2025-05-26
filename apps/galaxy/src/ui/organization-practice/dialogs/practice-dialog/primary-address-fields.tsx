@@ -21,8 +21,16 @@ const PrimaryAddressFields = ({
       'city',
       'state',
       'postalCode',
+      'zipLast4',
     ]
-    const formFields = ['address1', 'address2', 'city', 'state', 'zip']
+    const formFields = [
+      'address1',
+      'address2',
+      'city',
+      'state',
+      'zip',
+      'zipLast4',
+    ]
 
     formFields.forEach((field, index) => {
       const organizationField = fields[index]

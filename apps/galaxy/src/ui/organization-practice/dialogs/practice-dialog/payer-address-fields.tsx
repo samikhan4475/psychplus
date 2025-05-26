@@ -9,8 +9,22 @@ const PayerAddressFields = () => {
   const form = useFormContext()
 
   const onChange = (value: boolean) => {
-    const fields = ['street1', 'street2', 'city', 'state', 'postalCode']
-    const formValues = ['address1', 'address2', 'city', 'state', 'zip']
+    const fields = [
+      'street1',
+      'street2',
+      'city',
+      'state',
+      'postalCode',
+      'zipLast4',
+    ]
+    const formValues = [
+      'address1',
+      'address2',
+      'city',
+      'state',
+      'zip',
+      'zipLast4',
+    ]
 
     fields.forEach((field, index) => {
       const formValue = value ? form.getValues(formValues[index]) : ''

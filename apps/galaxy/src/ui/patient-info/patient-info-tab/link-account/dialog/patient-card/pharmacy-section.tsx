@@ -33,6 +33,14 @@ const PatientCardPharmacySection = ({
     state: '',
     country: '',
     postalCode: '',
+    zipLast4: '',
+  }
+  const pharmacyAddressValue = () => {
+    if (!pharmacyAddress?.city) return undefined
+    let baseValue = `${pharmacyAddress.city}/${pharmacyAddress.state}/${pharmacyAddress.postalCode}`
+    if (pharmacyAddress?.zipLast4)
+      baseValue = `${baseValue}/${pharmacyAddress.zipLast4}`
+    return baseValue
   }
   return (
     <>
@@ -42,12 +50,8 @@ const PatientCardPharmacySection = ({
         value={pharmacyAddress?.street1}
       />
       <LabelAndValue
-        label="Pharm City/State/Zip"
-        value={
-          pharmacyAddress?.city
-            ? `${pharmacyAddress.city}/${pharmacyAddress.state}/${pharmacyAddress.postalCode}`
-            : undefined
-        }
+        label="Pharm City/State/Zip/ Area Code"
+        value={pharmacyAddressValue()}
       />
     </>
   )

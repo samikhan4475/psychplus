@@ -42,6 +42,7 @@ const OrganizationForm = ({ data, onCloseModal }: FormProps) => {
         city: formData.city,
         state: formData.state,
         postalCode: formData.zip,
+        zipLast4: formData.zipLast4,
         type: 'Business',
       },
     }

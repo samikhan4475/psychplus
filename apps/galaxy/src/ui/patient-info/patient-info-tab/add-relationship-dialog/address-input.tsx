@@ -4,7 +4,7 @@ import { FormFieldContainer, GooglePlacesAutocomplete } from '@/components'
 
 const AddressInput = () => {
   return (
-    <FormFieldContainer className="col-span-2 w-full">
+    <FormFieldContainer className="w-full">
       <GooglePlacesAutocomplete
         required={true}
         name="street1"

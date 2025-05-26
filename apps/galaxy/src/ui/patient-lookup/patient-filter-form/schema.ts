@@ -1,5 +1,6 @@
 import { DateValue } from 'react-aria-components'
 import z from 'zod'
+import { zipLast4Schema } from '@/utils'
 import { INVALID_RANGE_ERROR } from '../constants'
 import { validateDate } from '../utils'
 
@@ -43,6 +44,7 @@ const patientLookupSchema = z
       .trim()
       .regex(zipCodeRegex, 'Invalid zip code!')
       .optional(),
+    zipLast4: zipLast4Schema,
     hasGuardian: z.string().trim().optional(),
     telephone: z.string().trim().optional(),
     consentVerificationStatuses: z.array(z.string()).optional(),

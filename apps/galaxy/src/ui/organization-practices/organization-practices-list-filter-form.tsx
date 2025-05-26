@@ -1,11 +1,14 @@
 'use client'
 
+import { useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Button } from '@radix-ui/themes'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 import { FormContainer } from '@/components'
+import { sanitizeFormData } from '@/utils'
+import { PracticeSearchParams } from '../organization-practice/types'
 import { AddressGroup } from './address-group-field'
 import { ClearButton } from './clear-button'
 import { CLIAField } from './clia-field'
@@ -16,12 +19,9 @@ import { PhoneField } from './phone-field'
 import { PracticeNameField } from './practice-name-field'
 import { ProviderSelect } from './provider-select'
 import { StatusSelect } from './status-select'
+import { useStore } from './store'
 import { TaxonomyCodeField } from './taxonomy-code-field'
 import { TINField } from './tin-field'
-import { useStore } from './store'
-import { PracticeSearchParams } from '../organization-practice/types'
-import { sanitizeFormData } from '@/utils'
-import { useParams } from 'next/navigation'
 
 const schema = z.object({
   displayName: z.string().optional(),
@@ -47,7 +47,9 @@ interface OrganizationPracticesFilterProps {
   isPractices?: boolean
 }
 
-const OrganizationPracticesListFilterForm = ({ isPractices }: OrganizationPracticesFilterProps) => {
+const OrganizationPracticesListFilterForm = ({
+  isPractices,
+}: OrganizationPracticesFilterProps) => {
   const { id } = useParams<{ id: string }>()
   const { search } = useStore((state) => ({
     search: state.search,
@@ -84,11 +86,9 @@ const OrganizationPracticesListFilterForm = ({ isPractices }: OrganizationPracti
       stateCode: data.state,
       cityName: data.city,
       recordStatuses: data.status ? [data.status] : undefined,
-      organizationId: id
+      organizationId: id,
     }
-    const cleanedData = sanitizeFormData(
-      formattedData,
-    ) as PracticeSearchParams
+    const cleanedData = sanitizeFormData(formattedData) as PracticeSearchParams
     search(cleanedData)
   }
 
@@ -103,7 +103,7 @@ const OrganizationPracticesListFilterForm = ({ isPractices }: OrganizationPracti
       <TINField />
       <TaxonomyCodeField />
       <CLIAField />
-      {isPractices && <OrganizationField  />}
+      {isPractices && <OrganizationField />}
       <PhoneField />
       <FaxField />
       <AddressGroup />

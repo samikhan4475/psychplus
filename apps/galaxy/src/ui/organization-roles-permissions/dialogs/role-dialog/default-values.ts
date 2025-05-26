@@ -10,6 +10,7 @@ const defaultValues = (data?: Staff) => {
     city: data?.city ?? '',
     state: data?.state ?? '',
     zip: data?.zip ?? '',
+    zipLast4: data?.zipLast4 ?? '',
     status: data?.status ?? '',
     isMailingAddressSameAsHome: 'no',
   }
