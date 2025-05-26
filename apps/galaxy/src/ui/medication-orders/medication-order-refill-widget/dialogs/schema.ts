@@ -82,6 +82,7 @@ const drugSchema = z.object({
   endTime: z.ostring().optional(),
   reasonForPrn: z.string().optional(),
   notes: z.string().optional(),
+  drugNote: z.string().optional(),
   deniedReason: z.string().optional(),
 })
 

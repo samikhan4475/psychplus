@@ -18,6 +18,7 @@ const PatientDetailsDialog = ({
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Content className="relative max-w-[800px]">
+        <Dialog.Title>Prescriber System Demographics </Dialog.Title>
         <CloseDialogTrigger className="absolute right-4 top-4 z-50" />
         <Box mt="4">
           <PatientInfoTable patient={[patient]} />

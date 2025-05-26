@@ -32,7 +32,6 @@ const DurationInformation = ({ index }: DurationInformationProps) => {
           name={`drugList.${index}.durationUnitCode`}
           placeholder="Select"
           codeset={CODESETS.DurationUnit}
-          defaultValue="Days"
           size="1"
           className="h-6 w-full"
         />
@@ -45,7 +44,7 @@ const DurationInformation = ({ index }: DurationInformationProps) => {
           field={`drugList.${index}.quantityValue`}
           className="h-6 w-full"
           prefix=""
-          decimalScale={0}
+          decimalScale={1}
           allowNegative={false}
         />
       </FormFieldContainer>

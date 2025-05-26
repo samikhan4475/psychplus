@@ -37,6 +37,9 @@ const MedicationOrderView = () => {
       <TabsContent value={MedicationOrdersTabs.REFILL_REQUESTS}>
         <MedicationOrderRefillWidget />
       </TabsContent>
+      <TabsContent value={MedicationOrdersTabs.CHANGE_REQUESTS}>
+        <MedicationOrderRefillWidget />
+      </TabsContent>
     </Tabs.Root>
   )
 }
@@ -48,11 +51,10 @@ const TabsContent = ({
   value: string
   children: React.ReactNode
 }) => {
-  const viewedTabs = useStore((state) => state.viewedTabs)
   return (
     <Tabs.Content
       value={value}
-      forceMount={viewedTabs.has(value) ? true : undefined}
+      forceMount={true}
       className="hidden flex-1 flex-col gap-1 overflow-auto data-[state=active]:flex"
     >
       {children}

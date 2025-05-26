@@ -3,30 +3,31 @@ import { TabContentHeading } from '@/components'
 import { useStore } from './store'
 
 const MedicationOrderRefillHeader = () => {
-  const { searchMedicationsList, loading } = useStore((state) => ({
-    searchMedicationsList: state.searchMedicationsList,
-    loading: state.loading,
-  }))
+  const { searchMedicationsList, loading, activeTab } = useStore()
+  const isRefillTab = activeTab.includes('Refill')
+  const title = isRefillTab ? 'Refill Requests' : 'Change Requests'
   return (
-    <TabContentHeading title="Refill Requests">
-      <Flex align="center" justify="end" gap="2" className="flex-1">
-        <Button
-          className="border-pp-grey bg-white h-6 flex-row gap-1 rounded-2 border border-solid align-middle"
-          type="button"
-          disabled={loading}
-          onClick={() => searchMedicationsList()}
-        >
-          <Text className="text-pp-black-3 text-1">Decline All</Text>
-        </Button>
-        <Button
-          className="border-pp-grey bg-white h-6 flex-row gap-1 rounded-2 border border-solid align-middle"
-          type="button"
-          disabled={loading}
-          onClick={() => searchMedicationsList()}
-        >
-          <Text className="text-pp-black-3 text-1">Approve All</Text>
-        </Button>
-      </Flex>
+    <TabContentHeading title={title}>
+      {isRefillTab && (
+        <Flex align="center" justify="end" gap="2" className="flex-1">
+          <Button
+            className="border-pp-grey bg-white h-6 flex-row gap-1 rounded-2 border border-solid align-middle"
+            type="button"
+            disabled={loading}
+            onClick={() => searchMedicationsList()}
+          >
+            <Text className="text-pp-black-3 text-1">Decline All</Text>
+          </Button>
+          <Button
+            className="border-pp-grey bg-white h-6 flex-row gap-1 rounded-2 border border-solid align-middle"
+            type="button"
+            disabled={loading}
+            onClick={() => searchMedicationsList()}
+          >
+            <Text className="text-pp-black-3 text-1">Approve All</Text>
+          </Button>
+        </Flex>
+      )}
     </TabContentHeading>
   )
 }

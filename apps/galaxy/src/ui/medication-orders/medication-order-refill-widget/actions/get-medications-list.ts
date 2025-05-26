@@ -47,7 +47,6 @@ const getMedicationsListAction = async ({
     ...defaultPayLoad,
     ...payload,
   })
-
   if (response.state === 'error') {
     return {
       state: 'error',

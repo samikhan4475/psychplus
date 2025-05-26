@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Flex, Text, TextArea, TextField } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
@@ -14,11 +15,14 @@ import {
   getPatientDOB,
   sanitizeFormData,
 } from '@/utils'
-import { rxRenewalAction } from '../actions'
+import { rxChangeRequestAction, rxRenewalAction } from '../actions'
 import { useStore } from '../store'
 import {
-  DENIEDOPTIONS,
+  CHANGERESPONSEDENIEDOPTIONS,
   MedicationRefill,
+  MedicationRefillAPIRequest,
+  PharmacyNotificationType,
+  REFILLDENIEDOPTIONS,
   RenewalResponseTypeEnum,
 } from '../types'
 import { schema, UpdateMedicationSchema } from './schema'
@@ -32,21 +36,49 @@ const DeclineMedicationForm = ({
   data,
   onCloseModal,
 }: DeclineMedicationFormProps) => {
-  const { searchMedicationsList } = useStore()
-
+  const { searchMedicationsList, activeTab } = useStore()
+  const isRefillTab = activeTab.includes('Refill')
   const form = useForm<UpdateMedicationSchema>({
     resolver: zodResolver(schema),
     mode: 'onChange',
     defaultValues: data,
   })
+  const [isLoading, setIsLoading] = useState(false)
+
   const onSubmit = async (data: UpdateMedicationSchema) => {
     if (!data.drugList || data.drugList.length === 0) return
 
-    for (const row of data.drugList) {
+    const invalidDrugIndex = data.drugList.findIndex(
+      (drug) => !drug.deniedReason,
+    )
+
+    if (invalidDrugIndex !== -1) {
+      toast.error('Please select a denial reason for all medications')
+      return
+    }
+
+    if (isRefillTab) {
+      await handleRxDenial(data)
+    } else {
+      await handleChangeRequestDenial(data)
+    }
+    const formattedData: MedicationRefillAPIRequest = {
+      notificationType: isRefillTab
+        ? PharmacyNotificationType.PharmacyRxRenewalRequest
+        : PharmacyNotificationType.PharmacyRxChangeRequest,
+    }
+
+    searchMedicationsList(formattedData)
+    onCloseModal(false)
+  }
+
+  const handleRxDenial = async (data: UpdateMedicationSchema) => {
+    setIsLoading(true)
+
+    for (const row of data.drugList ?? []) {
       const payload = {
         responseType: RenewalResponseTypeEnum.Denied,
-        referenceNumber: data.rxReferenceNumber ?? '',
-        note: row.notes ?? '',
+        note: '',
         numberOfRefills: 0,
         denialReasonType: row.deniedReason,
         denialReasonDetail: row.notes,
@@ -66,14 +98,48 @@ const DeclineMedicationForm = ({
       )
       if (response.state === 'success') {
         toast.success('Medication request is decline successfully')
-        searchMedicationsList({})
         onCloseModal(false)
       } else {
         toast.error(response.error ?? 'Failed to decline ')
-        searchMedicationsList({})
-        onCloseModal(false)
       }
     }
+    setIsLoading(false)
+  }
+
+  const handleChangeRequestDenial = async (data: UpdateMedicationSchema) => {
+    setIsLoading(true)
+
+    for (const row of data.drugList ?? []) {
+      const payload = {
+        responseType: RenewalResponseTypeEnum.Denied,
+        note: '',
+        denialReasonType: row.deniedReason,
+        denialReasonDetail: row.drugNote,
+        rxChangeResponseDrugDetail: {
+          drugCode: row?.drugCode ?? '',
+          drugCodeQualifier: row?.drugCodeQualifier ?? '',
+          drugDescription: row?.drugDescription ?? '',
+          quantityValue: row?.quantityValue?.toString() ?? '0',
+          quantityCodeListQualifier: row?.quantityCodeListQualifier,
+          quantityUnitOfMeasureCode: row?.quantityUnitOfMeasureCode,
+          signatureText: row?.drugSignatureList?.[0]?.signatureText,
+          refills: row.refills,
+          isSubstitutionsAllowed: row?.isSubstitutionsAllowed ?? false,
+          daysSupply: row?.daysSupply?.toString() ?? '0',
+        },
+      }
+      const sanitizeData = sanitizeFormData(payload)
+      const response = await rxChangeRequestAction(
+        data.pharmacyNotificationId ?? '',
+        sanitizeData,
+      )
+      if (response.state === 'success') {
+        toast.success('Medication request is decline successfully')
+      } else {
+        toast.error(response.error ?? 'Failed to decline ')
+      }
+    }
+    setIsLoading(false)
   }
   const drugs = data.drugList ?? []
   const patientLastName = data.patientLastName
@@ -112,9 +178,13 @@ const DeclineMedicationForm = ({
             </FormFieldContainer>
 
             <FormFieldContainer className="flex-1">
-              <FormFieldLabel>Select Reason</FormFieldLabel>
+              <FormFieldLabel required>Select Reason</FormFieldLabel>
               <SelectInput
-                options={DENIEDOPTIONS}
+                options={
+                  isRefillTab
+                    ? REFILLDENIEDOPTIONS
+                    : CHANGERESPONSEDENIEDOPTIONS
+                }
                 name={`drugList.${index}.deniedReason`}
                 buttonClassName="w-full"
                 className="h-6 w-full"
@@ -126,18 +196,13 @@ const DeclineMedicationForm = ({
 
             <FormFieldContainer className="flex-1">
               <FormFieldLabel>Notes</FormFieldLabel>
-              {/* <TextInput
-                field={`drugList.${index}.notes`}
-                placeHolder="Add notes"
-                className="mt-1 h-6 w-full "
-              /> */}
               <TextArea
                 placeholder="Notes here"
                 className=" h-6 w-full"
                 size="1"
                 maxLength={4000}
                 onChange={(e) =>
-                  form.setValue(`drugList.${index}.notes`, e.target.value)
+                  form.setValue(`drugList.${index}.drugNote`, e.target.value)
                 }
               />
             </FormFieldContainer>
@@ -152,6 +217,8 @@ const DeclineMedicationForm = ({
             variant="outline"
             color="gray"
             className="text-black"
+            disabled={isLoading}
+            loading={isLoading}
           >
             Decline
           </Button>

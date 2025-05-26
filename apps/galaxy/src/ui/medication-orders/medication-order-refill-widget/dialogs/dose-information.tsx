@@ -10,10 +10,7 @@ import {
 } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
-import {
-  getDrugUnitOptions,
-  getSurescriptsCode,
-} from '@/ui/medications/patient-medications-widget/utils'
+import { useDeepCompareMemo } from '@/hooks/use-deep-compare-memo'
 import { UpdateMedicationSchema } from './schema'
 
 interface DoseInformationProps {
@@ -22,10 +19,20 @@ interface DoseInformationProps {
 
 const DoseInformation = ({ index }: DoseInformationProps) => {
   const form = useFormContext<UpdateMedicationSchema>()
-  const codes = useCodesetCodes(CODESETS.PrescriptionUnitList)
+  const codes = useCodesetCodes(CODESETS.PrescriptionQuantityUnitOfMeasureList)
   const handleValueChange = (value: string) => {
     form.setValue(`drugList.${index}.quantityUnitOfMeasureCode`, value)
   }
+  const qualityUnitsCodesets = useDeepCompareMemo(() => {
+    return codes.map(({ display, value, attributes }) => {
+      const submissionCode =
+        attributes?.find((attr) => attr.name === 'SurescriptsCode')?.value ?? ''
+      return {
+        label: display,
+        value: submissionCode,
+      }
+    })
+  }, [codes])
   return (
     <Flex gap="2">
       <FormFieldContainer>
@@ -38,10 +45,10 @@ const DoseInformation = ({ index }: DoseInformationProps) => {
       </FormFieldContainer>
 
       <FormFieldContainer>
-        <FormFieldLabel>Dose Unit</FormFieldLabel>
+        <FormFieldLabel>Quantity Unit</FormFieldLabel>
         <SelectInput
           field={`drugList.${index}.quantityUnitOfMeasureCode`}
-          options={getDrugUnitOptions(codes)}
+          options={qualityUnitsCodesets}
           onValueChange={handleValueChange}
           className=""
           buttonClassName="h-6 w-[155px]"

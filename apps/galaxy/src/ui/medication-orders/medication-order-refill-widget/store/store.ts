@@ -74,6 +74,28 @@ const useStore = create<StoreState>((set, get) => ({
         loading: false,
       })
     }
+    // const activeTab = get().activeTab
+    // let allowedMedicationType = ''
+
+    // if (activeTab.includes('Refill')) {
+    //   allowedMedicationType = 'Dispensed'
+    // } else if (activeTab.includes('Change')) {
+    //   allowedMedicationType = 'Requested'
+    // }
+    // const filteredRequests = result.data.refillRequests.map((request) => {
+    //   const filteredDrugList =
+    //     request.drugList?.filter(
+    //       (drug) => drug.medicationType === allowedMedicationType,
+    //     ) ?? []
+
+    //   return filteredDrugList.length > 0
+    //     ? { ...request, drugList: filteredDrugList }
+    //     : null
+    // }).filter((request): request is MedicationRefill => request !== null)
+    // const filteredData = {
+    //   total: result.data.total,
+    //   refillRequests: filteredRequests,
+    // }
     set({
       data: result.data,
       loading: false,
@@ -111,6 +133,16 @@ const useStore = create<StoreState>((set, get) => ({
     set({
       activeTab,
       viewedTabs,
+      data: {
+        refillRequests: [],
+        total: 0,
+      },
+      page: 1,
+      pageCache: {},
+      payload: undefined,
+      error: undefined,
+      loading: false,
+      sort: undefined,
     })
   },
 

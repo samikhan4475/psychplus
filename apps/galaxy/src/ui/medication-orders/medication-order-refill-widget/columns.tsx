@@ -15,6 +15,7 @@ import MedicineDaysSupplyCell from './cells/medicine-days-supply-cell'
 import MedicineDosageCell from './cells/medicine-dosage-cell'
 import MedicineNameCell from './cells/medicine-name-cell'
 import MedicineQtyCell from './cells/medicine-qty-cell'
+import NotesNameCell from './cells/notes-cell'
 import PatientNameCell from './cells/patient-name-cell'
 import RefillCell from './cells/refills-cell'
 import SigCell from './cells/sig-cell'
@@ -268,11 +269,7 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => (
-        <LongTextCell className="w-[150px]">
-          {row.original?.notes ?? ''}
-        </LongTextCell>
-      ),
+      cell: ({ row }) => <NotesNameCell row={row} />,
     },
     {
       id: 'actions',

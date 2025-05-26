@@ -7,6 +7,16 @@ import { PatientPersonInfo } from '../types'
 
 const columns: ColumnDef<PatientPersonInfo>[] = [
   {
+    id: 'patientFirstName',
+    accessorKey: 'patientFirstName',
+    header: () => <ColumnHeader label="Patient Name" />,
+    cell: ({ row }) => (
+      <TextCell>{`${row.original?.patientFirstName ?? ''} ${
+        row.original?.patientLastName ?? ''
+      }`}</TextCell>
+    ),
+  },
+  {
     id: 'patientGender',
     accessorKey: 'patientGender',
     header: () => <ColumnHeader label="Gender" />,

@@ -3,7 +3,7 @@ import { TextCell } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { SharedCode } from '@/types'
-import { MedicationRefill, RefillMedicationType } from '../types'
+import { MedicationRefill } from '../types'
 
 interface MedicineDosageCellProps {
   row: Row<MedicationRefill>
@@ -19,14 +19,10 @@ const getDisplayValue = (
 
 const MedicineDosageCell = ({ row }: MedicineDosageCellProps) => {
   const PrescriptionUnitList = useCodesetCodes(CODESETS.PrescriptionUnitList)
-  const quantityUnitOfMeasureCode =
-    row.original?.drugList?.find(
-      (drug) => drug.medicationType === RefillMedicationType.MedicationType,
-    )?.quantityUnitOfMeasureCode ?? ''
-
+  const drug = row.original?.drugList?.[0]
   const displayValue = getDisplayValue(
     PrescriptionUnitList,
-    quantityUnitOfMeasureCode,
+    drug?.quantityUnitOfMeasureCode ?? '',
   )
   return <TextCell>{displayValue?.display ?? ''}</TextCell>
 }

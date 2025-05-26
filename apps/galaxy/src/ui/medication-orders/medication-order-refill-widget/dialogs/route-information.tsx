@@ -1,14 +1,33 @@
 'use client'
 
 import { Flex } from '@radix-ui/themes'
-import { CodesetSelect, FormFieldContainer, FormFieldLabel, NumberInput } from '@/components'
+import { useFormContext } from 'react-hook-form'
+import {
+  CodesetSelect,
+  FormFieldContainer,
+  FormFieldLabel,
+  NumberInput,
+  SelectInput,
+} from '@/components'
 import { CODESETS } from '@/constants'
+import { UpdateMedicationSchema } from './schema'
 
 interface RouteInformationProps {
   index: number
 }
-
+const options = [
+  { value: 'yes', label: 'Yes' },
+  { value: 'no', label: 'No' },
+]
 const RouteInformation = ({ index }: RouteInformationProps) => {
+  const form = useFormContext<UpdateMedicationSchema>()
+
+  const isSubstitutionsAllowed = !form.getValues(
+    `drugList.${index}.isSubstitutionsAllowed`,
+  )
+  const handleValueChange = (value: string) => {
+    form.setValue(`drugList.${index}.isSubstitutionsAllowed`, value !== 'yes')
+  }
   return (
     <Flex gap="2">
       <FormFieldContainer className="flex-1">
@@ -31,7 +50,15 @@ const RouteInformation = ({ index }: RouteInformationProps) => {
           className="w-full"
         />
       </FormFieldContainer>
-      
+      <FormFieldContainer className="flex-1">
+        <FormFieldLabel>Substitution</FormFieldLabel>
+        <SelectInput
+          options={options}
+          value={isSubstitutionsAllowed ? 'yes' : 'no'}
+          buttonClassName="w-full h-6"
+          onValueChange={handleValueChange}
+        />
+      </FormFieldContainer>
     </Flex>
   )
 }

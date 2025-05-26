@@ -39,6 +39,8 @@ interface PharmacyNotificationDrugModel {
   otherMedicationDateQualifier?: string
   drugSignatureList?: DrugSignature[]
   drugDiagnosisList?: DrugDiagnosis[]
+  note?: string
+  drugNote?: string 
 }
 interface PharmacyAddress {
   type?: string
@@ -177,7 +179,9 @@ interface PatientPersonInfo {
 }
 
 enum RefillMedicationType {
-  MedicationType = 'Dispensed',
+  Prescribed = 'Prescribed',
+  Requested = 'Requested',
+  Dispensed = 'Dispensed',
 }
 
 interface MedicationHistoryPayload {
@@ -234,7 +238,37 @@ interface RenewalResponsePayload {
   numberOfRefills?: number
   rxRenewalResponseDrugDetail?: RxRenewalResponseDrugDetail
 }
-const DENIEDOPTIONS = [
+
+interface RxChangeResponseDrugDetail {
+  drugCode?: string
+  drugCodeQualifier?: string
+  drugDescription?: string
+  quantityValue?: string
+  quantityCodeListQualifier?: string
+  quantityUnitOfMeasureCode?: string
+  signatureText?: string
+  isSubstitutionsAllowed?: boolean
+  daysSupply?: string
+  refills?: string
+}
+
+interface ChangeRequestPayload {
+  responseType: RenewalResponseType
+  referenceNumber?: string
+  note?: string
+  denialReasonType?: string
+  validatedResponseReasonType?: string[]
+  validatedResponseDate?: string
+  denialReasonDetail?: string
+  rxChangeResponseDrugDetail?: RxChangeResponseDrugDetail
+}
+
+enum PharmacyNotificationType {
+  PharmacyRxRenewalRequest = 'PharmacyRxRenewalRequest',
+  PharmacyRxChangeRequest = 'PharmacyRxChangeRequest',
+}
+
+const REFILLDENIEDOPTIONS = [
   { value: 'UnknownPatient', label: 'Patient unknown to the Provider' },
   { value: 'NeverUnderCare', label: 'Patient never under Provider care' },
   {
@@ -271,6 +305,40 @@ const DENIEDOPTIONS = [
   },
 ]
 
+const CHANGERESPONSEDENIEDOPTIONS = [
+  { value: 'UnknownPatient', label: 'Patient unknown to the Provider' },
+  { value: 'NeverUnderCare', label: 'Patient never under Provider care' },
+  {
+    value: 'NoLongerUnderCare',
+    label: 'Patient no longer under Provider care',
+  },
+  {
+    value: 'NeverPrescribed',
+    label: 'Medication never prescribed for the patient',
+  },
+  {
+    value: 'ContactProviderFirst',
+    label: 'Patient should contact Provider first',
+  },
+  {
+    value: 'ChangeNotAppropriate',
+    label: 'Change not appropriate',
+  },
+  { value: 'NeedsAppointment', label: 'Patient needs appointment' },
+  {
+    value: 'PrescriberNotAssociated',
+    label: 'Prescriber not associated with this practice or location',
+  },
+  {
+    value: 'NoPriorAuthAttempted',
+    label: 'No attempt will be made to obtain Prior Authorization',
+  },
+  {
+    value: 'AlreadyResponded',
+    label: 'Request already responded to by other means (e.g. phone or fax)',
+  },
+  { value: 'DeniedAtRequest', label: 'Medication denied at patient request' },
+]
 const MEDICATIONSSTATUS = [
   { value: 'All', label: 'All' },
   { value: 'Pending', label: 'Pending' },
@@ -286,9 +354,12 @@ export {
   type MedicationHistoryPayload,
   type MedicationHistoryResponse,
   type MapPatientTypes,
-  RenewalResponseTypeEnum,
   type RenewalResponsePayload,
   type RxRenewalResponseDrugDetail,
-  DENIEDOPTIONS,
+  type ChangeRequestPayload,
+  RenewalResponseTypeEnum,
+  PharmacyNotificationType,
+  REFILLDENIEDOPTIONS,
+  CHANGERESPONSEDENIEDOPTIONS,
   MEDICATIONSSTATUS,
 }

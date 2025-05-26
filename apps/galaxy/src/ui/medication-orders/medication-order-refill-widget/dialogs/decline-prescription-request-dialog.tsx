@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Cross1Icon } from '@radix-ui/react-icons'
 import { Button, Dialog, IconButton, Text } from '@radix-ui/themes'
 import { Row } from '@tanstack/react-table'
-import { MedicationRefill, RefillMedicationType } from '../types'
+import { MedicationRefill } from '../types'
 import { DeclineMedicationForm } from './decline-prescription-request-form'
 
 interface DeclineMedicationDialogProps {
@@ -14,12 +14,6 @@ const DeclineMedicationDialog = ({ row }: DeclineMedicationDialogProps) => {
   const [open, setOpen] = useState(false)
 
   const onOpenChange = (open: boolean) => setOpen(open)
-  const filteredData = {
-    ...row.original,
-    drugList: row?.original?.drugList?.filter(
-      (drug) => drug.medicationType === RefillMedicationType.MedicationType,
-    ),
-  }
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Trigger>
@@ -38,7 +32,7 @@ const DeclineMedicationDialog = ({ row }: DeclineMedicationDialogProps) => {
         </Dialog.Close>
         <Dialog.Title>Decline Prescription Request </Dialog.Title>
         <DeclineMedicationForm
-          data={filteredData}
+          data={row.original}
           onCloseModal={onOpenChange}
         />
       </Dialog.Content>

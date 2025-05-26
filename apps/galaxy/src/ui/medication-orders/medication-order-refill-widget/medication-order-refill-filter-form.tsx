@@ -17,7 +17,7 @@ import { PrescriberSelect } from './prescriber-select'
 import { StatusSelect } from './status-select'
 import { useStore } from './store'
 import { ToField } from './to-field'
-import { MedicationRefillAPIRequest } from './types'
+import { MedicationRefillAPIRequest, PharmacyNotificationType } from './types'
 
 const dateValueToDateOnly = (dateValue: DateValue): Date => {
   const date = new Date(dateValue.toString())
@@ -45,7 +45,8 @@ const schema = z.object({
 export type MedicationFormFilterSchemaType = z.infer<typeof schema>
 
 const MedicationOrderRefillFilterForm = () => {
-  const { searchMedicationsList } = useStore()
+  const { searchMedicationsList, activeTab } = useStore()
+  const isRefillTab = activeTab.includes('Refill')
 
   const form = useForm<MedicationFormFilterSchemaType>({
     resolver: zodResolver(schema),
@@ -72,7 +73,13 @@ const MedicationOrderRefillFilterForm = () => {
       drugDescriptionStartsWith: '',
       notificationResponseType: '',
     })
-    searchMedicationsList({})
+    const formattedData: MedicationRefillAPIRequest = {
+      notificationType: isRefillTab
+        ? PharmacyNotificationType.PharmacyRxRenewalRequest
+        : PharmacyNotificationType.PharmacyRxChangeRequest,
+    }
+
+    searchMedicationsList(formattedData)
   }
 
   const onSubmit: SubmitHandler<MedicationFormFilterSchemaType> = (data) => {
@@ -96,6 +103,9 @@ const MedicationOrderRefillFilterForm = () => {
         !['Pending', 'All'].includes(notificationResponseType) && {
           notificationResponseType,
         }),
+      notificationType: isRefillTab
+        ? PharmacyNotificationType.PharmacyRxRenewalRequest
+        : PharmacyNotificationType.PharmacyRxChangeRequest,
     }
 
     const cleanedData = sanitizeFormData(

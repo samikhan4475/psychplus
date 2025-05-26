@@ -1,20 +1,19 @@
 import { Row } from '@tanstack/react-table'
 import { DateTimeCell } from '@/components'
 import { formatDate } from '@/utils'
-import { MedicationRefill, RefillMedicationType } from '../types'
+import { MedicationRefill } from '../types'
 
 interface EffectiveDateCellProps {
   row: Row<MedicationRefill>
 }
 
 const EffectiveDateCell = ({ row }: EffectiveDateCellProps) => {
-  const startDateTime =
-    row.original?.drugList?.find(
-      (drug) => drug.medicationType === RefillMedicationType.MedicationType,
-    )?.startDateTime ?? undefined
+  const drug = row.original?.drugList?.[0]
   return (
     <DateTimeCell>
-      {startDateTime ? formatDate(`${startDateTime}`, 'MM/dd/yyyy') : ''}
+      {drug?.startDateTime
+        ? formatDate(`${drug?.startDateTime}`, 'MM/dd/yyyy')
+        : ''}
     </DateTimeCell>
   )
 }

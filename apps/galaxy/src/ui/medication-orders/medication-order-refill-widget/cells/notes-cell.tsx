@@ -6,11 +6,9 @@ interface MedicineNameCellProps {
   row: Row<MedicationRefill>
 }
 
-const MedicineNameCell = ({ row }: MedicineNameCellProps) => {
+const NotesNameCell = ({ row }: MedicineNameCellProps) => {
   const drug = row.original?.drugList?.[0]
-  return (
-    <LongTextCell className="w-[150px]">{drug?.drugDescription}</LongTextCell>
-  )
+  return <LongTextCell className="w-[150px]">{drug?.drugNote}</LongTextCell>
 }
 
-export default MedicineNameCell
+export default NotesNameCell

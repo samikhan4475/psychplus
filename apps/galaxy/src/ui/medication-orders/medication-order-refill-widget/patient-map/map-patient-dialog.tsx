@@ -20,18 +20,29 @@ interface PatientMapDialogProps {
 }
 
 const PatientMapDialog = ({ row }: PatientMapDialogProps) => {
-  const { selectedPatient, searchMedicationsList, setSelectedPatient } =
-    useStore((state) => ({
-      selectedPatient: state.selectedPatient,
-      setSelectedPatient: state.setSelectedPatient,
-      searchMedicationsList: state.searchMedicationsList,
-    }))
+  const {
+    selectedPatient,
+    searchMedicationsList,
+    setSelectedPatient,
+    activeTab,
+  } = useStore((state) => ({
+    selectedPatient: state.selectedPatient,
+    setSelectedPatient: state.setSelectedPatient,
+    searchMedicationsList: state.searchMedicationsList,
+    activeTab: state.activeTab,
+  }))
+
+  const isRefillTab = activeTab.includes('Refill')
 
   const filteredData = useMemo(() => {
     return {
       ...row.original,
       drugList: row?.original?.drugList?.filter(
-        (drug) => drug.medicationType === RefillMedicationType.MedicationType,
+        (drug) =>
+          drug.medicationType ===
+          (isRefillTab
+            ? RefillMedicationType.Dispensed
+            : RefillMedicationType.Requested),
       ),
     }
   }, [row.original])

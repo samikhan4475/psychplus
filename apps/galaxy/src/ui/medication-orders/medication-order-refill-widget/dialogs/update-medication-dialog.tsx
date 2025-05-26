@@ -1,10 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { Cross1Icon, Pencil1Icon } from '@radix-ui/react-icons'
+import { Cross1Icon } from '@radix-ui/react-icons'
 import { Button, Dialog, IconButton, Text } from '@radix-ui/themes'
 import { Row } from '@tanstack/react-table'
-import { MedicationRefill, RefillMedicationType } from '../types'
+import { MedicationRefill } from '../types'
 import { UpdateMedicationForm } from './update-medication-form'
 
 interface UpdateMedicationDialogProps {
@@ -14,12 +14,6 @@ const UpdateMedicationDialog = ({ row }: UpdateMedicationDialogProps) => {
   const [open, setOpen] = useState(false)
 
   const onOpenChange = (open: boolean) => setOpen(open)
-  const filteredData = {
-    ...row.original,
-    drugList: row?.original?.drugList?.filter(
-      (drug) => drug.medicationType === RefillMedicationType.MedicationType,
-    ),
-  }
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Trigger>
@@ -37,7 +31,7 @@ const UpdateMedicationDialog = ({ row }: UpdateMedicationDialogProps) => {
           </IconButton>
         </Dialog.Close>
         <Dialog.Title>Modify Prescription Request </Dialog.Title>
-        <UpdateMedicationForm data={filteredData} onCloseModal={onOpenChange}/>
+        <UpdateMedicationForm data={row.original} onCloseModal={onOpenChange} />
       </Dialog.Content>
     </Dialog.Root>
   )

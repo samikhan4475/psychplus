@@ -15,6 +15,12 @@ const SigInformation = ({ index }: SigInformationProps) => {
     control: form.control,
   })
   const signatureText = sigValue?.[0]?.signatureText
+  const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    form.setValue(
+      `drugList.${index}.drugSignatureList.0.signatureText`,
+      event.target.value,
+    )
+  }
   return (
     <Flex gap="2">
       <FormFieldContainer className="w-[33%]">
@@ -35,6 +41,7 @@ const SigInformation = ({ index }: SigInformationProps) => {
           className="w-full"
           maxLength={300}
           value={signatureText}
+          onChange={handleValueChange}
         />
       </FormFieldContainer>
     </Flex>

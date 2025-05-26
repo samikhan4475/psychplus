@@ -1,20 +1,19 @@
 import { Row } from '@tanstack/react-table'
 import { DateTimeCell } from '@/components'
 import { formatDate } from '@/utils'
-import { MedicationRefill, RefillMedicationType } from '../types'
+import { MedicationRefill } from '../types'
 
 interface LastRefillDateCellProps {
   row: Row<MedicationRefill>
 }
 
 const LastRefillDateCell = ({ row }: LastRefillDateCellProps) => {
-  const lastFillDate =
-    row.original?.drugList?.find(
-      (drug) => drug.medicationType === RefillMedicationType.MedicationType,
-    )?.lastFillDate ?? undefined
+  const drug = row.original?.drugList?.[0]
   return (
     <DateTimeCell>
-      {lastFillDate ? formatDate(`${lastFillDate}`, 'MM/dd/yyyy') : ''}
+      {drug?.lastFillDate
+        ? formatDate(`${drug?.lastFillDate}`, 'MM/dd/yyyy')
+        : ''}
     </DateTimeCell>
   )
 }

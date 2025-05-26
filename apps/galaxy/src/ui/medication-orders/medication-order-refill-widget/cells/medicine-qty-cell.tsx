@@ -1,17 +1,14 @@
 import { Row } from '@tanstack/react-table'
 import { TextCell } from '@/components'
-import { MedicationRefill, RefillMedicationType } from '../types'
+import { MedicationRefill } from '../types'
 
 interface MedicineQtyCellProps {
   row: Row<MedicationRefill>
 }
 
 const MedicineQtyCell = ({ row }: MedicineQtyCellProps) => {
-  const quantityValue =
-    row.original?.drugList?.find(
-      (drug) => drug.medicationType === RefillMedicationType.MedicationType,
-    )?.quantityValue ?? ''
-  return <TextCell>{quantityValue}</TextCell>
+  const drug = row.original?.drugList?.[0]
+  return <TextCell>{drug?.quantityValue}</TextCell>
 }
 
 export default MedicineQtyCell

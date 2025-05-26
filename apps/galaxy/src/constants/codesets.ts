@@ -120,6 +120,7 @@ const CODESETS = {
   TimeZoneId: 'PsychPlusPublic.TimeZoneId',
   UserActorCategory: 'UserActorCategory',
   Paging: 'PsychPlusPublic.Paging',
+  PrescriptionQuantityUnitOfMeasureList: 'PsychPlusPublic.PrescriptionQuantityUnitOfMeasureList',
 
   //Standard Codesets having groupingCodeStartsWith at last
 

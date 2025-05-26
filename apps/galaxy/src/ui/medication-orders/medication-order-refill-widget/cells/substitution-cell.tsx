@@ -7,11 +7,8 @@ interface SubstitutionCellProps {
 }
 
 const SubstitutionCell = ({ row }: SubstitutionCellProps) => {
-  const isSubstitutionsAllowed =
-    row.original?.drugList?.find(
-      (drug) => drug.medicationType === RefillMedicationType.MedicationType,
-    )?.isSubstitutionsAllowed ?? undefined
-  return <TextCell>{isSubstitutionsAllowed ? 'Yes' : 'No'}</TextCell>
+  const drug = row.original?.drugList?.[0]
+  return <TextCell>{!drug?.isSubstitutionsAllowed ? 'Yes' : 'No'}</TextCell>
 }
 
 export default SubstitutionCell

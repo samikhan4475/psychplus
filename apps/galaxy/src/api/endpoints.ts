@@ -997,6 +997,9 @@ const GET_EXTERNAL_REFERRAL_PATIENTS_INFO_HISTORY = (
   externalreferralId: string,
 ) =>
   `${API_URL}/api/externalreferrals/${externalreferralId}/history/actions/search`
+
+const PHARMACY_CHANGE_REQUEST = (pharmacyNotificationId: string) =>
+  `${API_URL}/api/pharmacynotifications/${pharmacyNotificationId}/changeresponses/actions/send`
 const MAP_PATIENTS = (pharmacyNotificationId: string, patientId: string) =>
   `${API_URL}/api/pharmacynotifications/${pharmacyNotificationId}/patients/${patientId}/actions/associate`
 export {
@@ -1441,6 +1444,7 @@ export {
   SEARCH_EXTERNAL_REFERRAL_PATIENTS_ENDPOINT,
   UPDATE_EXTERNAL_REFERRAL_PATIENT_ENDPOINT,
   GET_EXTERNAL_REFERRAL_PATIENTS_INFO_HISTORY,
+  PHARMACY_CHANGE_REQUEST,
   GET_ROLES_HISTORY,
   MAP_PATIENTS,
 }
