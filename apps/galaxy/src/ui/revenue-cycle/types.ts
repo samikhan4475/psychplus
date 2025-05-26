@@ -44,7 +44,7 @@ enum ClaimDetailsTab {
   AccidentsAndLabs = 'Accidents And Labs',
   Diagnosis = 'Diagnosis',
   Charges = 'Charges',
-  AuthorizationsAndReferrals = 'Authorizations and Referrals',
+  AuthorizationsAndReferrals = 'Authorizations and Referrals and CLIA',
   SubmissionInformation = 'Submission Information',
   SubmissionResponse = 'Submission Response',
   Insurances = 'Insurances',

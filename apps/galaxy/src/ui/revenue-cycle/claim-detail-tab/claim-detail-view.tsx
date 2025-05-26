@@ -6,6 +6,7 @@ import { Box, Flex, ScrollArea } from '@radix-ui/themes'
 import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { metadata } from '@/app/layout'
 import { FormContainer, LoadingPlaceholder } from '@/components'
 import {
   ClaimServiceLine,
@@ -46,7 +47,6 @@ import { claimUpdateSchema, ClaimUpdateSchemaType } from './schema'
 import { useStore as ClaimDetailStore } from './store'
 import { SubmissionInformationView } from './submission-information-section'
 import { SubmissionResponseTable } from './submission-response-section'
-import { metadata } from '@/app/layout'
 
 const ClaimDetailView = () => {
   const { selectedClaimData, setSelectedClaimsData, activeTab } = useStore(
@@ -66,7 +66,7 @@ const ClaimDetailView = () => {
     'Accidents And Labs',
     'Diagnosis',
     'Charges',
-    'Authorizations and Referrals',
+    'Authorizations and Referrals and CLIA',
     'Submission Information',
     'Submission Response',
     'Insurances',
