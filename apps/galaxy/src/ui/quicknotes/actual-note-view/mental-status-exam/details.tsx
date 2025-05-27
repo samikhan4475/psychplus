@@ -29,17 +29,15 @@ const labelMapping: Record<string, string> = {
   intelligence: 'Intelligence',
   intelligenceHowTested: 'Intelligence How Tested',
   memoryRemoteIntactOther: 'Memory',
-  schizophreniaDelusionValues: 'Thought Content Delusion',
-  schizophreniaHallucinationsValues: 'Thought Content Hallucinations',
-  tcsiYesNo: 'Thought Content Suicidal Ideation',
-  tchiYesNo: 'Thought Content Homicidal Ideation',
+  tcsiYesNo: 'Thought Content, Suicidal Ideation',
+  tchiYesNo: 'Thought Content, Homicidal Ideation',
   thoughtContentOther: 'Thought Content',
-  tcDelusionsYesNo: 'Thought Content Delusions',
-  tcHallucinationsYesNo: 'Thought Content Hallucinations',
+  tcDelusionsYesNo: 'Thought Content, Delusions',
+  tcHallucinationsYesNo: 'Thought Content, Hallucinations',
+  schizophreniaDelusionValues: 'Thought Content, Delusion',
+  schizophreniaHallucinationsValues: 'Thought Content, Hallucinations',
   mmRecentIntactYesNo: 'Memory Recent Intact',
   mmRemoteIntactYesNo: 'Memory Remote Intact',
-  siUnDisclosed: 'Thought Content Suicidal Ideation Plan',
-  hiUnDisclosed: 'Thought Content Homicidal Ideation Plan',
 }
 
 interface Props {
@@ -54,82 +52,80 @@ enum VisitType {
   Initial = 'Initial',
 }
 
-interface ValidationRule {
-  dependentKey: keyof MseWidgetSchemaType
-  value: string
-  otherKey: keyof MseWidgetSchemaType
-}
-
-const validationRules: Record<string, ValidationRule> = {
-  siUnDisclosed: {
-    dependentKey: 'tcsiYesNo',
-    value: 'yes',
-    otherKey: 'siOtherDetails',
-  },
-  hiUnDisclosed: {
-    dependentKey: 'tchiYesNo',
-    value: 'yes',
-    otherKey: 'hiOtherDetails',
-  },
-}
-
-const RenderArrayValue: React.FC<{
-  key: string
-  label: string
-  value: string[]
-  fieldKey: string
-  data: MseWidgetSchemaType
-  hallucinationTypeCodeset: SharedCode[]
-  delusionTypeCodeset: SharedCode[]
-}> = ({
-  key,
-  label,
-  value,
-  fieldKey,
-  data,
-  hallucinationTypeCodeset,
-  delusionTypeCodeset,
-}) => {
-  const sortedValues = mseValueMapping[fieldKey]
+const sortedValues = (value: string[], fieldKey: string) => {
+  return mseValueMapping[fieldKey]
     ? value
         .slice()
         .sort(
-          (a, b) =>
+          (a: string, b: string) =>
             mseValueMapping[fieldKey].indexOf(a) -
             mseValueMapping[fieldKey].indexOf(b),
         )
     : value
+}
 
-  if (key === 'schizophreniaHallucinationsValues') {
-    return (
-      <LabelAndValue
-        key={key}
-        label={`${label}:`}
-        value={formatDelusionsAndHallucinationsValues(
-          sortedValues,
-          hallucinationTypeCodeset,
-        )}
-      />
-    )
-  }
+const THOUGHT_CONTENT_VALUES = (
+  fieldKey: string,
+  value: string | string[],
+  data: MseWidgetSchemaType,
+  hallucinationTypeCodeset: SharedCode[],
+  delusionTypeCodeset: SharedCode[],
+) => {
+  if (value !== 'yes') return value;
 
-  if (key === 'schizophreniaDelusionValues') {
-    return (
-      <LabelAndValue
-        key={key}
-        label={`${label}:`}
-        value={formatDelusionsAndHallucinationsValues(
-          sortedValues,
-          delusionTypeCodeset,
-        )}
-      />
-    )
+  const getPlanStatus = (undisclosedField: string[] | undefined) => 
+    undisclosedField && undisclosedField.length > 0 ? 'Undisclosed' : 'Disclosed';
+
+  const getOtherDetails = (detailsField: keyof MseWidgetSchemaType) =>
+    data[detailsField] ? `, ${data[detailsField]}` : '';
+
+  const getTypesValue = (values: string[] | undefined, codeset: SharedCode[]) => {
+    if (!values) return '';
+    const sorted = sortedValues(values, fieldKey);
+    const typesValue = formatDelusionsAndHallucinationsValues(sorted, codeset);
+    return typesValue ? `, Types: ${typesValue}` : '';
+  };
+
+  switch (fieldKey) {
+    case 'tcsiYesNo':
+      return `${value}, Plan: ${getPlanStatus(data.siUnDisclosed)}${getOtherDetails('siOtherDetails')}`;
+    
+    case 'tchiYesNo':
+      return `${value}, Plan: ${getPlanStatus(data.hiUnDisclosed)}${getOtherDetails('hiOtherDetails')}`;
+    
+    case 'tcDelusionsYesNo':
+      return `${value}${getTypesValue(data.schizophreniaDelusionValues, delusionTypeCodeset)}`;
+    
+    case 'tcHallucinationsYesNo':
+      return `${value}${getTypesValue(data.schizophreniaHallucinationsValues, hallucinationTypeCodeset)}`;
+    
+    default:
+      return value;
   }
+}
+
+const RenderArrayValue: React.FC<{
+  label: string
+  value: string[]
+  fieldKey: string
+  data: MseWidgetSchemaType
+}> = ({ label, value, fieldKey, data }) => {
+  if (
+    [
+      'schizophreniaDelusionValues',
+      'schizophreniaHallucinationsValues',
+      'siUnDisclosed',
+      'hiUnDisclosed',
+    ].includes(fieldKey)
+  ) {
+    return null
+  }
+  const sorted = sortedValues(value, fieldKey)
 
   return (
     <LabelAndValue
       label={`${label}:`}
-      value={renderDataWithOther(fieldKey, sortedValues, data)}
+      value={renderDataWithOther(fieldKey, sorted, data)}
     />
   )
 }
@@ -165,29 +161,21 @@ const Details = ({
               value={value}
               fieldKey={key}
               data={reorderedData}
-              hallucinationTypeCodeset={hallucinationTypeCodeset}
-              delusionTypeCodeset={delusionTypeCodeset}
             />
           )
         }
 
         if (typeof value === 'string' && ['yes', 'no'].includes(value)) {
-          return <LabelAndValue key={key} label={`${label}:`} value={value} />
-        }
+          const valueData = THOUGHT_CONTENT_VALUES(
+            key,
+            value,
+            reorderedData,
+            hallucinationTypeCodeset,
+            delusionTypeCodeset,
+          )
 
-        const validationRule = validationRules[key]
-        if (
-          Array.isArray(value) &&
-          validationRule &&
-          reorderedData[validationRule.dependentKey] === validationRule.value
-        ) {
-          const otherDetail = reorderedData[validationRule.otherKey] as string
           return (
-            <LabelAndValue
-              key={key}
-              label={`${label}:`}
-              value={`Disclosed, ${otherDetail}`}
-            />
+            <LabelAndValue key={key} label={`${label}:`} value={valueData} />
           )
         }
 
