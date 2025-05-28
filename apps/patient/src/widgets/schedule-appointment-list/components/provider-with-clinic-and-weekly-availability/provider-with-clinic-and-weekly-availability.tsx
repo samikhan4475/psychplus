@@ -14,6 +14,7 @@ import type {
   StaffWithClinicsAndSlots,
 } from '../../types'
 import { renderProfileImage, renderStaffName } from '../../utils'
+import { isMobile } from '@psychplus/utils/client'
 
 const ProviderWithClinicAndWeeklyAvailability = ({
   staffWithClinicsAndSlots,
@@ -35,19 +36,35 @@ const ProviderWithClinicAndWeeklyAvailability = ({
   }, [])
 
   return (
-    <Flex className="hhera w-full flex-col gap-5 sm:flex-row sm:gap-0">
+    <Flex className="w-full flex-col gap-5 lg:flex-row lg:gap-0">
       <Flex direction="column" gap="2" className="w-[343px] lg:w-[425px]">
-        <Flex align="center" gap="2" className="w-11/12">
+        <Flex align="center" gap="2" className="w-10/12 lg:w-11/12">
           {renderProfileImage(
             profileImage,
             staffWithClinicsAndSlots.staff.legalName.firstName[0],
           )}
           <Flex direction="column" gap="1" className="text-[#151B4A]">
-            <Text className="font-bold" size="5">
+            <Text className="font-bold text-3 lg:text-5">
               {renderStaffName(staffWithClinicsAndSlots.staff)}
             </Text>
 
-            <StarRating rating={staffWithClinicsAndSlots.staff.rating?.valueOf()} />
+            <Flex align="center" gap="1">
+              {Array.from({ length: 5 }, (_, index) => index + 1).map(
+                (value) => (
+                  <Box key={value}>
+                    {value <=
+                    (staffWithClinicsAndSlots.staff.rating?.valueOf() ?? 0) ? (
+                      <StarFilledIcon height={isMobile() ? 12 : 16} width={isMobile() ? 12 : 16} color="#FFC700" />
+                    ) : (
+                      <StarIcon height={isMobile() ? 12 : 16} width={isMobile() ? 12 : 16} color="#FFC700" />
+                    )}
+                  </Box>
+                ),
+              )}
+              <Text className="text-2 pt-[1px] font-medium text-[#1C2024]">
+                {staffWithClinicsAndSlots.staff.rating?.valueOf()}
+              </Text>
+            </Flex>
 
             <Flex align="center">
               <Text size="1" className="text-[#194595]" ml="1">
@@ -66,7 +83,6 @@ const ProviderWithClinicAndWeeklyAvailability = ({
           setSelectedClinicId,
         )}
       </Flex>
-
       <Flex
         style={{ flex: filters.appointmentType === 'In-Person' ? 1.6 : 1.7 }}
       >
@@ -116,7 +132,7 @@ const renderLanguageAndLocation = (
   <Flex direction="column" gap="2" className="w-[272px]">
     {appointmentType === 'In-Person' && (
       <Flex gap="1">
-        <Flex mt="1">
+        <Flex mt="1" className='text-2 lg:text-3'>
           Location:
         </Flex>
         <ClinicsDropDown
@@ -129,9 +145,9 @@ const renderLanguageAndLocation = (
 
     {appointmentType === 'In-Person' && (
       <Flex align="start" className="w-52 flex-wrap justify-between" gap="2">
-        <Flex align="end" className="gap-[17px]">
+        <Flex align="end" className="gap-[17px] text-2 lg:text-3">
             Distance:
-            <Text className="text-[#575759] text-[14px]">
+            <Text className="text-[#575759] text-2 lg:text-3">
               {
                 staffWithClinicsAndSlots.clinicWithSlots.find(
                   (clinic) => clinic.clinic.id === selectedClinicId,
@@ -145,14 +161,13 @@ const renderLanguageAndLocation = (
 
     <Flex gap="3" align="start" className="w-24">
       <Text
-        className="text-[14px] font-regular leading-5 text-[#1C2024]"
-        size="2"
+        className="font-regular leading-5 text-[#1C2024] text-2 lg:text-3"
       >
         Language:
       </Text>
       <Flex className="gap-[2px]">
         {staffWithClinicsAndSlots.staff?.spokenLanguages?.map((language) => (
-          <Text className="text-[#575759] text-[14px] font-regular leading-5 after:content-[','] last:after:hidden" key={language}>
+          <Text className="text-[#575759] text-2 lg:text-3 font-regular leading-5 after:content-[','] last:after:hidden" key={language}>
             {language}
           </Text>
         ))}
@@ -194,7 +209,7 @@ const ClinicsDropDown = ({
       </Popover.Close>
       <Popover.Trigger className="cursor-pointer rounded-3 p-1 hover:bg-gray-2">
         <Flex key={defaultClinic?.clinic.id}>
-          <Text className="text-[#575759] text-[14px]">
+          <Text className="text-[#575759] text-2 lg:text-3">
             {defaultClinic?.clinic.name}{' '}
             {defaultClinic?.clinic.contact?.addresses?.[0].street1}{' '}
             {defaultClinic?.clinic.contact?.addresses?.[0].city}
@@ -203,7 +218,7 @@ const ClinicsDropDown = ({
             {defaultClinic?.clinic.contact?.addresses?.[0].postalCode}
           </Text>
           <Flex>
-            <DownArrowIcon height={18} width={18} />
+            <DownArrowIcon height={isMobile() ? 12 : 18} width={isMobile() ? 12 : 18} />
           </Flex>
         </Flex>
       </Popover.Trigger>

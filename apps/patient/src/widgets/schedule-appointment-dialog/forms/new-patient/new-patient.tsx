@@ -1,7 +1,7 @@
 'use client'
 
 import { ChangeEvent, useRef, useState } from 'react'
-import { zipLast4Schema, zipCodeSchema } from '@psychplus-v2/utils'
+import { zipLast4Schema, zipCodeSchema, cn } from '@psychplus-v2/utils'
 import * as ToggleGroup from '@radix-ui/react-toggle-group'
 import { Button, Flex, Text, TextField } from '@radix-ui/themes'
 import { type SubmitHandler } from 'react-hook-form'
@@ -31,7 +31,7 @@ interface NewPatientProps {
 }
 
 const toggleGroupItemClasses =
-  'bg-[#E8E8E8] text-3 data-[state=on]:bg-[#24366B] data-[state=on]:text-accent-1 rounded-4'
+  'bg-[#E8E8E8] text-2 lg:text-3 data-[state=on]:bg-[#24366B] data-[state=on]:text-accent-1 rounded-4'
 
 interface ScheduledAppointment {
   providerType: 'Psychiatry' | 'Therapy' | 'unknown'
@@ -228,7 +228,7 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
         py="5"
         mt="5"
       >
-        <Flex className="text-5 font-medium">
+        <Flex className="text-3 lg:text-5 font-medium">
           Do you want to see a Psychiatrist or a Therapist?
         </Flex>
 
@@ -244,25 +244,26 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
         >
           <ToggleGroup.Item
             value="Psychiatry"
-            className={
-              toggleGroupItemClasses + ' h-[50px] w-[268px] sm:w-[292px]'
-            }
+            className={cn(
+              'mt-2 sm:mt-0 h-[40px] w-[200px] lg:h-[50px] lg:w-[292px]',
+              toggleGroupItemClasses,
+            )}
           >
             Psychiatry <Text size="1">(Diagnosis / Medications)</Text>
           </ToggleGroup.Item>
           <ToggleGroup.Item
             value="Therapy"
-            className={
-              toggleGroupItemClasses +
-              ' mt-2 h-[50px] w-[207px] sm:ml-3 sm:mt-0'
-            }
+            className={cn(
+              'mt-2 h-[40px] lg:h-[50px] w-[190px] lg:w-[207px] sm:ml-3 sm:mt-0',
+              toggleGroupItemClasses,
+            )}
           >
             Therapy <Text size="1">(Counseling)</Text>
           </ToggleGroup.Item>
         </ToggleGroup.Root>
       </Flex>
       <Flex className="gap-6 max-md:w-full" direction="column" py="5">
-        <Flex className="text-5 font-medium">
+        <Flex className="text-3 lg:text-5 font-medium">
           Would you like to meet in-person or virtually?
         </Flex>
         <Flex className="">
@@ -278,16 +279,19 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
           >
             <ToggleGroup.Item
               value="In-Person"
-              className={
-                'mt-2 h-[50px] w-[178px] sm:mt-0 ' + toggleGroupItemClasses
-              }
+              className={cn(
+                'mt-2 h-[40px] lg:h-[50px] w-[178px] sm:mt-0 ',
+                toggleGroupItemClasses,
+              )}
             >
               In-Person
             </ToggleGroup.Item>
 
             <ToggleGroup.Item
               value="Virtual"
-              className={'ml-3 h-[50px] w-[157px] ' + toggleGroupItemClasses}
+              className={cn('sm:ml-3 mt-2 h-[40px] lg:h-[50px] w-[178px] ',
+                toggleGroupItemClasses
+              )}
             >
               Virtual
             </ToggleGroup.Item>
@@ -298,7 +302,7 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
         <Flex className="gap-6 max-md:w-full" direction="column" py="2">
           <Flex className="flex-col sm:flex-row" gap="3">
             <Flex direction="column" className="font-regular">
-              <Text size="4" mb="2" weight="medium">
+              <Text className="text-2 lg:text-4" mb="2" weight="medium">
                 Date of Birth
               </Text>
               <FormField
@@ -331,13 +335,13 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
                     handleZipCodeChange(e)
                   }
                 }}
-                className="h-[45px] w-[200px] rounded-6 text-4"
+                className="h-[35px] lg:h-[45px] w-[200px] rounded-6 text-4"
                 value={form.watch('zipCode')}
                 maxLength={5}
               />
             </Flex>
             <Flex direction="column" className="font-regular">
-              <Text size="4" mb="2" weight="medium">
+              <Text className="text-2 lg:text-4" mb="2" weight="medium">
                 State
               </Text>
               <FormSelect
@@ -346,7 +350,7 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
                 {...form.register('state')}
                 disabled={stateOptions.length < 2}
                 placeholder="Select state"
-                buttonClassName="h-[45px] w-[210px] text-4 rounded-6"
+                buttonClassName="h-[35px] lg:h-[45px] w-[210px] text-4 rounded-6"
                 options={stateOptions}
               />
               <TextField.Root />
@@ -357,14 +361,14 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
           <Flex gap="3" direction="row">
             <Button
               radius="full"
-              className="h-[40px] w-[100px] cursor-pointer items-center justify-center border-[#151B4A] bg-[white] px-4 text-[#151B4A] outline"
+              className="h-[30px] lg:h-[40px] w-[100px] cursor-pointer items-center justify-center border-[#151B4A] bg-[white] px-4 text-[#151B4A] outline"
               onClick={onclose}
             >
               <Text size="3">Cancel</Text>
             </Button>
             <FormSubmitButton
               radius="full"
-              className="h-[40px] w-[112px] cursor-pointer items-center justify-center bg-[#151B4A] px-4 font-bold"
+              className="h-[30px] lg:h-[40px] w-[112px] cursor-pointer items-center justify-center bg-[#151B4A] px-4 font-bold"
             >
               <Text size="3">Search</Text>
             </FormSubmitButton>

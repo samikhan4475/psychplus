@@ -1,4 +1,3 @@
-const mobileThreshold = 768
-const isMobile = (): boolean => window.innerWidth <= mobileThreshold
+const isMobile = (): boolean => window.matchMedia('(max-width: 768px)').matches;
 
 export { isMobile }

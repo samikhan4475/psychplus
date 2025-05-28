@@ -112,12 +112,18 @@ const ScheduleAppointmentListClient = ({
 
     setIsLoading(true)
     const today = new Date()
-    const maxDaysOutToLook =
-      getLastDayOfWeek(parseDateString(filters.startingDate)).getDay() +
-      1 -
-      (isBefore(new Date(filters.startingDate), today)
-        ? parseDateString(formatDateYmd(today)).getDay()
-        : parseDateString(filters.startingDate).getDay())
+    const startDate = parseDateString(filters.startingDate)
+    const todayDate = parseDateString(formatDateYmd(today))
+    const isStartBeforeToday = isBefore(new Date(filters.startingDate), today)
+
+    const referenceDay = isStartBeforeToday
+      ? todayDate.getDay()
+      : startDate.getDay()
+
+    const maxDaysOutToLook = !isMobile()
+      ? getLastDayOfWeek(startDate).getDay() + 1 - referenceDay
+      : 1
+
 
     getAppointmentAvailabilityForUnauthenticatedUser(
       {
@@ -218,13 +224,13 @@ const ScheduleAppointmentListClient = ({
           px="7"
           align="center"
         >
-          <Flex style={{ flex: 1 }} align="center">
-            <Flex className="w-[300px] text-[#151B4A] lg:w-[380px]">
-              <Text size="5">
+          <Flex align="center" justify={isMobile() ? 'center' : 'between'}>
+            <Flex className="w-[100px] text-[#151B4A] lg:w-[380px]">
+              <Text className='text-3 lg:text-5'>
                 {staffWithClinicsAndSlotsState?.length} Providers
               </Text>
             </Flex>
-            <Flex style={{ flex: 2.3 }}>
+            <Flex>
               <WeekCalendarRow />
             </Flex>
           </Flex>

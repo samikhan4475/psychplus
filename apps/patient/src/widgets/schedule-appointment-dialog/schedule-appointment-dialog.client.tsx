@@ -47,7 +47,7 @@ const ScheduleAppointmentDialogClient = ({
         <Dialog.Close className="absolute right-4 top-4 cursor-pointer">
           <Cross2Icon />
         </Dialog.Close>
-        <Dialog.Title className="text-center text-7 sm:text-left sm:text-8">
+        <Dialog.Title className="text-left text-4 lg:text-7">
           Schedule an appointment
         </Dialog.Title>
         {open && <ScheduleTabs onClose={onClose} mapKey={mapKey} />}

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Flex, Text } from '@radix-ui/themes'
 import { addDays, format } from 'date-fns'
 import { isMobile } from '@psychplus/utils/client'
@@ -24,20 +24,30 @@ const WeekCalendarRow = () => {
       : getFirstDayOfWeek(),
   )
 
-  const renderDays = () =>
-    Array.from({ length: daysToAdd }, (_, i) => addDays(startDate, i)).map(
-      renderDay,
-    )
+  const renderDays = () => {
+  if (isMobile()) {
+    return [renderDay(startDate)] // Use state-controlled date
+  }
 
-  const handleWeekChange = (daysToAdd: number) => {
-    const newWeekReel =
-      daysToAdd < 0 ? currentWeekReel - 1 : currentWeekReel + 1
+  return Array.from({ length: daysToAdd }, (_, i) =>
+    addDays(startDate, i)
+  ).map(renderDay)
+}
+
+
+  const handleWeekChange = (offset: number) => {
+    const changeBy = isMobile() ? 1 : 7
+    const newWeekReel = offset < 0 ? currentWeekReel - 1 : currentWeekReel + 1
+
+    const newStartDate = addDays(startDate, offset < 0 ? -changeBy : changeBy)
+
     setCurrentWeekReel(newWeekReel)
     handleFiltersChange({
-      startingDate: formatDateYmd(addDays(startDate, daysToAdd)),
+      startingDate: formatDateYmd(newStartDate),
     })
-    setStartDate(addDays(startDate, daysToAdd))
+    setStartDate(newStartDate)
   }
+
 
   return (
     <Flex align="center" className="w-full">
@@ -55,7 +65,7 @@ const WeekCalendarRow = () => {
       >
         <LeftArrowIcon />
       </Flex>
-      <Flex className="w-full sm:w-auto" mx="3">
+      <Flex className="w-full" mx="5">
         {renderDays()}
       </Flex>
       <Flex

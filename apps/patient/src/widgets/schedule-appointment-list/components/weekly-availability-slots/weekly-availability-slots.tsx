@@ -32,16 +32,93 @@ const WeeklyAvailabilitySlots = ({
           filters.startingDate,
         ),
       ).map(([date, slots], i) => (
-        <Flex className="w-full sm:w-20" key={`${date}-${i}`}>
-          <SlotComponent
-            slots={slots}
-            clinicWithSlots={clinicWithSlots}
-            staff={staff}
-            staffTypeCode={staffTypeCode}
-          />
+        <Flex className="w-full" key={`${date}-${i}`}>
+          {!isMobile() ? (
+            <SlotComponent
+              slots={slots}
+              clinicWithSlots={clinicWithSlots}
+              staff={staff}
+              staffTypeCode={staffTypeCode}
+            />
+          ) : (
+            <MobileSlotComponent
+              slots={slots}
+              clinicWithSlots={clinicWithSlots}
+              staff={staff}
+              staffTypeCode={staffTypeCode}
+            />
+          )}
         </Flex>
       ))}
     </Flex>
+  )
+}
+
+const MobileSlotComponent = ({
+  slots,
+  clinicWithSlots,
+  staff,
+  staffTypeCode,
+}: {
+  slots: Slot[]
+  clinicWithSlots: ClinicWithSlots | undefined
+  staff: Staff
+  staffTypeCode: number
+}) => {
+  const { setBookedSlot, filters } = useStore()
+  const router = useRouter()
+
+  const searchParams = useSearchParams()
+
+  const state = searchParams.get('state')
+  
+  
+  function setBookedSlotDetails(slot: Slot) {
+    setBookedSlot({
+      clinic: clinicWithSlots?.clinic,
+      specialist: staff,
+      specialistTypeCode: staffTypeCode,
+      type: filters.appointmentType,
+      startDate: slot.startDate,
+      duration: slot.duration,
+      servicesOffered: slot.servicesOffered,
+      state: state ?? '',
+    })
+
+    parent.postMessage(
+      {
+        event: enums.APPOINTMENT_SELECTED,
+      },
+      PSYCHPLUS_LIVE_URL,
+    )
+
+    clickTrack({
+      productArea: 'Patient',
+      productPageKey: 'Schedule Appointment Screen',
+      clickAction: 'Navigation',
+      clickActionData: 'Clicked Slot',
+    })
+
+    router.push(`/schedule-appointment/personal-details`)
+  }
+
+  return (
+    <Flex
+        className="flex-row overflow-x-auto whitespace-nowrap pb-4"
+        gap="4"
+      >
+      {slots.length > 0 ? (
+        slots.map((slot, i) => (
+          <SlotItem
+            key={`${slot.startDate}-${i}`}
+            slot={slot}
+            onBookedSlot={setBookedSlotDetails}
+          />
+        ))
+      ) : (
+        <Text>No slots available</Text>
+      )}
+      </Flex>
   )
 }
 
