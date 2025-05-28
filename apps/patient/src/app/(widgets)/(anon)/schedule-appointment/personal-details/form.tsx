@@ -108,21 +108,10 @@ type SchemaType = z.infer<typeof schema>
 
 const PersonalDetailsForm = () => {
   const router = useRouter()
-  const { patient, setPatient, address } = useStore()
+  const { patient, setPatient } = useStore()
 
   const form = useForm({
     schema,
-    defaultValues: {
-      primaryCity: address?.primaryCity,
-      primaryCountry: address?.primaryCountry,
-      primaryPostalCode: address?.primaryPostalCode,
-      primaryState: address?.primaryState,
-      primaryStreet1: address?.primaryStreet1,
-      primaryStreet2: address?.primaryStreet2,
-      primaryStreet: address?.primaryStreet,
-      primaryStreetNumber: address?.primaryStreetNumber,
-      primaryZipLast4: address?.primaryZipLast4,
-    },
     criteriaMode: 'all',
   })
 
@@ -216,9 +205,9 @@ const PersonalDetailsForm = () => {
                     last_name: form.getValues().lastName,
                     gender: form.getValues().gender,
                     date_of_birth: form.getValues().dateOfBirth,
-                    city: address?.primaryCity,
-                    state: address?.primaryState,
-                    zip_code: address?.primaryPostalCode,
+                    city: form.getValues().primaryCity,
+                    state: form.getValues().primaryState,
+                    zip_code: form.getValues().primaryPostalCode,
                   },
                 },
                 PSYCHPLUS_LIVE_URL,
@@ -254,7 +243,7 @@ const PersonalDetailsForm = () => {
           setIsLoading(false)
         })
     })
-  }, [form, subscribe, publish, isLoading, router, setPatient, address])
+  }, [form, subscribe, publish, isLoading, router, setPatient])
 
   const sendOtpHandler = (email: string, phoneNumber: string) => {
     setAlertError(null)
@@ -323,7 +312,10 @@ const PersonalDetailsForm = () => {
         )}
         <Flex direction="column" gap="5">
           <Flex direction="column" gap="1" className="w-full">
-            <Text>Email address</Text>
+            <Text as="p" className="text-[14px] font-medium">
+              <Text>Email Address</Text>
+              <Text className="text-[#f14545]">*</Text>
+            </Text>
             <FormTextInput
               type="text"
               label=""
@@ -335,7 +327,10 @@ const PersonalDetailsForm = () => {
 
           <Flex className="flex-col sm:flex-row" gap="4">
             <Flex direction="column" gap="1" className="w-full">
-              <Text>First name</Text>
+              <Text as="p" className="text-[14px] font-medium">
+                <Text>First Name</Text>
+                <Text className="text-[#f14545]">*</Text>
+              </Text>
               <FormTextInput
                 type="text"
                 label=""
@@ -345,7 +340,10 @@ const PersonalDetailsForm = () => {
               />
             </Flex>
             <Flex direction="column" gap="1" className="w-full">
-              <Text>Last Name</Text>
+              <Text as="p" className="text-[14px] font-medium">
+                <Text>Last Name</Text>
+                <Text className="text-[#f14545]">*</Text>
+              </Text>
               <FormTextInput
                 type="text"
                 label=""
@@ -358,7 +356,10 @@ const PersonalDetailsForm = () => {
 
           <Flex className="flex-col sm:flex-row" gap="4">
           <Flex direction="column" gap="1" className="w-full">
-              <Text>Gender</Text>
+              <Text as="p" className="text-[14px] font-medium">
+                <Text>Gender</Text>
+                <Text className="text-[#f14545]">*</Text>
+              </Text>
               <Select.Root
                 size="3"
                 {...form.register('gender')}
@@ -389,7 +390,10 @@ const PersonalDetailsForm = () => {
               )}
             </Flex>
             <Flex direction="column" gap="1" className="w-full">
-              <Text>Date of birth</Text>
+              <Text as="p" className="text-[14px] font-medium">
+                <Text>Date of birth</Text>
+                <Text className="text-[#f14545]">*</Text>
+              </Text>
               <FormTextInput
                 type="date"
                 label=""
@@ -409,7 +413,10 @@ const PersonalDetailsForm = () => {
               />
             </Flex>
             <Flex direction="column" gap="1" className="w-full">
-              <Text>Phone number</Text>
+              <Text as="p" className="text-[14px] font-medium">
+                <Text>Phone Number</Text>
+                <Text className="text-[#f14545]">*</Text>
+              </Text>
               <FormPhoneNumberInput
                 label=""
                 data-testid="phone-number-input"
@@ -439,7 +446,10 @@ const PersonalDetailsForm = () => {
           </Flex>
 
           <Flex direction="column" gap="1" className="w-full">
-            <Text>Password</Text>
+            <Text as="p" className="text-[14px] font-medium">
+                <Text>Password</Text>
+                <Text className="text-[#f14545]">*</Text>
+              </Text>
             <FormTextInput
               type="password"
               label=""

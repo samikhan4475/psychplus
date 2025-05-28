@@ -58,7 +58,7 @@ const SlotComponent = ({
 }) => {
   const [showAll, setShowAll] = useState(false)
   const handleShowMore = () => setShowAll(!showAll)
-  const { setBookedSlot, filters, address } = useStore()
+  const { setBookedSlot, filters} = useStore()
   const router = useRouter()
 
   const searchParams = useSearchParams()
@@ -77,15 +77,6 @@ const SlotComponent = ({
       servicesOffered: slot.servicesOffered,
       state: state ?? '',
     })
-
-    if (
-      filters.appointmentType !== "Virtual" &&
-      address?.primaryState &&
-      address.primaryState !== state
-    ) {
-      router.push(`/widgets/schedule-appointment-confirmation?myState=${address?.primaryState}&providerState=${state}`)
-      return
-    }
 
     parent.postMessage(
       {

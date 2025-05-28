@@ -19,10 +19,11 @@ import { usePubsub } from '@psychplus/utils/event'
 import { getZipcodeInfo } from '@psychplus/utils/map'
 import { clickTrack } from '@psychplus/utils/tracking'
 import { SCHEDULE_APPOINTMENT_DIALOG } from '@psychplus/widgets'
-import { PlacesAutocomplete } from '@/components-v2'
-import { useGooglePlacesContext } from '@/providers'
 import { useStore } from '@/widgets/schedule-appointment-list/store'
 import { enums, PSYCHPLUS_LIVE_URL } from '@/constants'
+import { DatePickerInput } from '@/components-v2/date-picker-input'
+import { DateValue } from 'react-aria-components'
+import { getLocalTimeZone } from '@internationalized/date'
 
 interface NewPatientProps {
   onclose?: () => void
@@ -56,7 +57,9 @@ interface StateOptions {
 
 const schema = z
   .object({
-    dateOfBirth: validate.requiredString,
+    dateOfBirth: z.custom<DateValue>((val) => !!val && typeof val === 'object', {
+      message: 'required',
+    }),
     zipCode: validate.requiredString,
     state: validate.requiredString,
     primaryStreet1: z.string().optional(),
@@ -71,7 +74,7 @@ const schema = z
   })
   .superRefine(({ dateOfBirth, zipCode }, ctx) => {
     const currentDate = new Date()
-    const dob = new Date(dateOfBirth)
+    const dob = dateOfBirth.toDate('CST')
 
     if (dob) {
       const ageInYears = currentDate.getFullYear() - dob.getFullYear()
@@ -100,8 +103,6 @@ type SchemaType = z.infer<typeof schema>
 const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
   const { publish } = usePubsub()
 
-  const { loaded } = useGooglePlacesContext()
-
   const form = useForm({
     schema,
     criteriaMode: 'all',
@@ -126,21 +127,21 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
 
   const [stateOptions, setStateOptions] = useState<StateOptions[]>([])
 
-  const { setPatient, setAddress,setGMapKey } = useStore()
+  const { setPatient, setGMapKey } = useStore()
+
+  const getLocalDateWithoutTime = (date?: DateValue | null): string | undefined => {
+        if (date) {
+          const dateObj = date.toDate(getLocalTimeZone())
+          const utcDate = `${dateObj.getDate()}`.padStart(2, '0')
+          const utcMonth = `${dateObj.getMonth() + 1}`.padStart(2, '0')
+          const utcYear = `${dateObj.getFullYear()}`
+          return `${utcYear}-${utcMonth}-${utcDate}`
+        }
+      }
 
   const onScheduleChange = (key: keyof ScheduledAppointment, value: string) => {
     setSchedule((prev) => ({ ...prev, [key]: value }))
   }
-
-  const getDobMaxDate = () => {
-    const date = new Date()
-    date.setFullYear(date.getFullYear() - 4)
-    const year = date.getFullYear()
-    const month = ('0' + (date.getMonth() + 1)).slice(-2)
-    const day = ('0' + date.getDate()).slice(-2)
-    return `${year}-${month}-${day}`
-  }
-
   const lastZipCode = useRef<string | null>(null)
 
   const handleZipCodeChange = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -190,16 +191,7 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
       .join('&')
 
     setPatient({
-      dateOfBirth: form.getValues().dateOfBirth,
-    })
-
-    setAddress({
-      primaryStreet1: form.getValues().primaryStreet1,
-      primaryStreet2: form.getValues().primaryStreet2,
-      primaryCity: form.getValues().primaryCity,
-      primaryState: form.getValues().primaryState,
-      primaryPostalCode: form.getValues().primaryPostalCode,
-      primaryZipLast4: form.getValues().primaryZipLast4 ?? '',
+      dateOfBirth: getLocalDateWithoutTime(form.getValues().dateOfBirth),
     })
 
     setGMapKey(mapKey)
@@ -314,28 +306,24 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
                 label=""
                 {...form.register('dateOfBirth')}
               >
-                <Flex className="rt-TextFieldRoot rt-r-size-3 rt-variant-surface h-[45px] w-full rounded-6 text-4 sm:w-[190px]">
-                  <input
-                    type="date"
-                    max={getDobMaxDate()}
-                    onChange={(e) => {
-                      form.setValue('dateOfBirth', e.target.value)
-                      form.trigger('dateOfBirth')
-                    }}
-                    data-testid="date-of-birth-input"
-                    className="rt-TextFieldInput rt-reset block w-[98%]"
+                <Flex className="rt-TextFieldRoot rt-r-size-3 h-[45px] w-full rounded-6 text-4 sm:w-[190px]">
+                  <DatePickerInput
+                    field="dateOfBirth"
+                    className="w-full"
+                    datePickerClass="rt-TextFieldInput rt-reset block w-full"
+                    dateInputClass="h-[45px]"
                   />
                 </Flex>
               </FormField>
             </Flex>
             <Flex direction="column" className="font-regular">
               <Text size="4" mb="2" weight="medium">
-                ZIP Code
+                Current ZIP Code
               </Text>
               <FormTextInput
                 type="number"
                 label=""
-                placeholder="ZIP Code"
+                placeholder="Current ZIP Code"
                 data-testid="zip-code-input"
                 {...form.register('zipCode')}
                 onChange={(e) => {
@@ -364,14 +352,6 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
               <TextField.Root />
             </Flex>
           </Flex>
-          {loaded && (
-            <PlacesAutocomplete
-              name="primary"
-              label="Primary"
-              className="h-[45px] rounded-6 text-4"
-              isSelfScheduling
-            />
-          )}
         </Flex>
         <Flex className="gap-6 max-md:w-full" direction="column" mt="5">
           <Flex gap="3" direction="row">

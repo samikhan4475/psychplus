@@ -42,9 +42,7 @@ interface AppointmentFiltersState {
 
 interface PatientState {
   patient: User | undefined
-  address: PrimaryAddress | undefined
   setPatient: (patient: User) => void
-  setAddress: (address: PrimaryAddress) => void
   gMapKey: string
   setGMapKey: (gMapKey: string) => void
 }
