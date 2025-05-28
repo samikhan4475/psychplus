@@ -6,7 +6,7 @@ import { DataTable, LoadingPlaceholder } from '@/components'
 import { columns } from './columns'
 import { useStore } from './store'
 
-const VacationTimeTable = () => {
+const VacationTimeTable = ({ staffId }: { staffId: string }) => {
   const { data, fetchLocationTimeList, loading } = useStore((state) => ({
     data: state.data,
     fetchLocationTimeList: state.fetchLocationTimeList,
@@ -14,7 +14,7 @@ const VacationTimeTable = () => {
   }))
 
   useEffect(() => {
-    fetchLocationTimeList()
+    fetchLocationTimeList({ providerStaffIds: [staffId] })
   }, [fetchLocationTimeList])
 
   if (loading) {

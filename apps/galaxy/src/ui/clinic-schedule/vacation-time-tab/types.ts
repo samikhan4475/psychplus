@@ -18,6 +18,7 @@ interface GetVacationsListParams {
 }
 
 interface GetVacationFilters {
+  providerStaffIds: string[]
   fromDate: string
   toDate: string
   status: string

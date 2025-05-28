@@ -12,7 +12,7 @@ import { SearchButton } from './search-button'
 import { StatusSelect } from './status-select'
 import { ToDatePicker } from './to-date-picker'
 
-const FilterForm = () => {
+const FilterForm = ({ staffId }: { staffId: string }) => {
   const { fetchLocationTimeList } = useStore((state) => ({
     fetchLocationTimeList: state.fetchLocationTimeList,
   }))
@@ -34,6 +34,7 @@ const FilterForm = () => {
       ...data,
       fromDate: formatDateToISOString(fromDate) ?? '',
       toDate: formatDateToISOString(toDate, true) ?? '',
+      providerStaffIds: [staffId],
     })
 
     return fetchLocationTimeList(payload, 1, true)

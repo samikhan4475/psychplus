@@ -13,13 +13,13 @@ const VacationTimeTab = ({ staffId }: VacationTimeTabProps) => {
   return (
     <Flex direction="column" gap="1" flexGrow="1">
       <VacationTimeHeader staffId={staffId} />
-      <FilterForm />
+      <FilterForm staffId={staffId} />
       <Flex
         direction="column"
         height="100%"
         className="bg-white h-[calc(100dvh-253px)] rounded-1"
       >
-        <VacationTimeTable />
+        <VacationTimeTable staffId={staffId} />
         <VacationTablePagination />
       </Flex>
     </Flex>
