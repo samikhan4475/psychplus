@@ -141,9 +141,9 @@ const columns: ColumnDef<ClaimPayment>[] = [
     ),
   },
   {
-    id: 'recordStatus',
+    id: 'status',
     header: ({ column }) => <ColumnHeader column={column} label="Status" />,
-    cell: ({ row }) => <TextCell>{row.original.recordStatus}</TextCell>,
+    cell: ({ row }) => <TextCell>{addSpaceToCamelCase(row.original.status)}</TextCell>,
   },
   {
     id: 'noindex',
