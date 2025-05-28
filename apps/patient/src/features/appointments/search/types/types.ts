@@ -1,8 +1,8 @@
 import { AppointmentType, ProviderType } from '@psychplus-v2/constants'
 import type {
-  Address,
   Clinic,
   ClinicContactDetails,
+  ContactDetails,
   LegalName,
   Specialist,
 } from '@psychplus-v2/types'
@@ -25,21 +25,13 @@ interface AppointmentSlot {
   clinicId?: string
 }
 
-interface ProviderAddress extends Address {
-  type: 'Business' | 'Mailing'
-}
-interface AppointmentContactDetails {
-  addresses: ProviderAddress[]
-  email: string
-}
-
 interface AppointmentSpecialist {
   id: number
   isTest?: boolean
   legalName: LegalName
   spokenLanguages?: string[]
   rating: number
-  contactInfo?: AppointmentContactDetails
+  contactInfo?: ContactDetails
 }
 
 interface AppointmentClinic {

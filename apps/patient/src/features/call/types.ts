@@ -1,8 +1,9 @@
 import { LegalName } from '@psychplus-v2/types'
 
 interface AcsInfoPayload {
-  staffEmail: string
-  appointmentId: string
+  staffEmail?: string
+  appointmentId?: string
+  shortUrlReference?: string
 }
 interface AcsInfo {
   externalId: string

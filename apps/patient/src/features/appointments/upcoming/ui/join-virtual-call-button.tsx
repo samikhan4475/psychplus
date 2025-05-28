@@ -40,15 +40,12 @@ const JoinVirtualCallBtn = ({
 
   const onJoinVirtualCall = async () => {
     const payload = {
-      staffId: row.specialist.id,
-      appointmentId: row.id,
+      staffEmail: row.specialist.contactInfo?.email || '',
     }
     const res = await acs_enabled(payload)
 
     if (res.state === 'success') {
-      router.push(
-        `/call?staffId=${payload.staffId}&appointmentId=${payload.appointmentId}`,
-      )
+      router.push(`/call?email=${payload.staffEmail}`)
     } else {
       router.push(virtualRoomLink)
     }

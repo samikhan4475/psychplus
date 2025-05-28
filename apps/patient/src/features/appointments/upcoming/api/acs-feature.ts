@@ -4,8 +4,7 @@ import * as api from '@psychplus-v2/api'
 import { API_URL } from '@psychplus-v2/env'
 
 interface payload {
-  staffId: number
-  appointmentId: number
+  staffEmail: string
 }
 
 interface AcsFeature {

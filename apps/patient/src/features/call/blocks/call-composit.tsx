@@ -72,9 +72,6 @@ const CallCompositeContainer = ({ acsInfo, username }: Props) => {
     setConnected,
   ])
 
-  if (!email) {
-    return <Text>No email found</Text>
-  }
   if (!callAdapter) {
     return <LoadingPlaceholder />
   }

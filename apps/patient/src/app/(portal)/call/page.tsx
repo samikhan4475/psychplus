@@ -4,6 +4,7 @@ import { User } from '@psychplus-v2/auth'
 import { Text } from '@radix-ui/themes'
 import { getProfile } from '@/api'
 import { getAcsInfo } from '@/features/call/api'
+import { AcsInfoPayload } from '@/features/call/types'
 
 const CallView = dynamic(
   () => import('@/features/call/call-view.tsx').then((mod) => mod.CallView),
@@ -12,26 +13,28 @@ const CallView = dynamic(
 
 interface Props {
   searchParams: {
-    email: string
-    appointmentId: string
+    email?: string
+    appointmentId?: string
+    reference?: string
   }
 }
 
-const Call = async ({ searchParams: { email, appointmentId } }: Props) => {
+const Call = async ({
+  searchParams: { email, appointmentId, reference },
+}: Props) => {
+  const payload: AcsInfoPayload = {}
+
+  if (email) payload.staffEmail = email
+  if (appointmentId) payload.appointmentId = appointmentId
+  if (reference) payload.shortUrlReference = reference
+
   const [acsResponse, profileResponse] = await Promise.all([
-    getAcsInfo({
-      staffEmail: email,
-      appointmentId,
-    }),
+    getAcsInfo(payload),
     getProfile(),
   ])
 
   if (acsResponse.state === 'error') {
     return <Text>{acsResponse.error}</Text>
-  }
-
-  if (!email) {
-    return <Text>No email found</Text>
   }
 
   const user: User | undefined =

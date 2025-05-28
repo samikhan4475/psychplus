@@ -1,4 +1,4 @@
-import { LegalName } from '.'
+import { ContactDetails, LegalName } from '.'
 
 interface Specialist {
   id: number
@@ -7,6 +7,7 @@ interface Specialist {
   spokenLanguages?: string[]
   hasPhoto?: boolean
   rating: number
+  contactInfo?: ContactDetails
 }
 
 export type { Specialist }
