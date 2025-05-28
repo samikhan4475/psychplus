@@ -29,6 +29,7 @@ import { AuthAndReferralsView } from './auth-and-referrals-section'
 import { BillingProviderView } from './billing-provider-section'
 import { ChargesHeaderAction, ChargesTableView } from './charges-section'
 import { ClaimAccordionItem } from './claim-accordion-item'
+import { ClaimDatesView } from './claim-dates-section'
 import {
   ClaimActions,
   ClaimDetailHeader,
@@ -66,6 +67,7 @@ const ClaimDetailView = () => {
     'Accidents And Labs',
     'Diagnosis',
     'Charges',
+    'Claim Dates',
     'Authorizations and Referrals and CLIA',
     'Submission Information',
     'Submission Response',
@@ -83,6 +85,7 @@ const ClaimDetailView = () => {
     resolver: zodResolver(claimUpdateSchema),
     reValidateMode: 'onChange',
     defaultValues: {
+      claimFrequencyCode: 'Original',
       claimServiceLines: [],
       claimDiagnosis: [],
     },
@@ -105,6 +108,17 @@ const ClaimDetailView = () => {
       dateOfServiceFrom: getDateString(data.dateOfServiceFrom),
       dateOfServiceTo: getDateString(data.dateOfServiceTo),
       submittedDate: getDateString(data.submittedDate),
+      onsetOfCurrentIllness: getDateString(data.onsetOfCurrentIllness),
+      firstSimilarIllness: getDateString(data.firstSimilarIllness),
+      lastMenstrualPeriod: getDateString(data.lastMenstrualPeriod),
+      admissionDate: getDateString(data.admissionDate),
+      dischargeDate: getDateString(data.dischargeDate),
+      lastXRayDate: getDateString(data.lastXRayDate),
+      lastXRayType: data.lastXRayType,
+      startDateOfInabilityToWork: getDateString(
+        data.startDateOfInabilityToWork,
+      ),
+      endDateOfInabilityToWork: getDateString(data.endDateOfInabilityToWork),
       renderingProviderId: data.renderingProviderId
         ? Number(data.renderingProviderId)
         : null,
@@ -148,7 +162,6 @@ const ClaimDetailView = () => {
       fetchClaimData(claimId)
     }
   }
-
   const handleAccordionChange = (value: string[]) => {
     setOpenItems(value)
   }
@@ -207,6 +220,30 @@ const ClaimDetailView = () => {
         : undefined,
       submittedDate: claimData.submittedDate
         ? getLocalCalendarDate(claimData.submittedDate)
+        : undefined,
+      onsetOfCurrentIllness: claimData.onsetOfCurrentIllness
+        ? getLocalCalendarDate(claimData.onsetOfCurrentIllness)
+        : undefined,
+      firstSimilarIllness: claimData.firstSimilarIllness
+        ? getLocalCalendarDate(claimData.firstSimilarIllness)
+        : undefined,
+      lastMenstrualPeriod: claimData.lastMenstrualPeriod
+        ? getLocalCalendarDate(claimData.lastMenstrualPeriod)
+        : undefined,
+      admissionDate: claimData.admissionDate
+        ? getLocalCalendarDate(claimData.admissionDate)
+        : undefined,
+      dischargeDate: claimData.dischargeDate
+        ? getLocalCalendarDate(claimData.dischargeDate)
+        : undefined,
+      lastXRayDate: claimData.lastXRayDate
+        ? getLocalCalendarDate(claimData.lastXRayDate)
+        : undefined,
+      startDateOfInabilityToWork: claimData.startDateOfInabilityToWork
+        ? getLocalCalendarDate(claimData.startDateOfInabilityToWork)
+        : undefined,
+      endDateOfInabilityToWork: claimData.endDateOfInabilityToWork
+        ? getLocalCalendarDate(claimData.endDateOfInabilityToWork)
         : undefined,
       renderingProviderId:
         claimData.renderingProviderId?.toString() ?? undefined,
@@ -373,6 +410,12 @@ const ClaimDetailView = () => {
                   <SubmissionInformationView />
                 </ClaimAccordionItem>
               </Flex>
+              <ClaimAccordionItem
+                title={ClaimDetailsTab.ClaimDates}
+                className="flex-1"
+              >
+                <ClaimDatesView />
+              </ClaimAccordionItem>
               <ClaimAccordionItem title={ClaimDetailsTab.SubmissionResponse}>
                 <SubmissionResponseTable />
               </ClaimAccordionItem>

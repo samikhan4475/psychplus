@@ -46,6 +46,18 @@ interface ClaimServiceLine {
   statusCode?: string
   isAnesthesia: boolean
   chargeId?: string
+  lastSeenDate?: string
+  onsetOfCurrentIllness?: DateValue
+  firstSimilarIllness?: DateValue
+  lastMenstrualPeriod?: DateValue
+  admissionDate?: DateValue
+  dischargeDate?: DateValue
+  lastXRayDate?: DateValue
+  lastXRayType?: DateValue
+  startDateOfInabilityToWork?: DateValue
+  endDateOfInabilityToWork?: DateValue
+  payerClaimControlNumber?: string
+  claimFrequencyCode?: string
 }
 
 interface ClaimDiagnosis {
@@ -329,6 +341,15 @@ interface ClaimUpdate {
   patientDateOfBirth: string
   claimServiceLines: ClaimServiceLine[]
   claimDiagnosis: ClaimDiagnosis[]
+  onsetOfCurrentIllness?: DateValue | string
+  firstSimilarIllness?: DateValue | string
+  lastMenstrualPeriod?: DateValue | string
+  admissionDate?: DateValue | string
+  dischargeDate?: DateValue | string
+  lastXRayDate?: DateValue | string
+  lastXRayType?: string
+  startDateOfInabilityToWork?: DateValue | string
+  endDateOfInabilityToWork?: DateValue | string
   updatedByName?: string
 }
 
@@ -470,6 +491,15 @@ interface ClaimUpdateApiResponse {
   isOtherAccident: boolean
   claimFrequencyCode?: string
   lastSeenDate?: string
+  onsetOfCurrentIllness?: string
+  firstSimilarIllness?: string
+  lastMenstrualPeriod?: string
+  admissionDate?: string
+  dischargeDate?: string
+  lastXRayDate?: string
+  lastXRayType?: string
+  startDateOfInabilityToWork?: string
+  endDateOfInabilityToWork?: string
   patientName: string
   patientAccountNumber?: string
   patientGender: string
@@ -651,8 +681,8 @@ interface ClaimAddServiceLine {
 }
 interface ProfessionalClaimServiceLine
   extends Omit<ClaimAddServiceLine, 'dateOfServiceFrom' | 'dateOfServiceTo'> {
-  dateOfServiceFrom?: DateValue;
-  dateOfServiceTo?: DateValue;
+  dateOfServiceFrom?: DateValue
+  dateOfServiceTo?: DateValue
 }
 export type {
   ProfessionalClaimServiceLine,
@@ -676,5 +706,5 @@ export type {
   UpdateClaimNotes,
   ClaimNotesFilter,
   ClaimAddApiRequest,
-  ClaimAddServiceLine
+  ClaimAddServiceLine,
 }

@@ -55,6 +55,7 @@ const CODESETS = {
   ContactMadeStatus: 'ContactMadeStatus',
   ReferralSource: 'ReferralSource',
   ParameterAdjustmentStatus: 'ParameterAdjustmentStatus',
+  ClaimFrequencyCode:'ClaimFrequencyCode',
   LicenseStatus: 'LicenseStatus',
   DurationUnit: 'DurationUnit',
   PrescribedStatus: 'PrescribedStatus',
