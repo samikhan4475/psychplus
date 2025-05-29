@@ -7,6 +7,7 @@ import {
   DataTable,
   DateTimeCell,
   LoadingPlaceholder,
+  LongTextCell,
   TextCell,
 } from '@/components'
 import { Sort } from '@/types'
@@ -50,7 +51,7 @@ const columns = (
         label="Patient Name"
       />
     ),
-    cell: ({ row }) => <TextCell>{row.original.patientName}</TextCell>,
+    cell: ({ row }) => <LongTextCell  className="w-[150px]">{row.original.patientName}</LongTextCell>,
   },
   {
     id: 'dateOfServiceFrom',
@@ -122,7 +123,7 @@ const columns = (
         label="Status"
       />
     ),
-    cell: ({ row }) => <TextCell>{row.original.status || '-'}</TextCell>,
+    cell: ({ row }) => <TextCell>{row.original.status ?? '-'}</TextCell>,
   },
 ]
 

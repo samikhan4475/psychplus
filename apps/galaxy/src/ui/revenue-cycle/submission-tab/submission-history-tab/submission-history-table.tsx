@@ -66,7 +66,7 @@ const columns = (
       />
     ),
     cell: ({ row }) => (
-      <TextCell>{row.original.isaControlNumber || '-'}</TextCell>
+      <TextCell>{row.original.isaControlNumber ?? '-'}</TextCell>
     ),
   },
   {
@@ -181,9 +181,6 @@ const SubmissionHistoryTable = () => {
         tableClass="[&_.rt-ScrollAreaRoot]:pb-2"
         data={data.submissionHistory}
         columns={columns(sort, sortData)}
-        onRowClick={(row) => {
-          //  TODO: Will be implemented rowclick if necessary
-        }}
         disablePagination
         sticky
       />
