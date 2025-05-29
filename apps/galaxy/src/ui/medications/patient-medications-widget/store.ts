@@ -16,8 +16,15 @@ import { getFavouriteDiagnosis } from '@/ui/diagnosis/diagnosis/actions/get-favo
 import { getIcd10Diagnosis } from '@/ui/diagnosis/diagnosis/actions/get-service-diagnosis'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { getNewSortDir } from '@/utils'
-import { fetchDrugs, getPatientMedicationsAction } from './actions'
 import {
+  addFavoriteMedication,
+  fetchDrugs,
+  getFavoriteMedications,
+  getPatientMedicationsAction,
+  removeFavoriteMedication,
+} from './actions'
+import {
+  FavoriteMedication,
   PatientMedication,
   PatientMedicationFilterValues,
   PatientPrescriptionStatus,
@@ -69,17 +76,25 @@ interface StoreState {
   workingDiagnosisData: DiagnosisIcd10Code[]
   updateWorkingDiagnosisData: (data: DiagnosisIcd10Code[]) => void
   setDiagnosisLoading: (value: boolean) => void
+  loadingFavorites: boolean
+  fetchFavoriteMedications: (value?: string) => void
+  favoritesData?: FavoriteMedication[]
+  markMedicationFavorites: (medicationName: string, id?: string) => void
+  favoritesLoaded: boolean
 }
 
 const useStore = create<StoreState>((set, get) => ({
   drugsData: [],
+  favoritesData: [],
   serviceDiagnosisData: [],
   workingDiagnosisData: [],
   favouriteDiagnosisData: [],
   loadingFavouriteDiagnosis: false,
   loadingDrugs: true,
+  favoritesLoaded: false,
   loadingWorkingDiagnosis: false,
   loadingServicesDiagnosis: false,
+  loadingFavorites: false,
   externalPatiendId: undefined,
   patientId: undefined,
   data: undefined,
@@ -302,6 +317,71 @@ const useStore = create<StoreState>((set, get) => ({
       favouriteDiagnosisData: optionsData,
       loadingFavouriteDiagnosis: false,
     })
+  },
+  fetchFavoriteMedications: async (value?: string) => {
+    const { favoritesLoaded } = get()
+    if (favoritesLoaded && !value) {
+      return
+    }
+
+    set({ loadingFavorites: true })
+
+    const response = await getFavoriteMedications(value)
+
+    if (response.state === 'error') {
+      toast.error('Failed to fetch drugs')
+      set({ loadingFavorites: false })
+      return
+    }
+
+    set({
+      loadingFavorites: false,
+      favoritesData: response.data,
+      favoritesLoaded: !value,
+    })
+  },
+
+  markMedicationFavorites: async (medicationName, id) => {
+    const favouriteMedicationsData = get().favoritesData ?? []
+
+    const alreadyExists = favouriteMedicationsData.find(
+      (item) => item.medicationName === medicationName,
+    )
+
+    if (alreadyExists) {
+      if (!id) {
+        throw new Error('Invalid ID for removing favorite')
+      }
+
+      const response = await removeFavoriteMedication(id)
+      if (!response || response.state === 'error') {
+        throw new Error(response?.error || 'Failed to remove favorite')
+      }
+
+      const updatedFavorites = favouriteMedicationsData.filter(
+        (item) => item.medicationName !== medicationName,
+      )
+      set({ favoritesData: updatedFavorites })
+
+      return { action: 'removed' }
+    }
+
+    const response = await addFavoriteMedication(medicationName)
+    if (!response || response.state === 'error') {
+      throw new Error(response?.error || 'Failed to add favorite')
+    }
+
+    const updatedFavorites = [
+      ...favouriteMedicationsData,
+      {
+        id: response.data?.id,
+        medicationName,
+      },
+    ]
+
+    set({ favoritesData: updatedFavorites })
+
+    return { action: 'added' }
   },
 }))
 

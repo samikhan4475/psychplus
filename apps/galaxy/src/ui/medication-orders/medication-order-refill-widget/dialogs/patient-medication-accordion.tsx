@@ -39,7 +39,7 @@ const PatientPrescriptionAccordian = () => {
                 <Box>
                   <DeleteIcon />
                 </Box>
-                <FavoriteIcon name={`drugs-${item?.drugDescription}`} />
+                <FavoriteIcon name={item?.drugDescription ?? ''} />
               </Flex>
             </Accordion.Trigger>
           </Accordion.Header>

@@ -8,9 +8,9 @@ const formatCurrency = (value?: number) => {
   return USDollar.format(value)
 }
 
-const formatValueWithDecimals = (value?: string | number) => {
+const formatValueWithDecimals = (value?: string | number, decimalScale: number = 2) => {
   const parsedValue =
     typeof value === 'number' ? value : parseFloat(value ?? '0')
-  return parsedValue.toFixed(2)
+  return parsedValue.toFixed(decimalScale)
 }
 export { formatCurrency, formatValueWithDecimals }

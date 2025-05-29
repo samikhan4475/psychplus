@@ -1,20 +1,25 @@
 'use client'
 
+import { useEffect, useRef, useState } from 'react'
 import { Box, Flex, ScrollArea, Text } from '@radix-ui/themes'
 import { Trash2 } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 import { LoadingPlaceholder } from '@/components'
 import { DiagnosisIcd10Code } from '@/types'
+import { getQuickNotesWorkingDiagnosis } from '@/ui/diagnosis/diagnosis/actions/get-working-diagnosis'
+import { getDiagnosisLimit } from '../../actions'
 import { useStore } from '../../store'
 import { DrugBlockProps } from '../../types'
 
 const WorkingDiagnosis = ({ index }: DrugBlockProps) => {
   const form = useFormContext()
+  const patientId = useStore((state) => state.patientId)
+  const hasLoadedTopDiagnoses = useRef(false)
+
+  const [topDiagnosisLoading, setTopDiagnosisLoading] = useState(false)
   const diagnosis = form.watch(`drugs[${index}].diagnosis`) ?? []
-  const { diagnosisLoading } = useStore((state) => ({
-    setDiagnosisLoading: state.setDiagnosisLoading,
-    diagnosisLoading: state.diagnosisLoading,
-  }))
+  const diagnosisLoading = useStore((state) => state.diagnosisLoading)
+
   const handleDelete = (code: string) => {
     const updatedDiagnosis = diagnosis.filter(
       (drug: DiagnosisIcd10Code) => drug.code !== code,
@@ -22,12 +27,60 @@ const WorkingDiagnosis = ({ index }: DrugBlockProps) => {
     form.setValue(`drugs[${index}].diagnosis`, updatedDiagnosis)
   }
 
-  if (diagnosisLoading) {
+  useEffect(() => {
+    const fetchTopDiagnoses = () => {
+      setTopDiagnosisLoading(true)
+
+      getQuickNotesWorkingDiagnosis({ patientId: String(patientId) })
+        .then((response) => {
+          if (response.state !== 'success') return
+
+          const { sectionItemValue } = response.data?.[0] || {}
+          const diagnosisCodes = sectionItemValue?.split(',') || []
+
+          if (sectionItemValue !== 'empty' && diagnosisCodes.length > 0) {
+            return getDiagnosisLimit({ diagnosisCodes }).then(
+              (diagnoseResponse) => {
+                if (diagnoseResponse.state === 'success') {
+                  const top3 = diagnoseResponse.data
+                    .slice(0, 3)
+                    .map((item) => ({
+                      ...item,
+                      checked: true,
+                      newDignoses: true,
+                    }))
+
+                  form.setValue(`drugs[${index}].diagnosis`, top3)
+                }
+              },
+            )
+          }
+        })
+        .catch((err) => {
+          console.error('Failed to fetch top diagnoses', err)
+        })
+        .finally(() => {
+          setTopDiagnosisLoading(false)
+        })
+    }
+
+    if (
+      !hasLoadedTopDiagnoses.current &&
+      (!diagnosis || diagnosis.length === 0)
+    ) {
+      hasLoadedTopDiagnoses.current = true
+      fetchTopDiagnoses()
+    }
+  }, [form, index, patientId])
+
+  if (diagnosisLoading || topDiagnosisLoading) {
     return <LoadingPlaceholder className="h-full w-full" />
   }
+
   if (!diagnosis?.length) {
     return null
   }
+
   return (
     <Flex
       direction="column"
@@ -39,7 +92,7 @@ const WorkingDiagnosis = ({ index }: DrugBlockProps) => {
         </Text>
       </Box>
       <ScrollArea className="max-h-[80px] py-0.5 pr-2">
-        {diagnosis?.map((data: DiagnosisIcd10Code) => (
+        {diagnosis.map((data: DiagnosisIcd10Code) => (
           <Flex
             key={data.id}
             display="flex"
@@ -50,7 +103,7 @@ const WorkingDiagnosis = ({ index }: DrugBlockProps) => {
             <Text className="w-full" size="1">
               {`${data.code} ${data.description}`}
             </Text>
-            <Box onClick={() => handleDelete(data?.code)}>
+            <Box onClick={() => handleDelete(data.code)}>
               <Trash2
                 className="cursor-pointer"
                 color="black"

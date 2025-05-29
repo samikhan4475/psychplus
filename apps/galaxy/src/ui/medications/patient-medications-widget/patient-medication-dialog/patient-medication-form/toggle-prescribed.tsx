@@ -14,11 +14,13 @@ const TogglePrescribed = () => {
   const medicationType = form.watch('medicationType')
 
   return (
-    <Flex align="center" direction="row">
+    <Flex align="end" direction="row">
       <YesNoSelect
-        field='medicationType'
+        field="medicationType"
         options={[{ label: 'Prescribe', value: MedicationType.Prescribed }]}
-        onChange={(value) => form.setValue('medicationType', value as MedicationType)}
+        onChange={(value) =>
+          form.setValue('medicationType', value as MedicationType)
+        }
         defaultValue={MedicationType.Prescribed}
         resetOnSameValue
       />
@@ -38,12 +40,10 @@ const TogglePrescribed = () => {
 
       <Flex className="pl-1">
         <YesNoSelect
-          field='medicationType'
+          field="medicationType"
           options={[{ label: 'Home', value: MedicationType.Home }]}
           onChange={(value) => {
             form.setValue('medicationType', value as MedicationType)
-            form.setValue('prescribedStatus', '')
-            form.setValue('pharmacyNcpdpId', '')
           }}
           defaultValue={MedicationType.Home}
           resetOnSameValue

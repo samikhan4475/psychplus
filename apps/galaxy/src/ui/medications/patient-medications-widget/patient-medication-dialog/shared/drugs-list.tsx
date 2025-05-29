@@ -9,10 +9,15 @@ import { useCodesetCodes } from '@/hooks'
 import { DrugInfo } from '@/types'
 import { cn } from '@/utils'
 import { useStore } from '../../store'
-import { MedicationType } from '../../types'
 import { PatientMedicationSchemaType } from '../patient-medication-form'
 
-const DrugsList = () => {
+const DrugsList = ({
+  onSelect,
+  replaceIndex,
+}: {
+  onSelect?: (drug: DrugInfo) => void
+  replaceIndex?: number | null
+}) => {
   const { drugsData, loadingDrugs } = useStore((state) => ({
     drugsData: state.drugsData,
     loadingDrugs: state.loadingDrugs,
@@ -55,10 +60,19 @@ const DrugsList = () => {
       endTime: '',
       sigDescription: '',
       drugCode: option?.representativeErxPackagedDrug?.packagedDrugId ?? '',
+      DeaSchedule:
+        option?.representativeErxPackagedDrug?.federalDeaClassCode ?? '',
       medicationStatus: 'Active',
     }
-    drugs.push(defaultValues)
-    form.setValue('drugs', drugs)
+    if (replaceIndex !== null && replaceIndex !== undefined) {
+      const updated = [...drugs]
+      updated[replaceIndex] = defaultValues
+      form.setValue('drugs', updated)
+    } else {
+      drugs.push(defaultValues)
+      form.setValue('drugs', drugs)
+    }
+    onSelect?.(option)
   }
   if (loadingDrugs) {
     return <LoadingPlaceholder className="mt-5" />
@@ -88,9 +102,10 @@ const DrugsList = () => {
               if (!isDisabled) handleValueChange(option)
             }}
             className={cn(
-              `hover:bg-pp-bg-accent rounded-2 ${isDisabled
-                ? 'cursor-not-allowed opacity-30'
-                : 'cursor-pointer opacity-100'
+              `hover:bg-pp-bg-accent rounded-2 ${
+                isDisabled
+                  ? 'cursor-not-allowed opacity-30'
+                  : 'cursor-pointer opacity-100'
               }`,
             )}
           >

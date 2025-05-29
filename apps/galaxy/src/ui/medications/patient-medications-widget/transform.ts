@@ -21,12 +21,13 @@ const transformInOptions = (
 const transformOutPatientMedication = (
   {
     medicationType,
-    pharmacyNcpdpId,
+    pharmacyId,
     prescribedStatus,
     drugs = [],
+    pharmacyNcpdpId,
   }: PatientMedicationSchemaType,
   patientId: number,
-  appointmentId?: string,
+  appointmentId: number,
 ): Partial<Prescription>[] =>
   drugs?.map((drug) =>
     sanitizeFormData({
@@ -34,20 +35,19 @@ const transformOutPatientMedication = (
       patientId,
       prescriptionDate: drug?.prescriptionDate ?? '',
       prescriptionType: drug?.prescriptionType ?? '',
-      locationId: 'e7e7c086-780f-4e65-9277-7568da8c1686',
+      locationId: 'EA646A1B-B967-4F92-A48C-EFF413B73762',
       dataSourceType: drug?.dataSourceType ?? '',
       prescribingStaffId: Number(drug.prescribingStaffId),
+      pharmacyNcpdpId : pharmacyNcpdpId,
       prescribedStatus:
         medicationType === MedicationType.Prescribed
           ? prescribedStatus
           : undefined,
       prescriptionStatusType: drug.prescriptionStatusType,
       notes: drug.instructionOrNotes,
-      appointmentId: 105471,
-      pharmacyNcpdpId:
-        medicationType === MedicationType.Prescribed
-          ? pharmacyNcpdpId
-          : undefined,
+      appointmentId,
+      pharmacyId:
+        medicationType === MedicationType.Prescribed ? pharmacyId : undefined,
       recordStatus: drug?.recordStatus,
       prescriptionDrugs: [
         sanitizeFormData({
@@ -66,10 +66,12 @@ const transformOutPatientMedication = (
           isMedicationAsNeeded: drug?.isMedicationAsNeeded,
           reasonForPrn: drug.reasonForPrn,
           startDateTime: `${drug.startDateTime}T${drug.startTime}:00Z`,
-          endDateTime: `${drug.endDateTime}T${drug.endTime}:00Z`,
+          endDateTime: drug.endDateTime && drug.endTime ?  `${drug.endDateTime}T${drug.endTime}:00Z` : '',
           isControlledSubstance: drug?.isControlledSubstance,
           DrugCodeQualifier: drug?.DrugCodeQualifier ?? 'ND',
           drugCode: drug?.drugCode ?? '',
+          DeaSchedule: drug?.DeaSchedule,
+          DrugNote:drug.instructionOrNotes
         }),
       ],
       prescriptionSignatures: [

@@ -9,7 +9,7 @@ const SigField = ({ index }: DrugBlockProps) => {
   const field = getFieldName(index, 'sigDescription')
 
   return (
-    <Flex direction="column" width="45%">
+    <Flex direction="column" width="65%">
       <BlockLabel name="SigField" orientation="vertical" required>
         Sig
       </BlockLabel>

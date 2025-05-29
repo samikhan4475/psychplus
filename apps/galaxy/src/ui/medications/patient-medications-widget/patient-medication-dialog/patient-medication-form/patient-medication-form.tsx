@@ -1,101 +1,139 @@
 'use client'
 
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Flex, Grid, ScrollArea } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FormContainer } from '@/components'
 import { AlertDialog } from '@/ui/alerts'
-import { getIcd10Diagnosis } from '@/ui/diagnosis/diagnosis/actions/get-service-diagnosis'
 import { addPatientPrescriptions, prescribingSignInAction } from '../../actions'
 import { updatePatientMedicationsAction } from '../../actions/update-patient-medication'
 import { useStore } from '../../store'
 import { transformOutPatientMedication } from '../../transform'
-import { Prescription } from '../../types'
-import { getFieldName, getInitialValuesPatientMedication } from '../../utils'
-import { FavoriteView, SearchDrugs } from '../shared'
-import { DrugInteractionAccordian } from './drug-interaction-accordian'
-import { PrescriptionAccordian } from './prescription-accordian'
-import { SaveButton } from './save-button'
+import { Prescription, TransmitResult } from '../../types'
+import { getInitialValuesPatientMedication } from '../../utils'
+import { ConfirmMedication } from '../confirm-medication'
+import { CredentialsVerificationForm } from '../credentials-verification'
+import { PrescriptionComplete } from '../prescription-complete'
+import { ReviewPrescription } from '../review-prescription'
+import { Step, StepComponentProps } from '../types'
+import { FormFields } from './form-fields'
 import { PatientMedicationSchemaType, schema } from './schema'
-import { SignButton } from './sign-button'
-import { TogglePrescribed } from './toggle-prescribed'
 
-interface PatientMedicationFormProps {
+interface PatientMedicationFormProps extends StepComponentProps {
   onClose?: (updateLocation?: PatientMedicationSchemaType) => void
   prescription?: Prescription
   patientId: number
+  transmissionResult?: TransmitResult[]
 }
 
 const PatientMedicationForm = ({
   onClose,
   prescription,
   patientId,
+  ...stepProps
 }: PatientMedicationFormProps) => {
-  const { refetch, setDiagnosisLoading } = useStore((state) => ({
+  const { refetch } = useStore((state) => ({
     refetch: state.refetch,
-    setDiagnosisLoading: state.setDiagnosisLoading,
   }))
+  const Component = useMemo(() => Components[stepProps.step], [stepProps.step])
   const [isOpen, setIsOpen] = useState(false)
+  const [isTransmitting, setIsTransmitting] = useState(false)
+  const [prescriptions, setPrescriptions] = useState<Prescription[]>([])
   const [errorMessage, setErrorMessage] = useState('')
   const searchParams = useSearchParams()
-  const appointmentId = searchParams.get('id') ?? ''
+  const appointmentId = searchParams.get('id') ?? 105471
+  const [wasCompleteStep, setWasCompleteStep] = useState(false)
   const form = useForm<PatientMedicationSchemaType>({
     resolver: zodResolver(schema),
     mode: 'onChange',
     defaultValues: getInitialValuesPatientMedication(prescription),
   })
+  const [transmissionResult, setTransmissionResult] = useState<Prescription[]>([])
+
+  const { setValue } = form
+
+  useEffect(() => {
+    if (prescription) {
+      setPrescriptions([prescription])
+    }
+  }, [prescription])
+
+  useEffect(() => {
+    if (prescription?.pharmacyNcpdpId) {
+      setValue('pharmacyNcpdpId', prescription.pharmacyNcpdpId)
+    }
+    if (prescription?.prescriptionPharmacyName) {
+      setValue(
+        'prescriptionPharmacyName',
+        prescription.prescriptionPharmacyName,
+      )
+    }
+  }, [prescription, setValue])
+
+  useEffect(() => {
+    if (stepProps.step === Step.Complete) {
+      setWasCompleteStep(true)
+    }
+  }, [stepProps.step])
+
+  useEffect(() => {
+    if (stepProps.step === Step.Form && wasCompleteStep) {
+      form.reset(getInitialValuesPatientMedication())
+      setPrescriptions([])
+      setWasCompleteStep(false)
+    }
+  }, [stepProps.step, wasCompleteStep])
+
+  const addUpdatePrecriptions = (payloads: Partial<Prescription>[]) =>
+    Promise.all(
+      payloads.map(async (item, ind) => {
+        if (item?.id) {
+          const response = await updatePatientMedicationsAction({
+            patientId,
+            id: item.id,
+            payload: item,
+          })
+
+          if (response?.state === 'error') return response
+          if (response?.data) {
+            const index = prescriptions?.findIndex(
+              (prescription) => prescription?.id === response.data.id,
+            )
+            if (index !== -1) {
+              prescriptions[index] = response.data
+              setPrescriptions([...prescriptions])
+            }
+          }
+        } else {
+          const response = await addPatientPrescriptions(item)
+          if (response?.state === 'error') return response
+          if (response?.data) {
+            const { drugs } = getInitialValuesPatientMedication(response?.data)
+            form.setValue(`drugs.${ind}`, drugs?.[0])
+            setPrescriptions((prev) => [...prev, response.data])
+          }
+        }
+      }),
+    )
+
   const onSubmit = async (data: PatientMedicationSchemaType) => {
-    const payload = transformOutPatientMedication(
+    const payloads = transformOutPatientMedication(
       data,
       patientId,
-      appointmentId,
+      Number(appointmentId),
     )
-    const results = await Promise.all(
-      payload.map(async (payload, index) =>
-        payload?.id
-          ? updatePatientMedicationsAction({
-            patientId,
-            id: payload?.id,
-            payload,
-          }).then(async (res) => {
-            if (res.state === 'error') return res
-            console.log('Update', {
-              payload,
-              response: res?.data,
-            })
-            if (payload?.id && data.isSigning) {
-              return await prescribingSignInAction([payload?.id])
-            }
-            return res
-          })
-          : addPatientPrescriptions(payload).then(async (res) => {
-            if (res.state === 'error') return res
-            console.log('Create', {
-              payload,
-              response: res?.data,
-            })
-            if (res?.data?.id && data.isSigning) {
-              const drug = getInitialValuesPatientMedication(res?.data)
-              form.setValue(`drugs.${index}`, drug?.drugs?.[0])
-              return await prescribingSignInAction([res?.data?.id])
-            }
-            return res
-          }),
-      ),
-    )
-    const errorResult = results.find((result) => result.state === 'error')
+    const results = await addUpdatePrecriptions(payloads)
+    const errorResult = results.find((result) => result?.state === 'error')
     if (errorResult) {
-      if (errorResult.status) {
-        const message = errorResult?.error
-        setErrorMessage(message)
-        form.setValue('isSigning', false)
-        return setIsOpen(true)
-      }
-      form.setValue('isSigning', false)
+      form.setValue('isReviewing', false)
       return toast.error(errorResult?.error)
+    }
+
+    if (data?.isReviewing) {
+      form.setValue('isReviewing', false)
+      return stepProps.onJump(Step.Review)
     }
     toast.success(
       `Prescription ${prescription?.id ? 'Updated' : 'Added'} Successfully`,
@@ -103,38 +141,61 @@ const PatientMedicationForm = ({
     refetch()
     onClose?.()
   }
+  const handleTransmit = async () => {
+    setIsTransmitting(true)
 
-  const diagnosisCodes = useMemo(
-    () =>
-      prescription?.prescriptionDiagnoses?.map((item) =>
-        String(item.diagnosisCode),
-      ) ?? [],
-    [prescription?.prescriptionDiagnoses],
-  )
-  useEffect(() => {
-    if (diagnosisCodes?.length) {
-      setDiagnosisLoading(true)
-      getIcd10Diagnosis({ DiagnosisCodes: diagnosisCodes })
-        .then((res) => {
-          if (res.state === 'error') {
-            setDiagnosisLoading(false)
-            return toast.error(res.error)
-          }
-          const diagnosisData = res?.data?.map((item) => ({
-            id: prescription?.prescriptionDiagnoses.find(
-              (el) => el.diagnosisCode === item.code,
-            )?.id,
-            code: item?.code,
-            description: item?.description,
-          }))
-          form.setValue(getFieldName(0, 'diagnosis'), diagnosisData)
-        })
-        .finally(() => {
-          setDiagnosisLoading(false)
-        })
+    const categorizePrescriptions = (prescriptions: Prescription[]) => {
+      const nonControlled: Prescription[] = []
+      const controlled: Prescription[] = []
+      prescriptions.forEach((item) => {
+        if (!Array.isArray(item.prescriptionDrugs)) return
+        const hasControlled = item.prescriptionDrugs.some(
+          (d) => d?.isControlledSubstance,
+        )
+        if (hasControlled) controlled.push(item)
+        else nonControlled.push(item)
+      })
+
+      return { nonControlled, controlled }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [diagnosisCodes])
+
+    const transmitBatch = async (batch: Prescription[]) => {
+      if (!batch.length) return 'success'
+      const ids = batch.map((p) => p.id)
+      const response = await prescribingSignInAction(ids)
+
+      if (response.state === 'error') {
+        toast.error(response.error)
+        return 'error'
+      }
+
+      const validationErrors = response.data?.find(
+        (d) => d.validationErrors?.length,
+      )?.validationErrors
+      if (validationErrors) {
+        setIsOpen(true)
+        setErrorMessage(validationErrors.join('\n') ?? '')
+        return 'error'
+      }
+      setTransmissionResult(response.data)
+
+      toast.success('Transmitted Successfully')
+      return 'success'
+    }
+
+    const { nonControlled, controlled } = categorizePrescriptions(prescriptions)
+
+    const result = await transmitBatch(nonControlled)
+    if (result === 'error') {
+      setIsTransmitting(false)
+      return
+    }
+
+    stepProps.onJump(
+      controlled.length ? Step.CredentialVerification : Step.Complete,
+    )
+    setIsTransmitting(false)
+  }
 
   return (
     <FormContainer
@@ -142,26 +203,20 @@ const PatientMedicationForm = ({
       form={form}
       onSubmit={onSubmit}
     >
-      <Flex gap="2" justify="between" direction="column" className="relative">
-        <Grid columns="2" gap="2">
-          <Flex direction="column" gap="1" flexGrow="1">
-            <TogglePrescribed />
-            < SearchDrugs />
-            <ScrollArea
-              scrollbars="vertical"
-              className="max-h-[70dvh] overflow-visible pr-2"
-            >
-              <DrugInteractionAccordian />
-              <PrescriptionAccordian />
-            </ScrollArea>
-          </Flex>
-          <FavoriteView />
-        </Grid>
-        <Flex gap="2" justify="end">
-          <SaveButton />
-          <SignButton onSubmit={onSubmit} />
-        </Flex>
-      </Flex >
+      <Component
+        {...stepProps}
+        prescriptions={prescriptions}
+        onTransmit={handleTransmit}
+        isTransmiting={isTransmitting}
+        transmissionResult={transmissionResult}
+        onClose={onClose}
+        onJump={(nextStep) => {
+          if (stepProps?.step === Step.Form && nextStep === Step.Review) {
+            return form.handleSubmit(onSubmit)()
+          }
+          stepProps.onJump(nextStep)
+        }}
+      />
       <AlertDialog
         title="Validation Error"
         message={errorMessage}
@@ -169,8 +224,15 @@ const PatientMedicationForm = ({
         onOpenChange={setIsOpen}
         disableClose
       />
-    </FormContainer >
+    </FormContainer>
   )
 }
 
+const Components: Record<Step, React.ComponentType<StepComponentProps>> = {
+  [Step.Form]: FormFields,
+  [Step.Review]: ReviewPrescription,
+  [Step.CredentialVerification]: CredentialsVerificationForm,
+  [Step.OrderConfirm]: ConfirmMedication,
+  [Step.Complete]: PrescriptionComplete,
+}
 export { PatientMedicationForm }

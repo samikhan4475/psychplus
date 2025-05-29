@@ -1,4 +1,4 @@
-import { Metadata, Sort } from '@/types'
+import { LegalName, Metadata, PatientAddress, Sort } from '@/types'
 import { PatientMedicationFilterSchemaType } from './filter-form'
 
 enum PrescribedStatus {
@@ -8,6 +8,29 @@ enum PrescribedStatus {
 enum MedicationType {
   Prescribed = 'prescribed',
   Home = 'home',
+}
+interface DrugDetail {
+  drugName?: string
+  doseStrength: string
+  doseUnit: string
+  drugForm: string
+  durationDays: string
+  durationUnit: string
+  route: string
+  frequency: string
+  prn: string
+  quantity: string
+  sig: string
+  refills: string
+  medicationStatus: string
+  startDateTime: string
+  endDateTime: string
+  substitution: string
+  prescriber: string
+  npi: string
+  dea: string
+  instructionsNotes: string
+  diagnosis: string
 }
 enum RecordStatus {
   Active = 'Active',
@@ -72,6 +95,7 @@ interface PatientMedication {
   medicationDetails: MedicationDetails
   prescriptionStatus: PrescriptionStatus
   isControlledSubstance: boolean
+  transactionStatus: string
 }
 
 interface GetPatientMedicationsResponse {
@@ -125,11 +149,28 @@ interface Prescription {
   transactionStatusReason: string
   metadata?: Metadata
   recordStatus: string
+  pharmacyRecordStatus: string
+  pharmacyId: string
+  prescriptionPharmacyName: string
+  pharmacySource: string
+  pharmacyStoreNumber: string
+  pharmacyActiveStartTime: string
+  pharmacyActiveEndTime: string
+  pharmacyServiceLevel: string
+  providerName: LegalName
+  providerNpi: string
+  providerDea: string
+  pharmacyAddress: Partial<PatientAddress>
+  pharmacyPhone: string
+  patientHeight: number
+  patientWeight: number
   prescriptionDrugs: Partial<PrescriptionDrug>[]
   prescriptionSignatures: Partial<PrescriptionSignature>[]
   prescriptionDiagnoses: Partial<PrescriptionDiagnosis>[]
   testPayloadResponse: string
   validationErrors: string[]
+  pharmacyFax: string
+  writtenDate: string
 }
 
 interface PrescriptionDrug {
@@ -158,6 +199,10 @@ interface PrescriptionDrug {
   prescriptionStatusTypeId: number
   medicationDetails: MedicationDetails
   isControlledSubstance: boolean
+  DrugNote: string
+  drugNote: string
+  DeaSchedule: string
+  deaSchedule: string
 }
 
 interface MedicationDetails {
@@ -194,6 +239,7 @@ interface PrescriptionSignature {
   durationUnitCode: string
   prescriptionId: string
   prescriptionDrugId: string
+  DrugNote: string
 }
 
 interface PrescriptionDiagnosis {
@@ -205,6 +251,27 @@ interface PrescriptionDiagnosis {
   metadata?: Metadata
 }
 
+interface PrescriptionSignResponse {
+  signatureType: string | number
+  pending: boolean
+}
+
+interface SelfPollStatusPayloadProps {
+  prescriptionDrugIds: string[]
+  otpCode?: string
+  isSourcePharmacyNotification: boolean
+}
+
+interface FavoriteMedication {
+  id?: string
+  staffId?: string
+  medicationName?: string
+  partialMedicationName?: string
+}
+interface TransmitResult {
+  id: string
+  writtenDate: string
+}
 export {
   PrescribedStatus,
   MedicationType,
@@ -218,4 +285,9 @@ export {
   type GetPatientMedicationsParams,
   type PatientMedicationFilterValues,
   type DrugBlockProps,
+  type DrugDetail,
+  type PrescriptionSignResponse,
+  type SelfPollStatusPayloadProps,
+  type FavoriteMedication,
+  type TransmitResult,
 }

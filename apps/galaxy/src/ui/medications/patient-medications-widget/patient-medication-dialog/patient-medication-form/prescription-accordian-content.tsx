@@ -1,8 +1,9 @@
 'use client'
 
 import { Flex } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import { BlockLabel } from '@/components'
-import { DrugBlockProps } from '../../types'
+import { DrugBlockProps, MedicationType } from '../../types'
 import { DoseStrengthField } from './dose-strength-field'
 import { DoseUnitField } from './dose-unit-field'
 import { DrugFormField } from './drug-form-field'
@@ -25,42 +26,52 @@ import { SubstitutionField } from './substitution-field'
 import { WorkingDiagnosis } from './working-diagnosis'
 
 const PrescriptionAccordianContent = ({ index }: DrugBlockProps) => {
+  const { watch } = useFormContext()
+  const medicationType = watch('medicationType')
+  const prnShow = medicationType === MedicationType.Home
+
   return (
     <Flex className="bg-whiteA-12 mt-2" gap="2" direction="column">
       <Flex gap="2">
         <DoseStrengthField index={index} />
-        <DoseUnitField index={index} />
         <DrugFormField index={index} />
+        <RouteField index={index} />
       </Flex>
       <Flex gap="2">
         <DurationField index={index} />
         <DurationUnitField index={index} />
-        <RouteField index={index} />
         <FrequencyField index={index} />
       </Flex>
       <Flex align="end" gap="2">
-        <PRNField index={index} />
-        <PrnReasonField index={index} />
+        {prnShow && (
+          <>
+            <PRNField index={index} />
+            <PrnReasonField index={index} />
+          </>
+        )}
+
         <QuantityField index={index} />
+        <DoseUnitField index={index} />
+        <RefillField index={index} />
+        <SubstitutionField index={index} />
+
       </Flex>
       <Flex gap="2">
         <SigField index={index} />
-        <RefillField index={index} />
         <MedicationStatusField index={index} />
       </Flex>
 
       <Flex gap="2">
         <StartDateTime index={index} />
-        <EndDateTime index={index} />
-      </Flex>
-
-      <Flex gap="2">
+        
+        {
+          prnShow && <EndDateTime index={index} />
+        }
         <PrescriberField index={index} />
-        <SubstitutionField index={index} />
       </Flex>
       <InstructionsOrNotesField index={index} />
       <Flex width="100%" direction="column">
-        <BlockLabel>Diaganosis</BlockLabel>
+        <BlockLabel>Diagnosis</BlockLabel>
         <SearchDiagnosis index={index} />
         <WorkingDiagnosis index={index} />
       </Flex>

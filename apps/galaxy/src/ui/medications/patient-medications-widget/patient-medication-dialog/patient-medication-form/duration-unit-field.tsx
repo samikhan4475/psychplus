@@ -15,7 +15,7 @@ const DurationUnitField = ({ index }: DrugBlockProps) => {
 
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel required>Duration Unit</FormFieldLabel>
+      <FormFieldLabel>Duration Unit</FormFieldLabel>
       <CodesetSelect
         name={field}
         placeholder="Select"

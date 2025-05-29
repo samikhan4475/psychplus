@@ -8,14 +8,15 @@ const QuantityField = ({ index }: DrugBlockProps) => {
   const field = getFieldName(index, 'quantityValue')
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel>Quantity</FormFieldLabel>
+      <FormFieldLabel required>Quantity</FormFieldLabel>
       <NumericInput
         placeholder="Quantity"
         field={field}
         className="h-6 w-full"
         prefix=""
-        decimalScale={0}
+        decimalScale={3}
         allowNegative={false}
+        formatOnBlurOnly={true}
       />
     </FormFieldContainer>
   )

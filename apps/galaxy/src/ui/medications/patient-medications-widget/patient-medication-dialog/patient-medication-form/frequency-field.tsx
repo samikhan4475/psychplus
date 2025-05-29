@@ -15,7 +15,7 @@ const FrequencyField = ({ index }: DrugBlockProps) => {
 
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel required>Frequency</FormFieldLabel>
+      <FormFieldLabel>Frequency</FormFieldLabel>
       <CodesetSelect
         placeholder="Select"
         name={field}

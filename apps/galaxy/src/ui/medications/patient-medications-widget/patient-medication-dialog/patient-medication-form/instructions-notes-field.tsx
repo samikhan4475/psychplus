@@ -11,7 +11,8 @@ const InstructionsOrNotesField = ({ index }: DrugBlockProps) => {
       <TextInput
         field={getFieldName(index, 'instructionOrNotes')}
         placeHolder="Add notes"
-        className="mt-1 h-6 w-full "
+        className="mt-1 h-6 w-full resize-y"
+        maxLength={210}
       />
     </FormFieldContainer>
   )

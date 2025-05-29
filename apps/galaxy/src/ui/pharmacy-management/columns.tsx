@@ -118,6 +118,30 @@ const columns: ColumnDef<Pharmacy>[] = [
       </TextCell>
     ),
   },
+  {
+    accessorKey: 'activeStartDate',
+    size: 100,
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Active Start Date" />
+    ),
+    cell: ({ row }) => (
+      <TextCell className="truncate">
+        {row?.original?.enabledDateFrom && formatDate(row?.original.enabledDateFrom)}
+      </TextCell>
+    ),
+  },
+  {
+    accessorKey: 'activeEndDate',
+    size: 100,
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Active End Date" />
+    ),
+    cell: ({ row }) => (
+      <TextCell className="truncate">
+        {row?.original?.enabledDateTo && formatDate(row?.original.enabledDateTo)}
+      </TextCell>
+    ),
+  },
 ]
 
 export { columns }

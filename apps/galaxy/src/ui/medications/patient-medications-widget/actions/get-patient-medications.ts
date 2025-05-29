@@ -11,6 +11,9 @@ const getPatientMedicationsAction = async ({
 }: GetPatientMedicationsParams): Promise<
   api.ActionResult<PatientMedication[]>
 > => {
+  const payload = {
+    ...formValues
+  };
   const offset = (page - 1) * PATIENT_MEDICATIONS_TABLE_PAGE_SIZE
 
   const url = new URL(api.GET_PATIENT_MEDICATIONS())
@@ -24,7 +27,7 @@ const getPatientMedicationsAction = async ({
   }
   const response = await api.POST<PatientMedication[]>(
     url?.toString(),
-    formValues,
+    payload,
   )
 
   if (response.state === 'error') {

@@ -13,8 +13,8 @@ const updatePatientMedicationsAction = async ({
   patientId,
   id,
   payload,
-}: GetPatientMedicationsParams): Promise<api.ActionResult<Prescription[]>> => {
-  const response = await api.PUT<Prescription[]>(
+}: GetPatientMedicationsParams): Promise<api.ActionResult<Prescription>> => {
+  const response = await api.PUT<Prescription>(
     api.UPDATE_PATIENT_MEDICATION(patientId, id),
     payload,
   )

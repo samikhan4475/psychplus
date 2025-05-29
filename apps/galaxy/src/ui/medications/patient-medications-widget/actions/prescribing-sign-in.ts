@@ -10,18 +10,11 @@ const prescribingSignInAction = async (
     api.PATIENT_MEDICATION_SIGN_IN,
     id,
   )
+
   if (response.state === 'error') {
     return {
       state: 'error',
       error: response.error,
-    }
-  }
-  if (response?.data?.[0]?.validationErrors?.length) {
-    const validationErrors = response?.data?.[0]?.validationErrors?.join('\n')
-    return {
-      state: 'error',
-      status: 1,
-      error: validationErrors,
     }
   }
 

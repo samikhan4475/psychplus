@@ -14,7 +14,7 @@ const DrugFormField = ({ index }: DrugBlockProps) => {
   const field = getFieldName(index, 'doseFormCode')
   return (
     <FormFieldContainer>
-      <FormFieldLabel required>Drug Form</FormFieldLabel>
+      <FormFieldLabel>Drug Form</FormFieldLabel>
       <CodesetSelect
         className="h-6 w-[155px]"
         name={field}

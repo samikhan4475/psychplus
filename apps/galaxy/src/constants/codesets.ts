@@ -62,6 +62,7 @@ const CODESETS = {
   FileFormatType: 'FileFormatType',
   ProofingStatus: 'ProofingStatus',
   MedicationStatus: 'MedicationStatus',
+  PrescribingTransactionStatus:'PrescribingTransactionStatus',
   PaymentType: 'PaymentType',
   ChargePerType: 'ChargePerType',
   MembershipType: 'MembershipType',

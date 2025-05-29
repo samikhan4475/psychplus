@@ -959,6 +959,9 @@ const TRANSFER_PROVIDER = (staffId: string, primaryRole: string) =>
   `${API_URL}/api/patients/careteam/providers/${staffId}/actions/makeprimary/${primaryRole}`
 const GET_MEDICATIONS_HISTORY = (pharmacyNotificationId: string) =>
   `${API_URL}/api/pharmacynotifications/${pharmacyNotificationId}/history/actions/search`
+const VALIDATE_USER_CREDS = `${AUTH_URL}/credentials/actions/validate`
+const SELF_PUSHSIGN_ENDPOINT = `${API_URL}/api/users/self/idproofings/action/pushsign`
+const SELF_POLLSTATUS_ENDPOINT = `${API_URL}/api/users/self/idproofings/action/pollstatus`
 const GET_PROOFING_TYPES = (userId: string) =>
   `${API_URL}/api/users/${userId}/proofingtypes`
 const GET_SELF_PROOFING_STATUS = `${API_URL}/api/users/self/idproofings`
@@ -1004,6 +1007,12 @@ const PHARMACY_CHANGE_REQUEST = (pharmacyNotificationId: string) =>
   `${API_URL}/api/pharmacynotifications/${pharmacyNotificationId}/changeresponses/actions/send`
 const MAP_PATIENTS = (pharmacyNotificationId: string, patientId: string) =>
   `${API_URL}/api/pharmacynotifications/${pharmacyNotificationId}/patients/${patientId}/actions/associate`
+const STAFF_FAVORITES_MEDICATION = (staffId: number) =>
+  `${API_URL}/api/staff/${staffId}/medications/favorites/search`
+const ADD_STAFF_FAVORITES_MEDICATION = (staffId: number) =>
+  `${API_URL}/api/staff/${staffId}/medications/favorites`
+const REMOVE_STAFF_FAVORITES_MEDICATION = (staffId: number,id:string) =>
+  `${API_URL}/api/staff/${staffId}/medications/favorites/${id}`
 const GET_STATES_PRIMARY_LOCATIONS = `${API_URL}/api/locations/actions/primaries/search`
 const VIRTUAL_PRIMARY_LOCATIONS_ENDPOINT = `${API_URL}/api/locations/actions/primaries/search`
 const ADD_VIRTUAL_PRIMARY_LOCATIONS_ENDPOINT = `${API_URL}/api/primarylocations`
@@ -1443,6 +1452,9 @@ export {
   CHANGE_PASSWORD,
   GET_WAITLIST_HISTORY_ENDPOINT,
   GET_MEDICATIONS_HISTORY,
+  VALIDATE_USER_CREDS,
+  SELF_PUSHSIGN_ENDPOINT,
+  SELF_POLLSTATUS_ENDPOINT,
   GET_PROOFING_TYPES,
   GET_SELF_PROOFING_STATUS,
   GET_USER_PROOFING_STATUS,
@@ -1453,8 +1465,11 @@ export {
   UPDATE_EXTERNAL_REFERRAL_PATIENT_ENDPOINT,
   GET_EXTERNAL_REFERRAL_PATIENTS_INFO_HISTORY,
   PHARMACY_CHANGE_REQUEST,
-  GET_ROLES_HISTORY,
   MAP_PATIENTS,
+  STAFF_FAVORITES_MEDICATION,
+  ADD_STAFF_FAVORITES_MEDICATION,
+  REMOVE_STAFF_FAVORITES_MEDICATION,
+  GET_ROLES_HISTORY,
   GET_STATES_PRIMARY_LOCATIONS,
   VIRTUAL_PRIMARY_LOCATIONS_ENDPOINT,
   ADD_VIRTUAL_PRIMARY_LOCATIONS_ENDPOINT,

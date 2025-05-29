@@ -19,6 +19,7 @@ interface NumericInputProps {
   maxLimit?: number
   allowNegative?: boolean
   containerClassName?: string
+  formatOnBlurOnly?: boolean
 }
 
 const NumericInput = ({
@@ -33,6 +34,7 @@ const NumericInput = ({
   maxLimit = 1000,
   containerClassName,
   allowNegative = true,
+  formatOnBlurOnly
 }: NumericInputProps) => {
   const form = useFormContext()
 
@@ -54,7 +56,7 @@ const NumericInput = ({
               placeholder={placeholder}
               name={fieldName}
               allowNegative={allowNegative}
-              value={formatValueWithDecimals(field.value)}
+              value={formatOnBlurOnly ? field.value : formatValueWithDecimals(field.value)}
               disabled={field.disabled || disabled}
               onValueChange={({ value }) => field.onChange(value)}
               isAllowed={(values) => {

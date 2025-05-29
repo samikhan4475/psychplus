@@ -1,15 +1,53 @@
 import { format, parseISO } from 'date-fns'
-import { SelectOptionType, SharedCode } from '@/types'
-import { getLocalCalendarDate } from '@/utils'
 import {
-  DiagnosesSchemaType,
-  PatientMedicationSchemaType,
-} from './patient-medication-dialog'
+  PatientProfile,
+  PhoneNumber,
+  SelectOptionType,
+  SharedCode,
+} from '@/types'
+import {
+  getLocalCalendarDate,
+  getMaskedPhoneNumber,
+  getPatientCity,
+  getPatientPhone,
+  getPatientPostalCode,
+  getPatientState,
+  getPatientStreet,
+} from '@/utils'
+import { PatientMedicationSchemaType } from './patient-medication-dialog'
 import { MedicationType, Prescription } from './types'
 
 const getYesNoValue = (value?: boolean) => {
   if (value === undefined) return ''
   return value ? 'yes' : 'no'
+}
+const formatDiagnosisList = (drug: Prescription): string => {
+  return (
+    drug?.prescriptionDiagnoses
+      ?.map(({ diagnosisCode, diagnosisDescription }) => {
+        return `${diagnosisCode} ${diagnosisDescription}`
+      })
+      .join(', ') ?? ''
+  )
+}
+
+const getPatientProfileAddress = (patientProfile?: PatientProfile) => {
+  return patientProfile?.contactDetails?.addresses
+    ? `${getPatientStreet(
+        patientProfile.contactDetails.addresses,
+      )}, ${getPatientCity(
+        patientProfile.contactDetails.addresses,
+      )}, ${getPatientState(
+        patientProfile.contactDetails.addresses,
+      )} ${getPatientPostalCode(patientProfile.contactDetails.addresses)}`
+    : 'N/A'
+}
+const getPatientProfilePhone = (patientProfile?: PatientProfile) => {
+  return getMaskedPhoneNumber(
+    getPatientPhone(
+      patientProfile?.contactDetails?.phoneNumbers as PhoneNumber[],
+    ) as string,
+  )
 }
 
 const getDoseQuantity = (codes: SharedCode[], value?: string) => {
@@ -25,30 +63,32 @@ const getFieldName = <
   return `drugs.${drugIndex}.${nestedFieldName}`
 }
 const getIsoStringtoUtcDateTime = (medication?: Prescription) => {
-  const prescriptionDrug = medication?.prescriptionDrugs?.[0] ?? {}
-  if (!medication) {
-    return undefined
+  if (!medication) return undefined
+
+  const prescriptionDrug = medication.prescriptionDrugs?.[0]
+  const getDateTime = (isoDate?: string) => {
+    if (!isoDate || isNaN(Date.parse(isoDate))) return undefined
+    return {
+      date: getLocalCalendarDate(isoDate),
+      time: format(parseISO(isoDate), 'HH:mm'),
+    }
   }
-  const getDateTime = (isoDate: string) => ({
-    date: getLocalCalendarDate(isoDate),
-    time: format(parseISO(isoDate), 'HH:mm'),
-  })
-  const startDateTime = getDateTime(prescriptionDrug?.startDateTime ?? '')
-  const endDateTime = getDateTime(prescriptionDrug?.endDateTime ?? '')
+
+  const startDateTime = getDateTime(prescriptionDrug?.startDateTime)
+  const endDateTime = getDateTime(prescriptionDrug?.endDateTime)
 
   return { startDateTime, endDateTime }
 }
 
 const getInitialValuesPatientMedication = (
   medication?: Prescription | undefined,
-  diagnosis?: DiagnosesSchemaType[],
 ): PatientMedicationSchemaType => {
   if (!medication) {
     return {
       isSigning: false,
       medicationType: MedicationType?.Prescribed,
       prescribedStatus: '',
-      pharmacyNcpdpId: '',
+      pharmacyId: '',
       drugs: [],
     }
   }
@@ -61,7 +101,7 @@ const getInitialValuesPatientMedication = (
     medicationType: medication?.prescribedStatus
       ? MedicationType.Prescribed
       : MedicationType.Home,
-    pharmacyNcpdpId: medication?.pharmacyNcpdpId ?? '',
+    pharmacyId: medication?.pharmacyId ?? '',
     prescribedStatus: medication?.prescribedStatus ?? '',
     drugs: [
       {
@@ -78,6 +118,7 @@ const getInitialValuesPatientMedication = (
         prescribableDrugDesc: prescriptionDrug?.drugDescription ?? '',
         DrugCodeQualifier: prescriptionDrug?.drugCodeQualifier ?? '',
         doseFormCode: prescriptionSignature?.doseFormCode ?? '',
+        DeaSchedule: prescriptionDrug?.deaSchedule,
         doseFrequencyCode: prescriptionSignature?.doseFrequencyCode ?? '',
         doseRouteCode: prescriptionSignature?.doseRouteCode ?? '',
         doseStrength: prescriptionSignature?.doseStrength ?? '',
@@ -97,7 +138,7 @@ const getInitialValuesPatientMedication = (
         isSubstitutionsAllowed:
           getYesNoValue(prescriptionDrug?.isSubstitutionsAllowed) ?? '',
 
-        prescriptionStatusType: medication?.prescriptionStatusType ?? '',
+        prescriptionStatusType: medication?.prescriptionStatusType != null ? String(medication.prescriptionStatusType) : '',
         quantityValue: String(prescriptionDrug?.quantityValue ?? ''),
         reasonForPrn: prescriptionDrug?.reasonForPrn ?? '',
         quantityUnitOfMeasureCode:
@@ -106,19 +147,20 @@ const getInitialValuesPatientMedication = (
           ? Number(prescriptionDrug.rxNormCode)
           : undefined,
         diagnosis:
-          diagnosis ??
           medication?.prescriptionDiagnoses?.map((diagnosis) => ({
             id: String(diagnosis?.id ?? ''),
             code: diagnosis?.diagnosisCode ?? '',
-            description: 'ABF',
+            description: diagnosis?.diagnosisDescription ?? '',
             prescriptionId: String(diagnosis?.prescriptionId ?? ''),
-          })),
+          })) ?? [],
       },
     ],
   }
 }
 const getMedicationStatusLabel = (options: SelectOptionType[], value: string) =>
   options?.find((opt) => opt.value === value)?.label
+const formatHeightWeight = (height?: number, weight?: number): string =>
+  !height && !weight ? 'N/A' : `${height ?? 'N/A'}/${weight ?? 'N/A'}`
 
 const getSurescriptsCode = (codes: SharedCode[], doseUnitCode?: string) => {
   const matchedCode = codes?.find(
@@ -145,4 +187,8 @@ export {
   getInitialValuesPatientMedication,
   getYesNoValue,
   getSurescriptsCode,
+  formatDiagnosisList,
+  getPatientProfileAddress,
+  getPatientProfilePhone,
+  formatHeightWeight
 }

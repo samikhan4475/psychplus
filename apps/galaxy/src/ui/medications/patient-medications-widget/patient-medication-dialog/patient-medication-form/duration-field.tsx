@@ -13,7 +13,7 @@ const DurationField = ({ index }: DrugBlockProps) => {
   const field = getFieldName(index, 'duration')
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel required>Duration</FormFieldLabel>
+      <FormFieldLabel>Duration</FormFieldLabel>
       <NumberInput
         format="##"
         placeholder="Duration"

@@ -2,8 +2,8 @@
 
 import { Fragment, useMemo, useState } from 'react'
 import { useParams } from 'next/navigation'
-import { Dialog, IconButton, Tooltip } from '@radix-ui/themes'
-import { RefreshCw } from 'lucide-react'
+import { Button, Dialog, IconButton, Tooltip } from '@radix-ui/themes'
+import { EditIcon, RefreshCw } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { PropsWithRow } from '@/components'
 import { FEATURE_FLAGS } from '@/constants'
@@ -15,7 +15,11 @@ import { ScriptSureIframeDialog } from '../script-sure-iframe-dialog'
 import { useStore } from '../store'
 import { PatientMedication, PatientPrescriptionStatus } from '../types'
 
-const RowActionEdit = ({ row }: PropsWithRow<PatientMedication>) => {
+interface RowActionEditProps extends PropsWithRow<PatientMedication> {
+  onEditClick: (medication: PatientMedication) => void
+}
+
+const RowActionEdit = ({ row, onEditClick }: RowActionEditProps) => {
   const { prescriptionStatusTypeId, externalPrescriptionId: prescriptionId } =
     row.original
   const { id: patientId = '' } = useParams<{ id: string }>()
@@ -53,21 +57,18 @@ const RowActionEdit = ({ row }: PropsWithRow<PatientMedication>) => {
     setIsOpen(true)
     setIsLoading(false)
   }
-
   if (!isFeatureFlagEnabled) {
     return (
-      <PatientMedicationDialog
-        title="Edit Medication"
-        medication={row.original}
+     <Tooltip content="Edit">
+      <IconButton
+        size="1"
+        color="gray"
+        variant="ghost"
+        onClick={() => onEditClick(row.original)}
       >
-        <Dialog.Trigger>
-          <Tooltip content="Edit">
-            <IconButton size="1" color="gray" variant="ghost" type="button">
-              <RefreshCw size={18} color="black" />
-            </IconButton>
-          </Tooltip>
-        </Dialog.Trigger>
-      </PatientMedicationDialog>
+        <EditIcon size={18} color="black" />
+      </IconButton>
+    </Tooltip>
     )
   }
 

@@ -1,35 +1,61 @@
 'use client'
 
-import React from 'react'
-import { ScrollArea, Table, Text } from '@radix-ui/themes'
+import React, { useCallback, useEffect } from 'react'
+import { Flex, ScrollArea, Table, Text } from '@radix-ui/themes'
+import { LoadingPlaceholder } from '@/components'
+import { useStore } from '../../store'
 import { FavoriteIcon } from './favorite-icon'
 
-const favouriteDiagnosisData = [
-  { id: 1, description: 'Hypertension' },
-  { id: 2, description: 'Diabetes Mellitus' },
-  { id: 3, description: 'Asthma' },
-  { id: 4, description: 'Migraine' },
-  {
-    id: 5,
-    description: 'Chronic Kidney Disease ?',
-  },
-]
-
 const FavoriteList = () => {
+  const {
+    loadingFavorites,
+    favoritesData,
+    fetchFavoriteMedications,
+    favoritesLoaded,
+  } = useStore((state) => ({
+    loadingFavorites: state.loadingFavorites,
+    favoritesData: state.favoritesData,
+    favoritesLoaded: state.favoritesLoaded,
+    fetchFavoriteMedications: state.fetchFavoriteMedications,
+  }))
+
+  useEffect(() => {
+    if (!favoritesLoaded) {
+      fetchFavoriteMedications()
+    }
+  }, [favoritesLoaded])
+
+  if (loadingFavorites) {
+    return (
+      <Flex className="absolute inset-0 w-full items-center justify-center">
+        <LoadingPlaceholder />
+      </Flex>
+    )
+  }
+
+  if (!favoritesData || favoritesData.length === 0) {
+    return (
+      <Flex justify="center" align="center" className="h-full">
+        <Text size="2" color="gray">
+          No favorites found
+        </Text>
+      </Flex>
+    )
+  }
+
   return (
     <ScrollArea className="max-h-[300px]">
       <Table.Root>
         <Table.Body className="align-middle">
-          {favouriteDiagnosisData?.map((item) => (
+          {favoritesData.map((item) => (
             <Table.Row key={item.id}>
               <Table.Cell className="border-pp-table-border h-5 w-full cursor-pointer truncate border-b px-2 py-1">
                 <Text className="truncate text-[12px] font-medium">
-                  {item.description}
+                  {item.medicationName}
                 </Text>
               </Table.Cell>
-
               <Table.Cell className="border-pp-table-border h-5 border-b px-2 py-1 text-right">
-                <FavoriteIcon name="drug" />
+                <FavoriteIcon name={item.medicationName ?? ''} />
               </Table.Cell>
             </Table.Row>
           ))}

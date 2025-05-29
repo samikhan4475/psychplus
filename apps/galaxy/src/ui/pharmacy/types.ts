@@ -8,11 +8,13 @@ interface Pharmacy {
   pharmacyId: string
   pharmacyName: string
   pharmacyContactDetails: ContactDetails
+  ncpdpId?: string
   lastUsed: string
   isPreferred: boolean
   isFavorite: boolean
   patientId: string
   externalPharmacyId: string
+  contactDetails: ContactDetails
 }
 interface PharmacyFilter {
   id?: string

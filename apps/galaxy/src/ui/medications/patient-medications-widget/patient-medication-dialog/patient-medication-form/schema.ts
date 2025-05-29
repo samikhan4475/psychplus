@@ -1,5 +1,6 @@
 import z from 'zod'
-import { MedicationType } from '../../types'
+import { MedicationType, PrescribedStatus } from '../../types'
+import { ConfirmationMethod } from '../types'
 
 const diagnosesSchema = z.object({
   id: z.ostring().or(z.onumber()),
@@ -13,23 +14,28 @@ const schema = z
       .enum([MedicationType.Prescribed, MedicationType.Home])
       .default(MedicationType.Home),
     prescribedStatus: z.ostring(),
-    pharmacyNcpdpId: z.ostring(),
+    pharmacyId: z.ostring(),
+    prescriptionPharmacyName: z.ostring(),
+    isAuthenticated: z.boolean().optional(),
+    confirmationMethod: z
+      .enum([ConfirmationMethod.Otp, ConfirmationMethod.Authenticator])
+      .optional(),
     drugs: z.array(
       z.object({
         doseStrength: z.string().min(1, 'Required'),
+        quantityValue: z.string().min(1, 'Required'),
         id: z.ostring(),
         prescriptionDrugId: z.ostring(),
         prescriptionSignatureId: z.ostring(),
         prescriptionDate: z.ostring(),
         prescriptionType: z.ostring(),
         doseUnitCode: z.string().min(1, 'Required'),
-        doseFormCode: z.string().min(1, 'Required'),
-        duration: z.string().min(1, 'Required'),
-        durationUnitCode: z.string().min(1, 'Required'),
-        doseRouteCode: z.string().min(1, 'Required'),
+        doseFormCode: z.ostring(),
+        duration: z.ostring(),
+        durationUnitCode: z.ostring(),
+        doseRouteCode: z.ostring(),
         DrugCodeQualifier: z.ostring(),
-        doseFrequencyCode: z.string().min(1, 'Required'),
-        quantityValue: z.ostring(),
+        doseFrequencyCode: z.ostring(),
         refills: z.string().min(1, 'Required'),
         prescriptionStatusType: z.ostring(),
         dataSourceType: z.ostring(),
@@ -40,9 +46,11 @@ const schema = z
         isSubstitutionsAllowed: z.ostring(),
         startTime: z.ostring(),
         endTime: z.ostring(),
+        DeaSchedule: z.ostring(),
         quantityUnitOfMeasureCode: z.ostring(),
         reasonForPrn: z.ostring(),
         prescribingStaffId: z.string().min(1, 'Required'),
+        prescribingStaffName: z.ostring(),
         instructionOrNotes: z.ostring(),
         prescribableDrugDesc: z.ostring(),
         recordStatus: z.ostring(),
@@ -54,13 +62,15 @@ const schema = z
         diagnosis: z.array(diagnosesSchema).optional(),
       }),
     ),
+    pharmacyNcpdpId: z.ostring(),
     isSigning: z.boolean().optional(),
+    isReviewing: z.oboolean(),
   })
   .superRefine((data, ctx) => {
-    const { prescribedStatus, pharmacyNcpdpId } = data
-    if (prescribedStatus === 'Pharmacy' && !pharmacyNcpdpId) {
+    const { prescribedStatus, pharmacyId } = data
+    if (prescribedStatus === PrescribedStatus.Pharmacy && !pharmacyId) {
       ctx.addIssue({
-        path: ['pharmacyNcpdpId'],
+        path: ['pharmacyId'],
         code: z.ZodIssueCode.custom,
         message: 'Required',
       })

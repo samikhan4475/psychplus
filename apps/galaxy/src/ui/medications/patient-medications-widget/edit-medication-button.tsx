@@ -6,28 +6,28 @@ import { PropsWithRow } from '@/components'
 import { Edit2Icon } from '@/components/icons'
 import { FEATURE_FLAGS } from '@/constants'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
-import { PatientMedicationDialog } from './patient-medication-dialog'
 import { ScriptSureMedicationDialog } from './script-sure-medication-dialog'
 import { PatientMedication } from './types'
-
-const EditMedicationButton = ({ row }: PropsWithRow<PatientMedication>) => {
+import { EditIcon } from 'lucide-react'
+interface RowActionEditProps extends PropsWithRow<PatientMedication> {
+  onEditClick: (medication: PatientMedication) => void
+}
+const EditMedicationButton = ({ row, onEditClick }: RowActionEditProps) => {
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
   )
   if (!isFeatureFlagEnabled) {
     return (
-      <PatientMedicationDialog
-        title="Edit Medication"
-        medication={row.original}
-      >
-        <Tooltip content="Edit Medication">
-          <Dialog.Trigger>
-            <IconButton size="1" color="gray" variant="ghost" highContrast>
-              <Edit2Icon width={16} height={16} />
-            </IconButton>
-          </Dialog.Trigger>
-        </Tooltip>
-      </PatientMedicationDialog>
+      <Tooltip content="Edit">
+           <IconButton
+             size="1"
+             color="gray"
+             variant="ghost"
+             onClick={() => onEditClick(row.original)}
+           >
+             <EditIcon size={18} color="black" />
+           </IconButton>
+         </Tooltip>
     )
   }
 

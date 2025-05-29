@@ -8,6 +8,8 @@ interface Pharmacy {
   resourceStatus: string
   serviceLevel: string[]
   enabledDate: string
+  enabledDateFrom: string
+  enabledDateTo: string
   enabledFrom: string
   npi: string
   ncpdpId: string

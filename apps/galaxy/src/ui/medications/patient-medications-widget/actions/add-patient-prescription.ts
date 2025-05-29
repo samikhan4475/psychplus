@@ -10,7 +10,6 @@ const addPatientPrescriptions = async ({
     api.SAVE_PATIENT_PRESCRIPTIONS(Number(payload?.patientId)),
     { ...payload },
   )
-
   if (response.state === 'error') {
     return {
       state: 'error',

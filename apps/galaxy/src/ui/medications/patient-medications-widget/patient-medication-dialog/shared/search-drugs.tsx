@@ -8,8 +8,15 @@ import { useDebouncedCallback } from 'use-debounce'
 import { cn } from '@/utils'
 import { useStore } from '../../store'
 import { DrugsList } from './drugs-list'
+import { DrugInfo } from '@/types'
 
-const SearchDrugs = () => {
+const SearchDrugs = ({
+  onSelect,
+  replaceIndex,
+}: {
+  onSelect?: (drug: DrugInfo) => void
+  replaceIndex?: number | null
+}) => {
   const { loadingDrugs, fetchDrugs } = useStore((state) => ({
     fetchDrugs: state.fetchDrugs,
     loadingDrugs: state.loadingDrugs,
@@ -58,7 +65,13 @@ const SearchDrugs = () => {
               }`,
             )}
           >
-            <DrugsList />
+            <DrugsList
+              onSelect={(drug) => {
+                onSelect?.(drug)
+                setShowOptions(false)
+              }}
+              replaceIndex={replaceIndex}
+            />
           </ScrollArea>
         )}
       </Box>

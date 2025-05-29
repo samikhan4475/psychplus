@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
 import { TriangleDownIcon } from '@radix-ui/react-icons'
 import { Flex, Text } from '@radix-ui/themes'
@@ -10,6 +11,29 @@ import { OverrideInteractionCheckbox } from './override-interaction'
 import { ReasonAccordianSelect } from './reason-accordian-select'
 
 const DrugInteractionAccordian = () => {
+  const [overrides, setOverrides] = useState(
+    () => new Map(DRUG_INTERACTION_ACCORDIAN.map((el) => [el.id, false])),
+  )
+  const [overrideAll, setOverrideAll] = useState(false)
+
+  const toggleOverrideAll = () => {
+    const newValue = !overrideAll
+    const updated = new Map(
+      Array.from(overrides.keys()).map((id) => [id, newValue]),
+    )
+    setOverrides(updated)
+    setOverrideAll(newValue)
+  }
+
+  const toggleSingle = (id: number) => {
+    const updated = new Map(overrides)
+    updated.set(id, !overrides.get(id))
+    setOverrides(updated)
+
+    const allChecked = Array.from(updated.values()).every((v) => v)
+    setOverrideAll(allChecked)
+  }
+
   return (
     <Accordion.Root
       type="single"
@@ -24,7 +48,10 @@ const DrugInteractionAccordian = () => {
               Drug Interactions Found ({DRUG_INTERACTION_ACCORDIAN.length})
             </Text>
           </Accordion.Trigger>
-          <DrugInteractionFound />
+          <DrugInteractionFound
+            onToggle={toggleOverrideAll}
+            checked={overrideAll}
+          />
         </Accordion.Header>
         <Accordion.Content className="my-2 p-1">
           {DRUG_INTERACTION_ACCORDIAN.map((el) => (
@@ -44,7 +71,10 @@ const DrugInteractionAccordian = () => {
                 <X className="cursor-pointer" />
               </Flex>
               <Flex align="center" gap="2" className="pr-3">
-                <OverrideInteractionCheckbox />
+                <OverrideInteractionCheckbox
+                  checked={overrides.get(el.id) || false}
+                  onToggle={() => toggleSingle(el.id)}
+                />
                 <ReasonAccordianSelect />
               </Flex>
             </Flex>

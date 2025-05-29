@@ -1,7 +1,7 @@
 'use client'
 
 import { Box, Flex, Text } from '@radix-ui/themes'
-import { getMaskedPhoneNumber } from '@/utils'
+import { formatDate, getMaskedPhoneNumber } from '@/utils'
 import TextInputField from './text-input-field'
 import { Pharmacy } from './types'
 
@@ -60,6 +60,14 @@ const PharmacyDetailsGeneralInformationSection = ({
             pharmacy.contactDetails?.phoneNumbers?.[0]?.number,
           )}
           width="w-[300px]"
+        />
+        <TextInputField
+          label="Active Start Date"
+          value={formatDate(pharmacy.enabledDateFrom) || ''}
+        />
+         <TextInputField
+          label="Active End Date"
+          value={formatDate(pharmacy.enabledDateTo) || ''}
         />
       </Flex>
     </Box>

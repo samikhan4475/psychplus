@@ -21,7 +21,9 @@ const DoseUnitField = ({ index }: DrugBlockProps) => {
   const form = useFormContext<PatientMedicationSchemaType>()
   const field = getFieldName(index, 'doseUnitCode')
   const quantityMeasureCode = getFieldName(index, 'quantityUnitOfMeasureCode')
-  const codes = useCodesetCodes(CODESETS.PrescriptionUnitList)
+
+  const codes = useCodesetCodes(CODESETS.PrescriptionQuantityUnitOfMeasureList)
+
   const handleValueChange = (value: string) => {
     const surescriptsCode = getSurescriptsCode(codes, value)
     form.setValue(quantityMeasureCode, surescriptsCode)
@@ -30,7 +32,7 @@ const DoseUnitField = ({ index }: DrugBlockProps) => {
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel required>Dose Unit</FormFieldLabel>
+      <FormFieldLabel required>Quantity Unit</FormFieldLabel>
       <SelectInput
         field={field}
         options={getDrugUnitOptions(codes)}
