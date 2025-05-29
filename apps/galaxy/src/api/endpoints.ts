@@ -44,6 +44,7 @@ const DIAGNOSIS_SEARCH_ICD10CODES_ENDPOINT = `${API_URL}/api/metadata/icd10codes
 const ADD_MASTER_FEE_SCHEDULE_ENDPOINT = `${API_URL}/api/masterfeeschedules`
 const MASTER_FEE_SCHEDULE_ENDPOINT = (scheduleId: string) =>
   `${API_URL}/api/masterfeeschedules/${scheduleId}`
+const ADD_PREFERRED_PARTNER_ENDPOINT = `${API_URL}/api/preferredpartners`
 const ADD_ON_DRUGS_SEARCH_ENDPOINT = `${API_URL}/api/drugs/core/actions/search`
 const NOTE_DETAILS_SAVE_ENDPOINT = (id: string) =>
   `${API_URL}/api/patients/${id}/notedetails`
@@ -76,6 +77,7 @@ const METADATA_CODESET_ENDPOINT = (name: string) =>
 const METADATA_CODESET_ALL_ENDPOINT = `${API_URL}/api/metadata/codesets`
 const GET_PROVIDER_SETTINGS_ENDPOINT = `${API_URL}/api/settings/actions/search`
 const GET_STAFF_ENDPOINT = `${API_URL}/api/staff/search?includeInactive=true`
+const GET_PREFERRED_PARTNER_LIST_ENDPOINT = `${API_URL}/api/preferredpartners/actions/search`
 const GET_STAFF_HISTORY_ENDPOINT = (staffId: string) =>
   `${API_URL}/api/staff/${staffId}/history/actions/search`
 const GET_APPOINTMENT_COSIGNERS_ENDPOINT = (appointmentId: number) =>
@@ -1008,6 +1010,7 @@ const ADD_VIRTUAL_PRIMARY_LOCATIONS_ENDPOINT = `${API_URL}/api/primarylocations`
 export {
   PATIENT_MEDICATION_SIGN_IN,
   GET_PATIENT_MEDICATION_ENDPOINT,
+  GET_PREFERRED_PARTNER_LIST_ENDPOINT,
   GET_LAB_RESULTS_ENDPOINT,
   NOTE_UPLOAD_FILE,
   GET_NOTE_VIEW_ENDPOINT,
@@ -1357,6 +1360,7 @@ export {
   ADD_CODSET_CODE_ATTRIBUTES,
   UPDATE_CODSET_CODE_ATTRIBUTES,
   GET_SELF_USER_SETTINGS,
+  ADD_PREFERRED_PARTNER_ENDPOINT,
   ADD_SELF_USER_SETTINGS,
   UPDATE_SELF_USER_SETTINGS,
   DELETE_SELF_USER_SETTINGS,

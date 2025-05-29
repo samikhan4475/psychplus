@@ -2,21 +2,20 @@
 
 import * as api from '@/api'
 import { Sort } from '@/types'
-import { GetStaffListResponse, Staff } from '@/ui/staff-management/types'
 import { PREFERRED_PARTNER_LIST_TABLE_PAGE_SIZE } from '../constants'
+import {
+  PreferredPartnerItem,
+  PreferredPartnerListPayload,
+  PreferredPartnerListResponse,
+} from '../types'
 
 const defaultPayload = {
-  isIncludeBiography: true,
-  isExcludeSelf: false,
-  isIncludeAttributions: true,
-  isIncludeOrganizations: true,
-  isIncludePractices: true,
   isIncludeMetadataResourceChangeControl: true,
   isIncludeMetadataResourceIds: true,
   isIncludeMetadataResourceStatus: true,
 }
-interface GetStaffListParams {
-  payload?: Partial<Staff>
+interface GetPreferredPartnerListParams {
+  payload?: Partial<PreferredPartnerListPayload>
   page?: number
   sort?: Sort
 }
@@ -25,10 +24,12 @@ const getPreferredPartnerListAction = async ({
   payload,
   page = 1,
   sort,
-}: GetStaffListParams): Promise<api.ActionResult<GetStaffListResponse>> => {
+}: GetPreferredPartnerListParams): Promise<
+  api.ActionResult<PreferredPartnerListResponse>
+> => {
   const offset = (page - 1) * PREFERRED_PARTNER_LIST_TABLE_PAGE_SIZE
 
-  const url = new URL(api.GET_STAFF_ENDPOINT)
+  const url = new URL(api.GET_PREFERRED_PARTNER_LIST_ENDPOINT)
   url.searchParams.append(
     'limit',
     String(PREFERRED_PARTNER_LIST_TABLE_PAGE_SIZE),
@@ -39,7 +40,7 @@ const getPreferredPartnerListAction = async ({
     url.searchParams.append('orderBy', `${sort.column} ${sort.direction}`)
   }
 
-  const response = await api.POST<Staff[]>(`${url}`, {
+  const response = await api.POST<PreferredPartnerItem[]>(`${url}`, {
     ...defaultPayload,
     ...payload,
   })
@@ -54,7 +55,7 @@ const getPreferredPartnerListAction = async ({
   return {
     state: 'success',
     data: {
-      staff: response.data,
+      preferredPartners: response.data,
       total: Number(response.headers.get('psychplus-totalresourcecount')),
     },
   }

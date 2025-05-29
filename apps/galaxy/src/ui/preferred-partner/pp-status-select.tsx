@@ -6,18 +6,21 @@ import {
   FormFieldLabel,
 } from '@/components'
 import { CODESETS } from '@/constants'
-import { useCodesetOptions } from '@/hooks'
+import { useCodesetCodes, useCodesetOptions } from '@/hooks'
+import { getPPStatuses } from './utils'
 
 const PPStatusSelect = () => {
-  const options = useCodesetOptions(CODESETS.UsStates)
+  const fixedPaymentType = useCodesetOptions(CODESETS.FixedPaymentType)
+  const ppStatuses = getPPStatuses(
+    useCodesetCodes(CODESETS.PaymentType),
+    useCodesetCodes(CODESETS.MembershipType),
+  )
+    ?.map((option) => ({ label: option.display, value: option.value }))
+    .concat(fixedPaymentType)
   return (
     <FormFieldContainer className="flex-row gap-1">
       <FormFieldLabel className="!text-1">PP Status</FormFieldLabel>
-      <DropdownSelect
-        field="stateCode"
-        options={options}
-        buttonClassName="flex-1"
-      />
+      <DropdownSelect field="subscriptionStatusList[0]" options={ppStatuses} />
     </FormFieldContainer>
   )
 }

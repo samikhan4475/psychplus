@@ -62,6 +62,11 @@ const CODESETS = {
   FileFormatType: 'FileFormatType',
   ProofingStatus: 'ProofingStatus',
   MedicationStatus: 'MedicationStatus',
+  PaymentType: 'PaymentType',
+  ChargePerType: 'ChargePerType',
+  MembershipType: 'MembershipType',
+  FixedPaymentType:'FixedPaymentType',
+  PaymentStatus:'PaymentStatus',
 
   // PsychPlusPublic Codesets
   TMSCoilType: 'PsychPlusPublic.TMSCoilType',

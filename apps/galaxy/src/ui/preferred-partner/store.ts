@@ -2,20 +2,22 @@ import { create } from 'zustand'
 import { Sort } from '@/types'
 import { getNewSortDir } from '@/utils'
 import { getPreferredPartnerListAction } from './actions'
-import { GetStaffListResponse, Staff } from '../staff-management/types'
-
+import {
+  PreferredPartnerListResponse,
+} from './types'
+import { SchemaType } from './preferred-partner-filter-form'
 
 interface Store {
-  data?: GetStaffListResponse
+  data?: PreferredPartnerListResponse
   loading?: boolean
   error?: string
-  payload?: Partial<Staff>
+  payload?: Partial<SchemaType>
   page: number
   sort?: Sort
-  pageCache: Record<number, GetStaffListResponse>
+  pageCache: Record<number, PreferredPartnerListResponse>
   jumpToPage: (page: number) => void
   search: (
-    payload?: Partial<Omit<Staff, 'language'>>,
+    payload?: Partial<SchemaType>,
     page?: number,
     reset?: boolean,
   ) => void

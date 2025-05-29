@@ -1,29 +1,37 @@
 'use client'
 
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { Row } from '@tanstack/react-table'
 import { DataTable, LoadingPlaceholder } from '@/components'
 import { useStore as useRootStore } from '@/store'
-import { Staff } from '../staff-management/types'
 import { columns } from './columns'
 import { useStore } from './store'
+import { PreferredPartnerItem } from './types'
 
 const PreferredPartnerListTable = () => {
-  const router = useRouter()
+  const { showFilters, loading, sort, sortData, data, search } = useStore(
+    (state) => ({
+      loading: state.loading,
+      sort: state.sort,
+      sortData: state.sortData,
+      showFilters: state.showFilters,
+      data: state.data,
+      search: state.search,
+    }),
+  )
   const addTab = useRootStore((state) => state.addTab)
-  const { showFilters, loading, sort, sortData } = useStore((state) => ({
-    loading: state.loading,
-    sort: state.sort,
-    sortData: state.sortData,
-    showFilters: state.showFilters,
-  }))
+  const router = useRouter()
+  useEffect(() => {
+    search({}, 1, true)
+  }, [])
 
-  const handleRowClick = (row: Row<Staff>) => {
-    const href = `/preferred-partner/${row.original.ppId}/profile`
+  const handleRowClick = (row: Row<PreferredPartnerItem>) => {
+    const href = `/preferred-partner/${row.original.id}/profile`
     addTab({
       href,
-      label: `${row.original?.ppName}`,
+      label: `${row.original?.name}`,
     })
     router.push(href)
   }
@@ -41,7 +49,7 @@ const PreferredPartnerListTable = () => {
       scrollbars="both"
     >
       <DataTable
-        data={[]}
+        data={data?.preferredPartners ?? []}
         onRowClick={handleRowClick}
         tdClass="[&:has(.dialog-trigger-cell)]:!p-0"
         tableClass="[&_.rt-ScrollAreaScrollbar]:!hidden"

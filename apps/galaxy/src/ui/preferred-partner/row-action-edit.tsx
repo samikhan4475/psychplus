@@ -3,10 +3,10 @@
 import { IconButton } from '@radix-ui/themes'
 import { type PropsWithRow } from '@/components'
 import { Edit2Icon } from '@/components/icons'
-import { Staff } from '../staff-management/types'
+import { PreferredPartnerItem } from './types'
 
 
-const RowActionEdit = ({ row }: PropsWithRow<Staff>) => {
+const RowActionEdit = ({ row }: PropsWithRow<PreferredPartnerItem>) => {
   const onClick = () => {
     // will be implemented here
   }
