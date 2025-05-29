@@ -9,10 +9,12 @@ import { SchemaType, telestateType } from './schema'
 const teleStatesAllowedAttributeName = 'IsServiceAllowedForTeleState'
 
 const AddTelestatePopover = () => {
-  const { states, fetchLocationsWithCosigners } = useStore((store) => ({
-    states: store.states,
-    fetchLocationsWithCosigners: store.fetchLocationWithCosigners,
-  }))
+  const { states, fetchLocationsWithCosigners, primaryStateLocations } =
+    useStore((store) => ({
+      states: store.states,
+      fetchLocationsWithCosigners: store.fetchLocationWithCosigners,
+      primaryStateLocations: store.primaryStateLocations,
+    }))
   const [searchValue, setSearchValue] = useState<string>('')
   const { append } = useFieldArray({
     name: 'teleStates',
@@ -49,7 +51,14 @@ const AddTelestatePopover = () => {
 
   const handleAddTelestate = (state: telestateType) => {
     if (isStateAdded(state.stateCode)) return
-    append(state)
+    const stateFound = primaryStateLocations?.find(
+      (el) => el.stateCode === state.stateCode,
+    )
+    if (stateFound) {
+      append({ ...state, location: stateFound.locationId })
+    } else {
+      append(state)
+    }
     fetchLocationsWithCosigners(state.stateCode, [serviceOffered])
   }
 

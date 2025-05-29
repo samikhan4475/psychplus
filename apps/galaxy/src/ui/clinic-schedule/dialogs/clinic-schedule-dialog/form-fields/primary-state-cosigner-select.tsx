@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import {
-  FormFieldContainer,
-  FormFieldError,
-  FormFieldLabel,
-  SelectInput,
-} from '@/components'
+import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
 import { SelectOptionType } from '@/types'
 import { getServiceCosigners } from '@/ui/clinic-schedule/clinic-time-tab/actions'
 import { useStore } from '@/ui/clinic-schedule/clinic-time-tab/store'
@@ -15,8 +10,8 @@ import { SchemaType } from '../schema'
 const PrimaryStateCosigner = () => {
   const { watch, setValue } = useFormContext<SchemaType>()
   const serviceId = watch('serviceId')
-  const primaryStateCosigner = watch('primaryStateCosigner')
-  const primaryStateCosignerName = watch('primaryStateCosignerName')
+  const primaryStateCosigner = watch('cosignerStaffId')
+  const cosignerName = watch('cosignerName')
   const [options, setOptions] = useState<SelectOptionType[]>([])
   const [loading, setLoading] = useState(false)
   const staff = useStore((state) => state.staff)
@@ -24,14 +19,14 @@ const PrimaryStateCosigner = () => {
   const handleAddCosigner = (value: string) => {
     const selectedCosigner = options.find((el) => el.value === value)
     if (!selectedCosigner) return
-    setValue('primaryStateCosigner', selectedCosigner.value)
-    setValue('primaryStateCosignerName', selectedCosigner.label)
+    setValue('cosignerStaffId', selectedCosigner.value)
+    setValue('cosignerName', selectedCosigner.label)
   }
 
   useEffect(() => {
     if (!serviceId) {
-      primaryStateCosigner && setValue('primaryStateCosigner', '')
-      primaryStateCosignerName && setValue('primaryStateCosignerName', '')
+      primaryStateCosigner && setValue('cosignerStaffId', '')
+      cosignerName && setValue('cosignerName', '')
       return
     }
     const fetchCosigners = async () => {
@@ -68,13 +63,12 @@ const PrimaryStateCosigner = () => {
       <SelectInput
         key={JSON.stringify(options)}
         buttonClassName="w-full h-6"
-        field="primaryStateCosigner"
+        field="cosignerStaffId"
         disabled={!serviceId}
         loading={loading}
         options={options}
         onValueChange={handleAddCosigner}
       />
-      <FormFieldError name="primaryStateCosigner" />
     </FormFieldContainer>
   )
 }

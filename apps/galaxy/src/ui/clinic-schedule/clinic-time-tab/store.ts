@@ -7,11 +7,13 @@ import {
   getStaffActiveStates,
   updateClinicScheduleStatus as patchClinicScheduleStatus,
 } from './actions'
+import { getPrimaryStatesLocations } from './client-actions'
 import { ClinicScheduleStatus } from './constants'
 import {
   ClinicSchedule,
   PartialClinicTimeFilterSchema,
   State,
+  StatesPrimaryLocation,
   StateWithLocationAndCosigners,
 } from './types'
 
@@ -27,6 +29,7 @@ interface Store {
   formValues?: PartialClinicTimeFilterSchema
   sort?: Sort
   states?: State[]
+  primaryStateLocations: StatesPrimaryLocation[]
   stateWithLocationAndCosigners?: StateWithLocationAndCosigners[]
   fetchClinicSchedules: (
     staffId: string,
@@ -41,6 +44,7 @@ interface Store {
   ) => Promise<ActionResult<ClinicSchedule>>
   fetchStaffData: (staffId: number) => Promise<void>
   fetchStates: (staffId: number) => Promise<void>
+  fetchPrimaryStateLocations: () => Promise<void>
   resetStates: () => void
   fetchLocationWithCosigners: (
     stateCode: string,
@@ -59,6 +63,7 @@ const useStore = create<Store>()((set, get) => ({
   page: 1,
   total: 10,
   pageCache: {},
+  primaryStateLocations: [],
   fetchClinicSchedules: async (staffId, page = 1, formValues = {}) => {
     set({
       error: undefined,
@@ -107,6 +112,14 @@ const useStore = create<Store>()((set, get) => ({
     const response = await getStaffActiveStates(staffId)
     if (response.state === 'success') {
       !get().states?.length && set({ states: response.data })
+    }
+  },
+  fetchPrimaryStateLocations: async () => {
+    const response = await getPrimaryStatesLocations()
+    if (response.state === 'success') {
+      set({
+        primaryStateLocations: response.data,
+      })
     }
   },
   resetStates: () => {

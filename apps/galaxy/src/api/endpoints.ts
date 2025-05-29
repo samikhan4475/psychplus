@@ -1004,6 +1004,7 @@ const PHARMACY_CHANGE_REQUEST = (pharmacyNotificationId: string) =>
   `${API_URL}/api/pharmacynotifications/${pharmacyNotificationId}/changeresponses/actions/send`
 const MAP_PATIENTS = (pharmacyNotificationId: string, patientId: string) =>
   `${API_URL}/api/pharmacynotifications/${pharmacyNotificationId}/patients/${patientId}/actions/associate`
+const GET_STATES_PRIMARY_LOCATIONS = `${API_URL}/api/locations/actions/primaries/search`
 const VIRTUAL_PRIMARY_LOCATIONS_ENDPOINT = `${API_URL}/api/locations/actions/primaries/search`
 const ADD_VIRTUAL_PRIMARY_LOCATIONS_ENDPOINT = `${API_URL}/api/primarylocations`
 
@@ -1454,6 +1455,7 @@ export {
   PHARMACY_CHANGE_REQUEST,
   GET_ROLES_HISTORY,
   MAP_PATIENTS,
+  GET_STATES_PRIMARY_LOCATIONS,
   VIRTUAL_PRIMARY_LOCATIONS_ENDPOINT,
   ADD_VIRTUAL_PRIMARY_LOCATIONS_ENDPOINT,
 }

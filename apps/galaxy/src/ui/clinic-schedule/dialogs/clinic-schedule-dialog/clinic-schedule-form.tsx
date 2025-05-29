@@ -37,10 +37,13 @@ const ClinicScheduleForm = ({
   providerId,
   onSubmit,
 }: ClinicScheduleFormProps) => {
-  const { staff, fetchStates } = useStore((store) => ({
-    fetchStates: store.fetchStates,
-    staff: store.staff,
-  }))
+  const { staff, fetchStates, fetchPrincipalStatesLocations } = useStore(
+    (store) => ({
+      fetchStates: store.fetchStates,
+      staff: store.staff,
+      fetchPrincipalStatesLocations: store.fetchPrimaryStateLocations,
+    }),
+  )
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     criteriaMode: 'all',
@@ -58,6 +61,7 @@ const ClinicScheduleForm = ({
   useEffect(() => {
     if (!staff) return
     fetchStates(providerId ?? Number(staff.id))
+    fetchPrincipalStatesLocations()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [staff, providerId])
 
@@ -75,7 +79,7 @@ const ClinicScheduleForm = ({
       <Flex gap="3" align="start">
         <PrimaryStateSelect />
         <PrimaryLocationSelect />
-        <PrimaryStateCosigner />
+        <ServiceSelect />
       </Flex>
       <Flex gap="3" align="start">
         <DaySelect />
@@ -91,7 +95,7 @@ const ClinicScheduleForm = ({
         <PublicViewSelect />
       </Flex>
       <Flex gap="3" align="start">
-        <ServiceSelect />
+        <PrimaryStateCosigner />
         <GroupType />
         <BookingFrequencySelect />
       </Flex>

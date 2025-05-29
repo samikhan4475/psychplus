@@ -19,8 +19,8 @@ const schema = z.object({
   primaryLocation: z.string(),
   timeZoneId: z.ostring(),
   primaryLocationName: z.string(),
-  primaryStateCosigner: z.string().min(1, 'Required'),
-  primaryStateCosignerName: z.string(),
+  cosignerStaffId: z.ostring(),
+  cosignerName: z.ostring(),
   day: z.string(),
   recurrence: z.string(),
   timeStart: z.custom<TimeValue>().refine((val) => val !== undefined, {

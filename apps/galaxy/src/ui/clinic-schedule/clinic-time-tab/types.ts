@@ -48,14 +48,14 @@ interface ClinicSchedule {
   startDate: string
   startTime: string
   visitMedium: string
-  cosignerStaffId: number
-  cosignerName: string
   isPublicViewable: boolean
   serviceId: string
   serviceOffered: string
   maxBookingsPerSlot: number
   teleStates: TeleState[]
   visitTypes: Visit[]
+  cosignerName?: string
+  cosignerStaffId?: number | string
   endDate?: string
   endTime?: string
   therapyTypeCode?: string
@@ -123,6 +123,12 @@ interface StateWithLocationAndCosigners {
   locationsWithCosigners: LocationWithCosigner[]
 }
 
+interface StatesPrimaryLocation {
+  id: string
+  stateCode: string
+  locationId: string
+}
+
 export type {
   StateCosigner,
   ClinicSchedule,
@@ -140,4 +146,5 @@ export type {
   LocationWithCosigner,
   StateWithLocationAndCosigners,
   License,
+  StatesPrimaryLocation,
 }

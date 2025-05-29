@@ -33,8 +33,8 @@ const ServiceSelect = () => {
   const teleStates = watch('teleStates')
   const location = watch('primaryLocation')
   const visitTypes = watch('visitTypes')
-  const cosignerStaffId = watch('primaryStateCosigner')
-  const cosignerName = watch('primaryStateCosignerName')
+  const cosignerStaffId = watch('cosignerStaffId')
+  const cosignerName = watch('cosignerName')
 
   const specialistTypes = useCodesetCodes(CODESETS.SpecialistType)
   const specialistType = specialistTypes.find(
@@ -65,8 +65,8 @@ const ServiceSelect = () => {
     setValue('maxBookingsPerSlot', serviceSelected.maxBookingsPerSlot)
     teleStates.length && setValue('teleStates', [])
     visitTypes.length && setValue('visitTypes', [])
-    cosignerStaffId && setValue('primaryStateCosigner', '')
-    cosignerName && setValue('primaryStateCosignerName', '')
+    cosignerStaffId && setValue('cosignerStaffId', '')
+    cosignerName && setValue('cosignerName', '')
   }
 
   const findMatchingService = (

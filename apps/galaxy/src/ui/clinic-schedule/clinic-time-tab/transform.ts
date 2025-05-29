@@ -43,8 +43,6 @@ const transformOut = (
     primaryLocationName,
     day,
     groups,
-    primaryStateCosignerName,
-    primaryStateCosigner,
     timeZoneId,
     ...rest
   } = clinicScheduleFormInput
@@ -77,8 +75,6 @@ const transformOut = (
     endDate: clinicScheduleFormInput.dateEnd ? endDateTime.date : undefined,
     startTime: startDateTime.time,
     endTime: endDateTime.time,
-    cosignerStaffId: Number(clinicScheduleFormInput.primaryStateCosigner),
-    cosignerName: clinicScheduleFormInput.primaryStateCosignerName ?? '',
     isPublicViewable: clinicScheduleFormInput.publicView === 'yes',
     teleStates: clinicScheduleFormInput.teleStates?.map((telestate) => ({
       ...telestate,
