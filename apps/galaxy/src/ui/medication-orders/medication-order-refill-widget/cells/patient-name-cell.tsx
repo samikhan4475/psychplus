@@ -1,58 +1,108 @@
 import { useState } from 'react'
-import { Flex } from '@radix-ui/themes'
+import { Flex, Text, Tooltip } from '@radix-ui/themes'
 import { Info } from 'lucide-react'
-import { LongTextCell } from '@/components'
 import PatientDetailsDialog from '../dialogs/patient-details-dialog'
+import { PatientPersonInfo } from '../types'
 
+const isPatientMatched = (data: any): boolean => {
+  const patient = data?.patient
+  if (!patient) return false
+
+  const formatDate = (date?: string) =>
+    date ? new Date(date).toISOString().split('T')[0] : null
+
+  const firstNameMatch =
+    patient?.legalName?.firstName === data?.patientFirstName
+  const lastNameMatch = patient?.legalName?.lastName === data?.patientLastName
+  const dobMatch =
+    formatDate(patient?.birthdate) === formatDate(data?.patientDateOfBirth)
+  const genderMatch = patient?.gender === data?.patientGender
+
+  return firstNameMatch && lastNameMatch && dobMatch && genderMatch
+}
 const PatientNameCell = ({ row }: { row: any }) => {
   const [dialogOpen, setDialogOpen] = useState(false)
 
   const isPatientAvailable = row.original?.patientId
-  const original = row.original
-  const nestedPatient = original?.patient
+  const data = row.original
+  const nestedPatient = data?.patient
+  const isMismatched = isPatientMatched(row.original)
 
   const patientName = isPatientAvailable
     ? `${nestedPatient?.legalName?.firstName ?? ''} ${
         nestedPatient?.legalName?.lastName ?? ''
       }`
-    : `${original?.patientFirstName ?? ''} ${original?.patientLastName ?? ''}`
+    : `${data?.patientFirstName ?? ''} ${data?.patientLastName ?? ''}`
 
-  const homeAddress = isPatientAvailable
-    ? row.original.patient.contactDetails?.addresses?.find(
-        (addr: any) => addr.type === 'Home',
-      )
-    : null
-  const contactPhone = isPatientAvailable
-    ? row.original.patient.contactDetails?.phoneNumbers?.find(
-        (phone: any) => phone.type === 'Contact',
-      )?.number
-    : null
-  const patientData = {
-    patientId: isPatientAvailable ? nestedPatient?.id : original?.patientId,
-    patientFirstName: isPatientAvailable ? nestedPatient?.legalName?.firstName : original?.patientFirstName,
-    patientLastName: isPatientAvailable ? nestedPatient?.legalName?.lastName : original?.patientLastName,
-    patientGender: isPatientAvailable ? nestedPatient?.gender : original?.patientGender,
-    patientDateOfBirth: isPatientAvailable ? nestedPatient?.birthdate : original?.patientDateOfBirth,
-    patientAddressLine1: isPatientAvailable ? homeAddress?.street1 : original?.patientAddressLine1,
-    patientCity: isPatientAvailable ? homeAddress?.city : original?.patientCity,
-    patientStateCode: isPatientAvailable ? homeAddress?.state : original?.patientStateCode,
-    patientCountryCode: isPatientAvailable ? homeAddress?.country : original?.patientCountryCode,
-    phone: isPatientAvailable ? contactPhone :'',
-    email: isPatientAvailable ? nestedPatient?.contactDetails?.email : '',
-  }
+  const homeAddress = nestedPatient?.contactDetails?.addresses?.find(
+    (a: any) => a.type === 'Home',
+  )
+  const contactPhone = nestedPatient?.contactDetails?.phoneNumbers?.find(
+    (p: any) => p.type === 'Contact',
+  )?.number
+
+  const patientData: PatientPersonInfo[] = [
+    nestedPatient && {
+      patientId: nestedPatient.id,
+      patientFirstName: nestedPatient?.legalName?.firstName,
+      patientLastName: nestedPatient?.legalName?.lastName,
+      patientGender: nestedPatient?.gender,
+      patientDateOfBirth: nestedPatient?.birthdate,
+      patientAddressLine1: homeAddress?.street1,
+      patientCity: homeAddress?.city,
+      patientStateCode: homeAddress?.state,
+      patientCountryCode: homeAddress?.country,
+      phone: contactPhone,
+      email: nestedPatient?.contactDetails?.email,
+      source: 'Galaxy',
+    },
+    {
+      patientId: data?.patientId,
+      patientFirstName: data?.patientFirstName,
+      patientLastName: data?.patientLastName,
+      patientGender: data?.patientGender,
+      patientDateOfBirth: data?.patientDateOfBirth,
+      patientAddressLine1: data?.patientAddressLine1,
+      patientCity: data?.patientCity,
+      patientStateCode: data?.patientStateCode,
+      patientCountryCode: data?.patientCountryCode,
+      phone: '',
+      email: '',
+      source: 'Pharmacy',
+    },
+  ].filter(Boolean) as PatientPersonInfo[]
+
+  const textElement = (
+    <Text
+      weight="regular"
+      size="1"
+      className={`w-[150px] ${!isMismatched ? 'text-pp-red' : ''}`}
+    >
+      {patientName}
+    </Text>
+  )
   return (
     <>
-      <Flex
-        justify="center"
-        align="center"
-        width="100%"
-        height="100%"
-        gapX="2"
-        onClick={() => setDialogOpen(true)}
-        className="cursor-pointer"
-      >
-        <Info size={14} className="text-gray-500" />
-        <LongTextCell className="w-[150px]">{patientName}</LongTextCell>
+      <Flex justify="center" align="center" width="100%" height="100%" gapX="2">
+        <Info
+          size={14}
+          className="text-gray-500 cursor-pointer"
+          onClick={() => setDialogOpen(true)}
+        />
+        {!isMismatched ? (
+          <Tooltip
+            content={
+              <Text className="select-text">
+                Patient information does not match between our system and the
+                pharmacy system.
+              </Text>
+            }
+          >
+            {textElement}
+          </Tooltip>
+        ) : (
+          textElement
+        )}
       </Flex>
       <PatientDetailsDialog
         open={dialogOpen}

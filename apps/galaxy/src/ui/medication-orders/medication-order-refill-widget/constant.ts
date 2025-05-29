@@ -1,6 +1,6 @@
 enum MedicationOrdersTabs {
-  REFILL_REQUESTS = 'Refill Requests (10)',
-  CHANGE_REQUESTS = 'Change Requests (10)',
+  REFILL_REQUESTS = 'Refill Requests',
+  CHANGE_REQUESTS = 'Change Requests',
   NEW_PRESCRIPTIONS = 'New Prescriptions (10)',
   ERRORS = 'Errors',
 }

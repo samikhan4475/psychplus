@@ -2,10 +2,16 @@ import React from 'react'
 import { ScrollArea } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, DataTable, TextCell } from '@/components'
-import { getMaskedPhoneNumber } from '@/utils'
+import { getMaskedPhoneNumber, getPatientDOB } from '@/utils'
 import { PatientPersonInfo } from '../types'
 
 const columns: ColumnDef<PatientPersonInfo>[] = [
+  {
+    id: 'source',
+    accessorKey: 'source',
+    header: () => <ColumnHeader label="Source" />,
+    cell: ({ row }) => <TextCell>{row.original?.source}</TextCell>,
+  },
   {
     id: 'patientFirstName',
     accessorKey: 'patientFirstName',
@@ -26,7 +32,13 @@ const columns: ColumnDef<PatientPersonInfo>[] = [
     id: 'patientDateOfBirth',
     accessorKey: 'patientDateOfBirth',
     header: () => <ColumnHeader label="DOB" />,
-    cell: ({ row }) => <TextCell>{row.original?.patientDateOfBirth}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell>
+        {row.original?.patientDateOfBirth
+          ? getPatientDOB(row.original?.patientDateOfBirth)
+          : ''}
+      </TextCell>
+    ),
   },
   {
     id: 'patientAddressLine1',

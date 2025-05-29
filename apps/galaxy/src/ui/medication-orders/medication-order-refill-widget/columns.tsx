@@ -163,7 +163,6 @@ const columns = (
     {
       id: 'daysSupply',
       accessorKey: 'daysSupply',
-      size: 100,
       header: ({ column }) => (
         <ColumnHeader
           label="Days Supply"
@@ -179,7 +178,6 @@ const columns = (
     {
       id: 'isSubstitutionsAllowed',
       accessorKey: 'isSubstitutionsAllowed',
-      size: 100,
       header: ({ column }) => (
         <ColumnHeader
           label="Substitution"
@@ -195,7 +193,6 @@ const columns = (
     {
       id: 'signatureText',
       accessorKey: 'signatureText',
-      size: 100,
       header: ({ column }) => (
         <ColumnHeader
           label="Sig"
@@ -211,7 +208,6 @@ const columns = (
     {
       id: 'refills',
       accessorKey: 'refills',
-      size: 100,
       header: ({ column }) => (
         <ColumnHeader
           label="Refills"
@@ -227,7 +223,6 @@ const columns = (
     {
       id: 'lastFillDate',
       accessorKey: 'lastFillDate',
-      size: 100,
       header: ({ column }) => (
         <ColumnHeader
           label="Last Refill Date"
@@ -243,7 +238,6 @@ const columns = (
     {
       id: 'startDateTime',
       accessorKey: 'startDateTime',
-      size: 100,
       header: ({ column }) => (
         <ColumnHeader
           label="Effective Date"
@@ -258,7 +252,6 @@ const columns = (
     },
     {
       id: 'notes',
-      size: 100,
       header: ({ column }) => (
         <ColumnHeader
           label="Notes/Comments"
@@ -273,7 +266,6 @@ const columns = (
     },
     {
       id: 'actions',
-      size: 6000,
       header: () => <ColumnHeader label="Actions" />,
       cell: ({ row }) => <ActionsCell row={row} />,
     },

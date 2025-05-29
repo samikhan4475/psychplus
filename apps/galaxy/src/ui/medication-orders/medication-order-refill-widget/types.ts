@@ -40,7 +40,7 @@ interface PharmacyNotificationDrugModel {
   drugSignatureList?: DrugSignature[]
   drugDiagnosisList?: DrugDiagnosis[]
   note?: string
-  drugNote?: string 
+  drugNote?: string
 }
 interface PharmacyAddress {
   type?: string
@@ -176,6 +176,7 @@ interface PatientPersonInfo {
   patientId?: string
   patientFirstName?: string
   patientLastName?: string
+  source?: string
 }
 
 enum RefillMedicationType {

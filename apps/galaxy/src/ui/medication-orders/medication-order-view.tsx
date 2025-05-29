@@ -7,11 +7,8 @@ import { MedicationOrdersTabs } from './medication-order-refill-widget/constant'
 import { MedicationOrderRefillWidget } from './medication-order-refill-widget/medication-order-refill-widget'
 import { useStore } from './medication-order-refill-widget/store'
 
-
-
 const MedicationOrderView = () => {
-  const { activeTab, setActiveTab } = useStore()
-
+  const { activeTab, setActiveTab, data, changeRequestData } = useStore()
   return (
     <Tabs.Root
       className="flex w-full flex-col"
@@ -21,10 +18,10 @@ const MedicationOrderView = () => {
       <Flex>
         <Tabs.List>
           <TabsTrigger value={MedicationOrdersTabs.REFILL_REQUESTS}>
-            {MedicationOrdersTabs.REFILL_REQUESTS}
+            {`${MedicationOrdersTabs.REFILL_REQUESTS} (${data.total})`}
           </TabsTrigger>
           <TabsTrigger value={MedicationOrdersTabs.CHANGE_REQUESTS}>
-            {MedicationOrdersTabs.CHANGE_REQUESTS}
+            {`${MedicationOrdersTabs.CHANGE_REQUESTS} (${changeRequestData.total})`}
           </TabsTrigger>
           <TabsTrigger value={MedicationOrdersTabs.NEW_PRESCRIPTIONS}>
             {MedicationOrdersTabs.NEW_PRESCRIPTIONS}
@@ -32,8 +29,8 @@ const MedicationOrderView = () => {
           <TabsTrigger value={MedicationOrdersTabs.ERRORS}>
             {MedicationOrdersTabs.ERRORS}
           </TabsTrigger>
-        </Tabs.List> 
-        </Flex>
+        </Tabs.List>
+      </Flex>
       <TabsContent value={MedicationOrdersTabs.REFILL_REQUESTS}>
         <MedicationOrderRefillWidget />
       </TabsContent>

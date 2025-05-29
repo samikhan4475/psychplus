@@ -7,7 +7,7 @@ import { PatientInfoTable } from './patient-info-table'
 interface PatientDetailsDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  patient: PatientPersonInfo
+  patient: PatientPersonInfo[]
 }
 
 const PatientDetailsDialog = ({
@@ -18,10 +18,10 @@ const PatientDetailsDialog = ({
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Content className="relative max-w-[800px]">
-        <Dialog.Title>Prescriber System Demographics </Dialog.Title>
+        <Dialog.Title>Prescriber System Demographic Info </Dialog.Title>
         <CloseDialogTrigger className="absolute right-4 top-4 z-50" />
         <Box mt="4">
-          <PatientInfoTable patient={[patient]} />
+          <PatientInfoTable patient={patient} />
         </Box>
       </Dialog.Content>
     </Dialog.Root>

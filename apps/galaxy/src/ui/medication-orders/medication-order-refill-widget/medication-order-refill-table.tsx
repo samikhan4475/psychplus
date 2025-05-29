@@ -12,15 +12,23 @@ import {
 } from './types'
 
 const MedicationOrderRefillTable = () => {
-  const { searchMedicationsList, data, loading, sort, sortData, activeTab } =
-    useStore((state) => ({
-      searchMedicationsList: state.searchMedicationsList,
-      loading: state.loading,
-      data: state.data,
-      sort: state.sort,
-      sortData: state.sortData,
-      activeTab: state.activeTab,
-    }))
+  const {
+    searchMedicationsList,
+    data,
+    loading,
+    sort,
+    sortData,
+    activeTab,
+    changeRequestData,
+  } = useStore((state) => ({
+    searchMedicationsList: state.searchMedicationsList,
+    loading: state.loading,
+    data: state.data,
+    changeRequestData: state.changeRequestData,
+    sort: state.sort,
+    sortData: state.sortData,
+    activeTab: state.activeTab,
+  }))
   const isRefillTab = activeTab.includes('Refill')
   useEffect(() => {
     const formattedData: MedicationRefillAPIRequest = {
@@ -33,9 +41,10 @@ const MedicationOrderRefillTable = () => {
   }, [activeTab])
 
   const filteredRefillRequests = useMemo(() => {
-    if (!data?.refillRequests) return []
-
-    return data.refillRequests
+    let newList = isRefillTab
+      ? data.refillRequests
+      : changeRequestData?.refillRequests
+    return newList
       .map((request) => ({
         ...request,
         drugList: request.drugList?.filter(
@@ -47,10 +56,9 @@ const MedicationOrderRefillTable = () => {
         ),
       }))
       .filter((request) => request.drugList && request.drugList.length > 0)
-  }, [data?.refillRequests])
+  }, [data?.refillRequests, changeRequestData?.refillRequests])
 
   const memoizedColumns = useMemo(() => columns(sort, sortData), [])
-  
   if (loading) {
     return (
       <Flex height="100%" align="center" justify="center">

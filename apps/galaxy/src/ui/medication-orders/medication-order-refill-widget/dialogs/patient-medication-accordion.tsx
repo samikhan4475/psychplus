@@ -12,9 +12,15 @@ import { UpdateMedicationSchema } from './schema'
 const PatientPrescriptionAccordian = () => {
   const form = useFormContext<UpdateMedicationSchema>()
   const drugs = form.watch('drugList') ?? []
-
+  const defaultValue =
+    drugs.length === 1 ? drugs[0]?.drugDescription ?? '' : undefined
   return (
-    <Accordion.Root type="single" collapsible className="mt-1">
+    <Accordion.Root
+      type="single"
+      collapsible
+      className="mt-1"
+      defaultValue={defaultValue}
+    >
       {drugs.map((item, index) => (
         <Accordion.Item
           key={`drugs-${item.drugDescription}`}

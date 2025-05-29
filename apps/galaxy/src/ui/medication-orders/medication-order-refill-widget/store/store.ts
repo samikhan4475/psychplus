@@ -14,6 +14,7 @@ import {
 
 interface StoreState {
   data: MedicationRefillResponseList
+  changeRequestData: MedicationRefillResponseList
   loading: boolean
   error?: string
   payload?: MedicationRefillAPIRequest
@@ -47,6 +48,10 @@ const useStore = create<StoreState>((set, get) => ({
     refillRequests: [],
     total: 0,
   },
+  changeRequestData: {
+    refillRequests: [],
+    total: 0,
+  },
   selectedTestId: undefined,
   error: undefined,
   payload: undefined,
@@ -74,36 +79,27 @@ const useStore = create<StoreState>((set, get) => ({
         loading: false,
       })
     }
-    // const activeTab = get().activeTab
-    // let allowedMedicationType = ''
+    const activeTab = get().activeTab
 
-    // if (activeTab.includes('Refill')) {
-    //   allowedMedicationType = 'Dispensed'
-    // } else if (activeTab.includes('Change')) {
-    //   allowedMedicationType = 'Requested'
-    // }
-    // const filteredRequests = result.data.refillRequests.map((request) => {
-    //   const filteredDrugList =
-    //     request.drugList?.filter(
-    //       (drug) => drug.medicationType === allowedMedicationType,
-    //     ) ?? []
-
-    //   return filteredDrugList.length > 0
-    //     ? { ...request, drugList: filteredDrugList }
-    //     : null
-    // }).filter((request): request is MedicationRefill => request !== null)
-    // const filteredData = {
-    //   total: result.data.total,
-    //   refillRequests: filteredRequests,
-    // }
-    set({
-      data: result.data,
-      loading: false,
-      page,
-      pageCache: reset
-        ? { [page]: result.data }
-        : { ...get().pageCache, [page]: result.data },
-    })
+    if (activeTab.includes('Refill')) {
+      set({
+        data: result.data,
+        loading: false,
+        page,
+        pageCache: reset
+          ? { [page]: result.data }
+          : { ...get().pageCache, [page]: result.data },
+      })
+    } else {
+      set({
+        changeRequestData: result.data,
+        loading: false,
+        page,
+        pageCache: reset
+          ? { [page]: result.data }
+          : { ...get().pageCache, [page]: result.data },
+      })
+    }
   },
   searchPatients: async (payload: Partial<LinkAccountType> = {}, page = 1) => {
     set({
@@ -133,10 +129,6 @@ const useStore = create<StoreState>((set, get) => ({
     set({
       activeTab,
       viewedTabs,
-      data: {
-        refillRequests: [],
-        total: 0,
-      },
       page: 1,
       pageCache: {},
       payload: undefined,
@@ -145,32 +137,29 @@ const useStore = create<StoreState>((set, get) => ({
       sort: undefined,
     })
   },
-
   next: () => {
     const page = get().page + 1
 
     if (get().pageCache[page]) {
-      set({
+      return set({
         data: get().pageCache[page],
         page,
       })
-    } else {
-      const { payload } = get()
-      if (payload) {
-        get().searchMedicationsList()
-      }
     }
-  },
 
+    get().searchMedicationsList(get().payload, page)
+  },
   prev: () => {
     const page = get().page - 1
 
-    if (page >= 1 && get().pageCache[page]) {
-      set({
-        data: get().pageCache[page],
+    if (get().pageCache[page]) {
+      return set({
         page,
+        data: get().pageCache[page],
       })
     }
+
+    get().searchMedicationsList(get().payload, page)
   },
 
   jumpToPage: (page: number) => {
@@ -181,12 +170,8 @@ const useStore = create<StoreState>((set, get) => ({
         data: get().pageCache[page],
         page,
       })
-    } else {
-      const { payload } = get()
-      if (payload) {
-        get().searchMedicationsList()
-      }
     }
+    get().searchMedicationsList(get().payload, page)
   },
   sortData: (column) => {
     set({
