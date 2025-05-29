@@ -164,9 +164,6 @@ const getColumns = ({
 
   const columns = [...baseColumns, ...remainingColumns]
 
-  if (appointmentId === '0') {
-    return columns
-  }
 
   if (afterSummaryVisit) {
     return [
@@ -176,13 +173,13 @@ const getColumns = ({
         size: 100,
         header: () => <ColumnHeader label="Actions" />,
         cell: ({ row }) => (
-          <ActionsCell row={row} afterSummaryVisit={afterSummaryVisit} />
+          <ActionsCell row={row} afterSummaryVisit={afterSummaryVisit} appointmentId={appointmentId ?? ''}  />
         ),
       },
     ]
   }
 
-  if (!isInboxLabOrder) {
+  if (!isInboxLabOrder) { 
     return [
       ...columns,
       {
@@ -195,7 +192,7 @@ const getColumns = ({
         id: 'actions',
         size: 100,
         header: () => <ColumnHeader label="Actions" />,
-        cell: ({ row }) => <ActionsCell row={row} />,
+        cell: ({ row }) => <ActionsCell row={row} appointmentId={appointmentId ?? ''} />,
       },
     ]
   }

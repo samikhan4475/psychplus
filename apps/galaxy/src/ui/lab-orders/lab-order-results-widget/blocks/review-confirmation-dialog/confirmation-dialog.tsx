@@ -30,10 +30,10 @@ const ConfirmationDialog = ({
           <X size={20} strokeWidth={1.5} />
         </Dialog.Close>
         <Dialog.Title size="6" weight="bold" className="m-0 mb-2 mt-2">
-          Are you sure you want to sign these orders?
+          Confirm Review ?
         </Dialog.Title>
         <Dialog.Description className="m-0 mb-2 mt-2">
-          Do you really want to sign these orders? The action cannot be undone.
+          Are you sure you’d like to review lab result(s) ?{' '}
         </Dialog.Description>
         <Flex justify="end" gap="2">
           <CancelButton />

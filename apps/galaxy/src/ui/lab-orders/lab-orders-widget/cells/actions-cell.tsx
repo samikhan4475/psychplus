@@ -8,9 +8,14 @@ import { RowResultAttachment } from './row-result-attachment'
 interface ActionsCellProps {
   row: LabOrderRow
   afterSummaryVisit?: boolean
+  appointmentId?: string
 }
 
-const ActionsCell = ({ row, afterSummaryVisit }: ActionsCellProps) => {
+const ActionsCell = ({
+  row,
+  afterSummaryVisit,
+  appointmentId,
+}: ActionsCellProps) => {
   const { original } = row
 
   const resultAttachmentAction: RowAction<LabOrders> = {
@@ -33,9 +38,19 @@ const ActionsCell = ({ row, afterSummaryVisit }: ActionsCellProps) => {
     ),
   }
 
-  const actions = afterSummaryVisit
-    ? [resultAttachmentAction]
-    : [resultAttachmentAction, editAction, deleteAction]
+  const actions: RowAction<LabOrders>[] = []
+
+  actions.push(resultAttachmentAction)
+
+  if (!afterSummaryVisit) {
+    const hasValidAppointment = appointmentId && appointmentId !== '0'
+
+    if (hasValidAppointment) {
+      actions.push(editAction)
+    }
+
+    actions.push(deleteAction)
+  }
 
   return <AdaptiveRowActionsCell actions={actions} row={row} />
 }
