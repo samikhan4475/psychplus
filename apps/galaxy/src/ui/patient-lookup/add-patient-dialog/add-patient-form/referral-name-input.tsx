@@ -2,7 +2,11 @@
 
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { FormFieldContainer, FormFieldLabel } from '@/components'
+import {
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+} from '@/components'
 import { AddPatientSchemaType } from './schema'
 
 const ReferralNameInput = () => {
@@ -16,6 +20,7 @@ const ReferralNameInput = () => {
         className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
         {...form.register('referralName')}
       />
+      <FormFieldError name="referralName" />
     </FormFieldContainer>
   )
 }

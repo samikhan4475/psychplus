@@ -33,8 +33,11 @@ const addPatientSchema = z
     referralSource: z.string().optional(),
     password: z.string().optional(),
     email: z.string().optional(),
-    referralName: optionalNameValidation,
-
+    referralName: z
+      .string()
+      .regex(nameRegex, 'Numbers are not allowed')
+      .max(250, { message: 'Cannot exceed 250 characters' })
+      .optional(),
     state: z.string().optional(),
     contactInfo: z.object({
       phoneNumbers: z
