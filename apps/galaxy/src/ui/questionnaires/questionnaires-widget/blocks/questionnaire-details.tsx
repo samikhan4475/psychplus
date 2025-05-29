@@ -31,6 +31,7 @@ import {
   SNAP_IV_SECTIONS,
 } from '../../snap-iv-tab/constants'
 import { useStore } from '../../store'
+import { parseSectionItemValue } from '../../utils'
 import { SCORE_INTERPRETATION_RANGES as YBOCS_SCORE_INTERPRETATION_RANGES } from '../../y-bocs-tab/constants'
 import { ChartView, ListView, TabsContent, TabsTrigger } from '../tabs'
 import { DeleteButton } from './delete-button'
@@ -155,10 +156,9 @@ const QuestionnaireRowDetail = ({
             Number(item.sectionItemValue),
           ),
         )
-      : option.data.reduce(
-          (acc, item) => acc + Number(item.sectionItemValue),
-          0,
-        )
+      : option.data.reduce((acc, item) => {
+          return acc + parseSectionItemValue(item.sectionItemValue)
+        }, 0)
 
   return (
     <Flex key={option.createdOn} gap="2" align="center" className="w-full">

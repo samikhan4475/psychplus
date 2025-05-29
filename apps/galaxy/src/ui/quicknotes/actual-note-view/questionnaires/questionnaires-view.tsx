@@ -4,6 +4,7 @@ import { Strong } from '@radix-ui/themes'
 import { format } from 'date-fns'
 import { QuickNoteHistory, QuickNoteSectionItem } from '@/types'
 import { BLOCK_OPTIONS } from '@/ui/questionnaires/questionnaires-widget/constants'
+import { parseSectionItemValue } from '@/ui/questionnaires/utils'
 import { QuickNoteSectionName } from '../../constants'
 import { BlockContainer, LabelAndValue } from '../shared'
 
@@ -67,7 +68,9 @@ const HistoryDetail = ({ entry }: { entry: QuickNoteHistory }) => {
             Number(item.sectionItemValue),
           ),
         )
-      : entry.data.reduce((acc, item) => acc + Number(item.sectionItemValue), 0)
+      : entry.data.reduce((acc, item) => {
+          return acc + parseSectionItemValue(item.sectionItemValue)
+        }, 0)
 
   return (
     <LabelAndValue

@@ -6,6 +6,7 @@ import { ListIcon, SignalIcon, XIcon } from 'lucide-react'
 import { QuickNoteHistory, QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { useStore } from '../../store'
+import { parseSectionItemValue } from '../../utils'
 import { AddToNotesSaveButton } from './add-to-notes-save-button'
 import { ChartView } from './chart-view'
 import { SheetView } from './sheet-view'
@@ -38,11 +39,9 @@ const HistoryView = ({ questionnaire }: HistoryViewProps) => {
               ),
             ).toString()
           : history.data
-              .reduce(
-                (acc: number, curr: QuickNoteSectionItem) =>
-                  acc + Number(curr.sectionItemValue),
-                0,
-              )
+              .reduce((acc: number, curr: QuickNoteSectionItem) => {
+                return acc + parseSectionItemValue(curr.sectionItemValue)
+              }, 0)
               .toString()
       if (selectedDates?.includes(history.createdOn)) {
         return { ...history, addToNote: true, totalScore }

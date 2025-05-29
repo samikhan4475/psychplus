@@ -1,9 +1,9 @@
 import toast from 'react-hot-toast'
 import { QuestionnaireType } from '@/constants'
+import { QuickNoteHistory } from '@/types'
 import { capitalizeFirstLetter } from '@/utils'
 import { QuickNoteSectionName } from '../quicknotes/constants'
 import { sendQuestionnaireToPatientClientAction } from './actions'
-import { QuickNoteHistory } from '@/types'
 
 function getQuestionnaireShortNames(name: string) {
   let shortName = name.replace('QuicknoteSectionQuestionnaire', '')
@@ -47,21 +47,32 @@ const sendToPatient = async (
 }
 
 const sumFirstEntryScores = (
-  entries: QuickNoteHistory[] = []
+  entries: QuickNoteHistory[] = [],
 ): number | undefined => {
   const firstData = entries[0]?.data
   if (!firstData || firstData.length === 0) return undefined
 
   return firstData.reduce(
-    (total, { sectionItemValue }) =>
-      total + (Number(sectionItemValue) || 0),
-    0
+    (total, { sectionItemValue }) => total + (Number(sectionItemValue) || 0),
+    0,
   )
+}
+
+const parseSectionItemValue = (value: string): number => {
+  const specialCases = ['1-contour', '1-hands', '1-numbers']
+  const rawValue = String(value)
+
+  const parsed = specialCases.includes(rawValue)
+    ? Number(rawValue.split('-')[0])
+    : Number(rawValue)
+
+  return isNaN(parsed) ? 0 : parsed
 }
 
 export {
   getQuestionnaireShortNames,
   QuestionnaireQuestionToSectionName,
   sendToPatient,
-  sumFirstEntryScores
+  sumFirstEntryScores,
+  parseSectionItemValue,
 }
