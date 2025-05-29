@@ -12,12 +12,14 @@ interface SSNInputProps extends InputProps {
   name: string
   editable?: boolean
   placeholder?: string
+  className?: string
 }
 
 const SSNInput = ({
   name,
   editable,
   placeholder = 'SSN',
+  className,
   ...rest
 }: SSNInputProps) => {
   const form = useFormContext()
@@ -34,6 +36,7 @@ const SSNInput = ({
             type="text"
             inputMode="numeric"
             format="###-##-####"
+            className={cn(className)}
             mask="_"
             allowEmptyFormatting={false}
             placeholder={placeholder}

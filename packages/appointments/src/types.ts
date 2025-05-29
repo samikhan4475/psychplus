@@ -148,6 +148,8 @@ type PatientPolicy = {
     lastName: string
   }
   policyHolderDateOfBirth?: string
+  policyHolderRelationship?: string
+  policyHolderSocialSecurityNumber?: string
   policyHolderGender?: string
 }
 

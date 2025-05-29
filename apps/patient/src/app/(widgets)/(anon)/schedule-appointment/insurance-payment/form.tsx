@@ -1,41 +1,23 @@
-'use client'
+'use client';
 
-import * as React from 'react'
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { INSURANCE_INFO, ProviderType, SELF_PAY_INFO } from '@psychplus-v2/constants'
-import { cn, getProviderTypeLabel } from '@psychplus-v2/utils'
-import { Box, Flex, Text } from '@radix-ui/themes'
-import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
-import { z } from 'zod'
-import {
-  BookAppointmentPayload,
-  CardSide,
-  InsurancePayers,
-  InsurancePlans,
-  InsurancePolicyPriority,
-} from '@psychplus/appointments'
-import {
-  addCreditCard,
-  bookAppointment,
-  fetchCreditCards,
-  fetchInsurancePayer,
-  submitPatientPolicy,
-  submitPatientPolicyCard,
-} from '@psychplus/appointments/api.client'
-import {
-  Form,
-  FormSubmitButton,
-  FormTextInput,
-  useForm,
-  validate,
-} from '@psychplus/form'
-import { Select } from '@psychplus/ui/select'
-import { clickTrack } from '@psychplus/utils/tracking'
-import { ImageUploader, psychPlusBlueColor, whiteColor } from '@/components'
-import { FormError } from '@/components-v2'
-import AppointmentDetailCard from '@/components/appointment-detail-card/appointment-detail-card'
-import { BookedSlot, useStore } from '@/widgets/schedule-appointment-list/store'
+import * as React from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { INSURANCE_INFO, ProviderType, SELF_PAY_INFO } from '@psychplus-v2/constants';
+import { cn, getAgeFromDate, getProviderTypeLabel } from '@psychplus-v2/utils';
+import { Box, Flex, RadioGroup, Text } from '@radix-ui/themes';
+import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
+import { z } from 'zod';
+import { BookAppointmentPayload, CardSide, InsurancePayers, InsurancePlans, InsurancePolicyPriority, PatientPolicy } from '@psychplus/appointments';
+import { addCreditCard, bookAppointment, fetchCreditCards, fetchInsurancePayer, submitPatientPolicy, submitPatientPolicyCard } from '@psychplus/appointments/api.client';
+import { Form, FormSubmitButton, FormTextInput, useForm, validate } from '@psychplus/form';
+import { Select } from '@psychplus/ui/select';
+import { clickTrack } from '@psychplus/utils/tracking';
+import { ImageUploader, psychPlusBlueColor, whiteColor } from '@/components';
+import { FormError, SSNInput } from '@/components-v2';
+import AppointmentDetailCard from '@/components/appointment-detail-card/appointment-detail-card';
+import { BookedSlot, useStore } from '@/widgets/schedule-appointment-list/store';
+
 
 type SchemaType = z.infer<typeof baseSchema>
 const baseSchema = z.object({
@@ -44,7 +26,76 @@ const baseSchema = z.object({
   memberId: validate.nullableString,
   groupNumber: validate.nullableString,
   effectiveDate: validate.nullableString,
-})
+  terminationDate: validate.nullableString,
+  isPatientPolicyHolder: z.boolean(),
+  policyHolderFirstName: z
+        .string()
+        .max(28, 'Max 28 characters are allowed')
+        .optional(),
+  policyHolderLastName: z
+        .string()
+        .max(28, 'Max 28 characters are allowed')
+        .optional(),
+  policyHolderGender: z.string().optional().optional(),
+  policyHolderRelationship: z.string().optional().optional(),
+  insurancePolicyPriority: z.string().min(1, 'Required'),
+  policyHolderDateOfBirth: z.string().optional(),
+  policyHolderSocialSecurityNumber: z.string().optional(),
+}).superRefine((data, ctx) => {
+    if (!data.isPatientPolicyHolder) {
+      if (!data.policyHolderFirstName) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Required',
+          path: ['policyHolderFirstName'],
+        })
+      }
+
+      if (!data.policyHolderLastName) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Required',
+          path: ['policyHolderLastName'],
+        })
+      }
+
+      if (
+        data.policyHolderDateOfBirth === '' ||
+        data.policyHolderDateOfBirth === null ||
+        data.policyHolderDateOfBirth === undefined
+      ) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Required',
+          fatal: true,
+          path: ['policyHolderDateOfBirth'],
+        })
+      } else if (getAgeFromDate(data.policyHolderDateOfBirth) < 18) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Must be at least 18 years of age',
+          fatal: true,
+          path: ['policyHolderDateOfBirth'],
+        })
+      }
+
+      if (!data.policyHolderGender) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Required',
+          path: ['policyHolderGender'],
+        })
+      }
+
+      if (!data.policyHolderRelationship) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Required',
+          path: ['policyHolderRelationship'],
+        })
+      }
+    }
+  })
 
 interface InsurancePaymentFormProps {
   insuranceOptions: {
@@ -78,9 +129,26 @@ const InsurancePaymentForm = ({
     })
   }
 
-  const schema = baseSchema.merge(insuranceSchema)
+  const schema = baseSchema.and(insuranceSchema)
 
-  const form = useForm({ schema })
+  const form = useForm({
+    schema,
+    defaultValues: {
+      insurancePlanId: '',
+      effectiveDate: '',
+      terminationDate: '',
+      memberId: '',
+      groupNumber: '',
+      isPatientPolicyHolder: true,
+      policyHolderFirstName: '',
+      policyHolderLastName: '',
+      policyHolderGender: '',
+      policyHolderDateOfBirth: '',
+      policyHolderRelationship: '',
+      insurancePolicyPriority: 'Primary',
+      policyHolderSocialSecurityNumber: '',
+    },
+  })
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const stripe = useStripe()
@@ -211,17 +279,31 @@ const InsurancePaymentForm = ({
   }
 
   const handlePolicySubmit = (data: SchemaType): Promise<boolean> => {
-    return submitPatientPolicy({
-      insurancePlanId: data.insurancePlanId ?? '',
-      memberId: data.memberId ?? '',
-      groupNumber: data.groupNumber ?? '',
-      effectiveDate: data.effectiveDate ?? '',
-      hasCardFrontImage: !!cardFrontImage,
-      hasCardBackImage: !!cardBackImage,
-      insurancePolicyPriority: InsurancePolicyPriority.PRIMARY,
-      isPatientPolicyHolder: true,
-      isActive: true,
-    })
+    const payload:PatientPolicy = {
+          insurancePlanId: data.insurancePlanId ?? '',
+          effectiveDate: data.effectiveDate ?? '',
+          terminationDate: data.terminationDate ?? '',
+          memberId: data.memberId ?? '',
+          groupNumber: data.groupNumber ?? '',
+          isPatientPolicyHolder: data.isPatientPolicyHolder ?? 'Yes',
+          insurancePolicyPriority: InsurancePolicyPriority.PRIMARY,
+          isActive: true,
+          hasCardFrontImage: cardFrontImage !== undefined,
+          hasCardBackImage: cardBackImage !== undefined
+        }
+        if (!data.isPatientPolicyHolder) {
+          payload.policyHolderName = {
+            firstName: data?.policyHolderFirstName ?? '',
+            lastName: data?.policyHolderLastName ?? '',
+          }
+          payload.policyHolderGender = data?.policyHolderGender
+          payload.policyHolderDateOfBirth = data?.policyHolderDateOfBirth
+          payload.policyHolderRelationship = data?.policyHolderRelationship
+          payload.policyHolderSocialSecurityNumber =
+            data?.policyHolderSocialSecurityNumber
+        }
+
+    return submitPatientPolicy(payload)
       .then((res) => {
         if (res.id) {
           if (cardFrontImage) {
@@ -257,6 +339,48 @@ const InsurancePaymentForm = ({
     form.setValue('insurancePayerId', payerId)
     setInsurancePlans(payer.plans ?? [])
     form.trigger('insurancePayerId')
+  }
+
+  const watchisPatientPolicyHolder = form.watch('isPatientPolicyHolder')
+
+  useEffect(() => {
+      if (!watchisPatientPolicyHolder) {
+        form.register('policyHolderFirstName')
+        form.register('policyHolderLastName')
+        form.register('policyHolderDateOfBirth')
+        form.register('policyHolderGender')
+        form.register('policyHolderRelationship')
+      } else {
+        form.unregister('policyHolderFirstName')
+        form.unregister('policyHolderLastName')
+        form.unregister('policyHolderDateOfBirth')
+        form.unregister('policyHolderGender')
+        form.unregister('policyHolderRelationship')
+      }
+    }, [form.register, form.unregister, watchisPatientPolicyHolder])
+
+  const onCheckedChange = (isPolicyHolder: boolean) => {
+    if (isPolicyHolder) {
+      form.clearErrors('policyHolderFirstName')
+      form.clearErrors('policyHolderLastName')
+      form.clearErrors('policyHolderDateOfBirth')
+      form.clearErrors('policyHolderGender')
+      form.clearErrors('policyHolderRelationship')
+    }
+    form.setValue('isPatientPolicyHolder', isPolicyHolder, {
+      shouldValidate: true,
+      shouldDirty: true,
+    })
+  }
+
+  const handleDateChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    name: 'effectiveDate' | 'terminationDate' | 'policyHolderDateOfBirth',
+  ) => {
+    const selectedDate = event.target.value
+    const [formattedDate] = new Date(selectedDate).toISOString().split('T')
+    form.setValue(name, formattedDate)
+    form.trigger(name)
   }
 
   return (
@@ -446,17 +570,211 @@ const InsurancePaymentForm = ({
                 data-testid="effective-date"
                 value={form.watch('effectiveDate') ?? ''}
                 max="9999-12-31"
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  const selectedDate = event.target.value
-                  const [effectiveDate] = new Date(selectedDate)
-                    .toISOString()
-                    .split('T')
-                  form.setValue('effectiveDate', effectiveDate)
-                  form.trigger('effectiveDate')
-                }}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => 
+                  handleDateChange(event, 'effectiveDate')
+                }
                 className="mr-2 mt-2 h-[50px] w-full text-3 font-regular text-gray-10"
               />
             </Flex>
+            <Flex direction="column" gap="1">
+              <Text as="p" className="text-[14px] font-medium">
+                <Text>Termination Date</Text>
+                <Text className="text-[#f14545]">*</Text>
+              </Text>
+
+              <FormTextInput
+                label=""
+                type="date"
+                name="terminationDate"
+                data-testid="termination-date"
+                value={form.watch('terminationDate') ?? ''}
+                max="9999-12-31"
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => 
+                  handleDateChange(event, 'terminationDate')
+                }
+                className="mr-2 mt-2 h-[50px] w-full text-3 font-regular text-gray-10"
+              />
+            </Flex>
+            <Box className="flex-1 mt-2 rounded-3 bg-[#F0F4FF] px-3 py-1.5" mb="2">
+              <Text as="p" className="text-[14px] font-medium">
+                <Text>Are you the primary insurance holder</Text>
+                <Text className="text-[#f14545]">*</Text>
+              </Text>
+              <RadioGroup.Root
+                id="isPatientPolicyHolder"
+                value={String(form.watch('isPatientPolicyHolder'))}
+                data-testid="signup-is-parent-or-guardian-input"
+                defaultValue={String(true)}
+                onValueChange={(value) => {
+                  const isPolicyHolder = value === 'true'
+                  onCheckedChange(isPolicyHolder)
+                }}
+              >
+                <Flex gap="4">
+                  {[
+                    { label: 'Yes', value: true },
+                    { label: 'No', value: false },
+                  ].map((option) => (
+                    <Text as="label" key={option.label} size="2">
+                      <Flex gap="1">
+                        <RadioGroup.Item
+                          value={String(option.value)}
+                          className={cn(`relative rounded-full border-pp-gray-2 flex h-5 w-5 items-center justify-center border`,
+                            watchisPatientPolicyHolder === option.value && 'bg-pp-blue-3'
+                          )}
+                        />
+                          {watchisPatientPolicyHolder === option.value && (
+                            <Box className="absolute rounded-full bg-white h-2.5 w-2.5 mt-[5px] ml-[4.5px]" />
+                          )}
+                        {option.label}
+                      </Flex>
+                    </Text>
+                  ))}
+                </Flex>
+              </RadioGroup.Root>
+            </Box>
+            {!watchisPatientPolicyHolder && (
+              <>
+                <Text size="5" className="mb-3 mt-3 font-bold text-[#151B4A]">
+                  Primary Insurance Holder Details
+                </Text>
+                <Flex direction="column" gap="1">
+                  <Text as="p" className="text-[14px] font-medium">
+                    <Text>First Name</Text>
+                    <Text className="text-[#f14545]">*</Text>
+                  </Text>
+                  <FormTextInput
+                    type="text"
+                    label=""
+                    placeholder="First name"
+                    className="h-[56px] w-full px-1"
+                    data-testid="policy-holder-first-name"
+                    {...form.register('policyHolderFirstName')}
+                  />
+                </Flex>
+                <Flex direction="column" gap="1">
+                  <Text as="p" className="text-[14px] font-medium">
+                    <Text>Last Name</Text>
+                    <Text className="text-[#f14545]">*</Text>
+                  </Text>
+                  <FormTextInput
+                    type="text"
+                    label=""
+                    placeholder="Last name"
+                    className="h-[56px] w-full px-1"
+                    data-testid="policy-holder-last-name"
+                    {...form.register('policyHolderLastName')}
+                  />
+                </Flex>
+                <Flex direction="column" gap="1">
+                  <Text as="p" className="text-[14px] font-medium">
+                    <Text>Gender</Text>
+                    <Text className="text-[#f14545]">*</Text>
+                  </Text>
+
+                  <Select.Root
+                    size="3"
+                    name="policyHolderGender"
+                    value={form.watch('policyHolderGender') ?? ''}
+                    onValueChange={(value) => {
+                      form.setValue('policyHolderGender', value)
+                      form.trigger('policyHolderGender')
+                    }}
+                  >
+                    <Select.Trigger
+                      placeholder="Select gender"
+                      className="h-[56px] w-full rounded-3"
+                    />
+                    <Select.Content
+                      position="popper"
+                      className="max-h-[275px] overflow-y-scroll"
+                      highContrast
+                    >
+                      <Select.Item value="NotSpecified">
+                        Not specified
+                      </Select.Item>
+                      <Select.Item value="Male">Male</Select.Item>
+                      <Select.Item value="Female">Female</Select.Item>
+                      <Select.Item value="Undetermined">
+                        Undetermined
+                      </Select.Item>
+                    </Select.Content>
+                  </Select.Root>
+                  {form.formState.errors.policyHolderGender && (
+                    <Text size="2" color="red">
+                      {form.formState.errors.policyHolderGender.message}
+                    </Text>
+                  )}
+                </Flex>
+                <Flex direction="column" gap="1">
+                  <Text as="p" className="text-[14px] font-medium">
+                    <Text>Date of Birth</Text>
+                    <Text className="text-[#f14545]">*</Text>
+                  </Text>
+
+                  <FormTextInput
+                    label=""
+                    type="date"
+                    name="policyHolderDateOfBirth"
+                    data-testid="policy-holder-date-of-birth"
+                    value={form.watch('policyHolderDateOfBirth') ?? ''}
+                    max="9999-12-31"
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                      handleDateChange(event, 'policyHolderDateOfBirth')
+                    }
+                    className="mr-2 mt-2 h-[50px] w-full text-3 font-regular text-gray-10"
+                  />
+                </Flex>
+                <Flex direction="column" gap="1">
+                  <Text as="p" className="text-[14px] font-medium">
+                    <Text>SSN</Text>
+                    <Text className="text-[#f14545]">*</Text>
+                  </Text>
+                  <SSNInput
+                    name="policyHolderSocialSecurityNumber"
+                    size="2"
+                    placeholder="Enter SSN"
+                    className="h-[56px] w-full border border-pp-gray-2 rounded-3 px-2"
+                  />
+                </Flex>
+                <Flex direction="column" gap="1">
+                  <Text as="p" className="text-[14px] font-medium">
+                    <Text>Relationship</Text>
+                    <Text className="text-[#f14545]">*</Text>
+                  </Text>
+
+                  <Select.Root
+                    size="3"
+                    name="policyHolderRelationship"
+                    value={form.watch('policyHolderRelationship') ?? ''}
+                    onValueChange={(value) => {
+                      form.setValue('policyHolderRelationship', value)
+                      form.trigger('policyHolderRelationship')
+                    }}
+                  >
+                    <Select.Trigger
+                      placeholder="Select relationship"
+                      className="h-[56px] w-full rounded-3"
+                    />
+                    <Select.Content
+                      position="popper"
+                      className="max-h-[275px] overflow-y-scroll"
+                      highContrast
+                    >
+                      <Select.Item value="Spouse">Spouse</Select.Item>
+                      <Select.Item value="Child">Child</Select.Item>
+                      <Select.Item value="OtherAdult">Other Adult</Select.Item>
+                      <Select.Item value="Guardian">Guardian</Select.Item>
+                    </Select.Content>
+                  </Select.Root>
+                  {form.formState.errors.policyHolderRelationship && (
+                    <Text size="2" color="red">
+                      {form.formState.errors.policyHolderRelationship.message}
+                    </Text>
+                  )}
+                </Flex>
+              </>
+            )}
           </Flex>
         </>
       )}
