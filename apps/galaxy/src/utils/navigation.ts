@@ -416,6 +416,10 @@ const getManagementNavLinks = (
       href: `${baseHref}/location`,
     },
     {
+      label: 'State',
+      href: `${baseHref}/states`,
+    },
+    {
       label: 'Reports',
       href: `${baseHref}/reports`,
     },
