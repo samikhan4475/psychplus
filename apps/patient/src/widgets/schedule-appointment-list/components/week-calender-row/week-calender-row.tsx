@@ -26,14 +26,19 @@ const WeekCalendarRow = () => {
 
   const renderDays = () => {
   if (isMobile()) {
-    return [renderDay(startDate)] // Use state-controlled date
+    const today = new Date()
+    const weekStart = getFirstDayOfWeek() // default week start
+    const weekEnd = addDays(weekStart, 6)
+
+    const isTodayInDefaultWeek = today >= weekStart && today <= weekEnd
+
+    return [renderDay(currentWeekReel === 0 && isTodayInDefaultWeek ? today : startDate)]
   }
 
   return Array.from({ length: daysToAdd }, (_, i) =>
     addDays(startDate, i)
   ).map(renderDay)
 }
-
 
   const handleWeekChange = (offset: number) => {
     const changeBy = isMobile() ? 1 : 7

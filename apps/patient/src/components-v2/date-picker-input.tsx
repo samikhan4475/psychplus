@@ -37,6 +37,7 @@ interface DatePickerInputProps<T extends DateValue> extends DatePickerProps<T> {
   showError?: boolean
   datePickerClass?: string
   className?: string
+  showIcon?: boolean
 }
 
 const DatePickerInput = <T extends DateValue>({
@@ -49,6 +50,7 @@ const DatePickerInput = <T extends DateValue>({
   showError = true,
   dateInputClass,
   className,
+  showIcon = true,
   ...props
 }: DatePickerInputProps<T>) => {
   const form = useFormContext()
@@ -136,9 +138,11 @@ const DatePickerInput = <T extends DateValue>({
                     </DateSegment>
                   )}
                 </DateInput>
-                <Button className="outline-none disabled:bg-gray-3 disabled:text-gray-11">
-                  <CalendarIcon size="13" stroke="#8B8D98" />
-                </Button>
+                {showIcon && (
+                  <Button className="outline-none disabled:bg-gray-3 disabled:text-gray-11">
+                    <CalendarIcon size="13" stroke="#8B8D98" />
+                  </Button>
+                )}
               </Group>
               <Popover className="bg-white pointer-events-auto rounded-1 p-3 shadow-[0px_7px_29px_rgba(100,100,111,0.2)]">
                 <Dialog>

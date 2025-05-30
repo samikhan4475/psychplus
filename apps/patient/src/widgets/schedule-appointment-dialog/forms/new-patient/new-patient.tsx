@@ -3,7 +3,7 @@
 import { ChangeEvent, useRef, useState } from 'react'
 import { zipLast4Schema, zipCodeSchema, cn } from '@psychplus-v2/utils'
 import * as ToggleGroup from '@radix-ui/react-toggle-group'
-import { Button, Flex, Text, TextField } from '@radix-ui/themes'
+import { Box, Button, Flex, Text, TextField } from '@radix-ui/themes'
 import { type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 import {
@@ -24,6 +24,9 @@ import { enums, PSYCHPLUS_LIVE_URL } from '@/constants'
 import { DatePickerInput } from '@/components-v2/date-picker-input'
 import { DateValue } from 'react-aria-components'
 import { getLocalTimeZone } from '@internationalized/date'
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { getMonth, getYear } from 'date-fns'
 
 interface NewPatientProps {
   onclose?: () => void
@@ -57,9 +60,12 @@ interface StateOptions {
 
 const schema = z
   .object({
-    dateOfBirth: z.custom<DateValue>((val) => !!val && typeof val === 'object', {
-      message: 'required',
-    }),
+    dateOfBirth: z.custom<Date>(
+      (value) => value instanceof Date && !isNaN(value.getTime()),
+      {
+        message: 'Required',
+      },
+    ),
     zipCode: validate.requiredString,
     state: validate.requiredString,
     primaryStreet1: z.string().optional(),
@@ -74,7 +80,7 @@ const schema = z
   })
   .superRefine(({ dateOfBirth, zipCode }, ctx) => {
     const currentDate = new Date()
-    const dob = dateOfBirth.toDate('CST')
+    const dob = new Date(dateOfBirth)
 
     if (dob) {
       const ageInYears = currentDate.getFullYear() - dob.getFullYear()
@@ -103,6 +109,8 @@ type SchemaType = z.infer<typeof schema>
 const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
   const { publish } = usePubsub()
 
+  const [selectedDate, setSelectedDate] = useState<Date | null>();
+
   const form = useForm({
     schema,
     criteriaMode: 'all',
@@ -129,9 +137,9 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
 
   const { setPatient, setGMapKey } = useStore()
 
-  const getLocalDateWithoutTime = (date?: DateValue | null): string | undefined => {
+  const getLocalDateWithoutTime = (date?: Date | null): string | undefined => {
         if (date) {
-          const dateObj = date.toDate(getLocalTimeZone())
+          const dateObj = date
           const utcDate = `${dateObj.getDate()}`.padStart(2, '0')
           const utcMonth = `${dateObj.getMonth() + 1}`.padStart(2, '0')
           const utcYear = `${dateObj.getFullYear()}`
@@ -219,6 +227,22 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
     const url = `/schedule?${queryString}`
     publish(`${SCHEDULE_APPOINTMENT_DIALOG}:appointment-search`, { url })
   }
+
+  const years = Array.from({ length: 200 }, (_, i) => new Date().getFullYear() - i);
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
   return (
     <>
@@ -310,18 +334,77 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
                 label=""
                 {...form.register('dateOfBirth')}
               >
-                <Flex className="rt-TextFieldRoot rt-r-size-3 h-[45px] w-full rounded-6 text-4 sm:w-[190px]">
-                  <DatePickerInput
-                    field="dateOfBirth"
-                    className="w-full"
-                    datePickerClass="rt-TextFieldInput rt-reset block w-full"
-                    dateInputClass="h-[45px]"
+                <Flex className="h-[45px] w-full rounded-6 text-4 sm:w-[190px]">
+                  <DatePicker
+                    renderCustomHeader={({
+                      date,
+                      changeYear,
+                      changeMonth,
+                      decreaseMonth,
+                      increaseMonth,
+                      prevMonthButtonDisabled,
+                      nextMonthButtonDisabled,
+                    }) => (
+                      <Flex
+                        align={'center'}
+                        justify={'center'}
+                        gap={'1'}
+                      >
+                        <button
+                          onClick={decreaseMonth}
+                          disabled={prevMonthButtonDisabled}
+                        >
+                          {'<'}
+                        </button>
+                        <select
+                          value={getYear(date)}
+                          onChange={({ target: { value } }) =>
+                            changeYear(value as unknown as number)
+                          }
+                        >
+                          {years.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+
+                        <select
+                          value={months[getMonth(date)]}
+                          onChange={({ target: { value } }) =>
+                            changeMonth(months.indexOf(value))
+                          }
+                        >
+                          {months.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+
+                        <button
+                          onClick={increaseMonth}
+                          disabled={nextMonthButtonDisabled}
+                        >
+                          {'>'}
+                        </button>
+                      </Flex>
+                    )}
+                    selected={selectedDate}
+                    className={cn("border-pp-gray-2 h-[35px] w-[195px] text-start rounded-6 border-2 text-4 lg:h-[45px] px-2")}
+                    onChange={(date) => {
+                      if(date){
+                        form.setValue('dateOfBirth', date)
+                        setSelectedDate(date)
+                      }
+                    }}
+                    placeholderText='dd/mm/yyyy'
                   />
                 </Flex>
               </FormField>
             </Flex>
             <Flex direction="column" className="font-regular">
-              <Text size="4" mb="2" weight="medium">
+              <Text className="text-2 lg:text-4" mb="2" weight="medium">
                 Current ZIP Code
               </Text>
               <FormTextInput

@@ -47,25 +47,7 @@ const ProviderWithClinicAndWeeklyAvailability = ({
             <Text className="font-bold text-3 lg:text-5">
               {renderStaffName(staffWithClinicsAndSlots.staff)}
             </Text>
-
-            <Flex align="center" gap="1">
-              {Array.from({ length: 5 }, (_, index) => index + 1).map(
-                (value) => (
-                  <Box key={value}>
-                    {value <=
-                    (staffWithClinicsAndSlots.staff.rating?.valueOf() ?? 0) ? (
-                      <StarFilledIcon height={isMobile() ? 12 : 16} width={isMobile() ? 12 : 16} color="#FFC700" />
-                    ) : (
-                      <StarIcon height={isMobile() ? 12 : 16} width={isMobile() ? 12 : 16} color="#FFC700" />
-                    )}
-                  </Box>
-                ),
-              )}
-              <Text className="text-2 pt-[1px] font-medium text-[#1C2024]">
-                {staffWithClinicsAndSlots.staff.rating?.valueOf()}
-              </Text>
-            </Flex>
-
+            <StarRating rating={staffWithClinicsAndSlots.staff.rating?.valueOf()} />
             <Flex align="center">
               <Text size="1" className="text-[#194595]" ml="1">
                 {getCodeDisplay(

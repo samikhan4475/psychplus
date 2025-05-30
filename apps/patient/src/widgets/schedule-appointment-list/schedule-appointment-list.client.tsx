@@ -101,7 +101,7 @@ const ScheduleAppointmentListClient = ({
       state: searchParams.get('state') || '',
       sortBy: '',
       language: '',
-      startingDate: formatDateYmd(getFirstDayOfWeek()),
+      startingDate: formatDateYmd(isMobile() ? new Date() : getFirstDayOfWeek()),
     })
   }, [handleFiltersChange, searchParams, setCodeSets])
 
