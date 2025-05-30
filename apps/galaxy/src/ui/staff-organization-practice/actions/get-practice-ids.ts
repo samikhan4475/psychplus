@@ -1,6 +1,7 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { GET_PRACTICES_ENDPOINT } from '@/api/endpoints'
 import { SelectOptionType } from '@/types'
 
 enum recordStatuses {
@@ -31,7 +32,7 @@ interface GetPracticeProps {
 const getPracticeIdsAction = async ({
   payload,
 }: GetPracticeProps): Promise<api.ActionResult<SelectOptionType[]>> => {
-  const response = await api.POST<PracticeList[]>(api.GET_PRACTICES_ENDPOINT, {
+  const response = await api.POST<PracticeList[]>(GET_PRACTICES_ENDPOINT, {
     ...defaultPayloadPracticeList,
     ...payload,
   })

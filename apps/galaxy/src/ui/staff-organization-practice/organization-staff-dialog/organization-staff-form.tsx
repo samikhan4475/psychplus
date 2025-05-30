@@ -39,7 +39,7 @@ const OrganizationStaffForm = ({ data, onClose }: FormProps) => {
         <OrganizationSelect />
         <Box className="border-pp-gray-8 mb-2 mt-2 gap-3 rounded-[4px] border p-2">
           <SearchAddPracticeSelect />
-          <PracticesListTable data={data} />
+          <PracticesListTable />
         </Box>
       </Box>
       <SubmitFormButton />

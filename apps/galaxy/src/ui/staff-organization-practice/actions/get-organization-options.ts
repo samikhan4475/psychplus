@@ -1,6 +1,7 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { GET_ORGANIZATIONS_ENDPOINT } from '@/api/endpoints'
 import { SelectOptionType } from '@/types'
 
 const defaultPayload = {
@@ -22,13 +23,10 @@ interface Payload {
 const getOrganizationOptionsAction = async (
   payload?: Payload,
 ): Promise<api.ActionResult<SelectOptionType[]>> => {
-  const response = await api.POST<Organization[]>(
-    api.GET_ORGANIZATIONS_ENDPOINT,
-    {
-      ...defaultPayload,
-      ...payload,
-    },
-  )
+  const response = await api.POST<Organization[]>(GET_ORGANIZATIONS_ENDPOINT, {
+    ...defaultPayload,
+    ...payload,
+  })
 
   if (response.state === 'error') {
     return {

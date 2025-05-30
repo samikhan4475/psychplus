@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { Box, Flex, ScrollArea } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
+import { useFormContext } from 'react-hook-form'
 import {
   ColumnHeader,
   DataTable,
@@ -82,10 +83,9 @@ const columns: ColumnDef<Practice>[] = [
   },
 ]
 
-interface PracticesListTableProps {
-  data: Practice
-}
-const PracticesListTable = ({ data }: PracticesListTableProps) => {
+const PracticesListTable = () => {
+  const form = useFormContext()
+  const organizationId = form.watch('organizationId')
   const {
     searchDialogPractices,
     dialogTableData,
@@ -99,11 +99,13 @@ const PracticesListTable = ({ data }: PracticesListTableProps) => {
   }))
 
   useEffect(() => {
+    if (!organizationId || dialogTableLoading) return
+
     searchDialogPractices({
-      organizationId: data?.organizationId ?? '',
+      organizationId: organizationId ?? '',
       staffuserId: currentUserId,
     })
-  }, [data.organizationId])
+  }, [organizationId])
 
   if (dialogTableLoading) {
     return (
