@@ -3,9 +3,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import z from 'zod'
 import { FormContainer } from '@/components'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { sanitizeFormData } from '@/utils'
-import { CLAIM_STATUSES } from '../../constants'
 import { ClaimListSearchParams } from '../../types'
+import { getClaimStatuses } from '../../utils'
 import { ClaimNumberField } from './claim-number-field'
 import { ClearFilterFormButton } from './clear-filter-form-button'
 import { PatientIdField } from './patient-id-field'
@@ -23,12 +25,13 @@ const ClaimListFilterForm = () => {
   const { claimsListSearch } = useStore((state) => ({
     claimsListSearch: state.claimsListSearch,
   }))
+  const claimStatusCodes = useCodesetCodes(CODESETS.ClaimStatus)
 
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
     const cleanedData = sanitizeFormData(data) as ClaimListSearchParams
     return claimsListSearch({
       ...cleanedData,
-      claimStatusCodes: CLAIM_STATUSES,
+      claimStatusCodes: getClaimStatuses(claimStatusCodes),
     })
   }
 

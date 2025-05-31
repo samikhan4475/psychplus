@@ -62,6 +62,9 @@ const getClaimStatusDisplay = (codes: SharedCode[], claimStatusCode: string) =>
       claimStatusCode
     : claimStatusCode
 
+const getClaimStatuses = (codes: SharedCode[]) =>
+  codes.map((code) => code.value)
+
 export {
   truncateString,
   getClaimStatusDisplay,
@@ -69,4 +72,5 @@ export {
   formatAmount,
   getRandomId,
   addSpaceToCamelCase,
+  getClaimStatuses,
 }

@@ -15,7 +15,7 @@ import { useCodesetCodes } from '@/hooks'
 import { Sort, type Claim } from '@/types'
 import { getSortDir } from '@/utils'
 import { formatDate } from '@/utils/date'
-import { CLAIM_STATUSES } from '../../constants'
+import { getClaimStatuses } from '../../utils'
 import { ClaimNumberCell } from './claim-number-cell'
 import { useStore } from './store'
 import { transformInClaims } from './utils'
@@ -151,7 +151,7 @@ const ClaimListTable = ({
   const claimStatusCodes = useCodesetCodes(CODESETS.ClaimStatus)
   useEffect(() => {
     claimsListSearch({
-      claimStatusCodes: CLAIM_STATUSES,
+      claimStatusCodes: getClaimStatuses(claimStatusCodes),
     })
   }, [])
 

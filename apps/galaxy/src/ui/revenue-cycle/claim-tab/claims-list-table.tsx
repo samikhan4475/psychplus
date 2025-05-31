@@ -3,6 +3,9 @@
 import { useEffect } from 'react'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { DataTable, LoadingPlaceholder } from '@/components'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
+import { transformInClaims } from '../dialogs/claim-selection-dialog/utils'
 import { useStore as useRootStore } from '../store'
 import { RevenueCycleTab } from '../types'
 import { columns } from './columns'
@@ -25,6 +28,7 @@ const ClaimListTable = () => {
     sort: state.sort,
     sortData: state.sortData,
   }))
+  const claimStatuses = useCodesetCodes(CODESETS.ClaimStatus)
 
   useEffect(() => {
     if (activeTab === RevenueCycleTab.Claim) {
@@ -42,7 +46,7 @@ const ClaimListTable = () => {
   return (
     <ScrollArea className="h-full p-2">
       <DataTable
-        data={claimsListData?.claims ?? []}
+        data={transformInClaims(claimStatuses, claimsListData?.claims ?? [])}
         columns={columns(sort, sortData)}
         disablePagination
         sticky

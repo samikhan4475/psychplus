@@ -8,35 +8,8 @@ const DENIAL_TABLE_PAGE_SIZE = 20
 const PATIENT_LIST_OPTION_SIZE = 20
 const INSURANCE_PAYER_LIST_OPTION_SIZE = 20
 const INSURANCE_PLAN_LIST_OPTION_SIZE = 20
-const ENABLE_FORM_STATUSES = ['NewCharge', 'Denied', 'Rejected', 'Resubmit']
+const ENABLE_FORM_STATUSES = ['NewCharge', 'Denied', 'Rejected', 'Reopen']
 const CLAIM_PAYMENT_STATUSES = ['Paid']
-const CLAIM_STATUSES = [
-  'NewCharge',
-  'Approved',
-  'Submitted',
-  'Resubmit',
-  'ReadyForSubmissionPrimary',
-  'ReadyForSubmissionSecondary',
-  'ReadyForSubmissionTertiary',
-  'BilledToPrimary',
-  'BilledToSecondary',
-  'BilledToTertiary',
-  'CreditPrimary',
-  'CreditSecondary',
-  'CreditTertiary',
-  'PatientResponsibility',
-  'CreditPatient',
-  'Denied',
-  'DeniedPrimary',
-  'DeniedSecondary',
-  'DeniedTertiary',
-  'Paid',
-  'ReveralApplied',
-  'Rejected',
-  'RejectedPrimary',
-  'RejectedSecondary',
-  'RejectedTertiary',
-]
 
 export {
   CLAIM_LIST_TABLE_PAGE_SIZE,
@@ -51,5 +24,4 @@ export {
   INSURANCE_PAYER_LIST_OPTION_SIZE,
   ENABLE_FORM_STATUSES,
   CLAIM_PAYMENT_STATUSES,
-  CLAIM_STATUSES,
 }
