@@ -29,6 +29,7 @@ const GET = async <T>(
       state: 'error',
       error: getErrorMessage(data),
       headers: response.headers,
+      status: response.status,
     }
   }
 

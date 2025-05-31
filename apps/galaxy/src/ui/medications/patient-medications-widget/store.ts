@@ -122,6 +122,10 @@ const useStore = create<StoreState>((set, get) => ({
   fetchExternalScriptsurePatientId: async (patientId: string) => {
     const response = await getScriptSureExternalPatient(patientId)
 
+    if (response.state === 'error' && response.status === 401) {
+      return
+    }
+
     if (response.state === 'error') {
       return toast.error(response.error ?? 'Failed to Fetch Scriptsure Patient')
     }

@@ -17,6 +17,7 @@ const getScriptSureExternalPatient = async (
     return {
       state: 'error',
       error: response.error,
+      status: response.status,
     }
   }
   return {

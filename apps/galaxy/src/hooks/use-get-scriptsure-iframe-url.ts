@@ -8,14 +8,15 @@ import { DAWSYS } from '@/constants'
 import { useStore as useAllergiesStore } from '@/ui/allergy/patient-allergies-widget/store'
 import { useStore as useMedicationsStore } from '@/ui/medications/patient-medications-widget/store'
 
-
 const useGetScriptSureIframeUrl = (
   id: string,
   scriptSureAppUrl: string,
   baseUrl: string,
   darkMode: 'on' | 'off' = 'off',
 ) => {
-  const allergiesListError = useAllergiesStore((state) => state.allergiesListError)
+  const allergiesListError = useAllergiesStore(
+    (state) => state.allergiesListError,
+  )
   const medicationError = useMedicationsStore((state) => state.error)
   const [iframeUrl, setIframeUrl] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(true)
@@ -35,14 +36,23 @@ const useGetScriptSureIframeUrl = (
         const url = `${scriptSureAppUrl}/widgets/${baseUrl}/${externalPatientId}?sessiontoken=${sessionToken}&darkmode=${darkMode}`
         setIframeUrl(url)
       }
-      
-      
-      if (sessionTokenResponse.state === 'error') {
-        toast.error( allergiesListError ?? medicationError ?? sessionTokenResponse.error ?? 'Failed to fetch data')
+
+      if (
+        sessionTokenResponse.state === 'error' &&
+        sessionTokenResponse.status !== 401
+      ) {
+        toast.error(
+          allergiesListError ??
+            medicationError ??
+            sessionTokenResponse.error ??
+            'Failed to fetch data',
+        )
       }
 
-
-      if (externalPatientResponse.state === 'error') {
+      if (
+        externalPatientResponse.state === 'error' &&
+        externalPatientResponse.status !== 401
+      ) {
         toast.error(externalPatientResponse.error ?? 'Failed to fetch data')
       }
       setLoading(false)

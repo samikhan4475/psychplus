@@ -8,7 +8,9 @@ const RxView = async () => {
   if (response.state !== 'success') {
     return (
       <Flex display="flex" justify="center" align="center" height="100%">
-        <Text>Your account has not been setup to use E-prescribe features.</Text> 
+        <Text>
+          Your account has not been setup to use E-prescribe features.
+        </Text>
       </Flex>
     )
   }

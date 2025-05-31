@@ -11,18 +11,19 @@ interface GetPatientMedicationsParams {
 
 const getPatientMedicationsAction = async ({
   patientIds,
-  medicationStatuses
+  medicationStatuses,
 }: GetPatientMedicationsParams): Promise<
   api.ActionResult<GetPatientMedicationsResponse>
 > => {
   const response = await api.POST<PatientMedication[]>(
     GET_PATIENT_MEDICATIONS(),
-    { patientIds,medicationStatuses },
+    { patientIds, medicationStatuses },
   )
   if (response.state === 'error') {
     return {
       state: 'error',
       error: response.error,
+      status: response.status,
     }
   }
 

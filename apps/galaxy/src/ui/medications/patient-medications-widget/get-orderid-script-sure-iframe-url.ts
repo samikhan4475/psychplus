@@ -28,8 +28,13 @@ const useGetOrderIdScriptSureIframeUrl = (
         const url = `${scriptSureAppUrl}/widgets/${baseUrl}/${externalPatientId}/${pendingOrderId}?sessiontoken=${sessionToken}&darkmode=${darkMode}`
         setIsOpen(true)
         setIframeUrl(url)
-      } else if (sessionTokenResponse.state === 'error') {
+      } else if (
+        sessionTokenResponse.state === 'error' &&
+        sessionTokenResponse.status !== 401
+      ) {
         toast.error(sessionTokenResponse.error ?? 'Failed to get response')
+        setIsOpen(false)
+      } else {
         setIsOpen(false)
       }
     }
