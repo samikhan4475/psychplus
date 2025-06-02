@@ -3,6 +3,7 @@ import { useParams, useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { genericEventBus } from '@/lib/generic-event-bus'
 import { LabOrders } from '@/types'
 import { useStore } from '../lab-orders-widget/store'
 import {
@@ -24,7 +25,7 @@ const useLabOrderForm = (
 ) => {
   const { id } = useParams<{ id: string }>()
   const appointmentId = useSearchParams().get('id') ?? ''
-  const { updateLabOrdersList } = useStore()
+  const { updateLabOrdersList, isQuickNoteView } = useStore()
   const [loadingSubmit, setLoadingSubmit] = useState(false)
   const [loadingPlaceOrder, setLoadingPlaceOrder] = useState(false)
 
@@ -202,10 +203,24 @@ const useLabOrderForm = (
       if (result.isEdit && specimenList.length > 0) {
         await specimenActions()
       }
-      const updatedLabOrder = {
-        ...result.data,
-        labTests:
-          labTestResult.state === 'success' ? [...labTestResult.data] : [],
+      let updatedLabOrder
+      if (labTestResult.state === 'success') {
+        updatedLabOrder = {
+          ...result.data,
+          labTests: [...labTestResult.data],
+        }
+        if (isQuickNoteView) {
+          genericEventBus.emit(`${appointmentId}`, {
+            type: 'lab-order',
+            message: 'Lab order added/updated',
+            timestamp: new Date().toISOString(),
+          })
+        }
+      } else {
+        updatedLabOrder = {
+          ...result.data,
+          labTests: [],
+        }
       }
 
       if (isPlaceOrder && data.labLocationData?.name === 'Quest') {

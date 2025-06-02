@@ -11,6 +11,7 @@ interface StoreState {
   error?: string
   payload?: LabOrderPayload
   activeTab: string
+  isQuickNoteView?: boolean
   viewedTabs: Set<string>
   sort?: Sort
   fetch: (
@@ -20,6 +21,7 @@ interface StoreState {
     reset?: boolean,
   ) => void
   setActiveTab: (tab: string) => void
+  setIsQuickNoteView: (isQuickNoteView: boolean) => void
   addLabResult: (labResult: LabResult) => void
   setLabResult: (labeResult: LabResult) => void
   selectedTestId?: string
@@ -59,6 +61,11 @@ const useStore = create<StoreState>((set, get) => ({
   setTestLabResult: (labResult) => {
     set({
       testLabResult: labResult,
+    })
+  },
+  setIsQuickNoteView: (isQuickNoteView) => {
+    set({
+      isQuickNoteView: isQuickNoteView,
     })
   },
   selectedTestId: undefined,

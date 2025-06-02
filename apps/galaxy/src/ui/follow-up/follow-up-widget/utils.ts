@@ -129,6 +129,7 @@ const getVisitSequence = (appointment: Appointment) => {
     case VisitTypes.Ect:
     case VisitTypes.GroupTherapy:
     case VisitTypes.KetamineFourVisit:
+    case VisitTypes.UDS:
       return VisitSequenceTypes.Na
     default:
       return VisitSequenceTypes.Establish

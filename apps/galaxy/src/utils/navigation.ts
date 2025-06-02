@@ -84,6 +84,7 @@ const getNavLinks = (
     },
     { label: 'Follow Up', href: '/follow-up' },
     { label: 'Assessment & Plan', href: '/assessment-plan' },
+    { label: 'Screening', href: '/screening' },
     { label: 'Procedures', href: '/procedures' },
     { label: 'Scheduling History', href: '/scheduling-history' },
     ...defaultBottomLinks,

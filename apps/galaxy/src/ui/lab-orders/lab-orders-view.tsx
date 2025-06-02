@@ -15,7 +15,10 @@ interface LabOrderHeaderProps {
   showFilters?: boolean
 }
 
-const LabOrdersView = ({ IsLabOrderHeader = true, showFilters = false }: LabOrderHeaderProps) => {
+const LabOrdersView = ({
+  IsLabOrderHeader = true,
+  showFilters = false,
+}: LabOrderHeaderProps) => {
   const { activeTab, setActiveTab } = useStore()
 
   return (
@@ -37,7 +40,11 @@ const LabOrdersView = ({ IsLabOrderHeader = true, showFilters = false }: LabOrde
       </Flex>
 
       <TabsContent value={LabOrdersTabs.LAB_ORDERS}>
-        <LabOrdersWidget IsLabOrderHeader={IsLabOrderHeader} showFilters={showFilters} />
+        <LabOrdersWidget
+          IsLabOrderHeader={IsLabOrderHeader}
+          showFilters={showFilters}
+          isQuickNoteView={false}
+        />
       </TabsContent>
       <TabsContent value={LabOrdersTabs.LAB_RESULTS}>
         <PatientLabResultView />

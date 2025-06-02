@@ -4,6 +4,7 @@ import { useFormContext, useWatch } from 'react-hook-form'
 import { TCMTypeOfVisit } from '@/ui/visit/constants'
 import { SchemaType } from '../../schema'
 import { useAddVisitStore } from '../../store'
+import { SlotDetails } from '../../types'
 import { VisitDate } from '../visit-date'
 import { VisitTypeDropdown } from '../visit-type-select'
 import { DCDate } from './dc-date'
@@ -18,9 +19,8 @@ import { ProviderTypeSelect } from './provider-type-select'
 import { VisitMediumText } from './visit-medium-text'
 import { VisitSequenceText } from './visit-sequence-text'
 import { VisitTimeDropdown } from './visit-time-select'
-import { SlotDetails } from '../../types'
 
-const TimedVisitForm = ({ slotDetails }: { slotDetails?: SlotDetails}) => {
+const TimedVisitForm = ({ slotDetails }: { slotDetails?: SlotDetails }) => {
   const form = useFormContext<SchemaType>()
   const { visitTypes } = useAddVisitStore()
 

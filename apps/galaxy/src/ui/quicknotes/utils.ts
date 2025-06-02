@@ -32,6 +32,7 @@ import { RosWidgetClientLoader } from '../ros/ros-widget/ros-widget-client-loade
 import { SocialHxClientLoader } from '../social-hx/social-hx-widget/social-hx-client-loader'
 import { SubstanceUseHxClientLoader } from '../substance-use-hx/substance-use-hx-widget/substance-use-hx-client-loader'
 import { TherapyWidgetClientLoader } from '../therapy/therapy-widget-client-loader'
+import { UdsWidget } from '../uds'
 import { UploadedDocumentsClientWidget } from '../uploaded-documents/uploaded-documents-client-widget'
 import { VitalsWidgetLoader } from '../vitals/vitals-widget-client-loader'
 import { AddOnClientView } from './actual-note-view/add-on/add-on-client-view'
@@ -62,6 +63,7 @@ import { TcmClientiew } from './actual-note-view/tcm/tcm-client-view'
 import { TherapyAssessmentPlanClientView } from './actual-note-view/therapy-assessment-plan/therapy-assessment-plan-client-view'
 import { TherapyClientView } from './actual-note-view/therapy/therapy-client-view'
 import { TmsDetailClientView } from './actual-note-view/tms/tms-detail-client-view'
+import { UdsClientView } from './actual-note-view/uds/uds-client-view'
 import { UploadedDocumentClientView } from './actual-note-view/uploaded-documents/uploaded-document-client-view'
 import { VitalsNoteClientView } from './actual-note-view/vitals/vitals-note-client-view'
 import { WorkingDiagnosisClientView } from './actual-note-view/working-diagnosis/working-diagnosis-client-view '
@@ -255,6 +257,11 @@ const widgets: Array<WidgetType> = [
     id: QuickNoteSectionName.QuicknoteSectionLabResults,
     actualNoteComponent: LabResultsClient,
     isClient: true,
+  },
+  {
+    component: UdsWidget,
+    id: QuickNoteSectionName.QuicknoteSectionUds,
+    actualNoteComponent: UdsClientView,
   },
 ]
 

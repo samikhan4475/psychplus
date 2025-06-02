@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { IconButton } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
+import { genericEventBus } from '@/lib/generic-event-bus'
 import { deleteLabOrderApi } from '../../add-lab-order/api'
 import { LabOrderStatusEnum } from '../../add-lab-order/blocks/types'
 import { DeleteDialog } from '../delete-dialogue/delete-dialogue'
@@ -18,7 +19,7 @@ const RowActionDelete = ({
 }) => {
   const [disabled, setDisabled] = useState(false)
   const appointmentId = useSearchParams().get('id') ?? ''
-  const { deleteLabOrder } = useStore()
+  const { deleteLabOrder, isQuickNoteView } = useStore()
 
   const onClickSend = async () => {
     setDisabled(true)
@@ -28,6 +29,13 @@ const RowActionDelete = ({
     if (response.state === 'success') {
       deleteLabOrder(response.data)
       toast.success('Lab order deleted')
+      if (isQuickNoteView) {
+        genericEventBus.emit(`${appointmentId}`, {
+          type: 'lab-order',
+          message: 'Lab order deleted',
+          timestamp: new Date().toISOString(),
+        })
+      }
     }
 
     setDisabled(false)

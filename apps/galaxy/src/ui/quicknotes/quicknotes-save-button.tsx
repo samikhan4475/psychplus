@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { Button } from '@radix-ui/themes'
 import { SaveIcon } from 'lucide-react'
 import { revalidateAction } from '@/actions/revalidate'
+import { VisitTypeEnum } from '@/enum'
+import { genericEventBus } from '@/lib/generic-event-bus'
 import { Appointment } from '@/types'
 import { SAVE_BUTTON } from './constants'
 import { useQuickNotesPermissions } from './hooks'
@@ -32,6 +34,13 @@ const QuickNotesSaveButton = ({
     }
     try {
       await save(appointment)
+      if (appointment.visitTypeCode === VisitTypeEnum.UDS) {
+        genericEventBus.emit(`${appointment.id}`, {
+          type: 'lab-order',
+          message: 'Lab order saved',
+          timestamp: new Date().toISOString(),
+        })
+      }
       revalidateAction(false)
     } catch (error) {
       console.error('Failed to save quick notes', error)

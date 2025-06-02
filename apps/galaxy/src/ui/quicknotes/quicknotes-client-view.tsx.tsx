@@ -11,6 +11,7 @@ import {
   StaffComment,
 } from '@/types'
 import { ActualNoteView } from './actual-note-view/actual-note-view'
+import { QuickNoteSectionName } from './constants'
 import { QuickNoteDataProvider } from './quick-note-data-provider'
 import { QuickNotesHeader } from './quicknotes-header'
 import { QuickNotesSaver } from './quicknotes-saver'

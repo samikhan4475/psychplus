@@ -116,6 +116,7 @@ enum ServiceType {
   IntermediateCareFacility = 'IntermediateCareFacility',
   PartialHospital = 'PartialHospital',
   SkilledNursingFacility = 'SkilledNursingFacility',
+  UDS = 'UDS',
 }
 
 enum ProviderType {
@@ -190,7 +191,7 @@ interface BookVisitPayload {
   serviceId: string
   specialistStaffId: number
   startDate: string
-  admissionDate?:string
+  admissionDate?: string
   consultationDate?: string
   stateCode: string
   stateId?: string

@@ -110,7 +110,7 @@ const CODESETS = {
   PatientLinkSection: 'PatientLinkSection',
   CosignerType: 'CosignerType',
   CounsellingOptions: 'PsychPlusPublic.CounsellingOptions',
-  DateFilterType:'PsychPlusPublic.DateFilterType',
+  DateFilterType: 'PsychPlusPublic.DateFilterType',
   TobaccoTreatment: 'PsychPlusPublic.TobaccoTreatment',
   ReferralTreatment: 'PsychPlusPublic.ReferralTreatment',
   HallucinationType: 'PsychPlusPublic.HallucinationType',
@@ -127,7 +127,10 @@ const CODESETS = {
   TimeZoneId: 'PsychPlusPublic.TimeZoneId',
   UserActorCategory: 'UserActorCategory',
   Paging: 'PsychPlusPublic.Paging',
-  PrescriptionQuantityUnitOfMeasureList: 'PsychPlusPublic.PrescriptionQuantityUnitOfMeasureList',
+  PrescriptionQuantityUnitOfMeasureList:
+    'PsychPlusPublic.PrescriptionQuantityUnitOfMeasureList',
+  ConfirmatoryTesting: 'PsychPlusPublic.ConfirmatoryTesting',
+  UDSMedicalNecessity: 'PsychPlusPublic.UDSMedicalNecessity',
 
   //Standard Codesets having groupingCodeStartsWith at last
 

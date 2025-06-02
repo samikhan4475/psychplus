@@ -22,6 +22,7 @@ const saveAbleWdgets: QuickNoteSectionName[] = [
   QuickNoteSectionName.QuickNoteSectionIndividualTherapy,
   QuickNoteSectionName.QuicknoteSectionProcedureEtcTab,
   QuickNoteSectionName.QuicknoteSectionCodes,
+  QuickNoteSectionName.QuicknoteSectionUds,
 ]
 
 const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
@@ -510,6 +511,16 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.Addon,
     QuickNoteSectionName.QuickNoteSectionHospitalOrders,
     QuickNoteSectionName.QuicknoteSectionReferrals,
+    QuickNoteSectionName.FollowUps,
+    QuickNoteSectionName.QuicknoteSectionCodes,
+  ],
+  [VisitTypeEnum.UDS]: [
+    QuickNoteSectionName.QuicknoteSectionUds,
+    QuickNoteSectionName.QuicknoteSectionPatientAllergies,
+    QuickNoteSectionName.QuickNoteSectionDiagnosis,
+    QuickNoteSectionName.QuicknoteSectionMedications,
+    QuickNoteSectionName.QuicknoteSectionLabOrders,
+    QuickNoteSectionName.QuicknoteSectionLabResults,
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
   ],

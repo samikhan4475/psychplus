@@ -20,6 +20,7 @@ enum VisitTypeEnum {
   PhpCareSubsequent = 'PhpCare/Subsequent',
   PhpCareDischarge = 'PhpCare/Discharge',
   PhpCareInitialDischarge = 'PhpCare/InitialDischarge',
+  UDS = 'UDS',
 }
 
 enum VisitMediumEnum {
@@ -27,6 +28,6 @@ enum VisitMediumEnum {
   TeleVisit = 'TeleVisit',
   Unavailable = 'unavailable',
   Either = 'Either',
-  Na = 'NA'
+  Na = 'NA',
 }
 export { VisitTypeEnum, VisitMediumEnum }

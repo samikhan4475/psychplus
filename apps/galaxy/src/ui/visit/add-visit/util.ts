@@ -80,6 +80,7 @@ const transformProviderTypes = (codes: SharedCode[], service: Service) => {
             ServiceType.Spravato,
             ServiceType.Therapy,
             ServiceType.Tms,
+            ServiceType.UDS,
           ].includes(service.serviceOffered as ServiceType)
         case ProviderType.Therapist:
           return [
@@ -116,6 +117,7 @@ const transformProviderTypes = (codes: SharedCode[], service: Service) => {
             ServiceType.NursingFacility,
             ServiceType.SkilledNursingFacility,
             ServiceType.IntermediateCareFacility,
+            ServiceType.UDS,
           ].includes(service.serviceOffered as ServiceType)
         case ProviderType.Anesthesiology:
         case ProviderType.NotSet:

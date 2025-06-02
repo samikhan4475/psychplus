@@ -28,6 +28,7 @@ import { TcmNoteDetailView } from '@/ui/quicknotes/actual-note-view/tcm/tcm-note
 import { TherapyAssessmentPlanNoteDetailView } from '@/ui/quicknotes/actual-note-view/therapy-assessment-plan/therapy-assessment-plan-note-detail-view'
 import { TherapyClientView } from '@/ui/quicknotes/actual-note-view/therapy/therapy-client-view'
 import { TmsNoteDetailView } from '@/ui/quicknotes/actual-note-view/tms/tms-note-detail-view'
+import { UdsNoteDetailView } from '@/ui/quicknotes/actual-note-view/uds'
 import { VitalsNoteDetailView } from '@/ui/quicknotes/actual-note-view/vitals/vitals-note-detail-view'
 import { WorkingDiagnosisNoteDetailView } from '@/ui/quicknotes/actual-note-view/working-diagnosis/working-diagnosis-note-detail-view'
 import { WorkingDischargeDiagnosisNoteDetailView } from '@/ui/quicknotes/actual-note-view/working-discharge-diagnosis/working-discharge-diagnosis-note-detail-view'
@@ -175,6 +176,10 @@ const widgetsArray: Array<WidgetType> = [
   {
     id: QuickNoteSectionName.QuicknoteSectionLabResults,
     actualNoteDetailComponent: LabResultsClientNoteView,
+  },
+  {
+    id: QuickNoteSectionName.QuicknoteSectionUds,
+    actualNoteDetailComponent: UdsNoteDetailView,
   },
 ]
 

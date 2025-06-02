@@ -29,6 +29,7 @@ interface WidgetFormContainerProps extends WidgetContainerProps {
   widgetContainerCheckboxFieldInitialValue?: string
   handleOnClear?: () => void
   isResetDisabled?: boolean
+  onSuccess?: () => void
 }
 
 const WidgetFormContainer = ({
@@ -114,6 +115,10 @@ const WidgetFormContainer = ({
       if (shouldToast) {
         toast.success('Saved!')
       }
+
+      if (props.onSuccess) {
+        props.onSuccess()
+      }
     }
 
   const saveWidget = async (
@@ -147,8 +152,6 @@ const WidgetFormContainer = ({
   const handleQuickNotesSaveAll = async (
     form: ReturnType<typeof useFormContext>,
   ) => {
-    ;[]
-
     const data = form.getValues()
     const sections: QuickNoteSectionItem[] = await getData(data)
 

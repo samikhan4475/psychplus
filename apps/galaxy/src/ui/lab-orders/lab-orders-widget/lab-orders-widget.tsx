@@ -3,6 +3,8 @@
 import { useEffect } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { WidgetContainer } from '@/components'
+import { genericEventBus } from '@/lib/generic-event-bus'
+import { GenericPayload } from '@/types'
 import { AddLabOrdersButton } from './add-lab-orders-button'
 import { LabOrderTablePagination } from './lab-order-pagination-table'
 import { LabOrderTable } from './lab-order-table'
@@ -15,20 +17,23 @@ interface LabOrderHeaderProps {
   patientId?: string
   appointmentId?: string
   showFilters?: boolean
+  isQuickNoteView?: boolean
 }
 const LabOrdersWidget = ({
   IsLabOrderHeader = false,
   showFilters = false,
+  isQuickNoteView = true,
 }: LabOrderHeaderProps) => {
   const searchParams = useSearchParams()
-  const { fetch, setAppointmentId } = useStore()
+  const { fetch, setAppointmentId, setIsQuickNoteView } = useStore()
   const { id } = useParams<{ id: string }>()
   const appointmentId = searchParams.get('id') ?? '0'
 
   const fetchData = () => {
+    setIsQuickNoteView(isQuickNoteView)
     setAppointmentId(appointmentId)
     const payload = {
-      patientId: [id]
+      patientId: [id],
     }
     fetch(appointmentId, payload)
   }
@@ -36,6 +41,23 @@ const LabOrdersWidget = ({
   useEffect(() => {
     fetchData()
   }, [appointmentId, id])
+
+  useEffect(() => {
+    if (!isQuickNoteView) return
+
+    const handleEvent = (event?: GenericPayload) => {
+      if (event?.type === 'lab-order') {
+        fetchData()
+      }
+    }
+
+    const eventKey = `${appointmentId}`
+    genericEventBus.on(eventKey, handleEvent)
+
+    return () => {
+      genericEventBus.off(eventKey, handleEvent)
+    }
+  }, [appointmentId, isQuickNoteView])
 
   return (
     <>

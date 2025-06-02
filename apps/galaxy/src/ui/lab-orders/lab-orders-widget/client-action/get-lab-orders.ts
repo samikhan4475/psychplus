@@ -1,6 +1,7 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { GET_LAB_ORDERS, GET_LAB_ORDERS_SEARCH } from '@/api/endpoints'
 import { LabOrderResponseList, LabOrders, Sort } from '@/types'
 import { LABS_ORDER_TABLE_PAGE_SIZE } from '../constant'
 import { LabOrderPayload } from '../types'
@@ -22,18 +23,18 @@ const getLabOrdersAction = async ({
 }: GetLabOrdersActionProps): Promise<
   api.ActionResult<LabOrderResponseList>
 > => {
-  const url = appointmentId
-    ? new URL(api.GET_LAB_ORDERS(appointmentId))
-    : new URL(api.GET_LAB_ORDERS_SEARCH)
-  const offset = (page - 1) * limit
+  let urlString = appointmentId
+    ? GET_LAB_ORDERS(appointmentId)
+    : GET_LAB_ORDERS_SEARCH
 
-  url.searchParams.append('limit', String(limit))
-  url.searchParams.append('offset', String(offset))
+  const offset = (page - 1) * limit
+  urlString += `?limit=${limit}&offset=${offset}`
 
   if (sort) {
-    url.searchParams.append('orderBy', `${sort.column} ${sort.direction}`)
+    urlString += `?orderBy=${sort.column} ${sort.direction}`
   }
-  const response = await api.POST<LabOrders[]>(`${url}`, {
+
+  const response = await api.POST<LabOrders[]>(urlString, {
     ...payload,
     ResourceStatusList: ['Active'],
   })

@@ -8,7 +8,7 @@ export const revalidate = 0
 interface QuickNotesVisitViewPageProps {
   params: {
     id: string
-    apptId:string
+    apptId: string
   }
   searchParams: {
     id: string
@@ -44,4 +44,3 @@ const QuickNotesVisitViewPage = ({
 )
 
 export default QuickNotesVisitViewPage
- 
