@@ -1,6 +1,5 @@
-import { CheckboxGroup, Text } from '@radix-ui/themes'
-import { Controller, useFormContext } from 'react-hook-form'
-import { FormFieldContainer } from '@/components'
+import { useFormContext } from 'react-hook-form'
+import { FormFieldContainer, RadioGroup } from '@/components'
 import { useOptionsAndDefaults } from '../hook'
 import { SchemaType } from '../schema'
 
@@ -9,40 +8,25 @@ const DayIsFullDoNotShowCheckbox = ({
 }: {
   isAdminView: boolean
 }) => {
-  const { control } = useFormContext<SchemaType>()
+  const { watch, setValue } = useFormContext<SchemaType>()
   const { defaultValue, options } = useOptionsAndDefaults({
     optionKey: 'DayIsFullDoNotShowPublicViewOptions',
     valueKey: 'DayIsFullDoNotShowPublicViewValue',
   })
   return (
-    <FormFieldContainer className="w-full px-2 py-1">
-      <Controller
-        name={'dayIsFullDoNotShowPublicViewPercent'}
-        control={control}
-        defaultValue={defaultValue?.split('|') ?? []}
+    <FormFieldContainer className="w-[60.5%] flex-row rounded-1 px-2 py-1">
+      <RadioGroup
+        className="!bg-white ml-2 flex-1 border-none"
+        field="dayIsFullDoNotShowPublicViewPercent"
+        defaultValue={
+          watch('dayIsFullDoNotShowPublicViewPercent') ?? defaultValue
+        }
+        onValueChange={(val) =>
+          setValue('dayIsFullDoNotShowPublicViewPercent', val)
+        }
+        options={options}
+        wrapperClassName="flex-1"
         disabled={!isAdminView}
-        render={({ field: { value, onChange, ...rest } }) => (
-          <CheckboxGroup.Root
-            className="ml-2 flex w-full flex-row gap-0"
-            onValueChange={onChange}
-            value={value}
-            size="1"
-            highContrast
-            {...rest}
-          >
-            {options.map((option) => (
-              <CheckboxGroup.Item
-                key={option.label}
-                value={option.value}
-                className="ml-1 w-[20%]"
-              >
-                <Text size="1" className="text-[11px]">
-                  {option.label}
-                </Text>
-              </CheckboxGroup.Item>
-            ))}
-          </CheckboxGroup.Root>
-        )}
       />
     </FormFieldContainer>
   )

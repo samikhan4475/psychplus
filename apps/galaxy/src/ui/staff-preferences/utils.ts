@@ -29,9 +29,9 @@ const getInitialValues = (
     staffBookingCutoffMinsBeforeVisit:
       MinutesLeftDoNotAllowStaffToBookValue?.content,
     dayIsFullDoNotShowPublicViewPercent:
-      DayIsFullDoNotShowPublicViewValue?.content?.split('|'),
+      DayIsFullDoNotShowPublicViewValue?.content,
     dayIsFullDoNotAllowStaffToBookPercent:
-      DayIsFullDoNotAllowStaffToBookValue?.content?.split('|'),
+      DayIsFullDoNotAllowStaffToBookValue?.content,
 
     // Alerts View
     patientIsInRoom: PatientIsInRoomValue?.content,

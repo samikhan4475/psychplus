@@ -3,8 +3,8 @@ import { z } from 'zod'
 const publicSchema = z.object({
   publicViewHideMinsBeforeVisit: z.string().optional(),
   staffBookingCutoffMinsBeforeVisit: z.string().optional(),
-  dayIsFullDoNotShowPublicViewPercent: z.array(z.string()).optional(),
-  dayIsFullDoNotAllowStaffToBookPercent: z.array(z.string()).optional(),
+  dayIsFullDoNotShowPublicViewPercent: z.string().optional(),
+  dayIsFullDoNotAllowStaffToBookPercent: z.string().optional(),
 })
 
 const alertSchema = z.object({
