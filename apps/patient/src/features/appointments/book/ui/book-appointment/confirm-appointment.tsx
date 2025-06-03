@@ -12,18 +12,16 @@ import {
   getNewProviderTypeLabel,
   getUserFullName,
 } from '@psychplus-v2/utils'
-import { Button, Container, Flex, Text } from '@radix-ui/themes'
+import { Box, Button, Container, Flex, Popover, Text } from '@radix-ui/themes'
 import { addMinutes } from 'date-fns'
-import AddToCalendar from 'react-add-to-calendar'
+import { formatLocalToCustom } from '@psychplus/utils/time'
 import { BookingConfirmedIcon, ProviderAvatar } from '@/components-v2'
 import {
-  CALENDER_ITEMS,
   CONFIRMATION_NOTES,
 } from '@/features/appointments/book/constants'
 import { ConfirmedAppointmentProps } from '@/features/appointments/book/types'
-import { getAppointmentDateTimeLabel } from '@/features/appointments/book/utils'
+import { downloadICS, getAppointmentDateTimeLabel } from '@/features/appointments/book/utils'
 import { ClinicsMapView } from '@/features/appointments/search/ui/search-appointments-view/clinics-map-view'
-import { formatLocalToCustom } from '@psychplus/utils/time'
 
 const ConfirmAppointment = ({
   bookedSlot,
@@ -46,10 +44,15 @@ const ConfirmAppointment = ({
   const calenderEvent = {
     title: `Appointment with ${specialistName}`,
     startTime: formatLocalToCustom(new Date(startDate)),
-    endTime: formatLocalToCustom(addMinutes(new Date(startDate), slot.duration)), 
+    endTime: formatLocalToCustom(
+      addMinutes(new Date(startDate), slot.duration),
+    ),
     description: 'Appointment Scheduled',
     location: 'Psych+',
   }
+
+  const googleEventLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${calenderEvent.title}&dates=${calenderEvent.startTime}/${calenderEvent.endTime}&details=${calenderEvent.description}&location=${calenderEvent.location}`
+
 
   return (
     <Flex direction="column" className="w-full">
@@ -129,14 +132,41 @@ const ConfirmAppointment = ({
               )}
             </Flex>
 
-            <Flex className="w-1/2" justify="end" align="end">
-              <AddToCalendar
-                event={calenderEvent}
-                buttonLabel="Add to Calendar"
-                buttonClassClosed="border border-[#151B4A] rounded-6 text-[#151B4A] px-4 py-2 cursor-pointer"
-                dropdownClass="absolute poopover bg-[white] mt-2 border border-gray-6 rounded-5 px-4 py-2 w-[151px] z-10"
-                listItems={CALENDER_ITEMS}
-              />
+            <Flex
+              className="w-1/2"
+              justify="end"
+              align="end"
+              direction={'column'}
+            >
+              <Popover.Root>
+                <Popover.Trigger>
+                  <Box className="cursor-pointer rounded-6 border border-[#151B4A] px-4 py-2 text-[#151B4A]">
+                    Add to Calendar
+                  </Box>
+                </Popover.Trigger>
+                <Popover.Content className="rounded bg-white shadow-md px-4 py-2">
+                  <Flex direction={'column'} gap="1">
+                    <Text
+                      className="cursor-pointer px-2 py-0.5 hover:rounded-2 hover:bg-[#151B4A] hover:text-[white]"
+                      onClick={() => window.open(googleEventLink, '_blank')}
+                    >
+                      Google
+                    </Text>
+                    <Text
+                      className="cursor-pointer px-2 py-0.5 hover:rounded-2 hover:bg-[#151B4A] hover:text-[white]"
+                      onClick={() => downloadICS(calenderEvent)}
+                    >
+                      Outlook
+                    </Text>
+                    <Text
+                      className="cursor-pointer px-2 py-0.5 hover:rounded-2 hover:bg-[#151B4A] hover:text-[white]"
+                      onClick={() => downloadICS(calenderEvent)}
+                    >
+                      Apple
+                    </Text>
+                  </Flex>
+                </Popover.Content>
+              </Popover.Root>
             </Flex>
           </Flex>
 

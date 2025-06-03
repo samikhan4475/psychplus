@@ -56,9 +56,54 @@ const insuranceMayNotCoverMessage = (appointmentType: AppointmentType) =>
       appointmentType,
     ).toLocaleLowerCase()} `
 
+    const generateICS = (event: {
+    title: string
+    description: string
+    location: string
+    startTime: string
+    endTime: string
+  }) => {
+    return `BEGIN:VCALENDAR
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+DTSTART:${event.startTime}
+DTEND:${event.endTime}
+SUMMARY:${event.title}
+DESCRIPTION:${event.description}
+LOCATION:${event.location}
+UID:${Date.now()}@yourdomain.com
+SEQUENCE:0
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+END:VCALENDAR`
+  }
+
+  const downloadICS = (event: {
+    title: string
+    description: string
+    location: string
+    startTime: string
+    endTime: string
+  }) => {
+    const blob = new Blob([generateICS(event)], {
+      type: 'text/calendar;charset=utf-8',
+    })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'appointment.ics'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
 export {
   isProviderMemberOfCareTeam,
   getAppointmentDateTimeLabel,
   isInsuranceDisabledBasedOnDiagnosisCodes,
   insuranceMayNotCoverMessage,
+  downloadICS
 }
