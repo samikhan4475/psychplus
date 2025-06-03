@@ -76,7 +76,10 @@ const transformOut =
       isHospitalDischargeView,
     )
 
-    return [...result, ...diagnosisSections]
+    return [
+      ...result,
+      ...diagnosisSections.filter((item) => item.sectionItemValue !== ''),
+    ]
   }
 
 const getDiagnosisSections = async (
