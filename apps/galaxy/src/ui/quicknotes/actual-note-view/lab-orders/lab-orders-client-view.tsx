@@ -10,7 +10,12 @@ type FollowUpProps = {
 
 const LabOrderClient = ({ patientId, appointmentId }: FollowUpProps) => {
   const data = useStore((state) => state.data)
-  return <Details data={data?.labOrders ?? []} />
+  const filteredLabOrders =
+    data?.labOrders?.filter((order) => {
+      return String(order.appointmentId) === String(appointmentId)
+    }) ?? []
+
+  return <Details data={filteredLabOrders} />
 }
 
 export { LabOrderClient }

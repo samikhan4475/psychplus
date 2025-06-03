@@ -88,7 +88,9 @@ const getUtcDateWithoutTime = (date?: DateValue | null): string | undefined => {
   }
 }
 
-const getLocalDateWithoutTime = (date?: DateValue | null): string | undefined => {
+const getLocalDateWithoutTime = (
+  date?: DateValue | null,
+): string | undefined => {
   if (date) {
     const dateObj = date.toDate(getLocalTimeZone())
     const utcDate = `${dateObj.getDate()}`.padStart(2, '0')

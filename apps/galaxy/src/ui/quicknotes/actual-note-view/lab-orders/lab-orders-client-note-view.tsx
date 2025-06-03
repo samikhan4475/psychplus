@@ -24,8 +24,9 @@ const LabOrderClientNote = ({
       setLoading(true)
       const payload = {
         patientId: [patientId],
-        appointmentId,
+        appointmentIds: [appointmentId],
         resourceStatusList: ['Active'],
+        isIncludeAppointments:true
       }
       const result = await getLabOrdersAction({
         appointmentId,
