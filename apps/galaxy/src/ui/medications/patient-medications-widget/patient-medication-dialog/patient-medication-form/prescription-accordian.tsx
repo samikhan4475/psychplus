@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
 import { TriangleDownIcon } from '@radix-ui/react-icons'
 import { Box, Flex, Text } from '@radix-ui/themes'
@@ -13,13 +13,23 @@ import { FavoriteIcon } from '../shared/favorite-icon'
 import { PrescriptionAccordianContent } from './prescription-accordian-content'
 import { PatientMedicationSchemaType } from './schema'
 
-const PrescriptionAccordian = () => {
+const PrescriptionAccordian = ({
+  errorIndex,
+}: {
+  errorIndex: number | null
+}) => {
   const form = useFormContext<PatientMedicationSchemaType>()
   const drugs = form.watch('drugs')
   const [editIndex, setEditIndex] = useState<number | null>(null)
   const [openItem, setOpenItem] = useState(
     drugs[0]?.prescribableDrugDesc ?? null,
   )
+
+  useEffect(() => {
+    if (errorIndex !== null && drugs[errorIndex]?.prescribableDrugDesc) {
+      setOpenItem(drugs[errorIndex]?.prescribableDrugDesc)
+    }
+  }, [errorIndex, drugs])
 
   const handleDelete = (drugName?: string) => (e: React.MouseEvent) => {
     e.stopPropagation()

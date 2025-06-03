@@ -29,7 +29,7 @@ const usePatientMedicationColumns = ({
         <LongTextCell>{row.original.drugDescription ?? 'N/A'}</LongTextCell>
       ),
     },
-    ...(isFeatureFlagEnabled
+    ...(!isFeatureFlagEnabled
       ? [
           {
             id: 'medication-strength',
@@ -118,13 +118,13 @@ const usePatientMedicationColumns = ({
     {
       id: 'medication-status',
       accessorKey: 'medicationStatus',
-      size: 5,
-      minSize: 5,
+      size: 10,
+      minSize: 10,
       maxSize: 100,
       header: () => <ColumnHeader label="Status" />,
       cell: ({ row }) => <StatusCell row={row} />,
     },
-    ...(isFeatureFlagEnabled
+    ...(!isFeatureFlagEnabled
       ? [
           {
             id: 'transaction-status',
@@ -143,9 +143,7 @@ const usePatientMedicationColumns = ({
       id: 'medication-actions',
       accessorKey: 'medicationActions',
       header: () => <ColumnHeader label="Actions" />,
-      cell: ({ row }) => (
-        <ActionsCell row={row} onEditClick={onEditClick} />
-      ),
+      cell: ({ row }) => <ActionsCell row={row} onEditClick={onEditClick} />,
     },
   ]
 }

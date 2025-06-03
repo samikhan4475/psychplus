@@ -27,10 +27,10 @@ const TogglePrescribed = () => {
 
       {medicationType === MedicationType.Prescribed && (
         <>
-          <SelectedIndicator />
+          <SelectedIndicator className="mb-[6px]" />
           <Flex
             align="start"
-            className="border-pp-focus-outline  rounded-md h-auto flex-1 gap-2 border-2 p-2"
+            className="border-pp-focus-outline rounded-md h-auto flex-1 gap-2 border-2 p-1"
           >
             <PrescribedVia />
             <PreferredPrescriberSelect />

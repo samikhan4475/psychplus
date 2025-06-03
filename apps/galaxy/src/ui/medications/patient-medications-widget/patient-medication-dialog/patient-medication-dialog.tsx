@@ -6,6 +6,7 @@ import toast from 'react-hot-toast'
 import { LoadingPlaceholder } from '@/components'
 import { cn } from '@/utils'
 import { getPatientPrescriptionAction } from '../actions'
+import { useStore } from '../store'
 import { PatientMedication, Prescription } from '../types'
 import { dialogTitles } from './data'
 import { useSteps } from './hooks'
@@ -33,7 +34,9 @@ const PatientMedicationDialog = ({
     Prescription | undefined
   >()
   const { step, stepCount, totalSteps, ...stepsProp } = useSteps()
-
+  const { refetch } = useStore((state) => ({
+    refetch: state.refetch,
+  }))
   const fetchData = useCallback(
     async (id: number) => {
       setLoading(true)
@@ -58,10 +61,16 @@ const PatientMedicationDialog = ({
   }, [open, fetchData, medication, patientId])
 
   return (
-    <Dialog.Root open={open} onOpenChange={(o) => {
-      if (!o) stepsProp.onJump(Step.Form)
-      onOpenChange(o)
-    }}>
+    <Dialog.Root
+      open={open}
+      onOpenChange={(o) => {
+        if (!o) {
+          stepsProp.onJump(Step.Form)
+          refetch()
+        }
+        onOpenChange(o)
+      }}
+    >
       {children}
       <Dialog.Content
         className={cn('relative max-w-[536px] !overflow-visible', {

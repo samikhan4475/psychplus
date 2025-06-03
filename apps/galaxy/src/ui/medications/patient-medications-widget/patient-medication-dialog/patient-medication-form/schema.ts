@@ -29,7 +29,7 @@ const schema = z
         prescriptionSignatureId: z.ostring(),
         prescriptionDate: z.ostring(),
         prescriptionType: z.ostring(),
-        doseUnitCode: z.string().min(1, 'Required'),
+        doseUnitCode: z.string().min(1, 'Required').default(''),
         doseFormCode: z.ostring(),
         duration: z.ostring(),
         durationUnitCode: z.ostring(),

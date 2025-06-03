@@ -24,11 +24,7 @@ const ActionsCell = ({ row, onEditClick }: ActionsCellProps) => {
     {
       id: 'row-action-edit',
       render: (props) => <RowActionEdit {...props} onEditClick={onEditClick} />,
-    },
-    {
-      id: 'row-action-check',
-      render: RowActionCheckbox,
-    },
+    }
   ]
 
   return <AdaptiveRowActionsCell actions={rowActions} row={row} />

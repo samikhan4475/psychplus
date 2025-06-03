@@ -50,7 +50,9 @@ const PatientMedicationForm = ({
     mode: 'onChange',
     defaultValues: getInitialValuesPatientMedication(prescription),
   })
-  const [transmissionResult, setTransmissionResult] = useState<Prescription[]>([])
+  const [transmissionResult, setTransmissionResult] = useState<Prescription[]>(
+    [],
+  )
 
   const { setValue } = form
 
@@ -163,7 +165,6 @@ const PatientMedicationForm = ({
       if (!batch.length) return 'success'
       const ids = batch.map((p) => p.id)
       const response = await prescribingSignInAction(ids)
-
       if (response.state === 'error') {
         toast.error(response.error)
         return 'error'
@@ -178,8 +179,12 @@ const PatientMedicationForm = ({
         return 'error'
       }
       setTransmissionResult(response.data)
-
-      toast.success('Transmitted Successfully')
+      const messageId = response.data?.[0]?.id
+      if (messageId) {
+        toast.success(`Transmitted Successfully — Message ID: ${messageId}`)
+      } else {
+        toast.success('Transmitted Successfully')
+      }
       return 'success'
     }
 

@@ -27,7 +27,7 @@ const DoseUnitField = ({ index }: DrugBlockProps) => {
   const handleValueChange = (value: string) => {
     const surescriptsCode = getSurescriptsCode(codes, value)
     form.setValue(quantityMeasureCode, surescriptsCode)
-    form.setValue(field, value)
+    form.setValue(field, value, { shouldValidate: true })
   }
 
   return (
