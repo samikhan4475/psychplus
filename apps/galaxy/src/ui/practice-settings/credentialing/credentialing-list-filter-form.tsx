@@ -5,7 +5,7 @@ import { LicenseManagerSelect } from './license-manager-select'
 
 const CredentialingListFilterForm = () => {
   return (
-    <Grid columns="12" gap="5" className="flex items-center">
+    <Grid columns="12" gap="5" className="flex items-center z-10">
       <Text weight="bold" size="2">
         License Manager
       </Text>

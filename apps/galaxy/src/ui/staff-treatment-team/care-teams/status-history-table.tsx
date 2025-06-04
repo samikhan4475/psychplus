@@ -11,7 +11,7 @@ import {
 import { formatDateTime } from '@/utils'
 import { getCareTeamStatusHistoryList } from './actions'
 import { CareTeam } from './types'
-import { sortOnAddedOn } from './util'
+import { sortHistory } from './util'
 
 const columns: ColumnDef<CareTeam>[] = [
   {
@@ -35,7 +35,7 @@ const columns: ColumnDef<CareTeam>[] = [
         {formatDateTime(row.original.metadata.createdOn, false)}
       </TextCell>
     ),
-    sortingFn: sortOnAddedOn,
+    sortingFn: sortHistory,
   },
   {
     id: 'status',

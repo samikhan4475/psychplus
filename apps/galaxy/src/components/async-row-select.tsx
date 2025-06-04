@@ -114,7 +114,7 @@ const AsyncRowSelect = ({
   })
 
   return (
-    <Box ref={ref} className="z-20">
+    <Box ref={ref} className="relative">
       <Flex
         className="relative w-full flex-wrap overflow-y-auto pr-3"
         align="center"
@@ -143,9 +143,9 @@ const AsyncRowSelect = ({
 
       {showOptions && (
         <Box
-          className={`bg-white !fixed mx-auto flex h-auto max-h-48 ${
+          className={`bg-white !absolute mx-auto flex h-auto max-h-48 ${
             defaultWidth ?? 'w-[280px]'
-          } flex-col  rounded-3 shadow-3  ${loading ?? 'min-h-28'}`}
+          } z-20 flex-col rounded-3 shadow-3 ${loading ?? 'min-h-28'}`}
         >
           {label && (
             <Text

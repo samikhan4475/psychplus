@@ -953,10 +953,12 @@ const GET_CARE_TEAM_MEMBER_STATUS_HISTORY = (
   careTeamId: number,
 ) =>
   `${API_URL}/api/staff/${staffId}/careteams/${careTeamId}/history/actions/search`
-const GET_CARE_TEAM_PROVIDERS = (staffId: string, isPrimary: boolean) =>
+const GET_PATIENTS_WITH_PRIMARY_STAFF = (staffId: number, isPrimary: boolean) =>
   `${API_URL}/api/patients/careteam/providers/${staffId}/actions/primaryrole/${isPrimary}`
-const TRANSFER_PROVIDER = (staffId: string, primaryRole: string) =>
-  `${API_URL}/api/patients/careteam/providers/${staffId}/actions/makeprimary/${primaryRole}`
+const TRANSFER_PRIMARY_PROVIDER = (staffId: string, providerType: string) =>
+  `${API_URL}/api/patients/careteam/providers/${staffId}/actions/makeprimary/${providerType}`
+const TRANSFER_SECONDARY_PROVIDER = (newStaffId: string, providerType: string) =>
+  `${API_URL}/api/providers/${newStaffId}/careteam/actions/makesecondary/${providerType}`
 const GET_MEDICATIONS_HISTORY = (pharmacyNotificationId: string) =>
   `${API_URL}/api/pharmacynotifications/${pharmacyNotificationId}/history/actions/search`
 const VALIDATE_USER_CREDS = `${AUTH_URL}/credentials/actions/validate`
@@ -1446,8 +1448,9 @@ export {
   ADD_CARE_TEAM_MEMBER,
   UPDATE_CARE_TEAM_MEMBER_STATUS,
   GET_CARE_TEAM_MEMBER_STATUS_HISTORY,
-  GET_CARE_TEAM_PROVIDERS,
-  TRANSFER_PROVIDER,
+  GET_PATIENTS_WITH_PRIMARY_STAFF,
+  TRANSFER_PRIMARY_PROVIDER,
+  TRANSFER_SECONDARY_PROVIDER,
   VALIDATE_CURRENT_PASSWORD,
   CHANGE_PASSWORD,
   GET_WAITLIST_HISTORY_ENDPOINT,

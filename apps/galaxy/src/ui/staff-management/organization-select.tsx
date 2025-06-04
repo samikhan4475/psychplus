@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useParams } from 'next/navigation'
 import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
 import { getOrganizationOptionsAction } from './actions'
@@ -16,12 +16,17 @@ const OrganizationSelect = () => {
     payload = { organizationId: id }
   }
 
+  const fetchOptions = useCallback(() => {
+    if (!id) return Promise.resolve({ state: 'success' as const, data: [] })
+    return getOrganizationOptionsAction({ payload })
+  }, [id, type])
+
   return (
     <FormFieldContainer className="flex-row items-center gap-2">
       <FormFieldLabel>Organization</FormFieldLabel>
       <AsyncSelect
         disabled={type === FEATURE_TYPES.ORGANIZATION}
-        fetchOptions={() => getOrganizationOptionsAction({ payload })}
+        fetchOptions={fetchOptions}
         field="organizationsIds.[0]"
         className="w-full"
         buttonClassName="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"

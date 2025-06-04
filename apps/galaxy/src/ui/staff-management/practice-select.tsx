@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useParams } from 'next/navigation'
 import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
 import { getPracticeOptionsAction } from './actions'
@@ -14,12 +14,17 @@ const PracticeSelect = () => {
     payload = { organizationId: id }
   }
 
+  const fetchOptions = useCallback(() => {
+    if (!id) return Promise.resolve({ state: 'success' as const, data: [] })
+    return getPracticeOptionsAction({ payload })
+  }, [id, type])
+
   return (
     <FormFieldContainer className="flex-row items-center gap-2">
       <FormFieldLabel>Practice</FormFieldLabel>
       <AsyncSelect
         disabled={type === FEATURE_TYPES.PRACTICE}
-        fetchOptions={() => getPracticeOptionsAction({ payload })}
+        fetchOptions={fetchOptions}
         field="practicesIds.[0]"
         className="w-full"
         buttonClassName="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"

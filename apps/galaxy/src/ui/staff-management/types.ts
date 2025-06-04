@@ -101,6 +101,7 @@ interface Staff {
   isMailingAddressSameAsPrimary?: boolean
   organizationsIds?: string[]
   practicesIds?: string[]
+  staffSpecialistIds?: string[]
   BioVideoLink?: string
   phoneContacts?: string
 }

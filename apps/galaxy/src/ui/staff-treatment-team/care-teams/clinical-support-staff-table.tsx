@@ -1,6 +1,6 @@
 'use client'
 
-import { ScrollArea } from '@radix-ui/themes'
+import { Flex, ScrollArea } from '@radix-ui/themes'
 import { DataTable, LoadingPlaceholder } from '@/components'
 import { ClinicalStaffHeader } from './clinical-staff-header'
 import { columns } from './columns'
@@ -28,7 +28,12 @@ const ClinicalSupportStaffTable = ({
   const heading = 'Clinical Support Staff'
 
   return (
-    <ScrollArea className="bg-white min-h-[150px] max-w-[calc(100vw_-_198px)] p-2">
+    <Flex
+      direction="column"
+      className="bg-white flex-1 overflow-visible"
+      p="2"
+      gap="1"
+    >
       <ClinicalStaffHeader staffId={staffId} setAlertInfo={setAlertInfo} />
       {loadingClinicalStaff ? (
         <LoadingPlaceholder className="bg-white min-h-[46vh]" />
@@ -45,7 +50,7 @@ const ClinicalSupportStaffTable = ({
           defaultSorting={[{ id: 'added-on', desc: true }]}
         />
       )}
-    </ScrollArea>
+    </Flex>
   )
 }
 
