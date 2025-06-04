@@ -59,7 +59,8 @@ const AvailabilityList = ({
         includeDistance: appointment.type === AppointmentType.InPerson,
         includeStaffBio: false,
         currentLocation: null,
-        postalCode: null,
+        postalCode: appointment.clinic.contact.addresses?.[0]?.postalCode ?? '',
+        state: appointment.clinic.contact.addresses?.[0]?.state,
       })
 
       if (result.state === 'error') {
