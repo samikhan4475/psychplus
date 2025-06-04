@@ -1,12 +1,19 @@
 'use client'
 
 import { ChangeEvent, useRef } from 'react'
+import dynamic from 'next/dynamic'
 import { Flex } from '@radix-ui/themes'
 import { cn } from '@/utils'
 import { ImageEditIcon } from './icons'
-import { ImageCaptureDialog } from './image-capture-dialog'
 import { ImageViewDialog } from './image-view-dialog'
 
+const ImageCaptureDialog = dynamic(
+  () =>
+    import('./image-capture-dialog.tsx').then((mod) => mod.ImageCaptureDialog),
+  {
+    ssr: false,
+  },
+)
 interface ImageControlsProps {
   onFileChange: (file: File | undefined) => void
   previewSrc?: string

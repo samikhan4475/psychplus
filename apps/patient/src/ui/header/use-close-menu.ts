@@ -1,3 +1,5 @@
+'use client'
+
 import { useCallback, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import { useStore } from './store'

@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { Avatar, Box } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { ImageControls } from '@/components'
 import {
   FormFieldContainer,
   FormFieldError,
@@ -11,6 +10,15 @@ import {
 } from '@/components/form'
 import { PictureFallback } from '@/components/icons'
 import { PatientInfoSchemaType } from '../patient-info-schema'
+import dynamic from 'next/dynamic'
+
+const ImageControls = dynamic(
+  () =>
+    import('@/components/image-control.tsx').then((mod) => mod.ImageControls),
+  {
+    ssr: false,
+  },
+)
 
 interface DrivingLicensePictureProps {
   setDriverLicenseImage: (file: File | undefined) => void

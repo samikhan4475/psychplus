@@ -1,7 +1,13 @@
+import dynamic from 'next/dynamic'
 import { Text } from '@radix-ui/themes'
-import { CallView } from '@/ui/call'
 import { getAcsInfo } from '@/ui/call/actions'
 
+const CallView = dynamic(
+  () => import('@/ui/call/call-view.tsx').then((mod) => mod.CallView),
+  {
+    ssr: false,
+  },
+)
 const CallPage = async () => {
   const [acsResponse] = await Promise.all([getAcsInfo()])
 
