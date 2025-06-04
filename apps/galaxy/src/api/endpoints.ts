@@ -141,6 +141,11 @@ const BOOK_APPOINTMENT = (patientId: number) =>
   `${API_URL}/api/patients/${patientId}/appointments/actions/book`
 const UPDATE_APPOINTMENT = (patientId: number, appointmentId: number) =>
   `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}`
+const UPDATE_VISIT_VERIFICATION_STATUS = (
+  appointmentId: number,
+  billingVerificationStatus: string,
+) =>
+  `${API_URL}/api/appointments/${appointmentId}/billingverifications/${billingVerificationStatus}`
 const GET_CLEARNING_HOUSE_EDI_ENDPOINT = `${API_URL}/api/integrationconfiguration/insuranceplans/actions/search`
 const ADD_CLEARNING_HOUSE_EDI_ENDPOINT = `${API_URL}/api/integrationconfiguration/insuranceplans`
 const UPDATE_CLEARNING_HOUSE_EDI_ENDPOINT = (id: string) =>
@@ -1103,6 +1108,7 @@ export {
   SEARCH_BOOKED_APPOINTMENTS_ENDPOINT,
   BOOK_APPOINTMENT,
   UPDATE_APPOINTMENT,
+  UPDATE_VISIT_VERIFICATION_STATUS,
   ADD_PATIENT_ENDPOINT,
   ADD_LOCATION_ENDPOINT,
   GET_LOCATION_HISTORY,

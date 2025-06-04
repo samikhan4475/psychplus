@@ -68,7 +68,7 @@ const CustomEvent = ({
   const stateCodes = useCodesetCodes(CODESETS.UsStates)
   const serviceCodes = useCodesetCodes(CODESETS.ServicesOffered)
   const frequencyCodes = useCodesetCodes(CODESETS.VisitRepeatFrequency)
-  const verificationStatusCodes = useCodesetCodes(CODESETS.VerificationStatus)
+  const verificationStatusCodes = useCodesetCodes(CODESETS.BillingVerificationStatus)
   const startTime = format(new Date(event.start), 'HH:mm')
   const endTime = format(new Date(event.end), 'HH:mm')
   const appointmentDate = format(new Date(event.start), 'MM/dd/yyyy')
@@ -85,7 +85,7 @@ const CustomEvent = ({
     locationName,
     providerType,
     visitType,
-    patientInsuranceVerificationStatus,
+    insuranceVerification,
     visitMedium,
   } = event.data as Appointment
   const state = useMemo(
@@ -208,7 +208,7 @@ const CustomEvent = ({
                   <Text className="font-[510]">Ins Verification</Text>
                   <Text className="text-pp-text-sub">
                     {getCodesetDisplayName(
-                      patientInsuranceVerificationStatus,
+                      insuranceVerification,
                       verificationStatusCodes,
                     )}
                   </Text>

@@ -58,7 +58,6 @@ function transformRequestPayload(
         : undefined,
       visitFrequency: data.visitFrequency ? parseInt(data.visitFrequency) : 0,
       appointmentStatus: data.visitStatus,
-      insuranceVerificationStatusCode: data.insuranceVerificationStatus,
       admissionLegalStatus: data.legal,
       authorizationNumber: data.insuranceAuthorizationNumber,
       authorizationDate: data.authDate ? data.authDate.toString() : undefined,

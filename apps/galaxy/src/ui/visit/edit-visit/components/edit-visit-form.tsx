@@ -14,6 +14,7 @@ import { Appointment, BookVisitPayload, VisitSequenceTypes } from '@/types'
 import { isDirty } from '@/ui/schedule/utils'
 import { cn, getCalendarDate } from '@/utils'
 import { SAVE_APPOINTMENT } from '../../constants'
+import { useUpdateVisitInsuranceVerificationStatus } from '../../hooks/use-update-visit-insurance-verfication-status'
 import {
   convertToTimezone,
   isVisitRescheduled,
@@ -57,6 +58,8 @@ const EditVisitForm = ({
   const [isAlertOpen, setIsAlertOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const { visitTypes } = useEditVisitStore()
+  const { updateVisitInsuranceVerificationStatus } =
+    useUpdateVisitInsuranceVerificationStatus()
   const hasPermissionToClickSaveButton = useHasPermission(
     'clickSaveOnEditVisit',
   )
@@ -175,8 +178,7 @@ const EditVisitForm = ({
         visitDetails.locationTimezoneId,
       )
 
-    updateVisitAction(sanitizedData).then((res) => {
-      setIsSubmitting(false)
+    updateVisitAction(sanitizedData).then(async (res) => {
       if (res.state === 'error') {
         if (res.status) {
           setIsAlertOpen(true)
@@ -189,15 +191,28 @@ const EditVisitForm = ({
         toast.error(res.error || 'Failed to update visit')
         return
       }
-      if (onEdit) {
-        onEdit()
+      const handleSuccess = () => {
+        setIsSubmitting(false)
+        if (onEdit) onEdit()
+        onClose()
+        toast.success(
+          isRescheduled
+            ? 'Visit status is set as Rescheduled'
+            : 'Visit updated successfully',
+        )
       }
-      toast.success(
-        isRescheduled
-          ? 'Visit status is set as Rescheduled'
-          : 'Visit updated successfully',
-      )
-      onClose()
+
+      if (data.insuranceVerificationStatus) {
+        await updateVisitInsuranceVerificationStatus({
+          appointmentId: visitDetails.appointmentId,
+          newStatus: data.insuranceVerificationStatus,
+          successMessage: 'Insurance verification status updated successfully',
+          onSuccess: handleSuccess,
+          onError: () => setIsSubmitting(false),
+        })
+      } else {
+        handleSuccess()
+      }
     })
   }
 

@@ -4,14 +4,10 @@ import { PropsWithRow, SelectCell } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { Appointment } from '@/types'
-import { StatusCode } from '../../constants'
-import {
-  useConfirmVisitUpdate,
-  useInactiveRowStatus,
-  useRefetchAppointments,
-} from '../../hooks'
-import { transformIn, updateVisit } from '../../utils'
-import { UpdateVisitAlert } from '../update-visit-alert'
+import { useUpdateVisitInsuranceVerificationStatus } from '@/ui/visit/hooks/use-update-visit-insurance-verfication-status'
+import { useInactiveRowStatus, useRefetchAppointments } from '../../hooks'
+
+const successMessage = 'Insurance verification status updated successfully'
 
 const InsuranceVerificationStatusCell = ({
   row: { original: appointment },
@@ -19,14 +15,14 @@ const InsuranceVerificationStatusCell = ({
   const [verificationStatus, setVerificationStatus] = useState<string>(
     appointment.insuranceVerification,
   )
+  const { loading, updateVisitInsuranceVerificationStatus } =
+    useUpdateVisitInsuranceVerificationStatus()
   const codes = useCodesetCodes(CODESETS.BillingVerificationStatus)
-
   const isInactiveVisit = useInactiveRowStatus(
     appointment.visitStatus,
     appointment.isServiceTimeDependent,
   )
-  const { alertState, onUpdateVisitConfirm, onUpdateVisitError } =
-    useConfirmVisitUpdate()
+
   const options = useMemo(
     () =>
       codes
@@ -44,32 +40,15 @@ const InsuranceVerificationStatusCell = ({
     [codes],
   )
   const refetch = useRefetchAppointments()
-  const confirmVisitUpdate = (isConfirmed: boolean, status?: number) => {
-    const isOverride = status === StatusCode.OverridePermission
-    const transformedBody = {
-      ...transformIn(appointment),
-      isOverridePermissionProvided: isOverride,
-      isProceedPermissionProvided: !isOverride,
-      insuranceVerificationStatusCode: verificationStatus,
-    }
-
-    onUpdateVisitConfirm({
-      isConfirmed,
-      body: transformedBody,
-      resetValue: () =>
-        setVerificationStatus(appointment.insuranceVerification),
-      status,
-    })
-  }
 
   const onChange = async (val: string) => {
     setVerificationStatus(val)
-    const transformedBody = transformIn(appointment)
-    transformedBody.insuranceVerificationStatusCode = val
-    updateVisit({
-      body: transformedBody,
-      onSuccess: refetch,
-      onError: onUpdateVisitError,
+    updateVisitInsuranceVerificationStatus({
+      appointmentId: appointment.appointmentId,
+      newStatus: val,
+      successMessage,
+      onSuccess: () => refetch(),
+      onError: () => setVerificationStatus(appointment.insuranceVerification),
     })
   }
 
@@ -80,12 +59,12 @@ const InsuranceVerificationStatusCell = ({
       align="center"
       onClick={(e) => e.stopPropagation()}
     >
-      <UpdateVisitAlert state={alertState} onConfirm={confirmVisitUpdate} />
       <SelectCell
         options={options}
         disabled={isInactiveVisit}
         value={verificationStatus}
         onValueChange={onChange}
+        loading={loading}
       />
     </Flex>
   )
