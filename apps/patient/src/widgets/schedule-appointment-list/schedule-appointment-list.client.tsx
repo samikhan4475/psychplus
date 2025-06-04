@@ -50,7 +50,7 @@ const ScheduleAppointmentListClient = ({
   useSubscribeClosePopover(SCHEDULE_APPOINTMENT_LIST)
   
   const searchParams = useSearchParams()
-  const mid = searchParams.get('mid') || "";
+  const mid = searchParams.get('mid') ?? "";
 
   if (typeof window !== "undefined") {
     localStorage.setItem("mid", mid);
@@ -65,7 +65,6 @@ const ScheduleAppointmentListClient = ({
     setFilteredStaffAppointmentAvailabilities,
     handleFiltersChange,
     setCurrentWeekReel,
-    patient,
   } = useStore()
 
   const [staffWithClinicsAndSlotsState, setStaffWithClinicsAndSlotsState] =
@@ -95,10 +94,10 @@ const ScheduleAppointmentListClient = ({
   useEffect(() => {
     getCodeSets().then(setCodeSets)
     handleFiltersChange({
-      providerType: searchParams.get('providerType') || '',
-      appointmentType: searchParams.get('appointmentType') || '',
-      zipCode: searchParams.get('zipCode') || '',
-      state: searchParams.get('state') || '',
+      providerType: searchParams.get('providerType') ?? '',
+      appointmentType: searchParams.get('appointmentType') ?? '',
+      zipCode: searchParams.get('zipCode') ?? '',
+      state: searchParams.get('state') ?? '',
       sortBy: '',
       language: '',
       startingDate: formatDateYmd(isMobile() ? new Date() : getFirstDayOfWeek()),
@@ -137,7 +136,7 @@ const ScheduleAppointmentListClient = ({
         maxDaysOutToLook,
         staffIds: staffIdParam ? [staffIdParam] : [],
         state: filters.state,
-        patientDateOfBirth: patient?.dateOfBirth,
+        patientDateOfBirth: searchParams.get('dateOfBirth') || '',
       },
       filters.appointmentType === 'In-Person',
     ).then((data) => {

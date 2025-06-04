@@ -3,7 +3,7 @@
 import { ChangeEvent, useRef, useState } from 'react'
 import { zipLast4Schema, zipCodeSchema, cn } from '@psychplus-v2/utils'
 import * as ToggleGroup from '@radix-ui/react-toggle-group'
-import { Box, Button, Flex, Text, TextField } from '@radix-ui/themes'
+import { Button, Flex, Text, TextField } from '@radix-ui/themes'
 import { type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 import {
@@ -21,9 +21,6 @@ import { clickTrack } from '@psychplus/utils/tracking'
 import { SCHEDULE_APPOINTMENT_DIALOG } from '@psychplus/widgets'
 import { useStore } from '@/widgets/schedule-appointment-list/store'
 import { enums, PSYCHPLUS_LIVE_URL } from '@/constants'
-import { DatePickerInput } from '@/components-v2/date-picker-input'
-import { DateValue } from 'react-aria-components'
-import { getLocalTimeZone } from '@internationalized/date'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { getMonth, getYear } from 'date-fns'
@@ -193,8 +190,8 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
       ...schedule,
       zipCode: form.getValues().zipCode,
       state: form.getValues().state,
+      dateOfBirth: getLocalDateWithoutTime(form.getValues().dateOfBirth),
     })
-      .filter((key) => key[0] !== 'dateOfBirth')
       .map((key) => `${key[0]}=${key[1]}`)
       .join('&')
 

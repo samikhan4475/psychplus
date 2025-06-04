@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import NextLink from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Flex, Link, Text, TextArea } from '@radix-ui/themes'
 import { ChevronDownIcon } from 'lucide-react'
 import { type SubmitHandler } from 'react-hook-form'
@@ -108,7 +108,9 @@ type SchemaType = z.infer<typeof schema>
 
 const PersonalDetailsForm = () => {
   const router = useRouter()
-  const { patient, setPatient } = useStore()
+  const { setPatient } = useStore()
+
+  const searchParams = useSearchParams()
 
   const form = useForm({
     schema,
@@ -402,7 +404,7 @@ const PersonalDetailsForm = () => {
                 {...form.register('dateOfBirth')}
                 style={{ marginRight: 12 }}
                 className="h-14 w-full"
-                defaultValue={patient?.dateOfBirth ?? ''}
+                defaultValue={searchParams.get('dateOfBirth') ?? ''}
                 onChange={(e) => {
                   if (isLessThen18(e.target.value)) {
                     form.setValue('isParentOrGuardian', true)
