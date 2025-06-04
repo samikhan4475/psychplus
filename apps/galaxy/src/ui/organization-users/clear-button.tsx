@@ -9,12 +9,42 @@ import { useStore } from './store'
 const ClearButton = () => {
   const { id } = useParams<{ id: string }>()
   const form = useFormContext<SchemaType>()
-  const { search } = useStore((state) => ({
+  const { search, setFormValues } = useStore((state) => ({
     search: state.search,
+    setFormValues: state.setFormValues,
   }))
   const onClear = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
-    form.reset()
+    form.reset({
+      firstName: '',
+      lastName: '',
+      age: '',
+      gender: '',
+      mrn: '',
+      dateOfBirth: undefined,
+      city: '',
+      postalCode: '',
+      hasGuardian: '',
+      telephone: '',
+      email: '',
+      ssn: '',
+      patientStatuses: [],
+      verificationStatuses: [],
+      insuranceVerificationStatuses: [],
+      consentVerificationStatuses: [],
+      creditCardVerificationStatuses: [],
+      patientCreatedFrom: undefined,
+      patientCreatedTo: undefined,
+      futureVisitsByDays: '',
+      nextVisitStatus: '',
+      contactMadeStatuses: [],
+      pastVisitStatus: '',
+      visitHistoryPastDays: '',
+      insurancePolicyIds: [],
+      organizations: '',
+      practices: [],
+    })
+    setFormValues({})
     search({
       organizationIds: [id],
     })

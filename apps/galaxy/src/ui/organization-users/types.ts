@@ -1,3 +1,4 @@
+import { DateValue } from 'react-aria-components'
 import { ContactDetails, Insurance, LegalName, Metadata } from '@/types'
 
 interface Users {
@@ -55,7 +56,7 @@ interface UsersSearchParam {
   gender?: string
   name?: string
   mrn?: string
-  dateOfBirth?: string
+  dateOfBirth?: string | DateValue
   city?: string
   postalCode?: string
   zipLast4?: string
@@ -63,8 +64,8 @@ interface UsersSearchParam {
   telephone?: string
   consentVerificationStatuses?: []
   creditCardVerificationStatuses?: []
-  patientCreatedFrom?: string
-  patientCreatedTo?: string
+  patientCreatedFrom?: string | DateValue
+  patientCreatedTo?: string | DateValue
   ssn?: string
   verificationStatuses?: []
   patientStatuses?: []

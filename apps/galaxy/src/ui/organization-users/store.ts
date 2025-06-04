@@ -10,6 +10,7 @@ interface Store {
   loading?: boolean
   showFilters: boolean
   formValues?: Partial<UsersSearchParam>
+  setFormValues: (formValues: Partial<UsersSearchParam>) => void
   search: (formValues?: Partial<UsersSearchParam>) => void
   toggleFilters: () => void
 }
@@ -20,12 +21,13 @@ const useStore = create<Store>()((set, get) => ({
   loading: undefined,
   showFilters: true,
   formValues: undefined,
+  setFormValues: (formValues?: Partial<UsersSearchParam> | undefined) =>
+    set({ formValues }),
   toggleFilters: () => set({ showFilters: !get().showFilters }),
   search: async (formValues: Partial<UsersSearchParam> = {}) => {
     set({
       error: undefined,
       loading: true,
-      formValues,
     })
 
     const result = await searchOrganizationUsersAction(formValues)

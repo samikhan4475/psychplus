@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
@@ -17,6 +18,7 @@ import { ClearButton } from './clear-button'
 import { ConsentVerifySelect } from './consent-verify-select'
 import { ContactInitiated } from './contact-initiated-select'
 import { CreditCardVerifySelect } from './credit-card-verify-select'
+import { defaultFilters } from './default'
 import { DOBField } from './dob-field'
 import { EmailField } from './email-field'
 import { FilterToggleButton } from './filter-toggle-button'
@@ -111,46 +113,33 @@ type SchemaType = z.infer<typeof schema>
 
 const OrganizationUsersListFilterForm = () => {
   const { id } = useParams<{ id: string }>()
-  const { showFilters, search } = useStore((state) => ({
-    showFilters: state.showFilters,
-    search: state.search,
-  }))
+  const { showFilters, search, formValues, setFormValues } = useStore(
+    (state) => ({
+      showFilters: state.showFilters,
+      search: state.search,
+      formValues: state.formValues,
+      setFormValues: state.setFormValues,
+    }),
+  )
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      age: '',
-      gender: '',
-      mrn: '',
-      dateOfBirth: undefined,
-      city: '',
-      postalCode: '',
-      stateId: '',
-      hasGuardian: '',
-      telephone: '',
-      email: '',
-      ssn: '',
-      patientStatuses: [],
-      verificationStatuses: [],
-      insuranceVerificationStatuses: [],
-      consentVerificationStatuses: [],
-      creditCardVerificationStatuses: [],
-      patientCreatedFrom: undefined,
-      patientCreatedTo: undefined,
-      futureVisitsByDays: '',
-      nextVisitStatus: '',
-      contactMadeStatuses: [],
-      pastVisitStatus: '',
-      visitHistoryPastDays: '',
-      insurancePolicyIds: [],
-      organizations: '',
-      practices: [],
-    },
+    defaultValues: defaultFilters(formValues),
   })
+  useEffect(() => {
+    const subscription = form.watch((values) => {
+      const formattedData = {
+        ...values,
+        organizationIds: [id],
+      }
 
+      const cleanedData = sanitizeFormData(formattedData) as UsersSearchParam
+      setFormValues(cleanedData)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [form.watch, id])
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
     const formattedData = {
       ...data,
