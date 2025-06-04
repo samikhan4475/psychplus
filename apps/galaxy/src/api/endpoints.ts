@@ -1,5 +1,5 @@
 import { API_URL, AUTH_URL } from '@/constants'
-import { ProofingType } from '@/ui/staff-credentialing/types'
+import { FileFormat } from '@/ui/preferred-partner-users/actions'
 
 const USER_ENDPOINT = `${API_URL}/api/users/self`
 const REFRESH_ENDPOINT = `${AUTH_URL}/refresh`
@@ -458,6 +458,24 @@ const GET_SELF_STAFF_DETAILS_ENDPOINT = `${API_URL}/api/staff/self`
 const GET_PATIENT_REFERRALS_ENDPOINT = `${API_URL}/api/referrals/search`
 const GET_PATIENT_REFERRALS_HISTORY_ENDPOINT = (liveReferralId: string) =>
   `${API_URL}/api/referrals/${liveReferralId}/history/search`
+const GET_PREFERRED_PARTNER_USERS = (ppId: string) =>
+  `${API_URL}/api/preferredpartners/${ppId}/userworklists/actions/search`
+const DELETE_PREFERRED_PARTNER_USER = (ppId: string, workListId: string) =>
+  `${API_URL}/api/preferredpartners/${ppId}/userworklists/${workListId}`
+const DEACTIVATE_PREFERRED_PARTNER_USER = (ppId: string, workListId: string) =>
+  `${API_URL}/api/preferredpartners/${ppId}/userworklists/${workListId}/actions/deactivate`
+const ACTIVATE_PREFERRED_PARTNER_USER = (ppId: string, workListId: string) =>
+  `${API_URL}/api/preferredpartners/${ppId}/userworklists/${workListId}/actions/activate`
+const UPDATE_PREFERRED_PARTNER_USER = (ppId: string, workListId: string) =>
+  `${API_URL}/api/preferredpartners/${ppId}/userworklists/${workListId}`
+const LINK_PREFERRED_PARTNER_USER_PATIENT = (
+  partnerId: string,
+  worklistId: string,
+  patientId: string,
+) =>
+  `${API_URL}/api/preferredpartners/${partnerId}/userworklists/${worklistId}/patients/${patientId}/actions/link`
+const UPLOAD_PREFERRED_PARTNER_USERS = (ppId: string, fileFormat: FileFormat) =>
+  `${API_URL}/api/preferredpartners/${ppId}/userworklists/actions/upload/${fileFormat}`
 const UPDATE_PATIENT_REFERRAL_ENDPOINT = (
   patientId: number,
   referralId: number,
@@ -1018,7 +1036,7 @@ const STAFF_FAVORITES_MEDICATION = (staffId: number) =>
   `${API_URL}/api/staff/${staffId}/medications/favorites/search`
 const ADD_STAFF_FAVORITES_MEDICATION = (staffId: number) =>
   `${API_URL}/api/staff/${staffId}/medications/favorites`
-const REMOVE_STAFF_FAVORITES_MEDICATION = (staffId: number,id:string) =>
+const REMOVE_STAFF_FAVORITES_MEDICATION = (staffId: number, id: string) =>
   `${API_URL}/api/staff/${staffId}/medications/favorites/${id}`
 const GET_STATES_PRIMARY_LOCATIONS = `${API_URL}/api/locations/actions/primaries/search`
 const VIRTUAL_PRIMARY_LOCATIONS_ENDPOINT = `${API_URL}/api/locations/actions/primaries/search`
@@ -1217,6 +1235,13 @@ export {
   SEARCH_STAFF_ENDPOINT,
   GET_PATIENT_REFERRALS_ENDPOINT,
   GET_PATIENT_REFERRALS_HISTORY_ENDPOINT,
+  GET_PREFERRED_PARTNER_USERS,
+  DELETE_PREFERRED_PARTNER_USER,
+  ACTIVATE_PREFERRED_PARTNER_USER,
+  DEACTIVATE_PREFERRED_PARTNER_USER,
+  UPDATE_PREFERRED_PARTNER_USER,
+  LINK_PREFERRED_PARTNER_USER_PATIENT,
+  UPLOAD_PREFERRED_PARTNER_USERS,
   SETTINGS_HISTORY_ENDPOINT,
   GET_SELF_STAFF_DETAILS_ENDPOINT,
   UPDATE_PATIENT_REFERRAL_ENDPOINT,

@@ -55,19 +55,19 @@ const CODESETS = {
   ContactMadeStatus: 'ContactMadeStatus',
   ReferralSource: 'ReferralSource',
   ParameterAdjustmentStatus: 'ParameterAdjustmentStatus',
-  ClaimFrequencyCode:'ClaimFrequencyCode',
+  ClaimFrequencyCode: 'ClaimFrequencyCode',
   LicenseStatus: 'LicenseStatus',
   DurationUnit: 'DurationUnit',
   PrescribedStatus: 'PrescribedStatus',
   FileFormatType: 'FileFormatType',
   ProofingStatus: 'ProofingStatus',
   MedicationStatus: 'MedicationStatus',
-  PrescribingTransactionStatus:'PrescribingTransactionStatus',
+  PrescribingTransactionStatus: 'PrescribingTransactionStatus',
   PaymentType: 'PaymentType',
   ChargePerType: 'ChargePerType',
   MembershipType: 'MembershipType',
-  FixedPaymentType:'FixedPaymentType',
-  PaymentStatus:'PaymentStatus',
+  FixedPaymentType: 'FixedPaymentType',
+  PaymentStatus: 'PaymentStatus',
 
   // PsychPlusPublic Codesets
   TMSCoilType: 'PsychPlusPublic.TMSCoilType',
@@ -129,6 +129,8 @@ const CODESETS = {
   Paging: 'PsychPlusPublic.Paging',
   PrescriptionQuantityUnitOfMeasureList:
     'PsychPlusPublic.PrescriptionQuantityUnitOfMeasureList',
+  PreferredPartnerUserType: 'PreferredPartnerUserType',
+  PreferredPartnerUserStatus: 'PreferredPartnerUserStatus',
   ConfirmatoryTesting: 'PsychPlusPublic.ConfirmatoryTesting',
   UDSMedicalNecessity: 'PsychPlusPublic.UDSMedicalNecessity',
 

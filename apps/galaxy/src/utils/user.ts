@@ -1,3 +1,5 @@
+import { SelectOptionType } from "@/types"
+
 const getUserInitials = ({
   firstName,
   lastName,
@@ -33,4 +35,7 @@ const getNameInitials = (value?: string) => {
   return initials
 }
 
-export { getUserInitials, getUserFullName, getNameInitials }
+const getUserStatus = (options: SelectOptionType[], value: string) =>
+  options?.find((option) => option.value === value)?.label
+
+export { getUserInitials, getUserFullName, getNameInitials, getUserStatus }
