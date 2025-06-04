@@ -115,7 +115,6 @@ export const MODERATE_CODES = [
   '90834',
   '90846',
   '90853',
-  '99203',
   '99204',
   '99213',
   '99214',
@@ -128,7 +127,7 @@ export const MODERATE_CODES = [
   '99349',
   '99495',
 ]
-export const MILD_CODES = ['99202', '99212', '99282', '99341', '99347']
+export const MILD_CODES = ['99202', '99203', '99212', '99282', '99341', '99347']
 export const HIGH_CODES = [
   '90837',
   '90847',
