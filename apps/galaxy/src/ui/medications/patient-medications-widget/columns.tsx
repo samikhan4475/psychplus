@@ -16,7 +16,6 @@ const usePatientMedicationColumns = ({
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
   )
-
   return [
     {
       id: 'medication-drug',
@@ -29,7 +28,7 @@ const usePatientMedicationColumns = ({
         <LongTextCell>{row.original.drugDescription ?? 'N/A'}</LongTextCell>
       ),
     },
-    ...(!isFeatureFlagEnabled
+    ...(isFeatureFlagEnabled
       ? [
           {
             id: 'medication-strength',
@@ -118,8 +117,8 @@ const usePatientMedicationColumns = ({
     {
       id: 'medication-status',
       accessorKey: 'medicationStatus',
-      size: 10,
-      minSize: 10,
+      size: 5,
+      minSize: 5,
       maxSize: 100,
       header: () => <ColumnHeader label="Status" />,
       cell: ({ row }) => <StatusCell row={row} />,
