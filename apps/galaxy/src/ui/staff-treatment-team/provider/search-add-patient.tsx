@@ -57,7 +57,7 @@ const SearchAddPatientSelect = ({
       toast.error(res.error ?? 'Error while adding member')
       return
     }
-    toast.success('Member added successfully')
+    toast.success('Patient added successfully')
     fetchPatientsOfProvider(staffId, isPrimary, providerType)
   }
 
