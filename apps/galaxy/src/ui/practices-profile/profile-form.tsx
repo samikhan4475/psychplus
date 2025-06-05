@@ -1,12 +1,15 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Flex } from '@radix-ui/themes'
+import { Box } from 'lucide-react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import z from 'zod'
 import { FormContainer } from '@/components'
 import { Organization, PracticeResource } from '@/types'
 import { sanitizeFormData, zipLast4Schema } from '@/utils'
+import { PracticeSettingsFields } from '../organization-practice/dialogs/practice-dialog/practice-settings-fields'
 import { updatePracticeAction } from './actions'
 import { AddressGroup } from './address-group'
 import { defaultValues } from './default-values'
@@ -23,6 +26,7 @@ const ProfileSchema = z.object({
   clia: z.string().optional(),
   organizationId: z.string(),
   defaultProviderStaffId: z.string().optional(),
+  defaultClearinghouseReceiverId: z.string().min(1, 'Required'),
   practicePhone: z.string().optional(),
   practiceFax: z.string().optional(),
   address1: z.string().min(1, { message: 'Address is required' }),
@@ -44,6 +48,8 @@ const ProfileSchema = z.object({
   sameAsPrimaryAddress: z.boolean().optional().default(true),
   isMailingAddressSameAsOrganization: z.string().optional(),
   isMailingAddressSameAsPrimary: z.string().optional(),
+  isAutoSubmissionEnabled: z.string().min(1, 'Required'),
+  isAutoPaymentPostingEnabled: z.string().min(1, 'Required'),
 })
 
 type ProfileSchemaType = z.infer<typeof ProfileSchema>
@@ -96,7 +102,12 @@ const ProfileForm = ({ practice, organization }: ProfileFormProps) => {
     const sanitizedPayload = sanitizeFormData(requestPayload)
 
     const response = await updatePracticeAction(
-      sanitizedPayload,
+      {
+        ...sanitizedPayload,
+        isAutoPaymentPostingEnabled:
+          formData.isAutoPaymentPostingEnabled === 'Active',
+        isAutoSubmissionEnabled: formData.isAutoSubmissionEnabled === 'Active',
+      },
       formData.organizationId,
       formData.id,
     )
@@ -123,6 +134,10 @@ const ProfileForm = ({ practice, organization }: ProfileFormProps) => {
       <PracticeInfoFields />
       <ProfileContentHeading title="Address" />
       <AddressGroup organization={organization} />
+      <ProfileContentHeading title="Practice Setting" />
+      <Flex gap="2" px="2" py="1" className="bg-white w-full">
+        <PracticeSettingsFields />
+      </Flex>
     </FormContainer>
   )
 }

@@ -25,6 +25,7 @@ const defaultPayload: OrganizationsSearchParams = {
   includeRoles: false,
   includePermissions: false,
   isIncludePracticeAddressLocation: true,
+  isIncludeClearingHouseReceiver:true,
   isIncludePaymentAddressLocation: true,
 }
 

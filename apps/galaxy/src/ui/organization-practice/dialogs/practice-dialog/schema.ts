@@ -30,6 +30,9 @@ const schema = z.object({
   recordStatus: z.string().optional(),
   sameAsOrganizationAddress: z.boolean().optional().default(true),
   sameAsPrimaryAddress: z.boolean().optional().default(true),
+  defaultClearinghouseReceiverId: z.string().min(1, 'Required'),
+  isAutoSubmissionEnabled: z.string().min(1, 'Required'),
+  isAutoPaymentPostingEnabled: z.string().min(1, 'Required'),
 })
 
 type SchemaType = z.infer<typeof schema>

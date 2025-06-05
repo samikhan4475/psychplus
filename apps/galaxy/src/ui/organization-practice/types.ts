@@ -27,6 +27,7 @@ interface Practice {
   taxonomy: string
   socialSecurityNumber: string
   defaultClearinghouseReceiverId: string
+  defaultClearinghouseReceiverName:string
   taxId: string
   practiceAddress: OrganizationAddress
   practicePaymentAddress: OrganizationAddress
@@ -43,6 +44,8 @@ interface Practice {
   organizationAddress: OrganizationAddress
   organizationId?: string
   organizationDisplayName: string
+  isAutoSubmissionEnabled: boolean
+  isAutoPaymentPostingEnabled: boolean
 }
 
 interface Organization extends OrganizationRoot {
@@ -79,6 +82,7 @@ interface OrganizationsSearchParams {
   includePractices?: boolean
   includeUsers?: boolean
   includeRoles?: boolean
+  isIncludeClearingHouseReceiver?:boolean
   includePermissions?: boolean
   organizationId?: string
   practiceId?: string
@@ -128,6 +132,8 @@ interface PracticeSearchParams {
   defaultProviderName?: string
   isIncludePracticeAddressLocation?: boolean
   isIncludePaymentAddressLocation?: boolean
+  isAutoSubmissionEnabled?: boolean
+  isAutoPaymentPostingEnabled?: boolean
 }
 
 export {

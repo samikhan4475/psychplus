@@ -16,6 +16,7 @@ import { NpiField } from './npi-field'
 import { OrganizationSelect } from './organization-select'
 import { PayerAddressFields } from './payer-address-fields'
 import { PhoneField } from './phone-field'
+import { PracticeSettings } from './practice-settings'
 import { PrimaryAddressFields } from './primary-address-fields'
 import { schema, type SchemaType } from './schema'
 import { StatusSelect } from './status-select'
@@ -52,6 +53,9 @@ const PracticeForm = ({
     }
     const requestPayload: Partial<Practice> = {
       ...formData,
+      isAutoSubmissionEnabled: formData.isAutoSubmissionEnabled === 'Yes',
+      isAutoPaymentPostingEnabled:
+        formData.isAutoPaymentPostingEnabled === 'Yes',
       shortName: formData.displayName,
       practiceAddress: {
         street1: formData.address1,
@@ -128,6 +132,7 @@ const PracticeForm = ({
         </Grid>
         <PrimaryAddressFields organizationAddress={data.organizationAddress} />
         <PayerAddressFields />
+        <PracticeSettings />
       </Box>
       <SubmitFormButton />
     </FormContainer>

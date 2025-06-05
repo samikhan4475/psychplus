@@ -28,6 +28,7 @@ interface PracticeResource {
   taxonomy: string
   socialSecurityNumber: string
   defaultClearinghouseReceiverId: string
+  defaultClearinghouseReceiverName: string
   taxId: string
   practiceAddress: Partial<PatientAddress>
   practicePaymentAddress: Partial<PatientAddress>
@@ -42,6 +43,8 @@ interface PracticeResource {
   organizationShortName: string
   organizationDisplayName: string
   organizationId: string
+  isAutoSubmissionEnabled: boolean | string
+  isAutoPaymentPostingEnabled: boolean | string
 }
 
 interface SelfPractice {

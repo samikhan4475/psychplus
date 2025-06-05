@@ -282,6 +282,47 @@ const columns = (
       ),
     },
     {
+      id: 'defaultClearinghouseReceiverName',
+      header: ({ column }) => (
+        <ColumnHeader
+          label="Default Clearinghouse"
+          column={column}
+          clientSideSort
+        />
+      ),
+      cell: ({ row }) => (
+        <TextCell>
+          {row.original.defaultClearinghouseReceiverName ?? ''}
+        </TextCell>
+      ),
+    },
+    {
+      id: 'isAutoSubmissionEnabled',
+      header: ({ column }) => (
+        <ColumnHeader label="Auto Submission" column={column} clientSideSort />
+      ),
+      cell: ({ row }) => (
+        <TextCell>
+          {row.original.isAutoSubmissionEnabled ? 'Yes' : 'No'}
+        </TextCell>
+      ),
+    },
+    {
+      id: 'isAutoPaymentPostingEnabled',
+      header: ({ column }) => (
+        <ColumnHeader
+          label="Auto Payment Posting"
+          column={column}
+          clientSideSort
+        />
+      ),
+      cell: ({ row }) => (
+        <TextCell>
+          {row.original.isAutoPaymentPostingEnabled ? 'Yes' : 'No'}
+        </TextCell>
+      ),
+    },
+    {
       id: 'recordStatus',
       header: ({ column }) => (
         <ColumnHeader
