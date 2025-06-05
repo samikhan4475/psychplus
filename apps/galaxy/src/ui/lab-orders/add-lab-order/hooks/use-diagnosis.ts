@@ -51,8 +51,8 @@ export default () => {
       }))
 
       form.setValue('diagnosis', [...newDiagnosisData])
-      setTableLoading(false)
     }
+    setTableLoading(false)
   }
 
   const getQuickNoteDiagnosis = async () => {
