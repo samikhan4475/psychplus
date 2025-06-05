@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import {
   BlockLabel,
@@ -8,6 +9,7 @@ import {
   MultiSelectField,
   YesNoSelect,
 } from '@/components'
+import { ChipList } from '@/components/chip-list'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes, useCodesetOptions } from '@/hooks'
 import { UdsWidgetSchemaType } from '../uds-widget-schema'
@@ -35,18 +37,28 @@ const ReasonOfConfirmationMultiSelectField = () => {
   )
 
   return (
-    <FormFieldContainer className="flex-row gap-x-2">
-      <FormFieldLabel className="text-[12px]" required>
-        Reason for Confirmation:
-      </FormFieldLabel>
-      <MultiSelectField
-        options={options}
-        className="min-w-60"
-        onChange={(values) => setValue('confirmationReasons', values)}
-        defaultValues={form.getValues('confirmationReasons') ?? []}
-      />
-      <FormFieldError name={'confirmationReasons'} />
-    </FormFieldContainer>
+    <>
+      <FormFieldContainer className="flex-row gap-x-2">
+        <FormFieldLabel className="text-[12px]" required>
+          Reason for Confirmation:
+        </FormFieldLabel>
+        <MultiSelectField
+          options={options}
+          className="min-w-60"
+          onChange={(values) => setValue('confirmationReasons', values)}
+          defaultValues={form.getValues('confirmationReasons') ?? []}
+        />
+        <FormFieldError name={'confirmationReasons'} />
+      </FormFieldContainer>
+      <Flex className="mt-2 w-full max-w-[700px] flex-wrap gap-1">
+        <ChipList
+          data={form.watch('confirmationReasons')}
+          field={'confirmationReasons'}
+          chipClassName="self-center"
+          options={options ?? []}
+        />
+      </Flex>
+    </>
   )
 }
 

@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Flex } from '@radix-ui/themes'
+import { Box, Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import {
   BlockLabel,
@@ -8,6 +8,7 @@ import {
   FormFieldLabel,
   MultiSelectField,
 } from '@/components'
+import { ChipList } from '@/components/chip-list'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes, useCodesetOptions } from '@/hooks'
 import { UdsWidgetSchemaType } from '../uds-widget-schema'
@@ -36,18 +37,28 @@ const MedicalNecessityMultiSelectField = () => {
   )
 
   return (
-    <FormFieldContainer className="flex-row gap-x-2">
-      <FormFieldLabel className="text-[12px]" required>
-        The patient was administered a urine drug screen (UDS) for:
-      </FormFieldLabel>
-      <MultiSelectField
-        options={options}
-        className="min-w-60"
-        onChange={(values) => setValue('medicalNecessity', values)}
-        defaultValues={form.getValues('medicalNecessity') ?? []}
-      />
-      <FormFieldError name="medicalNecessity" />
-    </FormFieldContainer>
+    <>
+      <FormFieldContainer className="flex-row gap-x-2">
+        <FormFieldLabel className="text-[12px]" required>
+          The patient was administered a urine drug screen (UDS) for:
+        </FormFieldLabel>
+        <MultiSelectField
+          options={options}
+          className="min-w-60"
+          onChange={(values) => setValue('medicalNecessity', values)}
+          defaultValues={form.getValues('medicalNecessity') ?? []}
+        />
+        <FormFieldError name="medicalNecessity" />
+      </FormFieldContainer>
+      <Flex className="mt-2 w-full max-w-[700px] flex-wrap gap-1">
+        <ChipList
+          data={form.watch('medicalNecessity')}
+          field={'medicalNecessity'}
+          chipClassName="self-center"
+          options={options ?? []}
+        />
+      </Flex>
+    </>
   )
 }
 
