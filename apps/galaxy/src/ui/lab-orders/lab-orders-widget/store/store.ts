@@ -20,6 +20,7 @@ interface StoreState {
     page?: number,
     reset?: boolean,
   ) => void
+  refetch: () => void
   setActiveTab: (tab: string) => void
   setIsQuickNoteView: (isQuickNoteView: boolean) => void
   addLabResult: (labResult: LabResult) => void
@@ -304,6 +305,13 @@ const useStore = create<StoreState>((set, get) => ({
       data: newData,
     })
   },
+  refetch: () => {
+    const { appointmentId, payload, page, fetch } = get()
+    if (appointmentId && payload) {
+      fetch(appointmentId, payload, page, false)
+    }
+  },
+
   next: () => {
     const nextPage = get().page + 1
 

@@ -3,6 +3,7 @@ import { LabOrders } from '@/types'
 import { AddLabOrderView } from '../../add-lab-order'
 import { LabOrderRow } from '../types'
 import { RowActionDelete } from './row-action-delete'
+import { RowActionReview } from './row-action-reveiw'
 import { RowResultAttachment } from './row-result-attachment'
 
 interface ActionsCellProps {
@@ -17,7 +18,6 @@ const ActionsCell = ({
   appointmentId,
 }: ActionsCellProps) => {
   const { original } = row
-
   const resultAttachmentAction: RowAction<LabOrders> = {
     id: 'row-results-attachment',
     render: RowResultAttachment,
@@ -26,6 +26,11 @@ const ActionsCell = ({
   const editAction: RowAction<LabOrders> = {
     id: 'row-results-edit',
     render: () => <AddLabOrderView isEdit={true} labOrderData={original} />,
+  }
+
+  const reviewAction: RowAction<LabOrders> = {
+    id: 'row-results-review',
+    render: () => <RowActionReview orderId={original?.id ?? ''} />,
   }
 
   const deleteAction: RowAction<LabOrders> = {
@@ -47,6 +52,9 @@ const ActionsCell = ({
 
     if (hasValidAppointment) {
       actions.push(editAction)
+      if (!original.isResultSigned) {
+        actions.push(reviewAction)
+      }
     }
 
     actions.push(deleteAction)

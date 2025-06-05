@@ -158,7 +158,7 @@ const getColumns = ({
           onClick={() => onSort?.(column.id)}
         />
       ),
-      cell: ({ row }) => <StatusCell row={row} />,
+      cell: ({ row }) => <StatusCell row={row} appointmentId={appointmentId ?? ''} />,
     },
   ]
 

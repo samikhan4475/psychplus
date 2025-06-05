@@ -122,6 +122,11 @@ interface LabOrders {
   recordStatus?: string
   orderStatus?: string
   isResultAbnormal?: boolean
+  resultSignedDate?:string
+  resultSignedByStaffName?:{
+    firstName?:string
+    lastName?:string
+  }
 }
 interface LabOrderResponseList {
   labOrders: LabOrders[]

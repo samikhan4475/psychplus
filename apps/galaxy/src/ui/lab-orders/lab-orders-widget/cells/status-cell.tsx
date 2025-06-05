@@ -1,17 +1,23 @@
-import { Badge, BadgeProps } from '@radix-ui/themes'
+import { Badge, BadgeProps, Text, Tooltip } from '@radix-ui/themes'
 import { Row } from '@tanstack/react-table'
 import { LabOrders } from '@/types'
+import { reviewStatusIcon } from './review-status-icon'
 
 interface StatusCellProps {
   row: Row<LabOrders>
+  appointmentId?: string
 }
 
-const StatusCell = ({ row }: StatusCellProps) => {
+const StatusCell = ({ row, appointmentId }: StatusCellProps) => {
   const orderStatus = row.original?.orderStatus ?? ''
+  const order = row.original
   return (
-    <Badge className="!rounded-none" color={getBadgeColor(orderStatus)}>
-      {labOrderStatusValues[orderStatus]}
-    </Badge>
+    <div className="flex items-center">
+      <Badge className="!rounded-none" color={getBadgeColor(orderStatus)}>
+        {labOrderStatusValues[orderStatus]}
+      </Badge>
+      {reviewStatusIcon(order, appointmentId)}
+    </div>
   )
 }
 
