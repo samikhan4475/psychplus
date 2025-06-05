@@ -78,24 +78,20 @@ const ClaimNotesRowAction: React.FC<RowActionDropdownProps> = ({
       >
         <CounterClockwiseClockIcon />
       </IconButton>
-      {isEditable(row?.original?.metadata?.createdOn) && (
-        <>
-          <ClaimNotesDialog
-            openNotesDialog={openNotesDialog}
-            isEditMode={true}
-            claimId={claimId}
-            row={row?.original}
-            handleCloseModal={() => setOpenNotesDialog(false)}
-          />
-          <IconButton
-            type="button"
-            variant="ghost"
-            onClick={() => setOpenNotesDialog(true)}
-          >
-            <Pencil1Icon width={16} height={16} className="text-pp-gray-1" />
-          </IconButton>
-        </>
-      )}
+      <ClaimNotesDialog
+        openNotesDialog={openNotesDialog}
+        isEditMode={true}
+        claimId={claimId}
+        row={row?.original}
+        handleCloseModal={() => setOpenNotesDialog(false)}
+      />
+      <IconButton
+        type="button"
+        variant="ghost"
+        onClick={() => setOpenNotesDialog(true)}
+      >
+        <Pencil1Icon width={16} height={16} className="text-pp-gray-1" />
+      </IconButton>
       {isEditable(row?.original?.metadata?.createdOn) && (
         <DeleteConfirmDialog
           isOpen={open}

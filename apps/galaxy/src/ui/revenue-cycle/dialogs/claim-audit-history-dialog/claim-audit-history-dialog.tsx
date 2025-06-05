@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Button, Dialog } from '@radix-ui/themes'
+import { Dialog, Text } from '@radix-ui/themes'
 import { CloseDialogTrigger } from '@/components/close-dialog-trigger'
 import { ClaimAuditHistoryTable } from './claim-audit-history-table'
 
@@ -19,14 +19,12 @@ const ClaimAuditHistoryDialog = ({ claimId }: DialogProps) => {
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Trigger>
-        <Button
+        <Text
           color="gray"
-          size="1"
-          className="text-black border-pp-gray-2 h-6 border border-solid !outline-none [box-shadow:none]"
-          variant="outline"
+          className="text-black border-pp-gray-2 rounded-md hover:bg-pp-gray-2 hover:text-black focus:bg-pp-gray-2 focus:text-black h-6 cursor-pointer border border-solid p-3 pt-0 text-2 !outline-none"
         >
           Hx
-        </Button>
+        </Text>
       </Dialog.Trigger>
 
       <Dialog.Content className="relative max-w-[1000px]">

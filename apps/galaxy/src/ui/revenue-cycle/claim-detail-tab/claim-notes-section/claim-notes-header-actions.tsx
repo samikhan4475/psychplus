@@ -1,5 +1,5 @@
 import { PlusCircledIcon } from '@radix-ui/react-icons'
-import { Button, Flex } from '@radix-ui/themes'
+import { Button, Flex, Text } from '@radix-ui/themes'
 import { DeleteIcon } from '@/components/icons'
 
 interface ClaimNotesHeaderActionProps {
@@ -24,10 +24,8 @@ const ClaimNotesHeaderActions = ({
         <DeleteIcon />
         Deleted Notes
       </Button>
-      <Button
-        type="button"
-        className="text-black bg-transparent"
-        size="1"
+      <Text
+        className="text-black border-pp-gray-2 rounded-md focus:bg-pp-gray-2 focus:text-black flex h-6 cursor-pointer items-center gap-1 bg-transparent p-3 text-2 !outline-none"
         onClick={(e) => {
           e.stopPropagation()
           handleOpenModal()
@@ -35,7 +33,7 @@ const ClaimNotesHeaderActions = ({
       >
         <PlusCircledIcon />
         Add Notes
-      </Button>
+      </Text>
     </Flex>
   )
 }

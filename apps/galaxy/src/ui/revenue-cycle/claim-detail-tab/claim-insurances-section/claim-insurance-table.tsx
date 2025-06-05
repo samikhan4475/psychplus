@@ -11,24 +11,14 @@ const ClaimInsuranceTable = () => {
     formState: { isSubmitSuccessful },
   } = form
 
-  const claimInsurancePolicies = form.watch('claimInsurancePolicies') || []
+  const claimInsurancePolicies = form.watch('claimInsurancePolicies') ?? []
   const [editRowId, setEditRowId] = useState<number | null>(null)
 
-  const columns = getColumns(editRowId, setEditRowId)  
+  const columns = getColumns(editRowId, setEditRowId)
   const transformedInsurances = useMemo(() => {
-    const primaryStatusCode = form.getValues('primaryStatusCode')
-    const secondaryStatusCode = form.getValues('secondaryStatusCode')
-    const tertiaryStatusCode = form.getValues('tertiaryStatusCode')
-
     return claimInsurancePolicies.map((insurance) => ({
       ...insurance,
-      viewHcfa:
-        (!!primaryStatusCode?.trim() &&
-          insurance.insurancePolicyPriority === 'Primary') ||
-        (!!secondaryStatusCode?.trim() &&
-          insurance.insurancePolicyPriority === 'Secondary') ||
-        (!!tertiaryStatusCode?.trim() &&
-          insurance.insurancePolicyPriority === 'Tertiary'),
+      viewHcfa: true,
     })) as InsuranceClaimPolicy[]
   }, [claimInsurancePolicies])
 
