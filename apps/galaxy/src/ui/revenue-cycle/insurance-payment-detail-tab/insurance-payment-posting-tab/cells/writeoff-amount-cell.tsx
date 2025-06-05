@@ -11,9 +11,11 @@ const WriteoffAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
     `claimServiceLinePayments.${row.index}.writeOffAmount`,
   )
 
+  const writeOffFixed = parseFloat(writeOffAmount).toFixed(2)
+
   return (
     <TextField.Root
-      value={writeOffAmount}
+      value={writeOffFixed}
       variant="soft"
       disabled
       placeholder="00.00"
