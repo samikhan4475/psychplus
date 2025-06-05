@@ -26,7 +26,7 @@ import { deepSanitizeFormData, getPaddedDateString } from '@/utils'
 import { addPreferredPartnerAction } from '../../actions'
 import { useStore } from '../../store'
 import { getPPStatuses } from '../../utils'
-import { MailingAddressGroup } from './mailing-address-group'
+import { BillingAddressGroup } from './billing-address-group'
 import { schema, SchemaType } from './schema'
 import { getInitialValues } from './utils'
 
@@ -43,7 +43,7 @@ const mailingOptions = [
   },
   {
     label: 'No',
-    value: '',
+    value: 'no',
   },
 ]
 const AddPreferredPartnerDialogForm = ({
@@ -65,7 +65,27 @@ const AddPreferredPartnerDialogForm = ({
     ?.map((option) => ({ label: option.display, value: option.value }))
     .concat(fixedPaymentType)
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
-    const { startDate, nextPaymentDate, subscriptionStatus } = data
+    const {
+      startDate,
+      nextPaymentDate,
+      subscriptionStatus,
+      isMailingAddressSameAsPrimary,
+    } = data
+
+    const isSameAddress = isMailingAddressSameAsPrimary === 'yes'
+
+    let addresses = data.contactDetails.addresses
+
+    if (isSameAddress && addresses.length >= 2) {
+      const primary = addresses[0]
+      addresses = [
+        primary,
+        {
+          ...primary,
+          type: 'Billing',
+        },
+      ]
+    }
 
     const payload = {
       ...data,
@@ -76,11 +96,18 @@ const AddPreferredPartnerDialogForm = ({
       nextPaymentDate: nextPaymentDate
         ? getPaddedDateString(nextPaymentDate)
         : null,
+      contactDetails: {
+        ...data.contactDetails,
+        addresses: addresses,
+        isMailingAddressSameAsPrimary: isSameAddress,
+      },
+      isMailingAddressSameAsPrimary: undefined,
     }
 
     const sanitizedPayload = deepSanitizeFormData(payload)
 
     const result = await addPreferredPartnerAction(sanitizedPayload)
+
     if (result.state === 'error') {
       toast.error(result.error)
       return
@@ -93,14 +120,13 @@ const AddPreferredPartnerDialogForm = ({
 
   useEffect(() => {
     if (subscriptionStatus.includes('_')) {
-      const [_, paymentType] = subscriptionStatus.split('_')
+      const [, paymentType] = subscriptionStatus.split('_')
       form.setValue('payerStatus', paymentType)
       form.setValue('fixedPaymentType', '')
     } else if (subscriptionStatus) {
       form.setValue('fixedPaymentType', subscriptionStatus)
     }
   }, [subscriptionStatus])
-
 
   const isNew = !id || id.trim() === ''
   return (
@@ -124,9 +150,10 @@ const AddPreferredPartnerDialogForm = ({
           <FormFieldLabel required={!isNew}>Total Users IDs</FormFieldLabel>
           <TextField.Root
             disabled
-            {...form.register('totalUserIds')}
+            {...form.register('totalUserIds', { valueAsNumber: true })}
             size="1"
             className={textFieldClass}
+            inputMode="numeric"
           />
           <FormFieldError name="totalUserIds" />
         </FormFieldContainer>
@@ -155,7 +182,6 @@ const AddPreferredPartnerDialogForm = ({
           <FormFieldError name="payerStatus" />
         </FormFieldContainer>
       </Grid>
-
       <Grid columns="3" gap="2">
         <FormFieldContainer className="bg-gray-2 px-1 py-2">
           <FormFieldLabel required={!isNew} className="mb-1">
@@ -166,7 +192,7 @@ const AddPreferredPartnerDialogForm = ({
               <FormFieldLabel>Number</FormFieldLabel>
               <TextField.Root
                 disabled={isNew}
-                {...form.register('individualsCount')}
+                {...form.register('individualsCount', { valueAsNumber: true })}
                 size="1"
                 className={textFieldClass}
               />
@@ -175,9 +201,10 @@ const AddPreferredPartnerDialogForm = ({
             <FormFieldContainer>
               <FormFieldLabel required>Rate</FormFieldLabel>
               <TextField.Root
-                {...form.register('individualRate')}
+                {...form.register('individualRate', { valueAsNumber: true })}
                 size="1"
                 className={textFieldClass}
+                inputMode="numeric"
               />
               <FormFieldError name="individualRate" />
             </FormFieldContainer>
@@ -192,7 +219,7 @@ const AddPreferredPartnerDialogForm = ({
               <FormFieldLabel>Number</FormFieldLabel>
               <TextField.Root
                 disabled={isNew}
-                {...form.register('couplesCount')}
+                {...form.register('couplesCount', { valueAsNumber: true })}
                 size="1"
                 className={textFieldClass}
               />
@@ -201,7 +228,7 @@ const AddPreferredPartnerDialogForm = ({
             <FormFieldContainer>
               <FormFieldLabel required>Rate</FormFieldLabel>
               <TextField.Root
-                {...form.register('coupleRate')}
+                {...form.register('coupleRate', { valueAsNumber: true })}
                 size="1"
                 className={textFieldClass}
               />
@@ -218,7 +245,7 @@ const AddPreferredPartnerDialogForm = ({
               <FormFieldLabel>Number</FormFieldLabel>
               <TextField.Root
                 disabled={isNew}
-                {...form.register('familiesCount')}
+                {...form.register('familiesCount', { valueAsNumber: true })}
                 size="1"
                 className={textFieldClass}
               />
@@ -227,7 +254,7 @@ const AddPreferredPartnerDialogForm = ({
             <FormFieldContainer>
               <FormFieldLabel required>Rate</FormFieldLabel>
               <TextField.Root
-                {...form.register('familyRate')}
+                {...form.register('familyRate', { valueAsNumber: true })}
                 size="1"
                 className={textFieldClass}
               />
@@ -236,7 +263,6 @@ const AddPreferredPartnerDialogForm = ({
           </Flex>
         </FormFieldContainer>
       </Grid>
-
       <Grid columns="3" gap="3">
         <FormFieldContainer>
           <FormFieldLabel required={!isNew}>
@@ -244,7 +270,7 @@ const AddPreferredPartnerDialogForm = ({
           </FormFieldLabel>
           <TextField.Root
             disabled={isNew}
-            {...form.register('plusChargeAmount')}
+            {...form.register('plusChargeAmount', { valueAsNumber: true })}
             size="1"
             className={textFieldClass}
           />
@@ -256,7 +282,7 @@ const AddPreferredPartnerDialogForm = ({
           </FormFieldLabel>
           <TextField.Root
             disabled={isNew}
-            {...form.register('serviceChargeAmount')}
+            {...form.register('serviceChargeAmount', { valueAsNumber: true })}
             size="1"
             className={textFieldClass}
           />
@@ -268,7 +294,9 @@ const AddPreferredPartnerDialogForm = ({
           </FormFieldLabel>
           <RadioGroup.Root
             value={form.watch('billingFrequency')}
-            onValueChange={(val) => form.setValue('billingFrequency', val)}
+            onValueChange={(val) =>
+              form.setValue('billingFrequency', val as 'Day' | 'Month' | 'Year')
+            }
             className="flex-row gap-2"
             size="1"
             highContrast
@@ -289,7 +317,6 @@ const AddPreferredPartnerDialogForm = ({
           <FormFieldError name="nextPaymentDate" />
         </FormFieldContainer>
       </Grid>
-
       <FormFieldContainer>
         <FormFieldLabel required className="mb-1">
           Primary Address
@@ -303,9 +330,13 @@ const AddPreferredPartnerDialogForm = ({
         <YesNoSelect
           field="isMailingAddressSameAsPrimary"
           options={mailingOptions}
-          label="Is your Mailing Address the same as Primary?"
+          label="Is your Billing Address the same as Primary?"
           className="border-none"
           onChange={(val) => {
+            form.setValue(
+              'isMailingAddressSameAsPrimary',
+              val === 'yes' ? 'yes' : 'no',
+            )
             form.setValue(
               'contactDetails.isMailingAddressSameAsPrimary',
               val === 'yes',
@@ -313,8 +344,7 @@ const AddPreferredPartnerDialogForm = ({
           }}
         />
       </Box>
-      <MailingAddressGroup />
-
+      <BillingAddressGroup />
       <Button
         type="submit"
         size="2"

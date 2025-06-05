@@ -59,6 +59,8 @@ const GET_PROVIDER_RECOMMENDATIONS = (appointmentId: string) =>
 const SAVE_PROVIDER_RECOMMENDATIONS = (appointmentId: string) =>
   `${API_URL}/api/appointments/${appointmentId}/providerrecommendations`
 
+const UPDATE_PREFERRED_PARTNER_ENDPOINT = (partnerId: string) =>
+  `${API_URL}/api/preferredpartners/${partnerId}`
 const SEND_POLICY_NOTICE_ENDPOINT = (id: string) =>
   `${API_URL}/api/patients/${id}/consents/actions/sendnotice`
 const STANDARD_CODESET_ENDPOINT = (
@@ -1109,6 +1111,7 @@ export {
   GET_PROVIDER_RECOMMENDATIONS,
   SAVE_PROVIDER_RECOMMENDATIONS,
   SEND_POLICY_NOTICE_ENDPOINT,
+  UPDATE_PREFERRED_PARTNER_ENDPOINT,
   STANDARD_CODESET_ENDPOINT,
   METADATA_CODESET_ENDPOINT,
   GET_PROVIDER_SETTINGS_ENDPOINT,

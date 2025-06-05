@@ -1,4 +1,4 @@
-'use-client'
+'use client'
 
 import React, { createContext, useContext, useMemo, useState } from 'react'
 import Script from 'next/script'

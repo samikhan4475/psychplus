@@ -39,4 +39,36 @@ function deepSanitizeFormData<T extends object>(obj: T): T {
   ) as T
 }
 
-export { sanitizeFormData, deepSanitizeFormData }
+function deepSanitizeFormDataWithBooleans<T extends object>(obj: T): T {
+  return Object.fromEntries(
+    Object.entries(obj)
+      .map(([key, value]) => {
+        if (
+          typeof value === 'object' &&
+          value !== null &&
+          !Array.isArray(value)
+        ) {
+          return [key, deepSanitizeFormDataWithBooleans(value)]
+        }
+        return [key, value]
+      })
+      .filter(([, value]) => {
+        if (typeof value === 'boolean') {
+          return true
+        }
+        return (
+          value !== undefined &&
+          value !== null &&
+          value !== '' &&
+          !(Array.isArray(value) && value.length === 0) &&
+          value !== 'undefined'
+        )
+      }),
+  ) as T
+}
+
+export {
+  sanitizeFormData,
+  deepSanitizeFormData,
+  deepSanitizeFormDataWithBooleans,
+}

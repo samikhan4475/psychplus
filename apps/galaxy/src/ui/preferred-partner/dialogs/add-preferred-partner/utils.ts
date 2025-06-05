@@ -1,19 +1,19 @@
-import { PreferredPartnerItem } from '../../types'
+import { SchemaType } from './schema'
 
 type BillingFrequency = 'Monthly' | 'Annual'
 
-const getInitialValues = (): PreferredPartnerItem => ({
+const getInitialValues = (): SchemaType => ({
   id: '',
   name: '',
-  individualRate: '',
-  coupleRate: '',
-  familyRate: '',
+  individualRate: 0,
+  coupleRate: 0,
+  familyRate: 0,
   subscriptionStatus: '',
   payerStatus: '',
-  billingFrequency: '',
-  totalUsers:0,
-  plusChargeAmount: '',
-  serviceChargeAmount: '',
+  billingFrequency: 'Month',
+  totalUsers: 0,
+  plusChargeAmount: 0,
+  serviceChargeAmount: 0,
   startDate: null,
   nextPaymentDate: null,
   contactDetails: {
@@ -29,6 +29,7 @@ const getInitialValues = (): PreferredPartnerItem => ({
         state: '',
         country: '',
         postalCode: '',
+        zipLast4: '',
         geoCoordinates: {
           longitude: 0,
           latitude: 0,
@@ -37,13 +38,14 @@ const getInitialValues = (): PreferredPartnerItem => ({
         timeZoneId: '',
       },
       {
-        type: 'Mailing',
+        type: 'Billing',
         street1: '',
         street2: '',
         city: '',
         state: '',
         country: '',
         postalCode: '',
+        zipLast4: '',
         geoCoordinates: {
           longitude: 0,
           latitude: 0,
@@ -61,6 +63,8 @@ const getInitialValues = (): PreferredPartnerItem => ({
   familiesCount: 0,
   couplesCount: 0,
   individualsCount: 0,
+  fixedPaymentType: '',
+  isMailingAddressSameAsPrimary: 'no',
 })
 
 const calculateDerivedValues = ({

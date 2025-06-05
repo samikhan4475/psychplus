@@ -5,46 +5,50 @@ import { useFormContext, useWatch } from 'react-hook-form'
 import { AddressFieldsGroup } from '@/components'
 import { SchemaType } from './schema'
 
-const MailingAddressGroup = () => {
+const BillingAddressGroup = () => {
   const { control, resetField } = useFormContext<SchemaType>()
   const isMailingAddressSameAsPrimary = useWatch({
     control,
-    name: 'contactDetails.isMailingAddressSameAsPrimary',
+    name: 'isMailingAddressSameAsPrimary',
   })
 
   const primaryAddress = useWatch({
     control,
     name: 'contactDetails.addresses.0',
   })
-
-  const mailingAddress = useWatch({
+  const billingAddress = useWatch({
     control,
     name: 'contactDetails.addresses.1',
   })
 
   useEffect(() => {
-    if (!isMailingAddressSameAsPrimary || !primaryAddress) return
+    if (isMailingAddressSameAsPrimary !== 'yes' || !primaryAddress) return
 
-    const updatedMailing = {
+    const updatedBilling = {
       ...primaryAddress,
-      type: 'Mailing',
+      type: 'Billing',
     }
-    const addresses = [primaryAddress, updatedMailing]
+    const addresses = [primaryAddress, updatedBilling]
 
     const areSame =
-      JSON.stringify(updatedMailing) === JSON.stringify(mailingAddress)
+      JSON.stringify(updatedBilling) === JSON.stringify(billingAddress)
 
     if (!areSame) {
       resetField('contactDetails.addresses', { defaultValue: addresses })
     }
-  }, [isMailingAddressSameAsPrimary, primaryAddress, mailingAddress])
+  }, [
+    isMailingAddressSameAsPrimary,
+    primaryAddress,
+    billingAddress,
+    resetField,
+  ])
   return (
     <AddressFieldsGroup
-      disabled={isMailingAddressSameAsPrimary}
+      disabled={isMailingAddressSameAsPrimary === 'yes'}
       prefix="contactDetails.addresses.1"
       addressFieldName="street1"
     />
   )
 }
 
-export { MailingAddressGroup }
+export { BillingAddressGroup }

@@ -3,12 +3,6 @@ import { z } from 'zod'
 
 const requiredString = z.string().min(1, 'Required')
 const optionalString = z.string().optional().default('')
-const requiredDate = z
-  .custom<DateValue>()
-  .refine((val) => val, {
-    message: 'Required',
-  })
-  .nullable()
 
 const PhoneNumberSchema = z.object({
   type: optionalString,
@@ -25,6 +19,7 @@ const AddressSchema = z.object({
   state: requiredString,
   country: requiredString,
   postalCode: requiredString,
+  zipLast4: optionalString,
   geoCoordinates: z
     .object({
       longitude: z.number(),
@@ -42,29 +37,32 @@ const ContactDetailsSchema = z.object({
   addresses: z.array(AddressSchema),
   isMailingAddressSameAsPrimary: z.boolean(),
 })
+
 const schema = z
   .object({
     id: optionalString,
     name: requiredString,
-    individualRate: requiredString,
-    coupleRate: requiredString,
-    familyRate: requiredString,
+    individualRate: z.number().default(0),
+    coupleRate: z.number().default(0),
+    familyRate: z.number().default(0),
     subscriptionStatus: optionalString,
     payerStatus: requiredString,
     fixedPaymentType: optionalString,
-    billingFrequency: requiredString,
-    plusChargeAmount: optionalString,
-    serviceChargeAmount: optionalString,
-    startDate: requiredDate,
-    nextPaymentDate: requiredDate,
+    billingFrequency: z.enum(['Day', 'Month', 'Year']).default('Month'),
+    plusChargeAmount: z.number().default(0),
+    serviceChargeAmount: z.number().default(0),
+    startDate: z.custom<DateValue>().nullable().optional(),
+    nextPaymentDate: z.custom<DateValue>().nullable().optional(),
     contactDetails: ContactDetailsSchema,
-    recordStatus: requiredString,
-    isTest: z.boolean(),
-    paymentStatus: optionalString,
-    totalUserIds: z.number().optional(),
-    familiesCount: z.number().optional(),
-    couplesCount: z.number().optional(),
-    individualsCount: z.number().optional(),
+    recordStatus: optionalString.default('Active'),
+    isTest: z.boolean().default(false),
+    paymentStatus: optionalString.default('Successful'),
+    totalUserIds: z.number().default(0),
+    totalUsers: z.number().default(0),
+    familiesCount: z.number().default(0),
+    couplesCount: z.number().default(0),
+    individualsCount: z.number().default(0),
+    isMailingAddressSameAsPrimary: z.enum(['yes', 'no']).default('no'),
   })
   .superRefine((data, ctx) => {
     const {
@@ -83,13 +81,13 @@ const schema = z
 
     const isNew = !id || id.trim() === ''
 
-    const numberFields = [
+    const requiredNumberFields = [
       { key: 'totalUserIds', value: totalUserIds },
       { key: 'familiesCount', value: familiesCount },
       { key: 'couplesCount', value: couplesCount },
       { key: 'individualsCount', value: individualsCount },
     ]
-    const stringFields = [
+    const rateFields = [
       { key: 'plusChargeAmount', value: plusChargeAmount },
       { key: 'serviceChargeAmount', value: serviceChargeAmount },
       { key: 'familyRate', value: familyRate },
@@ -98,8 +96,8 @@ const schema = z
     ]
 
     if (!isNew) {
-      numberFields.forEach(({ key, value }) => {
-        if (value === undefined || value === null || value < 1) {
+      requiredNumberFields.forEach(({ key, value }) => {
+        if (value === undefined || value === null) {
           ctx.addIssue({
             path: [key],
             message: 'Required',
@@ -108,8 +106,8 @@ const schema = z
         }
       })
 
-      stringFields.forEach(({ key, value }) => {
-        if (!value || value.trim().length < 1) {
+      rateFields.forEach(({ key, value }) => {
+        if (value === undefined || value === null) {
           ctx.addIssue({
             path: [key],
             message: 'Required',
@@ -119,24 +117,24 @@ const schema = z
       })
     }
 
-    if (!contactDetails.isMailingAddressSameAsPrimary) {
-      const mailingAddresses = contactDetails.addresses.filter(
-        (addr) => addr.type.toLowerCase() === 'mailing',
+    if (data.isMailingAddressSameAsPrimary === 'no') {
+      const billingAddresses = contactDetails.addresses.filter(
+        (addr) => addr.type.toLowerCase() === 'billing',
       )
 
-      if (mailingAddresses.length === 0) {
+      if (billingAddresses.length === 0) {
         ctx.addIssue({
           path: ['contactDetails.addresses'],
-          message: 'Mailing address is required when not same as primary',
+          message: 'Billing address is required when not same as primary',
           code: z.ZodIssueCode.custom,
         })
       } else {
-        const mailingAddress = mailingAddresses[0]
+        const billingAddress = billingAddresses[0]
         const fields = ['street1', 'city', 'state', 'postalCode'] as const
         fields.forEach((field) => {
           if (
-            !mailingAddress[field] ||
-            mailingAddress[field].trim().length < 1
+            !billingAddress[field] ||
+            billingAddress[field].trim().length < 1
           ) {
             ctx.addIssue({
               path: ['contactDetails.addresses', field],
