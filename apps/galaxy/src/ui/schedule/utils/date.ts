@@ -137,7 +137,7 @@ const getDateTimeString = (
 ) => {
   if (date && !time) {
     const { year, day, month } = date
-    const dateTime = new CalendarDateTime(year, month, day)
+    const dateTime = new CalendarDateTime(year, month, day, 12, 0, 0)
     return dateTime.toDate(getLocalTimeZone()).toISOString()
   } else if (date && time) {
     const { year, day, month } = date
@@ -163,6 +163,18 @@ const convertToZonedDate = (date: string, timezone: string): Date => {
 const getCalendarDateFromUtc = (date?: string): CalendarDate | undefined =>
   date ? toCalendarDate(parseAbsolute(date, getLocalTimeZone())) : undefined
 
+const getDateStringNoon = (
+  date?: DateValue | null,
+  timezoneId: string = getLocalTimeZone(),
+): string | undefined => {
+  if (date) {
+    const { year, month, day } = date
+    const noonDateTime = new CalendarDateTime(year, month, day, 12, 0, 0)
+    return noonDateTime.toDate(timezoneId).toISOString()
+  }
+  return undefined
+}
+
 export {
   getCurrentLocalDate,
   getCurrentWeekStartDate,
@@ -180,5 +192,6 @@ export {
   getUtcDateWithoutTime,
   getLocalTime,
   getCalendarDateFromUtc,
-  getLocalDateWithoutTime
+  getLocalDateWithoutTime,
+  getDateStringNoon
 }

@@ -1,40 +1,59 @@
 'use client'
 
-import { Appointment } from '@/types'
-import { useStore } from '@/ui/lab-result/patient-lab-result-widget/store'
+import { useEffect, useState } from 'react'
+import { Flex } from '@radix-ui/themes'
+import { LoadingPlaceholder } from '@/components'
+import { Appointment, LabResult } from '@/types'
+import { fetchLabResultsAction } from '@/ui/lab-result/patient-lab-result-widget/actions'
 import { getTableData } from '@/ui/lab-result/patient-lab-result-widget/utils'
-import { formatUTCDate } from '@/utils'
 import { Details } from './details'
 
 type LabResultsClientProps = {
-  patientId?: string
+  patientId: string
   appointmentId?: string
-  appointment?: Appointment
 }
 
 const LabResultsClient = ({
   patientId,
-  appointmentId,
-  appointment,
+  appointmentId
 }: LabResultsClientProps) => {
-  const labResultsData = useStore((state) => state.data)
-  const processedResults = getTableData(labResultsData ?? [])
+  const [response, setResponse] = useState<LabResult[]>([])
+  const [loading, setLoading] = useState(false)
 
-  const appointmentDateKey = appointment?.startDate
-    ? formatUTCDate(appointment.startDate, 'MM/dd/yy')
-    : null
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true)
+      const payload = {
+        resourceStatusList: ['Active'],
+        patientId: patientId,
+        isIncludeLabOrder: true,
+        isIncludeLabLocation: true,
+        isIncludeTests: true,
+        appointmentId,
+      }
+      const result = await fetchLabResultsAction(payload)
+      setLoading(false)
+      if (result.state === 'error') {
+        return
+      }
+      if (result.data?.length) {
+        const processedData = getTableData(result.data ?? [])
+        setResponse(processedData)
+      }
+    }
 
-  const filteredResults =
-    processedResults?.filter((result) => {
-      if (!appointmentDateKey) return false
-      if (!result?.observationTime) return true
-      const observationDate = formatUTCDate(
-        result?.observationTime.toString(),
-        'MM/dd/yy',
-      )
-      return appointmentDateKey === observationDate
-    }) ?? []
-  return <Details data={filteredResults} />
+    fetchData()
+  }, [])
+
+  if (loading) {
+    return (
+      <Flex height="100%" align="center" justify="center">
+        <LoadingPlaceholder />
+      </Flex>
+    )
+  }
+
+  return <Details data={response} />
 }
 
 export { LabResultsClient }

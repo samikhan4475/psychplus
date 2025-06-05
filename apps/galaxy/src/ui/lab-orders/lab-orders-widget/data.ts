@@ -1,5 +1,5 @@
 import { LabResult, LabResultPayload } from '@/types'
-import { getDateString } from '@/ui/schedule/utils'
+import { getDateString, getDateStringNoon } from '@/ui/schedule/utils'
 import { getCalendarDate } from '@/utils'
 
 const transformOut = (labResult: LabResultPayload, labTestId?: string) => {
@@ -7,7 +7,7 @@ const transformOut = (labResult: LabResultPayload, labTestId?: string) => {
     ...(labResult.id ? { id: labResult.id } : {}),
     labTestId: labResult.labTestId ?? labTestId,
     orderId: labResult.orderId || '',
-    observationTime: getDateString(labResult?.observationTime ?? null),
+    observationTime: getDateStringNoon(labResult?.observationTime ?? null),
     resultName: labResult.resultName ?? '',
     statusCode: labResult.statusCode ?? '',
     resultCode: labResult.resultCode ?? '',

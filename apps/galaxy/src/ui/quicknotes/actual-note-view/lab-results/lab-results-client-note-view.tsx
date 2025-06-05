@@ -13,7 +13,7 @@ type LabResultsClientProps = {
   appointmentId?: string
 }
 
-const LabResultsClientNoteView = ({ patientId }: LabResultsClientProps) => {
+const LabResultsClientNoteView = ({ patientId,appointmentId }: LabResultsClientProps) => {
   const [response, setResponse] = useState<LabResult[]>([])
   const [loading, setLoading] = useState(false)
 
@@ -26,6 +26,7 @@ const LabResultsClientNoteView = ({ patientId }: LabResultsClientProps) => {
         isIncludeLabOrder: true,
         isIncludeLabLocation: true,
         isIncludeTests: true,
+        appointmentId
       }
       const result = await fetchLabResultsAction(payload)
       setLoading(false)
