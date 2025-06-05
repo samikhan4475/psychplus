@@ -279,6 +279,8 @@ const GET_PATIENT_TRANSACTIONS_HISTORY = (
 ) =>
   `${API_URL}/api/patients/${patientId}/transactions/${transactionId}/actions/history`
 const GET_CLEARING_HOUSE_RECEIVER_LIST_ENDPOINT = `${API_URL}/api/clearinghousereceivers/actions/search`
+const GET_ALL_VISITS_LIST_ENDPOINT = `${API_URL}/api/dashboards/visit/actions/all`
+const GET_VISIT_BY_STATE_LIST_ENDPOINT = `${API_URL}/api/dashboards/visit/actions/state`
 const DELETE_CLEARING_HOUSE_RECEIVER_ENDPOINT = (id: string) =>
   `${API_URL}/api/clearinghousereceivers/${id}`
 const ADD_CLEARING_HOUSE_RECEIVER_ENDPOINT = `${API_URL}/api/clearinghousereceivers`
@@ -1507,4 +1509,6 @@ export {
   GET_STATES_PRIMARY_LOCATIONS,
   VIRTUAL_PRIMARY_LOCATIONS_ENDPOINT,
   ADD_VIRTUAL_PRIMARY_LOCATIONS_ENDPOINT,
+  GET_ALL_VISITS_LIST_ENDPOINT,
+  GET_VISIT_BY_STATE_LIST_ENDPOINT,
 }
