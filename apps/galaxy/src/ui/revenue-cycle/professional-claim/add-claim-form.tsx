@@ -6,10 +6,9 @@ import { DateValue } from 'react-aria-components'
 import { useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FormContainer, FormSubmitButton } from '@/components'
-import { ClaimAddApiRequest, ClaimUpdateApiResponse } from '@/types'
+import { ClaimAddApiRequest } from '@/types'
 import { getCalendarDateLabel, sanitizeFormData } from '@/utils'
 import { addClaimAction, getPracticeAction } from '../actions'
-import { useStore } from '../claim-tab/store'
 import { ClaimDetailsTab } from '../types'
 import { ClaimHeaders } from './add-claim-header'
 import { ChargesTable } from './charges'
@@ -106,6 +105,7 @@ const AddClaimForm = ({ onCloseModal }: AddClaimFormProps) => {
         0,
       ),
       primaryStatusCode: 'NewCharge',
+      claimStatusCode: 'NewCharge',
       claimServiceLines: (formData.claimServiceLines ?? []).map((line) => ({
         ...line,
         dateOfServiceFrom: getDateString(line.dateOfServiceFrom),
