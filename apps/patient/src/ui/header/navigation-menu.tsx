@@ -17,6 +17,10 @@ const NAV_LINKS = [
     href: '/health',
     label: 'Health',
   },
+  {
+    href: '/appointments/upcoming',
+    label: 'Appointments',
+  },
   // {
   //   href: '/care-plan',
   //   label: 'Care Plan',

@@ -18,10 +18,13 @@ interface Appointment {
   specialist: Specialist
   specialistTypeCode: ProviderType
   providerType: NewProviderType
+  visitType?: string
   startDate: string
   endDate: string
   duration: number
   coPay: number
+  coPayDue?: number
+  coPayPaid?: number
   virtualRoomLink: string
   isCopayPaid: boolean
   isSelfPay: boolean

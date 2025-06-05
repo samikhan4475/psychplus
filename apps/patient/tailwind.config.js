@@ -23,6 +23,7 @@ const config = {
         'pp-blue-5': '#EBF3FC',
         'pp-blue-6': '#A0D1FA',
         'pp-blue-7': '#24366B',
+        'pp-blue-8': '#151B4A',
         'pp-gray-1': '#60646C',
         'pp-gray-2': '#DDDDE3',
         'pp-gray-3': '#EBEBEF',
