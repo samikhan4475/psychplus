@@ -1,6 +1,10 @@
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { FormFieldContainer, FormFieldLabel } from '@/components'
+import {
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+} from '@/components'
 import { ClaimUpdateSchemaType } from '../schema'
 
 const CliaNumber = () => {
@@ -13,6 +17,7 @@ const CliaNumber = () => {
         size="1"
         {...form.register('clinicalLaboratoryImprovementAmendmentsNumber')}
       />
+      <FormFieldError name="clinicalLaboratoryImprovementAmendmentsNumber" />
     </FormFieldContainer>
   )
 }

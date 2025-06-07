@@ -159,7 +159,19 @@ const claimUpdateSchema = z
     claimType: z.string().optional(),
     authorizationNumber: z.string().optional(),
     referralNumber: z.string().optional(),
-    clinicalLaboratoryImprovementAmendmentsNumber: z.string().optional(),
+    clinicalLaboratoryImprovementAmendmentsNumber: z
+      .union([
+        z
+          .string()
+          .min(10, 'CLIA # must be at least 10 characters long.')
+          .max(10, 'CLIA # must be at least 10 characters long.')
+          .trim(),
+        z.literal(''),
+      ])
+      .optional()
+      .refine((val) => val === undefined || val === '' || val.length === 10, {
+        message: 'CLIA # must be at least 10 characters long.',
+      }),
     claimNotes: z.string().optional(),
     payerClaimControlNumber: z.string().optional(),
     primaryStatusCode: z.string().optional(),

@@ -4,7 +4,6 @@ import { Grid } from '@radix-ui/themes'
 import { AccidentDate } from './accident-date'
 import { AccidentState } from './accident-state'
 import { AccidentType } from './accident-type'
-import { CLIANumber } from './clia-number'
 import { LabCharges } from './lab-charges'
 import { FormCheckbox } from '@/components/form-checkbox'
 
@@ -15,7 +14,6 @@ const AccidentAndLabView = () => {
       <AccidentState />
       <AccidentType />
       <LabCharges />
-      <CLIANumber />
       <FormCheckbox label="New Employment" fieldName="isEmployment" />
       <FormCheckbox label="Auto Accident" fieldName="isAutoAccident" />
       <FormCheckbox label="Other Accident" fieldName="isOtherAccident" />
