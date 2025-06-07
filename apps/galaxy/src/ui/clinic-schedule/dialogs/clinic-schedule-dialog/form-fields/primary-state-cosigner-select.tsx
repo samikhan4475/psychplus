@@ -57,7 +57,7 @@ const PrimaryStateCosigner = () => {
 
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel required className="text-[12px]">
+      <FormFieldLabel className="text-[12px]">
         Primary State Cosigner
       </FormFieldLabel>
       <SelectInput

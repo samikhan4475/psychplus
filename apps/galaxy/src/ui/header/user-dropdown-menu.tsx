@@ -64,7 +64,7 @@ const UserDropdownMenu = () => {
             const href = `/user/profile`
             addTab({
               href,
-              label: `${user?.legalName?.firstName} ${user.legalName?.lastName} - ${user.staffId}`,
+              label: `${user?.legalName?.firstName} ${user.legalName?.lastName} - ${user.staffId} (Non-Admin)`,
             })
             router.push(href)
           }}

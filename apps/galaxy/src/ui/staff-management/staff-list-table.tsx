@@ -386,7 +386,7 @@ const StaffListTable = () => {
           const href = `/staff/${row.original.id}/profile?id=${row.original.userId}`
           addTab({
             href,
-            label: `${row.original?.legalName?.firstName} ${row.original.legalName?.lastName} - ${row.original.id}`,
+            label: `${row.original?.legalName?.firstName} ${row.original.legalName?.lastName} - ${row.original.id} (Admin)`,
           })
           router.push(href)
         }}
