@@ -15,7 +15,10 @@ const VisitByState = () => {
       <VisitByStateListFilterForm />
       <Flex direction="column" className="bg-white flex-1 !overflow-hidden">
         <VisitByStateListTable />
-        <VisitByStateListTablePagination />
+        {/*
+          Todo for now removed pagination will be added later
+          <VisitByStateListTablePagination />
+         */}
       </Flex>
     </Flex>
   )

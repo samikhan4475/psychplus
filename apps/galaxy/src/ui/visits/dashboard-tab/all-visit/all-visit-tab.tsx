@@ -11,7 +11,10 @@ const AllVisit = () => {
       <AllVisitsListFilterForm />
       <Box className="bg-white pt-1">
         <AllVisitsListTable />
-        <AllVisitListTablePagination />
+        {/*
+          Todo for now removed pagination will be added later
+          <AllVisitListTablePagination /> 
+         */}
       </Box>
     </>
   )

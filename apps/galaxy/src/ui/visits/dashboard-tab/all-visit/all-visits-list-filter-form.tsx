@@ -47,6 +47,7 @@ const AllVisitsListFilterForm = () => {
       stateCodes: defaultStates,
     },
   })
+  const dateFrom = form.watch('dateFrom')
 
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
     let formattedData = formatFilterFormData(data)
@@ -65,8 +66,8 @@ const AllVisitsListFilterForm = () => {
       onSubmit={onSubmit}
     >
       <Grid columns="8" gap="2" className="flex">
-        <DateFrom />
-        <DateTo />
+        <DateFrom setActiveFilter={setActiveFilter} />
+        <DateTo setActiveFilter={setActiveFilter} dateFrom={dateFrom} />
         <VisitsStateSelect />
         <RoundingViewFilterGroup
           activeFilter={activeFilter}

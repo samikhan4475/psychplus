@@ -3,7 +3,6 @@
 import * as api from '@/api/api.client'
 import { GET_VISIT_BY_STATE_LIST_ENDPOINT } from '@/api/endpoints'
 import { Sort } from '@/types'
-import { ALL_VISITS_LIST_TABLE_PAGE_SIZE } from '../../constants'
 import {
   StateVisits,
   StateVisitsListResponse,
@@ -23,14 +22,14 @@ const defaultPayload = {
 }
 const getVisitByStateListAction = async ({
   payload,
-  page = 1,
   sort,
 }: GetVisitByStateListParams): Promise<
   api.ActionResult<StateVisitsListResponse>
 > => {
   let urlString = GET_VISIT_BY_STATE_LIST_ENDPOINT
-  const offset = (page - 1) * ALL_VISITS_LIST_TABLE_PAGE_SIZE
-  urlString += `?limit=${ALL_VISITS_LIST_TABLE_PAGE_SIZE}&offset=${offset}`
+  //Todo for now removed pagination will be added later
+  // const offset = (page - 1) * ALL_VISITS_LIST_TABLE_PAGE_SIZE
+  // urlString += `?limit=${ALL_VISITS_LIST_TABLE_PAGE_SIZE}&offset=${offset}`
 
   if (sort) {
     urlString += `?orderBy=${sort.column} ${sort.direction}`
