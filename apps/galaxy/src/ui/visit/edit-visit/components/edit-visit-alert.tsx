@@ -59,6 +59,7 @@ const EditVisitAlert = ({
       onOpenChange={(dialogNewState) => {
         if (!dialogNewState && isOpen) {
           onClose()
+          setCurrentMessageIndex(0)
         }
       }}
     >

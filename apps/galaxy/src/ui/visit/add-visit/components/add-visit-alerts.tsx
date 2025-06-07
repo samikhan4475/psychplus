@@ -11,6 +11,7 @@ enum StatusCode {
   NoPermission = 406,
   OverridePermission = 428,
   ProceedConfirmation = 412,
+  ConflictCode = 409,
 }
 
 const AddVisitAlert = ({
@@ -60,6 +61,7 @@ const AddVisitAlert = ({
       onOpenChange={(dialogNewState) => {
         if (!dialogNewState && isOpen) {
           onClose()
+          setCurrentMessageIndex(0)
         }
       }}
     >
