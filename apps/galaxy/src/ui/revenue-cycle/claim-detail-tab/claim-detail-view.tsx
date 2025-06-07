@@ -6,8 +6,7 @@ import { Box, Flex, ScrollArea } from '@radix-ui/themes'
 import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { metadata } from '@/app/layout'
-import { FormContainer, LoadingPlaceholder } from '@/components'
+import { FormContainer } from '@/components'
 import {
   ClaimServiceLine,
   ClaimServiceLineApiResponse,
@@ -21,7 +20,7 @@ import {
 } from '@/utils'
 import { CLAIM_PAYMENT_STATUSES, ENABLE_FORM_STATUSES } from '../constants'
 import { useStore } from '../store'
-import { ClaimDetailsTab } from '../types'
+import { ClaimDetailsTab, RevenueCycleTab } from '../types'
 import { AccidentAndLabView } from './accident-lab-section'
 import { getClaimById } from './actions/get-service-claim'
 import { updateClaimAction } from './actions/update-claim'
@@ -42,6 +41,7 @@ import {
 import { ClaimNotesHeaderActions, ClaimNotesTable } from './claim-notes-section'
 import { ClaimDeletedNotesDialog } from './claim-notes-section/claim-notes-deleted-dialog'
 import { ClaimNotesDialog } from './claim-notes-section/claim-notes-dialog'
+import { defaultClaimUpdateValues } from './constants'
 import { DiagnosisView } from './diagnosis-section'
 import { LoadClaimConfrimationDialog } from './load-claim-confirmation-dialog'
 import { claimUpdateSchema, ClaimUpdateSchemaType } from './schema'
@@ -84,11 +84,7 @@ const ClaimDetailView = () => {
       CLAIM_PAYMENT_STATUSES.includes(claimPrimaryStatus),
     resolver: zodResolver(claimUpdateSchema),
     reValidateMode: 'onChange',
-    defaultValues: {
-      claimFrequencyCode: 'Original',
-      claimServiceLines: [],
-      claimDiagnosis: [],
-    },
+    defaultValues: defaultClaimUpdateValues,
   })
   const { control } = form
   const { append } = useFieldArray({
@@ -167,6 +163,7 @@ const ClaimDetailView = () => {
   }
 
   const fetchClaimData = async (claimId: string) => {
+    form.reset(defaultClaimUpdateValues)
     const claimResponse = await getClaimById(claimId)
     if (claimResponse.state === 'success') {
       const transformedClaimData = transformClaimData(claimResponse.data)
@@ -184,14 +181,15 @@ const ClaimDetailView = () => {
       toast.error('Failed to fetch claim data')
     }
   }
+
   useEffect(() => {
-    if (claimId) {
+    if (claimId && activeTab.includes(RevenueCycleTab.ClaimDetails)) {
       fetchClaimData(claimId)
     }
     return () => {
       openAlertModal(false)
     }
-  }, [])
+  }, [activeTab])
 
   useEffect(() => {
     if (isClaimPosted === true) {
@@ -331,6 +329,7 @@ const ClaimDetailView = () => {
     fetchClaimData(claimId)
     setReloadClaimDialog(false)
   }
+
   return (
     <Box>
       {openNotesDialog && (
