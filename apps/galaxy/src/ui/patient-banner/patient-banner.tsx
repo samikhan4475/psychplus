@@ -2,8 +2,8 @@ import React from 'react'
 import { Flex, Text } from '@radix-ui/themes'
 import { CloseIcon, TickIcon } from '@/components/icons'
 import { PatientProfile } from '@/types'
-import { formatUTCDate, getUserFullName } from '@/utils'
-import { ExternalProviderDetail } from '../pcp'
+import { formatDate, getUserFullName } from '@/utils'
+import { convertToTimezone } from '../visit/utils'
 import { getPatientDemographicsAction } from './actions/get-patient-demographics'
 import { CareTeamInfoSection } from './care-team-info-section'
 import { InsuranceInfoSection } from './insurance-info-section'
@@ -65,6 +65,11 @@ const PatientBanner = async ({
     patientDemographicsData?.externalProviders?.find(
       (provider) => provider.relationship === 'PrimaryCare',
     )?.externalProvider?.legalName
+
+  const { time } = convertToTimezone(
+    patientDemographicsData?.appointment?.lastSeenByProvider,
+    patientDemographicsData?.appointment?.locationTimezoneId,
+  )
 
   return (
     <Flex
@@ -132,9 +137,11 @@ const PatientBanner = async ({
           value={
             patientDemographicsData?.appointment?.lastSeenByProvider &&
             patientDemographicsData?.appointment?.providerFullName
-              ? `${formatUTCDate(
+              ? `${formatDate(
                   patientDemographicsData?.appointment?.lastSeenByProvider,
-                )} ${
+                )}
+                ${time}
+                ${
                   patientDemographicsData?.appointment?.lastSeenByProviderName
                     ?.firstName
                 } ${
