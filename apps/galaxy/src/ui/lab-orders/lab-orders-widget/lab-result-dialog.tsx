@@ -6,30 +6,25 @@ interface LabResultDialogProps {
   title?: string
   children: ReactNode
   onClose?: () => void
-  isEditing?: boolean
+  open: boolean
+  onOpenChange: (open: boolean) => void
 }
 
 const LabResultDialog = ({
   title,
   children,
   onClose,
+  open,
+  onOpenChange,
 }: LabResultDialogProps) => {
-  const [isOpen, setIsOpen] = useState(false)
   const handleOpenChange = (open: boolean) => {
-    setIsOpen(open)
+    onOpenChange(open)
     if (!open && onClose) {
       onClose()
     }
   }
   return (
-    <Dialog.Root open={isOpen} onOpenChange={handleOpenChange}>
-      <Tooltip content="View Results" side="top" align="center">
-        <Dialog.Trigger>
-          <Text size="1" weight="regular" className="text-pp-blue">
-            View Results
-          </Text>
-        </Dialog.Trigger>
-      </Tooltip>
+    <Dialog.Root open={open} onOpenChange={handleOpenChange}>
       <Dialog.Content className="relative max-h-[80vh] max-w-[70vw] overflow-y-scroll">
         <Flex justify="between" align="center" mb="2">
           <Dialog.Title

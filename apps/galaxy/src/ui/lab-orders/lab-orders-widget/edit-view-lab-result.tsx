@@ -27,6 +27,7 @@ interface LabResultsProps {
   form: UseFormReturn<SchemaType>
   setSelectedTestName: React.Dispatch<React.SetStateAction<string>>
   shouldEditLabResult: boolean
+  onSubmitSuccess?: () => void
 }
 
 const EditViewLabResult = ({
@@ -34,6 +35,7 @@ const EditViewLabResult = ({
   form,
   setSelectedTestName,
   shouldEditLabResult,
+  onSubmitSuccess,
 }: LabResultsProps) => {
   const [loadingSave, setLoadingSave] = useState(false)
   const { orderStatus } = row.original
@@ -160,10 +162,11 @@ const EditViewLabResult = ({
     const payload = transformOut(data.labResults, selectedTestId)
     const formattedData = sanitizeFormData(payload)
     if (editAbleLabResults?.id === '') {
-      handleAddLabResult(formattedData)
+      await handleAddLabResult(formattedData)
     } else {
-      hanldeEditLabResult(formattedData)
+      await hanldeEditLabResult(formattedData)
     }
+    if (onSubmitSuccess) onSubmitSuccess()
   }
 
   const handleCancel = () => {

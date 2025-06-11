@@ -1,4 +1,4 @@
-import { type ColumnDef } from '@tanstack/react-table'
+import { Row, type ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, DateTimeCell, TextCell } from '@/components'
 import { LabOrders, Sort } from '@/types'
 import { formatUTCDate, getSortDir } from '@/utils'
@@ -13,12 +13,14 @@ const getColumns = ({
   afterSummaryVisit,
   sort,
   onSort,
+  onResultClick,
 }: {
   appointmentId: string | null
   isInboxLabOrder: boolean
   afterSummaryVisit: boolean
   sort?: Sort
   onSort?: (column: string) => void
+  onResultClick: (row: Row<LabOrders>) => void
 }): ColumnDef<LabOrders>[] => {
   const baseColumns: ColumnDef<LabOrders>[] = [
     {
@@ -158,12 +160,13 @@ const getColumns = ({
           onClick={() => onSort?.(column.id)}
         />
       ),
-      cell: ({ row }) => <StatusCell row={row} appointmentId={appointmentId ?? ''} />,
+      cell: ({ row }) => (
+        <StatusCell row={row} appointmentId={appointmentId ?? ''} />
+      ),
     },
   ]
 
   const columns = [...baseColumns, ...remainingColumns]
-
 
   if (afterSummaryVisit) {
     return [
@@ -173,26 +176,34 @@ const getColumns = ({
         size: 100,
         header: () => <ColumnHeader label="Actions" />,
         cell: ({ row }) => (
-          <ActionsCell row={row} afterSummaryVisit={afterSummaryVisit} appointmentId={appointmentId ?? ''}  />
+          <ActionsCell
+            row={row}
+            afterSummaryVisit={afterSummaryVisit}
+            appointmentId={appointmentId ?? ''}
+          />
         ),
       },
     ]
   }
 
-  if (!isInboxLabOrder) { 
+  if (!isInboxLabOrder) {
     return [
       ...columns,
       {
         id: 'results',
         size: 150,
         header: () => <ColumnHeader label="Result" />,
-        cell: ({ row }) => <ResultsCell row={row} />,
+        cell: ({ row }) => (
+          <ResultsCell row={row} onResultClick={onResultClick} />
+        ),
       },
       {
         id: 'actions',
         size: 100,
         header: () => <ColumnHeader label="Actions" />,
-        cell: ({ row }) => <ActionsCell row={row} appointmentId={appointmentId ?? ''} />,
+        cell: ({ row }) => (
+          <ActionsCell row={row} appointmentId={appointmentId ?? ''} />
+        ),
       },
     ]
   }

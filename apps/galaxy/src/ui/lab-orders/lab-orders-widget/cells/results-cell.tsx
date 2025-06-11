@@ -7,15 +7,16 @@ type LabOrderRow = Row<LabOrders>
 
 interface ActionsCellProps {
   row: LabOrderRow
+  onResultClick: (row: LabOrderRow) => void
 }
 
-const ResultsCell = ({ row }: ActionsCellProps) => {
+const ResultsCell = ({ row, onResultClick }: ActionsCellProps) => {
   return (
     <AdaptiveRowActionsCell
       actions={[
         {
           id: 'row-results-view',
-          render: RowResultView,
+          render: () => <RowResultView row={row} onClick={onResultClick} />,
         },
       ]}
       row={row}
