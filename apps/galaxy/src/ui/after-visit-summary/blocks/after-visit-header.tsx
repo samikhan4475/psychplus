@@ -20,16 +20,24 @@ const AfterSummaryHeaderWidgetHeader = ({
 }: AfterSummaryHeaderWidgetHeaderProps) => {
   const options = useMemo(
     () =>
-      appointments.map((appointment) => ({
-        label: `${formatDateCell(
-          appointment.appointmentDate,
-          appointment.locationTimezoneId,
-        )} ${formatTimeCell(
-          appointment.appointmentDate,
-          appointment.locationTimezoneId,
-        )}, ${appointment.visitMedium}, ${appointment.visitType ?? ''}`,
-        value: String(appointment.appointmentId),
-      })),
+      appointments.map((appointment) => {
+        const hasDate = !!appointment.appointmentDate
+        const hasTimezone = !!appointment.locationTimezoneId
+        const label = hasDate && hasTimezone
+          ? `${formatDateCell(
+              appointment.appointmentDate,
+              appointment.locationTimezoneId,
+              false,
+            )} ${formatTimeCell(
+              appointment.appointmentDate,
+              appointment.locationTimezoneId,
+            )}, ${appointment.visitMedium}, ${appointment.visitType ?? ''}`
+          : `${appointment.visitMedium}, ${appointment.visitType ?? ''}`
+        return {
+          label,
+          value: String(appointment.appointmentId),
+        }
+      }),
     [appointments],
   )
 

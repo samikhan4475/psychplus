@@ -37,9 +37,15 @@ const AfterVisitSummaryView = ({
   const { data, fetch, setAppointmentId } = useLabOrdersStore()
   const { fetchWorkingDiagnosis } = useProviderRecommendationsStore()
 
-  const upcomingAppointments = appointments.filter((appointment) =>
-    ['Scheduled', 'Confirmed', 'CheckedIn'].includes(appointment.visitStatus),
-  )
+  const upcomingAppointments = appointments.filter((appointment) => {
+    const isUpcomingStatus = ['Scheduled', 'Confirmed', 'CheckedIn'].includes(
+      appointment.visitStatus,
+    )
+    const appointmentDate = new Date(appointment.appointmentDate)
+    const now = new Date()
+    return isUpcomingStatus && appointmentDate >= now
+  })
+
   const pastAppointments = appointments.filter(
     (appointment) => appointment.visitStatus === 'CheckedOut',
   )
