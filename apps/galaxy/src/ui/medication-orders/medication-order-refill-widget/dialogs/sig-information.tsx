@@ -42,6 +42,7 @@ const SigInformation = ({ index }: SigInformationProps) => {
           maxLength={300}
           value={signatureText}
           onChange={handleValueChange}
+           title={signatureText}
         />
       </FormFieldContainer>
     </Flex>

@@ -25,6 +25,7 @@ const defaultPayLoad = {
   isIncludeDiagnosisList: true,
   isIncludePharmacyData: true,
   isIncludePatientData: true,
+  IsIncludePharmacyNotificationResponseList: true,
 }
 
 const getMedicationsListAction = async ({
@@ -43,6 +44,7 @@ const getMedicationsListAction = async ({
   if (sort) {
     url.searchParams.append('orderBy', `${sort.column} ${sort.direction}`)
   }
+
   const response = await api.POST<MedicationRefill[]>(`${url}`, {
     ...defaultPayLoad,
     ...payload,

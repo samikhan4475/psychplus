@@ -74,6 +74,20 @@ interface PatientData {
   patientTypeEstablishedOrNew: string
   isSelfPay: boolean
 }
+
+interface PrescriberRxRenewalResponse {
+  id?: string
+  notificationId?: string
+  notificationType?: string
+  responseDate?: string
+  recordSource?: string
+  responseType?: string
+  userResponseType?: string
+  transactionId?: string
+  notificationTypeDisplayName?:string
+  userTransactionStatus?:string
+}
+
 interface MedicationRefill {
   id: string
   notificationId: string
@@ -85,6 +99,7 @@ interface MedicationRefill {
   metadata?: Metadata
   pharmacyName?: string
   notificationResponseType?: string
+  notificationUserResponseType?: string
   notificationResponseDate?: string
   prescriptionId?: string
   prescriberAgentStaffId?: number
@@ -112,6 +127,7 @@ interface MedicationRefill {
   pharmacyAddress?: PharmacyAddress
   isResponsePending?: boolean
   patient?: PatientData
+  pharmacyNotificationResponseList?: PrescriberRxRenewalResponse[]
 }
 
 interface MedicationRefillResponseList {
@@ -358,6 +374,7 @@ export {
   type RenewalResponsePayload,
   type RxRenewalResponseDrugDetail,
   type ChangeRequestPayload,
+  type PrescriberRxRenewalResponse,
   RenewalResponseTypeEnum,
   PharmacyNotificationType,
   REFILLDENIEDOPTIONS,

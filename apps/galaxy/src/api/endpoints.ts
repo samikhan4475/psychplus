@@ -1045,6 +1045,11 @@ const REMOVE_STAFF_FAVORITES_MEDICATION = (staffId: number, id: string) =>
 const GET_STATES_PRIMARY_LOCATIONS = `${API_URL}/api/locations/actions/primaries/search`
 const VIRTUAL_PRIMARY_LOCATIONS_ENDPOINT = `${API_URL}/api/locations/actions/primaries/search`
 const ADD_VIRTUAL_PRIMARY_LOCATIONS_ENDPOINT = `${API_URL}/api/primarylocations`
+const PHARMACY_CANCEL_REQUEST = (
+  pharmacyNotificationId: string,
+  pharmacyNotificationResponseId: string,
+) =>
+  `${API_URL}/api/pharmacynotifications/${pharmacyNotificationId}/responses/${pharmacyNotificationResponseId}/actions/cancel/send`
 
 export {
   PATIENT_MEDICATION_SIGN_IN,
@@ -1512,6 +1517,7 @@ export {
   GET_STATES_PRIMARY_LOCATIONS,
   VIRTUAL_PRIMARY_LOCATIONS_ENDPOINT,
   ADD_VIRTUAL_PRIMARY_LOCATIONS_ENDPOINT,
+  PHARMACY_CANCEL_REQUEST,
   GET_ALL_VISITS_LIST_ENDPOINT,
   GET_VISIT_BY_STATE_LIST_ENDPOINT,
 }

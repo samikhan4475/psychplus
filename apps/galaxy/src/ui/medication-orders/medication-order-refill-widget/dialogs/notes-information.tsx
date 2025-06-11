@@ -18,6 +18,19 @@ const NotesInformation = ({ index }: NotesInformationProps) => {
     }) ?? []
   return (
     <>
+
+     <FormFieldContainer className="flex-1">
+        <FormFieldLabel>Pharmacy Instructions</FormFieldLabel>
+        <TextArea
+          placeholder="Notes here"
+          className="mt-1 h-6 w-full "
+          size="1"
+          maxLength={300}
+          disabled
+          {...form.register(`drugList.${index}.drugNote`)}
+        />
+      </FormFieldContainer>
+
       <FormFieldContainer className="flex-1">
         <FormFieldLabel>Instruction & Notes</FormFieldLabel>
         <TextArea
@@ -25,7 +38,7 @@ const NotesInformation = ({ index }: NotesInformationProps) => {
           className="mt-1 h-6 w-full "
           size="1"
           maxLength={300}
-          {...form.register(`drugList.${index}.drugNote`)}
+          {...form.register(`drugList.${index}.notes`)}
         />
       </FormFieldContainer>
 

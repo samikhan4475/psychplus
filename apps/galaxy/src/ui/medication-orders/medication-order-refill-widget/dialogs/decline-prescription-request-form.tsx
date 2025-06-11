@@ -48,14 +48,6 @@ const DeclineMedicationForm = ({
   const onSubmit = async (data: UpdateMedicationSchema) => {
     if (!data.drugList || data.drugList.length === 0) return
 
-    const invalidDrugIndex = data.drugList.findIndex(
-      (drug) => !drug.deniedReason,
-    )
-
-    if (invalidDrugIndex !== -1) {
-      toast.error('Please select a denial reason for all medications')
-      return
-    }
 
     if (isRefillTab) {
       await handleRxDenial(data)
@@ -178,7 +170,7 @@ const DeclineMedicationForm = ({
             </FormFieldContainer>
 
             <FormFieldContainer className="flex-1">
-              <FormFieldLabel required>Select Reason</FormFieldLabel>
+              <FormFieldLabel >Select Reason</FormFieldLabel>
               <SelectInput
                 options={
                   isRefillTab

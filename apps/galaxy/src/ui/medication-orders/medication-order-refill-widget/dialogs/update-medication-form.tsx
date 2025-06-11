@@ -59,7 +59,7 @@ const UpdateMedicationForm = ({
     for (const row of data.drugList ?? []) {
       const payload = {
         responseType: RenewalResponseTypeEnum.Approved,
-         note: '',
+        note: row.notes,
         rxRenewalResponseDrugDetail: {
           drugDescription: row?.drugDescription ?? '',
           quantityValue: row?.quantityValue?.toString() ?? '0',
@@ -71,11 +71,10 @@ const UpdateMedicationForm = ({
           quantityCodeListQualifier: row?.quantityCodeListQualifier,
           quantityUnitOfMeasureCode: row?.quantityUnitOfMeasureCode,
           refills: row.refills,
+          drugNote: row.notes
         },
       }
-
-      const sanitizeData = sanitizeFormData(payload)
-
+      const sanitizeData = sanitizeFormData(payload) 
       const response = await rxRenewalAction(
         data.pharmacyNotificationId ?? '',
         sanitizeData,
@@ -134,7 +133,6 @@ const UpdateMedicationForm = ({
               scrollbars="vertical"
               className="max-h-[70dvh] overflow-visible pr-2"
             >
-              <DrugInteractionAccordian />
               <PatientPrescriptionAccordian />
             </ScrollArea>
           </Flex>

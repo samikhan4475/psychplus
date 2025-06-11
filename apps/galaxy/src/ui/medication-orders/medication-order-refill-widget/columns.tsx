@@ -266,7 +266,7 @@ const columns = (
     },
     {
       id: 'actions',
-      header: () => <ColumnHeader label="Actions" />,
+      header: () => <ColumnHeader className="w-[150px]" label="Actions" />,
       cell: ({ row }) => <ActionsCell row={row} />,
     },
   ]

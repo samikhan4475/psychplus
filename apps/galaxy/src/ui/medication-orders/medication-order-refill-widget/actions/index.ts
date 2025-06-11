@@ -4,4 +4,5 @@ export * from './get-medication-history'
 export * from './filter-patients'
 export * from './rx-renewal'
 export * from './rx-change-request'
-export * from "./map-patients"
+export * from './map-patients'
+export * from './rx-cancel-request'

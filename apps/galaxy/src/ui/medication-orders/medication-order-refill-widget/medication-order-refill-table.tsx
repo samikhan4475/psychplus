@@ -44,17 +44,31 @@ const MedicationOrderRefillTable = () => {
     let newList = isRefillTab
       ? data.refillRequests
       : changeRequestData?.refillRequests
+
     return newList
-      .map((request) => ({
-        ...request,
-        drugList: request.drugList?.filter(
-          (drug) =>
-            drug.medicationType ===
-            (isRefillTab
-              ? RefillMedicationType.Dispensed
-              : RefillMedicationType.Requested),
-        ),
-      }))
+      .map((request) => {
+        let finalDrugs
+        if (isRefillTab) {
+          finalDrugs = request.drugList?.filter(
+            (drug) => drug.medicationType === RefillMedicationType.Dispensed,
+          )
+        } else {
+          const requestedDrugs = request.drugList?.filter(
+            (drug) => drug.medicationType === RefillMedicationType.Requested,
+          )
+          finalDrugs =
+            requestedDrugs && requestedDrugs.length > 0
+              ? requestedDrugs
+              : request.drugList?.filter(
+                  (drug) =>
+                    drug.medicationType === RefillMedicationType.Prescribed,
+                )
+        }
+        return {
+          ...request,
+          drugList: finalDrugs,
+        }
+      })
       .filter((request) => request.drugList && request.drugList.length > 0)
   }, [data?.refillRequests, changeRequestData?.refillRequests])
 
