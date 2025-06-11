@@ -239,7 +239,8 @@ const formatDateOfBirth = (dob: string) => {
 const convertToCalendarDate = (storedDate: DateValue | string) => {
   if (typeof storedDate === 'string') {
     if (isISODate(storedDate)) {
-      return parseDate(storedDate)
+      const date = parseDate(storedDate)
+      return new CalendarDate(normalizeYear(date.year), date.month, date.day)
     } else {
       const datePart = storedDate?.split(' ')[0]
       return parseDate(datePart)
@@ -254,7 +255,7 @@ const convertToCalendarDate = (storedDate: DateValue | string) => {
     month: number
     day: number
   }
-  return new CalendarDate(year, month, day)
+  return new CalendarDate(normalizeYear(year), month, day)
 }
 
 const getOptionalDateString = (date?: DateValue | null): string | undefined =>
@@ -326,14 +327,23 @@ const generateTimeOptions = (interval = 20): SelectOptionType[] => {
   return options
 }
 
+const normalizeYear = (year: number) => {
+  if (year < 1000) {
+    const currentYear = new Date().getFullYear()
+    const currentCentury = Math.floor(currentYear / 100)
+    return currentCentury * 100 + year
+  }
+  return year
+}
+
 const getDateDifference = (dateObjEnd: DateValue, dateObjStart: DateValue) => {
   const startDateObj = new Date(
-    dateObjStart.year,
+    normalizeYear(dateObjStart.year),
     dateObjStart.month - 1,
     dateObjStart.day,
   )
   const endDateObj = new Date(
-    dateObjEnd.year,
+    normalizeYear(dateObjEnd.year),
     dateObjEnd.month - 1,
     dateObjEnd.day,
   )
