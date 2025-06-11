@@ -19,10 +19,8 @@ interface BookedStaffAndClinicDetailsProps {
 const BookedStaffAndClinicDetails = ({
   className,
 }: BookedStaffAndClinicDetailsProps) => {
-  const { bookedSlot, codeSetIndex } = useStore()
+  const { bookedSlot } = useStore()
   const [profileImage, setProfileImage] = useState<string | undefined>()
-
-  const specialistTypeCodeSet = codeSetIndex.SpecialistType
 
   const [bookedSlotState, setBookedSlotState] = useState<
     BookedSlot | undefined
@@ -44,24 +42,21 @@ const BookedStaffAndClinicDetails = ({
       )}
 
       <Flex direction="column" className="text-[#151B4A" gap="1">
-        <Text className="font-bold" size="5">
+        <Text className="font-bold text-3 md:text-5">
           {renderStaffName(bookedSlotState?.specialist)}
         </Text>
 
-        <Text size="4">{formatStartDate(bookedSlotState?.startDate)}</Text>
+        <Text className="text-2 md:text-4" size="4">{formatStartDate(bookedSlotState?.startDate)}</Text>
 
         <Flex className="text-[#194595]" gap="4">
-          <Text size="3">
-            {getCodeDisplay(
-              specialistTypeCodeSet,
-              bookedSlotState?.specialistTypeCode.toString(),
-            )}
+          <Text  className="text-2 md:text-3">
+            {bookedSlotState?.specialistTypeCode === 1 ? 'Psychiatrist' : 'Therapist'}
           </Text>
-          <Text size="3">{bookedSlotState?.type}</Text>
+          <Text className="text-2 md:text-3">{bookedSlotState?.type}</Text>
         </Flex>
         {bookedSlotState?.type === 'In-Person' && (
           <Flex gap="2">
-            <Text className="text-[#575759]" size="2">
+            <Text className="text-[#575759] text-1 md:text-2" size="2">
               {bookedSlotState?.clinic?.name.trim()}
               {', '}
               {bookedSlotState?.clinic?.contact?.addresses?.[0].street1}{' '}

@@ -298,7 +298,7 @@ const PersonalDetailsForm = () => {
           <Flex align="center" justify="between" className="bg-[#ffe5e7] p-6">
             <Flex align="center">
               <WarningIcon />
-              <Text className="text-psych-blue ml-2 text-[16px]">
+              <Text className="text-psych-blue ml-2 text-[12px] md:text-[16px]">
                 {alertError}
               </Text>
             </Flex>
@@ -314,14 +314,14 @@ const PersonalDetailsForm = () => {
         )}
         <Flex direction="column" gap="5">
           <Flex direction="column" gap="1" className="w-full">
-            <Text as="p" className="text-[14px] font-medium">
+            <Text as="p" className="text-[12px] md:text-[14px] font-medium">
               <Text>Email Address</Text>
               <Text className="text-[#f14545]">*</Text>
             </Text>
             <FormTextInput
               type="text"
               label=""
-              className="h-14 w-full"
+              className="h-11 md:h-14 w-full"
               data-testid="email-input"
               {...form.register('email')}
             />
@@ -329,27 +329,27 @@ const PersonalDetailsForm = () => {
 
           <Flex className="flex-col sm:flex-row" gap="4">
             <Flex direction="column" gap="1" className="w-full">
-              <Text as="p" className="text-[14px] font-medium">
+              <Text as="p" className="text-[12px] md:text-[14px] font-medium">
                 <Text>First Name</Text>
                 <Text className="text-[#f14545]">*</Text>
               </Text>
               <FormTextInput
                 type="text"
                 label=""
-                className="h-14 w-full"
+                className="h-11 md:h-14 w-full"
                 data-testid="first-name-input"
                 {...form.register('firstName')}
               />
             </Flex>
             <Flex direction="column" gap="1" className="w-full">
-              <Text as="p" className="text-[14px] font-medium">
+              <Text as="p" className="text-[12px] md:text-[14px] font-medium">
                 <Text>Last Name</Text>
                 <Text className="text-[#f14545]">*</Text>
               </Text>
               <FormTextInput
                 type="text"
                 label=""
-                className="h-14 w-full"
+                className="h-11 md:h-14 w-full"
                 data-testid="last-name-input"
                 {...form.register('lastName')}
               />
@@ -358,7 +358,7 @@ const PersonalDetailsForm = () => {
 
           <Flex className="flex-col sm:flex-row" gap="4">
           <Flex direction="column" gap="1" className="w-full">
-              <Text as="p" className="text-[14px] font-medium">
+              <Text as="p" className="text-[12px] md:text-[14px] font-medium">
                 <Text>Gender</Text>
                 <Text className="text-[#f14545]">*</Text>
               </Text>
@@ -372,7 +372,7 @@ const PersonalDetailsForm = () => {
               >
                 <Select.Trigger
                   placeholder={"Select gender"}
-                  className="h-14 w-full whitespace-nowrap rounded-[4px] border border-[#b9bbc6] px-[10px] py-2 text-[16px] font-regular text-[#1c2024] placeholder-[#1C2024]"
+                  className="h-11 md:h-14 w-full whitespace-nowrap rounded-[4px] border border-[#b9bbc6] px-[10px] py-2 text-[16px] font-regular text-[#1c2024] placeholder-[#1C2024]"
                 >
                   {form.watch('gender') ? form.watch('gender') : 'Select gender'}
                   <ChevronDownIcon className="absolute right-3 top-1/2 -translate-y-1/2 transform" />
@@ -392,7 +392,7 @@ const PersonalDetailsForm = () => {
               )}
             </Flex>
             <Flex direction="column" gap="1" className="w-full">
-              <Text as="p" className="text-[14px] font-medium">
+              <Text as="p" className="text-[12px] md:text-[14px] font-medium">
                 <Text>Date of birth</Text>
                 <Text className="text-[#f14545]">*</Text>
               </Text>
@@ -403,7 +403,7 @@ const PersonalDetailsForm = () => {
                 data-testid="date-of-birth-input"
                 {...form.register('dateOfBirth')}
                 style={{ marginRight: 12 }}
-                className="h-14 w-full"
+                className="h-11 md:h-14 w-full"
                 defaultValue={searchParams.get('dateOfBirth') ?? ''}
                 onChange={(e) => {
                   if (isLessThen18(e.target.value)) {
@@ -415,7 +415,7 @@ const PersonalDetailsForm = () => {
               />
             </Flex>
             <Flex direction="column" gap="1" className="w-full">
-              <Text as="p" className="text-[14px] font-medium">
+              <Text as="p" className="text-[12px] md:text-[14px] font-medium">
                 <Text>Phone Number</Text>
                 <Text className="text-[#f14545]">*</Text>
               </Text>
@@ -423,7 +423,7 @@ const PersonalDetailsForm = () => {
                 label=""
                 data-testid="phone-number-input"
                 {...form.register('phoneNumber')}
-                className="h-14 w-full"
+                className="h-11 md:h-14 w-full"
               />
             </Flex>
           </Flex>
@@ -431,7 +431,7 @@ const PersonalDetailsForm = () => {
               <PlacesAutocomplete
                 name="primary"
                 label="Primary"
-                className="h-[45px] rounded-6 text-4"
+                className="h-[35px] md:h-[45px] rounded-6 text-2 md:text-4"
                 isSelfScheduling
               />
             )}
@@ -448,14 +448,14 @@ const PersonalDetailsForm = () => {
           </Flex>
 
           <Flex direction="column" gap="1" className="w-full">
-            <Text as="p" className="text-[14px] font-medium">
+            <Text as="p" className="text-[12px] md:text-[14px] font-medium">
                 <Text>Password</Text>
                 <Text className="text-[#f14545]">*</Text>
               </Text>
             <FormTextInput
               type="password"
               label=""
-              className="h-14 w-full"
+              className="h-11 md:h-14 w-full"
               data-testid="password-input"
               {...form.register('password')}
             />
@@ -496,17 +496,17 @@ const PersonalDetailsForm = () => {
                 label=""
                 data-testid="guardian-first-name-input"
                 {...form.register('guardianFirstName')}
-                className="h-14 w-full"
+                className="h-11 md:h-14 w-full"
               />
             </Flex>
-            <Flex direction="column" gap="1" className="h-14 w-full">
+            <Flex direction="column" gap="1" className="h-11 md:h-14 w-full">
               <Text>Last name</Text>
               <FormTextInput
                 type="text"
                 label=""
                 data-testid="guardian-last-name-input"
                 {...form.register('guardianLastName')}
-                className="h-14 w-full"
+                className="h-11 md:h-14 w-full"
               />
             </Flex>
           </Flex>
@@ -538,13 +538,13 @@ const PersonalDetailsForm = () => {
           />
         </Flex>
 
-        <Flex align="center" className="gap-5 sm:gap-6">
+        <Flex align="center" className="flex-col md:flex-row gap-5 sm:gap-6">
           <FormSubmitButton
             data-testid="signup-submit-button"
             radius="full"
-            className="h-8 w-16 bg-[#151B4A] text-[#FFFFFF] sm:h-16 sm:w-40"
+            className="h-16 w-40 bg-[#151B4A] text-[#FFFFFF] md:h-8 md:w-16"
           >
-            <Text className="text-2 font-bold sm:text-5">
+            <Text className="text-5 font-bold md:text-2">
               {isLoading ? 'Loading...' : 'Next'}
             </Text>
           </FormSubmitButton>

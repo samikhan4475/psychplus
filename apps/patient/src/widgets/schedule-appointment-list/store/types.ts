@@ -2,7 +2,7 @@ import { StaffAppointmentAvailabilities } from '@psychplus/appointments'
 import { Clinic } from '@psychplus/clinics'
 import { CodeSetState } from '@psychplus/codeset'
 import { type Staff } from '@psychplus/staff'
-import { PrimaryAddress, User } from '@psychplus/user'
+import { User } from '@psychplus/user'
 import {
   type Filters,
   type StaffWithClinicsAndSlots,

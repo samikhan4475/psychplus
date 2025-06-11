@@ -36,15 +36,15 @@ const ProviderWithClinicAndWeeklyAvailability = ({
   }, [])
 
   return (
-    <Flex className="w-full flex-col gap-5 lg:flex-row lg:gap-0">
-      <Flex direction="column" gap="2" className="w-[343px] lg:w-[425px]">
-        <Flex align="center" gap="2" className="w-10/12 lg:w-11/12">
+    <Flex className="w-full flex-col gap-5 md:flex-row md:gap-0">
+      <Flex direction="column" gap="2" className="w-[343px] md:w-[425px]">
+        <Flex align="center" gap="2" className="w-10/12 md:w-11/12">
           {renderProfileImage(
             profileImage,
             staffWithClinicsAndSlots.staff.legalName.firstName[0],
           )}
           <Flex direction="column" gap="1" className="text-[#151B4A]">
-            <Text className="font-bold text-3 lg:text-5">
+            <Text className="font-bold text-3 md:text-5">
               {renderStaffName(staffWithClinicsAndSlots.staff)}
             </Text>
             <StarRating rating={staffWithClinicsAndSlots.staff.rating?.valueOf()} />
@@ -114,7 +114,7 @@ const renderLanguageAndLocation = (
   <Flex direction="column" gap="2" className="w-[272px]">
     {appointmentType === 'In-Person' && (
       <Flex gap="1">
-        <Flex mt="1" className='text-2 lg:text-3'>
+        <Flex mt="1" className='text-2 md:text-3'>
           Location:
         </Flex>
         <ClinicsDropDown
@@ -127,9 +127,9 @@ const renderLanguageAndLocation = (
 
     {appointmentType === 'In-Person' && (
       <Flex align="start" className="w-52 flex-wrap justify-between" gap="2">
-        <Flex align="end" className="gap-[17px] text-2 lg:text-3">
+        <Flex align="end" className="gap-[17px] text-2 md:text-3">
             Distance:
-            <Text className="text-[#575759] text-2 lg:text-3">
+            <Text className="text-[#575759] text-2 md:text-3">
               {
                 staffWithClinicsAndSlots.clinicWithSlots.find(
                   (clinic) => clinic.clinic.id === selectedClinicId,
@@ -143,13 +143,13 @@ const renderLanguageAndLocation = (
 
     <Flex gap="3" align="start" className="w-24">
       <Text
-        className="font-regular leading-5 text-[#1C2024] text-2 lg:text-3"
+        className="font-regular leading-5 text-[#1C2024] text-2 md:text-3"
       >
         Language:
       </Text>
       <Flex className="gap-[2px]">
         {staffWithClinicsAndSlots.staff?.spokenLanguages?.map((language) => (
-          <Text className="text-[#575759] text-2 lg:text-3 font-regular leading-5 after:content-[','] last:after:hidden" key={language}>
+          <Text className="text-[#575759] text-2 md:text-3 font-regular leading-5 after:content-[','] last:after:hidden" key={language}>
             {language}
           </Text>
         ))}
@@ -191,7 +191,7 @@ const ClinicsDropDown = ({
       </Popover.Close>
       <Popover.Trigger className="cursor-pointer rounded-3 p-1 hover:bg-gray-2">
         <Flex key={defaultClinic?.clinic.id}>
-          <Text className="text-[#575759] text-2 lg:text-3">
+          <Text className="text-[#575759] text-2 md:text-3">
             {defaultClinic?.clinic.name}{' '}
             {defaultClinic?.clinic.contact?.addresses?.[0].street1}{' '}
             {defaultClinic?.clinic.contact?.addresses?.[0].city}

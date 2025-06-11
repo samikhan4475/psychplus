@@ -387,7 +387,7 @@ const InsurancePaymentForm = ({
     <Form form={form} onSubmit={submitHandler}>
       <AppointmentDetailCard />
 
-      <Text className="my-5 text-6 font-bold sm:text-7 md:text-8">
+      <Text className="my-5 text-4 md:text-6 font-bold">
         Do you want to use your insurance
         <br />
         for this visit?
@@ -398,7 +398,7 @@ const InsurancePaymentForm = ({
           <button
             type="button"
             key={option.key}
-            className="border-darkblue mr-3 box-border rounded-[40px] border border-solid px-[25px] py-[8px] sm:px-[40px] sm:py-[15px]"
+            className="border-darkblue mr-3 box-border rounded-[40px] border border-solid px-[15px] py-[5px] md:px-[25px] md:py-[8px]"
             style={{
               color:
                 hasInsurance === option.value ? whiteColor : psychPlusBlueColor,
@@ -407,13 +407,13 @@ const InsurancePaymentForm = ({
             }}
             onClick={() => setHasInsurance(option.value)}
           >
-            <Text className="text-[22px] font-bold leading-[normal]">
+            <Text className="text-[15px] md:text-[22px] font-bold leading-[normal]">
               {option.label}
             </Text>
           </button>
         ))}
       </Flex>
-      <Box className='text-4 bg-pp-gray-2 py-3 px-3 my-3 rounded-3'>
+      <Box className='text-3 md:text-4 bg-pp-gray-2 py-3 px-3 my-3 rounded-3'>
         {hasInsurance ? (
           INSURANCE_INFO
         ): (
@@ -424,10 +424,10 @@ const InsurancePaymentForm = ({
       {hasInsurance && (
         <>
           <Flex direction="column" className="mt-10">
-            <Text as="p" className="text-[20px]">
+            <Text as="p" className="text-[15px] md:text-[20px]">
               Let’s collect your insurance information
             </Text>
-            <Flex gap="5" className="mt-2">
+            <Flex gap="5" className="mt-2 flex-col items-center md:flex-row">
               <ImageUploader
                 displayText={`Upload Image<br/>Front Side`}
                 onFileChange={setCardFrontImage}
@@ -450,7 +450,7 @@ const InsurancePaymentForm = ({
               Insurance Details
             </Text>
             <Flex direction="column" gap="1">
-              <Text as="p" className="text-[14px] font-medium">
+              <Text as="p" className="text-[12px] md:text-[14px] font-medium">
                 <Text>Payer</Text>
                 <Text className="text-[#f14545]">*</Text>
               </Text>
@@ -463,7 +463,7 @@ const InsurancePaymentForm = ({
               >
                 <Select.Trigger
                   placeholder="Select Payer"
-                  className="h-[56px] w-full rounded-3"
+                  className="h-[46px] md:h-[56px] w-full rounded-3"
                 />
                 <Select.Content
                   position="popper"
@@ -487,7 +487,7 @@ const InsurancePaymentForm = ({
               )}
             </Flex>
             <Flex direction="column" gap="1">
-              <Text as="p" className="text-[14px] font-medium">
+              <Text as="p" className="text-[12px] md:text-[14px] font-medium">
                 <Text>Insurance Plan</Text>
                 <Text className="text-[#f14545]">*</Text>
               </Text>
@@ -503,7 +503,7 @@ const InsurancePaymentForm = ({
               >
                 <Select.Trigger
                   placeholder="Select Insurance Plan"
-                  className="h-[56px] w-full rounded-3"
+                  className="h-[46px] md:h-[56px] w-full rounded-3"
                 />
                 <Select.Content
                   position="popper"
@@ -528,7 +528,7 @@ const InsurancePaymentForm = ({
             </Flex>
 
             <Flex direction="column" gap="1">
-              <Text as="p" className="text-[14px] font-medium">
+              <Text as="p" className="text-[12px] md:text-[14px] font-medium">
                 <Text>Member ID</Text>
                 <Text className="text-[#f14545]">*</Text>
               </Text>
@@ -536,14 +536,14 @@ const InsurancePaymentForm = ({
                 type="text"
                 label=""
                 placeholder="Member ID"
-                className="h-[56px] w-full px-1"
+                className="h-[46px] md:h-[56px] w-full px-1"
                 data-testid="insurance-id"
                 {...form.register('memberId')}
               />
             </Flex>
 
             <Flex direction="column" gap="1">
-              <Text as="p" className="text-[14px] font-medium">
+              <Text as="p" className="text-[12px] md:text-[14px] font-medium">
                 <Text>Group Number</Text>
                 <Text className="text-[#f14545]">*</Text>
               </Text>
@@ -551,14 +551,14 @@ const InsurancePaymentForm = ({
                 type="text"
                 label=""
                 placeholder="Group Number"
-                className="h-[56px] w-full px-1"
+                className="h-[46px] md:h-[56px] w-full px-1"
                 data-testid="group-number"
                 {...form.register('groupNumber')}
               />
             </Flex>
 
             <Flex direction="column" gap="1">
-              <Text as="p" className="text-[14px] font-medium">
+              <Text as="p" className="text-[12px] md:text-[14px] font-medium">
                 <Text>Effective Date</Text>
                 <Text className="text-[#f14545]">*</Text>
               </Text>
@@ -573,11 +573,11 @@ const InsurancePaymentForm = ({
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => 
                   handleDateChange(event, 'effectiveDate')
                 }
-                className="mr-2 mt-2 h-[50px] w-full text-3 font-regular text-gray-10"
+                className="mr-2 mt-2 h-[40px] md:h-[50px] w-full text-3 font-regular text-gray-10"
               />
             </Flex>
             <Flex direction="column" gap="1">
-              <Text as="p" className="text-[14px] font-medium">
+              <Text as="p" className="text-[12px] md:text-[14px] font-medium">
                 <Text>Termination Date</Text>
                 <Text className="text-[#f14545]">*</Text>
               </Text>
@@ -592,11 +592,11 @@ const InsurancePaymentForm = ({
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => 
                   handleDateChange(event, 'terminationDate')
                 }
-                className="mr-2 mt-2 h-[50px] w-full text-3 font-regular text-gray-10"
+                className="mr-2 mt-2 h-[40px] md:h-[50px] w-full text-3 font-regular text-gray-10"
               />
             </Flex>
             <Box className="flex-1 mt-2 rounded-3 bg-[#F0F4FF] px-3 py-1.5" mb="2">
-              <Text as="p" className="text-[14px] font-medium">
+              <Text as="p" className="text-[12px] md:text-[14px] font-medium">
                 <Text>Are you the primary insurance holder</Text>
                 <Text className="text-[#f14545]">*</Text>
               </Text>
@@ -635,11 +635,11 @@ const InsurancePaymentForm = ({
             </Box>
             {!watchisPatientPolicyHolder && (
               <>
-                <Text size="5" className="mb-3 mt-3 font-bold text-[#151B4A]">
+                <Text className="text-3 md:text-5 mb-3 mt-3 font-bold text-[#151B4A]">
                   Primary Insurance Holder Details
                 </Text>
                 <Flex direction="column" gap="1">
-                  <Text as="p" className="text-[14px] font-medium">
+                  <Text as="p" className="text-[12px] md:text-[14px] font-medium">
                     <Text>First Name</Text>
                     <Text className="text-[#f14545]">*</Text>
                   </Text>
@@ -647,13 +647,13 @@ const InsurancePaymentForm = ({
                     type="text"
                     label=""
                     placeholder="First name"
-                    className="h-[56px] w-full px-1"
+                    className="h-[46px] md:h-[56px] w-full px-1"
                     data-testid="policy-holder-first-name"
                     {...form.register('policyHolderFirstName')}
                   />
                 </Flex>
                 <Flex direction="column" gap="1">
-                  <Text as="p" className="text-[14px] font-medium">
+                  <Text as="p" className="text-[12px] md:text-[14px] font-medium">
                     <Text>Last Name</Text>
                     <Text className="text-[#f14545]">*</Text>
                   </Text>
@@ -661,13 +661,13 @@ const InsurancePaymentForm = ({
                     type="text"
                     label=""
                     placeholder="Last name"
-                    className="h-[56px] w-full px-1"
+                    className="h-[46px] md:h-[56px] w-full px-1"
                     data-testid="policy-holder-last-name"
                     {...form.register('policyHolderLastName')}
                   />
                 </Flex>
                 <Flex direction="column" gap="1">
-                  <Text as="p" className="text-[14px] font-medium">
+                  <Text as="p" className="text-[12px] md:text-[14px] font-medium">
                     <Text>Gender</Text>
                     <Text className="text-[#f14545]">*</Text>
                   </Text>
@@ -683,7 +683,7 @@ const InsurancePaymentForm = ({
                   >
                     <Select.Trigger
                       placeholder="Select gender"
-                      className="h-[56px] w-full rounded-3"
+                      className="h-[46px] md:h-[56px] w-full rounded-3"
                     />
                     <Select.Content
                       position="popper"
@@ -707,7 +707,7 @@ const InsurancePaymentForm = ({
                   )}
                 </Flex>
                 <Flex direction="column" gap="1">
-                  <Text as="p" className="text-[14px] font-medium">
+                  <Text as="p" className="text-[12px] md:text-[14px] font-medium">
                     <Text>Date of Birth</Text>
                     <Text className="text-[#f14545]">*</Text>
                   </Text>
@@ -722,11 +722,11 @@ const InsurancePaymentForm = ({
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                       handleDateChange(event, 'policyHolderDateOfBirth')
                     }
-                    className="mr-2 mt-2 h-[50px] w-full text-3 font-regular text-gray-10"
+                    className="mr-2 mt-2 h-[40px] md:h-[50px] w-full text-3 font-regular text-gray-10"
                   />
                 </Flex>
                 <Flex direction="column" gap="1">
-                  <Text as="p" className="text-[14px] font-medium">
+                  <Text as="p" className="text-[12px] md:text-[14px] font-medium">
                     <Text>SSN</Text>
                     <Text className="text-[#f14545]">*</Text>
                   </Text>
@@ -734,11 +734,11 @@ const InsurancePaymentForm = ({
                     name="policyHolderSocialSecurityNumber"
                     size="2"
                     placeholder="Enter SSN"
-                    className="h-[56px] w-full border border-pp-gray-2 rounded-3 px-2"
+                    className="h-[40px] md:h-[50px] w-full border border-pp-gray-2 rounded-3 px-2"
                   />
                 </Flex>
                 <Flex direction="column" gap="1">
-                  <Text as="p" className="text-[14px] font-medium">
+                  <Text as="p" className="text-[12px] md:text-[14px] font-medium">
                     <Text>Relationship</Text>
                     <Text className="text-[#f14545]">*</Text>
                   </Text>
@@ -754,7 +754,7 @@ const InsurancePaymentForm = ({
                   >
                     <Select.Trigger
                       placeholder="Select relationship"
-                      className="h-[56px] w-full rounded-3"
+                      className="h-[46px] md:h-[56px] w-full rounded-3"
                     />
                     <Select.Content
                       position="popper"
@@ -787,19 +787,19 @@ const InsurancePaymentForm = ({
       </Flex>
 
       <Flex direction="column" gap="1">
-        <Text as="p" className="mt-3 text-[14px] font-medium">
+        <Text as="p" className="mt-3 text-[12px] md:text-[14px] font-medium">
           <Text>Cardholder Details</Text>
           {isCreditCardRequired && <Text className="text-[#f14545]">*</Text>}
         </Text>
         <CardElement
           options={{ hidePostalCode: true }}
-          className="mr-3 h-[56px] w-full rounded-3 border border-gray-7 py-[16px] pl-3"
+          className="mr-3 h-[46px] md:h-[56px] w-full rounded-3 border border-gray-7 py-[16px] pl-3"
         />
       </Flex>
 
       <FormError message={formError} className="mt-5" />
 
-      <Flex>
+      <Flex className='items-center md:items-start'>
         <FormSubmitButton
           className={cn(
             formError ? 'mt-5' : 'mt-10',

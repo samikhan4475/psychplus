@@ -35,7 +35,7 @@ const ImageUploader = ({
   return (
     <button
       type="button"
-      className="flex h-auto w-2/4 max-w-[312px] cursor-pointer justify-center rounded-[20px] border border-dashed border-[#bebebe]"
+      className="flex h-auto w-full md:w-2/4 max-w-[312px] cursor-pointer justify-center rounded-[20px] border border-dashed border-[#bebebe]"
       onClick={handleFileInputClick}
       onKeyDown={(e) => e.stopPropagation()}
     >

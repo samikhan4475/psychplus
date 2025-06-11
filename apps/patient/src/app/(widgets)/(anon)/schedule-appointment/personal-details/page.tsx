@@ -21,10 +21,10 @@ const PersonalDetails = () => {
       <Flex direction="column" gap="6">
         <AppointmentDetailCard />
         <Flex direction="column" gap="2">
-          <Text size="8" className="font-bold text-[#151B4A]">
+          <Text size="8" className="font-bold text-[#151B4A] text-5 md:text-8">
             Tell us a bit about yourself.
           </Text>
-          <Text className="text-[#575759]" size="4">
+          <Text className="text-[#575759] text-2 md:text-4" size="4">
             To book your appointment, we need to verify just a few things.
           </Text>
         </Flex>

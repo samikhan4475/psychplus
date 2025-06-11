@@ -223,9 +223,9 @@ const ScheduleAppointmentListClient = ({
           px="7"
           align="center"
         >
-          <Flex align="center" justify={isMobile() ? 'center' : 'between'}>
-            <Flex className="w-[100px] text-[#151B4A] lg:w-[380px]">
-              <Text className='text-3 lg:text-5'>
+          <Flex align="center" className='justify-between md:justify-center'>
+            <Flex className="w-[100px] text-[#151B4A] md:w-[380px]">
+              <Text className='text-3 md:text-5'>
                 {staffWithClinicsAndSlotsState?.length} Providers
               </Text>
             </Flex>
@@ -233,13 +233,6 @@ const ScheduleAppointmentListClient = ({
               <WeekCalendarRow />
             </Flex>
           </Flex>
-          {!isMobile() && (
-            <Flex
-              style={{
-                flex: filters.appointmentType === 'In-Person' ? 0.28 : 0,
-              }}
-            ></Flex>
-          )}
         </Flex>
 
         <Flex className="w-full">

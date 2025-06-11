@@ -73,16 +73,16 @@ const MobileSlotComponent = ({
   const state = searchParams.get('state')
   
   
-  function setBookedSlotDetails(slot: Slot) {
+  function setMobileBookedSlotDetails(slot: Slot) {
     setBookedSlot({
-      clinic: clinicWithSlots?.clinic,
       specialist: staff,
-      specialistTypeCode: staffTypeCode,
+      clinic: clinicWithSlots?.clinic,
       type: filters.appointmentType,
-      startDate: slot.startDate,
+      specialistTypeCode: staffTypeCode,
       duration: slot.duration,
-      servicesOffered: slot.servicesOffered,
+      startDate: slot.startDate,
       state: state ?? '',
+      servicesOffered: slot.servicesOffered,
     })
 
     parent.postMessage(
@@ -112,7 +112,7 @@ const MobileSlotComponent = ({
           <SlotItem
             key={`${slot.startDate}-${i}`}
             slot={slot}
-            onBookedSlot={setBookedSlotDetails}
+            onBookedSlot={setMobileBookedSlotDetails}
           />
         ))
       ) : (
@@ -174,7 +174,7 @@ const SlotComponent = ({
 
   return (
     <Flex
-        className="flex-row overflow-x-auto whitespace-nowrap pb-4 sm:flex-col"
+        className="whitespace-nowrap pb-4 flex-col"
         gap="4"
       >
         {slots

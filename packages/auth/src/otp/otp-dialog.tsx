@@ -31,12 +31,12 @@ const OTPDialog = ({
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
       <Dialog.Content className="w-fit px-24 py-8">
         <Flex direction="column" align="center">
-          <Heading size="6" mb="3">
+          <Heading className='text-3 md:text-6' mb="3">
             Verify that it&apos;s you
           </Heading>
           <Flex direction="column" mb="4">
-            <Text size="3">Enter the code you recieved at</Text>
-            <Text size="3">{email}</Text>
+            <Text className='text-2 md:text-3'>Enter the code you received at</Text>
+            <Text className='text-2 md:text-3'>{email}</Text>
           </Flex>
           <PinCode autoFocus onChange={setValue} />
           <Flex gap="3" mt="5">
