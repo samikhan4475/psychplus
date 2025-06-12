@@ -70,7 +70,7 @@ const StaffFilterForm = () => {
       spokenLanguage: '',
       providerType: '',
       organizationsIds: type === FEATURE_TYPES.ORGANIZATION ? [id] : [''],
-      practicesIds: type === FEATURE_TYPES.ORGANIZATION ? [id] : [''],
+      practicesIds: type === FEATURE_TYPES.PRACTICE ? [id] : [''],
       providerAttributionCodes: [],
     },
   })

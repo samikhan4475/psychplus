@@ -1,10 +1,12 @@
 'use client'
 
 import { useState } from 'react'
+import { useParams } from 'next/navigation'
 import { Dialog, Flex, IconButton, Text } from '@radix-ui/themes'
 import { TrashIcon, X } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { deleteStaffAction } from '../../actions/delete-staff'
+import { FEATURE_TYPES } from '../../constants'
 import { useStore } from '../../store'
 import { CancelButton } from './cancel-button'
 import { DeleteButton } from './delete-button'
@@ -18,6 +20,8 @@ const DeleteDialog = ({ staffId }: DeleteDialogProps) => {
 
   const search = useStore((state) => state.search)
 
+  const { id, type } = useParams<{ id: string; type: string }>()
+
   const deleteRecord = (
     e: React.MouseEvent<HTMLButtonElement | SVGElement>,
   ) => {
@@ -28,7 +32,10 @@ const DeleteDialog = ({ staffId }: DeleteDialogProps) => {
       } else if (result.state === 'error') {
         toast.error(result.error)
       }
-      search()
+      search({
+        organizationsIds: type === FEATURE_TYPES.ORGANIZATION ? [id] : [],
+        practicesIds: type === FEATURE_TYPES.PRACTICE ? [id] : [],
+      })
     })
   }
   const onOpen = (e: React.MouseEvent<HTMLButtonElement | SVGElement>) => {

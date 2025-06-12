@@ -4,6 +4,7 @@ import * as api from '@/api'
 import { Sort } from '@/types'
 import { transformInStaffList } from '../data'
 import type { Staff } from '../types'
+import { staffListStatuses } from '../enums'
 
 const defaultPayload = {
   isIncludeBiography: true,
@@ -14,6 +15,7 @@ const defaultPayload = {
   isIncludeMetadataResourceChangeControl: true,
   isIncludeMetadataResourceIds: true,
   isIncludeMetadataResourceStatus: true,
+  statuses: [staffListStatuses.ACTIVE],
 }
 interface GetStaffListParams {
   payload?: Partial<Staff>
