@@ -10,7 +10,7 @@ const SubmittedDate = () => {
     <FormFieldContainer className="flex-1">
       <FormFieldLabel>Submission Date</FormFieldLabel>
       <I18nProvider locale="en-US">
-        <DatePickerInput field={`submittedDate`} isDisabled />
+        <DatePickerInput yearFormat='YYYY' field="submittedDate" isDisabled />
       </I18nProvider>
     </FormFieldContainer>
   )

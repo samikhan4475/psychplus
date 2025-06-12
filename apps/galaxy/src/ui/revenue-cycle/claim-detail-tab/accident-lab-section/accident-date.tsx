@@ -10,7 +10,7 @@ const AccidentDate = () => {
     <FormFieldContainer>
       <FormFieldLabel>Accident Date</FormFieldLabel>
       <I18nProvider locale="en-US">
-        <DatePickerInput field="accidentDate" />
+        <DatePickerInput yearFormat='YYYY' field="accidentDate" />
       </I18nProvider>
     </FormFieldContainer>
   )

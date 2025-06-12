@@ -11,9 +11,10 @@ const TableCellDosFrom: React.FC<TableCellDosFromProps> = ({ rowIndex }) => {
   return (
     <I18nProvider locale="en-US">
       <DatePickerInput
+        yearFormat="YYYY"
         field={`claimServiceLines.${rowIndex}.dateOfServiceFrom`}
-        dateInputClass={'!border-none'}
-      />{' '}
+        dateInputClass="!border-none"
+      />
     </I18nProvider>
   )
 }

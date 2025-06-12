@@ -17,7 +17,7 @@ const ClaimDatesView = () => {
         <FormFieldContainer key={field as string} className="flex-1">
           <FormFieldLabel>{label}</FormFieldLabel>
           {type === 'date' ? (
-            <DatePickerInput field={field} />
+            <DatePickerInput yearFormat='YYYY' field={field} />
           ) : (
             <TextField.Root size="1" {...form.register(field)} />
           )}
