@@ -124,6 +124,7 @@ const schema = z
     hasBioVideo: z.boolean().optional(),
     staffTypeIds: z.array(requiredString),
     contactInfo: ContactInfoSchema,
+    hasPhoto: z.boolean(),
   })
   .superRefine((data, ctx) => {
     const {

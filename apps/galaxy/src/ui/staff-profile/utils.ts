@@ -54,6 +54,7 @@ const getInitialValues = ({
   timeZonePreference: staff?.timeZonePreference ?? '',
   hasBioVideo: staff?.hasBioVideo ?? false,
   isTest: staff.isTest ?? false,
+  hasPhoto: staff?.hasPhoto ?? false
 })
 
 const handleUploadBioVideo = async (

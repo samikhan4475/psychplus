@@ -1,12 +1,15 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Flex, Grid } from '@radix-ui/themes'
+import { Box, Flex, Grid } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { STAFF_PROFILE_IMAGE_ENDPOINT } from '@/api/endpoints'
 import { CheckboxInput, FormContainer } from '@/components'
+import { updateStaffProfileImageAction } from '@/ui/staff-profile/actions/update-staff-profile-image'
+import { ProfilePicture } from '@/ui/staff-profile/profile-picture'
 import { handleUploadBioVideo } from '@/ui/staff-profile/utils'
 import { addStaffAction } from '../../actions/add-staff'
 import { FEATURE_TYPES } from '../../constants'
@@ -47,6 +50,7 @@ interface AddStaffDialogFormProps {
 const AddStaffDialogForm = ({ onClose }: AddStaffDialogFormProps) => {
   const { id, type } = useParams<{ id: string; type: string }>()
   const search = useStore((state) => state.search)
+  const [profileImage, setProfileImage] = useState<File | undefined>(undefined)
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     mode: 'onChange',
@@ -61,6 +65,22 @@ const AddStaffDialogForm = ({ onClose }: AddStaffDialogFormProps) => {
     if (bioVideo && result.data.id) {
       await handleUploadBioVideo(bioVideo, result.data.id, false)
     }
+    if (profileImage && result.data.id) {
+      const formData = new FormData()
+      formData.append('file', profileImage)
+
+      const uploadResult = await updateStaffProfileImageAction({
+        data: formData,
+        staffId: Number(result.data.id),
+      })
+
+      if (uploadResult.state === 'error') {
+        toast.error(
+          uploadResult.error ?? 'Failed to upload profile image. Try again.',
+        )
+        return
+      }
+    }
     toast.success('Staff Saved Successfully')
     form.reset()
     onClose(false)
@@ -69,21 +89,39 @@ const AddStaffDialogForm = ({ onClose }: AddStaffDialogFormProps) => {
       practicesIds: type === FEATURE_TYPES.PRACTICE ? [id] : [],
     })
   }
+
+  const savedProfileImageUrl = form.watch('hasPhoto')
+    ? STAFF_PROFILE_IMAGE_ENDPOINT(Number(form.watch('staffId')))
+    : ''
   return (
     <FormContainer form={form} className="gap-2" onSubmit={onSubmit}>
       <Flex justify="end">
         <CheckboxInput label="Add as test provider" field="isTest" />
       </Flex>
+      <Grid columns="12" gap="4">
+        <Box className="col-span-3 flex flex-col items-center">
+          <ProfilePicture
+            setProfileImage={setProfileImage}
+            savedProfileImageUrl={savedProfileImageUrl}
+          />
+        </Box>
+
+        <Box className="col-span-9 p-5">
+          <Grid columns="3" gap="2">
+            <FirstNameField />
+            <MiddleNameField />
+            <LastNameField />
+            <DobField />
+            <AgeField />
+            <GenderSelect />
+            <LanguageSelect />
+            <EmailField />
+            <PhoneField />
+          </Grid>
+        </Box>
+      </Grid>
+
       <Grid columns="3" gap="2">
-        <FirstNameField />
-        <MiddleNameField />
-        <LastNameField />
-        <DobField />
-        <AgeField />
-        <GenderSelect />
-        <LanguageSelect />
-        <EmailField />
-        <PhoneField />
         <VirtualWaitRoomField />
         <PasswordField />
       </Grid>

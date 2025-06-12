@@ -135,6 +135,7 @@ const schema = z
     homeAddress: getAddressSchema('Home').optional(),
     mailingAddress: getAddressSchema('Mailing'),
     bioVideo: z.instanceof(File).optional().nullable(),
+    hasPhoto: z.boolean(),
   })
   .superRefine((data, ctx) => {
     const {

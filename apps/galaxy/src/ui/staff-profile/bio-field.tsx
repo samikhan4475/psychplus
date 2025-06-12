@@ -12,7 +12,7 @@ const BioField = () => {
       <FormFieldLabel>Bio Text</FormFieldLabel>
       <AutoResizeInput
         field="biography"
-        maxLength={2000}
+        maxLength={2048}
         enableAutoSuggestions={false}
         className="min-h-20 w-[-webkit-fill-available]"
       />

@@ -1,15 +1,17 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Flex, Grid } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { STAFF_PROFILE_IMAGE_ENDPOINT } from '@/api/endpoints'
 import { FormContainer, TabContentHeading } from '@/components'
 import { GooglePlacesContextProvider } from '@/providers/google-places-provider'
 import { useStore as useRootStore } from '@/store'
 import { OrganizationOptions } from '../staff-management/types'
 import { updateStaffAction } from './actions/update-staff'
+import { updateStaffProfileImageAction } from './actions/update-staff-profile-image'
 import { AgeField } from './age-field'
 import { BioField } from './bio-field'
 import { BioVideoField } from './bio-video-field'
@@ -28,6 +30,7 @@ import { MiddleNameField } from './middle-name-field'
 import { OrganizationSelect } from './organization-select'
 import { PhoneField } from './phone-field'
 import { PracticeSelect } from './practice-select'
+import { ProfilePicture } from './profile-picture'
 import { ProviderPreferenceSelect } from './provider-preference-select'
 import { ResetButton } from './reset-button'
 import { SaveStaffButton } from './save-staff-button'
@@ -54,6 +57,7 @@ const StaffProfileForm = ({
   selectOptions,
 }: StaffProfileFormProps) => {
   const updateTab = useRootStore((state) => state.updateTab)
+  const [profileImage, setProfileImage] = useState<File | undefined>(undefined)
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onSubmit',
@@ -74,10 +78,30 @@ const StaffProfileForm = ({
       const href = `/staff/${id}/profile`
       const label = `${firstName} ${lastName} - ${id}`
       updateTab({ href, label })
+      if (profileImage) {
+        const formData = new FormData()
+        formData.append('file', profileImage)
+
+        const uploadResult = await updateStaffProfileImageAction({
+          data: formData,
+          staffId: Number(id),
+        })
+
+        if (uploadResult.state === 'error') {
+          toast.error(
+            uploadResult.error ?? 'Failed to upload profile image. Try again.',
+          )
+          return
+        }
+      }
     } else if (result.state === 'error') {
       toast.error(result.error)
     }
   }
+
+  const savedProfileImageUrl = form.watch('hasPhoto')
+    ? STAFF_PROFILE_IMAGE_ENDPOINT(Number(staff.staffId))
+    : ''
   return (
     <GooglePlacesContextProvider apiKey={googleApiKey}>
       <FormContainer className="bg-white" form={form} onSubmit={onSubmit}>
@@ -88,50 +112,76 @@ const StaffProfileForm = ({
             <SaveStaffButton />
           </Flex>
         </TabContentHeading>
+
         <Box className="bg-gray-3 px-3 py-1 text-1 font-medium">
           Personal Info
         </Box>
-        <Flex gap="2" direction="column" px="3" py="2">
-          <Grid columns="6" gap="2">
-            <FirstNameField />
-            <MiddleNameField />
-            <LastNameField />
-            <DobField />
-            <AgeField />
-            <GenderSelect />
+
+        <Box px="3" py="2">
+          <Grid columns="7" gap="4">
+            <Box className="col-span-1 flex flex-col items-center">
+              <ProfilePicture
+                setProfileImage={setProfileImage}
+                savedProfileImageUrl={savedProfileImageUrl}
+              />
+            </Box>
+
+            <Box className="col-span-6">
+              <Grid columns="6" gap="2">
+                <FirstNameField />
+                <MiddleNameField />
+                <LanguageSelect />
+                <EmailField />
+                <IndividualNpiField />
+                <BioVideoField />
+                <LastNameField />
+                <DobField />
+                <AgeField />
+                <GenderSelect />
+                <PhoneField />
+                <VirtualWaitRoomField />
+              </Grid>
+              <Grid columns="12" gap="2">
+                <Box className="col-span-6">
+                  <VideoCallLinkInput />
+                </Box>
+                <Box className="col-span-6">
+                  <BioField />
+                </Box>
+              </Grid>
+            </Box>
+
+            
+
+            <Box className="col-span-7">
+              <Grid columns="2" gap="2">
+                <HomeAddressGroup />
+                <MailingAddressGroup />
+              </Grid>
+            </Box>
+
+            <Box className="col-span-7">
+              <Grid columns="6" gap="2">
+                <OrganizationSelect
+                  organizations={selectOptions.organizations}
+                />
+                <StaffTypeSelect staffs={selectOptions.staffs} />
+                <StaffRoleSelect roles={selectOptions.roles} />
+                <CredentialsSelect />
+                <SupervisedByField />
+                <StatusSelect />
+              </Grid>
+            </Box>
+
+            <Box className="col-span-7">
+              <Grid columns="6" gap="2">
+                <PracticeSelect practices={selectOptions.practices} />
+                <ProviderPreferenceSelect />
+                <TimeZoneSelect />
+              </Grid>
+            </Box>
           </Grid>
-          <Grid columns="6" gap="2">
-            <LanguageSelect />
-            <EmailField />
-            <PhoneField />
-            <VirtualWaitRoomField />
-            <VideoCallLinkInput />
-          </Grid>
-          <Grid columns="2" gap="2">
-            <IndividualNpiField />
-            <BioVideoField />
-          </Grid>
-          <Grid columns="2" gap="2">
-            <BioField />
-          </Grid>
-          <Grid columns="2" gap="2" align="start">
-            <HomeAddressGroup />
-            <MailingAddressGroup />
-          </Grid>
-          <Grid columns="6" gap="2">
-            <OrganizationSelect organizations={selectOptions.organizations} />
-            <StaffTypeSelect staffs={selectOptions.staffs} />
-            <StaffRoleSelect roles={selectOptions.roles} />
-            <CredentialsSelect />
-            <SupervisedByField />
-            <StatusSelect />
-          </Grid>
-          <Grid columns="6" gap="2">
-            <PracticeSelect practices={selectOptions.practices} />
-            <ProviderPreferenceSelect />
-            <TimeZoneSelect />
-          </Grid>
-        </Flex>
+        </Box>
       </FormContainer>
     </GooglePlacesContextProvider>
   )

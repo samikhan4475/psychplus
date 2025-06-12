@@ -16,6 +16,7 @@ interface StaffUpdatePayload extends Partial<Staff> {
   timeZonePreference: string
   hasBioVideo?: boolean
   staffTypeIds?: string[]
+  hasPhoto?: boolean
 }
 
 export enum Credentials {

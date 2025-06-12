@@ -75,6 +75,7 @@ const getInitialValues = (id?: string, type?: string): SchemaType => ({
   referralSource: '',
   termsOfServiceConsentOn: '',
   privacyPolicyConsentOn: '',
+  hasPhoto: false
 })
 
 const createOptionsLookup = (options: SelectOptionType[]) =>
