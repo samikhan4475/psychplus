@@ -107,6 +107,7 @@ const transformParamsToFilterValues = (
     locationIds: params.locationIds ? params.locationIds : [],
     serviceIds: params.serviceIds ? params.serviceIds : [],
     providerTypes: params.providerTypes ? params.providerTypes : [],
+    visitTypeCode: params.visitTypeCode ? params.visitTypeCode : [],
   }
 }
 

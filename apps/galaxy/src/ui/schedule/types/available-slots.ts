@@ -300,6 +300,7 @@ interface AvailableSlotsParams {
   startingDate?: string
   serviceIds?: string[]
   stateIds?: string[]
+  visitTypeCode?: string[]
   locationIds?: string[]
   staffIds?: number[]
   specialistTypeCode?: string

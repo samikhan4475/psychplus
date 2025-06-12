@@ -21,6 +21,7 @@ import {
   StateSelect,
   VisitMediumSelect,
 } from './filter-fields'
+import { VisitTypeMultiSelect } from './filter-fields/visit-type-select'
 import { HideFiltersButton } from './hide-filters-button'
 import { SaveSettingsButton } from './save-settings-button'
 import { schema, SchemaType } from './schema'
@@ -157,6 +158,7 @@ const SchedulerFilterGroup = ({
               <StateSelect />
               <LocationDropdown />
               <ServiceMultiSelect />
+              <VisitTypeMultiSelect />
               <ProviderDropdown />
               {isPartialFilterView && (
                 <>

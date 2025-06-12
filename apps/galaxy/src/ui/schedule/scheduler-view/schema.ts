@@ -18,6 +18,7 @@ const schema = z
     stateIds: arrayOfIdsValidation,
     locationIds: arrayOfIdsValidation,
     serviceIds: arrayOfIdsValidation,
+    visitTypeCode: arrayOfIdsValidation,
     staffIds: arrayOfIdsValidation,
     providerTypes: arrayOfIdsValidation,
     gender: z.string().optional(),
