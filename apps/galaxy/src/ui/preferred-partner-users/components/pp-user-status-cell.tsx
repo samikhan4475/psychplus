@@ -11,25 +11,29 @@ interface PPUserStatusCellProps {
   userStatusOptions: SelectOptionType[]
 }
 
-export const PPUserStatusCell = ({ 
-  original, 
+export const PPUserStatusCell = ({
+  original,
   editMode,
-  userStatusOptions 
+  userStatusOptions,
 }: PPUserStatusCellProps) => {
-  const isDeleted = (user: PreferredPartnerUser) => user.recordStatus === 'Deleted'
-  const { getTempUserData, updateTempData } = usePreferredPartnerStore((state) => ({
-    getTempUserData: state.getTempUserData,
-    updateTempData: state.updateTempData,
-  }))
-  
-  // Get the current user data (with temp changes if in edit mode)
-  const currentUserData = editMode === original.id ? getTempUserData(original.id) : original
+  const isDeleted = (user: PreferredPartnerUser) =>
+    user.recordStatus === 'Deleted'
+  const { getTempUserData, updateTempData } = usePreferredPartnerStore(
+    (state) => ({
+      getTempUserData: state.getTempUserData,
+      updateTempData: state.updateTempData,
+    }),
+  )
+
+  const currentUserData =
+    editMode === original.id ? getTempUserData(original.id) : original
   const currentValue = currentUserData?.userStatus ?? original.userStatus
-  
+
   return editMode === original.id ? (
     <SimpleSelect
       value={currentValue}
       options={userStatusOptions}
+      exclude={['Unknown']}
       onValueChange={(value) => {
         updateTempData(original.id, 'userStatus', value)
       }}

@@ -14,10 +14,10 @@ import { PreferredPartnerUser } from '@/types'
 import { CreditCardCell } from '@/ui/patient-info/patient-info-tab/link-account/dialog/table/credit-card-cell'
 import { StatusCell } from '@/ui/patient-info/patient-info-tab/link-account/dialog/table/status-cell'
 import { StatusIcon } from '@/ui/patient-info/patient-info-tab/link-account/dialog/table/status-icon-cell'
-import { useStore } from '@/ui/patient-info/patient-info-tab/link-account/store'
 import { Patient } from '@/ui/patient-lookup/types'
 import { formatDateTime, getMaskedPhoneNumber } from '@/utils'
 import { usePreferredPartnerStore } from '../store'
+import { useLinkAccountStore } from './link-account-dialog/store'
 
 interface PreferredPartnerLinkTableProps {
   preferredPartnerUser: PreferredPartnerUser
@@ -196,7 +196,7 @@ const PreferredPartnerLinkTable = ({
   preferredPartnerUser,
   onCloseModal,
 }: PreferredPartnerLinkTableProps) => {
-  const { data, loading, search } = useStore((state) => ({
+  const { data, loading, search } = useLinkAccountStore((state) => ({
     data: state.data,
     loading: state.loading,
     search: state.search,
@@ -204,18 +204,18 @@ const PreferredPartnerLinkTable = ({
 
   useEffect(() => {
     search({})
-  }, [])
+  }, [search])
 
   if (loading) {
     return (
-      <Flex height="100%" align="center" justify="center">
+      <Flex height="100%" align="center" justify="center" p="8">
         <LoadingPlaceholder />
       </Flex>
     )
   }
 
   return (
-    <ScrollArea scrollbars="vertical" className="max-h-52 p-2">
+    <ScrollArea scrollbars="vertical" className="max-h-96 p-2">
       <DataTable
         data={data?.patients ?? []}
         columns={columns(preferredPartnerUser, onCloseModal)}

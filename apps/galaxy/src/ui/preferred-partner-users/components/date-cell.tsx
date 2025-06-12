@@ -1,3 +1,4 @@
+import { CalendarDate } from '@internationalized/date'
 import { TextCell } from '@/components'
 import { PreferredPartnerUser } from '@/types'
 import { cn, formatDate, getCalendarDate, getOptionalDateString } from '@/utils'
@@ -10,11 +11,7 @@ interface DateCellProps {
   dateField: 'addDate' | 'termDate'
 }
 
-export const DateCell = ({
-  original,
-  editMode,
-  dateField,
-}: DateCellProps) => {
+export const DateCell = ({ original, editMode, dateField }: DateCellProps) => {
   const isDeleted = (user: PreferredPartnerUser) =>
     user.recordStatus === 'Deleted'
   const { getTempUserData, updateTempData } = usePreferredPartnerStore(
@@ -30,12 +27,26 @@ export const DateCell = ({
 
   const calendarValue = currentValue ? getCalendarDate(currentValue) : null
 
+  const startDateValue = currentUserData?.addDate ?? original.addDate
+  const startDate = startDateValue ? getCalendarDate(startDateValue) : null
+
+  const validateTermDate = (date: CalendarDate | null): boolean => {
+    if (dateField !== 'termDate' || !date || !startDate) {
+      return true
+    }
+    return date.compare(startDate) >= 0
+  }
+
   return editMode === original.id ? (
     <SimpleDatePicker
       dateInputClass="h-6 w-[80px]"
       className="flex flex-row items-center gap-2"
       value={calendarValue}
+      minValue={dateField === 'termDate' ? startDate ?? undefined : undefined}
       handleChange={(date) => {
+        if (!validateTermDate(date)) {
+          return
+        }
         const dateString = getOptionalDateString(date)
         updateTempData(original.id, dateField, dateString ?? '')
       }}

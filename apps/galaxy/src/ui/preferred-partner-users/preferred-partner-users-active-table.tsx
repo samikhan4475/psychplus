@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect } from 'react'
-import { Flex } from '@radix-ui/themes'
+import { Box, Flex } from '@radix-ui/themes'
 import { type Row } from '@tanstack/react-table'
 import { DataTable, LoadingPlaceholder } from '@/components'
 import { DataTablePagination } from '@/components/data-table/data-table-pagination'
@@ -77,7 +77,13 @@ const PreferredPartnerUsersActiveTable = ({
 
   return (
     <Flex className="bg-white w-full" direction="column">
-      <Flex className="w-full" style={{ overflow: 'auto' }}>
+      <Box 
+        className="w-full overflow-hidden hover:overflow-hidden [&::-webkit-scrollbar]:hidden hover:[&::-webkit-scrollbar]:hidden"
+        style={{
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none'
+        }}
+      >
         <DataTable
           data={activeUsersData}
           columns={columns(
@@ -86,7 +92,7 @@ const PreferredPartnerUsersActiveTable = ({
             userTypeOptions,
             userStatusOptions,
           )}
-          tableClass="min-w-full"
+          tableClass="min-w-full [&::-webkit-scrollbar]:hidden [&_*::-webkit-scrollbar]:hidden overflow-hidden hover:overflow-hidden"
           tableRowClass="relative"
           theadClass="z-[1]"
           disablePagination
@@ -94,7 +100,7 @@ const PreferredPartnerUsersActiveTable = ({
           sticky
           isRowDisabled={isRowDisabled}
         />
-      </Flex>
+      </Box>
       <DataTablePagination
         className="border-t border-gray-6"
         total={activeUsersTotal}

@@ -15,6 +15,7 @@ interface SimpleSelectProps {
   menuClassName?: string
   disabled?: boolean
   loading?: boolean
+  exclude?: string[]
 }
 
 const SimpleSelect = ({
@@ -26,6 +27,7 @@ const SimpleSelect = ({
   menuClassName,
   disabled = false,
   loading = false,
+  exclude = [],
 }: SimpleSelectProps) => {
   const ref = useRef<HTMLButtonElement>(null)
 
@@ -36,6 +38,8 @@ const SimpleSelect = ({
     },
     [options],
   )
+
+  const filteredOptions = options?.filter((option) => !exclude.includes(option.value)) || []
 
   return (
     <Flex className="flex-1">
@@ -74,7 +78,7 @@ const SimpleSelect = ({
             width: ref?.current?.clientWidth,
           }}
         >
-          {options?.map((opt, idx) => (
+          {filteredOptions?.map((opt, idx) => (
             <DropdownMenu.Item
               key={`${opt?.value}-${idx}`}
               disabled={opt?.disabled}

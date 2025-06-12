@@ -90,7 +90,11 @@ const PreferredPartnerFiltersForm = ({
               align="center"
             >
               <FilterButton />
-              <ClearButton ppid={ppid} form={form} />
+              <ClearButton 
+                ppid={ppid} 
+                form={form} 
+                onClear={(ppid) => searchFn(ppid, getInitialValues(), 1, true)}
+              />
               <SubmitButton />
             </Flex>
           </Grid>

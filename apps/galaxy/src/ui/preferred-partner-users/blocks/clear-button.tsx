@@ -2,22 +2,18 @@
 
 import { Button } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
-import { usePreferredPartnerStore } from '../store'
 import { getInitialValues } from '../utils'
 import { PreferredPartnerFiltersSchemaType } from './schema'
 
 interface ClearButtonProps {
   ppid: string
   form: ReturnType<typeof useForm<PreferredPartnerFiltersSchemaType>>
+  onClear: (ppid: string) => void
 }
 
-const ClearButton = ({ ppid, form }: ClearButtonProps) => {
-  const { searchWorklist } = usePreferredPartnerStore((state) => ({
-    searchWorklist: state.searchWorklist,
-  }))
-
+const ClearButton = ({ ppid, form, onClear }: ClearButtonProps) => {
   const handleResetForm = () => {
-    searchWorklist(ppid, getInitialValues(), 1, true)
+    onClear(ppid)
     form.reset({ ...getInitialValues() })
   }
   return (

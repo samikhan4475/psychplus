@@ -7,6 +7,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from 'lucide-react'
+import { useState, useEffect } from 'react'
 import {
   Button,
   Calendar,
@@ -29,22 +30,64 @@ interface SimpleDatePickerProps<T extends DateValue> extends DatePickerProps<T> 
   dateInputClass?: string
   className?: string
   handleChange?: (date: CalendarDate | null) => void
+  yearFormat?: 'YY' | 'YYYY'
+  onBlur?: () => void
 }
 
 const SimpleDatePicker = <T extends DateValue>({
   dateInputClass,
   className,
   handleChange,
+  yearFormat = 'YY',
+  onBlur,
   ...props
 }: SimpleDatePickerProps<T>) => {
+  const [internalValue, setInternalValue] = useState<DateValue | null>(props.value ?? null)
+
+  useEffect(() => {
+    if (props.value !== internalValue) {
+      setInternalValue(props.value ?? null)
+    }
+  }, [props.value])
+
+  const handleDateChange = (date: DateValue | null) => {
+    setInternalValue(date)
+    
+  }
+
+  const handleDateBlur = () => {
+    onBlur?.()
+    
+    if (yearFormat === 'YY') {
+      if (!internalValue || !(internalValue instanceof CalendarDate)) {
+        handleChange?.(null)
+        return
+      }
+      const num = internalValue.year % 100
+      const currentYear = new Date().getFullYear()
+      const century = Math.floor(currentYear / 100) * 100
+
+      const updatedDate = new CalendarDate(
+        century + num,
+        internalValue.month,
+        internalValue.day,
+      )
+
+      handleChange?.(updatedDate as CalendarDate)
+    } else {
+      handleChange?.(internalValue as CalendarDate | null)
+    }
+  }
+
   return (
     <I18nProvider locale="en-US">
       <Box className={cn('w-full', className)}>
         <DatePicker
           {...props}
-          onChange={(date) => {
-            handleChange?.(date as CalendarDate | null)
-          }}
+          value={internalValue as T | null}
+          aria-label="date input"
+          onBlur={handleDateBlur}
+          onChange={handleDateChange}
         >
           <Group className="border-pp-gray-2 relative w-full rounded-1 border data-[disabled]:pointer-events-none data-[disabled]:bg-gray-3 data-[disabled]:text-gray-11 data-[focus-within]:outline-1 data-[focus-within]:outline-iris-12">
             <DateInput
@@ -55,7 +98,7 @@ const SimpleDatePicker = <T extends DateValue>({
             >
               {(segment) => (
                 <DateSegment segment={segment}>
-                  {({ text, placeholder, isPlaceholder }) => (
+                  {({ text, placeholder, isPlaceholder, type }) => (
                     <>
                       {isPlaceholder ? (
                         <span
@@ -63,10 +106,16 @@ const SimpleDatePicker = <T extends DateValue>({
                             visibility: isPlaceholder ? 'visible' : 'hidden',
                           }}
                         >
-                          {placeholder}
+                          {yearFormat === 'YY' && type === 'year'
+                            ? placeholder.slice(-2)
+                            : placeholder}
                         </span>
                       ) : (
-                        <p>{text.slice(-2)}</p>
+                        <p>
+                          {yearFormat === 'YY' && type === 'year'
+                            ? text.slice(-2)
+                            : text}
+                        </p>
                       )}
                     </>
                   )}

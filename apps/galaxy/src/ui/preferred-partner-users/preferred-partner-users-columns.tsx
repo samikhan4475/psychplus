@@ -4,12 +4,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
 import { PreferredPartnerUser, SelectOptionType } from '@/types'
 import { cn, formatDate, getAgeFromDate, getCalendarDate } from '@/utils'
-import {
-  ActionCell,
-  DateCell,
-  PPUserStatusCell,
-  PPUserTypeCell,
-} from './components'
+import { ActionCell, DateCell, PPUserStatusCell } from './components'
 
 const columns = (
   editMode: string | null,
@@ -115,11 +110,9 @@ const columns = (
       accessorKey: 'ppUserType',
       header: () => <ColumnHeader label="PP User Type" />,
       cell: ({ row: { original } }) => (
-        <PPUserTypeCell
-          original={original}
-          editMode={editMode}
-          userTypeOptions={userTypeOptions}
-        />
+        <TextCell className={isDeleted(original) ? 'text-gray-400' : ''}>
+          {original.userType}
+        </TextCell>
       ),
     },
     {
