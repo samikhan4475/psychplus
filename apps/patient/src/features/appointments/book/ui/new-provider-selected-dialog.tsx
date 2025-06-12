@@ -1,12 +1,13 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Button, Dialog, Flex } from '@radix-ui/themes'
-import { CloseDialogIcon, FormError } from '@/components-v2'
-import { changePrimaryProviderCareTeamAction } from '@/features/appointments/book/actions'
-import { NewProviderSelectedProps } from '@/features/appointments/book/types'
-import { useToast } from '@/providers'
-import { getNewProviderTypeLabel } from '@psychplus-v2/utils'
+import { useState } from 'react';
+import { getNewProviderTypeLabel } from '@psychplus-v2/utils';
+import { Button, Dialog, Flex } from '@radix-ui/themes';
+import { CloseDialogIcon } from '@/components-v2';
+import { changePrimaryProviderCareTeamAction } from '@/features/appointments/book/actions';
+import { NewProviderSelectedProps } from '@/features/appointments/book/types';
+import { useToast } from '@/providers';
+
 
 const NewProviderSelectedDialog = ({
   open,
@@ -17,10 +18,8 @@ const NewProviderSelectedDialog = ({
 }: NewProviderSelectedProps) => {
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string>()
 
   const onChangePrimarycard = async () => {
-    setError(undefined)
     setLoading(true)
 
     const result = await changePrimaryProviderCareTeamAction({
@@ -29,15 +28,17 @@ const NewProviderSelectedDialog = ({
     })
 
     if (result.state === 'error') {
-      setError(result.error)
-      setLoading(false)
-      return
+      toast({
+        type: 'error',
+        title: result.error,
+      })
+    } else {
+      toast({
+        type: 'success',
+        title: 'Primary Provider Changed',
+      })
     }
 
-    toast({
-      type: 'success',
-      title: 'Primary Provider Changed',
-    })
 
     setOpen(false)
     onClose(true)
@@ -59,7 +60,6 @@ const NewProviderSelectedDialog = ({
         <Dialog.Title className="font-sans -tracking-[0.25px]">
           New provider selected
         </Dialog.Title>
-        <FormError message={error} />
         <Dialog.Description size="3">
           You&apos;ve chosen an appointment with a new provider. Would you like
           to:
