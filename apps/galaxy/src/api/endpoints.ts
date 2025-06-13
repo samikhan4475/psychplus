@@ -302,7 +302,7 @@ const DOWNLOAD_CLAIM_SUBMISSION_HISTORY_ENDPOINT = (submissionId: string) =>
   `${API_URL}/api/claimsubmissions/${submissionId}/actions/download`
 const GET_PATIENT_STATEMENTS_LIST_ENDPOINT = `${API_URL}/api/billingstatements/actions/search`
 const DOWNLOAD_HCFA_FILE_ENDPOINT = `${API_URL}/api/claims/actions/previewclaimform`
-const GET_RESPONSE_HISTORY_LIST_ENDPOINT = `${API_URL}/api/claimsresponses/actions/search`
+const GET_RESPONSE_HISTORY_LIST_ENDPOINT = `${API_URL}/api/claimresponses/actions/search`
 const GET_DENIAL_LIST_ENDPOINT = `${API_URL}/api/billingdenials/actions/search`
 const RESOLVE_DENIAL_ENDPOINT = (claimServiceLinePaymentId: string) =>
   `${API_URL}/api/claimservicelinepayments/${claimServiceLinePaymentId}/actions/resolve`
