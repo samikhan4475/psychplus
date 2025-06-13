@@ -4,6 +4,7 @@ const getDefaultValues = (providerId?: string) => ({
     stateIds: [],
     locationIds: [],
     serviceIds: [],
+    visitTypeCode: [],
     staffIds: providerId ? [providerId]: [],
     providerTypes: [],
     gender: '',

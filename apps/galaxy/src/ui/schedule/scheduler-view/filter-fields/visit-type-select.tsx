@@ -1,7 +1,7 @@
 'use client'
 
 import { useFormContext } from 'react-hook-form'
-import { MultiSelectField } from '@/components'
+import { FormFieldError, MultiSelectField } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetOptions } from '@/hooks'
 import { FieldLabel, FormFieldContainer } from '../../shared'
@@ -23,6 +23,7 @@ const VisitTypeMultiSelect = () => {
         }
         menuClassName="w-[155px]"
       />
+      <FormFieldError name="visitTypeCode" />
     </FormFieldContainer>
   )
 }
