@@ -2,7 +2,7 @@ import { Flex } from '@radix-ui/themes'
 import { Relationship } from '@/types'
 import { PsychiatryAssessmentPlanTabSchemaType } from '@/ui/assessment-plan/psychiatry-assessment-plan-tab/psychiatry-assessment-plan-tab-schema'
 import { BlockContainer, LabelAndValue } from '../../shared'
-import { descriptionMapping, labelMapping } from '../constants'
+import { descriptionMapping, labelMapping, orderMapping } from '../constants'
 import { safetyBlockMapOptions } from '../utils'
 import { EmergencyResourcesBlock } from './emergency-resources-block'
 
@@ -16,10 +16,13 @@ export const SafetyPlanningBlock = ({
   patientRelationships,
 }: SafetyPlanningBlockProps) => {
   if (!data.safetyPlanningIntervention) return null
-  const relevantKeys = Object.entries(data).filter(
-    ([key, value]) =>
-      labelMapping[key] && Array.isArray(value) && value.length > 0,
-  )
+  const relevantKeys = Object.entries(data)
+    .filter(
+      ([key, value]) =>
+        labelMapping[key] && Array.isArray(value) && value.length > 0,
+    )
+    .sort((a, b) => orderMapping[a[0] ?? 0] - orderMapping[b[0] ?? 0])
+
   return (
     <BlockContainer heading="Safety Planning Intervention">
       {relevantKeys.map(([key, value]) => (

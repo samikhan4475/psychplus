@@ -8,7 +8,12 @@ import { SafetyPlanningBlock } from './safety-planning-block'
 const SafetyPlaningViewBlock = () => {
   return (
     <>
-    <SafetyPlanningBlock
+      <SafetyPlanningBlock
+        title="Warning Signs :"
+        fieldId="warningSigns"
+        options={WARNING_SIGNS_OPTIONS}
+      />
+      <SafetyPlanningBlock
         title="Coping Strategies :"
         fieldId="copingStrategies"
         options={COPING_STRATEGIES_OPTIONS}
@@ -17,11 +22,6 @@ const SafetyPlaningViewBlock = () => {
         title="Restricting Access :"
         fieldId="restrictingAccess"
         options={RESTRICTING_ACCESS_OPTIONS}
-      />
-      <SafetyPlanningBlock
-        title="Warning Signs :"
-        fieldId="warningSigns"
-        options={WARNING_SIGNS_OPTIONS}
       />
     </>
   )

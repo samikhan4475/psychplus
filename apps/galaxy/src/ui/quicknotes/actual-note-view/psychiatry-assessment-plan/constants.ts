@@ -25,3 +25,9 @@ export const labelMapping: Record<string, string> = {
   copingStrategies: 'Coping Strategies :',
   restrictingAccess: 'Restricting Access :',
 }
+
+export const orderMapping: Record<string, number> = {
+  warningSigns: 1,
+  copingStrategies: 2,
+  restrictingAccess: 3,
+}
