@@ -11,6 +11,10 @@ enum VISIT_TYPES {
 }
 
 const GROUP_OPTIONS = [
+  {
+    label: 'Infant (0 yo to 4 yo)',
+    value: 'infant',
+  },
   { label: 'Child (5 yo to 12 yo)', value: 'child' },
   { label: 'Adolescent (13 yo to 17 yo)', value: 'adolescent' },
   {
