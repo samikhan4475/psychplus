@@ -179,6 +179,7 @@ interface BookVisitPayload {
   isOverridePermissionProvided: boolean
   isPrimaryProviderType: boolean
   isProceedPermissionProvided: boolean
+  isOverridePrimaryProvider?: boolean
   isSelfPay?: boolean
   lastAuthorizationCoveredDate?: string
   locationId: string

@@ -29,6 +29,7 @@ const schema = z
     isPrimaryProviderType: z.boolean(),
     isOverridePermissionProvided: z.boolean(),
     isProceedPermissionProvided: z.boolean(),
+    isOverridePrimaryProvider: z.boolean().optional(),
     timeZoneId: z.string().optional(),
 
     // Timed Service

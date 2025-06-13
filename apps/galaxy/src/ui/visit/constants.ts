@@ -32,7 +32,8 @@ const ADD_DELETE_STAFF_COMMENT_EDIT_VISIT_POPUP =
 
 const DC_DATE_VALIDATION_ALERT_MESSAGE =
   'Discharge date can NOT be more than 14 days from the current date, please adjust the date to proceed'
-
+const PRIMARY_PROVIDER_ALERT_MESSAGE =
+  'would you like to update the patients primary provider'
 export {
   TCM,
   TCMTypeOfVisit,
@@ -47,4 +48,5 @@ export {
   CHANGE_STAFF_COMMENT_SUBSECTION_TO_BILLING,
   ADD_DELETE_STAFF_COMMENT_EDIT_VISIT_POPUP,
   DC_DATE_VALIDATION_ALERT_MESSAGE,
+  PRIMARY_PROVIDER_ALERT_MESSAGE,
 }

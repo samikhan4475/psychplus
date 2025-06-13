@@ -21,6 +21,7 @@ function transformRequestPayload(
     isPrimaryProviderType: data.isPrimaryProviderType,
     isOverridePermissionProvided: data.isOverridePermissionProvided,
     isProceedPermissionProvided: data.isProceedPermissionProvided,
+    isOverridePrimaryProvider: data.isOverridePrimaryProvider,
     specialistStaffId: 0,
     startDate: mapToUTCString(
       `${data.visitDate}T${data.visitTime}:00[${data.timeZoneId}]`,

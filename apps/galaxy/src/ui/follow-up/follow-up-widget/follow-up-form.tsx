@@ -131,6 +131,7 @@ const FollowUpForm = ({
       specialistStaffId: data.providerId ? Number(data.providerId) : 0,
       isOverridePermissionProvided: data.isOverridePermissionProvided,
       isProceedPermissionProvided: data.isProceedPermissionProvided,
+      isOverridePrimaryProvider: data.isOverridePrimaryProvider,
       patientId: Number(patientId),
       parentAppointmentId: Number(appointmentId),
     }

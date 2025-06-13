@@ -134,6 +134,7 @@ const AddVisitForm = ({
       isPrimaryProviderType: false,
       isOverridePermissionProvided: false,
       isProceedPermissionProvided: false,
+      isOverridePrimaryProvider: undefined,
     },
   })
 
@@ -263,7 +264,10 @@ const AddVisitForm = ({
       <AddVisitAlert
         isOpen={isAlertOpen}
         alertInfo={alertInfo}
-        onClose={() => setIsAlertOpen(false)}
+        onClose={() => {
+          setIsAlertOpen(false)
+          setIsLoading(false)
+        }}
         onConfirm={(data) => {
           setIsAlertOpen(false)
           setAlertInfo({ message: '', statusCode: 0 })

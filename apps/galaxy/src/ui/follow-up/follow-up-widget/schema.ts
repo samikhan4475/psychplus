@@ -7,6 +7,7 @@ const schema = z
     providerId: z.string().optional(),
     isOverridePermissionProvided: z.boolean().optional().default(false),
     isProceedPermissionProvided: z.boolean().optional().default(false),
+    isOverridePrimaryProvider: z.boolean().optional(),
     reason: z.string().optional(),
     isPatientWilling: z.boolean().optional(),
     type: z.string(),

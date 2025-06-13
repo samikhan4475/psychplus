@@ -1,29 +1,31 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Button, Dialog, Flex, Text } from '@radix-ui/themes'
 import { TriangleAlert } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 import { CloseDialogTrigger } from '@/components/close-dialog-trigger'
+import { PRIMARY_PROVIDER_ALERT_MESSAGE } from '../../constants'
+import { mapMessages } from '../../utils'
 import { SchemaType } from '../schema'
 
 enum StatusCode {
   NoPermission = 406,
   OverridePermission = 428,
-  ProceedConfirmation = 412,
   ConflictCode = 409,
+  ProceedConfirmation = 412,
 }
 
 const AddVisitAlert = ({
   alertInfo,
   isOpen,
-  onClose,
   onConfirm,
+  onClose,
 }: {
   alertInfo: { message: string; statusCode: number }
   isOpen: boolean
-  onClose: () => void
   onConfirm: (data: SchemaType) => void
+  onClose: () => void
 }) => {
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0)
   const form = useFormContext<SchemaType>()
@@ -32,27 +34,54 @@ const AddVisitAlert = ({
     StatusCode.OverridePermission,
     StatusCode.ProceedConfirmation,
   ].includes(statusCode)
-  const messages = message.includes('\n')
-    ? message.split('\n').filter((s) => s)
-    : [message]
+
+  const messages = useMemo(() => mapMessages(message), [message])
+
   const currentMessage = messages[currentMessageIndex]
+
+  const handleSubmit = (body: Partial<SchemaType>) => {
+    const isOverride = statusCode === StatusCode.OverridePermission
+    form.handleSubmit(
+      (data) => {
+        onConfirm({
+          ...data,
+          isOverridePermissionProvided: isOverride,
+          isProceedPermissionProvided: !isOverride,
+          ...body,
+        })
+      },
+      () => form.trigger(),
+    )()
+  }
+
   const handleYesClick = () => {
+    if (currentMessage.toLowerCase().includes(PRIMARY_PROVIDER_ALERT_MESSAGE)) {
+      handleSubmit({
+        isOverridePrimaryProvider: true,
+      })
+      return
+    }
+
     if (currentMessageIndex < messages.length - 1) {
       setCurrentMessageIndex(currentMessageIndex + 1)
     } else {
-      form.handleSubmit(
-        (data) => {
-          const isOverride = statusCode === StatusCode.OverridePermission
-          onConfirm({
-            ...data,
-            isOverridePermissionProvided: isOverride,
-            isProceedPermissionProvided: !isOverride,
-          })
-        },
-        () => form.trigger(),
-      )()
+      handleSubmit({
+        isOverridePrimaryProvider: undefined,
+      })
       setCurrentMessageIndex(0)
     }
+  }
+
+  const handleNoClick = () => {
+    if (currentMessage.toLowerCase().includes(PRIMARY_PROVIDER_ALERT_MESSAGE)) {
+      handleSubmit({
+        isOverridePrimaryProvider: false,
+      })
+      return
+    }
+
+    onClose()
+    setCurrentMessageIndex(0)
   }
 
   return (
@@ -82,11 +111,12 @@ const AddVisitAlert = ({
                   >
                     <Text size="2">Yes</Text>
                   </Button>
-                  <Dialog.Close>
-                    <Button className="border-pp-gray-2 text-pp-black-3 bg-white w-[166px] cursor-pointer border border-solid">
-                      <Text size="2">No</Text>
-                    </Button>
-                  </Dialog.Close>
+                  <Button
+                    className="border-pp-gray-2 text-pp-black-3 bg-white w-[166px] cursor-pointer border border-solid"
+                    onClick={handleNoClick}
+                  >
+                    <Text size="2">No</Text>
+                  </Button>
                 </>
               ) : null}
             </Flex>

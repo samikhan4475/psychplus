@@ -28,6 +28,7 @@ function transformRequestPayload(
     isPrimaryProviderType: data.isPrimaryProviderType,
     isOverridePermissionProvided: data.isOverridePermissionProvided,
     isProceedPermissionProvided: data.isProceedPermissionProvided,
+    isOverridePrimaryProvider: data.isOverridePrimaryProvider,
     specialistStaffId,
     startDate: '',
     durationMinutes: 0,

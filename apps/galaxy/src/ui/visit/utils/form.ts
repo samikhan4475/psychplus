@@ -7,6 +7,7 @@ import {
   toTimeZone,
 } from '@internationalized/date'
 import { getTimeLabel } from '@/utils'
+import { PRIMARY_PROVIDER_ALERT_MESSAGE } from '../constants'
 
 const sanitizeFormData = <T extends object>(obj: T): T =>
   Object.fromEntries(
@@ -46,4 +47,19 @@ const isVisitRescheduled = (
   }
 }
 
-export { sanitizeFormData, convertToTimezone, isVisitRescheduled }
+const mapMessages = (message: string) => {
+  let arr = message.includes('\n')
+    ? message.split('\n').filter((s) => s)
+    : [message]
+
+  const specialIndex = arr.findIndex((msg) =>
+    msg.toLowerCase().includes(PRIMARY_PROVIDER_ALERT_MESSAGE),
+  )
+  if (specialIndex > -1 && specialIndex !== arr.length - 1) {
+    const [specialMsg] = arr.splice(specialIndex, 1)
+    arr = [...arr, specialMsg]
+  }
+  return arr
+}
+
+export { sanitizeFormData, convertToTimezone, isVisitRescheduled, mapMessages }

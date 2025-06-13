@@ -137,6 +137,7 @@ const EditVisitForm = ({
       isPrimaryProviderType: visitDetails?.isPrimaryProviderType,
       isOverridePermissionProvided: false,
       isProceedPermissionProvided: false,
+      isOverridePrimaryProvider: undefined,
     },
   })
 
@@ -224,7 +225,10 @@ const EditVisitForm = ({
         <EditVisitAlert
           isOpen={isAlertOpen}
           alertInfo={alertInfo}
-          onClose={() => setIsAlertOpen(false)}
+          onClose={() => {
+            setIsAlertOpen(false)
+            setIsSubmitting(false)
+          }}
           onConfirm={(data) => {
             setIsAlertOpen(false)
             onSubmit(data)
