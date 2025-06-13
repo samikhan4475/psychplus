@@ -19,6 +19,7 @@ import { TemplateFilterInput } from './template-filter-input'
 import { TemplateInsuranceSelect } from './template-insurance-select'
 import { TemplateLocationSelect } from './template-location-select'
 import { TemplatePatientSelect } from './template-patients-select'
+import { TemplatePracticeSelect } from './template-practice-select'
 import { TemplateProviderSelect } from './template-provider-select'
 import { TemplateSelect } from './template-select'
 import { TemplateStaffSelect } from './template-staff-select'
@@ -228,6 +229,10 @@ const DynamicTemplateFilters = () => {
 
     return search(payload)
   }
+  const isCollectionReport = matchesAnyReport(
+    'CollectionDetailReport',
+    selectedTemplate?.shortName ?? '',
+  )
 
   return (
     <>
@@ -303,6 +308,14 @@ const DynamicTemplateFilters = () => {
                     isRequired={item.isRequired}
                     title={item.displayName}
                     name={`reportTemplateParameters.${i}.runValue`}
+                    isMultiple={isCollectionReport ? false : isMultiple}
+                  />
+                )}
+                {isSelect && item.parameterCode === 'PracticeList' && (
+                  <TemplatePracticeSelect
+                    isRequired={item.isRequired}
+                    title={item.displayName}
+                    name={`reportTemplateParameters.${i}.runValue`}
                     isMultiple={isMultiple}
                   />
                 )}
@@ -331,6 +344,7 @@ const DynamicTemplateFilters = () => {
                   item.parameterCode !== 'InsuranceList' &&
                   item.parameterCode !== 'LocationList' &&
                   item.parameterCode !== 'StateList' &&
+                  item.parameterCode !== 'PracticeList' &&
                   item.parameterCode !== 'ProviderList' && (
                     <TemplateSelect
                       isRequired={item.isRequired}

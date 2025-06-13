@@ -6,15 +6,19 @@ import { Practice, SelectOptionType } from '@/types'
 interface PracticesPayload {
   payload?: {
     organizationId?: string
+    locationId?: string
   }
+  signal?: AbortSignal
 }
 
 const getPracticesOptionsAction = async ({
   payload,
+  signal,
 }: PracticesPayload): Promise<api.ActionResult<SelectOptionType[]>> => {
   const response = await api.POST<Practice[]>(
     api.GET_PRACTICES_ENDPOINT,
     payload,
+    { signal },
   )
 
   if (response.state === 'error') {
