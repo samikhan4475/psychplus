@@ -45,9 +45,14 @@ const GeneratedReport = () => {
     )
   }
   return (
-    <Flex direction="column" className="bg-white overflow-hidden">
-      <ScrollArea className="bg-white mb-0 rounded-1 p-1">
-        <DataTable columns={columns} data={data} sticky disablePagination />
+    <Flex direction="column" className="bg-white overflow-hidden pb-1">
+      <ScrollArea className="mb-0 rounded-1 p-1">
+        <DataTable
+          columns={columns}
+          data={data}
+          tableClass="w-[calc(100vw_-_430px)] [&_.rt-ScrollAreaRoot]:overflow-visible z-[1]"
+          theadClass="z-[1]"
+        />
       </ScrollArea>
       <GeneratedReportTablePagination />
     </Flex>
