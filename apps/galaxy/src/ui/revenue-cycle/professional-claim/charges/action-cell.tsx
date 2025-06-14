@@ -25,7 +25,7 @@ const ActionCellDropdown: React.FC<RowActionCellDropdownProps> = ({
     )
     setValue('claimServiceLines', deletedCharges)
   }
-  if (rowIndex === 0) return null
+  if (rowIndex === 0 && claimServiceLines.length === 1) return null
   return (
     <Flex gap="1" align="center" justify="center" className="flex-1">
       <IconButton variant="ghost" onClick={handleDeleteCharge}>
