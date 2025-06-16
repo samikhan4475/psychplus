@@ -1,7 +1,7 @@
 import type { Contact, Metadata } from './shared'
 
 interface Clinic {
-  id: string
+  id: number
   metadata?: Metadata
   isTest?: boolean
   name: string
@@ -9,7 +9,7 @@ interface Clinic {
   description?: string
   npi?: string
   contact?: Contact
-  taxonomy?: [
+  taxonomy: [
     {
       code: string
       display: string
@@ -22,7 +22,7 @@ interface Clinic {
       ]
     },
   ]
-  distanceInMiles?: number
+  distanceInMiles: 0
 }
 
 type ClinicsDistancePayload = {

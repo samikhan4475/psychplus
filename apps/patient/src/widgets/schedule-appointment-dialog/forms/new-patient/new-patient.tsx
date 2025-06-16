@@ -1,10 +1,9 @@
 'use client'
 
 import { ChangeEvent, useRef, useState } from 'react'
-import { cn, zipCodeSchema, zipLast4Schema } from '@psychplus-v2/utils'
+import { zipLast4Schema, zipCodeSchema, cn } from '@psychplus-v2/utils'
 import * as ToggleGroup from '@radix-ui/react-toggle-group'
 import { Button, Flex, Text, TextField } from '@radix-ui/themes'
-import DatePicker from 'react-datepicker'
 import { type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 import {
@@ -17,29 +16,14 @@ import {
   validate,
 } from '@psychplus/form'
 import { usePubsub } from '@psychplus/utils/event'
+import { getZipcodeInfo } from '@psychplus/utils/map'
 import { clickTrack } from '@psychplus/utils/tracking'
 import { SCHEDULE_APPOINTMENT_DIALOG } from '@psychplus/widgets'
+import { useStore } from '@/widgets/schedule-appointment-list/store'
 import { enums, PSYCHPLUS_LIVE_URL } from '@/constants'
-import 'react-datepicker/dist/react-datepicker.css'
-import { useRouter } from 'next/navigation'
-import { StorageType } from '@psychplus-v2/constants'
-import { CodeWithDisplayName } from '@psychplus-v2/types'
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { getMonth, getYear } from 'date-fns'
-import { isMobile } from '@psychplus/utils/client'
-import { formatDateYmd, getFirstDayOfWeek } from '@psychplus/utils/time'
-import { getZipcodeInfo } from '@/actions'
-import { APPOINTMENTS_SEARCH_SESSION_PUBLIC_KEY } from '@/features/appointments/search/constants'
-import {
-  prefetchProviders,
-  updateStorage,
-} from '@/features/appointments/search/utils'
-import { StaffWithClinicsAndSlots } from '@/widgets/schedule-appointment-list/types'
-import {
-  getNormalizedAppointmentType,
-  getNormalizedProviderType,
-  getValidStartDate,
-  transformStaffWithClinicsAndSlots,
-} from '@/widgets/schedule-appointment-list/utils'
 
 interface NewPatientProps {
   onclose?: () => void
@@ -121,12 +105,8 @@ type SchemaType = z.infer<typeof schema>
 
 const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
   const { publish } = usePubsub()
-  const [prefetchPromise, setPrefetchPromise] = useState<Promise<void> | null>(
-    null,
-  )
 
-  const router = useRouter()
-  const [selectedDate, setSelectedDate] = useState<Date | null>()
+  const [selectedDate, setSelectedDate] = useState<Date | null>();
 
   const form = useForm({
     schema,
@@ -151,16 +131,18 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
   })
 
   const [stateOptions, setStateOptions] = useState<StateOptions[]>([])
-  const [zipStates, setZipStates] = useState<CodeWithDisplayName[]>([])
+
+  const { setPatient, setGMapKey } = useStore()
+
   const getLocalDateWithoutTime = (date?: Date | null): string | undefined => {
-    if (date) {
-      const dateObj = date
-      const utcDate = `${dateObj.getDate()}`.padStart(2, '0')
-      const utcMonth = `${dateObj.getMonth() + 1}`.padStart(2, '0')
-      const utcYear = `${dateObj.getFullYear()}`
-      return `${utcYear}-${utcMonth}-${utcDate}`
-    }
-  }
+        if (date) {
+          const dateObj = date
+          const utcDate = `${dateObj.getDate()}`.padStart(2, '0')
+          const utcMonth = `${dateObj.getMonth() + 1}`.padStart(2, '0')
+          const utcYear = `${dateObj.getFullYear()}`
+          return `${utcYear}-${utcMonth}-${utcDate}`
+        }
+      }
 
   const onScheduleChange = (key: keyof ScheduledAppointment, value: string) => {
     setSchedule((prev) => ({ ...prev, [key]: value }))
@@ -177,47 +159,23 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
 
     if (zipCode.length === 5) {
       lastZipCode.current = zipCode
-      const response = await getZipcodeInfo(zipCode)
-      if (response.state === 'error') {
-        return
-      }
+      const response = await getZipcodeInfo(zipCode, mapKey)
       const states = response.data
-      const options = states.map(() => {
+      const options = states.map((state) => {
         return {
-          label: states[0]?.displayName,
-          value: states[0]?.displayName,
+          label: state.long_name,
+          value: state.long_name,
         }
       })
 
       setStateOptions(options)
-      setZipStates(states)
+
       if (options.length) {
         const newState = options[0].value
         setTimeout(() => {
           form.setValue('state', newState)
           form.trigger('state')
-        }, 1700)
-
-        const promise = prefetchProviders<StaffWithClinicsAndSlots[]>({
-          filters: {
-            providerType: getNormalizedProviderType(schedule.providerType),
-            appointmentType: getNormalizedAppointmentType(
-              schedule.appointmentType,
-            ),
-            zipCode: form.getValues().zipCode,
-            state: newState,
-            stateCode: states[0]?.code,
-            startingDate: getValidStartDate(
-              formatDateYmd(isMobile() ? new Date() : getFirstDayOfWeek()),
-            ),
-          },
-          transformFn: transformStaffWithClinicsAndSlots,
-          storageKey: APPOINTMENTS_SEARCH_SESSION_PUBLIC_KEY,
-          storageType: StorageType.Local,
-          gMapKey: mapKey,
-          dateOfBirth: getLocalDateWithoutTime(form.getValues().dateOfBirth),
-        }).then(() => void 0)
-        setPrefetchPromise(promise)
+        }, 100)
       }
     }
 
@@ -227,7 +185,7 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
     }
   }
 
-  const onSubmit: SubmitHandler<SchemaType> = async () => {
+  const onSubmit: SubmitHandler<SchemaType> = () => {
     const queryString = Object.entries({
       ...schedule,
       zipCode: form.getValues().zipCode,
@@ -236,6 +194,12 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
     })
       .map((key) => `${key[0]}=${key[1]}`)
       .join('&')
+
+    setPatient({
+      dateOfBirth: getLocalDateWithoutTime(form.getValues().dateOfBirth),
+    })
+
+    setGMapKey(mapKey)
 
     parent.postMessage(
       {
@@ -249,46 +213,6 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
       },
       PSYCHPLUS_LIVE_URL,
     )
-    if (prefetchPromise) {
-      await prefetchPromise
-    } else {
-      await prefetchProviders<StaffWithClinicsAndSlots[]>({
-        filters: {
-          providerType: getNormalizedProviderType(schedule.providerType),
-          appointmentType: getNormalizedAppointmentType(
-            schedule.appointmentType,
-          ),
-          zipCode: form.getValues().zipCode,
-          state: form.getValues().state,
-          stateCode: zipStates[0]?.code,
-          startingDate: getValidStartDate(
-            formatDateYmd(isMobile() ? new Date() : getFirstDayOfWeek()),
-          ),
-        },
-        transformFn: transformStaffWithClinicsAndSlots,
-        storageKey: APPOINTMENTS_SEARCH_SESSION_PUBLIC_KEY,
-        storageType: StorageType.Local,
-        gMapKey: mapKey,
-        dateOfBirth: getLocalDateWithoutTime(form.getValues().dateOfBirth),
-      })
-
-      await updateStorage({
-        filters: {
-          providerType: getNormalizedProviderType(schedule.providerType),
-          appointmentType: getNormalizedAppointmentType(
-            schedule.appointmentType,
-          ),
-          zipCode: form.getValues().zipCode,
-          state: form.getValues().state,
-          stateCode: zipStates[0]?.code,
-          startingDate: getValidStartDate(
-            formatDateYmd(isMobile() ? new Date() : getFirstDayOfWeek()),
-          ),
-        },
-        storageKey: APPOINTMENTS_SEARCH_SESSION_PUBLIC_KEY,
-        storageType: StorageType.Local,
-      })
-    }
 
     clickTrack({
       productArea: 'Patient',
@@ -298,29 +222,24 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
     })
 
     const url = `/schedule?${queryString}`
-
-    router.push(`/widgets/schedule-appointment-list?${queryString}`)
     publish(`${SCHEDULE_APPOINTMENT_DIALOG}:appointment-search`, { url })
   }
 
-  const years = Array.from(
-    { length: 200 },
-    (_, i) => new Date().getFullYear() - i,
-  )
+  const years = Array.from({ length: 200 }, (_, i) => new Date().getFullYear() - i);
   const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ]
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
   return (
     <>
@@ -330,7 +249,7 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
         py="5"
         mt="5"
       >
-        <Flex className="text-3 font-medium lg:text-5">
+        <Flex className="text-3 lg:text-5 font-medium">
           Do you want to see a Psychiatrist or a Therapist?
         </Flex>
 
@@ -347,7 +266,7 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
           <ToggleGroup.Item
             value="Psychiatry"
             className={cn(
-              'mt-2 h-[40px] w-[200px] sm:mt-0 lg:h-[50px] lg:w-[292px]',
+              'mt-2 sm:mt-0 h-[40px] w-[200px] lg:h-[50px] lg:w-[292px]',
               toggleGroupItemClasses,
             )}
           >
@@ -356,7 +275,7 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
           <ToggleGroup.Item
             value="Therapy"
             className={cn(
-              'mt-2 h-[40px] w-[190px] sm:ml-3 sm:mt-0 lg:h-[50px] lg:w-[207px]',
+              'mt-2 h-[40px] lg:h-[50px] w-[190px] lg:w-[207px] sm:ml-3 sm:mt-0',
               toggleGroupItemClasses,
             )}
           >
@@ -365,7 +284,7 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
         </ToggleGroup.Root>
       </Flex>
       <Flex className="gap-6 max-md:w-full" direction="column" py="5">
-        <Flex className="text-3 font-medium lg:text-5">
+        <Flex className="text-3 lg:text-5 font-medium">
           Would you like to meet in-person or virtually?
         </Flex>
         <Flex className="">
@@ -382,7 +301,7 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
             <ToggleGroup.Item
               value="In-Person"
               className={cn(
-                'mt-2 h-[40px] w-[178px] sm:mt-0 lg:h-[50px] ',
+                'mt-2 h-[40px] lg:h-[50px] w-[178px] sm:mt-0 ',
                 toggleGroupItemClasses,
               )}
             >
@@ -391,9 +310,8 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
 
             <ToggleGroup.Item
               value="Virtual"
-              className={cn(
-                'mt-2 h-[40px] w-[178px] sm:ml-3 lg:h-[50px] ',
-                toggleGroupItemClasses,
+              className={cn('sm:ml-3 mt-2 h-[40px] lg:h-[50px] w-[178px] ',
+                toggleGroupItemClasses
               )}
             >
               Virtual
@@ -424,7 +342,11 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
                       prevMonthButtonDisabled,
                       nextMonthButtonDisabled,
                     }) => (
-                      <Flex align={'center'} justify={'center'} gap={'1'}>
+                      <Flex
+                        align={'center'}
+                        justify={'center'}
+                        gap={'1'}
+                      >
                         <button
                           onClick={decreaseMonth}
                           disabled={prevMonthButtonDisabled}
@@ -466,16 +388,14 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
                       </Flex>
                     )}
                     selected={selectedDate}
-                    className={cn(
-                      'border-pp-gray-2 h-[35px] w-[195px] rounded-6 border-2 px-2 text-start text-4 lg:h-[45px]',
-                    )}
+                    className={cn("border-pp-gray-2 h-[35px] w-[195px] text-start rounded-6 border-2 text-4 lg:h-[45px] px-2")}
                     onChange={(date) => {
-                      if (date) {
+                      if(date){
                         form.setValue('dateOfBirth', date)
                         setSelectedDate(date)
                       }
                     }}
-                    placeholderText="dd/mm/yyyy"
+                    placeholderText='dd/mm/yyyy'
                   />
                 </Flex>
               </FormField>
@@ -495,7 +415,7 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
                     handleZipCodeChange(e)
                   }
                 }}
-                className="h-[35px] w-[200px] rounded-6 text-4 lg:h-[45px]"
+                className="h-[35px] lg:h-[45px] w-[200px] rounded-6 text-4"
                 value={form.watch('zipCode')}
                 maxLength={5}
               />
@@ -521,14 +441,14 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
           <Flex gap="3" direction="row">
             <Button
               radius="full"
-              className="h-[30px] w-[100px] cursor-pointer items-center justify-center border-[#151B4A] bg-[white] px-4 text-[#151B4A] outline lg:h-[40px]"
+              className="h-[30px] lg:h-[40px] w-[100px] cursor-pointer items-center justify-center border-[#151B4A] bg-[white] px-4 text-[#151B4A] outline"
               onClick={onclose}
             >
               <Text size="3">Cancel</Text>
             </Button>
             <FormSubmitButton
               radius="full"
-              className="h-[30px] w-[112px] cursor-pointer items-center justify-center bg-[#151B4A] px-4 font-bold lg:h-[40px]"
+              className="h-[30px] lg:h-[40px] w-[112px] cursor-pointer items-center justify-center bg-[#151B4A] px-4 font-bold"
             >
               <Text size="3">Search</Text>
             </FormSubmitButton>

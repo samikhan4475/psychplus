@@ -1,13 +1,36 @@
 import { createHeaders, createJsonHeader } from '@psychplus-v2/headers'
-import { INTERNAL_ERROR_MESSAGE } from './constants'
-import {
-  ActionErrorState,
-  ActionResult,
-  ActionSuccessState,
-  GetOptions,
-  NetworkResult,
-} from './types'
-import { getResponseData } from './utils'
+
+const INTERNAL_ERROR_MESSAGE = 'Something went wrong!'
+
+interface ActionSuccessState<T = undefined> {
+  state: 'success'
+  data: T
+}
+
+interface ActionErrorState {
+  state: 'error'
+  error: string
+}
+
+type ActionResult<T> = ActionSuccessState<T> | ActionErrorState
+
+interface NetworkSuccessState<T> {
+  state: 'success'
+  data: T
+  headers: Headers
+}
+
+interface NetworkErrorState {
+  state: 'error'
+  error: string
+  headers: Headers
+}
+
+type NetworkResult<T> = NetworkSuccessState<T> | NetworkErrorState
+
+interface GetOptions extends RequestInit {
+  ignoreHeaders?: boolean
+}
 
 const GET = async <T>(
   url: string,
@@ -182,6 +205,14 @@ const DELETE = async <T>(
     state: 'success',
     data,
     headers: response.headers,
+  }
+}
+
+const getResponseData = (text: string) => {
+  try {
+    return JSON.parse(text)
+  } catch {
+    return text
   }
 }
 

@@ -1,13 +1,8 @@
-import {
-  AppointmentsCacheMap,
-  LocationProvidersFilterState,
-} from '@psychplus-v2/types'
 import { StaffAppointmentAvailabilities } from '@psychplus/appointments'
 import { Clinic } from '@psychplus/clinics'
 import { CodeSetState } from '@psychplus/codeset'
 import { type Staff } from '@psychplus/staff'
 import { User } from '@psychplus/user'
-import { ToastData } from '@/providers'
 import {
   type Filters,
   type StaffWithClinicsAndSlots,
@@ -43,13 +38,6 @@ interface AppointmentState {
 interface AppointmentFiltersState {
   filters: Filters
   handleFiltersChange: (newFilters: Partial<Filters>) => void
-  cache: AppointmentsCacheMap<StaffWithClinicsAndSlots[]>
-  data?: StaffWithClinicsAndSlots[]
-  searchLocationsProviders: (
-    filters: LocationProvidersFilterState,
-    toast?: (data: ToastData) => void,
-  ) => void
-  loading?: boolean
 }
 
 interface PatientState {

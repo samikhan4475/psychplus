@@ -140,30 +140,7 @@ const createAddress = (
     country: data[`${prefix}Country`] ?? 'US',
   }
 }
-function buildClinicContactAddresses(
-  locationAddress: Address,
-  includeGeo: boolean,
-): Address[] {
-  const base: Omit<Address, 'geoCoordinates'> = {
-    ...locationAddress,
-    state: locationAddress.stateCode,
-  }
 
-  if (includeGeo && locationAddress.latitude && locationAddress.longitude) {
-    return [
-      {
-        ...base,
-        geoCoordinates: {
-          latitude: locationAddress.latitude,
-          longitude: locationAddress.longitude,
-          altitude: 0,
-        },
-      },
-    ]
-  } else {
-    return [base]
-  }
-}
 export {
   getStateAbbreviation,
   getStateFullName,
@@ -171,5 +148,4 @@ export {
   getClinicAddressLabel,
   getBillingAddressLabel,
   createAddress,
-  buildClinicContactAddresses
 }

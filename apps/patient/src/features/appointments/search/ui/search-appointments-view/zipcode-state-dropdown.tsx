@@ -10,7 +10,7 @@ interface ZipCodeStateDropdownProps {
   options: StateListType[]
   name: string
   value: string
-  onValueChange?: (value: string) => void
+  onValueChange: (value: string) => void
   size?: '2' | '1' | '3'
   className?: string
 }
@@ -31,7 +31,6 @@ const ZipCodeStateDropdown = ({
       onValueChange={onValueChange}
     >
       <Select.Trigger
-        disabled
         className={cn(
           'min-w-[100px] text-accent-12',
           options.length <= 1 ? 'bg-gray-3 text-gray-11' : 'bg-[white]',

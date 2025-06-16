@@ -1,30 +1,13 @@
 import { getLocalTimeZone } from '@internationalized/date'
+import { AppointmentType, ProviderType } from '@psychplus-v2/constants'
+import { CareTeamMember } from '@psychplus-v2/types'
 import {
-  AppointmentType,
-  DEFAULT_APPOINTMENT_CACHE_TIME,
-  ProviderType,
-} from '@psychplus-v2/constants'
-import {
-  AppointmentsCacheMap,
-  CareTeamMember,
-  GeoCoordinates,
-  LocationProvider,
-} from '@psychplus-v2/types'
-import {
-  getAppointmentCacheKey,
   getCalendarDate,
   getCalendarDateLabel,
   getProviderTypeLabel,
-  isAppointmentsFreshEntry,
-  transformLocationProvidersRequest,
-  transformLocationProvidersResponse,
 } from '@psychplus-v2/utils'
-import { unstable_batchedUpdates } from 'react-dom'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import {
-  searchAppointmentsAction,
-  searchLocationsProvidersAction,
-} from '@/features/appointments/search/actions'
+import { searchAppointmentsAction } from '@/features/appointments/search/actions'
 import {
   APPOINTMENTS_SEARCH_SESSION_KEY,
   AppointmentSortBy,
@@ -32,29 +15,26 @@ import {
 import type {
   AppointmentAvailability,
   CurrentBookingAppointmentData,
+  CurrentLocation,
 } from '@/features/appointments/search/types'
-import { ToastData } from '@/providers'
-import { create } from '@/stores/common-store'
-import { getProviderTypeLabelNormalized } from '@/widgets/schedule-appointment-list/utils'
 import { transformResponseData } from '../actions/data'
 import { getStartOfWeek } from '../utils'
+import { create } from '@/stores/common-store'
 
 interface Store {
   loading: boolean
   error?: string
   data?: AppointmentAvailability[]
-  locationsProvidersData?: LocationProvider[]
   providerType: ProviderType
   appointmentType: AppointmentType
   zipCode?: string
   language?: string
   sortBy?: AppointmentSortBy
   startingDate: string
-  location?: GeoCoordinates
+  location?: CurrentLocation
   careTeam: CareTeamMember[]
   state?: string
   stateCode: string
-  maxDistanceInMiles?: string
   setStartingDate: (value: string) => void
   setProviderType: (value: ProviderType) => void
   setAppointmentType: (value: AppointmentType) => void
@@ -62,23 +42,17 @@ interface Store {
   setLanguage: (value: string) => void
   setState: (value: string) => void
   setStateCode: (value: string) => void
-  setMaxDistanceInMiles: (value: string) => void
   setSortBy: (value: AppointmentSortBy) => void
-  setLocation: (value: GeoCoordinates) => void
+  setLocation: (value: CurrentLocation) => void
   setLoading: (value: boolean) => void
   setCareTeam: (value: CareTeamMember[]) => void
-  setData: (data: AppointmentAvailability[] | undefined) => void
   careTeamMember: () => CareTeamMember | undefined
-  // search: () => void
-  searchLocationsProviders: (toast?: (data: ToastData) => void) => void
+  search: () => void
   prev: () => void
   next: () => void
-  cache: AppointmentsCacheMap<AppointmentAvailability[]>
-  setCache: (key: string, data: AppointmentAvailability[]) => void
+  cache: { [key: string]: AppointmentAvailability[] | undefined }
   currentBookingAppointmentData?: CurrentBookingAppointmentData
-  setCurrentBookingAppointmentData: (
-    data: CurrentBookingAppointmentData,
-  ) => void
+  setCurrentBookingAppointmentData: (data: CurrentBookingAppointmentData) => void
 }
 
 const useStore = create<Store>()(
@@ -87,7 +61,6 @@ const useStore = create<Store>()(
       loading: false,
       error: undefined,
       data: undefined,
-      locationsProvidersData: undefined,
       providerType: ProviderType.Psychiatrist,
       appointmentType: AppointmentType.Virtual,
       zipCode: undefined,
@@ -97,19 +70,8 @@ const useStore = create<Store>()(
       startingDate: getStartOfWeek(new Date()),
       careTeam: [],
       stateCode: '',
-      maxDistanceInMiles: undefined,
       currentBookingAppointmentData: undefined,
-      setCurrentBookingAppointmentData: (data) =>
-        set({ currentBookingAppointmentData: data }),
-      setCache: (key, data) =>
-        set({
-          cache: {
-            [key]: {
-              data,
-              timestamp: Date.now(),
-            },
-          },
-        }),
+      setCurrentBookingAppointmentData: (data) => set({ currentBookingAppointmentData: data }),
       setStateCode: (stateCode) => set({ stateCode }),
       setStartingDate: (startingDate) => set({ startingDate }),
       setCareTeam: (careTeam) => set({ careTeam }),
@@ -148,7 +110,7 @@ const useStore = create<Store>()(
             member.specialist === getProviderTypeLabel(get().providerType),
         ),
       search: async () => {
-        const cacheKey = getAppointmentCacheKey({
+        const cacheKey = getCacheKey({
           appointmentType: get().appointmentType,
           providerType: get().providerType,
           startingDate: get().startingDate,
@@ -159,7 +121,7 @@ const useStore = create<Store>()(
 
         if (get().cache[cacheKey]) {
           set({
-            data: get().cache[cacheKey].data,
+            data: get().cache[cacheKey],
             loading: false,
           })
 
@@ -192,132 +154,13 @@ const useStore = create<Store>()(
           })
         } else {
           const data = transformResponseData(result.data, getLocalTimeZone())
+
           set({
             loading: false,
             data: data,
-            cache: {
-              ...get().cache,
-              [cacheKey]: { data, timestamp: Date.now() },
-            },
+            cache: { ...get().cache, [cacheKey]: data },
           })
         }
-      },
-
-      setData: (data) => {
-        set({ data })
-      },
-      searchLocationsProviders: async (toast) => {
-        const cacheKey = getAppointmentCacheKey({
-          maxDistanceInMiles: get().maxDistanceInMiles,
-          appointmentType: get().appointmentType,
-          providerType: get().providerType,
-          startingDate: get().startingDate,
-          zipCode: get().zipCode,
-          location: get().location,
-          state: get().state,
-        })
-
-        const entry = get().cache[cacheKey]
-        if (isAppointmentsFreshEntry(entry, DEFAULT_APPOINTMENT_CACHE_TIME)) {
-          set({ data: entry.data, loading: false, error: undefined })
-          return
-        }
-
-        set({
-          loading: true,
-          error: undefined,
-          data: undefined,
-        })
-
-        const stateCode = get().stateCode
-        const providerType = get().providerType
-        const providerTypeLabel = getProviderTypeLabelNormalized(providerType)
-        const appointmentType = get().appointmentType
-
-        const payload = transformLocationProvidersRequest({
-          maxDistanceInMiles: get().maxDistanceInMiles,
-          appointmentType,
-          providerType,
-          providerTypeLabel,
-          zipCode: get().zipCode,
-          stateCode,
-        })
-        const [res1, res2] = await Promise.all([
-          searchLocationsProvidersAction({ ...payload, limit: 10, offset: 0 }),
-          searchLocationsProvidersAction({
-            ...payload,
-            limit: 10,
-            offset: 10,
-          }),
-        ])
-
-        const errorMessage = [res1, res2].find(
-          (r) => r.state !== 'success',
-        )?.error
-
-        if (errorMessage || res1.state === 'error' || res2.state === 'error') {
-          toast?.({
-            type: 'error',
-            title: errorMessage,
-          })
-          set({
-            loading: false,
-            error: errorMessage,
-          })
-          return
-        }
-
-        const rawData = [
-          ...(res1?.data?.locationsProviders ?? []),
-          ...(res2?.data?.locationsProviders ?? []),
-        ]
-
-        const baseTransformed = transformLocationProvidersResponse({
-          response: rawData,
-          providerType: providerType,
-          providerTypeLabel,
-          appointmentType: get().appointmentType,
-        })
-        unstable_batchedUpdates(() => {
-          set({
-            loading: false,
-            data: baseTransformed,
-            cache: {
-              ...get().cache,
-              [cacheKey]: { data: baseTransformed, timestamp: Date.now() },
-            },
-          })
-        })
-        if (rawData.length && rawData.length < res1?.data?.total) {
-          const res3 = await searchLocationsProvidersAction({
-            ...payload,
-            limit: 100,
-            offset: 20,
-          })
-
-          if (res3.state === 'success') {
-            const combined = transformLocationProvidersResponse({
-              response: [...rawData, ...res3.data.locationsProviders],
-              providerType,
-              providerTypeLabel,
-              appointmentType: appointmentType,
-            })
-            unstable_batchedUpdates(() => {
-              set({
-                data: combined,
-                cache: {
-                  ...get().cache,
-                  [cacheKey]: { data: combined, timestamp: Date.now() },
-                },
-              })
-            })
-          }
-        }
-      },
-      setMaxDistanceInMiles: (value) => {
-        set({
-          maxDistanceInMiles: value,
-        })
       },
       prev: () => {
         const newStartingDate = getCalendarDate(get().startingDate).subtract({
@@ -343,31 +186,34 @@ const useStore = create<Store>()(
     {
       name: APPOINTMENTS_SEARCH_SESSION_KEY,
       storage: createJSONStorage(() => sessionStorage),
-      partialize: (state) => {
-        const freshEntries = Object.entries(state.cache).filter(([, entry]) =>
-          isAppointmentsFreshEntry(entry, DEFAULT_APPOINTMENT_CACHE_TIME),
-        )
-
-        const trimmedCache =
-          freshEntries.length === 0
-            ? undefined
-            : Object.fromEntries(
-                freshEntries
-                  .sort(([, a], [, b]) => b.timestamp - a.timestamp)
-                  .slice(0, 5),
-              )
-
-        return {
-          appointmentType: state.appointmentType,
-          providerType: state.providerType,
-          zipCode: state.zipCode,
-          stateCode: state.stateCode,
-          ...(trimmedCache ? { cache: trimmedCache } : {}),
-        }
-      },
+      partialize: (state) => ({
+        appointmentType: state.appointmentType,
+        providerType: state.providerType,
+        zipCode: state.zipCode,
+        stateCode: state.stateCode,
+      }),
       skipHydration: true,
     },
   ),
 )
+
+const getCacheKey = ({
+  appointmentType,
+  providerType,
+  startingDate,
+  zipCode = 'none',
+  location,
+  state,
+}: {
+  appointmentType: AppointmentType
+  providerType: ProviderType
+  startingDate: string
+  zipCode?: string
+  location?: CurrentLocation
+  state?: string
+}) => {
+  const locationKey = location ? 'location' : 'none'
+  return `${appointmentType}:${providerType}:${startingDate}:${zipCode}:${locationKey}:${state}`
+}
 
 export { useStore }

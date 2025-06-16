@@ -1,20 +1,18 @@
 import { cn, getClinicAddressLabel } from '@psychplus-v2/utils'
 import { Box, DropdownMenu, Flex, Text } from '@radix-ui/themes'
-import { CheckIcon, ChevronDownIcon } from 'lucide-react'
+import { CheckIcon, ChevronDownIcon, MapPinIcon } from 'lucide-react'
 import type { AppointmentClinic } from '@/features/appointments/search/types'
 
 interface ClinicSelectorProps {
   clinics: AppointmentClinic[]
   selectedClinic: number
   onChange: (value: number) => void
-  slotsLoading?:boolean
 }
 
 const ClinicSelector = ({
   clinics,
   selectedClinic,
   onChange,
-  slotsLoading,
 }: ClinicSelectorProps) => {
   const hasMultipleClinics = clinics.length > 1
 
@@ -23,7 +21,7 @@ const ClinicSelector = ({
       <Text className="text-[12px] font-[500]">
         Location:
       </Text>
-      <DropdownMenu.Root modal={false} >
+      <DropdownMenu.Root modal={false}>
         <DropdownMenu.Trigger disabled={!hasMultipleClinics}>
           <Flex
             gap="2"
@@ -51,7 +49,6 @@ const ClinicSelector = ({
           {clinics.map((clinic, index) => (
             <DropdownMenu.Item
               key={clinic.id}
-              disabled={slotsLoading}
               onClick={() => {
                 onChange(index)
               }}

@@ -52,7 +52,6 @@
     "@tanstack/react-table": "^8.10.7",
     "@vis.gl/react-google-maps": "^1.1.0",
     "date-fns": "^2.30.0",
-    "dequal": "^2.0.3",
     "html-react-parser": "^5.1.10",
     "jwt-decode": "^4.0.0",
     "lucide-react": "0.373.0",

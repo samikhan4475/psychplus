@@ -5,14 +5,11 @@ interface Staff {
   metadata?: Metadata
   isTest?: boolean
   legalName: LegalName
-  staffRoleCode?: string
+  staffRoleCode: string
   contactInfo?: Contact
   spokenLanguages?: string[]
   virtualRoomLink?: string
   rating?: number
-  bio?: string
-  hasPhoto?: boolean
-  providerType?: string
 }
 
 type StaffPayload = {

@@ -25,26 +25,20 @@ const WeekCalendarRow = () => {
   )
 
   const renderDays = () => {
-    if (isMobile()) {
-      const today = new Date()
-      const weekStart = getFirstDayOfWeek() // default week start
-      const weekEnd = addDays(weekStart, 6)
+  if (isMobile()) {
+    const today = new Date()
+    const weekStart = getFirstDayOfWeek() // default week start
+    const weekEnd = addDays(weekStart, 6)
 
-      const isTodayInDefaultWeek = today >= weekStart && today <= weekEnd
+    const isTodayInDefaultWeek = today >= weekStart && today <= weekEnd
 
-      return [
-        renderDay(
-          currentWeekReel === 0 && isTodayInDefaultWeek ? today : startDate,
-        ),
-      ]
-    }
-
-    const monday = getFirstDayOfWeek(startDate)
-
-    return Array.from({ length: 7 }, (_, i) => addDays(monday, i)).map(
-      renderDay,
-    )
+    return [renderDay(currentWeekReel === 0 && isTodayInDefaultWeek ? today : startDate)]
   }
+
+  return Array.from({ length: daysToAdd }, (_, i) =>
+    addDays(startDate, i)
+  ).map(renderDay)
+}
 
   const handleWeekChange = (offset: number) => {
     const changeBy = isMobile() ? 1 : 7
@@ -58,6 +52,7 @@ const WeekCalendarRow = () => {
     })
     setStartDate(newStartDate)
   }
+
 
   return (
     <Flex align="center" className="w-full">
@@ -96,7 +91,7 @@ const renderDay = (currentDate: Date) => {
     <Flex
       key={currentDate.toString()}
       align="center"
-      className="h-10 w-full rounded-3 sm:w-24  md:w-24"
+      className="h-10 w-full rounded-3 sm:w-24"
       justify="center"
     >
       {format(new Date(date), 'yyyy-MM-dd') ===

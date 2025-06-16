@@ -26,9 +26,9 @@ const AppointmentSort = () => {
           {appointmentType === AppointmentType.InPerson ? (
             <Select.Item value={AppointmentSortBy.Nearest}>Nearest</Select.Item>
           ) : null}
-          {/* <Select.Item value={AppointmentSortBy.FirstAvailable}>
+          <Select.Item value={AppointmentSortBy.FirstAvailable}>
             First Available
-          </Select.Item> */}
+          </Select.Item>
           <Select.Item value={AppointmentSortBy.Rating}>Rating</Select.Item>
         </Select.Content>
       </Select.Root>
