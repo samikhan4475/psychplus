@@ -14,7 +14,7 @@ import {
   UpdateCptCodes,
 } from '@/types'
 import { manageCodes, sendEvent } from '@/utils'
-import { signNoteAction } from '../actions'
+import { signNoteClientAction } from '../client-actions'
 import { QuickNoteSectionName } from '../constants'
 import { SignPayloadProps } from '../types'
 import { modifyWidgetResponse } from '../utils'
@@ -173,7 +173,7 @@ const createStore = (initialState: StoreInitialState) =>
         }
 
         get().setWidgetsData(response?.data)
-        const signResults = await signNoteAction(payload)
+        const signResults = await signNoteClientAction(payload)
         set({ loading: false, unsavedChanges: {} })
         return signResults
       } catch (error) {
@@ -194,7 +194,7 @@ const createStore = (initialState: StoreInitialState) =>
           ...payload,
           isError: true,
         }
-        const signResults = await signNoteAction(body)
+        const signResults = await signNoteClientAction(body)
 
         set({ loading: false })
         if (signResults.state === 'success') {
