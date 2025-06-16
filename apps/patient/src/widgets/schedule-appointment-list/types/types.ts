@@ -1,4 +1,4 @@
-import { Slot } from '@psychplus/appointments'
+import { AppointmentSlot } from '@psychplus-v2/types'
 import { Clinic } from '@psychplus/clinics'
 import { Staff } from '@psychplus/staff'
 
@@ -10,6 +10,7 @@ interface Filters {
   sortBy: string
   language: string
   startingDate: string
+  maxDistanceInMiles?: string
 }
 
 interface FilterOptionButtonProps {
@@ -48,11 +49,12 @@ interface StaffWithClinicsAndSlots {
   staff: Staff
   staffTypeCode: number
   clinicWithSlots: ClinicWithSlots[]
+  providerType?: string
 }
 
 interface ClinicWithSlots {
   clinic: Clinic
-  availableSlots: Slot[]
+  availableSlots: AppointmentSlot[]
 }
 
 type ConfirmationNote = {
@@ -69,6 +71,11 @@ interface DifferentStateDialogProps {
   onConfirm?: () => void
 }
 
+interface SortFilterOptions {
+  sortBy?: string
+  language?: string
+  startingDate?: string
+}
 export type {
   Filters,
   FilterOptionButtonProps,
@@ -79,4 +86,5 @@ export type {
   ClinicWithSlots,
   ConfirmationNote,
   DifferentStateDialogProps,
+  SortFilterOptions,
 }

@@ -6,15 +6,12 @@ import { Box, Flex, Text } from '@radix-ui/themes'
 import { getCodeDisplay } from '@psychplus/codeset'
 import { getStaffProfilePicture } from '@psychplus/staff/api.client'
 import { Popover } from '@psychplus/ui/popover'
+import { isMobile } from '@psychplus/utils/client'
 import { DownArrowIcon } from '@/components'
 import { WeeklyAvailabilitySlots } from '../../components'
 import { useStore } from '../../store'
-import type {
-  ClinicWithSlots,
-  StaffWithClinicsAndSlots,
-} from '../../types'
+import type { ClinicWithSlots, StaffWithClinicsAndSlots } from '../../types'
 import { renderProfileImage, renderStaffName } from '../../utils'
-import { isMobile } from '@psychplus/utils/client'
 
 const ProviderWithClinicAndWeeklyAvailability = ({
   staffWithClinicsAndSlots,
@@ -24,10 +21,8 @@ const ProviderWithClinicAndWeeklyAvailability = ({
   const [profileImage, setProfileImage] = useState<string | undefined>()
   const { codeSetIndex, filters } = useStore()
   const specialistTypeCodeSet = codeSetIndex.SpecialistType
-
-  const [selectedClinicId, setSelectedClinicId] = useState(
-    staffWithClinicsAndSlots.clinicWithSlots[0].clinic.id,
-  )
+  const [selectedClinicIndex, setSelectedClinicIndex] = useState(0)
+  const [slotsLoading, setSlotsLoading] = useState(false)
 
   useEffect(() => {
     getStaffProfilePicture(staffWithClinicsAndSlots.staff.id).then(
@@ -35,19 +30,25 @@ const ProviderWithClinicAndWeeklyAvailability = ({
     )
   }, [])
 
+  useEffect(() => {
+    setSelectedClinicIndex(0)
+  }, [filters.appointmentType])
+
   return (
     <Flex className="w-full flex-col gap-5 md:flex-row md:gap-0">
-      <Flex direction="column" gap="2" className="w-[343px] md:w-[425px]">
+      <Flex direction="column" gap="2" className="w-[380px]">
         <Flex align="center" gap="2" className="w-10/12 md:w-11/12">
           {renderProfileImage(
             profileImage,
             staffWithClinicsAndSlots.staff.legalName.firstName[0],
           )}
           <Flex direction="column" gap="1" className="text-[#151B4A]">
-            <Text className="font-bold text-3 md:text-5">
+            <Text className="text-3 font-bold md:text-5">
               {renderStaffName(staffWithClinicsAndSlots.staff)}
             </Text>
-            <StarRating rating={staffWithClinicsAndSlots.staff.rating?.valueOf()} />
+            <StarRating
+              rating={staffWithClinicsAndSlots.staff.rating?.valueOf()}
+            />
             <Flex align="center">
               <Text size="1" className="text-[#194595]" ml="1">
                 {getCodeDisplay(
@@ -61,19 +62,24 @@ const ProviderWithClinicAndWeeklyAvailability = ({
         {renderLanguageAndLocation(
           filters.appointmentType,
           staffWithClinicsAndSlots,
-          selectedClinicId,
-          setSelectedClinicId,
+          selectedClinicIndex,
+          setSelectedClinicIndex,
+          slotsLoading,
         )}
       </Flex>
       <Flex
-        style={{ flex: filters.appointmentType === 'In-Person' ? 1.6 : 1.7 }}
+        className={"w-[700px]"}
       >
         <WeeklyAvailabilitySlots
           staff={staffWithClinicsAndSlots.staff}
           staffTypeCode={staffWithClinicsAndSlots.staffTypeCode}
-          clinicWithSlots={staffWithClinicsAndSlots.clinicWithSlots.find(
-            (clinic) => clinic.clinic.id === selectedClinicId,
-          )}
+          clinicWithSlots={
+            staffWithClinicsAndSlots.clinicWithSlots[selectedClinicIndex]
+          }
+          slotsLoading={slotsLoading}
+          setSlotsLoading={setSlotsLoading}
+          onClinicChange={setSelectedClinicIndex}
+          selectedClinic={selectedClinicIndex}
         />
       </Flex>
     </Flex>
@@ -81,10 +87,10 @@ const ProviderWithClinicAndWeeklyAvailability = ({
 }
 
 const StarRating = ({ rating }: { rating?: number }) => {
-  const numericRating = rating ?? 0;
+  const numericRating = rating ?? 0
 
   if (!rating || rating <= 0) {
-    return <Text>No reviews yet</Text>;
+    return <Text>No reviews yet</Text>
   }
 
   return (
@@ -102,25 +108,27 @@ const StarRating = ({ rating }: { rating?: number }) => {
         {numericRating}
       </Text>
     </Flex>
-  );
-};
+  )
+}
 
 const renderLanguageAndLocation = (
   appointmentType: string,
   staffWithClinicsAndSlots: StaffWithClinicsAndSlots,
-  selectedClinicId: number,
+  selectedClinicIndex: number,
   onChangeLocation: (id: number) => void,
+  slotsLoading: boolean,
 ) => (
   <Flex direction="column" gap="2" className="w-[272px]">
     {appointmentType === 'In-Person' && (
       <Flex gap="1">
-        <Flex mt="1" className='text-2 md:text-3'>
+        <Flex mt="1" className="text-2 md:text-3">
           Location:
         </Flex>
         <ClinicsDropDown
           clinics={staffWithClinicsAndSlots.clinicWithSlots}
           onClinicSelect={onChangeLocation}
-          selectedClinicId={selectedClinicId}
+          selectedClinicIndex={selectedClinicIndex}
+          slotsLoading={slotsLoading}
         />
       </Flex>
     )}
@@ -128,28 +136,28 @@ const renderLanguageAndLocation = (
     {appointmentType === 'In-Person' && (
       <Flex align="start" className="w-52 flex-wrap justify-between" gap="2">
         <Flex align="end" className="gap-[17px] text-2 md:text-3">
-            Distance:
-            <Text className="text-[#575759] text-2 md:text-3">
-              {
-                staffWithClinicsAndSlots.clinicWithSlots.find(
-                  (clinic) => clinic.clinic.id === selectedClinicId,
-                )?.clinic.distanceInMiles
-              }
-              mi
-            </Text>
-          </Flex>
+          Distance:
+          <Text className="text-2 text-[#575759] md:text-3">
+            {
+              staffWithClinicsAndSlots?.clinicWithSlots[selectedClinicIndex]
+                ?.clinic?.distanceInMiles
+            }
+            mi
+          </Text>
+        </Flex>
       </Flex>
     )}
 
     <Flex gap="3" align="start" className="w-24">
-      <Text
-        className="font-regular leading-5 text-[#1C2024] text-2 md:text-3"
-      >
+      <Text className="text-2 font-regular leading-5 text-[#1C2024] md:text-3">
         Language:
       </Text>
       <Flex className="gap-[2px]">
         {staffWithClinicsAndSlots.staff?.spokenLanguages?.map((language) => (
-          <Text className="text-[#575759] text-2 md:text-3 font-regular leading-5 after:content-[','] last:after:hidden" key={language}>
+          <Text
+            className="text-2 font-regular leading-5 text-[#575759] after:content-[','] last:after:hidden md:text-3"
+            key={language}
+          >
             {language}
           </Text>
         ))}
@@ -161,11 +169,13 @@ const renderLanguageAndLocation = (
 const ClinicsDropDown = ({
   clinics,
   onClinicSelect,
-  selectedClinicId,
+  selectedClinicIndex,
+  slotsLoading,
 }: {
   clinics: ClinicWithSlots[]
   onClinicSelect: (id: number) => void
-  selectedClinicId: number
+  selectedClinicIndex: number
+  slotsLoading: boolean
 }) => {
   const closeRef = useRef<HTMLButtonElement>(null)
 
@@ -175,23 +185,18 @@ const ClinicsDropDown = ({
     }
   }, [closeRef])
 
-  const defaultClinic = clinics.find(
-    (clinic) => clinic.clinic.id === selectedClinicId,
-  )
-
-  const uniqueClinics = clinics.filter(
-    (clinic, index, self) =>
-      index === self.findIndex((c) => c.clinic.id === clinic.clinic.id),
-  )
-
+  const defaultClinic = clinics[selectedClinicIndex]
   return (
     <Popover.Root>
       <Popover.Close ref={closeRef} id="popover-close">
         <div />
       </Popover.Close>
-      <Popover.Trigger className="cursor-pointer rounded-3 p-1 hover:bg-gray-2">
-        <Flex key={defaultClinic?.clinic.id}>
-          <Text className="text-[#575759] text-2 md:text-3">
+      <Popover.Trigger
+        className="cursor-pointer rounded-3 p-1 hover:bg-gray-2"
+        disabled={slotsLoading}
+      >
+        <Flex key={defaultClinic.clinic.id}>
+          <Text className="text-2 text-[#575759] md:text-3">
             {defaultClinic?.clinic.name}{' '}
             {defaultClinic?.clinic.contact?.addresses?.[0].street1}{' '}
             {defaultClinic?.clinic.contact?.addresses?.[0].city}
@@ -200,7 +205,10 @@ const ClinicsDropDown = ({
             {defaultClinic?.clinic.contact?.addresses?.[0].postalCode}
           </Text>
           <Flex>
-            <DownArrowIcon height={isMobile() ? 12 : 18} width={isMobile() ? 12 : 18} />
+            <DownArrowIcon
+              height={isMobile() ? 12 : 18}
+              width={isMobile() ? 12 : 18}
+            />
           </Flex>
         </Flex>
       </Popover.Trigger>
@@ -208,18 +216,18 @@ const ClinicsDropDown = ({
         align="end"
         className="max-h-[300px] overflow-y-auto p-2"
       >
-        {uniqueClinics.map((clinic) => (
+        {clinics.map((clinic, idx) => (
           <Box
             key={clinic.clinic.id}
             className="cursor-pointer rounded-3 py-2 text-[#575759] hover:bg-[#151B4A] hover:text-[#FFFFFF]"
             onClick={() => {
-              onClinicSelect(clinic.clinic.id)
+              onClinicSelect(idx)
               closeMenu()
             }}
           >
             <Flex>
               <Flex className="w-7">
-                {clinic.clinic.id === selectedClinicId && (
+                {idx === selectedClinicIndex && (
                   <CheckIcon color="#151B4A" height={18} width={18} />
                 )}
               </Flex>

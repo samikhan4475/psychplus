@@ -138,4 +138,4 @@ const mergeSlots = (
   return list
 }
 
-export { transformResponseData }
+export { transformResponseData, getSlotsByDay }

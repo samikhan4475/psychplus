@@ -1,20 +1,15 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { CalendarDate } from '@internationalized/date'
 import { AppointmentType } from '@psychplus-v2/constants'
 import { Clinic, Consent } from '@psychplus-v2/types'
 import {
-  getCalendarDate,
-  getCalendarDateLabel,
-  getDayOfWeekLabel,
-  getMonthLabel,
   getNewProviderTypeLabel,
   getTimeLabel,
   getUserFullName,
 } from '@psychplus-v2/utils'
 import { StarFilledIcon, StarIcon } from '@radix-ui/react-icons'
-import { Box, Button, Flex, Text } from '@radix-ui/themes'
-import { EmptyFileIcon, FeatureEmpty, ProviderAvatar } from '@/components-v2'
+import { Box, Button, Dialog, Flex, Text } from '@radix-ui/themes'
+import { ProviderAvatar } from '@/components-v2'
 import { useProfileStore } from '@/features/account/profile/store'
 import { useStore } from '@/features/appointments/search/store'
 import type {
@@ -23,15 +18,10 @@ import type {
   AppointmentSlot,
   AppointmentSpecialist,
 } from '@/features/appointments/search/types'
-import { AppointmentSortBy } from '../../constants'
 import { useSortedFilteredData } from '../../store/hooks'
-import {
-  generateDateRange,
-  getEarliestSlot,
-  isDateInNextRange,
-  parseDateAbsoluteToLocal,
-} from '../../utils'
 import { ClinicSelector } from './clinic-selector'
+import { ProviderBioDialog } from './provider-bio-dialog'
+import { ProviderSlots } from './provider-slots'
 
 interface DialogAction {
   isOpen: boolean
@@ -46,26 +36,14 @@ interface AvailabilityListProps {
 interface PrimaryProviderAvailabilityCardProps {
   userConsents: Consent[]
   setShowDifferentStateDialog: (action: DialogAction) => void
-}
-
-const getNextAvailableDateLabel = (nextSlotDate: CalendarDate) => {
-  return `${getDayOfWeekLabel(nextSlotDate).slice(0, 3)}, ${getMonthLabel(
-    nextSlotDate,
-  ).slice(0, 3)} ${nextSlotDate.day}`
+  primaryProviderAvailabilityData: AppointmentAvailability
 }
 
 const PrimaryProviderAvailabilityCard = ({
   userConsents,
   setShowDifferentStateDialog,
+  primaryProviderAvailabilityData,
 }: PrimaryProviderAvailabilityCardProps) => {
-  const data = useSortedFilteredData()
-
-  const careTeamMember = useStore((state) => state.careTeamMember())
-
-  const primaryProviderAvailabilityData = data.find(
-    (d) => d.specialist.id === careTeamMember?.staffDetails.id,
-  )
-
   if (!primaryProviderAvailabilityData) {
     return (
       <Flex pt="8" justify="center" className="bg-white">
@@ -122,112 +100,72 @@ const ProviderAvailabilityCard = ({
   setShowDifferentStateDialog: (action: DialogAction) => void
 }) => {
   const [selectedClinic, setSelectedClinic] = useState(0)
-  const [showMore, setShowMore] = useState(false)
-
-  const { appointmentType, startingDate, sortBy, setStartingDate } = useStore(
-    (state) => ({
-      appointmentType: state.appointmentType,
-      startingDate: state.startingDate,
-      sortBy: state.sortBy,
-      setStartingDate: state.setStartingDate,
-    }),
-  )
-  const nextAvailableSlotDate = Object.keys(data.allSlotsByDay)[0]
-
-  const dateIsInFuture = useMemo(
-    () =>
-      isDateInNextRange(
-        getCalendarDate(startingDate),
-        getCalendarDate(nextAvailableSlotDate),
-      ),
-    [startingDate, nextAvailableSlotDate],
-  )
-
-  const dateRange = useMemo(
-    () => generateDateRange(getCalendarDate(startingDate)),
-    [startingDate],
-  )
+  const [slotsLoading, setSlotsLoading] = useState(false)
+  const { appointmentType } = useStore((state) => ({
+    appointmentType: state.appointmentType,
+  }))
 
   useEffect(() => {
     setSelectedClinic(0)
   }, [appointmentType])
 
-  useEffect(() => {
-    if (!sortBy || sortBy === AppointmentSortBy.Nearest) {
-      setSelectedClinic(0)
-      return
-    }
-
-    let minIndex = 0
-    let minSlot: AppointmentSlot | null = null
-
-    for (let i = 0; i < data.clinics.length; ++i) {
-      const earliestSlot = getEarliestSlot(
-        data.clinics[i].slotsByDay,
-        dateRange,
-      )
-
-      if (!earliestSlot) {
-        continue
-      }
-      if (!minSlot) {
-        minSlot = earliestSlot
-        minIndex = i
-      }
-      const result = parseDateAbsoluteToLocal(earliestSlot, minSlot)
-      if (result < 0) {
-        minSlot = earliestSlot
-        minIndex = i
-      }
-    }
-
-    setSelectedClinic(minIndex)
-  }, [sortBy, data, dateRange])
-
-  const checkHasMoreSlots = () => {
-    const allSlotsByDay = Object.entries(
-      data.clinics[selectedClinic].slotsByDay,
-    )
-    return allSlotsByDay.some(([, value]) => value && value.length > 3)
-  }
-
   return (
     <Flex px="5" py="5" className="bg-white border-b border-b-gray-5">
       <Flex direction="column" gap="5" className="mr-[48px] w-[240px]">
         <Flex gap="4">
-          <ProviderAvatar provider={data.specialist} size="5" />
-          <Flex direction="column" justify="center">
-            <Text weight="bold" className="text-[20px] text-accent-12">
-              {`${getUserFullName(data.specialist.legalName)} ${
-                data.specialist.legalName.honors ?? ''
-              }`}
-            </Text>
-            <Flex gap="1">
-              <Text
-                weight="medium"
-                className="text-pp-gray-1 text-[12px] uppercase"
+          <ProviderBioDialog appointmentDetail={data}>
+            <Dialog.Trigger>
+              <Button
+                variant="ghost"
+                className="rounded-full p-0 hover:bg-transparent"
               >
-                {getNewProviderTypeLabel(data.providerType ?? '')}
-              </Text>
-              <Flex align="center">
-                {Array.from({ length: 5 }, (_, index) => index + 1).map(
-                  (value) => (
-                    <Box key={value}>
-                      {value <= (data.specialist.rating ?? 0) ? (
-                        <StarFilledIcon
-                          height={16}
-                          width={16}
-                          color="#FFC700"
-                        />
-                      ) : (
-                        <StarIcon height={16} width={16} color="#FFC700" />
-                      )}
-                    </Box>
-                  ),
-                )}
+                <ProviderAvatar
+                  provider={data?.specialist}
+                  size="5"
+                  className="cursor-pointer"
+                />
+              </Button>
+            </Dialog.Trigger>
+            <Flex direction="column" justify="center">
+              <Dialog.Trigger>
+                <Text
+                  weight="bold"
+                  size="5"
+                  className="cursor-pointer text-accent-12"
+                >
+                  {`${getUserFullName(data.specialist.legalName)} ${
+                    data.specialist.legalName.honors ?? ''
+                  }`}
+                </Text>
+              </Dialog.Trigger>
+
+              <Flex gap="1">
+                <Text
+                  weight="medium"
+                  className="text-pp-gray-1 text-[12px] uppercase"
+                >
+                  {getNewProviderTypeLabel(data.providerType ?? '')}
+                </Text>
+                <Flex align="center">
+                  {Array.from({ length: 5 }, (_, index) => index + 1).map(
+                    (value) => (
+                      <Box key={value}>
+                        {value <= (data.specialist.rating ?? 0) ? (
+                          <StarFilledIcon
+                            height={16}
+                            width={16}
+                            color="#FFC700"
+                          />
+                        ) : (
+                          <StarIcon height={16} width={16} color="#FFC700" />
+                        )}
+                      </Box>
+                    ),
+                  )}
+                </Flex>
               </Flex>
             </Flex>
-          </Flex>
+          </ProviderBioDialog>
         </Flex>
         <Flex direction="column">
           {appointmentType === AppointmentType.InPerson ? (
@@ -235,6 +173,7 @@ const ProviderAvailabilityCard = ({
               clinics={data.clinics}
               selectedClinic={selectedClinic}
               onChange={setSelectedClinic}
+              slotsLoading={slotsLoading}
             />
           ) : null}
           <Flex gap="2" justify="between" direction={'column'}>
@@ -243,93 +182,22 @@ const ProviderAvailabilityCard = ({
           </Flex>
         </Flex>
       </Flex>
-      <Flex className="flex-1 px-[40px] pt-2">
-        <Flex direction="column" gap="4" className="w-full">
-          {dateIsInFuture ? (
-            <FeatureEmpty
-              description={`Next available appointment on ${getNextAvailableDateLabel(
-                getCalendarDate(nextAvailableSlotDate),
-              )}`}
-              action={
-                <Flex justify="center">
-                  <Button
-                    size="3"
-                    className="justify-center"
-                    onClick={() =>
-                      setStartingDate(
-                        getCalendarDateLabel(
-                          getCalendarDate(nextAvailableSlotDate),
-                        ),
-                      )
-                    }
-                    highContrast
-                  >
-                    Go to Appointment
-                  </Button>
-                </Flex>
-              }
-              Icon={EmptyFileIcon}
-            />
-          ) : (
-            <>
-              <Flex>
-                {dateRange.map((date, i) => (
-                  <Box key={`${i}-${date.toString()}`} className="flex-1">
-                    <Flex direction="column" align="center" gap="4">
-                      {appointmentType === AppointmentType.Virtual ? (
-                        <AppointmentTimeSlots
-                          showMore={showMore}
-                          userConsents={userConsents}
-                          clinic={data.clinics[selectedClinic]}
-                          specialist={data.specialist}
-                          providerType={data.providerType}
-                          slots={data.allSlotsByDay[getCalendarDateLabel(date)]}
-                          setShowDifferentStateDialog={
-                            setShowDifferentStateDialog
-                          }
-                        />
-                      ) : (
-                        <AppointmentTimeSlots
-                          showMore={showMore}
-                          userConsents={userConsents}
-                          clinic={data.clinics[selectedClinic]}
-                          specialist={data.specialist}
-                          slots={
-                            data.clinics[selectedClinic].slotsByDay[
-                              getCalendarDateLabel(date)
-                            ]
-                          }
-                          providerType={data.providerType}
-                          setShowDifferentStateDialog={
-                            setShowDifferentStateDialog
-                          }
-                        />
-                      )}
-                    </Flex>
-                  </Box>
-                ))}
-              </Flex>
-              {checkHasMoreSlots() ? (
-                <Button
-                  onClick={() => setShowMore((prevState) => !prevState)}
-                  size="3"
-                  className="bg-pp-blue-1 text-accent-12"
-                >
-                  {showMore ? 'See less' : 'See more'}
-                </Button>
-              ) : (
-                <Box className="h-10" />
-              )}
-            </>
-          )}
-        </Flex>
-      </Flex>
+      <ProviderSlots
+        data={data}
+        userConsents={userConsents}
+        setShowDifferentStateDialog={setShowDifferentStateDialog}
+        selectedClinic={selectedClinic}
+        onClinicChange={setSelectedClinic}
+        setSlotsLoading={setSlotsLoading}
+        slotsLoading={slotsLoading}
+      />
     </Flex>
   )
 }
 
 const AppointmentTimeSlots = ({
   slots,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   userConsents,
   showMore,
   setShowDifferentStateDialog,
@@ -436,7 +304,7 @@ const renderSpokenLanguages = (data: AppointmentAvailability) => {
 }
 
 const renderDistance = (clinic: AppointmentClinic) => {
-  if (clinic.distanceInMiles === undefined) {
+  if (clinic?.distanceInMiles === undefined) {
     return null
   }
 
@@ -450,4 +318,10 @@ const renderDistance = (clinic: AppointmentClinic) => {
   )
 }
 
-export { AvailabilityList, PrimaryProviderAvailabilityCard }
+export {
+  AvailabilityList,
+  PrimaryProviderAvailabilityCard,
+  AppointmentTimeSlots,
+  renderDistance,
+  renderSpokenLanguages,
+}

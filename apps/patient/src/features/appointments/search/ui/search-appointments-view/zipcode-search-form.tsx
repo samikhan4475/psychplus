@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FormContainer } from '@psychplus-v2/components'
 import { zipCodeSchema } from '@psychplus-v2/utils'
 import { Flex } from '@radix-ui/themes'
+import { unstable_batchedUpdates } from 'react-dom'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
 import { getZipcodeInfo } from '@/actions'
@@ -69,9 +70,12 @@ const ZipCodeSearchForm = () => {
       zipStates.length > 0 &&
       !zipStates.some((zipState) => zipState.displayName === state)
     ) {
-      form.setValue('state', zipStates[0].displayName)
-      setState(zipStates[0].displayName)
-      setStateCode(zipStates[0].code)
+      unstable_batchedUpdates(() => {
+        form.setValue('state', zipStates[0].displayName)
+        setState(zipStates[0].displayName)
+        setStateCode(zipStates[0].code)
+        setZipCode(form.getValues().zipCode)
+      })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [zipStates])
@@ -82,6 +86,7 @@ const ZipCodeSearchForm = () => {
       form.setValue('state', zipStates[0].displayName)
       setState(zipStates[0].displayName)
       setStateCode(zipStates[0].code)
+      setZipCode(data.zipCode)
     }
     form.reset(form.getValues())
   }
@@ -97,15 +102,6 @@ const ZipCodeSearchForm = () => {
             <ZipCodeStateDropdown
               name="state"
               value={form.watch('state') ?? ''}
-              onValueChange={(value) => {
-                form.setValue('state', value)
-                form.trigger('state')
-                setState(value)
-                setStateCode(
-                  zipStates.find((state) => state.displayName === value)
-                    ?.code || '',
-                )
-              }}
               options={zipStates}
             />
 

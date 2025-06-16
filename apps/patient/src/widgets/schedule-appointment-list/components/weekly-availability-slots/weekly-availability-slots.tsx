@@ -1,55 +1,121 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { AppointmentSlot } from '@psychplus-v2/types'
+import { getCalendarDateLabel } from '@psychplus-v2/utils'
 import { Button, Flex, Text } from '@radix-ui/themes'
-import { Slot } from '@psychplus/appointments'
 import { Staff } from '@psychplus/staff'
 import { isMobile } from '@psychplus/utils/client'
 import { formatTimeWithAmPm } from '@psychplus/utils/time'
 import { clickTrack } from '@psychplus/utils/tracking'
+import { SlotStateRenderer } from '@/components-v2/slot-state-render'
+import { enums, PSYCHPLUS_LIVE_URL } from '@/constants'
+import { useInViewOnce } from '@/hooks'
+import { useSlots } from '@/hooks/use-slots'
 import { useStore } from '../../store'
 import type { ClinicWithSlots } from '../../types'
-import { organizeSlotsByDate } from '../../utils'
-import { enums, PSYCHPLUS_LIVE_URL } from '@/constants'
+import {
+  getNormalizedAppointmentType,
+  getNormalizedProviderType,
+  getValidStartDate,
+  organizeSlotsByDate,
+} from '../../utils'
+
+interface WeeklyAvailabilitySlotsProps {
+  staff: Staff
+  staffTypeCode: number
+  clinicWithSlots: ClinicWithSlots
+  slotsLoading?: boolean
+  setSlotsLoading?: (val: boolean) => void
+  onClinicChange?: (index: number) => void
+  selectedClinic?: number
+}
 
 const WeeklyAvailabilitySlots = ({
   staff,
   staffTypeCode,
   clinicWithSlots,
-}: {
-  staff: Staff
-  staffTypeCode: number
-  clinicWithSlots: ClinicWithSlots | undefined
-}) => {
-  const { filters } = useStore()
+  slotsLoading,
+  setSlotsLoading,
+  onClinicChange,
+  selectedClinic,
+}: WeeklyAvailabilitySlotsProps) => {
+  const {
+    handleFiltersChange,
+    filters: { startingDate, appointmentType, providerType, zipCode, sortBy },
+  } = useStore()
+  const [ref, inViewOnce] = useInViewOnce<HTMLDivElement>()
+  const {
+    showSlots,
+    slotState,
+    dateIsInFuture,
+    nextAvailableSlotDate,
+    fetchSlots,
+    dateRange,
+    errorMessage,
+  } = useSlots({
+    providerId: staff.id,
+    clinicId: clinicWithSlots.clinic.id,
+    appointmentType: getNormalizedAppointmentType(appointmentType),
+    providerType: getNormalizedProviderType(providerType),
+    zipCode: zipCode ?? '',
+    startingDate: getValidStartDate(startingDate),
+    selectedClinic,
+    onClinicChange,
+    setSlotsLoading,
+    rawStartingDate: startingDate,
+    transformFn: (data) => organizeSlotsByDate(data, startingDate),
+    inViewOnce,
+  })
+
+  useEffect(() => {
+    if (!sortBy || sortBy === 'Nearest') {
+      onClinicChange?.(0)
+    }
+  }, [sortBy])
 
   return (
-    <Flex gap="4" className="w-full">
-      {Object.entries(
-        organizeSlotsByDate(
-          clinicWithSlots?.availableSlots,
-          filters.startingDate,
-        ),
-      ).map(([date, slots], i) => (
-        <Flex className="w-full" key={`${date}-${i}`}>
-          {!isMobile() ? (
-            <SlotComponent
-              slots={slots}
-              clinicWithSlots={clinicWithSlots}
-              staff={staff}
-              staffTypeCode={staffTypeCode}
-            />
-          ) : (
-            <MobileSlotComponent
-              slots={slots}
-              clinicWithSlots={clinicWithSlots}
-              staff={staff}
-              staffTypeCode={staffTypeCode}
-            />
-          )}
-        </Flex>
-      ))}
+    <Flex gap="4" className="w-full" ref={ref}>
+      <SlotStateRenderer
+        slotsLoading={slotsLoading}
+        errorMessage={errorMessage}
+        showSlots={showSlots}
+        dateIsInFuture={dateIsInFuture}
+        slotState={slotState.current}
+        nextAvailableSlotDate={nextAvailableSlotDate}
+        dateRange={dateRange}
+        fetchSlots={fetchSlots}
+        handleGoToAppointment={(dateLabel) =>
+          handleFiltersChange({
+            startingDate: dateLabel,
+          })
+        }
+        renderSlotList={({ date }) => {
+          const key = getCalendarDateLabel(date)
+          const slots = slotState.current[key] ?? []
+
+          return (
+            <Flex className="w-full">
+              {!isMobile() ? (
+                <SlotComponent
+                  slots={slots}
+                  clinicWithSlots={clinicWithSlots}
+                  staff={staff}
+                  staffTypeCode={staffTypeCode}
+                />
+              ) : (
+                <MobileSlotComponent
+                  slots={slots}
+                  clinicWithSlots={clinicWithSlots}
+                  staff={staff}
+                  staffTypeCode={staffTypeCode}
+                />
+              )}
+            </Flex>
+          )
+        }}
+      />
     </Flex>
   )
 }
@@ -60,8 +126,8 @@ const MobileSlotComponent = ({
   staff,
   staffTypeCode,
 }: {
-  slots: Slot[]
-  clinicWithSlots: ClinicWithSlots | undefined
+  slots?: AppointmentSlot[]
+  clinicWithSlots: ClinicWithSlots
   staff: Staff
   staffTypeCode: number
 }) => {
@@ -71,9 +137,8 @@ const MobileSlotComponent = ({
   const searchParams = useSearchParams()
 
   const state = searchParams.get('state')
-  
-  
-  function setMobileBookedSlotDetails(slot: Slot) {
+
+  function setMobileBookedSlotDetails(slot: AppointmentSlot) {
     setBookedSlot({
       specialist: staff,
       clinic: clinicWithSlots?.clinic,
@@ -103,12 +168,9 @@ const MobileSlotComponent = ({
   }
 
   return (
-    <Flex
-        className="flex-row overflow-x-auto whitespace-nowrap pb-4"
-        gap="4"
-      >
-      {slots.length > 0 ? (
-        slots.map((slot, i) => (
+    <Flex className="flex-row overflow-x-auto whitespace-nowrap pb-4" gap="4">
+      {slots && slots?.length > 0 ? (
+        slots?.map((slot, i) => (
           <SlotItem
             key={`${slot.startDate}-${i}`}
             slot={slot}
@@ -118,7 +180,7 @@ const MobileSlotComponent = ({
       ) : (
         <Text>No slots available</Text>
       )}
-      </Flex>
+    </Flex>
   )
 }
 
@@ -128,22 +190,21 @@ const SlotComponent = ({
   staff,
   staffTypeCode,
 }: {
-  slots: Slot[]
+  slots: AppointmentSlot[] | undefined
   clinicWithSlots: ClinicWithSlots | undefined
   staff: Staff
   staffTypeCode: number
 }) => {
   const [showAll, setShowAll] = useState(false)
   const handleShowMore = () => setShowAll(!showAll)
-  const { setBookedSlot, filters} = useStore()
+  const { setBookedSlot, filters } = useStore()
   const router = useRouter()
 
   const searchParams = useSearchParams()
 
   const state = searchParams.get('state')
-  
-  
-  function setBookedSlotDetails(slot: Slot) {
+
+  function setBookedSlotDetails(slot: AppointmentSlot) {
     setBookedSlot({
       clinic: clinicWithSlots?.clinic,
       specialist: staff,
@@ -173,11 +234,9 @@ const SlotComponent = ({
   }
 
   return (
-    <Flex
-        className="whitespace-nowrap pb-4 flex-col"
-        gap="4"
-      >
-        {slots
+    <Flex className="flex-col whitespace-nowrap pb-4" gap="4">
+      {slots &&
+        slots
           .slice(0, showAll || isMobile() ? slots.length : 3)
           .map((slot, i) => (
             <SlotItem
@@ -186,15 +245,15 @@ const SlotComponent = ({
               onBookedSlot={setBookedSlotDetails}
             />
           ))}
-          {!isMobile() && slots.length > 3 && (
-          <Button
-            className="h-[36px] w-full p-2 rounded-[40px] bg-[#f0f4ff] text-[#24366b] font-medium text-[14px] leading-5 hover:bg-[#151B4A] hover:text-[white]"
-            onClick={handleShowMore}
-          >
-            <Text>{showAll ? 'Less' : 'More'}</Text>
-          </Button>
-        )}
-      </Flex>
+      {!isMobile() && slots && slots?.length > 3 && (
+        <Button
+          className="h-[36px] w-full rounded-[40px] bg-[#f0f4ff] p-2 text-[14px] font-medium leading-5 text-[#24366b] hover:bg-[#151B4A] hover:text-[white]"
+          onClick={handleShowMore}
+        >
+          <Text>{showAll ? 'Less' : 'More'}</Text>
+        </Button>
+      )}
+    </Flex>
   )
 }
 
@@ -202,18 +261,17 @@ const SlotItem = ({
   slot,
   onBookedSlot,
 }: {
-  slot: Slot
-  onBookedSlot: (slot: Slot) => void
+  slot: AppointmentSlot
+  onBookedSlot: (slot: AppointmentSlot) => void
 }) => (
-  <Flex
-    className="h-[36px] px-3 cursor-pointer rounded-[4px] border border-[#b9bbc6] text-[14px] font-medium leading-[20px] text-[#24366b] hover:text-[white] hover:bg-[#151B4A] sm:rounded-3"
-    align="center"
-    justify="center"
-    p="2"
+  <Button
+    variant="outline"
+    highContrast
+    className="min-h-[2.25rem] cursor-pointer rounded-[4px] border border-[#b9bbc6] px-3 text-[14px] font-medium leading-[20px] text-[#24366b] hover:bg-[#151B4A] hover:text-[white] sm:rounded-3"
     onClick={() => onBookedSlot(slot)}
   >
-    <Text>{formatTimeWithAmPm(slot.startDate)}</Text>
-  </Flex>
+    {formatTimeWithAmPm(slot.startDate)}
+  </Button>
 )
 
 export { WeeklyAvailabilitySlots }

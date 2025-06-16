@@ -4,9 +4,21 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormContainer } from '@psychplus-v2/components'
-import { AppointmentType, ProviderType } from '@psychplus-v2/constants'
-import { PatientAddress } from '@psychplus-v2/types'
-import { zipCodeSchema, zipLast4Schema } from '@psychplus-v2/utils'
+import {
+  AppointmentType,
+  ProviderType,
+  StorageType,
+} from '@psychplus-v2/constants'
+import {
+  AppointmentAvailability,
+  CodeWithDisplayName,
+  PatientAddress,
+} from '@psychplus-v2/types'
+import {
+  transformLocationProvidersResponse,
+  zipCodeSchema,
+  zipLast4Schema,
+} from '@psychplus-v2/utils'
 import { Button, Flex, Heading } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
@@ -24,6 +36,7 @@ import { updateProfileAction } from '@/features/account/profile/actions'
 import { useProfileStore } from '@/features/account/profile/store'
 import { useGooglePlacesContext } from '@/providers'
 import { APPOINTMENTS_SEARCH_SESSION_KEY } from '../../constants'
+import { getStartOfWeek, prefetchProviders, updateStorage } from '../../utils'
 import { RadioGroupInput } from '../schedule-appointment-button/radio-group-input'
 import { ZipCodeStateDropdown } from '../search-appointments-view/zipcode-state-dropdown'
 
@@ -45,15 +58,13 @@ const schema = z.object({
 
 type SchemaType = z.infer<typeof schema>
 
-interface StateListType {
-  code: string
-  displayName: string
-}
-
 const ScheduleVisitView = ({ googleAPIkey }: { googleAPIkey: string }) => {
   const router = useRouter()
 
-  const [zipStates, setZipStates] = useState<StateListType[]>([])
+  const [prefetchPromise, setPrefetchPromise] = useState<Promise<void> | null>(
+    null,
+  )
+  const [zipStates, setZipStates] = useState<CodeWithDisplayName[]>([])
 
   const { profile, setProfile } = useProfileStore((state) => ({
     profile: state.profile,
@@ -160,13 +171,6 @@ const ScheduleVisitView = ({ googleAPIkey }: { googleAPIkey: string }) => {
   }, [])
 
   useEffect(() => {
-    if (zipStates.length > 0) {
-      form.setValue('state', zipStates[0].displayName)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [zipStates])
-
-  useEffect(() => {
     const zipcode = form.watch('zipCode')?.trim()
     getZipCodeInfoApi(zipcode)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -190,9 +194,26 @@ const ScheduleVisitView = ({ googleAPIkey }: { googleAPIkey: string }) => {
   }, []) // eslint-disable-line
 
   useEffect(() => {
-    if (zipStates.length > 0) {
-      form.setValue('state', zipStates[0].displayName)
-    }
+    if (!zipStates.length) return
+    const stateDisplayName = zipStates[0].displayName
+    setTimeout(() => {
+      form.setValue('state', stateDisplayName)
+    }, 1700)
+    const promise = prefetchProviders<AppointmentAvailability[]>({
+      filters: {
+        providerType: form.getValues().providerType,
+        appointmentType: form.getValues().appointmentType,
+        zipCode: form.getValues().zipCode,
+        state: stateDisplayName,
+        stateCode: zipStates[0]?.code,
+        startingDate: getStartOfWeek(new Date()),
+      },
+      transformFn: transformLocationProvidersResponse,
+      storageKey: APPOINTMENTS_SEARCH_SESSION_KEY,
+      storageType: StorageType.Session,
+    }).then(() => void 0)
+
+    setPrefetchPromise(promise)
   }, [zipStates])
 
   const onSubmit = async (data: SchemaType) => {
@@ -217,37 +238,51 @@ const ScheduleVisitView = ({ googleAPIkey }: { googleAPIkey: string }) => {
 
       if (res.state === 'success') {
         setProfile(res.data)
-        const appointmentData = {
-          providerType: data.providerType,
-          appointmentType: data.appointmentType,
-          zipCode: data.zipCode,
-          state: data.state,
-          stateCode: zipStates?.[0]?.code,
-        }
-        sessionStorage.setItem(
-          APPOINTMENTS_SEARCH_SESSION_KEY,
-          JSON.stringify({ state: appointmentData }),
-        )
-        router.push(`/appointments/search`)
       }
       if (res.state === 'error') {
         console.error(res.error)
         return
       }
-    } else {
-      const appointmentData = {
-        providerType: data.providerType,
-        appointmentType: data.appointmentType,
-        zipCode: data.zipCode,
-        state: data.state,
-        stateCode: zipStates?.[0]?.code,
-      }
-      sessionStorage.setItem(
-        APPOINTMENTS_SEARCH_SESSION_KEY,
-        JSON.stringify({ state: appointmentData }),
-      )
-      router.push(`/appointments/search`)
     }
+
+    const appointmentData = {
+      providerType: data.providerType,
+      appointmentType: data.appointmentType,
+      zipCode: data.zipCode,
+      state: data.state,
+      stateCode: zipStates?.[0]?.code,
+    }
+
+    if (prefetchPromise) {
+      await prefetchPromise
+    } else {
+      const providers = await prefetchProviders<AppointmentAvailability[]>({
+        filters: {
+          ...appointmentData,
+          startingDate: getStartOfWeek(new Date()),
+        },
+        transformFn: transformLocationProvidersResponse,
+        storageKey: APPOINTMENTS_SEARCH_SESSION_KEY,
+        storageType: StorageType.Session,
+      })
+      if (!providers.length) {
+        sessionStorage.setItem(
+          APPOINTMENTS_SEARCH_SESSION_KEY,
+          JSON.stringify({ state: appointmentData }),
+        )
+      }
+    }
+
+    await updateStorage({
+      filters: {
+        ...appointmentData,
+        startingDate: getStartOfWeek(new Date()),
+      },
+      storageKey: APPOINTMENTS_SEARCH_SESSION_KEY,
+      storageType: StorageType.Session,
+    })
+
+    router.push(`/appointments/search`)
   }
 
   return (

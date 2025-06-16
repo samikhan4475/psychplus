@@ -1,6 +1,10 @@
-import { getCalendarDate } from '@psychplus-v2/utils'
+import { getCalendarDate, getMin, normalizeLanguageFilter, sortByFunc } from '@psychplus-v2/utils'
 import { AppointmentSortBy } from '../constants'
-import { generateDateRange, getEarliestSlot, parseDateAbsoluteToLocal } from '../utils'
+import {
+  generateDateRange,
+  getEarliestSlot,
+  parseDateAbsoluteToLocal,
+} from '../utils'
 import { useStore } from './store'
 
 const useSortedFilteredData = () => {
@@ -14,18 +18,24 @@ const useSortedFilteredData = () => {
     if (!language) {
       return true
     }
-    const languageFilter = language === 'HindiUrdu' ? 'Hindi/Urdu' : language
+    const languageFilter = normalizeLanguageFilter(language)
     return item.specialist.spokenLanguages?.includes(languageFilter)
   })
 
-  if (!sortBy || sortBy === AppointmentSortBy.Nearest) {
+  if (!sortBy) {
     return filteredData
   }
 
-  if (sortBy === AppointmentSortBy.Rating) {
-    return filteredData.sort(
-      (a, b) => b.specialist.rating - a.specialist.rating,
+  if (sortBy === AppointmentSortBy.Nearest) {
+    return sortByFunc(filteredData, (item) =>
+      getMin(item.clinics, (c) => c.distanceInMiles),
     )
+  }
+
+  if (sortBy === AppointmentSortBy.Rating) {
+    return  sortByFunc(filteredData, (item) =>
+    -(item.specialist.rating ?? 0)
+  )
   }
 
   const dateRange = generateDateRange(getCalendarDate(startingDate))

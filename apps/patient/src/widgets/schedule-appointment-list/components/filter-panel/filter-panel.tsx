@@ -1,11 +1,13 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react'
+import { CODESETS, DISTANCE_IN_MILES_OPTIONS } from '@psychplus-v2/constants'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
 import { Button, Flex, Text } from '@radix-ui/themes'
 import { cn } from '@psychplus/ui/cn'
 import { Select } from '@psychplus/ui/select'
 import { psychPlusBlueColor } from '@/components'
+import { mapCodesetToOptions, useCodesetCodes } from '@/providers'
 import { useStore } from '../../store'
 import type {
   FilterOptionButtonProps,
@@ -18,8 +20,9 @@ interface FilterPanelProps {
 }
 
 const FilterPanel = ({ stateOptions = [] }: FilterPanelProps) => {
-  const { codeSetIndex } = useStore()
-  const languageCodeSet = codeSetIndex.Language
+  const languageCodeSet = useCodesetCodes(CODESETS.Language)
+
+  const LANGUAGE_OPTIONS = mapCodesetToOptions(languageCodeSet)
   const { handleFiltersChange, filters } = useStore()
 
   const [filtersState, setFiltersState] = useState<Filters>()
@@ -37,7 +40,7 @@ const FilterPanel = ({ stateOptions = [] }: FilterPanelProps) => {
     <Flex pt="1" pb="6" className="w-full flex-wrap px-4 sm:px-7" gap="4">
       <Flex className="flex-col gap-6 sm:flex-row sm:gap-7">
         <Flex align="center" gap="4">
-          <Text className="text-[12px] md:text-[16px] font-medium text-[#000000]">
+          <Text className="text-[12px] font-medium text-[#000000] md:text-[16px]">
             Appointment
           </Text>
           {['Psychiatry', 'Therapy'].map((option) => (
@@ -52,7 +55,9 @@ const FilterPanel = ({ stateOptions = [] }: FilterPanelProps) => {
         </Flex>
 
         <Flex gap="4" align="center">
-          <Text className="text-[12px] md:text-[16px] font-medium text-[#000000]">Type</Text>
+          <Text className="text-[12px] font-medium text-[#000000] md:text-[16px]">
+            Type
+          </Text>
           {['Virtual', 'In-Person'].map((option) => (
             <FilterOptionButton
               key={option}
@@ -65,54 +70,79 @@ const FilterPanel = ({ stateOptions = [] }: FilterPanelProps) => {
         </Flex>
       </Flex>
 
-      <Flex className="flex-col gap-6 sm:flex-row sm:gap-7 flex-wrap">
+      <Flex className="flex-col flex-wrap gap-6 sm:flex-row sm:gap-7">
+        {filters.appointmentType === 'In-Person' && (
+          <Flex gap="4" align="center" className="text-[#1c2024]">
+            <Text className="text-[12px] font-medium lg:text-[16px] ">
+              Radius
+            </Text>
+            <FilterOptionsDropDown
+              prefix="Radius"
+              filterType="maxDistanceInMiles"
+              options={[...DISTANCE_IN_MILES_OPTIONS]}
+              onFilterChange={handleFiltersChange}
+              placeholder="Radius"
+              selectedOption={filters.maxDistanceInMiles}
+            />
+          </Flex>
+        )}
         <Flex gap="4" align="center" className="text-[#1c2024]">
-          <Text className="text-[12px] md:text-[16px] font-medium ">Sort by</Text>
+          <Text className="text-[12px] font-medium md:text-[16px] ">
+            Sort by
+          </Text>
           <FilterOptionsDropDown
             prefix="A-Z"
             filterType="sortBy"
-            options={['Nearest', 'First Available']}
+            options={
+              filters.appointmentType === 'In-Person'
+                ? ['Nearest', 'Rating']
+                : ['Rating']
+            }
             onFilterChange={handleFiltersChange}
             placeholder="A-Z"
             selectedOption={filters.sortBy}
           />
         </Flex>
         <Flex gap="4" align="center" className="text-[#1c2024]">
-          <Text className="text-[12px] md:text-[16px] font-medium">Language</Text>
+          <Text className="text-[12px] font-medium md:text-[16px]">
+            Language
+          </Text>
           <FilterOptionsDropDown
             prefix="Language"
             filterType="language"
-            options={languageCodeSet?.map((item) => item.display)}
+            options={LANGUAGE_OPTIONS.map((opt) => opt.value) ?? []}
             onFilterChange={handleFiltersChange}
             placeholder="Language"
             selectedOption={filters.language}
           />
         </Flex>
-          <Flex gap="4" align="center" className="text-[#1c2024]">
-            <Text className="text-[12px] md:text-[16px] font-medium">Current ZIP Code</Text>
-            <input
-              type="number"
-              placeholder="ZIP Code"
-              value={filtersState?.zipCode}
-              className="w-[70px] md:w-[102px] flex-1 rounded-[4px] border border-[#b9bbc6] px-[5px] md:px-[10px] py-1 md:py-2 font-regular text-[#1c2024] focus:border-blue-12 focus:outline-none"
-              style={{ color: psychPlusBlueColor }}
-              onChange={(e) => handleZipCodeChange(e.target.value)}
-            />
-          </Flex>
-          <Flex gap="4" align="center">
-            <Text className="text-[12px] md:text-[16px] font-medium text-[#1c2024]">
-              State
-            </Text>
-            <FilterOptionsDropDown
-              prefix="State"
-              filterType="state"
-              disabled={stateOptions.length < 2}
-              options={stateOptions}
-              onFilterChange={handleFiltersChange}
-              placeholder="State"
-              selectedOption={filtersState?.state}
-            />
-          </Flex>
+        <Flex gap="4" align="center" className="text-[#1c2024]">
+          <Text className="text-[12px] font-medium md:text-[16px]">
+            Current ZIP Code
+          </Text>
+          <input
+            type="number"
+            placeholder="ZIP Code"
+            value={filtersState?.zipCode}
+            className="w-[70px] flex-1 rounded-[4px] border border-[#b9bbc6] px-[5px] py-1 font-regular text-[#1c2024] focus:border-blue-12 focus:outline-none md:w-[102px] md:px-[10px] md:py-2"
+            style={{ color: psychPlusBlueColor }}
+            onChange={(e) => handleZipCodeChange(e.target.value)}
+          />
+        </Flex>
+        <Flex gap="4" align="center">
+          <Text className="text-[12px] font-medium text-[#1c2024] md:text-[16px]">
+            State
+          </Text>
+          <FilterOptionsDropDown
+            prefix="State"
+            filterType="state"
+            disabled={stateOptions.length < 2}
+            options={stateOptions}
+            onFilterChange={handleFiltersChange}
+            placeholder="State"
+            selectedOption={filtersState?.state}
+          />
+        </Flex>
       </Flex>
     </Flex>
   )
@@ -130,7 +160,7 @@ const FilterOptionButton = ({
       variant="outline"
       color="gray"
       className={cn(
-        'h-8 md:h-10 cursor-pointer rounded-[6px] bg-[#FFFFFF] px-[5px] md:px-[10px] font-medium text-[#1c2024]',
+        'h-8 cursor-pointer rounded-[6px] bg-[#FFFFFF] px-[5px] font-medium text-[#1c2024] md:h-10 md:px-[10px]',
         {
           'border-[#151B4A] bg-[#151B4A] text-[#FFFFFF]': active,
           '': !active,
@@ -138,7 +168,7 @@ const FilterOptionButton = ({
       )}
       onClick={() => onFilterChange({ [filterType]: filterOption })}
     >
-      <Text className='text-2 md:text-3'>{filterOption}</Text>
+      <Text className="text-2 md:text-3">{filterOption}</Text>
     </Button>
   )
 }
@@ -165,7 +195,7 @@ const FilterOptionsDropDown = ({
       <Select.Trigger
         ref={triggerRef}
         placeholder={placeholder}
-        className="h-8 md:h-10 min-w-[115px] whitespace-nowrap rounded-[4px] border border-[#b9bbc6] px-[5px] md:px-[10px] py-2 font-regular text-[#1c2024] placeholder-[#1C2024]"
+        className="h-8 min-w-[115px] whitespace-nowrap rounded-[4px] border border-[#b9bbc6] px-[5px] py-2 font-regular text-[#1c2024] placeholder-[#1C2024] md:h-10 md:px-[10px]"
       >
         {selectedOption || placeholder}
 
@@ -174,7 +204,7 @@ const FilterOptionsDropDown = ({
       <Select.Content align="end" position="popper" highContrast>
         {options?.map((option) => (
           <Select.Item key={option} value={option}>
-            <Text className='text-2 md:text-4'>{`${option}`}</Text>
+            <Text className="text-2 md:text-4">{`${option}`}</Text>
           </Select.Item>
         ))}
       </Select.Content>
