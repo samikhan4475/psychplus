@@ -7,6 +7,7 @@ const schema = z
     id: z.string(),
     postedAmount: z.number().optional(),
     insuranceName: z.string().min(1, { message: 'Insurance name is required' }),
+    insurancePlanId:z.string().min(1,'Required'),
     paymentMethod: z.string().min(1, { message: 'Payment method is required' }),
     checkNumber: z.string().min(1, { message: 'Check number is required' }),
     amount: z.preprocess(

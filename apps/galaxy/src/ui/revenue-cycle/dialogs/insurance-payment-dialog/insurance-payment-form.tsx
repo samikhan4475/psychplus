@@ -51,6 +51,7 @@ const InsurancePaymentForm = ({
       checkNumber: data?.checkNumber ?? '',
       comments: data?.comments ?? '',
       checkDate: data?.checkDate && getLocalCalendarDate(data?.checkDate),
+      insurancePlanId:data?.insurancePlanId ?? '',
       receivedDate:
         data?.receivedDate && getLocalCalendarDate(data?.receivedDate),
       depositDate: data?.depositDate && getLocalCalendarDate(data?.depositDate),

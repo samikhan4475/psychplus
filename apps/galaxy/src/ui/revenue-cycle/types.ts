@@ -117,6 +117,7 @@ interface InsurancePayment {
   isDuplicate: boolean
   claimCount: string
   insuranceName: string
+  insurancePlanId?:string
   checkNumber: string
   checkDate: string
   receivedDate: string

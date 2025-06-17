@@ -4,9 +4,13 @@ import * as api from '@/api'
 import type { InsurancePlan, SelectOptionType } from '@/types'
 import { INSURANCE_PLAN_LIST_OPTION_SIZE } from '../constants'
 
+interface InsurancePlanOptionType extends SelectOptionType {
+  insurancePlanId: string
+}
+
 const getInsurancePlanOptionsAction = async (
   name: string,
-): Promise<api.ActionResult<SelectOptionType[]>> => {
+): Promise<api.ActionResult<InsurancePlanOptionType[]>> => {
   const url = new URL(api.SEARCH_INSURANCE_PLANS_ENDPOINT)
   url.searchParams.append('limit', String(INSURANCE_PLAN_LIST_OPTION_SIZE))
   const response = await api.POST<InsurancePlan[]>(`${url}`, { name })
@@ -21,6 +25,7 @@ const getInsurancePlanOptionsAction = async (
   const transformedData = response.data.map((data) => ({
     value: data.name,
     label: data.name,
+    insurancePlanId: data.id,
   }))
 
   return {
@@ -29,4 +34,4 @@ const getInsurancePlanOptionsAction = async (
   }
 }
 
-export { getInsurancePlanOptionsAction }
+export { getInsurancePlanOptionsAction, type InsurancePlanOptionType }
