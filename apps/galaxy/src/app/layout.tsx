@@ -20,7 +20,6 @@ import {
   STRIPE_PUBLISHABLE_KEY,
   WEBSOCKETSERVICE_URL,
 } from '@/constants'
-import { WebSocketConnector } from '@/providers/websocket-provider'
 import { StoreProvider } from '@/store'
 import { Header } from '@/ui/header'
 import { LockScreenProvider } from '@/ui/lock-screen-context'
@@ -42,6 +41,15 @@ const josefin = Josefin_Sans({
 const DynamicMiniPlayer = dynamic(
   () =>
     import('@/ui/call/blocks/mini-player.tsx').then((mod) => mod.MiniPlayer),
+  {
+    ssr: false,
+  },
+)
+const WebSocketConnector = dynamic(
+  () =>
+    import('@/providers/websocket-provider.tsx').then(
+      (mod) => mod.WebSocketConnector,
+    ),
   {
     ssr: false,
   },

@@ -1,9 +1,15 @@
-import { AppointmentType, ProviderType } from '@psychplus-v2/constants'
+import {
+  AppointmentType,
+  ProviderType,
+  StorageType,
+} from '@psychplus-v2/constants'
 import type {
   Clinic,
   ClinicContactDetails,
   ContactDetails,
   LegalName,
+  LocationProviders,
+  LocationProvidersFilterState,
   Specialist,
 } from '@psychplus-v2/types'
 
@@ -23,6 +29,7 @@ interface AppointmentSlot {
   servicesOffered: string[]
   startDateUtc?: string
   clinicId?: string
+  locationId?: string
 }
 
 interface AppointmentSpecialist {
@@ -30,7 +37,7 @@ interface AppointmentSpecialist {
   isTest?: boolean
   legalName: LegalName
   spokenLanguages?: string[]
-  rating: number
+  rating?: number
   contactInfo?: ContactDetails
 }
 
@@ -93,6 +100,35 @@ interface CurrentBookingAppointmentData {
     distanceInMiles?: number
   }
 }
+interface DialogAction {
+  isOpen: boolean
+  clinic: Clinic
+}
+interface SeachStaffAuthenticatedPayload {
+  staffIds: number[]
+}
+
+interface PrefetchProvidersParams<T> {
+  filters: LocationProvidersFilterState
+  transformFn: (params: {
+    response: LocationProviders[]
+    providerType: ProviderType
+    providerTypeLabel: string
+    appointmentType: AppointmentType
+  }) => T
+  storageKey: string
+  storageType?: StorageType
+  gMapKey?: string
+  dateOfBirth?: string
+}
+
+interface UpdateStorageParams {
+  filters: LocationProvidersFilterState
+  storageKey: string
+  storageType?: StorageType
+  isCacheNeeded?: boolean
+}
+
 export type {
   AppointmentSpecialist,
   CurrentLocation,
@@ -103,4 +139,8 @@ export type {
   AppointmentsSearchApiResponse,
   DifferentStateDialogProps,
   CurrentBookingAppointmentData,
+  DialogAction,
+  SeachStaffAuthenticatedPayload,
+  PrefetchProvidersParams,
+  UpdateStorageParams,
 }

@@ -1,5 +1,6 @@
 import { Clinic } from '../../clinics/src/types'
 import { Staff } from '../../staff/src/types'
+import { AppointmentType } from './contants'
 
 interface StaffAppointmentAvailabilities {
   staffAppointmentAvailabilities: StaffAppointmentAvailabilty[]
@@ -13,11 +14,23 @@ interface Slot {
   servicesOffered: string[]
 }
 
+interface AppointmentSlot {
+  type: AppointmentType
+  isPlusSlot: boolean
+  duration: number
+  startDate: string
+  endDate: string
+  servicesOffered: string[]
+  startDateUtc?: string
+  clinicId?: string
+}
+
+
 interface StaffAppointmentAvailabilty {
   specialist: Staff
   specialistTypeCode: number
   clinic: Clinic
-  availableSlots: Slot[]
+  availableSlots: AppointmentSlot[]
 }
 
 type AppointmentAvailabilityPayload = {
@@ -39,7 +52,7 @@ type AppointmentAvailabilityPayload = {
 }
 
 type BookAppointmentPayload = {
-  locationId: number
+  locationId: string | number
   specialistStaffId: number
   specialistTypeCode: number
   type: string
@@ -48,7 +61,7 @@ type BookAppointmentPayload = {
   isFollowup: boolean
   serviceId?: string
   marketingCampaignId?: string
-  providerType?:string
+  providerType?: string
   isSelfPay?: boolean
   stateCode?: string
 }

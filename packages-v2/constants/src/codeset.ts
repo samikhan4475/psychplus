@@ -24,6 +24,7 @@ const CODESETS = {
   DelusionType: 'PsychPlusPublic.DelusionType',
   HallucinationType: 'PsychPlusPublic.HallucinationType',
   Relationship: 'HL7v3.RoleCode',
+  SpecialistType: 'SpecialistType',
 }
 
 export {

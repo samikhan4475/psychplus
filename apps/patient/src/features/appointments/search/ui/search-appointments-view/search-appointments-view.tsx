@@ -1,15 +1,18 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { AppointmentType } from '@psychplus-v2/constants'
 import { CareTeamMember, Clinic, Consent } from '@psychplus-v2/types'
 import { getProviderTypeLabel } from '@psychplus-v2/utils'
 import { Box, Flex, Text } from '@radix-ui/themes'
+import { useShallow } from 'zustand/react/shallow'
 import { clickTrack } from '@psychplus/utils/tracking'
 import { useProfileStore } from '@/features/account/profile/store'
 import { useStore } from '@/features/appointments/search/store'
-import { checkCareTeamExists } from '../../utils'
+import { useDeepCompareEffect } from '@/hooks'
+import { checkCareTeamExists, getStartOfWeek } from '../../utils'
+import { AppointmentRadiusFilter } from './appointment-radius-filter'
 import { AppointmentSort } from './appointment-sort'
 import {
   AvailabilityList,
@@ -29,12 +32,14 @@ interface SearchAppointmentsViewProps {
   userConsents: Consent[]
   careTeam: CareTeamMember[]
   mapKey: string
+  isSchedulingOptimizationEnabled?: boolean
 }
 
 const SearchAppointmentsView = ({
   userConsents,
   careTeam,
   mapKey,
+  isSchedulingOptimizationEnabled,
 }: SearchAppointmentsViewProps) => {
   const [hasHydrated, setHasHydrated] = useState(false)
 
@@ -61,7 +66,7 @@ const SearchAppointmentsView = ({
 
   const {
     loading,
-    search,
+    searchLocationsProviders,
     providerType,
     appointmentType,
     zipCode,
@@ -69,46 +74,67 @@ const SearchAppointmentsView = ({
     startingDate,
     state,
     setCareTeam,
-  } = useStore()
+    data,
+    maxDistanceInMiles,
+    careTeamMember,
+    search,
+  } = useStore(
+    useShallow((state) => ({
+      providerType: state.providerType,
+      appointmentType: state.appointmentType,
+      loading: state.loading,
+      searchLocationsProviders: state.searchLocationsProviders,
+      zipCode: state.zipCode,
+      location: state.location,
+      startingDate: state.startingDate,
+      state: state.state,
+      setCareTeam: state.setCareTeam,
+      maxDistanceInMiles: state.maxDistanceInMiles,
+      data: state.data,
+      search: state.search,
+      careTeamMember: state.careTeamMember(),
+    })),
+  )
 
   const { profile } = useProfileStore((state) => ({
     profile: state.profile,
   }))
 
   useEffect(() => {
-    if (!hasHydrated) return
+    const hydrateAndInit = async () => {
+      await Promise.resolve(useStore.persist.rehydrate())
 
-    if (profile?.contactDetails?.addresses?.[0]) {
-      const newZipCode = profile.contactDetails.addresses[0].postalCode
-      const newState = profile.contactDetails.addresses[0].state
-
-      if (newZipCode !== zipCode || newState !== state) {
-        search()
+      const state = useStore.getState()
+      if (!state.startingDate) {
+        state.setStartingDate(getStartOfWeek(new Date()))
       }
+
+      setHasHydrated(true)
+
+      clickTrack({
+        productArea: 'Patient',
+        productPageKey: 'Portal Schedule Appointment Screen',
+        clickAction: 'Navigation',
+        clickActionData: 'Landed',
+      })
     }
-  }, [profile, hasHydrated, search, zipCode, state])
 
-  useEffect(() => {
-    useStore.persist.rehydrate()
-    setHasHydrated(true)
-
-    clickTrack({
-      productArea: 'Patient',
-      productPageKey: 'Portal Schedule Appointment Screen',
-      clickAction: 'Navigation',
-      clickActionData: 'Landed',
-    })
+    hydrateAndInit()
   }, [])
 
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     if (!hasHydrated) {
       return
     }
     setCareTeam(careTeam)
-    search()
+    if (isSchedulingOptimizationEnabled) {
+      searchLocationsProviders()
+    } else {
+      search()
+    }
   }, [
     hasHydrated,
-    search,
+    searchLocationsProviders,
     providerType,
     appointmentType,
     zipCode,
@@ -117,16 +143,26 @@ const SearchAppointmentsView = ({
     location,
     setCareTeam,
     careTeam,
+    maxDistanceInMiles,
+    isSchedulingOptimizationEnabled,
   ])
+
+  const careTeamExists = useMemo(
+    () => checkCareTeamExists(careTeam, getProviderTypeLabel(providerType)),
+    [careTeam, providerType],
+  )
+
+  const primaryProviderAvailabilityData = useMemo(
+    () =>
+      data?.find(
+        ({ specialist }) => specialist.id === careTeamMember?.staffDetails?.id,
+      ),
+    [data, careTeamMember],
+  )
 
   if (!hasHydrated) {
     return <LoadingPlaceholder showFilters />
   }
-
-  const careTeamExists = checkCareTeamExists(
-    careTeam,
-    getProviderTypeLabel(providerType),
-  )
 
   return (
     <Flex position="relative" direction="column" width="100%" height="100%">
@@ -146,6 +182,8 @@ const SearchAppointmentsView = ({
             gap={{ initial: '2', sm: '4' }}
           >
             <Flex gap={{ initial: '2', sm: '4' }}>
+              {isSchedulingOptimizationEnabled && <AppointmentRadiusFilter />}
+
               <AppointmentSort />
               <ProviderLanguageFilter />
             </Flex>
@@ -165,7 +203,7 @@ const SearchAppointmentsView = ({
               px="5"
               className="bg-white flex-1 border-b border-b-gray-5"
             >
-              {careTeamExists ? (
+              {careTeamExists && primaryProviderAvailabilityData ? (
                 <Text
                   weight="medium"
                   className="mr-[48px] w-[240px] text-[20px] text-accent-12"
@@ -181,10 +219,15 @@ const SearchAppointmentsView = ({
           </Flex>
           <Flex>
             <Flex className="flex-1" direction="column">
-              {careTeamExists ? (
+              {careTeamExists && primaryProviderAvailabilityData ? (
                 <PrimaryProviderAvailabilityCard
                   userConsents={userConsents}
                   setShowDifferentStateDialog={setDialogState}
+                  primaryProviderAvailabilityData={
+                    primaryProviderAvailabilityData
+                  }
+                  isSchedulingOptimizationEnabled={isSchedulingOptimizationEnabled}
+                  
                 />
               ) : null}
 
@@ -201,6 +244,7 @@ const SearchAppointmentsView = ({
               <AvailabilityList
                 userConsents={userConsents}
                 setShowDifferentStateDialog={setDialogState}
+                isSchedulingOptimizationEnabled={isSchedulingOptimizationEnabled}
               />
             </Flex>
             <ClinicsMapView

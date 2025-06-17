@@ -31,11 +31,11 @@ const BannerAppointmentButton = ({
         },
       }),
     )
-    if (profile.contactDetails?.addresses) {
-      router.push(`/appointments/search`)
-    } else {
+    // if (profile.contactDetails?.addresses) {
+    //   router.push(`/appointments/search`)
+    // } else {
       router.push(`/appointments/schedule-visit`)
-    }
+    // }
   }
 
   return (

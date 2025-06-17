@@ -10,11 +10,12 @@ import { Button, Flex, Text } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
 import { clickTrack } from '@psychplus/utils/tracking'
+import { FormError, FormSubmitButton } from '@/components-v2'
+import { useProfileStore } from '@/features/account/profile/store'
 import {
-  FormError,
-  FormSubmitButton,
-} from '@/components-v2'
-import { bookAppointmentAction, BookAppointmentParams } from '@/features/appointments/book/actions'
+  bookAppointmentAction,
+  BookAppointmentParams,
+} from '@/features/appointments/book/actions'
 import { BookSlotButtonProps } from '@/features/appointments/book/types'
 import { isProviderMemberOfCareTeam } from '@/features/appointments/book/utils'
 import { useStore } from '@/features/appointments/search/store'
@@ -22,7 +23,6 @@ import { checkCareTeamExists } from '@/features/appointments/search/utils'
 import { rescheduleAppointment } from '@/features/appointments/upcoming/actions'
 import { NewProviderSelectedDialog } from '../new-provider-selected-dialog'
 import { PrimaryProviderAppointedDialog } from '../primary-provider-appointed-dialog'
-import { useProfileStore } from '@/features/account/profile/store'
 
 const schema = z.object({})
 
@@ -37,7 +37,14 @@ const BookAppointmentButton = ({
   creditCards,
   patientInsurances,
 }: BookSlotButtonProps) => {
-  const { specialist, clinic, slot, appointmentType, providerType, newProviderType } = bookedSlot
+  const {
+    specialist,
+    clinic,
+    slot,
+    appointmentType,
+    providerType,
+    newProviderType,
+  } = bookedSlot
 
   const [error, setError] = useState<string>('')
   const [loading, setLoading] = useState(false)
@@ -56,7 +63,6 @@ const BookAppointmentButton = ({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
   })
-  
 
   const stateCode = useStore((state) => state.stateCode)
   useEffect(() => {
@@ -65,7 +71,7 @@ const BookAppointmentButton = ({
 
   const careTeamExists = checkCareTeamExists(
     careTeam,
-    getNewProviderTypeLabel(newProviderType || ""),
+    getNewProviderTypeLabel(newProviderType || ''),
   )
   const providerMemberOfCareTeam = isProviderMemberOfCareTeam(
     careTeam,
@@ -106,15 +112,18 @@ const BookAppointmentButton = ({
         appointmentId: Number(appointmentId),
         specialistStaffId: specialist.id,
         specialistTypeCode: providerType,
-        providerType:getNewProviderTypeLabel(newProviderType || ""),
+        providerType: getNewProviderTypeLabel(newProviderType || ''),
         type: appointmentType,
         startDate: slot.startDateUtc ?? slot.startDate,
         duration: slot.duration,
         serviceId: slot.servicesOffered?.[0],
-        locationId: clinic.id,
+        locationId: slot?.locationId ? slot?.locationId : clinic.id,
         isSelfPay: paymentMethod === PaymentType.SelfPay,
         stateCode: stateCode,
-        patientResidingStateCode: profile?.contactDetails?.addresses?.filter(address => address.type === 'Home')?.[0]?.state || '',
+        patientResidingStateCode:
+          profile?.contactDetails?.addresses?.filter(
+            (address) => address.type === 'Home',
+          )?.[0]?.state || '',
         appointmentSource: 'PatientPortal',
       })
 
@@ -125,18 +134,21 @@ const BookAppointmentButton = ({
       }
     } else {
       const mid = localStorage.getItem('mid')
-      const payload:BookAppointmentParams = {
-        locationId: clinic.id,
+      const payload: BookAppointmentParams = {
+        locationId: slot?.locationId ? slot?.locationId : clinic.id,
         specialistStaffId: specialist.id,
         specialistTypeCode: providerType,
-        providerType:getNewProviderTypeLabel(newProviderType || ""),
+        providerType: getNewProviderTypeLabel(newProviderType || ''),
         type: appointmentType,
         startDate: slot.startDateUtc ?? slot.startDate,
         duration: slot.duration,
         serviceId: slot.servicesOffered?.[0],
         isSelfPay: paymentMethod === PaymentType.SelfPay,
         stateCode: stateCode,
-        patientResidingStateCode: profile?.contactDetails?.addresses?.filter(address => address.type === 'Home')?.[0]?.state || '',
+        patientResidingStateCode:
+          profile?.contactDetails?.addresses?.filter(
+            (address) => address.type === 'Home',
+          )?.[0]?.state || '',
         appointmentSource: 'PatientPortal',
       }
 
@@ -156,7 +168,7 @@ const BookAppointmentButton = ({
       }
     }
 
-    const providerTypeLabel = getNewProviderTypeLabel(newProviderType || "")
+    const providerTypeLabel = getNewProviderTypeLabel(newProviderType || '')
     clickTrack({
       productArea: 'Patient',
       productPageKey: 'Portal appointmentBooked',

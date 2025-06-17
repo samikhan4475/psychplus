@@ -1,47 +1,72 @@
-'use client';
+'use client'
 
-import * as React from 'react';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { INSURANCE_INFO, ProviderType, SELF_PAY_INFO } from '@psychplus-v2/constants';
-import { cn, getAgeFromDate, getProviderTypeLabel } from '@psychplus-v2/utils';
-import { Box, Flex, RadioGroup, Text } from '@radix-ui/themes';
-import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import { z } from 'zod';
-import { BookAppointmentPayload, CardSide, InsurancePayers, InsurancePlans, InsurancePolicyPriority, PatientPolicy } from '@psychplus/appointments';
-import { addCreditCard, bookAppointment, fetchCreditCards, fetchInsurancePayer, submitPatientPolicy, submitPatientPolicyCard } from '@psychplus/appointments/api.client';
-import { Form, FormSubmitButton, FormTextInput, useForm, validate } from '@psychplus/form';
-import { Select } from '@psychplus/ui/select';
-import { clickTrack } from '@psychplus/utils/tracking';
-import { ImageUploader, psychPlusBlueColor, whiteColor } from '@/components';
-import { FormError, SSNInput } from '@/components-v2';
-import AppointmentDetailCard from '@/components/appointment-detail-card/appointment-detail-card';
-import { BookedSlot, useStore } from '@/widgets/schedule-appointment-list/store';
-
+import * as React from 'react'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import {
+  INSURANCE_INFO,
+  ProviderType,
+  SELF_PAY_INFO,
+} from '@psychplus-v2/constants'
+import { cn, getAgeFromDate, getProviderTypeLabel } from '@psychplus-v2/utils'
+import { Box, Flex, RadioGroup, Text } from '@radix-ui/themes'
+import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
+import { z } from 'zod'
+import {
+  BookAppointmentPayload,
+  CardSide,
+  InsurancePayers,
+  InsurancePlans,
+  InsurancePolicyPriority,
+  PatientPolicy,
+} from '@psychplus/appointments'
+import {
+  addCreditCard,
+  bookAppointment,
+  fetchCreditCards,
+  fetchInsurancePayer,
+  submitPatientPolicy,
+  submitPatientPolicyCard,
+} from '@psychplus/appointments/api.client'
+import {
+  Form,
+  FormSubmitButton,
+  FormTextInput,
+  useForm,
+  validate,
+} from '@psychplus/form'
+import { Select } from '@psychplus/ui/select'
+import { clickTrack } from '@psychplus/utils/tracking'
+import { ImageUploader, psychPlusBlueColor, whiteColor } from '@/components'
+import { FormError, SSNInput } from '@/components-v2'
+import AppointmentDetailCard from '@/components/appointment-detail-card/appointment-detail-card'
+import { BookedSlot, useStore } from '@/widgets/schedule-appointment-list/store'
 
 type SchemaType = z.infer<typeof baseSchema>
-const baseSchema = z.object({
-  insurancePayerId: validate.nullableString,
-  insurancePlanId: validate.nullableString,
-  memberId: validate.nullableString,
-  groupNumber: validate.nullableString,
-  effectiveDate: validate.nullableString,
-  terminationDate: validate.nullableString,
-  isPatientPolicyHolder: z.boolean(),
-  policyHolderFirstName: z
-        .string()
-        .max(28, 'Max 28 characters are allowed')
-        .optional(),
-  policyHolderLastName: z
-        .string()
-        .max(28, 'Max 28 characters are allowed')
-        .optional(),
-  policyHolderGender: z.string().optional().optional(),
-  policyHolderRelationship: z.string().optional().optional(),
-  insurancePolicyPriority: z.string().min(1, 'Required'),
-  policyHolderDateOfBirth: z.string().optional(),
-  policyHolderSocialSecurityNumber: z.string().optional(),
-}).superRefine((data, ctx) => {
+const baseSchema = z
+  .object({
+    insurancePayerId: validate.nullableString,
+    insurancePlanId: validate.nullableString,
+    memberId: validate.nullableString,
+    groupNumber: validate.nullableString,
+    effectiveDate: validate.nullableString,
+    terminationDate: validate.nullableString,
+    isPatientPolicyHolder: z.boolean(),
+    policyHolderFirstName: z
+      .string()
+      .max(28, 'Max 28 characters are allowed')
+      .optional(),
+    policyHolderLastName: z
+      .string()
+      .max(28, 'Max 28 characters are allowed')
+      .optional(),
+    policyHolderGender: z.string().optional().optional(),
+    policyHolderRelationship: z.string().optional().optional(),
+    insurancePolicyPriority: z.string().min(1, 'Required'),
+    policyHolderDateOfBirth: z.string().optional(),
+    policyHolderSocialSecurityNumber: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
     if (!data.isPatientPolicyHolder) {
       if (!data.policyHolderFirstName) {
         ctx.addIssue({
@@ -168,11 +193,11 @@ const InsurancePaymentForm = ({
     setIsLoading(true)
     setFormError(undefined)
 
-      const cardSubmitted = await handleCardSubmit()
-      if (!cardSubmitted) {
-        setIsLoading(false)
-        return
-      }
+    const cardSubmitted = await handleCardSubmit()
+    if (!cardSubmitted) {
+      setIsLoading(false)
+      return
+    }
 
     if (hasInsurance) {
       const policySubmitted = await handlePolicySubmit(data)
@@ -191,9 +216,11 @@ const InsurancePaymentForm = ({
     ).toISOString()
 
     const patientMid = localStorage.getItem('mid')
-    
-    const payload : BookAppointmentPayload = {
-      locationId: bookSlotState?.clinic?.id ?? 0,
+
+    const payload: BookAppointmentPayload = {
+      locationId: bookSlotState?.locationId
+        ? bookSlotState?.locationId
+        : bookSlotState?.clinic?.id ?? 0,
       specialistStaffId: bookSlotState?.specialist?.id ?? 0,
       specialistTypeCode: bookSlotState?.specialistTypeCode ?? 0,
       type: appointmentTypeMapper[bookSlotState?.type ?? ''],
@@ -201,9 +228,10 @@ const InsurancePaymentForm = ({
       duration: bookSlotState?.duration || 0,
       isFollowup: true,
       serviceId: bookSlotState?.servicesOffered?.[0],
-      providerType: bookSlotState?.specialistTypeCode === 1 ? 'Psychiatrist' : 'Therapy',
+      providerType:
+        bookSlotState?.specialistTypeCode === 1 ? 'Psychiatrist' : 'Therapy',
       isSelfPay: hasInsurance ? false : true,
-      stateCode: bookSlotState?.state
+      stateCode: bookSlotState?.state,
     }
 
     if (patientMid) {
@@ -252,56 +280,57 @@ const InsurancePaymentForm = ({
 
       const { paymentMethod } = result
 
-        try {
-          await addCreditCard({
-            patientId: patient?.id ?? 0,
-            cardType: paymentMethod?.card?.brand ?? '',
-            name: patient?.legalName?.firstName + ' ' + patient?.legalName?.lastName,
-            numberLastFour: paymentMethod?.card?.last4 ?? '',
-            isActive: true,
-            isPrimary: true,
-            expireMonth: paymentMethod?.card?.exp_month ?? 0,
-            expireYear: paymentMethod?.card?.exp_year ?? 0,
-            cardKey: paymentMethod?.id ?? '',
-          })
-        } catch (err) {
-          const message =
-            err instanceof Error
-              ? err.message
-              : (err as { message: string }).message
-          setFormError(message)
+      try {
+        await addCreditCard({
+          patientId: patient?.id ?? 0,
+          cardType: paymentMethod?.card?.brand ?? '',
+          name:
+            patient?.legalName?.firstName + ' ' + patient?.legalName?.lastName,
+          numberLastFour: paymentMethod?.card?.last4 ?? '',
+          isActive: true,
+          isPrimary: true,
+          expireMonth: paymentMethod?.card?.exp_month ?? 0,
+          expireYear: paymentMethod?.card?.exp_year ?? 0,
+          cardKey: paymentMethod?.id ?? '',
+        })
+      } catch (err) {
+        const message =
+          err instanceof Error
+            ? err.message
+            : (err as { message: string }).message
+        setFormError(message)
 
-          return false
-        }
+        return false
+      }
     }
 
     return true
   }
 
   const handlePolicySubmit = (data: SchemaType): Promise<boolean> => {
-    const payload:PatientPolicy = {
-          insurancePlanId: data.insurancePlanId ?? '',
-          effectiveDate: data.effectiveDate ?? '',
-          terminationDate: data.terminationDate ?? '',
-          memberId: data.memberId ?? '',
-          groupNumber: data.groupNumber ?? '',
-          isPatientPolicyHolder: data.isPatientPolicyHolder ?? 'Yes',
-          insurancePolicyPriority: InsurancePolicyPriority.PRIMARY,
-          isActive: true,
-          hasCardFrontImage: cardFrontImage !== undefined,
-          hasCardBackImage: cardBackImage !== undefined
-        }
-        if (!data.isPatientPolicyHolder) {
-          payload.policyHolderName = {
-            firstName: data?.policyHolderFirstName ?? '',
-            lastName: data?.policyHolderLastName ?? '',
-          }
-          payload.policyHolderGender = data?.policyHolderGender
-          payload.policyHolderDateOfBirth = data?.policyHolderDateOfBirth
-          payload.policyHolderRelationship = data?.policyHolderRelationship
-          payload.policyHolderSocialSecurityNumber =
-            data?.policyHolderSocialSecurityNumber
-        }
+    const payload: PatientPolicy = {
+      insurancePlanId: data.insurancePlanId ?? '',
+      effectiveDate: data.effectiveDate ?? '',
+      terminationDate: data.terminationDate ?? '',
+      memberId: data.memberId ?? '',
+      groupNumber: data.groupNumber ?? '',
+      isPatientPolicyHolder: data.isPatientPolicyHolder ?? 'Yes',
+      insurancePolicyPriority: InsurancePolicyPriority.PRIMARY,
+      isActive: true,
+      hasCardFrontImage: cardFrontImage !== undefined,
+      hasCardBackImage: cardBackImage !== undefined,
+    }
+    if (!data.isPatientPolicyHolder) {
+      payload.policyHolderName = {
+        firstName: data?.policyHolderFirstName ?? '',
+        lastName: data?.policyHolderLastName ?? '',
+      }
+      payload.policyHolderGender = data?.policyHolderGender
+      payload.policyHolderDateOfBirth = data?.policyHolderDateOfBirth
+      payload.policyHolderRelationship = data?.policyHolderRelationship
+      payload.policyHolderSocialSecurityNumber =
+        data?.policyHolderSocialSecurityNumber
+    }
 
     return submitPatientPolicy(payload)
       .then((res) => {
@@ -344,20 +373,20 @@ const InsurancePaymentForm = ({
   const watchisPatientPolicyHolder = form.watch('isPatientPolicyHolder')
 
   useEffect(() => {
-      if (!watchisPatientPolicyHolder) {
-        form.register('policyHolderFirstName')
-        form.register('policyHolderLastName')
-        form.register('policyHolderDateOfBirth')
-        form.register('policyHolderGender')
-        form.register('policyHolderRelationship')
-      } else {
-        form.unregister('policyHolderFirstName')
-        form.unregister('policyHolderLastName')
-        form.unregister('policyHolderDateOfBirth')
-        form.unregister('policyHolderGender')
-        form.unregister('policyHolderRelationship')
-      }
-    }, [form.register, form.unregister, watchisPatientPolicyHolder])
+    if (!watchisPatientPolicyHolder) {
+      form.register('policyHolderFirstName')
+      form.register('policyHolderLastName')
+      form.register('policyHolderDateOfBirth')
+      form.register('policyHolderGender')
+      form.register('policyHolderRelationship')
+    } else {
+      form.unregister('policyHolderFirstName')
+      form.unregister('policyHolderLastName')
+      form.unregister('policyHolderDateOfBirth')
+      form.unregister('policyHolderGender')
+      form.unregister('policyHolderRelationship')
+    }
+  }, [form.register, form.unregister, watchisPatientPolicyHolder])
 
   const onCheckedChange = (isPolicyHolder: boolean) => {
     if (isPolicyHolder) {
@@ -387,7 +416,7 @@ const InsurancePaymentForm = ({
     <Form form={form} onSubmit={submitHandler}>
       <AppointmentDetailCard />
 
-      <Text className="my-5 text-4 md:text-6 font-bold">
+      <Text className="my-5 text-4 font-bold md:text-6">
         Do you want to use your insurance
         <br />
         for this visit?
@@ -407,18 +436,14 @@ const InsurancePaymentForm = ({
             }}
             onClick={() => setHasInsurance(option.value)}
           >
-            <Text className="text-[15px] md:text-[22px] font-bold leading-[normal]">
+            <Text className="text-[15px] font-bold leading-[normal] md:text-[22px]">
               {option.label}
             </Text>
           </button>
         ))}
       </Flex>
-      <Box className='text-3 md:text-4 bg-pp-gray-2 py-3 px-3 my-3 rounded-3'>
-        {hasInsurance ? (
-          INSURANCE_INFO
-        ): (
-          SELF_PAY_INFO
-        )}
+      <Box className="bg-pp-gray-2 my-3 rounded-3 px-3 py-3 text-3 md:text-4">
+        {hasInsurance ? INSURANCE_INFO : SELF_PAY_INFO}
       </Box>
 
       {hasInsurance && (
@@ -450,7 +475,7 @@ const InsurancePaymentForm = ({
               Insurance Details
             </Text>
             <Flex direction="column" gap="1">
-              <Text as="p" className="text-[12px] md:text-[14px] font-medium">
+              <Text as="p" className="text-[12px] font-medium md:text-[14px]">
                 <Text>Payer</Text>
                 <Text className="text-[#f14545]">*</Text>
               </Text>
@@ -463,7 +488,7 @@ const InsurancePaymentForm = ({
               >
                 <Select.Trigger
                   placeholder="Select Payer"
-                  className="h-[46px] md:h-[56px] w-full rounded-3"
+                  className="h-[46px] w-full rounded-3 md:h-[56px]"
                 />
                 <Select.Content
                   position="popper"
@@ -487,7 +512,7 @@ const InsurancePaymentForm = ({
               )}
             </Flex>
             <Flex direction="column" gap="1">
-              <Text as="p" className="text-[12px] md:text-[14px] font-medium">
+              <Text as="p" className="text-[12px] font-medium md:text-[14px]">
                 <Text>Insurance Plan</Text>
                 <Text className="text-[#f14545]">*</Text>
               </Text>
@@ -503,7 +528,7 @@ const InsurancePaymentForm = ({
               >
                 <Select.Trigger
                   placeholder="Select Insurance Plan"
-                  className="h-[46px] md:h-[56px] w-full rounded-3"
+                  className="h-[46px] w-full rounded-3 md:h-[56px]"
                 />
                 <Select.Content
                   position="popper"
@@ -528,7 +553,7 @@ const InsurancePaymentForm = ({
             </Flex>
 
             <Flex direction="column" gap="1">
-              <Text as="p" className="text-[12px] md:text-[14px] font-medium">
+              <Text as="p" className="text-[12px] font-medium md:text-[14px]">
                 <Text>Member ID</Text>
                 <Text className="text-[#f14545]">*</Text>
               </Text>
@@ -536,14 +561,14 @@ const InsurancePaymentForm = ({
                 type="text"
                 label=""
                 placeholder="Member ID"
-                className="h-[46px] md:h-[56px] w-full px-1"
+                className="h-[46px] w-full px-1 md:h-[56px]"
                 data-testid="insurance-id"
                 {...form.register('memberId')}
               />
             </Flex>
 
             <Flex direction="column" gap="1">
-              <Text as="p" className="text-[12px] md:text-[14px] font-medium">
+              <Text as="p" className="text-[12px] font-medium md:text-[14px]">
                 <Text>Group Number</Text>
                 <Text className="text-[#f14545]">*</Text>
               </Text>
@@ -551,14 +576,14 @@ const InsurancePaymentForm = ({
                 type="text"
                 label=""
                 placeholder="Group Number"
-                className="h-[46px] md:h-[56px] w-full px-1"
+                className="h-[46px] w-full px-1 md:h-[56px]"
                 data-testid="group-number"
                 {...form.register('groupNumber')}
               />
             </Flex>
 
             <Flex direction="column" gap="1">
-              <Text as="p" className="text-[12px] md:text-[14px] font-medium">
+              <Text as="p" className="text-[12px] font-medium md:text-[14px]">
                 <Text>Effective Date</Text>
                 <Text className="text-[#f14545]">*</Text>
               </Text>
@@ -570,14 +595,14 @@ const InsurancePaymentForm = ({
                 data-testid="effective-date"
                 value={form.watch('effectiveDate') ?? ''}
                 max="9999-12-31"
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => 
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                   handleDateChange(event, 'effectiveDate')
                 }
-                className="mr-2 mt-2 h-[40px] md:h-[50px] w-full text-3 font-regular text-gray-10"
+                className="mr-2 mt-2 h-[40px] w-full text-3 font-regular text-gray-10 md:h-[50px]"
               />
             </Flex>
             <Flex direction="column" gap="1">
-              <Text as="p" className="text-[12px] md:text-[14px] font-medium">
+              <Text as="p" className="text-[12px] font-medium md:text-[14px]">
                 <Text>Termination Date</Text>
                 <Text className="text-[#f14545]">*</Text>
               </Text>
@@ -589,14 +614,17 @@ const InsurancePaymentForm = ({
                 data-testid="termination-date"
                 value={form.watch('terminationDate') ?? ''}
                 max="9999-12-31"
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => 
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                   handleDateChange(event, 'terminationDate')
                 }
-                className="mr-2 mt-2 h-[40px] md:h-[50px] w-full text-3 font-regular text-gray-10"
+                className="mr-2 mt-2 h-[40px] w-full text-3 font-regular text-gray-10 md:h-[50px]"
               />
             </Flex>
-            <Box className="flex-1 mt-2 rounded-3 bg-[#F0F4FF] px-3 py-1.5" mb="2">
-              <Text as="p" className="text-[12px] md:text-[14px] font-medium">
+            <Box
+              className="mt-2 flex-1 rounded-3 bg-[#F0F4FF] px-3 py-1.5"
+              mb="2"
+            >
+              <Text as="p" className="text-[12px] font-medium md:text-[14px]">
                 <Text>Are you the primary insurance holder</Text>
                 <Text className="text-[#f14545]">*</Text>
               </Text>
@@ -619,13 +647,15 @@ const InsurancePaymentForm = ({
                       <Flex gap="1">
                         <RadioGroup.Item
                           value={String(option.value)}
-                          className={cn(`relative rounded-full border-pp-gray-2 flex h-5 w-5 items-center justify-center border`,
-                            watchisPatientPolicyHolder === option.value && 'bg-pp-blue-3'
+                          className={cn(
+                            `rounded-full border-pp-gray-2 relative flex h-5 w-5 items-center justify-center border`,
+                            watchisPatientPolicyHolder === option.value &&
+                              'bg-pp-blue-3',
                           )}
                         />
-                          {watchisPatientPolicyHolder === option.value && (
-                            <Box className="absolute rounded-full bg-white h-2.5 w-2.5 mt-[5px] ml-[4.5px]" />
-                          )}
+                        {watchisPatientPolicyHolder === option.value && (
+                          <Box className="rounded-full bg-white absolute ml-[4.5px] mt-[5px] h-2.5 w-2.5" />
+                        )}
                         {option.label}
                       </Flex>
                     </Text>
@@ -635,11 +665,14 @@ const InsurancePaymentForm = ({
             </Box>
             {!watchisPatientPolicyHolder && (
               <>
-                <Text className="text-3 md:text-5 mb-3 mt-3 font-bold text-[#151B4A]">
+                <Text className="mb-3 mt-3 text-3 font-bold text-[#151B4A] md:text-5">
                   Primary Insurance Holder Details
                 </Text>
                 <Flex direction="column" gap="1">
-                  <Text as="p" className="text-[12px] md:text-[14px] font-medium">
+                  <Text
+                    as="p"
+                    className="text-[12px] font-medium md:text-[14px]"
+                  >
                     <Text>First Name</Text>
                     <Text className="text-[#f14545]">*</Text>
                   </Text>
@@ -647,13 +680,16 @@ const InsurancePaymentForm = ({
                     type="text"
                     label=""
                     placeholder="First name"
-                    className="h-[46px] md:h-[56px] w-full px-1"
+                    className="h-[46px] w-full px-1 md:h-[56px]"
                     data-testid="policy-holder-first-name"
                     {...form.register('policyHolderFirstName')}
                   />
                 </Flex>
                 <Flex direction="column" gap="1">
-                  <Text as="p" className="text-[12px] md:text-[14px] font-medium">
+                  <Text
+                    as="p"
+                    className="text-[12px] font-medium md:text-[14px]"
+                  >
                     <Text>Last Name</Text>
                     <Text className="text-[#f14545]">*</Text>
                   </Text>
@@ -661,13 +697,16 @@ const InsurancePaymentForm = ({
                     type="text"
                     label=""
                     placeholder="Last name"
-                    className="h-[46px] md:h-[56px] w-full px-1"
+                    className="h-[46px] w-full px-1 md:h-[56px]"
                     data-testid="policy-holder-last-name"
                     {...form.register('policyHolderLastName')}
                   />
                 </Flex>
                 <Flex direction="column" gap="1">
-                  <Text as="p" className="text-[12px] md:text-[14px] font-medium">
+                  <Text
+                    as="p"
+                    className="text-[12px] font-medium md:text-[14px]"
+                  >
                     <Text>Gender</Text>
                     <Text className="text-[#f14545]">*</Text>
                   </Text>
@@ -683,7 +722,7 @@ const InsurancePaymentForm = ({
                   >
                     <Select.Trigger
                       placeholder="Select gender"
-                      className="h-[46px] md:h-[56px] w-full rounded-3"
+                      className="h-[46px] w-full rounded-3 md:h-[56px]"
                     />
                     <Select.Content
                       position="popper"
@@ -707,7 +746,10 @@ const InsurancePaymentForm = ({
                   )}
                 </Flex>
                 <Flex direction="column" gap="1">
-                  <Text as="p" className="text-[12px] md:text-[14px] font-medium">
+                  <Text
+                    as="p"
+                    className="text-[12px] font-medium md:text-[14px]"
+                  >
                     <Text>Date of Birth</Text>
                     <Text className="text-[#f14545]">*</Text>
                   </Text>
@@ -722,11 +764,14 @@ const InsurancePaymentForm = ({
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                       handleDateChange(event, 'policyHolderDateOfBirth')
                     }
-                    className="mr-2 mt-2 h-[40px] md:h-[50px] w-full text-3 font-regular text-gray-10"
+                    className="mr-2 mt-2 h-[40px] w-full text-3 font-regular text-gray-10 md:h-[50px]"
                   />
                 </Flex>
                 <Flex direction="column" gap="1">
-                  <Text as="p" className="text-[12px] md:text-[14px] font-medium">
+                  <Text
+                    as="p"
+                    className="text-[12px] font-medium md:text-[14px]"
+                  >
                     <Text>SSN</Text>
                     <Text className="text-[#f14545]">*</Text>
                   </Text>
@@ -734,11 +779,14 @@ const InsurancePaymentForm = ({
                     name="policyHolderSocialSecurityNumber"
                     size="2"
                     placeholder="Enter SSN"
-                    className="h-[40px] md:h-[50px] w-full border border-pp-gray-2 rounded-3 px-2"
+                    className="border-pp-gray-2 h-[40px] w-full rounded-3 border px-2 md:h-[50px]"
                   />
                 </Flex>
                 <Flex direction="column" gap="1">
-                  <Text as="p" className="text-[12px] md:text-[14px] font-medium">
+                  <Text
+                    as="p"
+                    className="text-[12px] font-medium md:text-[14px]"
+                  >
                     <Text>Relationship</Text>
                     <Text className="text-[#f14545]">*</Text>
                   </Text>
@@ -754,7 +802,7 @@ const InsurancePaymentForm = ({
                   >
                     <Select.Trigger
                       placeholder="Select relationship"
-                      className="h-[46px] md:h-[56px] w-full rounded-3"
+                      className="h-[46px] w-full rounded-3 md:h-[56px]"
                     />
                     <Select.Content
                       position="popper"
@@ -787,19 +835,19 @@ const InsurancePaymentForm = ({
       </Flex>
 
       <Flex direction="column" gap="1">
-        <Text as="p" className="mt-3 text-[12px] md:text-[14px] font-medium">
+        <Text as="p" className="mt-3 text-[12px] font-medium md:text-[14px]">
           <Text>Cardholder Details</Text>
           {isCreditCardRequired && <Text className="text-[#f14545]">*</Text>}
         </Text>
         <CardElement
           options={{ hidePostalCode: true }}
-          className="mr-3 h-[46px] md:h-[56px] w-full rounded-3 border border-gray-7 py-[16px] pl-3"
+          className="mr-3 h-[46px] w-full rounded-3 border border-gray-7 py-[16px] pl-3 md:h-[56px]"
         />
       </Flex>
 
       <FormError message={formError} className="mt-5" />
 
-      <Flex className='items-center md:items-start'>
+      <Flex className="items-center md:items-start">
         <FormSubmitButton
           className={cn(
             formError ? 'mt-5' : 'mt-10',
