@@ -6,6 +6,7 @@ import { TriangleAlert } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 import { CloseDialogTrigger } from '@/components/close-dialog-trigger'
 import { PRIMARY_PROVIDER_ALERT_MESSAGE } from '@/ui/visit/constants'
+import { VisitAlertType } from '@/ui/visit/types'
 import { mapMessages } from '@/ui/visit/utils'
 import { SchemaType } from './schema'
 
@@ -27,6 +28,7 @@ const FollowUpVisitAlert = ({
   onClose: () => void
 }) => {
   const form = useFormContext<SchemaType>()
+  const [body, setBody] = useState<VisitAlertType>({})
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0)
   const { message, statusCode } = alertInfo
   const isConfirmation = [
@@ -38,17 +40,9 @@ const FollowUpVisitAlert = ({
 
   const currentMessage = messages[currentMessageIndex]
 
-  const handleSubmit = (body: Partial<SchemaType>) => {
-    const isOverride = statusCode === StatusCode.OverridePermission
+  const handleSubmit = (overrideParams: Partial<SchemaType>) => {
     form.handleSubmit(
-      (data) => {
-        onConfirm({
-          ...data,
-          isProceedPermissionProvided: !isOverride,
-          isOverridePermissionProvided: isOverride,
-          ...body,
-        })
-      },
+      (data) => onConfirm({ ...data, ...body, ...overrideParams }),
       () => form.trigger(),
     )()
   }
@@ -59,11 +53,18 @@ const FollowUpVisitAlert = ({
       return
     }
 
+    const isOverride = statusCode === StatusCode.OverridePermission
     if (currentMessageIndex < messages.length - 1) {
+      setBody({
+        isProceedPermissionProvided: !isOverride,
+        isOverridePermissionProvided: isOverride,
+      })
       setCurrentMessageIndex(currentMessageIndex + 1)
     } else {
       handleSubmit({
+        isOverridePermissionProvided: isOverride,
         isOverridePrimaryProvider: undefined,
+        isProceedPermissionProvided: !isOverride,
       })
       setCurrentMessageIndex(0)
     }

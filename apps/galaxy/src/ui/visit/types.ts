@@ -225,6 +225,16 @@ interface BookVisitResponse {
   isSelfPay: boolean
 }
 
+
+type VisitAlertType =
+  | Pick<
+      BookVisitPayload,
+      | 'isOverridePermissionProvided'
+      | 'isOverridePrimaryProvider'
+      | 'isProceedPermissionProvided'
+    >
+  | {}
+
 export {
   type Clinic,
   type DropdownOptions,
@@ -240,6 +250,7 @@ export {
   type StaffCommentParams,
   type BookVisitPayload,
   type BookVisitResponse,
+  type VisitAlertType,
   ServiceType,
   ProviderType,
   TCMVisitTypes,
