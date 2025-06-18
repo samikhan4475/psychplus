@@ -8,10 +8,12 @@ const SubmissionHistoryView = () => {
   return (
     <Flex direction="column">
       <SubmissionHistoryFilterForm />
-      <Flex direction="column" mt="2" className="bg-white flex-1 ">
-        <Box className="flex-1 overflow-auto">
-          <SubmissionHistoryTable />
-        </Box>
+      <Flex
+        direction="column"
+        mt="2"
+        className="bg-white min-h-[calc(100vh-364px)]"
+      >
+        <SubmissionHistoryTable />
         <SubmissionHistoryTablePagination />
       </Flex>
     </Flex>

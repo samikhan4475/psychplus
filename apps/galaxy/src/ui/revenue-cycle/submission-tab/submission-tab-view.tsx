@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Flex, Tabs } from '@radix-ui/themes'
+import { Flex, Tabs } from '@radix-ui/themes'
 import { TabContentHeading } from '@/components'
 import { ElectronicPaperSubmissionView } from './electronic-paper-submission-view'
 import { useStore } from './store'
@@ -24,7 +24,7 @@ const SubmissionTabView = () => {
     reset()
   }
   return (
-    <Flex direction="column" className="gap-0.5">
+    <Flex direction="column" className="flex-1 gap-0.5">
       <TabContentHeading title="Submission">
         {selectedTab !== TabValue.SubmissionHistory && (
           <SubmissionSubmitField />
@@ -33,9 +33,12 @@ const SubmissionTabView = () => {
       <Tabs.Root
         defaultValue={selectedTab}
         onValueChange={handleTabSelection}
-        className="relative z-0"
+        className="relative z-0 !flex flex-1 flex-col"
       >
-        <Box className="bg-white mt-1 w-full py-1 shadow-2">
+        <Flex
+          direction="column"
+          className="bg-white mt-1 w-full flex-1 py-1"
+        >
           <SubmissionTabs />
           <Tabs.Content value={TabValue.PaperSubmission}>
             <ElectronicPaperSubmissionView />
@@ -46,7 +49,7 @@ const SubmissionTabView = () => {
           <Tabs.Content value={TabValue.SubmissionHistory}>
             <SubmissionHistoryView />
           </Tabs.Content>
-        </Box>
+        </Flex>
       </Tabs.Root>
     </Flex>
   )

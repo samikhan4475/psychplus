@@ -9,7 +9,7 @@ const SubmissionTabs = () => {
   return (
     <Tabs.List
       className={cn(
-        'items-center gap-x-2 pl-[17px] [box-shadow:none] lg:flex-1',
+        'items-center gap-x-2 pl-[17px] h-fit [box-shadow:none]',
       )}
     >
       <Tabs.Trigger

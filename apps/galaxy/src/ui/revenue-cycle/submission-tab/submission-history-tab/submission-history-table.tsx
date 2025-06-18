@@ -156,7 +156,7 @@ const SubmissionHistoryTable = () => {
   }, [])
   if (loading) {
     return (
-      <Flex height="100%" align="center" justify="center">
+      <Flex className='flex-1' align="center" justify="center">
         <LoadingPlaceholder />
       </Flex>
     )
@@ -176,7 +176,7 @@ const SubmissionHistoryTable = () => {
     )
   }
   return (
-    <ScrollArea>
+    <ScrollArea className='h-full shadow-1'>
       <DataTable
         tableClass="[&_.rt-ScrollAreaRoot]:pb-2"
         data={data.submissionHistory}
