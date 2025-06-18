@@ -2,15 +2,14 @@
 
 import { Fragment, useMemo, useState } from 'react'
 import { useParams } from 'next/navigation'
-import { Button, Dialog, IconButton, Tooltip } from '@radix-ui/themes'
-import { EditIcon, RefreshCw } from 'lucide-react'
+import { IconButton, Tooltip } from '@radix-ui/themes'
+import { EditIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { PropsWithRow } from '@/components'
 import { FEATURE_FLAGS } from '@/constants'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { useStore as globalStore } from '@/store'
 import { getPatientMedicationOrderAction } from '../actions'
-import { PatientMedicationDialog } from '../patient-medication-dialog'
 import { ScriptSureIframeDialog } from '../script-sure-iframe-dialog'
 import { useStore } from '../store'
 import { PatientMedication, PatientPrescriptionStatus } from '../types'
@@ -59,16 +58,16 @@ const RowActionEdit = ({ row, onEditClick }: RowActionEditProps) => {
   }
   if (!isFeatureFlagEnabled) {
     return (
-     <Tooltip content="Edit">
-      <IconButton
-        size="1"
-        color="gray"
-        variant="ghost"
-        onClick={() => onEditClick(row.original)}
-      >
-        <EditIcon size={18} color="black" />
-      </IconButton>
-    </Tooltip>
+      <Tooltip content="Edit">
+        <IconButton
+          size="1"
+          color="gray"
+          variant="ghost"
+          onClick={() => onEditClick(row.original)}
+        >
+          <EditIcon size={18} color="black" />
+        </IconButton>
+      </Tooltip>
     )
   }
 
@@ -82,7 +81,7 @@ const RowActionEdit = ({ row, onEditClick }: RowActionEditProps) => {
           onClick={onRefresh}
           disabled={isDisabled}
         >
-          <RefreshCw size={18} color="black" />
+          <EditIcon size={18} color="black" />
         </IconButton>
       </Tooltip>
       <ScriptSureIframeDialog
