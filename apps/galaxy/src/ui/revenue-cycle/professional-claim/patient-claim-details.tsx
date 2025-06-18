@@ -1,6 +1,6 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { useWatch } from 'react-hook-form'
-import { cn, getPatientDOB } from '@/utils'
+import { cn, formatDateOfBirth } from '@/utils'
 
 const PatientClaimDetails = () => {
   const [patientGender, patientDateOfBirth, patientAccountNumber] = useWatch({
@@ -11,7 +11,10 @@ const PatientClaimDetails = () => {
   return (
     <Flex className="bg-pp-header-bg mt-3 gap-9 rounded-[5px] p-2">
       <LabelAndValue label="MRN" value={patientAccountNumber} />
-      <LabelAndValue label="DOB" value={getPatientDOB(patientDateOfBirth)} />
+      <LabelAndValue
+        label="DOB"
+        value={formatDateOfBirth(patientDateOfBirth)}
+      />
       <LabelAndValue label="Gender" value={patientGender} />
     </Flex>
   )

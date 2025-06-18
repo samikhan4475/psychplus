@@ -3,7 +3,7 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
 import { PreferredPartnerUser, SelectOptionType } from '@/types'
-import { cn, formatDate, getAgeFromDate, getCalendarDate } from '@/utils'
+import { cn, formatDateOfBirth, getAgeFromDate, getCalendarDate } from '@/utils'
 import { ActionCell, DateCell, PPUserStatusCell } from './components'
 
 const columns = (
@@ -49,7 +49,7 @@ const columns = (
         <TextCell
           className={cn('truncate', isDeleted(original) && 'text-gray-400')}
         >
-          {formatDate(original.dob, 'MM/dd/yyyy')}
+          {formatDateOfBirth(original.dob)}
         </TextCell>
       ),
     },

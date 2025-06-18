@@ -2,7 +2,7 @@ import { Box, Grid, Text } from '@radix-ui/themes'
 import {
   formatDateOfBirth,
   getAgeFromDate,
-  getLocalCalendarDate,
+  getCalendarDate,
 } from '@/utils'
 import { getAddressData } from '../../utils'
 import { DisplayAddress } from './display-address'
@@ -63,7 +63,7 @@ const StaffRecordInfo = () => {
             value={
               selectedRecord.dateOfBirth &&
               getAgeFromDate(
-                getLocalCalendarDate(String(selectedRecord?.dateOfBirth)),
+                getCalendarDate(String(selectedRecord?.dateOfBirth)),
               )
             }
             required

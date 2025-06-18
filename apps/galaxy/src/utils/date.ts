@@ -229,7 +229,10 @@ const isISODate = (dateString: string): boolean => {
 }
 
 const formatDateOfBirth = (dob: string) => {
-  const date = parseDate(dob)
+  if(!dob) return ''
+  
+  const isoDateOnly = dob.split('T')[0]
+  const date = parseDate(isoDateOnly)
   const month = String(date.month).padStart(2, '0')
   const day = String(date.day).padStart(2, '0')
   const year = String(date.year).padStart(2, '0')

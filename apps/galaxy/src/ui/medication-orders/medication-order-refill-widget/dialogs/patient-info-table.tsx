@@ -2,7 +2,7 @@ import React from 'react'
 import { ScrollArea } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, DataTable, TextCell } from '@/components'
-import { getMaskedPhoneNumber, getPatientDOB } from '@/utils'
+import { formatDateOfBirth, getMaskedPhoneNumber, getPatientDOB } from '@/utils'
 import { PatientPersonInfo } from '../types'
 
 const columns: ColumnDef<PatientPersonInfo>[] = [
@@ -35,7 +35,7 @@ const columns: ColumnDef<PatientPersonInfo>[] = [
     cell: ({ row }) => (
       <TextCell>
         {row.original?.patientDateOfBirth
-          ? getPatientDOB(row.original?.patientDateOfBirth)
+          ? formatDateOfBirth(row.original?.patientDateOfBirth)
           : ''}
       </TextCell>
     ),

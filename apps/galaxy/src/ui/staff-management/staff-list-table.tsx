@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
-import { format } from 'date-fns'
 import {
   ColumnHeader,
   DataTable,
@@ -12,8 +11,8 @@ import {
   TextCell,
 } from '@/components'
 import { useStore as useRootStore } from '@/store'
-import { PatientAddress, PatientAddressType, Sort } from '@/types'
-import { getMaskedPhoneNumber, getSortDir } from '@/utils'
+import { PatientAddress, Sort } from '@/types'
+import { formatDateOfBirth, getMaskedPhoneNumber, getSortDir } from '@/utils'
 import { getAddressLabel } from '@/utils/address'
 import { ActionsCell, CollapseCell } from './cells'
 import { FEATURE_TYPES } from './constants'
@@ -217,7 +216,9 @@ const columns = (
       ),
       cell: ({ row }) => (
         <TextCell className="w-[85px]">
-          {format(new Date(String(row.original?.dateOfBirth)), 'dd/MM/yyyy')}
+          {row.original.dateOfBirth
+            ? formatDateOfBirth(row.original.dateOfBirth as string)
+            : ''}
         </TextCell>
       ),
     },

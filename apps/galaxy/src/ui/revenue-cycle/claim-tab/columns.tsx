@@ -7,7 +7,7 @@ import {
 } from '@/components'
 import { Sort, type Claim } from '@/types'
 import { getSortDir } from '@/utils'
-import { formatDate } from '@/utils/date'
+import { formatDate, formatDateOfBirth } from '@/utils/date'
 import { formatAmount, getInsurancePayerName } from '../utils'
 import { ActionsCell } from './actions-cell'
 import { CellCPTCodes } from './cell-cpt-codes'
@@ -67,7 +67,11 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <LongTextCell className="w-[150px]">{row.original.patientName}</LongTextCell>,
+      cell: ({ row }) => (
+        <LongTextCell className="w-[150px]">
+          {row.original.patientName}
+        </LongTextCell>
+      ),
     },
     {
       id: 'patientStatusCode',
@@ -97,7 +101,7 @@ const columns = (
       ),
       cell: ({ row }) => (
         <DateTimeCell className="w-[80px]">
-          {formatDate(`${row.original.patientDateOfBirth}`, 'MM/dd/yyyy')}
+          {formatDateOfBirth(row.original.patientDateOfBirth)}
         </DateTimeCell>
       ),
     },

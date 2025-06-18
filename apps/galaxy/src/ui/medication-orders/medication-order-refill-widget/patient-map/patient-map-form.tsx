@@ -18,10 +18,10 @@ import {
 import { CODESETS } from '@/constants'
 import { useCodesetOptions } from '@/hooks'
 import {
+  formatDateOfBirth,
   getAgeFromDate,
   getCalendarDate,
   getOptionalDateString,
-  getPatientDOB,
   sanitizeFormData,
 } from '@/utils'
 import { useStore } from '../store'
@@ -76,7 +76,7 @@ const PatientMapForm = ({ data, onCloseModal }: PatientMapFormProps) => {
   const patientGender = data.patientGender
 
   const patientName = `${patientFirstName} ${patientLastName}`
-  const patientSummary = `${patientName}, ${getPatientDOB(
+  const patientSummary = `${patientName}, ${formatDateOfBirth(
     patientDateOfBirth ?? '',
   )} | ${getAgeFromDate(getCalendarDate(patientDateOfBirth))} yo ${
     patientGender?.charAt(0) || ''

@@ -2,7 +2,7 @@
 
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
-import { getPatientAge, getPatientDOB, getPatientFullName } from '@/utils'
+import { formatDateOfBirth, getPatientAge, getPatientFullName } from '@/utils'
 import { HistoryDateTimeCell } from './cells'
 import { Patient } from './types'
 
@@ -31,7 +31,7 @@ const columns: ColumnDef<Patient>[] = [
     header: () => <ColumnHeader label="DOB" />,
     cell: ({ row: { original: patient } }) => (
       <TextCell className="truncate">
-        {getPatientDOB(patient?.patientDateOfBirth)}
+        {formatDateOfBirth(patient?.patientDateOfBirth)}
       </TextCell>
     ),
   },

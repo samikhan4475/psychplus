@@ -3,22 +3,11 @@ import { Flex, Grid, Text } from '@radix-ui/themes'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
-import { StoreProvider } from '@/store'
 import { ClaimServiceLine } from '@/types'
-import { cn } from '@/utils'
+import { cn, formatDateOfBirth } from '@/utils'
 import { getClaimStatusDisplay } from '../../utils'
 import { ClaimUpdateSchemaType } from '../schema'
 
-const formatDateOfBirth = (dob: string | undefined): string => {
-  if (!dob) return ''
-
-  const date = new Date(dob)
-  const day = String(date.getDate()).padStart(2, '0')
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const year = String(date.getFullYear())
-
-  return `${month}/${day}/${year}`
-}
 const calculateBilledAmount = (
   claimServiceLines: ClaimServiceLine[],
 ): number => {

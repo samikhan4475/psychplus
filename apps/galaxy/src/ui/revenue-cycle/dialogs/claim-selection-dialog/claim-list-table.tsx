@@ -14,7 +14,7 @@ import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { Sort, type Claim } from '@/types'
 import { getSortDir } from '@/utils'
-import { formatDate } from '@/utils/date'
+import { formatDate, formatDateOfBirth } from '@/utils/date'
 import { getClaimStatuses } from '../../utils'
 import { ClaimNumberCell } from './claim-number-cell'
 import { useStore } from './store'
@@ -92,7 +92,7 @@ const columns = (
       ),
       cell: ({ row }) => (
         <DateCell>
-          {formatDate(row.original.patientDateOfBirth, 'MM/dd/yyyy')}
+          {formatDateOfBirth(row.original.patientDateOfBirth)}
         </DateCell>
       ),
     },

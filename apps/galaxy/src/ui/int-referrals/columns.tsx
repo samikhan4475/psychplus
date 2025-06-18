@@ -5,9 +5,11 @@ import { ColumnHeader, LongTextCell, TextCell } from '@/components'
 import { PatientReferral, Sort } from '@/types'
 import {
   formatDate,
+  formatDateOfBirth,
   formatDateTime,
   getMaskedPhoneNumber,
   getNewSortDir,
+  getPatientDOB,
   getPatientFullName,
 } from '@/utils'
 import {
@@ -76,7 +78,7 @@ const columns = (
       cell: ({ row: { original } }) => (
         <TextCell className="truncate">
           {original?.patientDateOfBirth &&
-            formatDate(original?.patientDateOfBirth, 'MM/dd/yyyy')}
+            formatDateOfBirth(original?.patientDateOfBirth)}
         </TextCell>
       ),
     },

@@ -8,7 +8,7 @@ import {
   PatientReferral,
   StaffResource,
 } from '@/types'
-import { convertToCalendarDate, formatDate } from '@/utils'
+import { convertToCalendarDate, formatDateOfBirth } from '@/utils'
 import { IntReferralsPatientLookUpSchemaType } from './int-patient-filter-form'
 
 const getInitialValues = (): IntReferralsPatientLookUpSchemaType => {
@@ -62,7 +62,7 @@ const transformOutPatientRow = ({
   accessToken: String(id),
   patientMrn: mrn,
   gender,
-  dob: dateOfBirth ? formatDate(dateOfBirth) : '',
+  dob: dateOfBirth ? formatDateOfBirth(dateOfBirth) : '',
   patientStatus: resourceStatus,
   state,
 })

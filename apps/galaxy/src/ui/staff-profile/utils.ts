@@ -1,5 +1,5 @@
 import toast from 'react-hot-toast'
-import { getLocalCalendarDate } from '@/utils'
+import { getCalendarDate } from '@/utils'
 import { uploadStaffVideoAction } from './actions/upload-staff-video'
 import { SchemaType } from './schema'
 import { StaffUpdatePayload } from './types'
@@ -38,7 +38,7 @@ const getInitialValues = ({
   status: staff?.status ?? '',
   staffUserRoleIds: staff?.staffUserRoleIds ?? [],
   staffTypeIds: staff?.staffUserRoleIds ?? [],
-  dob: staff?.dob ? getLocalCalendarDate(String(staff?.dob)) : null,
+  dob: staff?.dob ? getCalendarDate(String(staff?.dob)) : null,
   spokenLanguages: staff?.spokenLanguages ?? [''],
   virtualRoomLink: staff?.virtualRoomLink ?? '',
   isVirtualRoomLink: Boolean(staff?.virtualRoomLink),

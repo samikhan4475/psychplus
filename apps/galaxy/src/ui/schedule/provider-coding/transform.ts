@@ -49,7 +49,7 @@ const singleSelectArrayFields = [
   'patientInsuranceVerificationStatuses',
   'noteSignedStatuses',
   'legalStatuses',
-  'facilityAdmissionIds'
+  'facilityAdmissionIds',
 ]
 
 const dateOfBirthField = 'dateOfBirth'

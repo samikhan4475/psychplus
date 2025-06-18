@@ -1,6 +1,6 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { cn, getAgeFromDate, getCalendarDate, getPatientDOB } from '@/utils'
+import { cn, formatDateOfBirth, getAgeFromDate, getCalendarDate, getPatientDOB } from '@/utils'
 import { UpdateMedicationSchema } from './schema'
 
 const PatientSelect = () => {
@@ -15,7 +15,7 @@ const PatientSelect = () => {
     <Flex className="bg-pp-bg-table-label rounded-[5px] p-2">
       <Flex gap="1" className="whitespace-nowrap">
         <Text className={cn('text-[11.5px]')}>
-          {patientName} ,{getPatientDOB(patientDateOfBirth)}
+          {patientName} ,{formatDateOfBirth(patientDateOfBirth)}
           {` | ${getAgeFromDate(
             getCalendarDate(patientDateOfBirth),
           )} yo ${patientGender?.charAt(0)}`}

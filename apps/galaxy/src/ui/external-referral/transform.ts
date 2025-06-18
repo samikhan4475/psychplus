@@ -1,17 +1,15 @@
 import { Gender, InsurancePolicyPriority, NewPatient } from '@/types'
 import {
-  formatDate,
+  formatDateOfBirth,
   getMaskedPhoneNumber,
   getOptionalDateString,
   getPatientCity,
-  getPatientDOB,
   getPatientGender,
   getPatientInsuranceName,
   getPatientMRN,
   getPatientPhone,
   getPatientPostalCode,
   getPatientState,
-  getPatientZipLast4,
   getSlashedPaddedDateString,
   sanitizeFormData,
 } from '@/utils'
@@ -56,7 +54,7 @@ const transformResponseData = (data: Patient[]): Patient[] =>
       ...item
     }) => ({
       mrn: getPatientMRN(item?.id),
-      dob: getPatientDOB(item?.patientDateOfBirth),
+      dob: formatDateOfBirth(item?.patientDateOfBirth),
       phoneNumber: getMaskedPhoneNumber(
         getPatientPhone(item?.contactDetails?.phoneNumbers) ?? '',
       ),
@@ -98,7 +96,7 @@ const transformOutPatientRow = ({
   accessToken: String(id),
   patientMrn: patientExternalMrn,
   gender,
-  dob: birthdate ? formatDate(birthdate) : '',
+  dob: birthdate ? formatDateOfBirth(birthdate) : '',
   patientStatus: status,
   state,
 })

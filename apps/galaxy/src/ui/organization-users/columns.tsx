@@ -4,10 +4,10 @@ import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
 import { Gender } from '@/types'
 import {
+  formatDateOfBirth,
   getMaskedPhoneNumber,
   getPatientAge,
   getPatientCity,
-  getPatientDOB,
   getPatientFullName,
   getPatientGender,
   getPatientInsuranceName,
@@ -142,7 +142,7 @@ const columns: ColumnDef<Users>[] = [
     header: () => <ColumnHeader label="DOB" />,
     cell: ({ row: { original } }) => (
       <TextCell className="truncate">
-        {getPatientDOB(original?.birthdate)}
+        {formatDateOfBirth(original?.birthdate)}
       </TextCell>
     ),
   },

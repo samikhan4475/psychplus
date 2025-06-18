@@ -10,9 +10,9 @@ import {
   SelectInput,
 } from '@/components'
 import {
+  formatDateOfBirth,
   getAgeFromDate,
   getCalendarDate,
-  getPatientDOB,
   sanitizeFormData,
 } from '@/utils'
 import { rxChangeRequestAction, rxRenewalAction } from '../actions'
@@ -47,7 +47,6 @@ const DeclineMedicationForm = ({
 
   const onSubmit = async (data: UpdateMedicationSchema) => {
     if (!data.drugList || data.drugList.length === 0) return
-
 
     if (isRefillTab) {
       await handleRxDenial(data)
@@ -140,7 +139,7 @@ const DeclineMedicationForm = ({
   const patientGender = data.patientGender
 
   const patientName = `${patientFirstName} ${patientLastName}`
-  const patientSummary = `${patientName}, ${getPatientDOB(
+  const patientSummary = `${patientName}, ${formatDateOfBirth(
     patientDateOfBirth ?? '',
   )} | ${getAgeFromDate(getCalendarDate(patientDateOfBirth))} yo ${
     patientGender?.charAt(0) || ''
@@ -170,7 +169,7 @@ const DeclineMedicationForm = ({
             </FormFieldContainer>
 
             <FormFieldContainer className="flex-1">
-              <FormFieldLabel >Select Reason</FormFieldLabel>
+              <FormFieldLabel>Select Reason</FormFieldLabel>
               <SelectInput
                 options={
                   isRefillTab

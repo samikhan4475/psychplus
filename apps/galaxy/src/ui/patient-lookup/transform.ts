@@ -5,12 +5,11 @@ import {
   PatientProfile,
 } from '@/types'
 import {
-  formatDate,
+  formatDateOfBirth,
   getMaskedPhoneNumber,
   getOptionalDateString,
   getPatientAge,
   getPatientCity,
-  getPatientDOB,
   getPatientFullName,
   getPatientGender,
   getPatientInsuranceName,
@@ -63,7 +62,7 @@ const transformResponseData = (data: PatientProfile[]): Patient[] =>
       name: getPatientFullName(item?.legalName),
       age: getPatientAge(item?.birthdate),
       mrn: getPatientMRN(item?.id),
-      dob: getPatientDOB(item?.birthdate),
+      dob: formatDateOfBirth(item?.birthdate),
       phoneNumber: getMaskedPhoneNumber(
         getPatientPhone(item?.contactDetails?.phoneNumbers) ?? '',
       ),
@@ -106,7 +105,7 @@ const transformOutPatientRow = ({
   accessToken: String(id),
   patientMrn: mrn,
   gender,
-  dob: birthdate ? formatDate(birthdate) : '',
+  dob: birthdate ? formatDateOfBirth(birthdate) : '',
   patientStatus: status,
   state,
 })

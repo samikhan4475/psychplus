@@ -4,7 +4,7 @@ import {
   SelectOptionType,
   StaffResource,
 } from '@/types'
-import { formatDate, getPatientFullName, getPatientMRN } from '@/utils'
+import { formatDateOfBirth, getPatientFullName, getPatientMRN } from '@/utils'
 
 const PROVIDER_NAME_PRIFIX = '_providerName'
 
@@ -54,7 +54,7 @@ const transformOutPatientRow = ({
   accessToken: String(id),
   patientMrn: getPatientMRN(patientId),
   gender: patientGender,
-  dob: patientDateOfBirth ? formatDate(patientDateOfBirth) : '',
+  dob: patientDateOfBirth ? formatDateOfBirth(patientDateOfBirth) : '',
   patientStatus,
   state: stateCode,
 })

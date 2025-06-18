@@ -1,6 +1,6 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { Claim } from '@/types'
-import { cn, getPatientDOB } from '@/utils'
+import { cn, formatDateOfBirth } from '@/utils'
 
 interface LinkClaimHeaderProps {
   data: Claim
@@ -19,7 +19,8 @@ const LinkClaimHeader = ({ data }: LinkClaimHeaderProps) => {
       <LabelAndValue label="Claim Number" value={claimNumber} />
       <LabelAndValue label="Patient Name" value={patientName} />
       <LabelAndValue label="MRN" value={patientAccountNumber} />
-      <LabelAndValue label="DOB" value={getPatientDOB(patientDateOfBirth)}/>
+      <LabelAndValue label="DOB" value={formatDateOfBirth(patientDateOfBirth)}
+      />
       <LabelAndValue label="Gender" value={patientGender} />
     </Flex>
   )

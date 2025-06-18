@@ -193,5 +193,5 @@ export {
   getLocalTime,
   getCalendarDateFromUtc,
   getLocalDateWithoutTime,
-  getDateStringNoon
+  getDateStringNoon,
 }
