@@ -13,6 +13,7 @@ interface TextAreaInputProps {
   placeHolder?: string
   maxLength?: number
   formContainerClassName?: string
+  disabled?: boolean
 }
 
 const TextAreaInput = ({
@@ -23,6 +24,7 @@ const TextAreaInput = ({
   placeHolder,
   maxLength,
   formContainerClassName,
+  disabled = false,
 }: TextAreaInputProps) => {
   const form = useFormContext()
 
@@ -34,6 +36,7 @@ const TextAreaInput = ({
     >
       {label && <BlockLabel name={field}>{label}</BlockLabel>}
       <TextArea
+        disabled={disabled}
         size="1"
         autoFocus={autoFocus}
         className={cn('h-[var(--chip-height)]', className)}

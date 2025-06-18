@@ -2,8 +2,8 @@
 
 import * as api from '@/api'
 import { QuickNoteHistory } from '@/types'
+import { HospitalInitialHistoryParams } from '@/ui/hospital/hospital-initial-widget/history/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { HospitalInitialHistoryParams } from '../ui/hospital/hospital-initial-widget/history/types'
 
 const getQuickNoteHistoryAction = async (
   patientId: string,

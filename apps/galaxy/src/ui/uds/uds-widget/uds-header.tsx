@@ -1,7 +1,11 @@
+import { useParams } from 'next/navigation'
 import { Flex, Text } from '@radix-ui/themes'
 import { WidgetSaveButton } from '@/components'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { HistoryButton } from '../history'
 
 const UdsHeader = () => {
+  const patientId = useParams().id as string
   return (
     <Flex
       justify="between"
@@ -12,6 +16,10 @@ const UdsHeader = () => {
         Urine Drug Screen
       </Text>
       <Flex className="gap-x-2 text-[20px]" align="center">
+        <HistoryButton
+          sectionName={QuickNoteSectionName.QuicknoteSectionUds}
+          patientId={patientId}
+        />
         <WidgetSaveButton variant="filled" />
       </Flex>
     </Flex>

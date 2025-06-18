@@ -115,6 +115,7 @@ const MultiSelectField = ({
   }, [defaultValues])
 
   const onClose = () => {
+    if (disable) return
     setSelectAll(false)
     setSelectedValues([])
     onChange?.([])

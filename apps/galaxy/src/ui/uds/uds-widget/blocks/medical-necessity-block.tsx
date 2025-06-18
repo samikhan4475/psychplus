@@ -10,11 +10,15 @@ import {
 } from '@/components'
 import { ChipList } from '@/components/chip-list'
 import { CODESETS } from '@/constants'
-import { useCodesetCodes, useCodesetOptions } from '@/hooks'
+import { useCodesetCodes } from '@/hooks'
 import { UdsWidgetSchemaType } from '../uds-widget-schema'
 import { OtherBlock } from './other-block'
 
-const MedicalNecessityMultiSelectField = () => {
+const MedicalNecessityMultiSelectField = ({
+  editable = true,
+}: {
+  editable?: boolean
+}) => {
   const { setValue } = useFormContext<UdsWidgetSchemaType>()
   const form = useFormContext()
 
@@ -43,6 +47,7 @@ const MedicalNecessityMultiSelectField = () => {
           The patient was administered a urine drug screen (UDS) for:
         </FormFieldLabel>
         <MultiSelectField
+          disabled={!editable}
           options={options}
           className="min-w-60"
           onChange={(values) => setValue('medicalNecessity', values)}
@@ -52,6 +57,7 @@ const MedicalNecessityMultiSelectField = () => {
       </FormFieldContainer>
       <Flex className="mt-2 w-full max-w-[700px] flex-wrap gap-1">
         <ChipList
+          isDisable={!editable}
           data={form.watch('medicalNecessity')}
           field={'medicalNecessity'}
           chipClassName="self-center"
@@ -62,15 +68,17 @@ const MedicalNecessityMultiSelectField = () => {
   )
 }
 
-const MedicalNecessityBlock = () => {
+const MedicalNecessityBlock = ({ editable = true }: { editable?: boolean }) => {
   const form = useFormContext()
   return (
     <Flex direction="column">
       <BlockLabel className="mb-1 text-3" required>
         UDS Medical Necessity
       </BlockLabel>
-      <MedicalNecessityMultiSelectField />
-      {form.watch('medicalNecessity')?.includes('Other') && <OtherBlock />}
+      <MedicalNecessityMultiSelectField editable={editable} />
+      {form.watch('medicalNecessity')?.includes('Other') && (
+        <OtherBlock editable={editable} />
+      )}
     </Flex>
   )
 }

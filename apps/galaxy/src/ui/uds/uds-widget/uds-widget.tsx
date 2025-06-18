@@ -9,6 +9,7 @@ import { genericEventBus } from '@/lib/generic-event-bus'
 import { LabOrderResponseList, QuickNoteSectionItem } from '@/types'
 import { shouldDisableDiagnosisActions } from '@/ui/diagnosis/diagnosis/utils'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { HistoryButton } from '../history'
 import {
   ConfirmatoryTestingBlock,
   InterpretationBlock,
@@ -73,7 +74,17 @@ const UdsWidget = ({
           isUdsTab,
         )}
         topHeader={isUdsTab && <UdsHeader />}
-        headerRight={!isUdsTab && <WidgetSaveButton />}
+        headerRight={
+          !isUdsTab && (
+            <>
+              <HistoryButton
+                sectionName={QuickNoteSectionName.QuicknoteSectionUds}
+                patientId={patientId}
+              />{' '}
+              <WidgetSaveButton />
+            </>
+          )
+        }
         tags={isUdsTab ? [QuickNoteSectionName.QuicknoteSectionUds] : []}
         formResetValues={createEmptyFormValues()}
         onSuccess={handleFormSuccess}

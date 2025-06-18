@@ -59,6 +59,8 @@ const transformOut =
 
     const sanitizedFormData = sanitizeFormData(schema)
 
+    const { medicalNecessity = [] } = sanitizedFormData
+
     Object.entries(sanitizedFormData).forEach(([key, value]) => {
       result.push({
         pid: Number(patientId),
@@ -69,7 +71,7 @@ const transformOut =
       })
     })
     const diagnosisSections = await getDiagnosisSections(
-      schema,
+      medicalNecessity,
       patientId,
       diagnosisData,
       isUdsTab ? false : true,
@@ -83,10 +85,9 @@ const transformOut =
   }
 
 const getDiagnosisSections = async (
-  schema: UdsWidgetSchemaType,
+  medicalNecessity: string[],
   patientId: string,
   diagnosisData: QuickNoteSectionItem[] = [],
-
   isQuicknoteView?: boolean,
   isHospitalDischargeView?: boolean,
 ) => {
@@ -103,9 +104,6 @@ const getDiagnosisSections = async (
     }
     data = response.data
   }
-
-  const formData = sanitizeFormData(schema)
-  const { medicalNecessity = [] } = formData
 
   const existingCodes =
     data?.[0]?.sectionItemValue?.split(',').map((code) => code.trim()) || []
@@ -130,4 +128,4 @@ const getDiagnosisSections = async (
   return diagnosisCodesToAddSet
 }
 
-export { transformOut, transformIn }
+export { transformOut, transformIn, getDiagnosisSections }

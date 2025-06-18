@@ -5,7 +5,7 @@ import {
   TextAreaInput,
 } from '@/components'
 
-const PurposeOfVisit = () => {
+const PurposeOfVisit = ({ editable = true }: { editable?: boolean }) => {
   return (
     <FormFieldContainer>
       <BlockLabel required className="mb-1 text-3">
@@ -15,6 +15,7 @@ const PurposeOfVisit = () => {
         className="h-[75px] w-[70%]"
         field="purposeOfVisit"
         placeHolder="Reason"
+        disabled={!editable}
       />
       <FormFieldError name="purposeOfVisit" />
     </FormFieldContainer>

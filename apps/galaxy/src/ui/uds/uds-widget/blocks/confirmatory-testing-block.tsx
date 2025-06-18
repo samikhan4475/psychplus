@@ -14,7 +14,11 @@ import { CODESETS } from '@/constants'
 import { useCodesetCodes, useCodesetOptions } from '@/hooks'
 import { UdsWidgetSchemaType } from '../uds-widget-schema'
 
-const ReasonOfConfirmationMultiSelectField = () => {
+const ReasonOfConfirmationMultiSelectField = ({
+  editable = true,
+}: {
+  editable?: boolean
+}) => {
   const { setValue } = useFormContext<UdsWidgetSchemaType>()
   const form = useFormContext()
 
@@ -43,6 +47,7 @@ const ReasonOfConfirmationMultiSelectField = () => {
           Reason for Confirmation:
         </FormFieldLabel>
         <MultiSelectField
+          disabled={!editable}
           options={options}
           className="min-w-60"
           onChange={(values) => setValue('confirmationReasons', values)}
@@ -52,6 +57,7 @@ const ReasonOfConfirmationMultiSelectField = () => {
       </FormFieldContainer>
       <Flex className="mt-2 w-full max-w-[700px] flex-wrap gap-1">
         <ChipList
+          isDisable={!editable}
           data={form.watch('confirmationReasons')}
           field={'confirmationReasons'}
           chipClassName="self-center"
@@ -62,7 +68,11 @@ const ReasonOfConfirmationMultiSelectField = () => {
   )
 }
 
-const ConfirmatoryTestingBlock = () => {
+const ConfirmatoryTestingBlock = ({
+  editable = true,
+}: {
+  editable?: boolean
+}) => {
   const { watch } = useFormContext<UdsWidgetSchemaType>()
   const isConfirmatoryTesting = watch('confirmatoryTesting')
 
@@ -72,11 +82,11 @@ const ConfirmatoryTestingBlock = () => {
         <BlockLabel required className="text-3">
           Confirmatory Testing
         </BlockLabel>
-        <YesNoSelect field="confirmatoryTesting" />
+        <YesNoSelect field="confirmatoryTesting" disabled={!editable} />
         <FormFieldError name={'confirmatoryTesting'} />
       </FormFieldContainer>
       {isConfirmatoryTesting === 'yes' && (
-        <ReasonOfConfirmationMultiSelectField />
+        <ReasonOfConfirmationMultiSelectField editable={editable} />
       )}
     </>
   )

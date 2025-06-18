@@ -27,15 +27,28 @@ const RESULT_ACTION_OPTIONS = [
   },
 ]
 
-const ResultSelect = () => {
-  return <SelectInput field="result" options={RESULT_OPTIONS} required={true} />
+const ResultSelect = ({ editable = true }: { editable?: boolean }) => {
+  return (
+    <SelectInput
+      field="result"
+      options={RESULT_OPTIONS}
+      required={true}
+      disabled={!editable}
+    />
+  )
 }
 
-const ResultActionSelect = () => {
-  return <SelectInput field="resultAction" options={RESULT_ACTION_OPTIONS} />
+const ResultActionSelect = ({ editable = true }: { editable?: boolean }) => {
+  return (
+    <SelectInput
+      field="resultAction"
+      options={RESULT_ACTION_OPTIONS}
+      disabled={!editable}
+    />
+  )
 }
 
-const InterpretationBlock = () => {
+const InterpretationBlock = ({ editable = true }: { editable?: boolean }) => {
   return (
     <FormFieldContainer>
       <BlockLabel required className="text-3 font-[600]">
@@ -46,9 +59,9 @@ const InterpretationBlock = () => {
           The patient&apos;s urine drug screen results were
         </Text>
         <Text className="mx-1 text-[12px] text-red-9">*</Text>
-        <ResultSelect />
+        <ResultSelect editable={editable} />
         <Text className="mx-1.5 text-[12px]">and</Text>
-        <ResultActionSelect />
+        <ResultActionSelect editable={editable} />
         <Text className="ml-1.5 text-[12px]">
           forwarded for confirmatory testing via laboratory analysis.
         </Text>
