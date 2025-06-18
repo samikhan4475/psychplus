@@ -1,27 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { ActionResult } from '@/api'
 import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
-import { getVisitTypesAction } from '../actions'
-import { useStore } from '../store'
-import { SelectOptionType } from '../types'
+import { CODESETS } from '@/constants'
+import { useCodesetOptions } from '@/hooks'
 
 const VisitTypeSelect = () => {
-  const [visitTypesResult, setVisitTypesResult] =
-    useState<ActionResult<SelectOptionType[]>>()
-  const { setVisitTypes } = useStore()
-
-  useEffect(() => {
-    getVisitTypesAction().then(setVisitTypesResult)
-  }, [])
-
-  const isSuccess = visitTypesResult?.state === 'success'
-  const options = isSuccess ? visitTypesResult?.data : []
-
-  useEffect(() => {
-    setVisitTypes(options)
-  }, [visitTypesResult])
+  const options = useCodesetOptions(CODESETS.VisitType)
 
   return (
     <FormFieldContainer className="flex-row items-center gap-1">

@@ -163,16 +163,15 @@ interface SchedulingHistoryPayload {
   facilityAdmissionId?: string
   visitTypeCode?: string
   locationId?: string
-  visitStatuses?: string
+  visitStatuses?: string[]
   admittingProviderName?: string
   admissionDateTime?: string
   admitTime?: string
   dischargeVisitSequenceDate: string | null
-  dateOfService?: string | null
   serviceId?: string
   providerType?: string
   providerStaffId?: string
-  cosignerStaffId?: string
+  cosignerUserId?: string
   dischargeHospitalName?: string
   dischargeHospitalDate?: string | null
   residingStateCode?: string

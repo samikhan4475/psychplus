@@ -73,7 +73,7 @@ const FilterForm = () => {
       serviceId: '',
       providerType: '',
       providerStaffId: '',
-      cosignerStaffId: '',
+      cosignerUserId: '',
       dischargeHospitalName: '',
       dischargeHospitalDate: undefined,
       residingStateCode: '',
@@ -90,8 +90,9 @@ const FilterForm = () => {
   })
 
   const onSubmit: SubmitHandler<SchedulingHistorySchemaType> = (data) => {
+    const { dateOfService, ...rest } = data
     const formattedData = {
-      ...data,
+      ...rest,
       fromDate: getDateString(data.fromDate),
       admitTime: data.admitTime ? data.admitTime.toString() : undefined,
       toDate: getDateString(data.toDate),
@@ -99,11 +100,12 @@ const FilterForm = () => {
       dischargeVisitSequenceDate: getDateString(
         data.dischargeVisitSequenceDate,
       ),
-      dateOfService: getDateString(data.dateOfService),
+      appointmentDateTime: getDateString(dateOfService),
       dischargeHospitalDate: getDateString(data.dischargeHospitalDate),
+      visitStatuses: data.visitStatuses ? [data.visitStatuses] : undefined,
     }
-    const sanatizedData = sanitizeFormData(formattedData)
-    fetchSchedulingHistory(id, sanatizedData)
+    const sanitizedData = sanitizeFormData(formattedData)
+    fetchSchedulingHistory(id, sanitizedData)
   }
   const selectedVisitTypeCode = form.watch('visitTypeCode')
   const selectedVisitType = visitTypes?.find(
