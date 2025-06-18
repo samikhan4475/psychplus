@@ -26,10 +26,11 @@ import { StorageType } from '@psychplus-v2/constants'
 import { CodeWithDisplayName } from '@psychplus-v2/types'
 import { getMonth, getYear } from 'date-fns'
 import { isMobile } from '@psychplus/utils/client'
-import { formatDateYmd, getFirstDayOfWeek } from '@psychplus/utils/time'
+import { formatDateYmd } from '@psychplus/utils/time'
 import { getZipcodeInfo } from '@/actions'
 import { APPOINTMENTS_SEARCH_SESSION_PUBLIC_KEY } from '@/features/appointments/search/constants'
 import {
+  getStartOfWeek,
   prefetchProviders,
   updateStorage,
 } from '@/features/appointments/search/utils'
@@ -37,7 +38,6 @@ import { StaffWithClinicsAndSlots } from '@/widgets/schedule-appointment-list/ty
 import {
   getNormalizedAppointmentType,
   getNormalizedProviderType,
-  getValidStartDate,
   transformStaffWithClinicsAndSlots,
 } from '@/widgets/schedule-appointment-list/utils'
 
@@ -207,9 +207,9 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
             zipCode: form.getValues().zipCode,
             state: newState,
             stateCode: states[0]?.code,
-            startingDate: getValidStartDate(
-              formatDateYmd(isMobile() ? new Date() : getFirstDayOfWeek()),
-            ),
+            startingDate: isMobile()
+              ? formatDateYmd(new Date())
+              : getStartOfWeek(new Date()),
           },
           transformFn: transformStaffWithClinicsAndSlots,
           storageKey: APPOINTMENTS_SEARCH_SESSION_PUBLIC_KEY,
@@ -261,9 +261,9 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
           zipCode: form.getValues().zipCode,
           state: form.getValues().state,
           stateCode: zipStates[0]?.code,
-          startingDate: getValidStartDate(
-            formatDateYmd(isMobile() ? new Date() : getFirstDayOfWeek()),
-          ),
+          startingDate: isMobile()
+            ? formatDateYmd(new Date())
+            : getStartOfWeek(new Date()),
         },
         transformFn: transformStaffWithClinicsAndSlots,
         storageKey: APPOINTMENTS_SEARCH_SESSION_PUBLIC_KEY,
@@ -281,9 +281,9 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
           zipCode: form.getValues().zipCode,
           state: form.getValues().state,
           stateCode: zipStates[0]?.code,
-          startingDate: getValidStartDate(
-            formatDateYmd(isMobile() ? new Date() : getFirstDayOfWeek()),
-          ),
+          startingDate: isMobile()
+            ? formatDateYmd(new Date())
+            : getStartOfWeek(new Date()),
         },
         storageKey: APPOINTMENTS_SEARCH_SESSION_PUBLIC_KEY,
         storageType: StorageType.Local,

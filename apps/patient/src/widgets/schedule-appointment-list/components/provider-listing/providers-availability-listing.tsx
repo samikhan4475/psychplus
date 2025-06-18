@@ -7,24 +7,24 @@ import { WeekCalendarRow } from '../week-calender-row'
 interface Props {
   sortedProviders: StaffWithClinicsAndSlots[]
   filters: Filters
-  isSchedulingOptimizationEnabled?:boolean
+  isSchedulingOptimizationEnabled?: boolean
 }
 
 const ProvidersAvailabilityListing = ({
   sortedProviders,
   filters,
-  isSchedulingOptimizationEnabled
+  isSchedulingOptimizationEnabled,
 }: Props) => {
   return (
     <>
       <Flex
-        className="w-full flex-1 border border-gray-3"
+        className="bg-white sticky z-10 w-full flex-1 border border-gray-3 max-xs:top-[140px] xs:top-[134px] sm:top-[104px] md:top-[99px] lg:top-[72px]"
         py="5"
         px="7"
         align="center"
       >
         <Flex align="center" className="justify-between md:justify-center">
-          <Flex className="w-[380px] text-[#151B4A]">
+          <Flex className="text-[#151B4A] sm:min-w-[61px] md:min-w-[300px] lg:min-w-[380px]">
             <Text className="sm-text-2 text-3 md:text-5">
               {sortedProviders?.length} Providers
             </Text>
@@ -46,7 +46,9 @@ const ProvidersAvailabilityListing = ({
             >
               <ProviderWithClinicAndWeeklyAvailability
                 staffWithClinicsAndSlots={staffWithClinicsAndSlots}
-                isSchedulingOptimizationEnabled={isSchedulingOptimizationEnabled}
+                isSchedulingOptimizationEnabled={
+                  isSchedulingOptimizationEnabled
+                }
               />
             </Flex>
           ))}

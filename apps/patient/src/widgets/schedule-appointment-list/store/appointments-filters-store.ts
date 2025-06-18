@@ -50,16 +50,18 @@ const createAppointmentFiltersStore: StateCreator<AppointmentFiltersState> = (
       providerType,
       maxDistanceInMiles: rest.maxDistanceInMiles,
     })
-    const entry = get().cache[cacheKey]
-    if (isAppointmentsFreshEntry(entry, DEFAULT_APPOINTMENT_CACHE_TIME)) {
-      set({ data: entry.data, loading: false })
-      return
-    }
 
     set({
       loading: true,
       data: undefined,
     })
+    const entry = get().cache[cacheKey]
+    if (isAppointmentsFreshEntry(entry, DEFAULT_APPOINTMENT_CACHE_TIME)) {
+      setTimeout(() => {
+        set({ data: entry.data, loading: false })
+      }, 1200)
+      return
+    }
 
     const payload = transformLocationProvidersRequest({
       maxDistanceInMiles: rest.maxDistanceInMiles,
@@ -113,7 +115,7 @@ const createAppointmentFiltersStore: StateCreator<AppointmentFiltersState> = (
         },
       })
     })
-    
+
     if (rawData.length && rawData.length < res1?.data?.total) {
       const res3 = await searchLocationsProvidersAction({
         ...payload,
@@ -121,6 +123,7 @@ const createAppointmentFiltersStore: StateCreator<AppointmentFiltersState> = (
         offset: 20,
       })
 
+      if (startingDate !== get()?.filters?.startingDate) return
       if (res3.state === 'success') {
         const combined = transformStaffWithClinicsAndSlots({
           response: [...rawData, ...res3.data.locationsProviders],

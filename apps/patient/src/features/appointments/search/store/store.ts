@@ -217,23 +217,26 @@ const useStore = create<Store>()(
           state: get().state,
         })
 
-        const entry = get().cache[cacheKey]
-        if (isAppointmentsFreshEntry(entry, DEFAULT_APPOINTMENT_CACHE_TIME)) {
-          set({ data: entry.data, loading: false, error: undefined })
-          return
-        }
-
         set({
           loading: true,
           error: undefined,
           data: undefined,
         })
 
+        const entry = get().cache[cacheKey]
+        if (isAppointmentsFreshEntry(entry, DEFAULT_APPOINTMENT_CACHE_TIME)) {
+          setTimeout(() => {
+            set({ data: entry.data, loading: false, error: undefined })
+          }, 1200)
+
+          return
+        }
+
         const stateCode = get().stateCode
         const providerType = get().providerType
         const providerTypeLabel = getProviderTypeLabelNormalized(providerType)
         const appointmentType = get().appointmentType
-
+        const startingDate = get().startingDate
         const payload = transformLocationProvidersRequest({
           maxDistanceInMiles: get().maxDistanceInMiles,
           appointmentType,
@@ -294,7 +297,7 @@ const useStore = create<Store>()(
             limit: 100,
             offset: 20,
           })
-
+          if (startingDate !== get().startingDate) return
           if (res3.state === 'success') {
             const combined = transformLocationProvidersResponse({
               response: [...rawData, ...res3.data.locationsProviders],

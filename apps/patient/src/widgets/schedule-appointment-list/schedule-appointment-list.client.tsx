@@ -8,7 +8,7 @@ import { useDebounce } from 'use-debounce'
 import { useShallow } from 'zustand/react/shallow'
 import { isMobile } from '@psychplus/utils/client'
 import { getZipcodeInfo } from '@psychplus/utils/map'
-import { formatDateYmd, getFirstDayOfWeek } from '@psychplus/utils/time'
+import { formatDateYmd } from '@psychplus/utils/time'
 import { SCHEDULE_APPOINTMENT_LIST } from '@psychplus/widgets'
 import {
   usePublishLoaded,
@@ -16,6 +16,7 @@ import {
   useSubscribeClosePopover,
 } from '@psychplus/widgets/hooks'
 import { LoadingPlaceholder } from '@/features/appointments/search/ui/search-appointments-view/loading-placeholder.tsx'
+import { getStartOfWeek } from '@/features/appointments/search/utils'
 import { useDeepCompareEffect } from '@/hooks'
 import { useCodesetCodes, useToast } from '@/providers'
 import { AvailabilityList, FilterPanel } from './components'
@@ -29,12 +30,12 @@ import {
 
 interface ScheduleAppointmentListClientProps {
   mapKey: string
-  isSchedulingOptimizationEnabled?:boolean
+  isSchedulingOptimizationEnabled?: boolean
 }
 
 const ScheduleAppointmentListClient = ({
   mapKey,
-  isSchedulingOptimizationEnabled
+  isSchedulingOptimizationEnabled,
 }: ScheduleAppointmentListClientProps) => {
   const [hasHydrated, setHasHydrated] = useState(false)
   const stateCodes = useCodesetCodes(CODESETS.UsStates)
@@ -99,9 +100,9 @@ const ScheduleAppointmentListClient = ({
       sortBy: '',
       language: '',
       maxDistanceInMiles: undefined,
-      startingDate: formatDateYmd(
-        isMobile() ? new Date() : getFirstDayOfWeek(),
-      ),
+      startingDate: isMobile()
+        ? formatDateYmd(new Date())
+        : getStartOfWeek(new Date()),
     })
   }, [handleFiltersChange, searchParams])
 
@@ -122,7 +123,7 @@ const ScheduleAppointmentListClient = ({
         zipCode,
         appointmentType: getNormalizedAppointmentType(appointmentType),
         state,
-        startingDate: getValidStartDate(startingDate),
+        startingDate: isMobile() ? getValidStartDate(startingDate) : startingDate,
         maxDistanceInMiles,
         providerType: getNormalizedProviderType(providerType),
         stateCode: getCodsetValue(stateCodes, filters.state),
@@ -178,8 +179,13 @@ const ScheduleAppointmentListClient = ({
 
   return (
     <Flex direction="column" className="w-full" ref={ref}>
-      <FilterPanel stateOptions={stateOptions} isSchedulingOptimizationEnabled={isSchedulingOptimizationEnabled} />
-      <AvailabilityList isSchedulingOptimizationEnabled={isSchedulingOptimizationEnabled} />
+      <FilterPanel
+        stateOptions={stateOptions}
+        isSchedulingOptimizationEnabled={isSchedulingOptimizationEnabled}
+      />
+      <AvailabilityList
+        isSchedulingOptimizationEnabled={isSchedulingOptimizationEnabled}
+      />
     </Flex>
   )
 }

@@ -166,7 +166,7 @@ const SearchAppointmentsView = ({
 
   return (
     <Flex position="relative" direction="column" width="100%" height="100%">
-      <Box px="7" className="bg-pp-blue-1 py-[20px]">
+      <Box px="7" className="bg-pp-blue-1 sticky top-[70px] z-10 py-[20px]">
         <Flex
           direction={{ initial: 'column', sm: 'row' }}
           justify="between"
@@ -195,7 +195,7 @@ const SearchAppointmentsView = ({
         <LoadingPlaceholder />
       ) : (
         <>
-          <Flex>
+          <Flex className="sticky z-10 sm:top-[191px] md:top-48 lg:top-36">
             <Flex
               align="center"
               pt="6"
@@ -226,12 +226,13 @@ const SearchAppointmentsView = ({
                   primaryProviderAvailabilityData={
                     primaryProviderAvailabilityData
                   }
-                  isSchedulingOptimizationEnabled={isSchedulingOptimizationEnabled}
-                  
+                  isSchedulingOptimizationEnabled={
+                    isSchedulingOptimizationEnabled
+                  }
                 />
               ) : null}
 
-              {careTeamExists ? (
+              {careTeamExists && primaryProviderAvailabilityData ? (
                 <Box className="bg-white border-pp-gray-3 border-b px-5 py-6">
                   <Text
                     weight="medium"
@@ -244,7 +245,9 @@ const SearchAppointmentsView = ({
               <AvailabilityList
                 userConsents={userConsents}
                 setShowDifferentStateDialog={setDialogState}
-                isSchedulingOptimizationEnabled={isSchedulingOptimizationEnabled}
+                isSchedulingOptimizationEnabled={
+                  isSchedulingOptimizationEnabled
+                }
               />
             </Flex>
             <ClinicsMapView

@@ -88,6 +88,8 @@ const ProviderSlots = ({
 
   return (
     <Flex className="flex-1 px-[40px] pt-2" ref={ref}>
+
+      
       <Flex direction="column" gap="4" className="w-full">
         <SlotStateRenderer
           slotsLoading={slotsLoading}

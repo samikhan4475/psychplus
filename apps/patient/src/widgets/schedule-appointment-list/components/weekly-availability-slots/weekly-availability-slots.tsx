@@ -76,7 +76,12 @@ const WeeklyAvailabilitySlots = ({
   }, [sortBy])
 
   return (
-    <Flex gap="4" className="w-full" ref={ref}>
+    <Flex
+      gap="4"
+      className="w-full max-sm:ml-0 sm:ml-[100px] md:ml-0 lg:ml-[53px]"
+      justify="center"
+      ref={ref}
+    >
       <SlotStateRenderer
         slotsLoading={slotsLoading}
         errorMessage={errorMessage}

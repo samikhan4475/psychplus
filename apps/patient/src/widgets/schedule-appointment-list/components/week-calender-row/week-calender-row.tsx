@@ -75,7 +75,7 @@ const WeekCalendarRow = () => {
       >
         <LeftArrowIcon />
       </Flex>
-      <Flex className="w-full" mx="5">
+      <Flex className="w-full md:mx-0 lg:mx-6">
         {renderDays()}
       </Flex>
       <Flex
@@ -96,7 +96,7 @@ const renderDay = (currentDate: Date) => {
     <Flex
       key={currentDate.toString()}
       align="center"
-      className="h-10 w-full rounded-3 sm:w-24  md:w-24"
+      className="h-10 w-full rounded-3 sm:w-[80px]  md:w-24"
       justify="center"
     >
       {format(new Date(date), 'yyyy-MM-dd') ===

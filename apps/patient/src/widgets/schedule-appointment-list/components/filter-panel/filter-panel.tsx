@@ -41,10 +41,15 @@ const FilterPanel = ({
   }
 
   return (
-    <Flex pt="1" pb="6" className="w-full flex-wrap px-4 sm:px-7" gap="4">
-      <Flex className="flex-col gap-6 sm:flex-row sm:gap-7">
-        <Flex align="center" gap="4">
-          <Text className="text-[12px] font-medium text-[#000000] md:text-[16px]">
+    <Flex
+      pt="1"
+      pb="6"
+      className="bg-white sticky top-0 z-10 w-full flex-1 flex-wrap px-4 sm:px-7"
+      gap="4"
+    >
+      <Flex className="flex-row gap-3 max-sm:w-full max-xs:flex-row xs:flex-row sm:flex-col sm:gap-2.5 md:flex-row">
+        <Flex align="center" gap="2">
+          <Text className="text-[12px] font-medium text-[#000000] md:text-[14px]">
             Appointment
           </Text>
           {['Psychiatry', 'Therapy'].map((option) => (
@@ -58,8 +63,8 @@ const FilterPanel = ({
           ))}
         </Flex>
 
-        <Flex gap="4" align="center">
-          <Text className="text-[12px] font-medium text-[#000000] md:text-[16px]">
+        <Flex gap="2" align="center">
+          <Text className="text-[12px] font-medium text-[#000000] md:text-[14px]">
             Type
           </Text>
           {['Virtual', 'In-Person'].map((option) => (
@@ -74,11 +79,11 @@ const FilterPanel = ({
         </Flex>
       </Flex>
 
-      <Flex className="flex-col flex-wrap gap-6 sm:flex-row sm:gap-7">
+      <Flex className="flex-1 flex-row gap-3 max-sm:flex-wrap sm:flex-wrap sm:gap-2.5 md:flex-wrap">
         {isSchedulingOptimizationEnabled &&
           filters.appointmentType === 'In-Person' && (
-            <Flex gap="4" align="center" className="text-[#1c2024]">
-              <Text className="text-[12px] font-medium lg:text-[16px] ">
+            <Flex gap="2" align="center" className="flex-1 text-[#1c2024]">
+              <Text className="text-[12px] font-medium lg:text-[14px] ">
                 Radius
               </Text>
               <FilterOptionsDropDown
@@ -91,8 +96,8 @@ const FilterPanel = ({
               />
             </Flex>
           )}
-        <Flex gap="4" align="center" className="text-[#1c2024]">
-          <Text className="text-[12px] font-medium md:text-[16px] ">
+        <Flex gap="2" align="center" className="flex-1 text-[#1c2024]">
+          <Text className="text-[12px] font-medium md:text-[14px] ">
             Sort by
           </Text>
           <FilterOptionsDropDown
@@ -109,7 +114,7 @@ const FilterPanel = ({
           />
         </Flex>
         <Flex gap="4" align="center" className="text-[#1c2024]">
-          <Text className="text-[12px] font-medium md:text-[16px]">
+          <Text className="text-[12px] font-medium md:text-[14px]">
             Language
           </Text>
           <FilterOptionsDropDown
@@ -121,21 +126,21 @@ const FilterPanel = ({
             selectedOption={filters.language}
           />
         </Flex>
-        <Flex gap="4" align="center" className="text-[#1c2024]">
-          <Text className="text-[12px] font-medium md:text-[16px]">
-            Current ZIP Code
+        <Flex gap="2" align="center" className="flex-1 text-[#1c2024]">
+          <Text className="whitespace-nowrap text-[12px] font-medium md:text-[14px]">
+            ZIP Code
           </Text>
           <input
             type="number"
             placeholder="ZIP Code"
             value={filtersState?.zipCode}
-            className="w-[70px] flex-1 rounded-[4px] border border-[#b9bbc6] px-[5px] py-1 font-regular text-[#1c2024] focus:border-blue-12 focus:outline-none md:w-[102px] md:px-[10px] md:py-2"
+            className="flex-1 rounded-[4px] border border-[#b9bbc6] px-[5px] py-1 font-regular text-[#1c2024] focus:border-blue-12 focus:outline-none max-sm:h-7 max-xs:h-6 sm:h-8 md:h-8 md:px-[10px] md:py-2 lg:h-10"
             style={{ color: psychPlusBlueColor }}
             onChange={(e) => handleZipCodeChange(e.target.value)}
           />
         </Flex>
-        <Flex gap="4" align="center">
-          <Text className="text-[12px] font-medium text-[#1c2024] md:text-[16px]">
+        <Flex gap="2" align="center" className="flex-1">
+          <Text className="text-[12px] font-medium text-[#1c2024] md:text-[14px]">
             State
           </Text>
           <FilterOptionsDropDown
@@ -165,7 +170,7 @@ const FilterOptionButton = ({
       variant="outline"
       color="gray"
       className={cn(
-        'h-8 cursor-pointer rounded-[6px] bg-[#FFFFFF] px-[5px] font-medium text-[#1c2024] md:h-10 md:px-[10px]',
+        'cursor-pointer rounded-[6px] bg-[#FFFFFF] px-[5px] font-medium text-[#1c2024] max-sm:h-7 sm:h-8 md:h-8 md:px-[10px] lg:h-10',
         {
           'border-[#151B4A] bg-[#151B4A] text-[#FFFFFF]': active,
           '': !active,
@@ -200,7 +205,7 @@ const FilterOptionsDropDown = ({
       <Select.Trigger
         ref={triggerRef}
         placeholder={placeholder}
-        className="h-8 min-w-[115px] whitespace-nowrap rounded-[4px] border border-[#b9bbc6] px-[5px] py-2 font-regular text-[#1c2024] placeholder-[#1C2024] md:h-10 md:px-[10px]"
+        className="w-full flex-1 whitespace-nowrap rounded-[4px] border border-[#b9bbc6] px-[5px] py-2 font-regular text-[#1c2024] placeholder-[#1C2024] max-sm:h-7 max-xs:h-6 sm:h-8 md:h-8 md:px-[10px] lg:h-10"
       >
         {selectedOption || placeholder}
 

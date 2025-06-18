@@ -1,17 +1,20 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { getUserInitials } from '@psychplus-v2/utils'
 import { CheckIcon, StarFilledIcon, StarIcon } from '@radix-ui/react-icons'
-import { Box, Flex, Text } from '@radix-ui/themes'
+import { Avatar, Box, Flex, Text } from '@radix-ui/themes'
 import { getCodeDisplay } from '@psychplus/codeset'
-import { getStaffProfilePicture } from '@psychplus/staff/api.client'
 import { Popover } from '@psychplus/ui/popover'
 import { isMobile } from '@psychplus/utils/client'
 import { DownArrowIcon } from '@/components'
-import { LegacyWeeklyAvailabilitySlots, WeeklyAvailabilitySlots } from '../../components'
+import {
+  LegacyWeeklyAvailabilitySlots,
+  WeeklyAvailabilitySlots,
+} from '../../components'
 import { useStore } from '../../store'
 import type { ClinicWithSlots, StaffWithClinicsAndSlots } from '../../types'
-import { renderProfileImage, renderStaffName } from '../../utils'
+import { renderStaffName } from '../../utils'
 
 interface ProviderWithClinicAndWeeklyAvailabilityProps {
   staffWithClinicsAndSlots: StaffWithClinicsAndSlots
@@ -22,17 +25,10 @@ const ProviderWithClinicAndWeeklyAvailability = ({
   staffWithClinicsAndSlots,
   isSchedulingOptimizationEnabled,
 }: ProviderWithClinicAndWeeklyAvailabilityProps) => {
-  const [profileImage, setProfileImage] = useState<string | undefined>()
   const { codeSetIndex, filters } = useStore()
   const specialistTypeCodeSet = codeSetIndex.SpecialistType
   const [selectedClinicIndex, setSelectedClinicIndex] = useState(0)
   const [slotsLoading, setSlotsLoading] = useState(false)
-
-  useEffect(() => {
-    getStaffProfilePicture(staffWithClinicsAndSlots.staff.id).then(
-      setProfileImage,
-    )
-  }, [])
 
   useEffect(() => {
     setSelectedClinicIndex(0)
@@ -40,12 +36,26 @@ const ProviderWithClinicAndWeeklyAvailability = ({
 
   return (
     <Flex className="w-full flex-col gap-5 md:flex-row md:gap-0">
-      <Flex direction="column" gap="2" className="w-[380px]">
+      <Flex
+        direction="column"
+        gap="2"
+        className="md:min-w-[300px] lg:min-w-[380px]"
+      >
         <Flex align="center" gap="2" className="w-10/12 md:w-11/12">
-          {renderProfileImage(
-            profileImage,
-            staffWithClinicsAndSlots.staff.legalName.firstName[0],
-          )}
+          <Avatar
+            src={
+              staffWithClinicsAndSlots?.staff?.hasPhoto
+                ? `/api/staff/${staffWithClinicsAndSlots?.staff?.id}/profileimage`
+                : undefined
+            }
+            color="gray"
+            fallback={getUserInitials(
+              staffWithClinicsAndSlots?.staff?.legalName,
+            )}
+            className="h-[56px] w-[56px]"
+            radius="full"
+          />
+
           <Flex direction="column" gap="1" className="text-[#151B4A]">
             <Text className="text-3 font-bold md:text-5">
               {renderStaffName(staffWithClinicsAndSlots.staff)}
@@ -71,7 +81,7 @@ const ProviderWithClinicAndWeeklyAvailability = ({
           slotsLoading,
         )}
       </Flex>
-      <Flex className={'w-[700px]'}>
+      <Flex className="sm:w-[700px] md:min-w-[700px] lg:min-w-[700px]">
         {isSchedulingOptimizationEnabled ? (
           <WeeklyAvailabilitySlots
             staff={staffWithClinicsAndSlots.staff}

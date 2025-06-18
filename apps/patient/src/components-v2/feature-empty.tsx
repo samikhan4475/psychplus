@@ -6,7 +6,7 @@ interface FeatureEmptyProps {
   title?: string
   description?: React.ReactNode
   action?: React.ReactNode
-  Icon: LucideIcon | FC
+  Icon?: LucideIcon | FC
 }
 
 const FeatureEmpty = ({
@@ -24,19 +24,21 @@ const FeatureEmpty = ({
     py="7"
     px="5"
   >
-    <Flex
-      align="center"
-      justify="center"
-      className="rounded-full h-[65px] w-[65px] bg-[#EEF2F6]"
-    >
-      <Icon
-        width={30}
-        height={30}
-        strokeWidth={1}
-        fill="white"
-        className="text-accent-12"
-      />
-    </Flex>
+    {Icon && (
+      <Flex
+        align="center"
+        justify="center"
+        className="rounded-full h-[65px] w-[65px] bg-[#EEF2F6]"
+      >
+        <Icon
+          width={30}
+          height={30}
+          strokeWidth={1}
+          fill="white"
+          className="text-accent-12"
+        />
+      </Flex>
+    )}
 
     <Flex
       direction="column"
@@ -55,7 +57,7 @@ const FeatureEmpty = ({
       ) : null}
     </Flex>
     <Box className="w-full" mt="1">
-      {action || null}
+      {action ?? null}
     </Box>
   </Flex>
 )

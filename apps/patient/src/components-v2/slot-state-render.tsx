@@ -89,7 +89,6 @@ export const SlotStateRenderer = ({
     return (
       <FeatureEmpty
         description="No slots available for this provider"
-        Icon={EmptyFileIcon}
       />
     )
   }
