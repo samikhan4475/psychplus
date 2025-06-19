@@ -29,6 +29,10 @@ export const PPUserStatusCell = ({
     editMode === original.id ? getTempUserData(original.id) : original
   const currentValue = currentUserData?.userStatus ?? original.userStatus
 
+  const userStatusLabel = userStatusOptions?.find(
+    (item) => item?.value === currentValue,
+  )
+
   return editMode === original.id ? (
     <SimpleSelect
       value={currentValue}
@@ -42,7 +46,7 @@ export const PPUserStatusCell = ({
     />
   ) : (
     <TextCell className={isDeleted(original) ? 'text-gray-400' : ''}>
-      {original.userStatus}
+      {userStatusLabel?.label || currentValue || ''}
     </TextCell>
   )
 }

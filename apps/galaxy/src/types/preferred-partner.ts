@@ -48,6 +48,7 @@ interface PreferredPartnerUser {
 interface PreferredPartnerFiltersPayload {
   userName?: string
   mrn?: string
+  ssn?: string
   userNumber?: string
   customerStatuses?: string[]
   dateFrom?: string

@@ -1,20 +1,19 @@
 'use client'
 
 import { Button } from '@radix-ui/themes'
-import { useForm } from 'react-hook-form'
-import { getInitialValues } from '../utils'
-import { PreferredPartnerFiltersSchemaType } from './schema'
+import { FieldValues, useForm } from 'react-hook-form'
 
-interface ClearButtonProps {
+interface ClearButtonProps<T extends FieldValues> {
   ppid: string
-  form: ReturnType<typeof useForm<PreferredPartnerFiltersSchemaType>>
+  form: ReturnType<typeof useForm<T>>
   onClear: (ppid: string) => void
+  initialValues: T
 }
 
-const ClearButton = ({ ppid, form, onClear }: ClearButtonProps) => {
+const ClearButton = <T extends FieldValues>({ ppid, form, onClear, initialValues }: ClearButtonProps<T>) => {
   const handleResetForm = () => {
     onClear(ppid)
-    form.reset({ ...getInitialValues() })
+    form.reset({ ...initialValues })
   }
   return (
     <Button

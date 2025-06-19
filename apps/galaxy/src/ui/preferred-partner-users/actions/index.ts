@@ -1,4 +1,3 @@
-export * from './delete-preferred-partner-user'
 export * from './search-preferred-partner-users'
 export * from './activate-preferred-partner-user'
 export * from './deactivate-preferred-partner-user'

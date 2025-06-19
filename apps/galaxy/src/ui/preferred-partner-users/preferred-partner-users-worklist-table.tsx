@@ -1,4 +1,5 @@
 'use client'
+
 import React, { useEffect } from 'react'
 import { Box, Flex } from '@radix-ui/themes'
 import { type Row } from '@tanstack/react-table'
@@ -6,9 +7,9 @@ import { DataTable, LoadingPlaceholder } from '@/components'
 import { DataTablePagination } from '@/components/data-table/data-table-pagination'
 import { CODESETS } from '@/constants'
 import { useCodesetOptions } from '@/hooks'
-import { columns } from './preferred-partner-users-columns'
+import { worklistColumns } from './preferred-partner-users-worklist-columns'
 import { usePreferredPartnerStore } from './store'
-import { getCodesetOptions, getInitialValues } from './utils'
+import { getWorklistInitialValues } from './utils'
 
 interface PreferredPartnerUsersWorklistTableProps {
   ppid: string
@@ -17,15 +18,15 @@ interface PreferredPartnerUsersWorklistTableProps {
 const PreferredPartnerUsersWorklistTable = ({
   ppid,
 }: PreferredPartnerUsersWorklistTableProps) => {
-  const { 
-    worklistData, 
-    worklistLoading, 
-    searchWorklist, 
-    editMode, 
-    setEditMode, 
+  const {
+    worklistData,
+    worklistLoading,
+    searchWorklist,
+    editMode,
+    setEditMode,
     worklistPage,
     worklistFormValues,
-    worklistTotal 
+    worklistTotal,
   } = usePreferredPartnerStore((state) => ({
     worklistData: state.worklistData,
     worklistLoading: state.worklistLoading,
@@ -38,17 +39,16 @@ const PreferredPartnerUsersWorklistTable = ({
   }))
 
   useEffect(() => {
-    searchWorklist(ppid, getInitialValues(), 1, true)
+    searchWorklist(ppid, getWorklistInitialValues(), 1, true)
   }, [])
 
-  const userTypeOptionsCodeset = useCodesetOptions(
+  const userTypeOptions = useCodesetOptions(
     CODESETS.PreferredPartnerUserType,
   )
-  const userStatusOptionsCodesets = useCodesetOptions(
+  const userStatusOptions = useCodesetOptions(
     CODESETS.PreferredPartnerUserStatus,
   )
-  const userTypeOptions = getCodesetOptions(userTypeOptionsCodeset)
-  const userStatusOptions = getCodesetOptions(userStatusOptionsCodesets)
+  const statusOptions = useCodesetOptions(CODESETS.CustomerStatus)
 
   if (worklistLoading) {
     return <LoadingPlaceholder className="bg-white min-h-40 h-full" />
@@ -56,6 +56,10 @@ const PreferredPartnerUsersWorklistTable = ({
 
   const isRowDisabled = (row: Row<(typeof worklistData)[0]>) => {
     return row.original.recordStatus === 'Deleted'
+  }
+
+  const isRowHighlightedRed = (row: Row<(typeof worklistData)[0]>) => {
+    return row.original.matchStatus === 'Reconcile'
   }
 
   const handleNextPage = () => {
@@ -74,20 +78,21 @@ const PreferredPartnerUsersWorklistTable = ({
 
   return (
     <Flex className="bg-white w-full" direction="column">
-      <Box 
+      <Box
         className="w-full overflow-hidden hover:overflow-hidden [&::-webkit-scrollbar]:hidden hover:[&::-webkit-scrollbar]:hidden"
         style={{
           scrollbarWidth: 'none',
-          msOverflowStyle: 'none'
+          msOverflowStyle: 'none',
         }}
       >
         <DataTable
           data={worklistData}
-          columns={columns(
+          columns={worklistColumns(
             editMode,
             setEditMode,
             userTypeOptions,
             userStatusOptions,
+            statusOptions,
           )}
           tableClass="min-w-full [&::-webkit-scrollbar]:hidden [&_*::-webkit-scrollbar]:hidden overflow-hidden hover:overflow-hidden"
           tableRowClass="relative"
@@ -96,9 +101,10 @@ const PreferredPartnerUsersWorklistTable = ({
           isRowSpan
           sticky
           isRowDisabled={isRowDisabled}
+          isRowHighlightedRed={isRowHighlightedRed}
         />
       </Box>
-      
+
       <DataTablePagination
         className="border-t border-gray-6"
         total={worklistTotal}

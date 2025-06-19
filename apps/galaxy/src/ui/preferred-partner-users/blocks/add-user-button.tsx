@@ -12,12 +12,16 @@ interface AddUserButtonProps {
 
 const AddUserButton: React.FC<AddUserButtonProps> = ({ ppid }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const { searchActiveUsers } = usePreferredPartnerStore((state) => ({
-    searchActiveUsers: state.searchActiveUsers,
-  }))
+  const { searchActiveUsers, searchWorklist } = usePreferredPartnerStore(
+    (state) => ({
+      searchActiveUsers: state.searchActiveUsers,
+      searchWorklist: state.searchWorklist,
+    }),
+  )
 
   const handleUploadSuccess = () => {
     searchActiveUsers(ppid, {}, 1, true)
+    searchWorklist(ppid, {}, 1, true)
   }
 
   return (

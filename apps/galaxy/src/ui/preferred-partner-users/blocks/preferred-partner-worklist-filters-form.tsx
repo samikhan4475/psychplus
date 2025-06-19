@@ -10,15 +10,15 @@ import {
 import { FormContainer } from '@/components'
 import { FormError } from '@/components/form'
 import { usePreferredPartnerStore } from '../store'
-import { getInitialValues } from '../utils'
+import { getWorklistInitialValues } from '../utils'
 import { ClearButton } from './clear-button'
 import { FilterButton } from './filter-button'
-import { Filters } from './filters'
-import {
-  preferredPartnerFiltersSchema,
-  PreferredPartnerFiltersSchemaType,
-} from './schema'
 import { SubmitButton } from './submit-button'
+import { WorklistFilters } from './worklist-filters'
+import {
+  preferredPartnerWorklistFiltersSchema,
+  PreferredPartnerWorklistFiltersSchemaType,
+} from './worklist-schema'
 
 interface PreferredPartnerWorklistFiltersFormProps {
   ppid: string
@@ -36,48 +36,45 @@ const PreferredPartnerWorklistFiltersForm = ({
       toggleFilters: state.toggleFilters,
     }))
 
-  const form = useForm<PreferredPartnerFiltersSchemaType>({
+  const form = useForm<PreferredPartnerWorklistFiltersSchemaType>({
     disabled: worklistLoading,
-    resolver: zodResolver(preferredPartnerFiltersSchema),
+    resolver: zodResolver(preferredPartnerWorklistFiltersSchema),
     criteriaMode: 'all',
     mode: 'onBlur',
-    defaultValues: getInitialValues(),
+    defaultValues: getWorklistInitialValues(),
   })
 
-  const onSubmit: SubmitHandler<PreferredPartnerFiltersSchemaType> = (data) => {
+  const onSubmit: SubmitHandler<PreferredPartnerWorklistFiltersSchemaType> = (
+    data,
+  ) => {
     return searchWorklist(ppid, data, 1, true)
   }
-  
-  const onError: SubmitErrorHandler<PreferredPartnerFiltersSchemaType> = (
-    errors,
-  ) => {
+
+  const onError: SubmitErrorHandler<
+    PreferredPartnerWorklistFiltersSchemaType
+  > = (errors) => {
     if (!showFilters && Object.keys(errors).length > 0) {
       toggleFilters()
     }
   }
 
   return (
-    <Flex 
-      direction="column" 
-      gap="1" 
-      className="bg-white w-full" 
-      py="3" 
-      px="4"
-    >
+    <Flex direction="column" gap="1" className="bg-white w-full" py="3" px="4">
       <FormError message={error} />
       <Flex gap="4" className="w-full">
-        <FormContainer form={form} onSubmit={onSubmit} onError={onError} className="w-full">
-          <Grid 
-            columns={{ initial: '1', sm: '2', md: '4' }} 
-            gap="2" 
-            align="baseline" 
+        <FormContainer
+          form={form}
+          onSubmit={onSubmit}
+          onError={onError}
+          className="w-full"
+        >
+          <Grid
+            columns={{ initial: '1', sm: '2', md: '4' }}
+            gap="2"
+            align="baseline"
             className="w-full"
           >
-            {showFilters && (
-              <>
-                <Filters form={form} />
-              </>
-            )}
+            {showFilters && <WorklistFilters form={form} />}
 
             <Flex
               className="col-span-full"
@@ -86,10 +83,13 @@ const PreferredPartnerWorklistFiltersForm = ({
               align="center"
             >
               <FilterButton />
-              <ClearButton 
-                ppid={ppid} 
-                form={form} 
-                onClear={(ppid) => searchWorklist(ppid, getInitialValues(), 1, true)}
+              <ClearButton
+                ppid={ppid}
+                form={form}
+                onClear={(ppid) =>
+                  searchWorklist(ppid, getWorklistInitialValues(), 1, true)
+                }
+                initialValues={getWorklistInitialValues()}
               />
               <SubmitButton />
             </Flex>

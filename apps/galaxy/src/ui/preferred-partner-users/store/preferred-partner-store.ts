@@ -5,16 +5,21 @@ import { PreferredPartnerUser, Sort } from '@/types'
 import {
   activatePreferredPartnerUserAction,
   deactivatePreferredPartnerUserAction,
-  deletePreferredPartnerUserAction,
   linkPreferredPartnerUserPatientAction,
   searchPreferredPartnerUsersAction,
   updatePreferredPartnerUserAction,
 } from '../actions'
 import { preferredPartnerFiltersSchema } from '../blocks/schema'
+import { preferredPartnerWorklistFiltersSchema } from '../blocks/worklist-schema'
 import { transformOut } from './transform'
+import { transformWorklistOut } from './worklist-transform'
 
 export type PreferredPartnerFilters = z.infer<
   typeof preferredPartnerFiltersSchema
+>
+
+export type PreferredPartnerWorklistFilters = z.infer<
+  typeof preferredPartnerWorklistFiltersSchema
 >
 
 const PREFERRED_PARTNER_FILTERS_KEY = 'preferred-partner-filters'
@@ -42,7 +47,7 @@ interface Store {
   worklistPageCache: Record<number, PreferredPartnerUser[]>
   worklistLoading?: boolean
   worklistError?: string
-  worklistFormValues?: Partial<PreferredPartnerFilters>
+  worklistFormValues?: Partial<PreferredPartnerWorklistFilters>
   worklistTotal: number
 
   totalCounts: {
@@ -60,11 +65,10 @@ interface Store {
   ) => Promise<void>
   searchWorklist: (
     partnerId: string,
-    formValues?: Partial<PreferredPartnerFilters>,
+    formValues?: Partial<PreferredPartnerWorklistFilters>,
     page?: number,
     reset?: boolean,
   ) => Promise<void>
-  deleteUser: (partnerId: string, userId: string) => Promise<void>
   activateUser: (partnerId: string, userId: string) => Promise<void>
   deactivateUser: (partnerId: string, userId: string) => Promise<void>
   linkUser: (
@@ -83,6 +87,17 @@ interface Store {
   commitTempChanges: (partnerId: string, userId: string) => Promise<void>
   discardTempChanges: (userId: string) => void
   getTempUserData: (userId: string) => PreferredPartnerUser | undefined
+  updateBothUserArrays: (incomingUsers: PreferredPartnerUser[]) => void
+  updateSingleUserInBothArrays: (
+    userId: string,
+    userData: PreferredPartnerUser,
+  ) => void
+  calculateTotalCounts: (users: PreferredPartnerUser[]) => {
+    totalUsers: number
+    totalFamilies: number
+    totalCouples: number
+    totalIndividuals: number
+  }
 }
 
 const usePreferredPartnerStore = create<Store>()(
@@ -188,36 +203,70 @@ const usePreferredPartnerStore = create<Store>()(
 
         return originalUser
       },
-      deleteUser: async (partnerId, userId) => {
-        const result = await deletePreferredPartnerUserAction({
-          partnerId,
-          workListId: userId,
+
+      updateBothUserArrays: (incomingUsers: PreferredPartnerUser[]) => {
+        const updateUserArray = (existingData: PreferredPartnerUser[]) => {
+          const updatedData = existingData.map((existingUser) => {
+            const updatedUser = incomingUsers.find(
+              (newUser: PreferredPartnerUser) => newUser.id === existingUser.id,
+            )
+            return updatedUser || existingUser
+          })
+
+          const existingUserIds = new Set(existingData.map((user) => user.id))
+          const newUsers = incomingUsers.filter(
+            (user) => !existingUserIds.has(user.id),
+          )
+
+          return [...updatedData, ...newUsers]
+        }
+
+        const finalActiveUsersData = updateUserArray(get().activeUsersData)
+        const finalWorklistData = updateUserArray(get().worklistData)
+
+        set({
+          activeUsersData: finalActiveUsersData,
+          worklistData: finalWorklistData,
+        })
+      },
+
+      updateSingleUserInBothArrays: (
+        userId: string,
+        userData: PreferredPartnerUser,
+      ) => {
+        const updateArray = (data: PreferredPartnerUser[]) =>
+          data.map((user) => (user.id === userId ? userData : user))
+
+        set({
+          activeUsersData: updateArray(get().activeUsersData),
+          worklistData: updateArray(get().worklistData),
+        })
+      },
+
+      calculateTotalCounts: (users: PreferredPartnerUser[]) => {
+        const totalCounts = {
+          totalUsers: 0,
+          totalFamilies: 0,
+          totalCouples: 0,
+          totalIndividuals: 0,
+        }
+
+        users.forEach((user) => {
+          totalCounts.totalUsers++
+          switch (user.userType) {
+            case 'Family':
+              totalCounts.totalFamilies++
+              break
+            case 'Couple':
+              totalCounts.totalCouples++
+              break
+            case 'Individual':
+              totalCounts.totalIndividuals++
+              break
+          }
         })
 
-        if (result.state === 'error') {
-          throw new Error(result.error || 'Failed to delete user')
-        }
-
-        if (result.data) {
-          const updatedActiveUsersData = get().activeUsersData.map((user) => {
-            if (user.id === userId) {
-              return result.data
-            }
-            return user
-          })
-
-          const updatedWorklistData = get().worklistData.map((user) => {
-            if (user.id === userId) {
-              return result.data
-            }
-            return user
-          })
-
-          set({
-            activeUsersData: updatedActiveUsersData,
-            worklistData: updatedWorklistData,
-          })
-        }
+        return totalCounts
       },
       activateUser: async (partnerId, userId) => {
         const result = await activatePreferredPartnerUserAction({
@@ -229,25 +278,8 @@ const usePreferredPartnerStore = create<Store>()(
           throw new Error(result.error || 'Failed to activate user')
         }
 
-        if (result.data) {
-          const updatedActiveUsersData = get().activeUsersData.map((user) => {
-            if (user.id === userId) {
-              return result.data
-            }
-            return user
-          })
-
-          const updatedWorklistData = get().worklistData.map((user) => {
-            if (user.id === userId) {
-              return result.data
-            }
-            return user
-          })
-
-          set({
-            activeUsersData: updatedActiveUsersData,
-            worklistData: updatedWorklistData,
-          })
+        if (result.data.length > 0) {
+          get().updateBothUserArrays(result.data)
         }
       },
       deactivateUser: async (partnerId, userId) => {
@@ -260,25 +292,8 @@ const usePreferredPartnerStore = create<Store>()(
           throw new Error(result.error || 'Failed to deactivate user')
         }
 
-        if (result.data) {
-          const updatedActiveUsersData = get().activeUsersData.map((user) => {
-            if (user.id === userId) {
-              return result.data
-            }
-            return user
-          })
-
-          const updatedWorklistData = get().worklistData.map((user) => {
-            if (user.id === userId) {
-              return result.data
-            }
-            return user
-          })
-
-          set({
-            activeUsersData: updatedActiveUsersData,
-            worklistData: updatedWorklistData,
-          })
+        if (result.data.length > 0) {
+          get().updateBothUserArrays(result.data)
         }
       },
       linkUser: async (partnerId, userId, patientId) => {
@@ -293,24 +308,7 @@ const usePreferredPartnerStore = create<Store>()(
         }
 
         if (result.data) {
-          const updatedActiveUsersData = get().activeUsersData.map((user) => {
-            if (user.id === userId) {
-              return result.data
-            }
-            return user
-          })
-
-          const updatedWorklistData = get().worklistData.map((user) => {
-            if (user.id === userId) {
-              return result.data
-            }
-            return user
-          })
-
-          set({
-            activeUsersData: updatedActiveUsersData,
-            worklistData: updatedWorklistData,
-          })
+          get().updateSingleUserInBothArrays(userId, result.data)
         }
       },
 
@@ -352,35 +350,13 @@ const usePreferredPartnerStore = create<Store>()(
             : { ...get().activeUsersPageCache, [page]: result.data.users },
           activeUsersPage: page,
           activeUsersTotal: result.data.total,
+          totalCounts: get().calculateTotalCounts(result.data.users),
         })
-        
-        const totalCounts = {
-          totalUsers: 0,
-          totalFamilies: 0,
-          totalCouples: 0,
-          totalIndividuals: 0,
-        }
-
-        result.data.users.forEach((user) => {
-          totalCounts.totalUsers++
-          switch (user.userType) {
-            case 'Family':
-              totalCounts.totalFamilies++
-              break
-            case 'Couple':
-              totalCounts.totalCouples++
-              break
-            case 'Individual':
-              totalCounts.totalIndividuals++
-              break
-          }
-        })
-        set({ totalCounts: totalCounts })
       },
 
       searchWorklist: async (
         partnerId,
-        formValues: Partial<PreferredPartnerFilters> = {},
+        formValues: Partial<PreferredPartnerWorklistFilters> = {},
         page = 1,
         reset = false,
       ) => {
@@ -394,7 +370,7 @@ const usePreferredPartnerStore = create<Store>()(
 
         const result = await searchPreferredPartnerUsersAction({
           partnerId: partnerId,
-          filters: transformOut(formValues),
+          filters: transformWorklistOut(formValues),
           page,
           sort: get().sort,
           isIncludeOnlyActiveUsers: false,
@@ -429,47 +405,12 @@ const usePreferredPartnerStore = create<Store>()(
           throw new Error(result.error || 'Failed to update user')
         }
 
-        const updatedActiveUsersData = get().activeUsersData.map((user) => {
-          if (user.id === userId) {
-            return userData
-          }
-          return user
-        })
+        get().updateSingleUserInBothArrays(userId, userData)
 
-        const updatedWorklistData = get().worklistData.map((user) => {
-          if (user.id === userId) {
-            return userData
-          }
-          return user
-        })
+        const updatedActiveUsersData = get().activeUsersData
+        const totalCounts = get().calculateTotalCounts(updatedActiveUsersData)
 
-        const totalCounts = {
-          totalUsers: 0,
-          totalFamilies: 0,
-          totalCouples: 0,
-          totalIndividuals: 0,
-        }
-
-        updatedActiveUsersData.forEach((user) => {
-          totalCounts.totalUsers++
-          switch (user.userType) {
-            case 'Family':
-              totalCounts.totalFamilies++
-              break
-            case 'Couple':
-              totalCounts.totalCouples++
-              break
-            case 'Individual':
-              totalCounts.totalIndividuals++
-              break
-          }
-        })
-
-        set({
-          activeUsersData: updatedActiveUsersData,
-          worklistData: updatedWorklistData,
-          totalCounts: totalCounts,
-        })
+        set({ totalCounts })
       },
     }),
     {

@@ -1,6 +1,7 @@
 export { ActionCell } from './action-cell'
 export { PPUserTypeCell } from './pp-user-type-cell'
 export { PPUserStatusCell } from './pp-user-status-cell'
+export { UserStatusCell } from './user-status-cell'
 export { DateCell } from './date-cell'
 export { PreferredPartnerLinkDialogContent } from './preferred-partner-link-dialog-content'
 export { PreferredPartnerLinkTable } from './preferred-partner-link-table'

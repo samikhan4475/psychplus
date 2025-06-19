@@ -94,6 +94,7 @@ const PreferredPartnerFiltersForm = ({
                 ppid={ppid} 
                 form={form} 
                 onClear={(ppid) => searchFn(ppid, getInitialValues(), 1, true)}
+                initialValues={getInitialValues()}
               />
               <SubmitButton />
             </Flex>

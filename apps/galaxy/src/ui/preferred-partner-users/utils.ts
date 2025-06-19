@@ -1,4 +1,14 @@
 import { PreferredPartnerFiltersSchemaType } from './blocks/schema'
+import { PreferredPartnerWorklistFiltersSchemaType } from './blocks/worklist-schema'
+
+export const getWorklistInitialValues =
+  (): PreferredPartnerWorklistFiltersSchemaType => ({
+    userName: '',
+    ssn: '',
+    dateFrom: null,
+    dateTo: null,
+    userStatus: '',
+  })
 
 export const getInitialValues = (): PreferredPartnerFiltersSchemaType => ({
   userName: '',
@@ -7,11 +17,3 @@ export const getInitialValues = (): PreferredPartnerFiltersSchemaType => ({
   dateTo: null,
 })
 
-export const getCodesetOptions = (
-  codeset: { label: string; value: string }[],
-) => {
-  return codeset.map((option: { value: string }) => ({
-    value: option.value,
-    label: option.value,
-  }))
-}

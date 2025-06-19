@@ -9,7 +9,7 @@ import { CODESETS } from '@/constants'
 import { useCodesetOptions } from '@/hooks'
 import { columns } from './preferred-partner-users-columns'
 import { usePreferredPartnerStore } from './store'
-import { getCodesetOptions, getInitialValues } from './utils'
+import { getInitialValues } from './utils'
 
 const PREFERRED_PARTNER_PAGE_SIZE = 25
 
@@ -44,14 +44,12 @@ const PreferredPartnerUsersActiveTable = ({
     searchActiveUsers(ppid, getInitialValues(), 1, true)
   }, [])
 
-  const userTypeOptionsCodeset = useCodesetOptions(
+  const userTypeOptions = useCodesetOptions(
     CODESETS.PreferredPartnerUserType,
   )
-  const userStatusOptionsCodesets = useCodesetOptions(
+  const userStatusOptions = useCodesetOptions(
     CODESETS.PreferredPartnerUserStatus,
   )
-  const userTypeOptions = getCodesetOptions(userTypeOptionsCodeset)
-  const userStatusOptions = getCodesetOptions(userStatusOptionsCodesets)
 
   if (activeUsersLoading) {
     return <LoadingPlaceholder className="bg-white min-h-40 h-full" />
@@ -59,6 +57,10 @@ const PreferredPartnerUsersActiveTable = ({
 
   const isRowDisabled = (row: Row<(typeof activeUsersData)[0]>) => {
     return row.original.recordStatus === 'Deleted'
+  }
+
+  const isRowHighlightedRed = (row: Row<(typeof activeUsersData)[0]>) => {
+    return row.original.matchStatus === 'Reconcile'
   }
 
   const handleNextPage = () => {
@@ -99,6 +101,7 @@ const PreferredPartnerUsersActiveTable = ({
           isRowSpan
           sticky
           isRowDisabled={isRowDisabled}
+          isRowHighlightedRed={isRowHighlightedRed}
         />
       </Box>
       <DataTablePagination

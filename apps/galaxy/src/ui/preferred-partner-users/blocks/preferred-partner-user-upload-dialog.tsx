@@ -26,9 +26,6 @@ const PreferredPartnerUserUploadDialog: React.FC<
     const extension = file.name.toLowerCase().split('.').pop()
     const mimeType = file.type.toLowerCase()
 
-    if (extension === 'csv' || mimeType === 'text/csv') {
-      return 'Csv'
-    }
     if (
       extension === 'xlsx' ||
       mimeType ===
@@ -38,25 +35,6 @@ const PreferredPartnerUserUploadDialog: React.FC<
     }
     if (extension === 'xls' || mimeType === 'application/vnd.ms-excel') {
       return 'Xlsx'
-    }
-    if (extension === 'json' || mimeType === 'application/json') {
-      return 'Json'
-    }
-    if (
-      extension === 'xml' ||
-      mimeType === 'application/xml' ||
-      mimeType === 'text/xml'
-    ) {
-      return 'Xml'
-    }
-    if (extension === 'pdf' || mimeType === 'application/pdf') {
-      return 'Pdf'
-    }
-    if (extension === 'txt' || mimeType === 'text/plain') {
-      return 'Txt'
-    }
-    if (mimeType.startsWith('image/')) {
-      return 'Image'
     }
 
     return null
@@ -69,7 +47,7 @@ const PreferredPartnerUserUploadDialog: React.FC<
 
       if (!fileFormat) {
         toast.error(
-          'Please select a valid file format (CSV, Excel, JSON, XML, PDF, TXT, or Image)',
+          'Please select a valid Excel file (.xlsx or .xls)',
         )
         return
       }
@@ -99,7 +77,7 @@ const PreferredPartnerUserUploadDialog: React.FC<
 
       if (!fileFormat) {
         toast.error(
-          'Please select a valid file format (CSV, Excel, JSON, XML, PDF, TXT, or Image)',
+          'Please select a valid Excel file (.xlsx or .xls)',
         )
         return
       }
@@ -236,7 +214,7 @@ const PreferredPartnerUserUploadDialog: React.FC<
             <input
               ref={fileInputRef}
               type="file"
-              accept=".csv,.xlsx,.xls,.json,.xml,.pdf,.txt,.jpg,.jpeg,.png,.gif,.bmp,.svg"
+              accept=".xlsx,.xls"
               onChange={handleFileSelect}
               className="hidden"
               disabled={isUploading}

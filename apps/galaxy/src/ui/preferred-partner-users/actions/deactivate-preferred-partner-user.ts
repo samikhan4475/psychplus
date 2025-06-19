@@ -12,9 +12,9 @@ const deactivatePreferredPartnerUserAction = async ({
   partnerId,
   workListId,
 }: DeactivatePreferredPartnerUserParams): Promise<
-  api.ActionResult<PreferredPartnerUser>
+  api.ActionResult<PreferredPartnerUser[]>
 > => {
-  const response = await api.DELETE<PreferredPartnerUser>(
+  const response = await api.DELETE<PreferredPartnerUser[]>(
     api.DEACTIVATE_PREFERRED_PARTNER_USER(partnerId, workListId),
   )
 

@@ -12,9 +12,9 @@ const activatePreferredPartnerUserAction = async ({
   partnerId,
   workListId,
 }: ActivatePreferredPartnerUserParams): Promise<
-  api.ActionResult<PreferredPartnerUser>
+  api.ActionResult<PreferredPartnerUser[]>
 > => {
-  const response = await api.POST<PreferredPartnerUser>(
+  const response = await api.POST<PreferredPartnerUser[]>(
     api.ACTIVATE_PREFERRED_PARTNER_USER(partnerId, workListId),
   )
 
