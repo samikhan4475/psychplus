@@ -113,7 +113,9 @@ const AfterVisitSummaryView = ({
           headerItems={headerItems}
           appointment={selectedAppointment}
         />
-        <ProvidersRecommendationsBlock appointmentId={appointmentId} />
+        <ProvidersRecommendationsBlock
+          appointmentId={String(selectedAppointment.appointmentId)}
+        />
         <UpcomingAppointmentsBlock appointments={upcomingAppointments} />
         <MedicationsBlock />
         <ReferralView referrals={referrals} />
