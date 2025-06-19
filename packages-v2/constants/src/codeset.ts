@@ -24,6 +24,8 @@ const CODESETS = {
   DelusionType: 'PsychPlusPublic.DelusionType',
   HallucinationType: 'PsychPlusPublic.HallucinationType',
   Relationship: 'HL7v3.RoleCode',
+  ContactMadeStatus: 'ContactMadeStatus',
+  ServicesOffered: 'ServicesOffered',
   SpecialistType: 'SpecialistType',
 }
 

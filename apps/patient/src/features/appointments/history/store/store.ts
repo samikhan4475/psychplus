@@ -6,20 +6,38 @@ interface AppointmentsStore {
   loading: boolean
   error?: string
   data: Appointment[]
+  allAppointments: Appointment[]
   total: number
   page: number
   setPage: (page: number) => void
   fetchAppointments: (page?: number, limit?: number) => Promise<void>
+  fetchAllAppointments: () => Promise<void>
 }
 
 const useStore = create<AppointmentsStore>((set, get) => ({
   loading: false,
   error: undefined,
   data: [],
+  allAppointments: [],
   total: 0,
   page: 1,
 
   setPage: (page) => set({ page }),
+
+  fetchAllAppointments: async () => {
+    set({ loading: true, error: undefined })
+    const response = await getAppointmentsHistory(0, 0)
+
+    if (response.state === 'error') {
+      set({ error: response.error, loading: false })
+      return
+    }
+
+    set({
+      allAppointments: response.data.previousAppointments,
+      loading: false,
+    })
+  },
 
   fetchAppointments: async (limit, page = 1) => {
     try {

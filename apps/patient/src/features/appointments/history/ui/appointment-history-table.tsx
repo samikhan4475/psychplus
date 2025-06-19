@@ -155,7 +155,14 @@ const AppointmentHistoryTable = () => {
                   </Flex>
                 </Table.Cell>
                 <Table.Cell>
-                  <Link className="flex items-center gap-1" href={'#'}>
+                  <Link
+                    className="flex items-center gap-1"
+                    href={
+                      row.status === 'CheckedOut'
+                        ? `/appointments/avs/${row.id}`
+                        : '#'
+                    }
+                  >
                     <Text
                       className={cn(
                         'whitespace-nowrap text-[14px] font-medium',
