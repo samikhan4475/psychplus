@@ -11,7 +11,7 @@ const WriteoffAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
     `claimServiceLinePayments.${row.index}.writeOffAmount`,
   )
 
-  const writeOffFixed = parseFloat(writeOffAmount).toFixed(2)
+  const writeOffFixed = parseFloat(writeOffAmount || '0').toFixed(2)
 
   return (
     <TextField.Root
