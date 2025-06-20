@@ -22,19 +22,25 @@ const GooglePlacesContextProvider = ({
   const [loaded, setLoaded] = useState(false)
 
   const contextValue = useMemo(() => ({ loaded }), [loaded])
-
+  
   return (
     <GooglePlacesContext.Provider value={contextValue}>
       <Script
         async
         defer
         strategy="afterInteractive"
+        onLoad={() => {
+          setLoaded(true)
+        }}
         onReady={() => {
           setLoaded(true)
         }}
+        onError={(e) => {
+          console.error('Google Places script error:', e)
+        }}
         src={`https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`}
       />
-      {loaded && children}
+      {children}
     </GooglePlacesContext.Provider>
   )
 }
