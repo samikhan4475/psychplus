@@ -205,19 +205,25 @@ const widgets: Array<WidgetType> = [
     component: TherapyAssessmentPlanClientLoader,
     id: QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan,
     actualNoteComponent: TherapyAssessmentPlanClientView,
-    providerTypes: [ProviderType.Therapy],
+    providerTypes: [VisitTypeEnum.IndividualPsychotherapy],
   },
   {
     component: PsychiatryAssessmentPlanClientLoader,
     id: QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
     actualNoteComponent: PsychiatryAssessmentPlanClientView,
-    providerTypes: [ProviderType.Psychiatry],
+    providerTypes: [
+      VisitTypeEnum.Outpatient,
+      VisitTypeEnum.ResidentCare,
+      VisitTypeEnum.TransitionalCare,
+      VisitTypeEnum.EdVisit,
+      VisitTypeEnum.HospitalCareInitial,
+    ],
   },
   {
     component: FamilyInternalMedicineAssessmentPlanClientLoader,
     id: QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,
     actualNoteComponent: FamilyInternalMedicineAssessmentPlanClientView,
-    providerTypes: [ProviderType.InternalMedicine, ProviderType.FamilyMedicine],
+    providerTypes: [VisitTypeEnum.FamilyPsychotherapy],
   },
   {
     component: SpravatoWidgetClientLoader,
@@ -285,7 +291,7 @@ const getWidgetsByVisitType = (
 
     if (
       widget &&
-      (!widget.providerTypes || widget.providerTypes.includes(providerType))
+      (!widget.providerTypes || widget.providerTypes.includes(visitType))
     ) {
       acc.push(widget)
     }

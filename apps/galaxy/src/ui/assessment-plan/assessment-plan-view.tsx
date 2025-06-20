@@ -4,6 +4,7 @@ import { useEffect, useMemo } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
+import { VisitTypeEnum } from '@/enum'
 import { Appointment, QuickNoteSectionItem, Relationship } from '@/types'
 import { validateYesNoEnum } from '../mse/mse-widget/utils'
 import { QuickNoteSectionName } from '../quicknotes/constants'
@@ -41,6 +42,7 @@ const AssessmentPlanView = ({
   patientRelationships,
   sectionsData,
 }: AssessmentPlanViewProps) => {
+  const { visitTypeCode } = appointment
   const { activeTab, setActiveTab } = useStore((state) => ({
     activeTab: state.activeTab,
     setActiveTab: state.setActiveTab,
@@ -65,6 +67,20 @@ const AssessmentPlanView = ({
     sectionsData,
     QuickNoteSectionName.QuicknoteSectionMse,
   )
+  const psychiatryVisitTypes = [
+    VisitTypeEnum.Outpatient,
+    VisitTypeEnum.ResidentCare,
+    VisitTypeEnum.TransitionalCare,
+    VisitTypeEnum.EdVisit,
+    VisitTypeEnum.HospitalCareInitial,
+  ]
+  const psychiatryAssessmentPlanSection = visitTypeCode
+    ? psychiatryVisitTypes.includes(visitTypeCode as VisitTypeEnum)
+    : false
+  const individualPsychotherapy =
+    visitTypeCode === VisitTypeEnum.IndividualPsychotherapy
+  const familyPsychotherapy =
+    visitTypeCode === VisitTypeEnum.FamilyPsychotherapy
 
   const safetyPlanningBoolean =
     psychiatryAssessmentPlanData?.find(
@@ -81,17 +97,33 @@ const AssessmentPlanView = ({
   const shouldShowSafety = safetyPlanningBoolean || isEnabled
 
   useEffect(() => {
-    if (
-      !shouldShowSafety &&
-      appointment.providerType === ProviderType.Psychiatry
-    ) {
-      setActiveTab(AssessmentPlanTabs.PAP)
+    const { visitTypeCode } = appointment
+
+    if (shouldShowSafety) {
+      setActiveTab(AssessmentPlanTabs.SPAI)
+    } else {
+      const tabMap: Record<string, AssessmentPlanTabs> = {
+        psychiatry: AssessmentPlanTabs.PAP,
+        therapy: AssessmentPlanTabs.TAP,
+        familyMedicine: AssessmentPlanTabs.FIMAP,
+      }
+
+      const tab =
+        visitTypeCode && tabMap[visitTypeCode.toLowerCase()]
+          ? tabMap[visitTypeCode.toLowerCase()]
+          : AssessmentPlanTabs.PAP
+
+      setActiveTab(tab)
     }
   }, [shouldShowSafety, setActiveTab])
 
   let renderTab = null
-  switch (appointment.providerType) {
-    case ProviderType.Psychiatry:
+  switch (appointment.visitTypeCode) {
+    case VisitTypeEnum.Outpatient:
+    case VisitTypeEnum.ResidentCare:
+    case VisitTypeEnum.TransitionalCare:
+    case VisitTypeEnum.EdVisit:
+    case VisitTypeEnum.HospitalCareInitial:
       renderTab = (
         <>
           <TabsContent value={AssessmentPlanTabs.PAP}>
@@ -99,7 +131,6 @@ const AssessmentPlanView = ({
               sectionsData={sectionsData}
               appointment={appointment}
               patientId={patientId}
-              isPsychiatryAssessmentPlanTab={true}
             />
           </TabsContent>
           {shouldShowSafety && (
@@ -117,7 +148,7 @@ const AssessmentPlanView = ({
         </>
       )
       break
-    case ProviderType.Therapy:
+    case VisitTypeEnum.IndividualPsychotherapy:
       renderTab = (
         <TabsContent value={AssessmentPlanTabs.TAP}>
           <TherapyAssessmentPlanTab
@@ -129,8 +160,7 @@ const AssessmentPlanView = ({
         </TabsContent>
       )
       break
-    case ProviderType.InternalMedicine:
-    case ProviderType.FamilyMedicine:
+    case VisitTypeEnum.FamilyPsychotherapy:
       renderTab = (
         <TabsContent value={AssessmentPlanTabs.FIMAP}>
           <FamilyInternalMedicineAssessmentPlanTab
@@ -186,27 +216,23 @@ const AssessmentPlanView = ({
     >
       <Flex>
         <Tabs.List>
-          {appointment.providerType === ProviderType.Psychiatry && (
+          {psychiatryAssessmentPlanSection && (
             <TabsTrigger value={AssessmentPlanTabs.PAP}>
               {AssessmentPlanTabs.PAP}
             </TabsTrigger>
           )}
-          {appointment.providerType === ProviderType.Psychiatry &&
-            shouldShowSafety && (
-              <TabsTrigger value={AssessmentPlanTabs.SPAI}>
-                {AssessmentPlanTabs.SPAI}
-              </TabsTrigger>
-            )}
+          {psychiatryAssessmentPlanSection && shouldShowSafety && (
+            <TabsTrigger value={AssessmentPlanTabs.SPAI}>
+              {AssessmentPlanTabs.SPAI}
+            </TabsTrigger>
+          )}
 
-          {appointment.providerType === ProviderType.Therapy && (
+          {individualPsychotherapy && (
             <TabsTrigger value={AssessmentPlanTabs.TAP}>
               {AssessmentPlanTabs.TAP}
             </TabsTrigger>
           )}
-          {[
-            ProviderType.InternalMedicine as string,
-            ProviderType.FamilyMedicine as string,
-          ].includes(appointment.providerType) && (
+          {familyPsychotherapy && (
             <TabsTrigger value={AssessmentPlanTabs.FIMAP}>
               {AssessmentPlanTabs.FIMAP}
             </TabsTrigger>
