@@ -1,6 +1,13 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
-import { formatCurrency, formatDateTime, getSlashedDateString } from '@/utils'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
+import {
+  formatCurrency,
+  formatDateTime,
+  getCodesetDisplayName,
+  getSlashedDateString,
+} from '@/utils'
 import { SignCell } from './cells'
 import { BillingHistory } from './types'
 
@@ -80,7 +87,14 @@ const columns: ColumnDef<BillingHistory>[] = [
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="Visit Sequence" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.visitSequence}</TextCell>,
+    cell: ({ row }) => {
+      const sequenceCodes = useCodesetCodes(CODESETS.VisitSequence)
+      const sequence = getCodesetDisplayName(
+        row.original.visitSequence,
+        sequenceCodes,
+      )
+      return <TextCell>{sequence}</TextCell>
+    },
   },
   {
     accessorKey: 'visitMedium',
@@ -88,9 +102,14 @@ const columns: ColumnDef<BillingHistory>[] = [
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="Visit Medium" />
     ),
-    cell: ({ row }) => (
-      <TextCell>{row.original?.visitMedium ?? 'N/A'}</TextCell>
-    ),
+    cell: ({ row }) => {
+      const mediumCodes = useCodesetCodes(CODESETS.VisitMedium)
+      const medium = getCodesetDisplayName(
+        row.original?.visitMedium,
+        mediumCodes,
+      )
+      return <TextCell>{medium ?? 'N/A'}</TextCell>
+    },
   },
   {
     accessorKey: 'primaryInsuranceDescription',

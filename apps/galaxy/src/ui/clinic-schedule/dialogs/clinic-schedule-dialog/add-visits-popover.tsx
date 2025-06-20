@@ -2,7 +2,10 @@ import { useEffect, useMemo, useState } from 'react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { LoadingPlaceholder } from '@/components'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { SelectOptionType } from '@/types'
+import { getCodesetDisplayName } from '@/utils'
 import { getLocationServicesAction } from '../../clinic-time-tab/actions'
 import * as MultiSelectPopover from './multiselect-popover'
 import { SchemaType } from './schema'
@@ -17,6 +20,9 @@ const AddVisitPopover = () => {
   const { append } = useFieldArray({
     name: 'visitTypes',
   })
+  const visitTypeCodes = useCodesetCodes(CODESETS.VisitType)
+  const sequenceCodes = useCodesetCodes(CODESETS.VisitSequence)
+  const mediumCodes = useCodesetCodes(CODESETS.VisitMedium)
   const { watch } = useFormContext<SchemaType>()
   const [location, serviceId, visitsAdded, visitMedium] = watch([
     'primaryLocation',
@@ -43,11 +49,22 @@ const AddVisitPopover = () => {
         return
       }
       setVisits(
-        response.data[0]?.serviceVisitTypes?.map((el) => ({
-          value: el.id.toString(),
-          label: `${el.typeOfVisit} - ${el.visitSequence} - ${el.visitMedium}`,
-          visitMedium: el.visitMedium,
-        })) ?? [],
+        response.data[0]?.serviceVisitTypes?.map((el) => {
+          const visitType = getCodesetDisplayName(
+            el.visitTypeCode,
+            visitTypeCodes,
+          )
+          const sequence = getCodesetDisplayName(
+            el.visitSequence,
+            sequenceCodes,
+          )
+          const medium = getCodesetDisplayName(el.visitMedium, mediumCodes)
+          return {
+            value: el.id.toString(),
+            label: `${visitType} - ${sequence} - ${medium}`,
+            visitMedium: el.visitMedium,
+          }
+        }) ?? [],
       )
       setLoading(false)
     }

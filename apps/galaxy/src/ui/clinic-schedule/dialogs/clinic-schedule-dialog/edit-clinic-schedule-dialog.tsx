@@ -4,7 +4,9 @@ import { Dialog, Flex } from '@radix-ui/themes'
 import { SubmitHandler } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { CloseDialogTrigger } from '@/components'
-import { sanitizeFormData } from '@/utils'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
+import { getCodesetDisplayName, sanitizeFormData } from '@/utils'
 import { updateClinicSchedule } from '../../clinic-time-tab/actions'
 import { useStore } from '../../clinic-time-tab/store'
 import { transformOut } from '../../clinic-time-tab/transform'
@@ -31,6 +33,8 @@ const EditClinicScheduleDialog = ({
   const [open, setOpen] = useState(false)
   const [showProfilePreferenceAlert, setShowProfilePreferenceAlert] =
     useState(false)
+  const sequenceCodes = useCodesetCodes(CODESETS.VisitSequence)
+  const mediumCodes = useCodesetCodes(CODESETS.VisitMedium)
 
   const onSubmit: SubmitHandler<SchemaType> = async (e) => {
     const santizedFormData = sanitizeFormData(e)
@@ -80,10 +84,17 @@ const EditClinicScheduleDialog = ({
         ...el,
         location: el.locationId,
       })),
-      visitTypes: clinicTime.visitTypes?.map((el) => ({
-        serviceVisitTypeId: el.serviceVisitTypeId,
-        visitName: `${el.typeOfVisit} - ${el.visitSequence} - ${el.visitMedium}`,
-      })),
+      visitTypes: clinicTime.visitTypes?.map((el) => {
+        const sequence = getCodesetDisplayName(
+          el.visitSequence ?? '',
+          sequenceCodes,
+        )
+        const medium = getCodesetDisplayName(el.visitMedium ?? '', mediumCodes)
+        return {
+          serviceVisitTypeId: el.serviceVisitTypeId,
+          visitName: `${el.typeOfVisit} - ${sequence} - ${medium}`,
+        }
+      }),
       bookingFrequency: String(clinicTime.maxBookingsPerSlot),
       timeStart: parseTime(clinicTime.startTime),
       timeEnd: clinicTime.endTime ? parseTime(clinicTime.endTime) : undefined,

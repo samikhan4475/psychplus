@@ -5,7 +5,11 @@ import { useCodesetCodes, useCodesetOptions } from '@/hooks'
 import { Appointment, PatientProfile } from '@/types'
 import { getTimeZoneAbbreviation } from '@/ui/schedule/utils'
 import { convertToTimezone } from '@/ui/visit/utils'
-import { getPatientFullName, getSlashedPaddedDateString } from '@/utils'
+import {
+  getCodesetDisplayName,
+  getPatientFullName,
+  getSlashedPaddedDateString,
+} from '@/utils'
 import { BlockContainer, LabelAndValue } from './shared'
 
 interface Props {
@@ -20,9 +24,16 @@ const PsychiatricEvaluation = ({
   cosignerLabel,
 }: Props) => {
   const ServicesOffered = useCodesetCodes(CODESETS.ServicesOffered)
+  const sequenceCodes = useCodesetCodes(CODESETS.VisitSequence)
+  const mediumCodes = useCodesetCodes(CODESETS.VisitMedium)
   const service = ServicesOffered.find(
     (service) => service.value === appointment.service,
   )?.display
+  const sequence = getCodesetDisplayName(
+    appointment?.visitSequence,
+    sequenceCodes,
+  )
+  const medium = getCodesetDisplayName(appointment?.type ?? '', mediumCodes)
 
   const { date, time } = convertToTimezone(
     appointment.startDate,
@@ -45,7 +56,7 @@ const PsychiatricEvaluation = ({
       <LabelAndValue label="Title:" value={appointment.visitNoteTitle} />
       <LabelAndValue
         label="Visit Type:"
-        value={`${appointment?.visitType} | ${appointment?.visitSequence} | ${appointment?.type}`}
+        value={`${appointment?.visitType} | ${sequence} | ${medium}`}
       />
       <LabelAndValue label="Provider Type:" value={providerTypeLabel} />
       <LabelAndValue label="Provider:" value={appointment.providerName} />

@@ -8,10 +8,12 @@ import { Service } from '@/types'
 import { getCodesetDisplayName } from '@/utils'
 
 const ServiceVisitTypeCell = ({ row: { original } }: PropsWithRow<Service>) => {
-  const codes = useCodesetCodes(CODESETS.VisitSequence)
+  const sequenceCodes = useCodesetCodes(CODESETS.VisitSequence)
+  const mediumCodes = useCodesetCodes(CODESETS.VisitMedium)
   const visitTypes = original?.serviceVisitTypes?.map((visit) => {
-    const sequnce = getCodesetDisplayName(visit.visitSequence, codes)
-    return `${visit?.typeOfVisit} - ${sequnce} - ${visit?.visitMedium}`
+    const sequence = getCodesetDisplayName(visit.visitSequence, sequenceCodes)
+    const medium = getCodesetDisplayName(visit?.visitMedium, mediumCodes)
+    return `${visit?.typeOfVisit} - ${sequence} - ${medium}`
   })
   const serviceVisit = visitTypes?.join(' | ')
   return (

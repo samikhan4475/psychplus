@@ -12,7 +12,7 @@ import {
 import { CODESETS } from '@/constants'
 import { useCodesetCodes, useHasPermission } from '@/hooks'
 import { SharedCode } from '@/types'
-import { getSlashedDateString } from '@/utils'
+import { getCodesetDisplayName, getSlashedDateString } from '@/utils'
 import { getTimeZoneAbbreviation } from '../schedule/utils'
 import { convertToTimezone } from '../visit/utils'
 import { TableHeaderCheckboxCell, TableRowCheckboxCell } from './cells'
@@ -168,13 +168,18 @@ const getColumns = (
       id: 'visit-type',
       accessorKey: 'visitType',
       header: () => <ColumnHeader label="Visit Display" />,
-      cell: ({ row }) => (
-        <Box className="truncate">
-          <TextCell>
-            {`${row.original.visitType} | ${row.original.visitSequence} | ${row.original.visitMedium}`}{' '}
-          </TextCell>
-        </Box>
-      ),
+      cell: ({ row }) => {
+        const { visitType, visitSequence = '', visitMedium = '' } = row.original
+        const sequenceCodes = useCodesetCodes(CODESETS.VisitSequence)
+        const mediumCodes = useCodesetCodes(CODESETS.VisitMedium)
+        const sequence = getCodesetDisplayName(visitSequence, sequenceCodes)
+        const medium = getCodesetDisplayName(visitMedium, mediumCodes)
+        return (
+          <Box className="truncate">
+            <TextCell>{`${visitType} | ${sequence} | ${medium}`}</TextCell>
+          </Box>
+        )
+      },
     },
     {
       id: 'note-title',
