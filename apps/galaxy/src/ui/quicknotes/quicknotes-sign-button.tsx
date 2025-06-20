@@ -69,13 +69,15 @@ const QuickNotesSignButton = ({
   const { workingDischargeDiagnosisData } = useDischargeDiagnosisStore()
   const { workingDiagnosisData } = useDiagnosisStore()
 
-  const { staffId, staffRoleCode, staffSpecialistIds, ProviderType } =
+  const { staffId, staffRoleCode, staffSpecialistIds, ProviderType, user } =
     useGlobalStore((state) => ({
       staffId: state.user.staffId,
       staffRoleCode: state.staffResource.staffRoleCode,
       staffSpecialistIds: state.staffResource.staffSpecialistIds,
       ProviderType: state.codesets.ProviderType,
+      user: state.user,
     }))
+
   const {
     data: medicationData,
     isPmpReviewed,
@@ -188,7 +190,9 @@ const QuickNotesSignButton = ({
     patientId,
     appointmentId,
     appointment,
-    signedByUserId: appointment.providerUserId,
+    ...(isPrescriber && !appointment.isServiceTimeDependent
+      ? { signedByUserId: user.id }
+      : { signedByUserId: appointment.providerUserId }),
     signedDate: isPrescriber ? new Date().toISOString() : undefined,
     noteTitleCode: appointment.visitNoteTitle,
     noteTypeCode: noteTypeCodes?.value,
