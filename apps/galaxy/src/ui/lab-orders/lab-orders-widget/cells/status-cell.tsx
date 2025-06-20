@@ -5,10 +5,9 @@ import { reviewStatusIcon } from './review-status-icon'
 
 interface StatusCellProps {
   row: Row<LabOrders>
-  appointmentId?: string
 }
 
-const StatusCell = ({ row, appointmentId }: StatusCellProps) => {
+const StatusCell = ({ row }: StatusCellProps) => {
   const orderStatus = row.original?.orderStatus ?? ''
   const order = row.original
   return (
@@ -16,7 +15,7 @@ const StatusCell = ({ row, appointmentId }: StatusCellProps) => {
       <Badge className="!rounded-none" color={getBadgeColor(orderStatus)}>
         {labOrderStatusValues[orderStatus]}
       </Badge>
-      {reviewStatusIcon(order, appointmentId)}
+      {reviewStatusIcon(order)}
     </div>
   )
 }

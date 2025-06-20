@@ -11,7 +11,7 @@ import { FieldLabel, FormFieldContainer } from '../../shared'
 import { DateRangePickerInput } from '../date-range-picker'
 import { useStore } from '../store'
 
-const DateRangeInput = () => {
+const DateRangeInput = ({ hideLabel }: { hideLabel?: boolean }) => {
   const dateToday = today(getLocalTimeZone())
   const { weekStartDate, setStartDate, fetchWeekOnNavigate } = useStore(
     (state) => ({
@@ -35,7 +35,7 @@ const DateRangeInput = () => {
 
   return (
     <FormFieldContainer>
-      <FieldLabel>Date Range</FieldLabel>
+      {!hideLabel && <FieldLabel>Date Range</FieldLabel>}
       <I18nProvider locale="en-UK">
         <DateRangePickerInput
           value={value}

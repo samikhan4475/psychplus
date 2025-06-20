@@ -49,13 +49,10 @@ const ActionsCell = ({
 
   if (!afterSummaryVisit) {
     const hasValidAppointment = appointmentId && appointmentId !== '0'
+    const isResultNotSigned = !original.isResultSigned
 
-    if (hasValidAppointment) {
-      actions.push(editAction)
-      if (!original.isResultSigned) {
-        actions.push(reviewAction)
-      }
-    }
+    if (isResultNotSigned) actions.push(reviewAction)
+    if (hasValidAppointment) actions.push(editAction)
 
     actions.push(deleteAction)
   }

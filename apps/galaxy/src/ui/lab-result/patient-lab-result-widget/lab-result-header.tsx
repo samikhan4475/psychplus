@@ -2,8 +2,7 @@
 
 import * as Tabs from '@radix-ui/react-tabs'
 import { Flex, Text } from '@radix-ui/themes'
-import { ListIcon, SignalIcon } from 'lucide-react'
-
+import { BarChartIcon, ListIcon, SignalIcon } from 'lucide-react'
 interface LabResultHeaderProps {
   activeTab: string
   setActiveTab: (tab: string) => void
@@ -51,6 +50,12 @@ const LabResultHeader = ({
                     <Flex align="center" gap="2">
                       <SignalIcon size={14} />
                       Sheet View
+                    </Flex>
+                  </TabsTrigger>
+                   <TabsTrigger value="GraphView">
+                    <Flex align="center" gap="2">
+                      <BarChartIcon size={14} />
+                      Graph View
                     </Flex>
                   </TabsTrigger>
                 </Flex>

@@ -34,6 +34,8 @@ const LabResultFilterForm = () => {
       dateTo: formatDateToISOString(data.dateTo, true),
       patientId,
       resourceStatusList: ['Active'],
+      isIncludeLabOrder: true,
+      isIncludeTests: true,
     }
 
     const cleanedData = removeEmptyValues(formattedData)

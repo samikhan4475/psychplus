@@ -4,6 +4,7 @@ interface SelectOptionType {
   disabled?: boolean
   ncpdpId?:string
   servicesOffered?: string
+  parentTitle?: string
 }
 
 export type { SelectOptionType }

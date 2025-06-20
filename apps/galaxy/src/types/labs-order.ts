@@ -97,6 +97,7 @@ interface LabOrders {
   orderType?: string
   orderSendStatus?: boolean
   orderSentDateTime?: string
+  labValidation?:string
   isPscHold?: boolean
   isTest?: boolean
   labOrderDate: string

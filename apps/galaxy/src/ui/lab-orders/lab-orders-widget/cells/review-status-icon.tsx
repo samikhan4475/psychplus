@@ -3,8 +3,7 @@ import { CheckCircle2, Hourglass } from 'lucide-react'
 import { LabOrders } from '@/types'
 import { formatDate } from '@/utils'
 
-export const reviewStatusIcon = (order: LabOrders, appointmentId?: string) => {
-  if (!appointmentId || appointmentId === '0') return null
+export const reviewStatusIcon = (order: LabOrders) => {
 
   const isResultSigned = order?.isResultSigned
 

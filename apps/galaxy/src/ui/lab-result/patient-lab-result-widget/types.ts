@@ -1,11 +1,12 @@
+import { CalendarDate } from '@internationalized/date'
 import { LabResult, Metadata } from '@/types'
 
 export interface LabResults {
-  resultId: string
-  resultValue: string
+  resultId?: string
+  resultValue?: string
   resultName?: string
   resultUnit: string
-  observationTime: string
+  observationTime: string | CalendarDate
   recomendedValue: string
   labName: string
   metadata: Metadata
@@ -52,6 +53,17 @@ export interface LabResultSubRow {
   resultsByDate: GroupedResultsByDate
 }
 
+export interface SubRow {
+  resultName: string
+  resultsByDate: Record<string, LabResults>
+  testName?: string
+  observationTime?: Date | string
+}
+
+export interface ProcessedTestData {
+  testName: string
+  subRows: SubRow[]
+}
 export interface LabResultResponseTransformed
   extends Omit<LabResultResponse, 'results'> {
   subRows: LabResultSubRow[]

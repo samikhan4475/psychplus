@@ -10,6 +10,7 @@ import { LabResultHeader } from './lab-result-header'
 import { LabResultSheet } from './lab-result-sheet'
 import { LabResultTable } from './lab-result-table'
 import { useStore } from './store'
+import { LabResultGraph } from './lab-result-graph'
 
 interface LabResultWidgetProps {
   isQuickNoteView?: boolean
@@ -56,6 +57,9 @@ const LabResultWidget = ({ isQuickNoteView = true }: LabResultWidgetProps) => {
         </TabsContent>
         <TabsContent value="SheetView">
           {activeTab === 'SheetView' && <LabResultSheet />}
+        </TabsContent>
+         <TabsContent value="GraphView">
+          {activeTab === 'GraphView' && <LabResultGraph />}
         </TabsContent>
       </Tabs.Root>
     </Flex>

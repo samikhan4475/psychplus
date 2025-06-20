@@ -161,7 +161,7 @@ const getColumns = ({
         />
       ),
       cell: ({ row }) => (
-        <StatusCell row={row} appointmentId={appointmentId ?? ''} />
+        <StatusCell row={row}  />
       ),
     },
   ]
