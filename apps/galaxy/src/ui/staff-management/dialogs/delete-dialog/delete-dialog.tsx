@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation'
 import { Dialog, Flex, IconButton, Text } from '@radix-ui/themes'
 import { TrashIcon, X } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { detachPracticeAction } from '@/ui/staff-organization-practice/actions'
 import { deleteStaffAction } from '../../actions/delete-staff'
 import { FEATURE_TYPES } from '../../constants'
 import { useStore } from '../../store'
@@ -13,15 +14,14 @@ import { DeleteButton } from './delete-button'
 
 interface DeleteDialogProps {
   staffId: string
+  row: any
 }
 
-const DeleteDialog = ({ staffId }: DeleteDialogProps) => {
+const DeleteDialog = ({ row, staffId }: DeleteDialogProps) => {
   const [isOpen, setIsOpen] = useState(false)
 
   const search = useStore((state) => state.search)
-
-  const { id, type } = useParams<{ id: string; type: string }>()
-
+  const { type, id } = useParams<{ type: string; id: string }>()
   const deleteRecord = (
     e: React.MouseEvent<HTMLButtonElement | SVGElement>,
   ) => {
@@ -38,6 +38,32 @@ const DeleteDialog = ({ staffId }: DeleteDialogProps) => {
       })
     })
   }
+
+  const deassociateRecords = (
+    e: React.MouseEvent<HTMLButtonElement | SVGElement>,
+  ) => {
+    e.stopPropagation()
+    detachPracticeAction(
+      {
+        roleIds: row?.staffPractice[0]?.users[0]?.userRoles[0]?.id
+          ? [row?.staffPractice[0]?.users[0]?.userRoles[0]?.id]
+          : [],
+      },
+      row.userId,
+      id,
+    ).then((result) => {
+      if (result.state === 'success') {
+        toast.success('Staff Deleted Successfully')
+      } else if (result.state === 'error') {
+        toast.error(result.error)
+      }
+      search({
+        organizationsIds: type === FEATURE_TYPES.ORGANIZATION ? [id] : [],
+        practicesIds: type === FEATURE_TYPES.PRACTICE ? [id] : [],
+      })
+    })
+  }
+
   const onOpen = (e: React.MouseEvent<HTMLButtonElement | SVGElement>) => {
     e.stopPropagation()
     setIsOpen(true)
@@ -65,7 +91,13 @@ const DeleteDialog = ({ staffId }: DeleteDialogProps) => {
           </Text>
           <Flex justify="end" gap="2">
             <CancelButton />
-            <DeleteButton onClick={deleteRecord} />
+            <DeleteButton
+              onClick={
+                type === FEATURE_TYPES.PRACTICE
+                  ? deassociateRecords
+                  : deleteRecord
+              }
+            />
           </Flex>
         </Flex>
       </Dialog.Content>

@@ -7,7 +7,7 @@ import { Staff } from '../types'
 const RowActionDelete = ({
   row: { original: record },
 }: PropsWithRow<Staff>) => {
-  return <DeleteDialog staffId={record.id} />
+  return <DeleteDialog row={record} staffId={record.id} />
 }
 
 export { RowActionDelete }

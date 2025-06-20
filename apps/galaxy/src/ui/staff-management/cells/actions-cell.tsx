@@ -4,22 +4,21 @@ import { Staff } from '../types'
 import { RowActionDelete } from './row-action-delete'
 import { RowActionEdit } from './row-action-edit'
 
-const rowActions: RowAction<Staff>[] = [
-  {
-    id: 'insurance-list-row-action-edit',
-    render: RowActionEdit,
-  },
-  {
-    id: 'insurance-list-row-action-delete',
-    render: RowActionDelete,
-  },
-]
-
 interface ActionsCellProps {
   row: Row<Staff>
 }
 
 const ActionsCell = ({ row }: ActionsCellProps) => {
+  const rowActions: RowAction<Staff>[] = [
+    {
+      id: 'insurance-list-row-action-edit',
+      render: RowActionEdit,
+    },
+    {
+      id: 'insurance-list-row-action-delete',
+      render: RowActionDelete,
+    },
+  ]
   return <AdaptiveRowActionsCell actions={rowActions} row={row} />
 }
 
