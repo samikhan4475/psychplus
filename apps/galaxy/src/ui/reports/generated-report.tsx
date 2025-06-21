@@ -27,9 +27,6 @@ const GeneratedReport = () => {
     generatedReport: state.generatedReport,
     generateReportLoading: state.generateReportLoading,
   }))
-  if (!generatedReport) return
-  const { headers, data } = parseGeneratedReport(generatedReport)
-  const columns = generateColumns(headers)
 
   if (generateReportLoading) {
     return (
@@ -44,6 +41,10 @@ const GeneratedReport = () => {
       </Flex>
     )
   }
+  if (!generatedReport) return
+  const { headers, data } = parseGeneratedReport(generatedReport)
+  const columns = generateColumns(headers)
+
   return (
     <Flex direction="column" className="bg-white overflow-hidden pb-1">
       <ScrollArea className="mb-0 rounded-1 p-1">
