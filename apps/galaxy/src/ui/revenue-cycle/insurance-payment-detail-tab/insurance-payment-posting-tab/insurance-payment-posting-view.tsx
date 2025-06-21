@@ -84,7 +84,10 @@ const InsurancePaymentPostingView = ({
         )
         onCancel()
       } else if (result.state === 'error') {
-        toast.error(result.error)
+        let error = result.error
+        if (error.includes('(InvalidOperationException)'))
+          error = error.split('(InvalidOperationException)')[1].trim()
+        toast.error(error)
       }
     }
   }
