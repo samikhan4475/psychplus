@@ -10,12 +10,14 @@ const defaultPayload = {
   isIncludeMetadataResourceStatus: true,
 }
 const getStateLocationAction = async (
-  locationName: string,
+  stateName: string,
+  locationName?: string,
 ): Promise<api.ActionResult<SelectOptionType[]>> => {
   const url = new URL(api.LOCATION_ENDPOINT)
   const response = await api.POST<Location[]>(`${url}`, {
     ...defaultPayload,
-    locationName,
+    stateName,
+    locationName: locationName ?? undefined,
   })
 
   if (response.state === 'error') {

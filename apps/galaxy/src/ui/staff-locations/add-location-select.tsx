@@ -1,5 +1,3 @@
-import React from 'react'
-import { useParams } from 'next/navigation'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FormFieldContainer, FormFieldLabel } from '@/components'
@@ -16,9 +14,9 @@ const AddLocationSelect = ({ staffId }: { staffId: string }) => {
     search: state.search,
     sureScriptEnabled: state.sureScriptEnabled,
   }))
-
   const form = useFormContext<SchemaType>()
   const stateName = form.watch('stateName')
+
   const onOptionClick = async (option: SelectOptionType) => {
     if (staffId && typeof staffId === 'string') {
       const result = await createProviderLocationAction({
@@ -48,6 +46,7 @@ const AddLocationSelect = ({ staffId }: { staffId: string }) => {
       search({ staffId }, 1, true)
     }
   }
+
   return (
     <FormFieldContainer className="flex-row gap-x-2">
       <FormFieldLabel>Select & Add Location</FormFieldLabel>
@@ -58,7 +57,10 @@ const AddLocationSelect = ({ staffId }: { staffId: string }) => {
         label="Select Location"
         disabled={!stateName}
         onRowClick={onOptionClick}
-        fetchOptions={getStateLocationAction}
+        fetchDependencies={[stateName]}
+        fetchOptions={(lessonName) =>
+          getStateLocationAction(stateName ?? '', lessonName)
+        }
       />
     </FormFieldContainer>
   )

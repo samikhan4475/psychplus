@@ -28,6 +28,7 @@ interface AsyncRowSelectProps
   label?: string
   defaultWidth?: `w-[${number}${Unit}]` | `w-${number}`
   disabledOptions?: string[]
+  fetchDependencies?: unknown[]
 }
 
 interface RowOptionProps {
@@ -68,6 +69,7 @@ const AsyncRowSelect = ({
   defaultValue,
   defaultWidth,
   disabledOptions,
+  fetchDependencies = [],
   ...textFieldProps
 }: AsyncRowSelectProps) => {
   const [showOptions, setShowOptions] = useState(false)
@@ -95,7 +97,7 @@ const AsyncRowSelect = ({
 
   useEffect(() => {
     debouncedFetch(defaultValue ?? '')
-  }, [debouncedFetch, defaultValue])
+  }, [debouncedFetch, defaultValue, fetchDependencies])
 
   const onOptionClick = (option: Option) => {
     if (!allowMultiple) setShowOptions(false)

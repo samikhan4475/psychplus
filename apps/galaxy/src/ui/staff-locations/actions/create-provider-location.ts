@@ -16,7 +16,6 @@ const createProviderLocationAction = async ({
   const url = new URL(api.ADD_PROVIDER_LOCATION_ENDPOINT(staffId))
   const response = await api.POST<Location[]>(`${url}`, [
     {
-      staff_id: staffId,
       locationId,
     },
   ])
