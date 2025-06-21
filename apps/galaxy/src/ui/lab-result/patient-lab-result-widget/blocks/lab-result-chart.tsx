@@ -1,13 +1,6 @@
 'use client'
 
 import { Box, Flex, Text } from '@radix-ui/themes'
-import { DateRangeInput } from '@/ui/schedule/calendar-view/filter-fields'
-import { useStore as useDateRangeStore } from '@/ui/schedule/calendar-view/store'
-import {
-  convertToCalendarDate,
-  formatEndOfDay,
-  formatStartOfDay,
-} from '@/utils/date'
 import { useLabTestStore } from '../store'
 import { LabResults } from '../types'
 import { LabResultChartData } from './lab-result-chart-data'
@@ -31,16 +24,6 @@ const LabResultChart = () => {
     (test) => test.testName === selectedTestName,
   )
 
-  const { weekStartDate } = useDateRangeStore((s) => ({
-    weekStartDate: s.weekStartDate,
-  }))
-
-  const startDate = new Date(
-    formatStartOfDay(convertToCalendarDate(weekStartDate)),
-  )
-  const endDate = new Date(
-    formatEndOfDay(convertToCalendarDate(weekStartDate.add({ days: 7 }))),
-  )
   const selectedSubRow = selectedTest?.subRows.find((sub: SubRow) =>
     Object.values(sub.resultsByDate ?? {}).some(
       (entry) => entry.resultId === selectedTestId,
@@ -54,10 +37,6 @@ const LabResultChart = () => {
 
   const filteredEntries = entries
     .filter((entry) => !isNaN(Number(entry.resultValue)))
-    .filter((entry) => {
-      const obsDate = new Date(entry.observationTime)
-      return obsDate >= startDate && obsDate <= endDate
-    })
 
   const chartData = filteredEntries.map((entry) => {
     const value = Number(entry.resultValue)
@@ -93,10 +72,6 @@ const LabResultChart = () => {
             {selectedResultName}
           </Text>
         </Flex>
-
-        <Box>
-          <DateRangeInput hideLabel={true} />
-        </Box>
       </Flex>
 
       {chartData.length > 0 ? (

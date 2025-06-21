@@ -62,7 +62,12 @@ const AddLabOrderForm = ({
         {labOrderId && <SpecimenForm />}
         <Flex gap="2" justify="end" mt="4">
           <FormSubmitButton
-            className="bg-pp-black-1 text-white relative ml-auto cursor-pointer px-3 py-1.5"
+            className={`text-white h-8 rounded-2 px-3 py-1.5 text-1
+            ${
+              loadingPlaceOrder || isFormDisabled
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-pp-black-1'
+            }`}
             form={form}
             loading={loadingSubmit}
             disabled={loadingSubmit || isFormDisabled}
@@ -70,7 +75,12 @@ const AddLabOrderForm = ({
             <Text size="1">Save</Text>
           </FormSubmitButton>
           <Button
-            className="bg-pp-black-1 h-8 rounded-2 px-3 py-1.5 text-1 text-[white]"
+            className={`text-white h-8 rounded-2 px-3 py-1.5 text-1
+            ${
+              loadingPlaceOrder || isFormDisabled
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-pp-black-1'
+            }`}
             type="button"
             onClick={onClickConfirmPlaceOrder}
             loading={loadingPlaceOrder}
