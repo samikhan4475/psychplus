@@ -12,6 +12,7 @@ const patientDataSchema = z.object({
       state: z.string().optional(),
       hasFrontImage: z.boolean(),
       hasBackImage: z.boolean().optional(),
+      validIn: z.string().optional(),
     })
     .optional(),
 })

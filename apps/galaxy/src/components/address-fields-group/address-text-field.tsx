@@ -82,7 +82,7 @@ const AddressTextField = ({
         {...props}
         {...rest}
       />
-      <FormFieldError name={field} />
+      {required && <FormFieldError name={field} />}
     </FormFieldContainer>
   )
 }
