@@ -113,6 +113,22 @@ const ResponsiveMenuLinks = () => {
         ]}
       />
 
+<MenuItem
+        value="appointments"
+        label="Appointments"
+        links={[
+          {
+            label: 'Upcoming',
+            href: '/appointments/upcoming',
+            Icon: UserCircleIcon,
+          },
+          {
+            label: 'History',
+            href: '/appointments/history',
+            Icon: ShieldPlusIcon,
+          },
+        ]}
+      />
       <MenuItem
         value="billing"
         label="Billing"

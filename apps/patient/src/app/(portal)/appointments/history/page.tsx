@@ -1,15 +1,18 @@
-import React from 'react'
-import { Box } from '@radix-ui/themes'
 import AppointmentHistoryView from '@/features/appointments/history/ui/appointment-history-view'
+import { Flex, Heading } from '@radix-ui/themes'
 
 const HistoryAppointmentsPage = () => {
   return (
-    <>
-      <Box className="text-pp-blue-8 mb-4 text-[24px] font-[600] leading-6 tracking-[0.36px]">
+    <Flex direction="column" gap="3" px={"3"}>
+      <Heading
+        as="h2"
+        weight="bold"
+        className="text-[24px] text-accent-12 xs:text-[28px] sm:text-[32px]"
+      >
         History
-      </Box>
+      </Heading>
       <AppointmentHistoryView />
-    </>
+    </Flex>
   )
 }
 

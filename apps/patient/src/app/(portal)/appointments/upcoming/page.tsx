@@ -1,15 +1,18 @@
-import React from 'react'
 import { UpcomingAppointmentsSummary } from '@/features/appointments/upcoming'
-import { Box } from '@radix-ui/themes'
+import { Flex, Heading } from '@radix-ui/themes'
 
 const UpcomingAppointmentsPage = () => {
   return (
-    <>
-      <Box className="text-pp-blue-8 mb-4 text-[24px] font-[600] leading-6 tracking-[0.36px]">
+    <Flex direction="column" gap="3" px={"3"}>
+      <Heading
+        as="h2"
+        weight="bold"
+        className="text-[24px] text-accent-12 xs:text-[28px] sm:text-[32px]"
+      >
         Upcoming
-      </Box>
+      </Heading>
       <UpcomingAppointmentsSummary />
-    </>
+    </Flex>
   )
 }
 

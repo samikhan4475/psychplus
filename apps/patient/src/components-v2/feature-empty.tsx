@@ -47,7 +47,7 @@ const FeatureEmpty = ({
       align="center"
       justify="center"
     >
-      <Text className="font-serif text-[24px] font-[600] -tracking-[1.5px] text-accent-12">
+      <Text className="font-serif text-[24px] font-[600] -tracking-[1.5px] text-accent-12 text-center">
         {title}
       </Text>
       {description ? (
