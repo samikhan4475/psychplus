@@ -315,6 +315,8 @@ const GET_PAYMENTS_HISTORY_LIST_ENDPOINT = (paymentId: string) =>
 const GET_CLAIMPAYMENTS_HISTORY_LIST_ENDPOINT = (claimPaymentId: string) =>
   `${API_URL}/api/claimpayments/${claimPaymentId}/history/actions/search`
 const GET_CLAIMS_LIST_ENDPOINT = `${API_URL}/api/claims/actions/search`
+const GET_INSURANCE_PLAN_LIST_ENDPOINT = (practiceId: string) =>
+  `${API_URL}/api/practices/${practiceId}/plans/actions/search`
 const EXPORT_CLAIMS_LIST_ENDPOINT = (fileFormat: string) =>
   `${API_URL}/api/claims/actions/export/${fileFormat}`
 const SETTINGS_HISTORY_ENDPOINT = `${API_URL}/api/settings/actions/history/search`
@@ -578,6 +580,12 @@ const GET_SCRIPT_SURE_EXTERNAL_PATIENT_ID = (patientId: string) =>
 
 const GET_STAFF_BY_ID = (staffId: number) => `${API_URL}/api/staff/${staffId}`
 const GET_PAYER_PLANS_LIST = `${API_URL}/api/insurance/plans/actions/search`
+const ADD_PRACTICE_PAYER_PLAN = (practiceId: string) =>
+  `${API_URL}/api/practices/${practiceId}/plans`
+const UPDATE_PRACTICE_PAYER_PLAN = (
+  practiceId: string,
+  practicePlanId: string,
+) => `${API_URL}/api/practices/${practiceId}/plans/${practicePlanId}`
 const ADD_PAYER_PLAN = (id: string) =>
   `${API_URL}/api/insurance/payers/${id}/insuranceplans`
 const UPDATE_PAYER_PLAN = (payerId: string, insuranceid: string) =>
@@ -1113,6 +1121,7 @@ export {
   NOTE_DETAILS_HISTORY_ENDPOINT,
   ADD_ON_DRUGS_SEARCH_ENDPOINT,
   NOTE_DETAILS_SAVE_ENDPOINT,
+  UPDATE_PRACTICE_PAYER_PLAN,
   GET_PATIENT_PROFILE_ENDPOINT,
   GET_PATIENT_CONSENTS_ENDPOINT,
   GET_PROVIDER_RECOMMENDATIONS,
@@ -1159,6 +1168,7 @@ export {
   GET_RECIPIENT_SECURE_MESSAGE,
   CREATE_CHANNEL_SECURE_MESSAGE,
   ATTACHMENTS_SECURE_MESSAGE,
+  ADD_PRACTICE_PAYER_PLAN,
   SEARCH_PHARMACIES,
   GET_PATIENT_BILLING_HISTORY,
   ADD_PATIENT_RELATIONSHIP_ENDPOINT,
@@ -1330,6 +1340,7 @@ export {
   ADD_ORGANIZATION_ENDPOINT,
   UPDATE_ORGANIZATION_ENDPOINT,
   GET_ORGANIZATION_HX_STATUS_ENDPOINT,
+  GET_INSURANCE_PLAN_LIST_ENDPOINT,
   GET_NOTE_DOCUMENTS_ENDPOINT,
   GET_STAFF_USER_ENDPOINT,
   GET_NOTE_DOCUMENT_ENDPOINT,
