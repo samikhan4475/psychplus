@@ -102,7 +102,8 @@ const AsyncAutoCompleteTextField = ({
         break
     }
   }
-
+  const label = valueKey === 'insurancePlanObject' ? selectedLabel?.name : selectedLabel
+  
   useEffect(() => {
     if (!listRef.current || focusedIndex === -1) return
     const focusedItem = listRef.current.children[focusedIndex] as HTMLElement
@@ -122,13 +123,9 @@ const AsyncAutoCompleteTextField = ({
         )}
       >
         {form.watch(field) ? (
-          <Tooltip
-            content={<Text className="select-text"> {selectedLabel}</Text>}
-          >
+          <Tooltip content={<Text className="select-text">{label}</Text>}>
             <Text className="text-gray-200 px-2 text-1">
-              {truncateText
-                ? truncateString(selectedLabel, truncateText)
-                : selectedLabel}
+              {truncateText ? truncateString(label, truncateText) : label}
             </Text>
           </Tooltip>
         ) : (
@@ -154,9 +151,19 @@ const AsyncAutoCompleteTextField = ({
   )
   const handleSelect = (item: SelectOptionType) => {
     onSelect?.(item)
-    const value = valueKey === 'value' ? item.value : item.label
+
+    let value
+    if (valueKey === 'insurancePlanObject') {
+      value = item.insurancePlanObject
+    } else if (valueKey === 'value') {
+      value = item.value
+    } else {
+      value = item.label
+    }
     form.setValue(field, value)
-    setSelectedLabel(item.label)
+    valueKey == 'insurancePlanObject'
+      ? setSelectedLabel(item.insurancePlanObject)
+      : setSelectedLabel(item.label)
     setOpen(false)
   }
   return (

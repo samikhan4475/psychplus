@@ -6,9 +6,17 @@ const schema = z
   .object({
     id: z.string(),
     postedAmount: z.number().optional(),
-    insuranceName: z.string().min(1, { message: 'Insurance name is required' }),
-    insurancePlanId:z.string().min(1,'Required'),
+    insuranceName: z
+      .object({
+        id: z.string().min(1, { message: 'Insurance ID is required' }),
+        name: z.string().min(1, { message: 'Insurance name is required' }),
+      })
+      .refine(
+        (val) => val && val.id && val.name,
+        { message: 'Insurance selection is required' }
+      ),
     paymentMethod: z.string().min(1, { message: 'Payment method is required' }),
+     insurancePlanId: z.string(),
     checkNumber: z.string().min(1, { message: 'Check number is required' }),
     amount: z.preprocess(
       (val) => {

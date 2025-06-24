@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Grid, Text } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
@@ -45,7 +46,10 @@ const InsurancePaymentForm = ({
     defaultValues: {
       id: data?.id ?? '',
       postedAmount: data?.postedAmount,
-      insuranceName: data?.insuranceName ?? '',
+      insuranceName:
+        data?.id && data?.insuranceName
+          ? { id: data.id, name: data.insuranceName }
+          : { id: '', name: '' },
       paymentMethod: data?.paymentMethod ?? 'Check',
       amount: data?.amount,
       checkNumber: data?.checkNumber ?? '',
@@ -58,6 +62,18 @@ const InsurancePaymentForm = ({
       attachments: data?.paymentAttachments ?? [],
     },
   })
+
+  const [hasChangedInsurancePlan, setHasChangedInsurancePlan] = useState(false)
+  const watchedInsuranceId = form.watch('insuranceName.id')
+
+  useEffect(() => {
+    setHasChangedInsurancePlan(
+      Boolean(
+        !data?.id ||
+          (data.id && watchedInsuranceId && data.id !== watchedInsuranceId),
+      ),
+    )
+  }, [watchedInsuranceId, data?.insurancePlanId])
 
   async function onSave(formData: SchemaType) {
     const user = await getUserAuthAction()
@@ -81,15 +97,20 @@ const InsurancePaymentForm = ({
       })
     }
 
+    const insurance = formData.insuranceName
     const { attachments, ...restFormData } = formData
 
     const reqPayload: Partial<InsurancePayment> = {
       ...restFormData,
+      insuranceName: insurance?.name ?? '',
       checkDate: formatDateToISOString(formData.checkDate) ?? '',
       receivedDate: formatDateToISOString(formData.receivedDate) ?? '',
       depositDate: formatDateToISOString(formData.depositDate) ?? '',
       paymentAttachments: attachmentFiles,
       practiceId: user?.practiceId,
+      insurancePlanId: hasChangedInsurancePlan
+        ? insurance?.id
+        : data?.insurancePlanId,
     }
 
     const finalPayload = data?.id

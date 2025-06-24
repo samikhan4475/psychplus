@@ -5,7 +5,7 @@ import type { InsurancePlan, SelectOptionType } from '@/types'
 import { INSURANCE_PLAN_LIST_OPTION_SIZE } from '../constants'
 
 interface InsurancePlanOptionType extends SelectOptionType {
-  insurancePlanId: string
+  insurancePlanId?: string
 }
 
 const getInsurancePlanOptionsAction = async (
@@ -25,7 +25,7 @@ const getInsurancePlanOptionsAction = async (
   const transformedData = response.data.map((data) => ({
     value: data.name,
     label: data.name,
-    insurancePlanId: data.id,
+    insurancePlanObject: { id: data.id, name: data.name },
   }))
 
   return {

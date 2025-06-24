@@ -16,7 +16,7 @@ import { SchemaType } from './schema'
 const InsuranceNameField = () => {
   const form = useFormContext<SchemaType>()
   const onSelect = (plan: InsurancePlanOptionType) =>
-    form.setValue('insurancePlanId', plan.insurancePlanId)
+    form.setValue('insurancePlanId', plan.insurancePlanId ?? '')
   return (
     <FormFieldContainer className="flex-1 gap-0">
       <FormFieldLabel required>Insurance Name</FormFieldLabel>
@@ -25,7 +25,7 @@ const InsuranceNameField = () => {
         field="insuranceName"
         onSelect={(plan) => onSelect(plan as InsurancePlanOptionType)}
         placeholder="Search"
-        valueKey="label"
+        valueKey="insurancePlanObject"
       />
       <FormFieldError name="insuranceName" />
     </FormFieldContainer>
