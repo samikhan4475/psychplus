@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import {
   Box,
@@ -43,130 +43,141 @@ const SearchModifierCodes = ({
   const [open, setOpen] = useState(false)
   const [results, setResults] = useState<CodeItem[]>([])
   const [loading, setLoading] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
 
-  const handleSearchService = useDebouncedCallback(async (value: string) => {
+  const handleOpenChange = useCallback(
+    (isOpen: boolean) => {
+      if (!disabled) setOpen(isOpen)
+    },
+    [disabled],
+  )
+
+  const handleSelectItem = useCallback(
+    (item: CodeItem) => {
+      onChange?.(item)
+      inputRef.current?.focus()
+    },
+    [onChange],
+  )
+
+  const handleSearch = useDebouncedCallback(async (value: string) => {
     setLoading(true)
     const response = await getServiceModifiersCodes(value)
     if (response.state === 'success') {
       setResults(response.data.serviceModifierData || [])
     } else {
       setResults([])
-      toast('Error fetching modifiers codes')
+      toast.error('Error fetching modifier codes')
     }
     setLoading(false)
   }, 500)
 
-  const onOpenChange = (open: boolean) => {
-    if (!disabled) {
-      setOpen(open)
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Tab') {
+      inputRef.current?.focus()
     }
   }
 
-  const renderColumn = (value: string, disabled?: boolean) => {
-    const content = value ? (
-      <Text>{value}</Text>
-    ) : (
-      <Text size="1" className={cn('text-gray-9', { 'text-gray-8': disabled })}>
-        {placeholder}
-      </Text>
-    )
-
-    return (
-      <Box
-        className={cn('flex cursor-pointer items-center', {
-          'bg-pp-states-disabled cursor-not-allowed': disabled,
-        })}
-        onClick={() => onOpenChange(true)}
-      >
-        <Flex
-          py="2"
-          px="2"
-          align="center"
-          className={cn('h-6 rounded-item [box-shadow:none]')}
-        >
-          {content}
-        </Flex>
-        <MagnifyingGlassIcon className="ml-2" height="16" width="16" />
-      </Box>
-    )
-  }
-
-  const renderItem = (item: CodeItem) => {
-    return (
-      <Box
-        py="1"
+  const renderTriggerContent = (value: string | undefined) => (
+    <Box
+      className={cn('flex cursor-pointer items-center', {
+        'bg-pp-states-disabled cursor-not-allowed': disabled,
+      })}
+      onClick={() => handleOpenChange(true)}
+    >
+      <Flex
+        py="2"
         px="2"
-        className={cn('hover:bg-pp-black-1 hover:text-white mx-1 rounded-1', {
-          'bg-pp-states-disabled cursor-not-allowed': disabled,
-        })}
-        onClick={() => {
-          if (onChange) onChange(item)
-          onOpenChange(false)
-        }}
+        align="center"
+        className="h-6 rounded-item [box-shadow:none]"
       >
-        <Text size="1" weight="regular">
-          {item.code}
+        <Text
+          size="1"
+          className={cn({ 'text-black': value, 'text-gray-8': !value })}
+        >
+          {value || placeholder}
         </Text>
-      </Box>
-    )
-  }
+      </Flex>
+      <MagnifyingGlassIcon className="ml-2" height="16" width="16" />
+    </Box>
+  )
+
+  const renderResultItem = (item: CodeItem) => (
+    <Box
+      key={item.code}
+      py="1"
+      px="2"
+      className={cn('hover:bg-pp-black-1 hover:text-white mx-1 rounded-1', {
+        'bg-pp-states-disabled cursor-not-allowed': disabled,
+      })}
+      onClick={() => handleSelectItem(item)}
+    >
+      <Text size="1">{item.code}</Text>
+    </Box>
+  )
 
   return (
-    <Controller
-      name={fieldName}
-      control={control}
-      render={({ field }) => (
-        <Popover.Root open={open} onOpenChange={onOpenChange}>
-          <Popover.Trigger disabled={disabled}>
-            {renderColumn(field.value || initialValue, disabled)}
-          </Popover.Trigger>
-          <Popover.Content className="p-0">
-            <Flex className="py-1">
-              <TextField.Root
-                size="1"
-                variant="soft"
-                onChange={(e) => handleSearchService(e.target.value)}
-                placeholder={placeholder}
-                autoFocus
-                className="bg-white h-6 flex-1 border-0 outline-none [&>*]:bg-transparent [&>*]:outline-none"
-                required={required}
-                disabled={disabled}
-              >
-                <TextField.Slot>
-                  <MagnifyingGlassIcon height="16" width="16" />
-                </TextField.Slot>
-              </TextField.Root>
-            </Flex>
-
-            {loading && (
-              <Flex py="4" justify="center">
-                <Text size="2" color="gray" align="center">
-                  Loading...
-                </Text>
+    <>
+      <input
+        ref={inputRef}
+        className="pointer-events-none absolute opacity-0"
+        onFocus={() => handleOpenChange(!open)}
+        tabIndex={0}
+      />
+      <Controller
+        name={fieldName}
+        control={control}
+        render={({ field }) => (
+          <Popover.Root open={open} onOpenChange={handleOpenChange}>
+            <Popover.Trigger disabled={disabled}>
+              {renderTriggerContent(field.value || initialValue)}
+            </Popover.Trigger>
+            <Popover.Content className="p-0">
+              <Flex className="py-1">
+                <TextField.Root
+                  size="1"
+                  variant="soft"
+                  onChange={(e) => handleSearch(e.target.value)}
+                  placeholder={placeholder}
+                  autoFocus
+                  onKeyDown={handleInputKeyDown}
+                  required={required}
+                  disabled={disabled}
+                  className="bg-white h-6 flex-1 border-0 outline-none [&>*]:bg-transparent [&>*]:outline-none"
+                >
+                  <TextField.Slot>
+                    <MagnifyingGlassIcon height="16" width="16" />
+                  </TextField.Slot>
+                </TextField.Root>
               </Flex>
-            )}
-            {results.length === 0 && !loading && (
-              <Flex py="4" justify="center">
-                <Text size="2" color="gray" align="center">
-                  No results
-                </Text>
-              </Flex>
-            )}
 
-            <Separator color="gray" size="4" />
-            <Flex direction="column" py="1" gap="1">
-              <ScrollArea scrollbars="vertical" className="max-h-[100px]">
-                {results.map((item) => (
-                  <Box key={item.code} className="cursor-pointer">
-                    {renderItem(item)}
-                  </Box>
-                ))}
-              </ScrollArea>
-            </Flex>
-          </Popover.Content>
-        </Popover.Root>
-      )}
-    />
+              {loading && (
+                <Flex py="4" justify="center">
+                  <Text size="2" color="gray">
+                    Loading...
+                  </Text>
+                </Flex>
+              )}
+              {!loading && results.length === 0 && (
+                <Flex py="4" justify="center">
+                  <Text size="2" color="gray">
+                    No results
+                  </Text>
+                </Flex>
+              )}
+
+              <Separator color="gray" size="4" />
+
+              <Flex direction="column" py="1" gap="1">
+                <ScrollArea scrollbars="vertical" className="max-h-[100px]">
+                  {results.map(renderResultItem)}
+                </ScrollArea>
+              </Flex>
+            </Popover.Content>
+          </Popover.Root>
+        )}
+      />
+    </>
   )
 }
 
