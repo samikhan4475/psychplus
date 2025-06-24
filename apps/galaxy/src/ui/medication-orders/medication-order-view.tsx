@@ -6,6 +6,7 @@ import { TabsTrigger } from '@/components'
 import { MedicationOrdersTabs } from './medication-order-refill-widget/constant'
 import { MedicationOrderRefillWidget } from './medication-order-refill-widget/medication-order-refill-widget'
 import { useStore } from './medication-order-refill-widget/store'
+import { PharmacyNotificationWidget } from '../pharmacy-notifications/pharmacy-notifications-widget/pharmacy-notifications-widget'
 
 const MedicationOrderView = () => {
   const { activeTab, setActiveTab, data, changeRequestData } = useStore()
@@ -29,6 +30,9 @@ const MedicationOrderView = () => {
           <TabsTrigger value={MedicationOrdersTabs.ERRORS}>
             {MedicationOrdersTabs.ERRORS}
           </TabsTrigger>
+           <TabsTrigger value={MedicationOrdersTabs.NOTIFICATIONS}>
+            {MedicationOrdersTabs.NOTIFICATIONS}
+          </TabsTrigger>
         </Tabs.List>
       </Flex>
       <TabsContent value={MedicationOrdersTabs.REFILL_REQUESTS}>
@@ -36,6 +40,9 @@ const MedicationOrderView = () => {
       </TabsContent>
       <TabsContent value={MedicationOrdersTabs.CHANGE_REQUESTS}>
         <MedicationOrderRefillWidget />
+      </TabsContent>
+         <TabsContent value={MedicationOrdersTabs.NOTIFICATIONS}>
+        <PharmacyNotificationWidget />
       </TabsContent>
     </Tabs.Root>
   )

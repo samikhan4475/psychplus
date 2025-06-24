@@ -3,6 +3,7 @@ enum MedicationOrdersTabs {
   CHANGE_REQUESTS = 'Change Requests',
   NEW_PRESCRIPTIONS = 'New Prescriptions (10)',
   ERRORS = 'Errors',
+  NOTIFICATIONS = 'Erx Notifications',
 }
 
 enum MedicationOrdersTabsId {

@@ -279,7 +279,7 @@ const getInboxNavLinks = ({
         {
           label: 'Medication Orders',
           tab: Tabs.MEDICATION_ORDERS,
-        },
+        }
       ],
     },
   ]

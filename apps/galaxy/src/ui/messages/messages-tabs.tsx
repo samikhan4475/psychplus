@@ -9,6 +9,7 @@ import { NotesView } from '../notes/notes-view'
 import { SecureMessagesView } from '../secure-messages/secure-messages-view'
 import { useStore } from './store'
 import { Tabs as TabsEnum } from './types'
+import { PharmacyNotificationView } from '../pharmacy-notifications'
 
 const MessagesTabs = () => {
   const {

@@ -13,7 +13,7 @@ enum Tabs {
   LAB_ORDERS = 'lab-orders',
   MEDICATION_ORDERS = 'medication-orders',
   LAB_RESULTS = 'lab-results',
-
+  PHARMACY_NOTIFICATIONS = 'pharmacy-notifications',
 }
 
 interface Store {

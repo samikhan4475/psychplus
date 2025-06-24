@@ -992,7 +992,10 @@ const GET_PATIENTS_WITH_PRIMARY_STAFF = (staffId: number, isPrimary: boolean) =>
   `${API_URL}/api/patients/careteam/providers/${staffId}/actions/primaryrole/${isPrimary}`
 const TRANSFER_PRIMARY_PROVIDER = (staffId: string, providerType: string) =>
   `${API_URL}/api/patients/careteam/providers/${staffId}/actions/makeprimary/${providerType}`
-const TRANSFER_SECONDARY_PROVIDER = (newStaffId: string, providerType: string) =>
+const TRANSFER_SECONDARY_PROVIDER = (
+  newStaffId: string,
+  providerType: string,
+) =>
   `${API_URL}/api/providers/${newStaffId}/careteam/actions/makesecondary/${providerType}`
 const GET_MEDICATIONS_HISTORY = (pharmacyNotificationId: string) =>
   `${API_URL}/api/pharmacynotifications/${pharmacyNotificationId}/history/actions/search`
@@ -1053,6 +1056,7 @@ const REMOVE_STAFF_FAVORITES_MEDICATION = (staffId: number, id: string) =>
 const GET_STATES_PRIMARY_LOCATIONS = `${API_URL}/api/locations/actions/primaries/search`
 const VIRTUAL_PRIMARY_LOCATIONS_ENDPOINT = `${API_URL}/api/locations/actions/primaries/search`
 const ADD_VIRTUAL_PRIMARY_LOCATIONS_ENDPOINT = `${API_URL}/api/primarylocations`
+const GET_PHARMACY_NOTIFICATIONS_ENDPOINT = `${API_URL}/api/pharmacynotifications/actions/statuses/search`
 const STAFF_PROFILE_IMAGE_ENDPOINT = (staffId: number) =>
   `${API_URL}/api/staff/${staffId}/profileimage`
 const PHARMACY_CANCEL_REQUEST = (
@@ -1530,8 +1534,9 @@ export {
   GET_STATES_PRIMARY_LOCATIONS,
   VIRTUAL_PRIMARY_LOCATIONS_ENDPOINT,
   ADD_VIRTUAL_PRIMARY_LOCATIONS_ENDPOINT,
+  GET_PHARMACY_NOTIFICATIONS_ENDPOINT,
   PHARMACY_CANCEL_REQUEST,
   GET_ALL_VISITS_LIST_ENDPOINT,
   GET_VISIT_BY_STATE_LIST_ENDPOINT,
-  STAFF_PROFILE_IMAGE_ENDPOINT
+  STAFF_PROFILE_IMAGE_ENDPOINT,
 }
