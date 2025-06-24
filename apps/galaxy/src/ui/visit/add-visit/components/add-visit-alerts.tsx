@@ -53,6 +53,7 @@ const AddVisitAlert = ({
       handleSubmit({
         isOverridePrimaryProvider: true,
       })
+      setCurrentMessageIndex(0)
       return
     }
     const isOverride = statusCode === StatusCode.OverridePermission
@@ -60,7 +61,7 @@ const AddVisitAlert = ({
       setCurrentMessageIndex(currentMessageIndex + 1)
       setBody({
         isOverridePermissionProvided: isOverride,
-        isProceedPermissionProvided: !isOverride, 
+        isProceedPermissionProvided: !isOverride,
       })
     } else {
       handleSubmit({
@@ -77,6 +78,7 @@ const AddVisitAlert = ({
       handleSubmit({
         isOverridePrimaryProvider: false,
       })
+      setCurrentMessageIndex(0)
       return
     }
 
