@@ -1,13 +1,16 @@
 'use client'
 
 import { Flex } from '@radix-ui/themes'
-import { DateTimeInformation } from './date-time-information'
+import { useFormContext, useWatch } from 'react-hook-form'
+import { useStore } from '../store'
+import { AuthorizationInformation } from './authorization-information'
 import { DoseInformation } from './dose-information'
 import { DurationInformation } from './duration-information'
 import { NotesInformation } from './notes-information'
 import { PharmacyInformation } from './pharmacy-information'
 import { PrescriberInformation } from './prescriber-information'
 import { RouteInformation } from './route-information'
+import { UpdateMedicationSchema } from './schema'
 import { SigInformation } from './sig-information'
 
 interface PatientMedicationFormProps {
@@ -15,6 +18,15 @@ interface PatientMedicationFormProps {
 }
 
 const PatientMedicationForm = ({ index }: PatientMedicationFormProps) => {
+  const form = useFormContext<UpdateMedicationSchema>()
+  const rxChangeRequestCode =
+    useWatch({
+      control: form.control,
+      name: `rxChangeRequestCode`,
+      defaultValue: '',
+    }) ?? []
+  const { activeTab } = useStore()
+  const isRefillTab = activeTab.includes('Refill')
   return (
     <Flex className="bg-whiteA-12 mt-2" gap="2" direction="column">
       <DoseInformation index={index} />
@@ -24,6 +36,8 @@ const PatientMedicationForm = ({ index }: PatientMedicationFormProps) => {
       <PharmacyInformation index={index} />
       <PrescriberInformation index={index} />
       <NotesInformation index={index} />
+      {rxChangeRequestCode === 'PriorAuthorizationRequired' ||
+        (isRefillTab && <AuthorizationInformation index={index} />)}
     </Flex>
   )
 }

@@ -80,6 +80,7 @@ const DeclineMedicationForm = ({
           drugCode: row?.drugCode ?? '',
           drugCodeQualifier: row?.drugCodeQualifier ?? '',
           daysSupply: row?.daysSupply?.toString() ?? '0',
+          ignatureText: row?.drugSignatureList?.[0]?.signatureText,
         },
       }
       const sanitizeData = sanitizeFormData(payload)
@@ -117,6 +118,7 @@ const DeclineMedicationForm = ({
           refills: row.refills,
           isSubstitutionsAllowed: row?.isSubstitutionsAllowed ?? false,
           daysSupply: row?.daysSupply?.toString() ?? '0',
+          ignatureText: row?.drugSignatureList?.[0]?.signatureText,
         },
       }
       const sanitizeData = sanitizeFormData(payload)

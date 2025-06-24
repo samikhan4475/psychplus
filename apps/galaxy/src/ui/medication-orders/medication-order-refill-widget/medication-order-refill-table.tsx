@@ -71,7 +71,6 @@ const MedicationOrderRefillTable = () => {
       })
       .filter((request) => request.drugList && request.drugList.length > 0)
   }, [data?.refillRequests, changeRequestData?.refillRequests])
-
   const memoizedColumns = useMemo(() => columns(sort, sortData), [])
   if (loading) {
     return (

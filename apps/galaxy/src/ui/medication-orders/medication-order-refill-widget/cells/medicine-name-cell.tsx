@@ -9,7 +9,7 @@ interface MedicineNameCellProps {
 const MedicineNameCell = ({ row }: MedicineNameCellProps) => {
   const drug = row.original?.drugList?.[0]
   return (
-    <LongTextCell className="w-[150px]">{drug?.drugDescription}</LongTextCell>
+    <LongTextCell className='w-[300px]'>{drug?.drugDescription}</LongTextCell>
   )
 }
 

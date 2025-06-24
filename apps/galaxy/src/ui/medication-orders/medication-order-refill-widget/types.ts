@@ -41,6 +41,7 @@ interface PharmacyNotificationDrugModel {
   drugDiagnosisList?: DrugDiagnosis[]
   note?: string
   drugNote?: string
+  pharmacyNotificationResponseId?: string
 }
 interface PharmacyAddress {
   type?: string
@@ -84,8 +85,10 @@ interface PrescriberRxRenewalResponse {
   responseType?: string
   userResponseType?: string
   transactionId?: string
-  notificationTypeDisplayName?:string
-  userTransactionStatus?:string
+  notificationTypeDisplayName?: string
+  userTransactionStatus?: string
+  note?: string
+  pharmacyNotificationResponseDrug?: PharmacyNotificationDrugModel[]
 }
 
 interface MedicationRefill {
@@ -126,6 +129,7 @@ interface MedicationRefill {
   pharmacyNotificationId: string
   pharmacyAddress?: PharmacyAddress
   isResponsePending?: boolean
+  rxChangeRequestCode?: string
   patient?: PatientData
   pharmacyNotificationResponseList?: PrescriberRxRenewalResponse[]
 }
@@ -244,6 +248,8 @@ interface RxRenewalResponseDrugDetail {
   drugCode?: string
   drugCodeQualifier?: string
   daysSupply?: string
+  priorAuthorizationCode?: string
+  priorAuthorizationStatus?: string
 }
 
 interface RenewalResponsePayload {
@@ -362,6 +368,30 @@ const MEDICATIONSSTATUS = [
   { value: 'Approved', label: 'Approved' },
   { value: 'Denied', label: 'Denied' },
 ]
+
+const PASTATUS = [
+  {
+    value: 'DocumentationApproved',
+    label: 'The medication was approved by the payer',
+  },
+  {
+    value: 'DocumentationDenied',
+    label: 'The medication was not approved by the payer.',
+  },
+  {
+    value: 'DocumentationDeferred',
+    label: 'The medication request being reviewed by the payer.',
+  },
+  {
+    value: 'DocumentationNotRequired',
+    label: 'A prior authorization is not required for this medication.',
+  },
+  {
+    value: 'DocumentationRequested',
+    label:
+      'The action of obtaining a prior authorization approval is being sought.',
+  },
+]
 export {
   RefillMedicationType,
   type MedicationRefill,
@@ -380,4 +410,5 @@ export {
   REFILLDENIEDOPTIONS,
   CHANGERESPONSEDENIEDOPTIONS,
   MEDICATIONSSTATUS,
+  PASTATUS,
 }

@@ -28,6 +28,7 @@ import {
   PrescriberRxRenewalResponse,
   RenewalResponseTypeEnum,
 } from '../types'
+import { NestedActionsCell } from './nested-action-cell'
 
 interface ActionsCellProps {
   row: Row<MedicationRefill>
@@ -55,12 +56,21 @@ const columns: ColumnDef<PrescriberRxRenewalResponse>[] = [
       <ColumnHeader label="Response Date/Time" column={column} clientSideSort />
     ),
     cell: ({ row }) => (
-      <TextCell className="w-[120px]">
-        {formatDateTime(row.original.responseDate)}
-      </TextCell>
+      <TextCell>{formatDateTime(row.original.responseDate)}</TextCell>
     ),
   },
-
+  {
+    id: 'drugDescription',
+    accessorKey: 'drugDescription',
+    header: ({ column }) => (
+      <ColumnHeader label="Medicine Name" column={column} clientSideSort />
+    ),
+    cell: ({ row }) => (
+      <LongTextCell className="w-[250px]">
+        {row.original?.pharmacyNotificationResponseDrug?.[0]?.drugDescription}
+      </LongTextCell>
+    ),
+  },
   {
     id: 'userResponseType',
     accessorKey: 'userResponseType',
@@ -72,6 +82,16 @@ const columns: ColumnDef<PrescriberRxRenewalResponse>[] = [
     ),
   },
   {
+    id: 'note',
+    accessorKey: 'note',
+    header: ({ column }) => (
+      <ColumnHeader label="Note" column={column} clientSideSort />
+    ),
+    cell: ({ row }) => (
+      <LongTextCell className="w-[250px]">{row.original.note}</LongTextCell>
+    ),
+  },
+  {
     id: 'userTransactionStatus',
     accessorKey: 'userTransactionStatus',
     header: ({ column }) => (
@@ -80,6 +100,11 @@ const columns: ColumnDef<PrescriberRxRenewalResponse>[] = [
     cell: ({ row }) => (
       <LongTextCell>{row.original.userTransactionStatus}</LongTextCell>
     ),
+  },
+  {
+    id: 'actions',
+    header: () => <ColumnHeader label="Actions" />,
+    cell: ({ row }) => <NestedActionsCell row={row} />,
   },
 ]
 const ActionsCell = ({ row }: ActionsCellProps) => {
@@ -143,7 +168,7 @@ const ActionsCell = ({ row }: ActionsCellProps) => {
       badgeColorMap[status] ?? 'green'
 
     content = (
-      <Flex  align="center" justify="between">
+      <Flex align="center" justify="between">
         <Badge
           className="!rounded-none"
           color={getBadgeColor(notificationUserResponseType ?? '')}
@@ -177,7 +202,7 @@ const ActionsCell = ({ row }: ActionsCellProps) => {
               </Button>
             </Popover.Trigger>
             <Popover.Content
-              className="-mb-2 -mt-2 w-screen max-w-[calc(100vw_-_900px)] rounded-1 !p-0"
+              className="-mb-2 -mt-2 w-screen max-w-[calc(100vw_-_750px)] rounded-1 !p-0"
               align="start"
               alignOffset={3}
             >

@@ -59,7 +59,7 @@ const drugSchema = z.object({
   quantityUnitOfMeasureCode: z.string().optional(),
   medicationType: z.string(),
   isSubstitutionsAllowed: z.boolean().optional(),
-  startDateTime: z.string().datetime().optional(),
+  startDateTime: z.string().optional(),
   doseStrength: z.string().optional(),
   doseFormCode: z.string().optional(),
   doseUnitCode: z.string().optional(),
@@ -72,7 +72,7 @@ const drugSchema = z.object({
   refills: z.coerce.string().optional(),
   isMedicationAsNeeded: z.boolean().optional(),
   reasonForMedicationAsNeeded: z.string().optional(),
-  endDateTime: z.string().datetime().optional(),
+  endDateTime: z.string().optional(),
   otherMedicationDate: z.string().datetime().optional(),
   otherMedicationDateQualifier: z.string().optional(),
   drugSignatureList: z.array(drugSignatureSchema).optional(),
@@ -84,6 +84,8 @@ const drugSchema = z.object({
   notes: z.string().optional(),
   drugNote: z.string().optional(),
   deniedReason: z.string().optional(),
+  priorAuthorizationCode: z.string().optional(),
+  priorAuthorizationStatus: z.string().optional(),
 })
 
 const schema = z.object({
@@ -108,6 +110,7 @@ const schema = z.object({
   patientCountryCode: z.string(),
   integrationJournalId: z.string().uuid().optional(),
   rxReferenceNumber: z.string().optional(),
+  rxChangeRequestCode: z.string().optional(),
   pharmacyAddress: z.object({
     type: z.string().min(1, 'Type is required'),
     street1: z.string().min(1, 'Street address is required'),

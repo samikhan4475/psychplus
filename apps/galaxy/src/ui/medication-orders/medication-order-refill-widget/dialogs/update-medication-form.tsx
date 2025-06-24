@@ -14,7 +14,6 @@ import {
   PharmacyNotificationType,
   RenewalResponseTypeEnum,
 } from '../types'
-import { DrugInteractionAccordian } from './drug-interaction-accordion'
 import { PatientPrescriptionAccordian } from './patient-medication-accordion'
 import { PatientSelect } from './patient-select'
 import { schema, UpdateMedicationSchema } from './schema'
@@ -71,10 +70,12 @@ const UpdateMedicationForm = ({
           quantityCodeListQualifier: row?.quantityCodeListQualifier,
           quantityUnitOfMeasureCode: row?.quantityUnitOfMeasureCode,
           refills: row.refills,
-          drugNote: row.notes
+          drugNote: row.notes,
+          priorAuthorizationCode: row?.priorAuthorizationCode,
+          priorAuthorizationStatus: row?.priorAuthorizationStatus,
         },
       }
-      const sanitizeData = sanitizeFormData(payload) 
+      const sanitizeData = sanitizeFormData(payload)
       const response = await rxRenewalAction(
         data.pharmacyNotificationId ?? '',
         sanitizeData,
@@ -106,6 +107,8 @@ const UpdateMedicationForm = ({
           refills: row.refills,
           isSubstitutionsAllowed: row?.isSubstitutionsAllowed ?? false,
           daysSupply: row?.daysSupply?.toString() ?? '0',
+          priorAuthorizationCode: row?.priorAuthorizationCode,
+          priorAuthorizationStatus: row?.priorAuthorizationStatus,
         },
       }
 
@@ -123,6 +126,7 @@ const UpdateMedicationForm = ({
     }
     setIsLoading(false)
   }
+
   return (
     <FormContainer form={form} onSubmit={onSubmit}>
       <Flex gap="2" justify="between" direction="column" className="relative">
