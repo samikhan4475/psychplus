@@ -31,7 +31,7 @@ const useLabOrderForm = (
 
   const isFormDisabled =
     labOrderData?.labLocationData?.name === 'Quest' &&
-    labOrderData.labOrderStatus !== LabOrderStatusEnum.Unsigned
+    labOrderData.labOrderStatus !== LabOrderStatusEnum.Unsigned && labOrderData.labOrderStatus !== LabOrderStatusEnum.SignedNotSent
 
   const form = useForm<LabOrderSchemaType>({
     resolver: zodResolver(labOrderSchema),

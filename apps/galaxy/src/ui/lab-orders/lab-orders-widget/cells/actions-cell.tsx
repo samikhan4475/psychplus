@@ -1,7 +1,7 @@
 import { AdaptiveRowActionsCell, type RowAction } from '@/components'
 import { LabOrders } from '@/types'
 import { AddLabOrderView } from '../../add-lab-order'
-import { LabOrderRow } from '../types'
+import { LabOrderRow, OrderStatus } from '../types'
 import { RowActionDelete } from './row-action-delete'
 import { RowActionReview } from './row-action-reveiw'
 import { RowResultAttachment } from './row-result-attachment'
@@ -51,7 +51,7 @@ const ActionsCell = ({
     const hasValidAppointment = appointmentId && appointmentId !== '0'
     const isResultNotSigned = !original.isResultSigned
 
-    if (isResultNotSigned) actions.push(reviewAction)
+    if (isResultNotSigned && original.orderStatus === OrderStatus.ResultReceived) actions.push(reviewAction)
     if (hasValidAppointment) actions.push(editAction)
 
     actions.push(deleteAction)
