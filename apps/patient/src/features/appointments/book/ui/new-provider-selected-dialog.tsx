@@ -64,7 +64,7 @@ const NewProviderSelectedDialog = ({
           You&apos;ve chosen an appointment with a new provider. Would you like
           to:
         </Dialog.Description>
-        <Flex gap="3" mt="4" justify="end">
+        <Flex gap="3" mt="4" justify="end" direction={{initial:'column', md:'row'}}>
           <Button
             variant="outline"
             color="gray"

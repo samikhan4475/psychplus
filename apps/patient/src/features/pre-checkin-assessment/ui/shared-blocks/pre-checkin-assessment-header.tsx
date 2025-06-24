@@ -7,6 +7,7 @@ import { cn } from '@psychplus/ui/cn'
 import { PreCheckinAssessmentTabs } from '@/features/pre-checkin-assessment/constants'
 import { useStore } from '@/features/pre-checkin-assessment/store'
 import { PreCheckinAssessmentTab } from '@/features/pre-checkin-assessment/types'
+import React, { useEffect, useRef, useState } from 'react'
 
 type PreCheckinAssessmentHeaderProps = {
   tabs: PreCheckinAssessmentTab[]
@@ -16,45 +17,137 @@ const PreCheckinAssessmentHeader = ({
   tabs,
 }: PreCheckinAssessmentHeaderProps) => {
   const { activeTab, completedTabs, setActiveTab } = useStore()
+  const [fade, setFade] = useState(false)
+  const prevTabRef = useRef(activeTab)
+
+  useEffect(() => {
+    if (prevTabRef.current !== activeTab) {
+      setFade(true)
+      const timeout = setTimeout(() => setFade(false), 250)
+      prevTabRef.current = activeTab
+      return () => clearTimeout(timeout)
+    }
+  }, [activeTab])
 
   const handleTabChange = (value: PreCheckinAssessmentTabs) => {
     setActiveTab(value)
   }
 
+  // Find the active tab object
+  const activeTabObj = tabs.find((tab) => tab.id === activeTab)
+  const { trigger, indicator, label } = activeTabObj
+    ? getTabStyles(activeTabObj.id, activeTab, completedTabs)
+    : { trigger: '', indicator: '', label: '' }
+
+  // Fade classes
+  const fadeClass = fade
+    ? 'transition-opacity duration-300 opacity-0'
+    : 'transition-opacity duration-300 opacity-100'
+
   return (
-    <Tabs.List className="flex w-full gap-3">
-      {tabs.map((tab) => {
-        const { trigger, indicator, label } = getTabStyles(
-          tab.id,
-          activeTab,
-          completedTabs,
-        )
-        return (
+    <>
+      {/* Mobile: Only show the active tab, with fade effect */}
+      <Tabs.List className="block sm:hidden w-full justify-center">
+        {activeTabObj && (
           <Flex
-            key={tab.id}
             direction="column"
-            className="flex-1 cursor-pointer gap-2"
+            className="flex-1 cursor-pointer gap-2 md:min-w-fit min-w-[-webkit-fill-available] items-center"
             align="center"
-            onClick={() => handleTabChange(tab.id)}
+            onClick={() => handleTabChange(activeTabObj.id)}
           >
-            <Tabs.Trigger value={tab.id} id={tab.id} className={trigger} />
-            <Flex width="100%" gap="1">
-              <Box className={indicator}>
-                {activeTab === tab.id ? (
+            <Tabs.Trigger
+              value={activeTabObj.id}
+              id={activeTabObj.id}
+              className={trigger}
+            />
+            <Flex
+              width="100%"
+              gap="1"
+              justify="center"
+            >
+              <Box
+                className={[
+                  indicator,
+                  fadeClass,
+                ].join(' ')}
+              >
+                {activeTab === activeTabObj.id ? (
                   <Circle size="8px" strokeWidth="4px" fill="white" />
                 ) : (
-                  activeTab !== tab.id &&
-                  completedTabs?.includes(tab.id) && (
+                  activeTab !== activeTabObj.id &&
+                  completedTabs?.includes(activeTabObj.id) && (
                     <Check strokeWidth="3.5px" color="white" />
                   )
                 )}
               </Box>
-              <Text className={label}>{tab.id}</Text>
+              <Text
+                className={[
+                  label,
+                  fadeClass,
+                ].join(' ')}
+              >
+                {activeTabObj.id}
+              </Text>
             </Flex>
           </Flex>
-        )
-      })}
-    </Tabs.List>
+        )}
+      </Tabs.List>
+      {/* Desktop: Show all tabs, fade effect on active tab */}
+      <Tabs.List className="hidden sm:flex w-full gap-3">
+        {tabs.map((tab) => {
+          const { trigger, indicator, label } = getTabStyles(
+            tab.id,
+            activeTab,
+            completedTabs,
+          )
+          const isActive = activeTab === tab.id
+          return (
+            <Flex
+              key={tab.id}
+              direction="column"
+              className="flex-1 cursor-pointer gap-2 md:min-w-fit min-w-[-webkit-fill-available]"
+              align="center"
+              onClick={() => handleTabChange(tab.id)}
+            >
+              <Tabs.Trigger
+                value={tab.id}
+                id={tab.id}
+                className={trigger}
+              />
+              <Flex
+                width="100%"
+                gap="1"
+                justify={{ initial: 'center', md: 'start' }}
+              >
+                <Box
+                  className={[
+                    indicator,
+                    isActive ? fadeClass : '',
+                  ].join(' ')}
+                >
+                  {activeTab === tab.id ? (
+                    <Circle size="8px" strokeWidth="4px" fill="white" />
+                  ) : (
+                    activeTab !== tab.id &&
+                    completedTabs?.includes(tab.id) && (
+                      <Check strokeWidth="3.5px" color="white" />
+                    )
+                  )}
+                </Box>
+                <Text
+                  className={[
+                    label,
+                    isActive ? fadeClass : '',
+                  ].join(' ')}
+                >
+                  {tab.id}
+                </Text>
+              </Flex>
+            </Flex>
+          )
+        })}
+      </Tabs.List>
+    </>
   )
 }
 

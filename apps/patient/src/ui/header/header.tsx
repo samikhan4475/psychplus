@@ -1,12 +1,12 @@
+import { getCodesets, getIsFeatureFlagEnabled, getProfile } from '@/api'
+import { FeatureFlags } from '@/constants'
+import { ScheduleAppointmentButton } from '@/features/appointments/search'
+import { NotificationPopover } from '@/features/notifications'
 import { User } from '@psychplus-v2/auth'
 import { PsychPlusNavLogo } from '@psychplus-v2/components'
 import { CODESETS } from '@psychplus-v2/constants'
 import { STRIPE_PUBLISHABLE_KEY } from '@psychplus-v2/env'
 import { Container, Flex } from '@radix-ui/themes'
-import { getCodesets, getIsFeatureFlagEnabled, getProfile } from '@/api'
-import { FeatureFlags } from '@/constants'
-import { ScheduleAppointmentButton } from '@/features/appointments/search'
-import { NotificationPopover } from '@/features/notifications'
 import { NavigationMenu } from './navigation-menu'
 import { ResponsiveMenu } from './responsive-menu'
 import { ResponsiveMenuToggle } from './responsive-menu-toggle'
@@ -34,7 +34,7 @@ const Header = async () => {
   return (
     <>
       <header className="bg-white fixed top-0 z-50 w-full border border-transparent border-b-gray-6">
-        <Container px="5">
+        <Container px={{ initial: '2', sm: '5' }}>
           <Flex
             height="100%"
             align="center"

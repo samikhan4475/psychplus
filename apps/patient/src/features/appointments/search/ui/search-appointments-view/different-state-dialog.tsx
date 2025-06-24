@@ -53,11 +53,11 @@ const DifferentStateDialog = ({
           {stateLabels.user}&quot;. Are you currently in the state where you are
           booking the appointment?
         </Dialog.Description>
-        <Flex gap="3" mt="4">
+        <Flex gap="3" mt="4" className="flex-col md:flex-row">
           <Button
             variant="outline"
             color="gray"
-            className="w-6/12 py-2 capitalize"
+            className="w-full md:w-6/12 py-2 capitalize"
             highContrast
             onClick={() => handleClose()}
           >
@@ -66,7 +66,7 @@ const DifferentStateDialog = ({
 
           <Dialog.Close>
             <Button
-              className="w-6/12 bg-[#24366B] py-2 capitalize"
+              className="w-full md:w-6/12 bg-[#24366B] py-2 capitalize"
               onClick={() => handleClose(true)}
             >
               Yes, book appointment

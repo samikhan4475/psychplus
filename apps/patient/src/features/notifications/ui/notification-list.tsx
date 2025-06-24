@@ -1,9 +1,9 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
-import { Box, Button, Flex, ScrollArea, Text } from '@radix-ui/themes'
 import { LoadingPlaceholder } from '@/components-v2'
 import { useToast } from '@/providers'
+import { Box, Button, Flex, ScrollArea, Text } from '@radix-ui/themes'
+import { useEffect, useRef, useState } from 'react'
 import {
   getNotificationsAction,
   markAsReadNotificationAction,
@@ -39,7 +39,7 @@ const NotificationList = () => {
   const handleShowMore = () => setPage((prev) => prev + 1)
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const container = scrollRef.current
       const restoreScroll = createScrollRestorer(container)
 
@@ -82,7 +82,7 @@ const NotificationList = () => {
 
   return notificationListResponse.notificationList.length > 0 ? (
     <>
-      <ScrollArea className="max-h-[calc(100vh-290px)]">
+      <ScrollArea className="max-h-[calc(100vh-290px)] hidden md:block">
         <Box ref={scrollRef}>
           {notificationList.map((notification) => (
             <NotificationCard
@@ -93,6 +93,15 @@ const NotificationList = () => {
           ))}
         </Box>
       </ScrollArea>
+      <Box ref={scrollRef} className="block md:hidden">
+        {notificationList.map((notification) => (
+          <NotificationCard
+            key={notification.id}
+            {...notification}
+            onMark={handleMarkAsRead}
+          />
+        ))}
+      </Box>
       <Box className="px-2 py-3">
         <Button
           onClick={handleShowMore}

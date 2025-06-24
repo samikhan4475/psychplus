@@ -11,7 +11,7 @@ const BillingSummaryServer = async () => {
   }
 
   return (
-    <CardContainer>
+    <CardContainer className='px-3 sm:px-8 py-4 sm:py-7'>
       {/* <PaymentSummary data={paymentDueData} /> */}
       {/* <Separator my="4" className="w-full" /> */}
       <InsuranceSummary data={insuranceData.data} />

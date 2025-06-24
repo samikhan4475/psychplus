@@ -1,3 +1,5 @@
+import { useStore } from '@/features/appointments/search/store'
+import { generateDateRange } from '@/features/appointments/search/utils'
 import { getLocalTimeZone, isToday, today } from '@internationalized/date'
 import {
   cn,
@@ -11,8 +13,6 @@ import {
   ChevronRightIcon,
   type LucideIcon,
 } from 'lucide-react'
-import { useStore } from '@/features/appointments/search/store'
-import { generateDateRange } from '@/features/appointments/search/utils'
 
 const DaysHeader = () => {
   const { startingDate, prev, next } = useStore((state) => ({
@@ -30,45 +30,35 @@ const DaysHeader = () => {
   const dateRange = generateDateRange(getCalendarDate(startingDate))
 
   return (
-    <Flex align="center" className="flex-1">
+    <Flex align="end" className="flex-1">
       <PaginationIcon
         Icon={ChevronLeftIcon}
         onClick={prev}
         disabled={isPastDate}
       />
-      <Flex className="flex-1">
+      <Flex className="flex-1 w-[calc(100vw-113px)] overflow-x-scroll sm:w-auto sm:overflow-x-hidden" gap="2">
         {dateRange.map((date) => (
-              <Flex
-                key={date.toString()}
-                align="end"
-                className="flex-1"
-                justify="center"
-              >
-                {isToday(date, getLocalTimeZone()) ? (
-                  <Flex gap="1" align="baseline">
-                    <Text className="absolute -mt-[16px] text-[12px] font-medium text-[#194595]">
-                      Today
-                    </Text>
-                    <Text className="text-[13px] text-gray-11">
-                      {getDayOfWeekLabel(date).slice(0, 3)}
-                    </Text>
-                    <Text className="text-[#151B4A]">
-                      {getMonthLabel(date).slice(0, 3)}
-                      {date.day}
-                    </Text>
-                  </Flex>
-                ) : (
-                  <Flex gap="1" align="baseline">
-                    <Text className="text-[13px] text-gray-11">
-                      {getDayOfWeekLabel(date).slice(0, 3)}
-                    </Text>
-                    <Text className="text-[#151B4A]">
-                      {getMonthLabel(date).slice(0, 3)}
-                      {date.day}
-                    </Text>
-                  </Flex>
-                )}
+          <Flex
+            key={date.toString()}
+            align="end"
+            className="flex-1"
+            justify="center"
+          >
+            <Flex direction='column'>
+              <Text className="text-[12px] font-medium text-[#194595]" hidden={!isToday(date, getLocalTimeZone())}>
+                Today
+              </Text>
+              <Flex gap='1' align='baseline'>
+                <Text className="text-[13px] text-gray-11">
+                  {getDayOfWeekLabel(date).slice(0, 3)}
+                </Text>
+                <Text className="text-[#151B4A]">
+                  {getMonthLabel(date).slice(0, 3)}
+                  {date.day}
+                </Text>
               </Flex>
+            </Flex>
+          </Flex>
         ))}
       </Flex>
       <PaginationIcon Icon={ChevronRightIcon} onClick={next} />

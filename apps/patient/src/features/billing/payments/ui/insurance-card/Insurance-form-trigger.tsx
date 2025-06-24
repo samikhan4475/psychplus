@@ -41,7 +41,7 @@ const InsuranceFormTrigger = ({
   const trigger = (
     <>
       <Box>
-        <Flex align="center" justify="between" className="mb-3" width="100%">
+        <Flex align="center" justify="between" className="mb-3 flex-col md:flex-row gap-1" width="100%">
           <Flex align="center" gap="2">
             <Heading weight="medium" size="4" className="font-sans text-[18px]">
               {insurance.payerName}
@@ -73,7 +73,7 @@ const InsuranceFormTrigger = ({
           </Flex>
         </Flex>
 
-        <Flex align="center" gap="1" className="mb-2">
+        <Flex align="center" gap="1" className="mb-2" wrap={{initial:'wrap', md:'nowrap'}}>
           <Badge
             label={insurance.verificationStatus}
             type={getStatusVariant(

@@ -1,12 +1,12 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import Link from 'next/link'
-import { BellIcon } from '@radix-ui/react-icons'
-import { Box, Button, Flex, Popover } from '@radix-ui/themes'
 import { webSocketEventBus } from '@/lib/websocket-event-bus'
 import { useToast } from '@/providers'
 import { WebSocketEventType } from '@/types'
+import { BellIcon } from '@radix-ui/react-icons'
+import { Box, Button, Flex, Popover } from '@radix-ui/themes'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import {
   getNotificationsAction,
   markAsReadBatchNotificationAction,
@@ -137,7 +137,9 @@ const NotificationPopover = () => {
       </Box>
 
       <Box className="block sm:hidden">
-        <BellIconButton inboxCount={inboxCount} onClick={onOpen} />
+        <Link href="/notifications">
+          <BellIconButton inboxCount={inboxCount} />
+        </Link>
         {isOpen && (
           <Box className="bg-white fixed left-0 top-0 z-50 h-screen w-screen">
             <>
@@ -163,3 +165,4 @@ const NotificationPopover = () => {
 }
 
 export { NotificationPopover }
+

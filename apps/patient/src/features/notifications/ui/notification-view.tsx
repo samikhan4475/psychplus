@@ -6,8 +6,8 @@ import { NotificationList } from './notification-list'
 
 const NotificationView = () => {
   return (
-    <Flex direction="column" className="gap-y-6">
-      <Text size="6" weight="bold">
+    <Flex direction="column" className="gap-y-6 px-3">
+      <Text size={{ initial: '4', sm: '6' }} weight="bold">
         Notifications
       </Text>
       <Flex direction="column" className="shadow-3">

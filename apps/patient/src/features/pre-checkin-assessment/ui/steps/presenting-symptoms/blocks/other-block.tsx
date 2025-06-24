@@ -1,12 +1,12 @@
-import { Flex, Text } from '@radix-ui/themes'
 import { AutoResizeInput } from '@/components-v2'
+import { Flex, Text } from '@radix-ui/themes'
 
 const OtherBlock = () => {
   return (
-    <Flex className="items-center" gap="2">
+    <Flex align={{ initial: 'start', md: 'center' }} direction={{ initial: 'column', md: 'row' }} gap="2">
       <Text
         weight={'light'}
-        className="mr-2 text-[16px] font-medium text-[#151B4A] lg:text-[18px]"
+        className="mr-2 text-[16px] font-medium text-[#151B4A] lg:text-[18px] text-left md:text-center"
       >
         Other
       </Text>

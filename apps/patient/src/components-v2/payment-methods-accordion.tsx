@@ -91,11 +91,11 @@ const PaymentMethodAccordion = ({
             content={
               <Box>
                 {patientInsurances?.policies ? (
-                  <Flex width="100%" gap="2" direction="column">
+                  <Flex width="100%" gap={{initial:'2', md:'3'}} direction="column">
                     {patientInsurances.policies.map((insurance) => (
                       <Flex
                         key={insurance.id}
-                        p="3"
+                        p={{initial:'2', md:'3'}}
                         className="w-full rounded-2 border border-[#DDDDE3]"
                       >
                         <Box className="w-full">

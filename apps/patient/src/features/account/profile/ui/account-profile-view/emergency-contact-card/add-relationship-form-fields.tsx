@@ -1,13 +1,5 @@
 'use client'
 
-import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { FormContainer } from '@psychplus-v2/components'
-import { CODESETS } from '@psychplus-v2/constants'
-import { Box, Flex, TextFieldInput, Grid, Switch } from '@radix-ui/themes'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 import {
   CodesetFormSelect,
   FormField,
@@ -18,12 +10,20 @@ import {
   PhoneNumberInput,
   ZipcodeInput
 } from '@/components-v2'
-import { addRelationship} from '../../../actions/add-relationship'
-import { updateRelationship } from '../../../actions/update-relationship'
-import { useProfileStore } from '../../../store'
 import { useToast } from '@/providers'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { FormContainer } from '@psychplus-v2/components'
+import { CODESETS } from '@psychplus-v2/constants'
 import { PhoneNumberEnum, RelationshipDefaultValuesProps } from '@psychplus-v2/types'
 import { zipCodeSchema } from '@psychplus-v2/utils'
+import { Box, Flex, Grid, Switch, TextFieldInput } from '@radix-ui/themes'
+import { useRouter } from 'next/navigation'
+import React, { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { addRelationship } from '../../../actions/add-relationship'
+import { updateRelationship } from '../../../actions/update-relationship'
+import { useProfileStore } from '../../../store'
 
 const schema = z.object({
   firstName: z.string().min(1, 'Required.').max(16, 'Max 16 characters are allowed.'),
@@ -40,14 +40,14 @@ const schema = z.object({
 type SchemaType = z.infer<typeof schema>
 
 interface FormFieldsProps {
-  editMode?: boolean
+  mode: 'add' | 'edit'
   open?: boolean
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>
   defaultValues?: RelationshipDefaultValuesProps
 }
 
 const AddRelationshipFormFields = ({
-  editMode = false,
+  mode,
   open,
   setOpen,
   defaultValues,
@@ -55,15 +55,15 @@ const AddRelationshipFormFields = ({
   const { toast } = useToast()
   const router = useRouter()
 
-  const [hasEmergencyContact, setHasEmergencyContact ] = useState<boolean>(
-    editMode ? defaultValues?.isEmergencyContact ?? false : false
+  const [hasEmergencyContact, setHasEmergencyContact] = useState<boolean>(
+    mode === 'edit' ? defaultValues?.isEmergencyContact ?? false : false
   )
-  const [hasRRI, setHasRRI ] = useState<boolean>(
-    editMode ? defaultValues?.isAllowedToReleaseInformation ?? false : false
+  const [hasRRI, setHasRRI] = useState<boolean>(
+    mode === 'edit' ? defaultValues?.isAllowedToReleaseInformation ?? false : false
   )
 
-  const [hasGuardian, setHasGuardian ] = useState<boolean>(
-    editMode ? defaultValues?.isGuardian ?? false : false
+  const [hasGuardian, setHasGuardian] = useState<boolean>(
+    mode === 'edit' ? defaultValues?.isGuardian ?? false : false
   )
 
   const handleEmergencySwitchToggle = () => {
@@ -73,7 +73,7 @@ const AddRelationshipFormFields = ({
   const handleRRISwitchToggle = () => {
     setHasRRI(!hasRRI)
   }
-  
+
   const handleGuardianSwitchToggle = () => {
     setHasGuardian(!hasGuardian)
   }
@@ -82,7 +82,7 @@ const AddRelationshipFormFields = ({
     profile: state.profile,
     setProfile: state.setProfile,
   }))
-  
+
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -91,7 +91,7 @@ const AddRelationshipFormFields = ({
   })
 
   const onSubmit = async (data: SchemaType) => {
-    if (editMode) {
+    if (mode === 'edit' && defaultValues?.id) {
       const result = await updateRelationship(
         {
           id: defaultValues?.id,
@@ -127,7 +127,7 @@ const AddRelationshipFormFields = ({
           isAllowedToReleaseInformation: hasRRI,
         }
       )
-  
+
       if (result.state === 'success') {
         router.refresh()
         setOpen?.(false)
@@ -137,7 +137,7 @@ const AddRelationshipFormFields = ({
         })
       }
     } else {
-      const {state} = await addRelationship({
+      const { state } = await addRelationship({
         patientId: profile.id,
         name: {
           firstName: data.firstName,
@@ -169,7 +169,7 @@ const AddRelationshipFormFields = ({
         },
         isAllowedToReleaseInformation: hasRRI
       })
-  
+
       if (state === 'success') {
         router.refresh()
         setOpen?.(false)
@@ -183,7 +183,7 @@ const AddRelationshipFormFields = ({
 
   return (
     <FormContainer form={form} onSubmit={onSubmit}>
-      <Grid columns="3" rows="4" className="w-full" gap="3">
+      <Grid columns={{ initial: '1', sm: '3' }} rows="4" className="w-full" gap="3">
         <Box>
           <FormFieldContainer className="w-full">
             <FormFieldLabel required>First Name</FormFieldLabel>
@@ -211,7 +211,7 @@ const AddRelationshipFormFields = ({
           />
           <FormFieldError name="middleName" />
         </FormFieldContainer>
-        
+
         <Box>
           <FormFieldContainer className="w-full">
             <FormFieldLabel required>Last Name</FormFieldLabel>
@@ -283,12 +283,12 @@ const AddRelationshipFormFields = ({
         <Box>
           <FormFieldContainer className="w-full">
             <FormFieldLabel required>Home Phone</FormFieldLabel>
-              <PhoneNumberInput
-                size="3"
-                {...form.register('homePhone')}
-                placeholder="Enter home phone"
-                classNames="font-[400]"
-              />
+            <PhoneNumberInput
+              size="3"
+              {...form.register('homePhone')}
+              placeholder="Enter home phone"
+              classNames="font-[400]"
+            />
             <FormFieldError name="homePhone" />
           </FormFieldContainer>
         </Box>
@@ -308,48 +308,48 @@ const AddRelationshipFormFields = ({
 
         <Box>
           <FormFieldContainer className="w-full">
-            <Flex align="center" gap="3">
+            <Flex align="center" gap="3" justify={{ initial: 'between', sm: 'center' }}>
               <FormFieldLabel>Emergency Contact</FormFieldLabel>
-              <Switch 
-                color="indigo" 
-                highContrast 
-                defaultChecked={hasEmergencyContact} 
+              <Switch
+                color="indigo"
+                highContrast
+                defaultChecked={hasEmergencyContact}
                 onCheckedChange={handleEmergencySwitchToggle}
               />
             </Flex>
           </FormFieldContainer>
         </Box>
 
-        <Box className="mb-3">
+        <Box className="mb-0 sm:mb-3">
           <FormFieldContainer className="w-full">
-            <Flex align="center" gap="3">
+            <Flex align="center" gap="3" justify={{ initial: 'between', sm: 'center' }}>
               <FormFieldLabel>RRI</FormFieldLabel>
-              <Switch 
-                color="indigo" 
-                highContrast 
-                defaultChecked={hasRRI} 
-                onCheckedChange={handleRRISwitchToggle} 
+              <Switch
+                color="indigo"
+                highContrast
+                defaultChecked={hasRRI}
+                onCheckedChange={handleRRISwitchToggle}
               />
             </Flex>
           </FormFieldContainer>
         </Box>
 
-        <Box className="mb-3">
+        <Box className="mb-0 sm:mb-3">
           <FormFieldContainer className="w-full">
-            <Flex align="center" gap="3">
+            <Flex align="center" gap="3" justify={{ initial: 'between', sm: 'center' }}>
               <FormFieldLabel>Guardian</FormFieldLabel>
-              <Switch 
-                color="indigo" 
-                highContrast 
-                defaultChecked={hasGuardian} 
-                onCheckedChange={handleGuardianSwitchToggle} 
+              <Switch
+                color="indigo"
+                highContrast
+                defaultChecked={hasGuardian}
+                onCheckedChange={handleGuardianSwitchToggle}
               />
             </Flex>
           </FormFieldContainer>
         </Box>
       </Grid>
 
-      <Flex width="100%" justify="end">
+      <Flex width="100%" justify="end" mt="3">
         <FormSubmitButton
           highContrast
           size="4"
@@ -357,7 +357,7 @@ const AddRelationshipFormFields = ({
           className="min-w-[151px] font-bold"
         >
           {
-            !editMode ? 'Add' : "Update"
+            mode === 'add' ? 'Add' : "Update"
           }
         </FormSubmitButton>
       </Flex>

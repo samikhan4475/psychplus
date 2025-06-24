@@ -1,17 +1,17 @@
 'use client'
 
-import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { EditIcon, FormError } from '@/components-v2'
+import { useProfileStore } from '@/features/account/profile/store'
+import { useToast } from '@/providers'
 import { Appointment } from '@psychplus-v2/types'
 import {
   getNewProviderTypeLabel,
   getProviderTypeLabel,
 } from '@psychplus-v2/utils'
-import { Box, Button, Flex, Tooltip } from '@radix-ui/themes'
 import { Popover } from '@psychplus/ui/popover'
-import { EditIcon, FormError } from '@/components-v2'
-import { useProfileStore } from '@/features/account/profile/store'
-import { useToast } from '@/providers'
+import { Box, Button, Flex, Tooltip } from '@radix-ui/themes'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { useStore } from '../../search/store'
 import { AppointmentSlot } from '../../search/types'
 import { DaysHeader } from '../../search/ui/search-appointments-view/days-header'
@@ -60,7 +60,7 @@ const UpdateDateAndTimeDialog = ({
         locationId: appointment.clinic.id,
         serviceId: selectedSlot?.servicesOffered[0],
         isSelfPay: appointment.isSelfPay,
-        stateCode:appointment.clinic.contact.addresses?.[0]?.state,
+        stateCode: appointment.clinic.contact.addresses?.[0]?.state,
         appointmentSource: 'PatientPortal',
         patientResidingStateCode:
           profile?.contactDetails?.addresses?.filter(
@@ -98,12 +98,12 @@ const UpdateDateAndTimeDialog = ({
         className="max-w-[200px]"
       >
         <Popover.Trigger>
-          <Button variant="ghost" className="bg-[white]">
+          <Button variant="ghost" className="bg-[white] mt-1">
             <EditIcon />
           </Button>
         </Popover.Trigger>
       </Tooltip>
-      <Popover.Content align="center" className="w-[800px]">
+      <Popover.Content align="center" className="w-[300px] md:w-[600px] lg:w-[800px]">
         <FormError message={error} />
         <Box className="border-b border-b-gray-5 pb-3">
           <DaysHeader />

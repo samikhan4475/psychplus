@@ -1,5 +1,6 @@
 'use client'
 
+import { cn } from '@psychplus-v2/utils'
 import { Button } from '@radix-ui/themes'
 
 interface TriggerButtonProps {
@@ -15,7 +16,7 @@ const TriggerButton = ({ title, onClick, className }: TriggerButtonProps) => (
     highContrast
     onClick={onClick}
     size="2"
-    className={className}
+    className={cn(className, 'p-2 md:p-0')}
   >
     + {title}
   </Button>

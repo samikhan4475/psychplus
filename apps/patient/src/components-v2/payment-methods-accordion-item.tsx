@@ -35,7 +35,7 @@ const PaymentMethodsAccordionItem = ({
         </Flex>
       </Accordion.Trigger>
     </Accordion.Header>
-    <Accordion.Content className=" p-4">{content}</Accordion.Content>
+    <Accordion.Content className="px-0 py-4 sm:p-4">{content}</Accordion.Content>
   </Accordion.Item>
 )
 

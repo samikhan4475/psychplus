@@ -1,6 +1,3 @@
-import * as RadioGroup from '@radix-ui/react-radio-group'
-import { Box, Flex, Text } from '@radix-ui/themes'
-import { useFormContext, UseFormReturn } from 'react-hook-form'
 import {
   FeatureCard,
   FormFieldContainer,
@@ -8,6 +5,9 @@ import {
   FormFieldLabel,
   PlacesAutocomplete,
 } from '@/components-v2'
+import * as RadioGroup from '@radix-ui/react-radio-group'
+import { Box, Flex, Text } from '@radix-ui/themes'
+import { useFormContext, UseFormReturn } from 'react-hook-form'
 
 const secondaryFields = [
   'secondaryCity',
@@ -24,16 +24,16 @@ const AddressCard = () => {
 
   return (
     <Flex
-      direction="row"
+      direction={{ initial: 'column', sm: 'row' }}
       className="w-full overflow-hidden rounded-2 border border-gray-5"
       align="baseline"
     >
-      <Box className="w-1/2">
+      <Box className="w-full md:w-1/2">
         <FeatureCard
           title="Primary Address"
           showTitleInsideCard
           containerClassName="border-none"
-          contentClassName="pr-4"
+          contentClassName="px-3 md:px-5"
         >
           <PlacesAutocomplete
             name="primary"
@@ -43,12 +43,12 @@ const AddressCard = () => {
           />
         </FeatureCard>
       </Box>
-      <Box className="w-1/2">
+      <Box className="w-full md:w-1/2">
         <FeatureCard
           title={mailingAddressTitle(mailingSameAsPrimary, form)}
           showTitleInsideCard
           containerClassName="border-none"
-          contentClassName="pl-0"
+          contentClassName="px-3 md:px-5"
         >
           <PlacesAutocomplete
             name="secondary"
@@ -67,16 +67,18 @@ const mailingAddressTitle = (
   form: UseFormReturn,
 ) => {
   return (
-    <Flex className="flex-1" gap="2" align="center">
+    <Flex className="flex-1" gap="2"  align={{ initial: 'start', sm: 'center' }} direction={{ initial: 'column', sm: 'row' }}>
       <Text className="whitespace-nowrap text-[20px] font-medium text-[#1C2024]">
         Mailing Address
       </Text>
       <FormFieldContainer className="mr-auto flex-1">
         <Flex
-          className="h-[35px] rounded-1 bg-[#f0f4ff] px-[6px]"
-          align="center"
+          className="h-fit md:h-[35px] rounded-1 bg-[#f0f4ff] px-[6px] py-2 md:py-0"
+          align={{ initial: 'start', sm: 'center' }}
+          direction={{ initial: 'column', sm: 'row' }}
+          gap="2"
         >
-          <FormFieldLabel className="whitespace-nowrap text-[12px] font-medium">
+          <FormFieldLabel className="text-[12px] font-medium">
             Is your mailing address same as primary?
           </FormFieldLabel>
           <RadioGroup.Root

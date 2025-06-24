@@ -1,11 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import type { PatientAddress, PatientProfile } from '@psychplus-v2/types'
-import * as RadioGroup from '@radix-ui/react-radio-group'
-import { Flex } from '@radix-ui/themes'
-import { useForm } from 'react-hook-form'
 import {
   FormFieldContainer,
   FormFieldLabel,
@@ -16,6 +10,12 @@ import {
 import { updateProfileAction } from '@/features/account/profile/actions'
 import { useProfileStore } from '@/features/account/profile/store'
 import { useGooglePlacesContext } from '@/providers'
+import { zodResolver } from '@hookform/resolvers/zod'
+import type { PatientAddress, PatientProfile } from '@psychplus-v2/types'
+import * as RadioGroup from '@radix-ui/react-radio-group'
+import { Flex } from '@radix-ui/themes'
+import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
 import { addressSchema, AddressSchemaType } from './address-schema'
 
 const AddressForm = ({
@@ -44,23 +44,23 @@ const AddressForm = ({
     defaultValues: {
       ...(homeAddress
         ? {
-            primaryStreet1: homeAddress.street1,
-            primaryStreet2: homeAddress.street2,
-            primaryCity: homeAddress.city,
-            primaryState: homeAddress.state,
-            primaryPostalCode: homeAddress.postalCode,
-            primaryZipLast4: homeAddress.zipLast4 ?? '',
-          }
+          primaryStreet1: homeAddress.street1,
+          primaryStreet2: homeAddress.street2,
+          primaryCity: homeAddress.city,
+          primaryState: homeAddress.state,
+          primaryPostalCode: homeAddress.postalCode,
+          primaryZipLast4: homeAddress.zipLast4 ?? '',
+        }
         : undefined),
       ...(mailingAddress
         ? {
-            secondaryStreet1: mailingAddress.street1,
-            secondaryStreet2: mailingAddress.street2,
-            secondaryCity: mailingAddress.city,
-            secondaryState: mailingAddress.state,
-            secondaryPostalCode: mailingAddress.postalCode,
-            secondaryZipLast4: mailingAddress.zipLast4 ?? '',
-          }
+          secondaryStreet1: mailingAddress.street1,
+          secondaryStreet2: mailingAddress.street2,
+          secondaryCity: mailingAddress.city,
+          secondaryState: mailingAddress.state,
+          secondaryPostalCode: mailingAddress.postalCode,
+          secondaryZipLast4: mailingAddress.zipLast4 ?? '',
+        }
         : undefined),
       primaryCountry: 'US',
       secondaryCountry: 'US',
@@ -97,7 +97,7 @@ const AddressForm = ({
         'secondaryStreet2',
       ])
   }, [form, mailingSameAsPrimary])
-  
+
   const submitAction = (data: AddressSchemaType) => {
     const primaryAddressData: PatientAddress = {
       type: 'Home',
@@ -113,15 +113,15 @@ const AddressForm = ({
     const mailingAddressData = mailingSameAsPrimary
       ? { ...primaryAddressData, type: 'Mailing' }
       : {
-          type: 'Mailing',
-          street1: data.secondaryStreet1,
-          street2: data.secondaryStreet2,
-          city: data.secondaryCity,
-          state: data.secondaryState,
-          postalCode: data.secondaryPostalCode,
-          zipLast4: data.secondaryZipLast4 ?? '',
-          country: 'US',
-        }
+        type: 'Mailing',
+        street1: data.secondaryStreet1,
+        street2: data.secondaryStreet2,
+        city: data.secondaryCity,
+        state: data.secondaryState,
+        postalCode: data.secondaryPostalCode,
+        zipLast4: data.secondaryZipLast4 ?? '',
+        country: 'US',
+      }
 
     return updateProfileAction({
       ...profile,
@@ -152,8 +152,8 @@ const AddressForm = ({
         <PlacesAutocomplete name="primary" label="Primary" editable={!isEdit} />
       ) : null}
       <FormFieldContainer>
-        <Flex align="center" mt="3" gap="3" className="col-span-2 py-4">
-          <FormFieldLabel className="text-[17px]">
+        <Flex align={{ initial: 'start', sm: 'center' }} mt="3" gap="3" className="col-span-2 py-0 sm:py-4" direction={{ initial: 'column', sm: 'row' }}>
+          <FormFieldLabel className="text-[14px] sm:text-[17px]">
             Is your mailing address same as primary?
           </FormFieldLabel>
 

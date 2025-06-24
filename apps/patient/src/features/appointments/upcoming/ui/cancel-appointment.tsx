@@ -47,7 +47,7 @@ const CancelAppointment = ({ appointmentId }: CancelAppointmentParams) => {
         <Button
           color="gray"
           variant="outline"
-          className="absolute right-8 top-6 text-[#C62A2F] hover:bg-gray-2 active:bg-gray-3"
+          className="static md:absolute right-8 top-6 text-[#C62A2F] hover:bg-gray-2 active:bg-gray-3 w-fit full self-end"
         >
           <Text weight="regular">Cancel</Text>
         </Button>
@@ -62,7 +62,7 @@ const CancelAppointment = ({ appointmentId }: CancelAppointmentParams) => {
           Are you sure you want to cancel this appointment?
         </Dialog.Description>
 
-        <Flex gap="3" mt="4" justify="end">
+        <Flex gap="3" mt="4" justify="end" direction={{ initial: 'column', md: 'row' }}>
           <Dialog.Close>
             <Button variant="outline" color="gray" highContrast>
               No, keep appointment

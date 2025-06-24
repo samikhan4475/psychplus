@@ -1,12 +1,12 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import { cn } from '@psychplus-v2/utils'
-import { Box, Button, Flex, Text } from '@radix-ui/themes'
 import { PreCheckinAssessmentTabs } from '@/features/pre-checkin-assessment/constants'
 import { useStore } from '@/features/pre-checkin-assessment/store'
+import { cn } from '@psychplus-v2/utils'
+import { Box, Button, Flex, Text } from '@radix-ui/themes'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import React, { useEffect, useRef, useState } from 'react'
 import { NotificationItem } from '../../types'
 import { useStore as useNotificationStore } from '../store'
 import { getPurposeCodeMeta, getTimeAgo, Purpose_Code_Types } from '../utils'
@@ -95,11 +95,15 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
         onNavigate()
       }}
       className={cn(
-        `min-w-56 bg-white mx-2 items-start gap-x-4 border-b border-b-gray-4 p-3`,
+        ` bg-white mx-2 gap-x-4 border-b border-b-gray-4 p-3`,
         className,
       )}
+      direction={{
+        initial: 'column',
+        sm: 'row',
+      }}
     >
-      <Box className="relative">
+      <Box className="relative hidden sm:block">
         <Image
           src={iconPath}
           width={40}
@@ -120,7 +124,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
 
       <Flex direction="column" className="gap-y-4">
         <Flex direction="column" className="gap-y-1">
-          <Text size="2" className="text-[#60646C]" weight="medium">
+          <Text size={{ initial: '1', sm: '2' }} className="text-[#60646C] whitespace-normal break-words" weight="medium">
             {message}
           </Text>
           <Text size="1" className="opacity-85">
@@ -145,3 +149,4 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
 }
 
 export { NotificationCard }
+

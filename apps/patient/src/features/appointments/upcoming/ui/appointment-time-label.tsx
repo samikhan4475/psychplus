@@ -1,17 +1,16 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { getLocalTimeZone, isToday } from '@internationalized/date'
 import { Appointment } from '@psychplus-v2/types'
 import {
-  getCalendarDate,
   getDayOfWeekLabel,
   getLocalCalendarDate,
   getMonthLabel,
-  getTimeLabel,
+  getTimeLabel
 } from '@psychplus-v2/utils'
 import { DashIcon } from '@radix-ui/react-icons'
 import { Flex, Text } from '@radix-ui/themes'
+import { useEffect, useState } from 'react'
 
 interface AppointmentTimeLabelProps {
   appointment: Appointment
@@ -33,7 +32,7 @@ const AppointmentTimeLabel = ({
   const appointmentDate = getLocalCalendarDate(row.startDate)
 
   return (
-    <Flex mt="1" align="center">
+    <Flex mt="1" >
       <Text className="text-[15px] font-[600] text-accent-12">
         {getTimeLabel(row.startDate).slice(0, -2)}{' '}
         <Text weight="regular">

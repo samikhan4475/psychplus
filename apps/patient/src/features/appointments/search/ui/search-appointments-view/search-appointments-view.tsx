@@ -165,15 +165,15 @@ const SearchAppointmentsView = ({
   }
 
   return (
-    <Flex position="relative" direction="column" width="100%" height="100%">
-      <Box px="7" className="bg-pp-blue-1 sticky top-[70px] z-10 py-[20px]">
+    <Flex position="relative" direction="column" width="100%" height="100%" className='overflow-x-hidden'>
+      <Box px={{initial:'5', sm:'7'}} className="bg-pp-blue-1 py-[20px] sticky top-[70px] z-10">
         <Flex
           direction={{ initial: 'column', sm: 'row' }}
           justify="between"
           wrap="wrap"
           gap={{ initial: '2', sm: '4' }}
         >
-          <Flex gap={{ initial: '2', sm: '9' }} wrap="wrap">
+          <Flex gap={{ initial: '2', sm: '9' }} wrap="wrap" className='flex-col sm:flex-row'>
             <ProviderTypeFilter />
             <VisitTypeFilter />
           </Flex>
@@ -181,7 +181,7 @@ const SearchAppointmentsView = ({
             direction={{ initial: 'column', sm: 'row' }}
             gap={{ initial: '2', sm: '4' }}
           >
-            <Flex gap={{ initial: '2', sm: '4' }}>
+            <Flex gap={{ initial: '2', sm: '4' }} className='flex-col sm:flex-row'>
               {isSchedulingOptimizationEnabled && <AppointmentRadiusFilter />}
 
               <AppointmentSort />
@@ -201,7 +201,7 @@ const SearchAppointmentsView = ({
               pt="6"
               pb="3"
               px="5"
-              className="bg-white flex-1 border-b border-b-gray-5"
+              className="bg-white flex-1 border-b border-b-gray-5 flex-col sm:flex-row gap-2"
             >
               {careTeamExists && primaryProviderAvailabilityData ? (
                 <Text

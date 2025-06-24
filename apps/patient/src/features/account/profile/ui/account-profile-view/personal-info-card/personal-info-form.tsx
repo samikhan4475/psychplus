@@ -178,11 +178,12 @@ const PersonalInfoForm = ({
       isEdit={isEdit}
     >
       <Flex direction="column" gap="3" className="w-full" mb="4">
-        <Flex className="w-full" gap="3">
+        <Flex className="w-full" gap="3" direction={{ initial: 'column', sm: 'row' }}>
           <FormFieldContainer className="w-full">
             <FormFieldLabel required>First Name</FormFieldLabel>
             <TextFieldInput
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
               {...form.register('firstName')}
               disabled={!isEdit}
               placeholder={getPlaceholder('firstName', isEdit)}
@@ -193,7 +194,8 @@ const PersonalInfoForm = ({
           <FormFieldContainer className="w-full">
             <FormFieldLabel>Middle Name</FormFieldLabel>
             <TextFieldInput
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
               {...form.register('middleName')}
               disabled={!isEdit}
               placeholder={getPlaceholder('middleName', isEdit)}
@@ -204,7 +206,8 @@ const PersonalInfoForm = ({
           <FormFieldContainer className="w-full">
             <FormFieldLabel required>Last Name</FormFieldLabel>
             <TextFieldInput
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
               {...form.register('lastName')}
               disabled={!isEdit}
               placeholder={getPlaceholder('lastName', isEdit)}
@@ -213,15 +216,15 @@ const PersonalInfoForm = ({
           </FormFieldContainer>
         </Flex>
 
-        <Flex className="w-full" gap="3">
+        <Flex className="w-full" gap="3" direction={{ initial: 'column', sm: 'row' }}>
           <FormFieldContainer className="w-full">
             <FormFieldLabel required>Date of Birth</FormFieldLabel>
             <TextFieldInput
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px] mr-4"
               type="date"
               max="9999-12-31"
               data-testid="birth-date"
-              className="mr-4"
               {...form.register('birthdate')}
               disabled={!isEdit}
             />
@@ -242,7 +245,8 @@ const PersonalInfoForm = ({
           <FormFieldContainer className="w-full">
             <FormFieldLabel required>Email</FormFieldLabel>
             <TextFieldInput
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
               {...form.register('email')}
               disabled
               placeholder={getPlaceholder('email', isEdit)}
@@ -251,11 +255,12 @@ const PersonalInfoForm = ({
           </FormFieldContainer>
         </Flex>
 
-        <Flex className="w-full" gap="3">
+        <Flex className="w-full" gap="3" direction={{ initial: 'column', sm: 'row' }}>
           <FormFieldContainer className="w-full">
             <FormFieldLabel>MRN</FormFieldLabel>
             <TextFieldInput
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
               {...form.register('medicalRecordNumber')}
               disabled
             />
@@ -274,15 +279,15 @@ const PersonalInfoForm = ({
 
           <FormFieldContainer className="w-full">
             <FormFieldLabel>CMD</FormFieldLabel>
-            <TextFieldInput size="3" {...form.register('cmdId')} disabled />
+            <TextFieldInput size={{ initial: '2', sm: '3' }} className="text-[13px] sm:text-[14px]" {...form.register('cmdId')} disabled />
             <FormFieldError name="cmdId" />
           </FormFieldContainer>
         </Flex>
 
-        <Flex className="w-full" gap="3">
+        <Flex className="w-full" gap="3" direction={{ initial: 'column', sm: 'row' }}>
           <FormFieldContainer className="w-full">
             <FormFieldLabel>Status</FormFieldLabel>
-            <TextFieldInput size="3" {...form.register('status')} disabled />
+            <TextFieldInput size={{ initial: '2', sm: '3' }} className="text-[13px] sm:text-[14px]" {...form.register('status')} disabled />
             <FormFieldError name="status" />
           </FormFieldContainer>
 
@@ -293,7 +298,8 @@ const PersonalInfoForm = ({
               disabled={!isEdit}
               placeholder={isEdit ? 'Select state' : ''}
               codeset={CODESETS.UsStates}
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
             />
             <FormFieldError name="driversLicense.validIn" />
           </FormFieldContainer>
@@ -301,7 +307,8 @@ const PersonalInfoForm = ({
           <FormFieldContainer className="w-full">
             <FormFieldLabel required>Driving License Number</FormFieldLabel>
             <TextFieldInput
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
               {...form.register('driversLicense.number')}
               disabled={!isEdit}
               placeholder={getPlaceholder('drivingLicenseNumber', isEdit)}
@@ -310,7 +317,7 @@ const PersonalInfoForm = ({
           </FormFieldContainer>
         </Flex>
 
-        <FormFieldContainer className="h-auto w-1/3">
+        <FormFieldContainer className="h-auto w-full sm:w-1/3">
           <FormFieldLabel>Driving License</FormFieldLabel>
           <Flex className="h-auto">
             <DriverLicenseInput
@@ -336,12 +343,13 @@ const PersonalInfoForm = ({
 
         <FormFieldContainer>
           <Flex
-            align="center"
+            direction={{ initial: 'column', sm: 'row' }}
+            align={{ initial: 'start', sm: 'center' }}
             mt="3"
             gap="3"
             className="col-span-2 box-border border-y border-gray-6 py-4"
           >
-            <FormFieldLabel className="text-[17px]">
+            <FormFieldLabel className="text-[14px] sm:text-[17px]">
               Do you have a Parent/Guardian?
             </FormFieldLabel>
 
@@ -369,13 +377,14 @@ const PersonalInfoForm = ({
         </FormFieldContainer>
 
         {form.watch('hasGuardian') && (
-          <Flex className="w-full" gap="3">
+          <Flex className="w-full" gap="3" direction={{ initial: 'column', sm: 'row' }}>
             <FormFieldContainer className="w-full">
               <FormFieldLabel required={form.watch('hasGuardian')}>
                 First Name
               </FormFieldLabel>
               <TextFieldInput
-                size="3"
+                size={{ initial: '2', sm: '3' }}
+                className="text-[13px] sm:text-[14px]"
                 {...form.register('guardianFirstName')}
                 disabled={!isEdit}
                 placeholder={getPlaceholder('firstName', isEdit)}
@@ -388,7 +397,8 @@ const PersonalInfoForm = ({
                 Last Name
               </FormFieldLabel>
               <TextFieldInput
-                size="3"
+                size={{ initial: '2', sm: '3' }}
+                className="text-[13px] sm:text-[14px]"
                 {...form.register('guardianLastName')}
                 disabled={!isEdit}
                 placeholder={getPlaceholder('lastName', isEdit)}

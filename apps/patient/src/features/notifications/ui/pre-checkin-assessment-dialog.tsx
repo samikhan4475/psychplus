@@ -112,7 +112,7 @@ const PreCheckinAssessmentDialog = ({
         onOpenChange={(open) => setIsDialogOpen(open)}
         open={initialDataLoading}
       >
-        <Dialog.Content className="relative flex h-[700px] max-w-[1200px] flex-col overflow-hidden">
+        <Dialog.Content className="relative flex h-[700px] max-w-[1200px] flex-col overflow-hidden p-3 md:p-6">
           <CloseDialogIcon />
           <LoadingPlaceholder containerClassName="mx-auto my-auto" />
         </Dialog.Content>

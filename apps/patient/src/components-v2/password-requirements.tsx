@@ -44,13 +44,13 @@ const PasswordRequirement = ({
   satisfied,
   children,
 }: React.PropsWithChildren<{ satisfied: boolean }>) => (
-  <Flex align="center" gap="2">
+  <Flex align={{ initial: 'start', sm: 'center' }} gap="2">
     {satisfied ? (
       <CheckIcon color="green" width={16} height={16} />
     ) : (
       <XIcon color="tomato" width={16} height={16} />
     )}
-    <Text weight="medium" className="text-[15px]">
+    <Text weight="medium" className="text-[13px] sm:text-[15px]">
       {children}
     </Text>
   </Flex>

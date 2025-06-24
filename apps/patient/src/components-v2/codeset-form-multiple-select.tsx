@@ -73,21 +73,21 @@ const CodesetFormMultipleSelect = ({
             >
               <Flex
                 className={cn(
-                  'max-h-60 min-h-[40px] flex-wrap overflow-y-auto rounded-6 border border-gray-7',
+                  'max-h-[35px] sm:max-h-60 min-h-[32px] sm:min-h-[40px] flex-wrap overflow-y-auto rounded-6 border border-gray-7',
                   selectProps.disabled && 'bg-gray-3 text-gray-11',
                 )}
-                px="3"
-                py="2"
+                px={{ initial: '1', sm: '3' }}
+                py={{ initial: '0', sm: '2' }}
                 align="center"
               >
-                <Text className="cursor-pointer text-[#888888]">
+                <Text className="cursor-pointer text-[#888888] text-[13px] sm:text-[14px]">
                   {form.getValues(name).length === 0 && placeholder}
                 </Text>
 
                 {selectedItems.map((item) => (
                   <Flex
                     key={item}
-                    className="whitespace-nowrap rounded-6 border border-[#194595] bg-[#D9E2FC]"
+                    className="whitespace-nowrap rounded-6 border border-[#194595] bg-[#D9E2FC] text-[13px] sm:text-[14px]"
                     align="center"
                     gap="2"
                     px="4"
@@ -155,7 +155,7 @@ const CodesetFormMultipleSelect = ({
                         </Text>
                       ))
                   ) : (
-                    <Text size="2" color="gray" align="center" mt="3">
+                    <Text size={{ initial: '1', sm: '2' }} color="gray" align="center" mt="3">
                       No results
                     </Text>
                   )}

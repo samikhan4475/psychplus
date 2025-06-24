@@ -59,7 +59,7 @@ const ReviewOfSystems: React.FC = () => {
       >
         <Box className="bg-white rounded-2 border border-gray-5 p-6 pb-8">
           <Flex align="center" className="mb-4 flex-col gap-[19px] sm:flex-row">
-            <Text className="text-[22px] font-medium">Review of Systems</Text>
+            <Text className="text-[18px] md:text-[22px] font-medium">Review of Systems</Text>
 
             <CheckAllNoConcernCell form={form} />
           </Flex>

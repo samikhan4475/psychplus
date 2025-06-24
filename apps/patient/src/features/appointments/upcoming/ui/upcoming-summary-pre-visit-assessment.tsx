@@ -1,7 +1,5 @@
 'use client'
 
-import { Button, Dialog, Flex, Text } from '@radix-ui/themes'
-import { ChevronRightIcon } from 'lucide-react'
 import { Badge, CloseDialogIcon, FileLineIcon } from '@/components-v2'
 import { NoteStoreProvider } from '@/features/note/store'
 import { NoteSectionItem } from '@/features/note/types'
@@ -10,6 +8,8 @@ import { PreCheckinAssessmentTabs } from '@/features/pre-checkin-assessment/cons
 import { useStore } from '@/features/pre-checkin-assessment/store'
 import { PreCheckinAssessmentStapperProps } from '@/features/pre-checkin-assessment/types'
 import { getTabsToShow } from '@/features/pre-checkin-assessment/utils'
+import { Button, Dialog, Flex, Text } from '@radix-ui/themes'
+import { ChevronRightIcon } from 'lucide-react'
 
 const UpcomingSummaryPreVisitAssessment = ({
   insurancePayers,
@@ -36,9 +36,11 @@ const UpcomingSummaryPreVisitAssessment = ({
 
   return (
     <NoteStoreProvider notes={notes}>
-      <Flex gap="2" align="center">
-        <FileLineIcon />
-        <Text className="text-[12px] xs:text-[15px]">Pre-Visit Assessment</Text>
+      <Flex gap={{ initial: '3', sm: '2' }} align={{ initial: 'start', sm: 'center' }} direction={{ initial: 'column', sm: 'row' }}>
+        <Flex align="center" gap="2">
+          <FileLineIcon />
+          <Text className="text-[12px] xs:text-[15px]">Pre-Visit Assessment</Text>
+        </Flex>
         <Badge
           label={completed ? 'Completed' : 'Not Completed'}
           type={completed ? 'success' : 'warning'}
@@ -53,9 +55,9 @@ const UpcomingSummaryPreVisitAssessment = ({
                 tabsToShow.length > 0
                   ? tabsToShow
                   : getTabsToShow({
-                      tabs: Object.values(PreCheckinAssessmentTabs),
-                      questionnaireSectionsToShowOnPreCheckin,
-                    })
+                    tabs: Object.values(PreCheckinAssessmentTabs),
+                    questionnaireSectionsToShowOnPreCheckin,
+                  })
 
               const firstEmptyTab = tabs?.find(
                 (tab) =>
@@ -83,10 +85,10 @@ const UpcomingSummaryPreVisitAssessment = ({
             </Button>
           </Dialog.Trigger>
 
-          <Dialog.Content className="relative flex h-[700px] max-w-[1200px] flex-col overflow-hidden">
+          <Dialog.Content className="relative flex h-[700px] max-w-[1200px] flex-col overflow-hidden  p-3 md:p-6">
             <CloseDialogIcon />
             {!showCompletionScreen && (
-              <Dialog.Title className="font-sans -tracking-[0.25px]">
+              <Dialog.Title className="font-sans -tracking-[0.25px] mt-3 md:mt-0 text-[18px] sm:text-[20px]">
                 Pre Check-in Assessment
               </Dialog.Title>
             )}

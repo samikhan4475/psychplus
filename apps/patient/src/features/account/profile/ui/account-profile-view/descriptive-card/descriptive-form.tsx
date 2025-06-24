@@ -98,7 +98,7 @@ const DescriptiveForm = ({
       languageProficiency: data.languageProficiency,
       contactDetails: {
         ...profile.contactDetails,
-        phoneNumbers,
+        phoneNumbers, 
       },
       races: data?.races || [],
       ethnicities: data?.ethnicities || [],
@@ -121,11 +121,12 @@ const DescriptiveForm = ({
       isEdit={isEdit}
     >
       <Flex direction="column" gap="3" className="w-full" mb="4">
-        <Grid columns="3" gap="3">
+        <Grid columns={{ initial: '1', sm: '3' }} gap="3">
           <FormFieldContainer>
             <FormFieldLabel>Preferred Name</FormFieldLabel>
             <TextFieldInput
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
               {...form.register('preferredName')}
               disabled={!isEdit}
               placeholder={getPlaceholder('preferredName', isEdit)}
@@ -136,7 +137,8 @@ const DescriptiveForm = ({
           <FormFieldContainer>
             <FormFieldLabel>Prefix</FormFieldLabel>
             <TextFieldInput
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
               {...form.register('prefix')}
               disabled={!isEdit}
               placeholder={getPlaceholder('prefix', isEdit)}
@@ -147,7 +149,8 @@ const DescriptiveForm = ({
           <FormFieldContainer>
             <FormFieldLabel>Suffix</FormFieldLabel>
             <TextFieldInput
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
               {...form.register('suffix')}
               disabled={!isEdit}
               placeholder={getPlaceholder('suffix', isEdit)}
@@ -156,7 +159,7 @@ const DescriptiveForm = ({
           </FormFieldContainer>
         </Grid>
 
-        <Grid columns="3" gap="3">
+        <Grid columns={{ initial: '1', sm: '3' }} gap="3">
           <FormFieldContainer>
             <FormFieldLabel>Prof. Suffix</FormFieldLabel>
             <CodesetFormSelect
@@ -164,7 +167,8 @@ const DescriptiveForm = ({
               disabled={!isEdit}
               placeholder={isEdit ? 'Select prof suffix' : ''}
               codeset={CODESETS.ProfSuffix}
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
             />
             <FormFieldError name="professionalSuffix" />
           </FormFieldContainer>
@@ -176,7 +180,8 @@ const DescriptiveForm = ({
               disabled={!isEdit}
               placeholder={isEdit ? 'Select gender' : ''}
               codeset={CODESETS.Gender}
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
             />
             <FormFieldError name="gender" />
           </FormFieldContainer>
@@ -188,13 +193,14 @@ const DescriptiveForm = ({
               disabled={!isEdit}
               placeholder={isEdit ? 'Select orientation' : ''}
               codeset={CODESETS.GenderOrientation}
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
             />
             <FormFieldError name="genderOrientation" />
           </FormFieldContainer>
         </Grid>
 
-        <Grid columns="3" gap="3">
+        <Grid columns={{ initial: '1', sm: '3' }} gap="3">
           <FormFieldContainer>
             <FormFieldLabel>Gender Expression</FormFieldLabel>
             <CodesetFormSelect
@@ -202,7 +208,8 @@ const DescriptiveForm = ({
               disabled={!isEdit}
               placeholder={isEdit ? 'Select gender expression' : ''}
               codeset={CODESETS.GenderExpression}
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
             />
             <FormFieldError name="genderExpression" />
           </FormFieldContainer>
@@ -214,7 +221,8 @@ const DescriptiveForm = ({
               disabled={!isEdit}
               placeholder={isEdit ? 'Select pronoun' : ''}
               codeset={CODESETS.GenderPronoun}
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
             />
             <FormFieldError name="genderPronoun" />
           </FormFieldContainer>
@@ -222,7 +230,8 @@ const DescriptiveForm = ({
           <FormFieldContainer>
             <FormFieldLabel>Comment</FormFieldLabel>
             <TextFieldInput
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
               {...form.register('comment')}
               disabled={!isEdit}
               placeholder={getPlaceholder('comment', isEdit)}
@@ -231,7 +240,7 @@ const DescriptiveForm = ({
           </FormFieldContainer>
         </Grid>
 
-        <Grid columns="3" gap="3">
+        <Grid columns={{ initial: '1', sm: '3' }} gap="3">
           <FormFieldContainer>
             <FormFieldLabel>Religion</FormFieldLabel>
             <CodesetFormSelect
@@ -239,14 +248,16 @@ const DescriptiveForm = ({
               disabled={!isEdit}
               placeholder={isEdit ? 'Select religion' : ''}
               codeset={CODESETS.Religion}
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
             />
           </FormFieldContainer>
 
           <FormFieldContainer>
             <FormFieldLabel>Mother Maiden Name</FormFieldLabel>
             <TextFieldInput
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
               {...form.register('motherMaidenName')}
               disabled={!isEdit}
               placeholder={getPlaceholder('motherMaidenName', isEdit)}
@@ -261,13 +272,14 @@ const DescriptiveForm = ({
               disabled={!isEdit}
               placeholder={isEdit ? 'Select language' : ''}
               codeset={CODESETS.Language}
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
             />
             <FormFieldError name="language" />
           </FormFieldContainer>
         </Grid>
 
-        <Grid columns="3" gap="3">
+        <Grid columns={{ initial: '1', sm: '3' }} gap="3">
           <FormFieldContainer>
             <FormFieldLabel>Language Ability</FormFieldLabel>
             <CodesetFormSelect
@@ -275,7 +287,8 @@ const DescriptiveForm = ({
               disabled={!isEdit}
               placeholder={isEdit ? 'Select language ability' : ''}
               codeset={CODESETS.LanguageAbility}
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
             />
             <FormFieldError name="languageAbility" />
           </FormFieldContainer>
@@ -287,7 +300,8 @@ const DescriptiveForm = ({
               disabled={!isEdit}
               placeholder={isEdit ? 'Select proficiency' : ''}
               codeset={CODESETS.LanguageProficiency}
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
             />
             <FormFieldError name="languageProficiency" />
           </FormFieldContainer>
@@ -301,7 +315,7 @@ const DescriptiveForm = ({
             placeholder={isEdit ? 'Select race' : ''}
             codeset={CODESETS.RaceAndEthnicity}
             groupingCodes={RACES_GROUPING_CODES}
-            size="3"
+            size={{ initial: '2', sm: '3' }}
             exclude={[CODE_RACE]}
           />
         </FormFieldContainer>
@@ -315,7 +329,7 @@ const DescriptiveForm = ({
             codeset={CODESETS.RaceAndEthnicity}
             groupingCodes={ETHNICITIES_GROUPING_CODES}
             exclude={[CODE_ETHNICITY]}
-            size="3"
+            size={{ initial: '2', sm: '3' }}
           />
         </FormFieldContainer>
       </Flex>

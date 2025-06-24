@@ -1,8 +1,3 @@
-import React, { useMemo } from 'react'
-import { CODESETS } from '@psychplus-v2/constants'
-import * as RadioGroup from '@radix-ui/react-radio-group'
-import { Flex, Text, TextFieldInput } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
 import {
   CodesetFormSelect,
   FeatureCard,
@@ -12,6 +7,11 @@ import {
   PhoneNumberInput,
 } from '@/components-v2'
 import { getPlaceholder } from '@/features/account/profile/utils'
+import { CODESETS } from '@psychplus-v2/constants'
+import * as RadioGroup from '@radix-ui/react-radio-group'
+import { Flex, Text, TextFieldInput } from '@radix-ui/themes'
+import { useMemo } from 'react'
+import { useFormContext } from 'react-hook-form'
 import PreCheckinAssessmentImageUploader from '../../../shared-blocks/pre-checkin-assessment-image-uploader'
 
 const PatientInfoCard = () => {
@@ -25,97 +25,103 @@ const PatientInfoCard = () => {
       contentClassName="gap-3 relative"
       showTitleInsideCard
     >
-      <Flex className="w-full " direction="row" gap="2">
-        <Flex direction="column" className="w-32">
-          <Flex direction="column" className="w-24">
+      <Flex className="w-full " direction={{ initial: 'column', sm: 'row' }} gap="2">
+        <Flex direction="column" className="w-full md:w-32">
+          <Flex direction="column" className="w-full md:w-24">
             <PreCheckinAssessmentImageUploader />
           </Flex>
         </Flex>
         <Flex direction="column" className="flex-1" gap="4">
-          <Flex className="w-full" gap="3">
-            <FormFieldContainer className="w-1/4">
+          <Flex className="w-full" gap="3" direction={{ initial: 'column', sm: 'row' }}>
+            <FormFieldContainer className="w-full md:w-1/4">
               <FormFieldLabel required>First Name</FormFieldLabel>
               <TextFieldInput
-                size="3"
+                size={{ initial: '2', sm: '3' }}
+                className="text-[13px] sm:text-[14px]"
                 {...form.register('firstName')}
                 placeholder={getPlaceholder('firstName')}
               />
               <FormFieldError name="firstName" />
             </FormFieldContainer>
 
-            <FormFieldContainer className="w-1/4">
+            <FormFieldContainer className="w-full md:w-1/4">
               <FormFieldLabel>Middle Name</FormFieldLabel>
               <TextFieldInput
-                size="3"
+                size={{ initial: '2', sm: '3' }}
+                className="text-[13px] sm:text-[14px]"
                 {...form.register('middleName')}
                 placeholder={getPlaceholder('middleName')}
               />
               <FormFieldError name="middleName" />
             </FormFieldContainer>
 
-            <FormFieldContainer className="w-1/4">
+            <FormFieldContainer className="w-full md:w-1/4">
               <FormFieldLabel required>Last Name</FormFieldLabel>
               <TextFieldInput
-                size="3"
+                size={{ initial: '2', sm: '3' }}
+                className="text-[13px] sm:text-[14px]"
                 {...form.register('lastName')}
                 placeholder={getPlaceholder('lastName')}
               />
               <FormFieldError name="lastName" />
             </FormFieldContainer>
-            <FormFieldContainer className="w-1/4">
+            <FormFieldContainer className="w-full md:w-1/4">
               <FormFieldLabel required>Date of Birth</FormFieldLabel>
               <TextFieldInput
                 {...form.register('birthdate')}
-                size="3"
+                size={{ initial: '2', sm: '3' }}
+                className="text-[13px] sm:text-[14px] ml-[-13px]"
                 type="date"
                 max="9999-12-31"
                 data-testid="birth-date"
-                className="ml-[-13px]"
               />
 
               <FormFieldError name="birthdate" />
             </FormFieldContainer>
           </Flex>
 
-          <Flex className="w-full" gap="3">
-            <FormFieldContainer className="w-1/4">
+          <Flex className="w-full" gap="3"  direction={{ initial: 'column', sm: 'row' }}>
+            <FormFieldContainer className="w-full md:w-1/4">
               <FormFieldLabel required>Phone Number</FormFieldLabel>
               <PhoneNumberInput
                 {...form.register('phoneNumber')}
                 name="phoneNumber"
-                size="3"
+                size={{ initial: '2', sm: '3' }}
+                // className="text-[13px] sm:text-[14px]"
                 placeholder={getPlaceholder('phoneNumber')}
               />
               <FormFieldError name="phoneNumber" />
             </FormFieldContainer>
 
-            <FormFieldContainer className="w-1/4">
+            <FormFieldContainer className="w-full md:w-1/4">
               <FormFieldLabel required>Email Address</FormFieldLabel>
               <TextFieldInput
                 {...form.register('email')}
-                size="3"
+                size={{ initial: '2', sm: '3' }}
+                className="text-[13px] sm:text-[14px]"
                 placeholder={getPlaceholder('emailAddress')}
                 disabled
               />
               <FormFieldError name="email" />
             </FormFieldContainer>
-            <Flex className="w-2/4" gap="3" justify="between">
-              <FormFieldContainer className="w-2/5">
+            <Flex className="w-full md:w-2/4" gap="3" justify="between" direction={{ initial: 'column', sm: 'row' }}>
+              <FormFieldContainer className="w-full md:w-2/5">
                 <FormFieldLabel required>Gender</FormFieldLabel>
                 <CodesetFormSelect
-                  size="3"
+                  size={{ initial: '2', sm: '3' }}
+                  className="text-[13px] sm:text-[14px]"
                   name="gender"
                   placeholder="Select"
                   codeset={CODESETS.Gender}
                 />
                 <FormFieldError name="gender" />
               </FormFieldContainer>
-              <FormFieldContainer>
+              <FormFieldContainer className="w-full md:w-1/2">
                 <Flex
                   direction="column"
-                  className="min-h-[60px] min-w-[280px] flex-1  rounded-4 bg-[#f0f4ff] py-3 pl-2"
+                  className="min-h-[60px] w-full md:min-w-[280px] flex-1  rounded-4 bg-[#f0f4ff] py-3 pl-2"
                 >
-                  <Flex direction="row" align="center">
+                  <Flex direction={{ initial: 'column', sm: 'row' }} align={{ initial: 'start', sm: 'center' }}>
                     <FormFieldLabel className="text-[12px]" required>
                       Guardian
                     </FormFieldLabel>
@@ -159,13 +165,14 @@ const PatientInfoCard = () => {
             </Flex>
           </Flex>
           {hasGuardian && (
-            <Flex className="w-1/2" gap="3">
+            <Flex className="w-full md:w-1/2" gap="3" direction={{ initial: 'column', sm: 'row' }}>
               <FormFieldContainer className="w-full">
                 <FormFieldLabel required={hasGuardian}>
                   Guardian First Name
                 </FormFieldLabel>
                 <TextFieldInput
-                  size="3"
+                  size={{ initial: '2', sm: '3' }}
+                  className="text-[13px] sm:text-[14px]"
                   {...form.register('guardianFirstName')}
                   placeholder={getPlaceholder('guardianFirstName')}
                 />
@@ -177,7 +184,8 @@ const PatientInfoCard = () => {
                   Guardian Last Name
                 </FormFieldLabel>
                 <TextFieldInput
-                  size="3"
+                  size={{ initial: '2', sm: '3' }}
+                  className="text-[13px] sm:text-[14px]"
                   {...form.register('guardianLastName')}
                   placeholder={getPlaceholder('guardianLastName')}
                 />

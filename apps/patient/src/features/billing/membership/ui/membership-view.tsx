@@ -34,7 +34,7 @@ const MembershipView = async () => {
     throw new Error(profileResponse.error)
   }
   return (
-    <Flex direction="column" gap="5">
+    <Flex direction="column" gap="5" className='px-3 sm:px-0'>
       <FeatureContainer>
         <MembershipCard
           membership={membershipResponse.data}

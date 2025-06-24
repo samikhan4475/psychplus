@@ -23,16 +23,16 @@ const AppointmentDetails = ({ bookedSlot }: BookedAppointmentProps) => {
   const isSlotToday = isToday(slotDate, getLocalTimeZone())
 
   return (
-    <Flex gap="3" align="center">
-      <ProviderAvatar provider={specialist} size="8" />
-      <Flex direction="column" gap="2">
-        <Text trim="end" weight="bold" className="text-[22px] text-[#151B4A]">
+    <Flex gap="3" align={{initial:'start', md:'center'}}>
+      <ProviderAvatar provider={specialist} size={{initial:'4', md:'8'}} />
+      <Flex direction="column" gap={{initial:'1', md:'2'}}>
+        <Text trim="end" weight="bold" className="text-[16px] md:text-[22px] text-[#151B4A]">
           {getUserFullName(specialist.legalName)}
           {specialist.legalName.honors && `, ${specialist.legalName.honors}`}
         </Text>
 
         <Flex
-          className="text-[18px] text-[#151B4A]"
+          className="text-[14px] md:text-[18px] text-[#151B4A]"
           direction="row"
           gap="2"
           align="center"
@@ -61,7 +61,7 @@ const AppointmentDetails = ({ bookedSlot }: BookedAppointmentProps) => {
         </Flex>
 
         {appointmentType === AppointmentType.InPerson && (
-          <Text className="text-[14px] text-[#60646C]" weight="bold">
+          <Text className="text-[12px] md:text-[14px] text-[#60646C]" weight="bold">
             {getClinicAddressLabel(clinic.contact?.addresses)}
           </Text>
         )}

@@ -17,7 +17,7 @@ const ProviderAvatar = ({
       src={
         provider.hasPhoto ? `/api/staff/${provider.id}/profileimage` : undefined
       }
-      size="6"
+      size={{ initial: '3', md: '6' }}
       alt="Provider Avatar"
       className={cn('border border-accent-6', className)}
       highContrast

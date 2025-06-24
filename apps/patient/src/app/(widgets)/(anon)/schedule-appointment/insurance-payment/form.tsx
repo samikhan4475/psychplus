@@ -416,7 +416,7 @@ const InsurancePaymentForm = ({
     <Form form={form} onSubmit={submitHandler}>
       <AppointmentDetailCard />
 
-      <Text className="my-5 text-4 font-bold md:text-6">
+      <Text className="my-5 text-2 md:text-6 font-bold">
         Do you want to use your insurance
         <br />
         for this visit?

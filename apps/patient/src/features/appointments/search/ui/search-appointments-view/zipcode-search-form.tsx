@@ -1,11 +1,3 @@
-import { useEffect, useState } from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { FormContainer } from '@psychplus-v2/components'
-import { zipCodeSchema } from '@psychplus-v2/utils'
-import { Flex } from '@radix-ui/themes'
-import { unstable_batchedUpdates } from 'react-dom'
-import { useForm } from 'react-hook-form'
-import z from 'zod'
 import { getZipcodeInfo } from '@/actions'
 import {
   FormFieldContainer,
@@ -13,6 +5,14 @@ import {
   ZipcodeInput,
 } from '@/components-v2'
 import { useStore } from '@/features/appointments/search/store'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { FormContainer } from '@psychplus-v2/components'
+import { zipCodeSchema } from '@psychplus-v2/utils'
+import { Flex } from '@radix-ui/themes'
+import { useEffect, useState } from 'react'
+import { unstable_batchedUpdates } from 'react-dom'
+import { useForm } from 'react-hook-form'
+import z from 'zod'
 import { ZipCodeStateDropdown } from './zipcode-state-dropdown'
 
 const schema = z.object({
@@ -94,7 +94,7 @@ const ZipCodeSearchForm = () => {
   return (
     <Flex direction="column" gap="2">
       <FormContainer form={form} onSubmit={onSubmit}>
-        <Flex align="end" gap="2">
+        <Flex align={{ initial: 'start', sm: 'end' }} gap="2" className='flex-col sm:flex-row' >
           <FormFieldContainer
             className="flex-1 flex-row"
             gap={{ initial: '2', sm: '4' }}
@@ -114,7 +114,7 @@ const ZipCodeSearchForm = () => {
             />
           </FormFieldContainer>
           <FormSubmitButton
-            size={{ initial: '2' }}
+            size={{ initial: '4', sm: '2' }}
             className="flex-1 sm:flex-initial"
           >
             Search ZIP

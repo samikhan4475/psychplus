@@ -1,11 +1,5 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { PaymentType } from '@psychplus-v2/constants'
-import { Appointment } from '@psychplus-v2/types'
-import { DialogClose } from '@radix-ui/react-dialog'
-import { Box, Button, Dialog, Flex, Text, Tooltip } from '@radix-ui/themes'
 import {
   CloseDialogIcon,
   EditIcon,
@@ -18,6 +12,12 @@ import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
 import { NoteSectionItem } from '@/features/note/types'
 import { useToast } from '@/providers'
+import { PaymentType } from '@psychplus-v2/constants'
+import { Appointment } from '@psychplus-v2/types'
+import { DialogClose } from '@radix-ui/react-dialog'
+import { Box, Button, Dialog, Flex, Text, Tooltip } from '@radix-ui/themes'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import {
   insuranceMayNotCoverMessage,
   isInsuranceDisabledBasedOnDiagnosisCodes,
@@ -130,7 +130,7 @@ const ChangePaymentMethodDialog = ({
           direction="column"
         >
           <Flex direction="column" px="3" py="2" gap="3">
-            <Text size="4" weight="medium">
+            <Text size={{ initial: "3", sm: "4" }} weight="medium">
               Do you want to use your insurance for this visit?
             </Text>
             <PaymentMethodToggleButtons

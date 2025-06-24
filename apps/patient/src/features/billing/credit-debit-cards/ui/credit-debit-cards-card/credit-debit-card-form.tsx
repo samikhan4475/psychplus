@@ -154,7 +154,7 @@ const CreditCardForm = ({
       />
       <FormHeading title="Add Card" />
       <Flex gap="4" direction="column" className="w-full">
-        <FormFieldContainer className="w-5/12">
+        <FormFieldContainer className="w-full md:w-5/12">
           <FormFieldLabel required>Card Number</FormFieldLabel>
           <Box
             py="2"

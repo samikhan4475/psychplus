@@ -31,7 +31,7 @@ const FieldLabel = ({
   children,
 }: React.PropsWithChildren<{ tooltip?: string }>) => (
   <Flex align="center" gap="2">
-    <Text align="right" className="text-[22px] font-[600] sm:text-[15px]">
+    <Text align="right" className="text-[16px] sm:text-[22px] font-[600]">
       {children}
     </Text>
     {tooltip ? <FieldTooltip content={tooltip} /> : null}

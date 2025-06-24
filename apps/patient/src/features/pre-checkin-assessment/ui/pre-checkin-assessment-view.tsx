@@ -141,9 +141,9 @@ const PreCheckinAssessmentView = ({
             </Box>
 
             <Flex
-              className="h-[400px] flex-grow overflow-y-auto"
+              className="h-[300px] md:h-[400px] flex-grow overflow-y-auto"
               direction="column"
-              mt="6"
+              mt={{ initial: '2', sm: '6' }}
               pr="2"
             >
               {tabs.find((tab) => tab.id === activeTab)?.content}

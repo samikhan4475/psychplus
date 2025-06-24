@@ -63,7 +63,7 @@ const BookAppointmentView = ({
     return () => window.removeEventListener('beforeunload', handleBeforeUnload)
   }, [])
   return (
-    <Flex direction="column" className="h-full w-full px-24" py="9">
+    <Flex direction="column" className="h-full w-full px-6 md:px-24" py={{initial:'4', md:'9'}}>
       {!bookingSuccessful ? (
         <>
           <AppointmentDetails bookedSlot={bookedSlot} />

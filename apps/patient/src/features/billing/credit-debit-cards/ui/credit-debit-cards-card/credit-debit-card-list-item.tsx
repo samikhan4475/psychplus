@@ -25,7 +25,7 @@ const CreditCardListItem = ({ creditCard }: { creditCard: CreditCard }) => {
 
   return (
     <Flex direction="column">
-      <Flex justify="between" gap="2">
+      <Flex justify="between" gap="2" direction={{initial:'column-reverse', md:'row'}}>
         <Flex direction="column">
           <Flex gap="3">
             <CardIcon type={creditCard.cardType} />

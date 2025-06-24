@@ -297,7 +297,7 @@ const ScheduleVisitView = ({
 
   return (
     <ViewContainer className="flex items-center justify-center">
-      <Flex direction="column" gap="4">
+      <Flex direction="column" gap="4" p="4">
         <Heading size="8">Schedule an appointment</Heading>
         <FormContainer form={form} onSubmit={onSubmit}>
           <Flex direction="column" gap="5">
@@ -337,8 +337,8 @@ const ScheduleVisitView = ({
                 form.setValue('appointmentType', value as AppointmentType)
               }}
             />
-            <Flex justify="between" gap="2">
-              <FormFieldContainer className="w-1/3 gap-[3px]">
+            <Flex justify="between" gap="2" className='flex-col sm:flex-row'>
+              <FormFieldContainer className="xs:w-full sm:w-1/3 gap-[3px]">
                 <FormFieldLabel required>Enter ZIP Code</FormFieldLabel>
                 <ZipcodeInput
                   className="h-[42px] font-[400]"
@@ -354,7 +354,7 @@ const ScheduleVisitView = ({
                 <FormFieldError name="zipCode" />
               </FormFieldContainer>
 
-              <FormFieldContainer className="w-3/4">
+              <FormFieldContainer className="xs:w-full sm:w-3/4">
                 <FormFieldLabel required>State of Residence</FormFieldLabel>
                 <ZipCodeStateDropdown
                   size="3"

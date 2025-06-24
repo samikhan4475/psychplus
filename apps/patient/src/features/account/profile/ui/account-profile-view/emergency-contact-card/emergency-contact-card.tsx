@@ -1,24 +1,24 @@
 'use client'
 
-import { ReactNode, useState } from 'react'
+import { EmptyFileIcon, FeatureEmpty } from '@/components-v2'
+import { RelationshipData } from '@psychplus-v2/types'
+import { cn } from '@psychplus-v2/utils'
+import { DataTable } from '@psychplus/ui/data-table/data-table'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import {
+  Box,
   DropdownMenu,
   Flex,
-  Text,
   Switch,
-  Box,
+  Text,
 } from '@radix-ui/themes'
 import { PencilIcon, Trash2 } from 'lucide-react'
-import { AddRelationshipFormFields } from './add-relationship-form-fields'
+import { ReactNode, useState } from 'react'
 import { AccountProfileAccordion } from '../account-profile-accordion'
-import { RelationshipFormDialog } from './relationship-form-dialog'
-import { RelationshipData } from '@psychplus-v2/types'
-import { DeleteRelationship } from './delete-relationship'
-import { DataTable } from '@psychplus/ui/data-table/data-table'
+import { AddRelationshipFormFields } from './add-relationship-form-fields'
 import { columns } from './columns'
-import { EmptyFileIcon, FeatureEmpty } from '@/components-v2'
-import { cn } from '@psychplus-v2/utils'
+import { DeleteRelationship } from './delete-relationship'
+import { RelationshipFormDialog } from './relationship-form-dialog'
 
 interface InformationCell {
   content: ReactNode;
@@ -42,7 +42,7 @@ interface RenderDataTableProps {
   setSelectedId: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
-const EmergencyContactCard= ({ relationshipData }:EmergencyContactCardProps) => {
+const EmergencyContactCard = ({ relationshipData }: EmergencyContactCardProps) => {
   const [deleteItem, setDeleteItem] = useState<RelationshipData | undefined>(undefined);
   const [selectedId, setSelectedId] = useState<string | undefined>(undefined)
 
@@ -146,7 +146,7 @@ const EmergencyContactCard= ({ relationshipData }:EmergencyContactCardProps) => 
         setOpen={(value) => { if (value === false) { setSelectedId(undefined) } }}
         content={
           <AddRelationshipFormFields
-            editMode={true}
+            mode="edit"
             setOpen={(value) => { if (value === false) { setSelectedId(undefined) } }}
             defaultValues={
               {
@@ -177,6 +177,7 @@ const RenderAddEditRelationshipModal = (
   setIsAddRelationshipModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 ) => (
   <AddRelationshipFormFields
+    mode="add"
     open={isAddRelationshipModalOpen}
     setOpen={setIsAddRelationshipModalOpen}
   />
@@ -193,8 +194,8 @@ const RenderDataTable = (
 ) => (
   <Box className="overflow-x-auto">
     <Box className={cn(
-        {'min-w-[1600px]': relationshipData.length > 0}
-      )}>
+      { 'min-w-[1600px]': relationshipData.length > 0 }
+    )}>
       <DataTable
         data={relationshipData}
         columns={columns(setSelectedId, setDeleteItem)}
@@ -206,7 +207,7 @@ const RenderDataTable = (
         columnCellClass="text-xs h-auto border-r border-r-[#D9E2FC] p-1 text-[#1C2024] last:border-r-0"
         isPreferredPartnerTable={true}
         initialPageSize={10}
-        noResultsComponent={ renderEmptyDataComponent } 
+        noResultsComponent={renderEmptyDataComponent}
       />
     </Box>
   </Box>

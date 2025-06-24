@@ -9,14 +9,14 @@ const SaveButton = () => {
   const { disabled } = useToggleableFormContext()
   return (
     <FormSubmitButton
-      size="3"
+      size={{ initial: '2', sm: '3' }}
       disabled={disabled}
       highContrast
       variant="outline"
     >
       <Flex align="center" gap="2" px="1">
         <SaveIcon height={12} width={12} />
-        <Text weight="regular" size="2">
+        <Text weight="regular" size={{ initial: '1', sm: '2' }}>
           Save
         </Text>
       </Flex>

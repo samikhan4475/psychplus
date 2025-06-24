@@ -100,7 +100,7 @@ const AutoResizeInput = ({
       suppressHydrationWarning
       suppressContentEditableWarning
       className={cn(
-        'min-h-8 min-w-48 bg-white relative max-h-48 max-w-2xl self-start overflow-y-auto overflow-x-hidden rounded-6 border border-gray-8 px-2 py-1 text-[12px] outline-offset-1 outline-accent-8 focus:border-gray-8 focus:outline-2 [&::-webkit-scrollbar-thumb]:rounded-6 [&::-webkit-scrollbar-thumb]:bg-grayA-8 [&::-webkit-scrollbar-track]:rounded-6 [&::-webkit-scrollbar-track]:bg-grayA-3 [&::-webkit-scrollbar]:[width:6px]',
+        'min-h-8 min-w-full md:min-w-48 bg-white relative max-h-48 max-w-full md:max-w-2xl self-start overflow-y-auto overflow-x-hidden rounded-6 border border-gray-8 px-2 py-1 text-[12px] outline-offset-1 outline-accent-8 focus:border-gray-8 focus:outline-2 [&::-webkit-scrollbar-thumb]:rounded-6 [&::-webkit-scrollbar-thumb]:bg-grayA-8 [&::-webkit-scrollbar-track]:rounded-6 [&::-webkit-scrollbar-track]:bg-grayA-3 [&::-webkit-scrollbar]:[width:6px]',
         {
           'before:text-nowrap before:absolute before:inset-0 before:overflow-hidden before:px-1 before:py-[1px] before:text-gray-8 before:content-[attr(data-placeholder)]':
             placeholder,

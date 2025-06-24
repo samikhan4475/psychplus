@@ -1,4 +1,9 @@
-import { useEffect, useMemo, useState } from 'react'
+import { LoadingPlaceholder } from '@/components-v2'
+import type {
+  AppointmentAvailability,
+  AppointmentSlot,
+} from '@/features/appointments/search/types'
+import { useToast } from '@/providers'
 import { AppointmentType } from '@psychplus-v2/constants'
 import { Appointment } from '@psychplus-v2/types'
 import {
@@ -8,12 +13,7 @@ import {
   getTimeLabel,
 } from '@psychplus-v2/utils'
 import { Box, Button, Flex, Text } from '@radix-ui/themes'
-import { LoadingPlaceholder } from '@/components-v2'
-import type {
-  AppointmentAvailability,
-  AppointmentSlot,
-} from '@/features/appointments/search/types'
-import { useToast } from '@/providers'
+import { useEffect, useMemo, useState } from 'react'
 import { searchAppointmentsAction } from '../../search/actions'
 import { transformResponseData } from '../../search/actions/data'
 import { useStore } from '../../search/store/store'

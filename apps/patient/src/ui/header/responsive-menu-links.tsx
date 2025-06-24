@@ -1,26 +1,16 @@
-import React from 'react'
-import NextLink from 'next/link'
 import * as Accordion from '@radix-ui/react-accordion'
 import { Flex, Text } from '@radix-ui/themes'
 import {
-  AlertTriangleIcon,
   ChevronDownIcon,
   CircleDollarSignIcon,
   CrossIcon,
-  FlaskConicalIcon,
-  HeartPulseIcon,
   ListChecksIcon,
-  NotebookTextIcon,
   PillIcon,
-  ScaleIcon,
-  Settings2Icon,
   ShieldPlusIcon,
-  StethoscopeIcon,
-  StoreIcon,
   UserCircleIcon,
-  WalletIcon,
-  type LucideIcon,
+  type LucideIcon
 } from 'lucide-react'
+import NextLink from 'next/link'
 import { useStore } from './store'
 
 const ResponsiveMenuLinks = () => {
@@ -139,9 +129,9 @@ const ResponsiveMenuLinks = () => {
             Icon: ListChecksIcon,
           },
           {
-            label: 'Payments',
-            href: '/billing/payments',
-            Icon: ListChecksIcon,
+            label: 'Insurance',
+            href: '/billing/insurance',
+            Icon: CircleDollarSignIcon,
           },
           // {
           //   label: 'Insurance',

@@ -1,23 +1,3 @@
-import Link from 'next/link'
-import {
-  AppointmentType,
-  CODESETS,
-  PaymentType,
-  ProviderType,
-  UserSettingName,
-} from '@psychplus-v2/constants'
-import { GOOGLE_MAPS_API_KEY, STRIPE_PUBLISHABLE_KEY } from '@psychplus-v2/env'
-import { Appointment } from '@psychplus-v2/types'
-import {
-  extractUserSetting,
-  formatCurrency,
-  getAppointmentTypeLabel,
-  getNewProviderTypeLabel,
-  getUserFullName,
-  withSuspense,
-} from '@psychplus-v2/utils'
-import { Button, Flex, Text } from '@radix-ui/themes'
-import { CalendarDaysIcon, DotIcon } from 'lucide-react'
 import { getCodesets, getConsents, getProfile } from '@/api'
 import {
   Badge,
@@ -47,6 +27,26 @@ import { NoteSectionName } from '@/features/note/constants'
 import { getPatientPharmacies } from '@/features/pharmacy/api'
 import { questionnairesToShowOnPreCheckin } from '@/features/pre-checkin-assessment/ui/steps/questionnaire/utils'
 import { CodesetStoreProvider, GooglePlacesContextProvider } from '@/providers'
+import {
+  AppointmentType,
+  CODESETS,
+  PaymentType,
+  ProviderType,
+  UserSettingName,
+} from '@psychplus-v2/constants'
+import { GOOGLE_MAPS_API_KEY, STRIPE_PUBLISHABLE_KEY } from '@psychplus-v2/env'
+import { Appointment } from '@psychplus-v2/types'
+import {
+  extractUserSetting,
+  formatCurrency,
+  getAppointmentTypeLabel,
+  getNewProviderTypeLabel,
+  getUserFullName,
+  withSuspense,
+} from '@psychplus-v2/utils'
+import { Button, Flex, Text } from '@radix-ui/themes'
+import { CalendarDaysIcon, DotIcon } from 'lucide-react'
+import Link from 'next/link'
 import { ScheduleAppointmentButton } from '../../search'
 import { getUpcomingAppointments } from '../api'
 import {
@@ -217,19 +217,19 @@ const UpcomingAppointmentsSummaryComponent = async () => {
             {upcomingAppointments.map((row) => {
               const isWithin48Hour = isWithin48HoursUTC(row?.startDate)
               return (
-                <CardContainer key={row.id}>
+                <CardContainer key={row.id} className='px-4 md:px-8 py-3 md:py-7'>
                   <CancelAppointment appointmentId={row.id} />
                   <Flex direction="column" gap="3">
                     <Flex
                       direction={{ initial: 'column', xs: 'row' }}
-                      gap="5"
+                      gap={{ initial: "2", sm: "5" }}
                       className="justify-between"
                     >
-                      <Flex gap="3">
-                        <ProviderAvatar provider={row.specialist} size="6" />
-                        <Flex direction="column">
+                      <Flex gap="3" align={{ initial: 'center', sm: "center" }}>
+                        <ProviderAvatar provider={row.specialist} size={{ initial: '4', sm: '6' }} />
+                        <Flex direction="column" gap="2">
                           <Flex align="center" gap="3">
-                            <Text className="text-[20px] font-[600] leading-6 -tracking-[0.25px] text-[#24366B] xs:text-[24px] sm:text-[28px]">
+                            <Text className="text-[16px] md:text-[20px] font-[600] leading-6 -tracking-[0.25px] text-[#24366B] xs:text-[24px] sm:text-[28px]">
                               {getUserFullName(row.specialist.legalName)}
                               {row.specialist.legalName.honors &&
                                 `, ${row.specialist.legalName.honors}`}
@@ -249,34 +249,66 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                               specialistId={row.specialist.id}
                             />
                           </Flex>
-                          <Flex
-                            mt="1"
-                            direction={{ initial: 'row', xs: 'row' }}
-                            align="center"
-                            gap="3"
-                          >
-                            <Flex>
-                              <Text className="text-[14px] text-[#194595]">
-                                {getNewProviderTypeLabel(
-                                  row.providerType,
-                                ).toLocaleUpperCase()}
-                              </Text>
-                              <DotIcon color="gray" />
-                              <Text className="whitespace-nowrap text-[14px] text-[#194595]">
-                                {getAppointmentTypeLabel(
-                                  row.type,
-                                ).toLocaleUpperCase()}{' '}
-                                VISIT
-                              </Text>
+                          <Flex direction="column" gap='2' className='hidden md:flex' >
+                            <Flex
+                              mt="1"
+                              direction={{ initial: 'column', sm: 'row' }}
+                              align={{ initial: 'start', sm: 'center' }}
+                              gap="3"
+                            >
+                              <Flex direction={{ initial: 'column', sm: 'row' }}>
+                                <Text className="text-[12px] md:text-[14px] text-[#194595]">
+                                  {getNewProviderTypeLabel(
+                                    row.providerType,
+                                  ).toLocaleUpperCase()}
+                                </Text>
+                                <DotIcon color="gray" className='hidden sm:block' />
+                                <Text className="whitespace-nowrap text-[12px] md:text-[14px] text-[#194595]">
+                                  {getAppointmentTypeLabel(
+                                    row.type,
+                                  ).toLocaleUpperCase()}{' '}
+                                  VISIT
+                                </Text>
+                              </Flex>
+                              <Flex className="flex-1">
+                                <ChangeVisitMedium appointment={row} />
+                              </Flex>
                             </Flex>
-                            <Flex className="flex-1">
-                              <ChangeVisitMedium appointment={row} />
+                            <Flex gap="3" align={{ initial: 'start', sm: 'center' }}>
+                              <AppointmentTimeLabel appointment={row} />
+                              <UpdateDateAndTimeDialog appointment={row} />
                             </Flex>
                           </Flex>
-                          <Flex gap="3" align="center">
-                            <AppointmentTimeLabel appointment={row} />
-                            <UpdateDateAndTimeDialog appointment={row} />
+                        </Flex>
+                      </Flex>
+                      <Flex direction="column" gap='2' className='flex md:hidden' >
+                        <Flex
+                          mt="1"
+                          direction={{ initial: 'column', sm: 'row' }}
+                          align={{ initial: 'start', sm: 'center' }}
+                          gap="3"
+                        >
+                          <Flex >
+                            <Text className="text-[12px] md:text-[14px] text-[#194595]">
+                              {getNewProviderTypeLabel(
+                                row.providerType,
+                              ).toLocaleUpperCase()}
+                            </Text>
+                            <DotIcon color="gray" size={16} />
+                            <Text className="whitespace-nowrap text-[12px] md:text-[14px] text-[#194595]">
+                              {getAppointmentTypeLabel(
+                                row.type,
+                              ).toLocaleUpperCase()}{' '}
+                              VISIT
+                            </Text>
                           </Flex>
+                          <Flex className="flex-1">
+                            <ChangeVisitMedium appointment={row} />
+                          </Flex>
+                        </Flex>
+                        <Flex gap="3" align={{ initial: 'start', sm: 'center' }}>
+                          <AppointmentTimeLabel appointment={row} />
+                          <UpdateDateAndTimeDialog appointment={row} />
                         </Flex>
                       </Flex>
                     </Flex>
@@ -361,7 +393,7 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                       align="center"
                       justify={
                         isWithin48Hour &&
-                        !row?.isQuickNoteSigned 
+                          !row?.isQuickNoteSigned
                           ? 'between'
                           : 'end'
                       }
@@ -395,7 +427,7 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                             }}
                           />
                         )}
-                      <Flex>
+                      <Flex direction={{ initial: 'column', sm: 'row' }}>
                         {row.type === AppointmentType.Virtual && (
                           <JoinVirtualCallBtn
                             virtualRoomLink={row?.virtualRoomLink}

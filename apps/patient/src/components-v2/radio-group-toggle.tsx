@@ -30,7 +30,7 @@ const RadioGroupToggle = ({ value, option, disabled }: RadioGroupItemProps) => {
         className="pl-[3px]"
         disabled={disabled}
       >
-        <Text weight="medium">{option === 'true' ? 'Yes' : 'No'}</Text>
+        <Text weight="medium" className="text-[13px] sm:text-[16px]">{option === 'true' ? 'Yes' : 'No'}</Text>
       </RadioGroupItem>
     </Flex>
   )

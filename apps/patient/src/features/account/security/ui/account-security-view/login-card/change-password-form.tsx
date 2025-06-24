@@ -75,7 +75,8 @@ const ChangePasswordForm = () => {
         <FormFieldContainer className="w-full">
           <FormFieldLabel>Current Password</FormFieldLabel>
           <PasswordInput
-            size="3"
+            size={{ initial: '2', sm: '3' }}
+            className="text-[13px] sm:text-[14px]"
             maxLength={32}
             placeholder={getPlaceholder('currentPassword')}
             {...form.register('currentPassword')}
@@ -85,7 +86,8 @@ const ChangePasswordForm = () => {
         <FormFieldContainer className="w-full">
           <FormFieldLabel>New Password</FormFieldLabel>
           <PasswordInput
-            size="3"
+            size={{ initial: '2', sm: '3' }}
+            className="text-[13px] sm:text-[14px]"
             maxLength={32}
             placeholder={getPlaceholder('newPassword')}
             {...form.register('newPassword')}
@@ -95,7 +97,8 @@ const ChangePasswordForm = () => {
         <FormFieldContainer className="w-full">
           <FormFieldLabel>Confirm New Password</FormFieldLabel>
           <PasswordInput
-            size="3"
+            size={{ initial: '2', sm: '3' }}
+            className="text-[13px] sm:text-[14px]"
             maxLength={32}
             placeholder={getPlaceholder('confirmPassword')}
             {...form.register('confirmPassword')}

@@ -1,8 +1,17 @@
 'use client'
 
-import { useCallback, useState, type ChangeEvent } from 'react'
+import {
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+  ZipcodeInput,
+  ZipLast4Input,
+} from '@/components-v2'
+import { getPlaceholder } from '@/features/account/profile/utils'
 import { cn } from '@psychplus-v2/utils'
+import { FormTextInput } from '@psychplus/form'
 import { Box, Flex, Responsive, Text, TextFieldInput } from '@radix-ui/themes'
+import { useCallback, useState, type ChangeEvent } from 'react'
 import useOnclickOutside from 'react-cool-onclickoutside'
 import {
   useFormContext,
@@ -14,15 +23,6 @@ import usePlacesAutocomplete, {
   type DetailsResult,
   type Suggestion,
 } from 'use-places-autocomplete'
-import { FormTextInput } from '@psychplus/form'
-import {
-  FormFieldContainer,
-  FormFieldError,
-  FormFieldLabel,
-  ZipcodeInput,
-  ZipLast4Input,
-} from '@/components-v2'
-import { getPlaceholder } from '@/features/account/profile/utils'
 
 interface AddressForm {
   street1?: string
@@ -205,21 +205,21 @@ const PlacesAutocomplete = ({
       <Flex
         ref={ref}
         gap="3"
-        direction={direction}
-        className={cn('w-full', direction === 'row' ? 'flex-col' : 'flex-row')}
+        direction={{ initial: 'column', sm: 'row' }}
+        className={cn('w-full')}
       >
         <Box className="flex-1" position="relative">
           <FormFieldContainer>
             <FormFieldLabel required={!isSelfScheduling}>{label} Address 1</FormFieldLabel>
             <InputComponent
               label=""
-              size="3"
+              size={{ initial: '2', sm: '3' }}
               {...form.register(street1Field)}
               onChange={handleInput}
               onFocus={() => {
                 setShowSuggestions(true)
               }}
-              className={cn('text-[15px]', className)}
+              className={cn('text-[13px] sm:text-[14px]', className)}
               disabled={!ready || editable}
               placeholder={getPlaceholder(
                 `${label?.toLocaleLowerCase() ?? ''}Address 1`,
@@ -238,8 +238,8 @@ const PlacesAutocomplete = ({
           <FormFieldLabel>{label} Address 2</FormFieldLabel>
           <InputComponent
             label=""
-            size="3"
-            className={cn('text-[15px]', className)}
+            size={{ initial: '2', sm: '3' }}
+            className={cn('text-[13px] sm:text-[14px]', className)}
             {...form.register(street2Field)}
             disabled={editable}
             placeholder={getPlaceholder(
@@ -256,8 +256,8 @@ const PlacesAutocomplete = ({
           <FormFieldLabel required={!isSelfScheduling}>City</FormFieldLabel>
           <InputComponent
             label=""
-            size="3"
-            className={className}
+            size={{ initial: '2', sm: '3' }}
+            className={cn('text-[13px] sm:text-[14px]', className)}
             {...form.register(cityField)}
             disabled={true}
             placeholder={getPlaceholder('city', !editable)}
@@ -270,8 +270,8 @@ const PlacesAutocomplete = ({
             <FormFieldLabel required={!isSelfScheduling}>State</FormFieldLabel>
             <InputComponent
               label=""
-              size="3"
-              className={className}
+              size={{ initial: '2', sm: '3' }}
+              className={cn('text-[13px] sm:text-[14px]', className)}
               {...form.register(stateField)}
               disabled={true}
               placeholder={getPlaceholder('state', !editable)}
@@ -284,12 +284,12 @@ const PlacesAutocomplete = ({
           <FormFieldLabel required={!isSelfScheduling}>Zip</FormFieldLabel>
           <ZipCodeInputComponent
             label=""
-            size="3"
+            size={{ initial: '2', sm: '3' }}
             {...form.register(postalCodeField)}
             value={form.getValues(postalCodeField)}
             disabled={true}
             placeholder={getPlaceholder('zip', !editable)}
-            className={className}
+            className={cn('text-[13px] sm:text-[14px]', className)}
           />
           {!isSelfScheduling && <FormFieldError name={postalCodeField} />}
         </FormFieldContainer>
@@ -461,12 +461,12 @@ const renderZipLast4Field = (
       <FormFieldLabel>Area Code</FormFieldLabel>
       <ZipLast4InputComponent
         label=""
-        size="3"
+        size={{ initial: '2', sm: '3' }}
+        className={cn('text-[13px] sm:text-[14px]', className)}
         {...form.register(zipLast4Field)}
         value={form.getValues(zipLast4Field)}
         disabled
         placeholder={getPlaceholder('areaCode', editable)}
-        className={className}
       />
       {!isSelfScheduling && <FormFieldError name={zipLast4Field} />}
     </FormFieldContainer>
@@ -481,9 +481,6 @@ const isCompleteAddress = (address?: AddressForm) =>
   address?.country
 
 export {
-  PlacesAutocomplete,
-  getInitialAutocompleteValue,
-  getAddressFromPlacesResult,
-  isCompleteAddress,
-  type AddressForm,
+  getAddressFromPlacesResult, getInitialAutocompleteValue, isCompleteAddress, PlacesAutocomplete, type AddressForm
 }
+

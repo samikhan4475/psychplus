@@ -1,7 +1,3 @@
-import React, { useMemo } from 'react'
-import { Box, Flex, Separator, Text } from '@radix-ui/themes'
-import { Elements } from '@stripe/react-stripe-js'
-import { loadStripe } from '@stripe/stripe-js'
 import {
   CreditDebitCardsIcon,
   EmptyFileIcon,
@@ -10,6 +6,10 @@ import {
 } from '@/components-v2'
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { CreditCardForm } from '@/features/billing/credit-debit-cards/ui/credit-debit-cards-card/credit-debit-card-form'
+import { Box, Flex, Separator, Text } from '@radix-ui/themes'
+import { Elements } from '@stripe/react-stripe-js'
+import { loadStripe } from '@stripe/stripe-js'
+import { useMemo } from 'react'
 import { CreditCardListItem } from './credit-debit-card-list-item'
 
 interface PaymentMethodsCardProps {
@@ -31,14 +31,12 @@ const PaymentMethodsForm = ({ stripeApiKey, creditCards }: PaymentMethodsCardPro
         align="center"
         justify="between"
         gap="2"
+        direction={{ initial: 'column', sm: 'row' }}
       >
-        <Text size="2" weight="medium" className="whitespace-nowrap">
+        <Text size="2" weight="medium" className="text-center">
           We accept all major Credit & Debit Cards
         </Text>
-
-        <Flex>
-          <CreditDebitCardsIcon />
-        </Flex>
+        <CreditDebitCardsIcon />
       </Flex>
       <Flex align="start" direction="column">
         <Box className="bg-[#F9F9FB] p-3">

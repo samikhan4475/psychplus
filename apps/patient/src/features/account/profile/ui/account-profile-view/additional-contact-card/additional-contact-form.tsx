@@ -102,11 +102,11 @@ const AdditionalContactForm = ({
       isEdit={isEdit}
     >
       <Flex direction="column" gap="3" className="w-full" mb="4">
-        <Flex className="w-full" gap="3">
+        <Flex className="w-full" gap="3" direction={{ initial: 'column', sm: 'row' }}>
           <FormFieldContainer className="w-full">
             <FormFieldLabel required>Home Phone</FormFieldLabel>
             <PhoneNumberInput
-              size="3"
+              size={{ initial: '2', sm: '3' }}
               {...form.register('homeContactNumber')}
               editable={!isEdit}
               placeholder={getPlaceholder('home phone', isEdit)}
@@ -117,7 +117,8 @@ const AdditionalContactForm = ({
           <FormFieldContainer className="w-full">
             <FormFieldLabel>Ext</FormFieldLabel>
             <ExtensionInput
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
               {...form.register('homeContactExtension')}
               value={form.getValues('homeContactExtension')}
               disabled={!isEdit}
@@ -129,7 +130,8 @@ const AdditionalContactForm = ({
           <FormFieldContainer className="w-full">
             <FormFieldLabel>Comment</FormFieldLabel>
             <TextFieldInput
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
               {...form.register('homeContactComment')}
               disabled={!isEdit}
               placeholder={getPlaceholder('comment', isEdit)}
@@ -138,11 +140,11 @@ const AdditionalContactForm = ({
           </FormFieldContainer>
         </Flex>
 
-        <Flex className="w-full" gap="3">
+        <Flex className="w-full" gap="3" direction={{ initial: 'column', sm: 'row' }}>
           <FormFieldContainer className="w-full">
             <FormFieldLabel required>Work Phone</FormFieldLabel>
             <PhoneNumberInput
-              size="3"
+              size={{ initial: '2', sm: '3' }}
               {...form.register('workContactNumber')}
               editable={!isEdit}
               placeholder={getPlaceholder('work phone', isEdit)}
@@ -153,7 +155,8 @@ const AdditionalContactForm = ({
           <FormFieldContainer className="w-full">
             <FormFieldLabel>Ext</FormFieldLabel>
             <ExtensionInput
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
               {...form.register('workContactExtension')}
               value={form.getValues('workContactExtension')}
               disabled={!isEdit}
@@ -165,7 +168,8 @@ const AdditionalContactForm = ({
           <FormFieldContainer className="w-full">
             <FormFieldLabel>Comment</FormFieldLabel>
             <TextFieldInput
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
               {...form.register('workContactComment')}
               disabled={!isEdit}
               placeholder={getPlaceholder('comment', isEdit)}

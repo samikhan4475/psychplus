@@ -96,12 +96,13 @@ const AlternateInfoForm = ({
       isEdit={isEdit}
     >
       <Flex direction="column" gap="3" className="w-full" mb="4">
-        <Flex className="w-full" gap="3">
+        <Flex className="w-full" gap="3" direction={{ initial: 'column', sm: 'row' }}>
           <FormFieldContainer className="w-full">
             <FormFieldLabel required>First Name</FormFieldLabel>
             <TextFieldInput
               placeholder={getPlaceholder(`first name`, isEdit)}
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
               {...form.register('firstName')}
               disabled={!isEdit}
             />
@@ -112,7 +113,8 @@ const AlternateInfoForm = ({
             <FormFieldLabel>Middle Name</FormFieldLabel>
             <TextFieldInput
               placeholder={getPlaceholder(`middle name`, isEdit)}
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
               {...form.register('middleName')}
               disabled={!isEdit}
             />
@@ -123,7 +125,8 @@ const AlternateInfoForm = ({
             <FormFieldLabel required>Last Name</FormFieldLabel>
             <TextFieldInput
               placeholder={getPlaceholder(`last name`, isEdit)}
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
               {...form.register('lastName')}
               disabled={!isEdit}
             />
@@ -136,7 +139,8 @@ const AlternateInfoForm = ({
             <FormFieldLabel>Prefix</FormFieldLabel>
             <TextFieldInput
               placeholder={getPlaceholder(`prefix`, isEdit)}
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
               {...form.register('title')}
               disabled={!isEdit}
             />
@@ -147,7 +151,8 @@ const AlternateInfoForm = ({
             <FormFieldLabel>Suffix</FormFieldLabel>
             <TextFieldInput
               placeholder={getPlaceholder(`suffix`, isEdit)}
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
               {...form.register('suffix')}
               disabled={!isEdit}
             />
@@ -158,7 +163,8 @@ const AlternateInfoForm = ({
             <FormFieldLabel>Prof. Suffix</FormFieldLabel>
             <TextFieldInput
               placeholder={getPlaceholder(`prof. suffix`, isEdit)}
-              size="3"
+              size={{ initial: '2', sm: '3' }}
+              className="text-[13px] sm:text-[14px]"
               {...form.register('honors')}
               disabled={!isEdit}
             />

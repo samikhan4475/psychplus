@@ -35,9 +35,9 @@ const FeatureCard = ({
         <Text className="text-[14px] font-[500] xs:text-[16px]">{title}</Text>
       </Flex>
     )}
-    <Flex direction="column" py="5" px="5" className={cn(contentClassName)}>
+    <Flex direction="column" py="5" px={{ initial: '3', md: '5' }} className={cn(contentClassName)}>
       {showTitleInsideCard && title && (
-        <Text className="text-[22px] font-medium" mb="2">
+        <Text className="md:text-[22px] text-[18px] font-medium" mb="2">
           {title}
         </Text>
       )}

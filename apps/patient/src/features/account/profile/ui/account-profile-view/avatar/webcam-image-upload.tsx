@@ -103,7 +103,7 @@ const WebcamImageUpload = () => {
             </Flex>
           )}
         </Flex>
-        <Flex gap="3" justify="end">
+        <Flex gap="3" justify="end" wrap={{ initial: 'wrap', md: 'nowrap' }}>
           {imgSrc ? (
             <Button
               variant="soft"

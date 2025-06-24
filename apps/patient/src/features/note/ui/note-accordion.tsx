@@ -48,7 +48,7 @@ const NoteAccordion = ({
             p="2"
             className="border-pp-gray-2 bg-pp-blue-2 group w-full cursor-pointer rounded-2 border"
           >
-            <Text size="3" weight="medium">
+            <Text size={{ initial: '2', sm: '3' }} weight="medium">
               {title}
             </Text>
             <Flex gap="5">

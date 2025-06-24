@@ -54,7 +54,7 @@ const AccountProfileAccordion = ({
             p="2"
             className="w-full rounded-2 border border-[#DDDDE3] bg-[#EEF2F6]"
           >
-            <Text size="3" weight="medium">
+            <Text size={{ initial: '1', sm: '3' }} weight="medium">
               {title}
             </Text>
             <Flex gap="5">
@@ -82,13 +82,10 @@ const AccountProfileAccordion = ({
                 >
                   <Flex align="center" gap="1" className="cursor-pointer">
                     <PencilIcon
-                      height={15}
-                      width={15}
-                      strokeWidth={2}
+                      className="h-3 w-3 sm:h-4 sm:w-4 stroke-2 text-[#194595]"
                       aria-hidden
-                      color="#194595"
                     />
-                    <Text className="text-[#194595] underline">Edit</Text>
+                    <Text className="text-[#194595] underline text-[12px] sm:text-[14px]" >Edit</Text>
                   </Flex>
                 </Accordion.Trigger>
               )}
@@ -100,12 +97,9 @@ const AccountProfileAccordion = ({
                 }}
               >
                 <ChevronDown
-                  height={20}
-                  width={20}
-                  strokeWidth={2}
-                  className={`group-data-[state=${
+                  className="h-4 w-4 sm:h-5 sm:w-5 stroke-2 group-data-[state=${
                     isOpen ? 'open' : 'closed'
-                  }]:rotate-180`}
+                  }]:rotate-180"
                   aria-hidden
                 />
               </Accordion.Trigger>

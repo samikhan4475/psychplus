@@ -12,7 +12,7 @@ const CancelButton = () => {
 
   return (
     <Button
-      size="3"
+      size={{ initial: '2', sm: '3' }}
       variant="outline"
       color="red"
       onClick={(e) => {
@@ -24,7 +24,7 @@ const CancelButton = () => {
       }}
       highContrast
     >
-      <Text size="2" weight="regular" color="red">
+      <Text size={{ initial: '1', sm: '2' }} weight="regular" color="red">
         Cancel
       </Text>
     </Button>

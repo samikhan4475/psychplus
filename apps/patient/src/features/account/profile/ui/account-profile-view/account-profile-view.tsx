@@ -48,10 +48,9 @@ const AccountProfileView = async () => {
         <GooglePlacesContextProvider apiKey={GOOGLE_MAPS_API_KEY}>
           <Flex direction="column" gap="4">
             <ProfileAvatar />
-            <FeatureContainer>
+            <FeatureContainer className='px-3 sm:px-0 gap-3'>
               <PersonalInfoCard />
               <AddressCard />
-              {/* <PreferredPartnerCard /> */}
               <EmergencyContactCard relationshipData={relationshipResponse.data}/>
               <AdditionalContactCard />
               <AlternateInfoCard />

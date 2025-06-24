@@ -1,12 +1,12 @@
-import { getUserFullName, withSuspense } from '@psychplus-v2/utils'
-import { Flex, Separator, Text } from '@radix-ui/themes'
-import { StethoscopeIcon } from 'lucide-react'
 import {
   CardContainer,
   FeatureEmpty,
   LoadingPlaceholder,
   ProviderAvatar,
 } from '@/components-v2'
+import { getUserFullName, withSuspense } from '@psychplus-v2/utils'
+import { Flex, Separator, Text } from '@radix-ui/themes'
+import { StethoscopeIcon } from 'lucide-react'
 import { getCareTeam } from '../../api'
 import { CareTeamBookButton } from './care-team-book-button'
 
@@ -42,20 +42,29 @@ const ServerComponent = async () => {
                 align="start"
                 gap="3"
               >
-                <ProviderAvatar
-                  className="h-[88px] w-[88px]"
-                  provider={row.staffDetails}
-                />
-                <Flex direction="column" align="start">
-                  <Flex align="center" gap="2" className="mb-1">
-                    <Text className="text-[18px] font-[600] text-[#1A1A1A]">
+                <Flex gap="2" align="center">
+                  <ProviderAvatar
+                    className="h-[48px] w-[48px] sm:h-[88px] sm:w-[88px]"
+                    provider={row.staffDetails}
+                  />
+                 <Flex align="center" gap="2" className="mb-1  flex sm:hidden">
+                    <Text className="text-[16px] sm:text-[18px] font-[600] text-[#1A1A1A]">
+                      {getUserFullName(row.staffDetails.legalName)}
+                    </Text>
+
+                    <CareTeamBookButton careTeamMember={row} icon />
+                  </Flex>
+                </Flex>
+                <Flex direction="column" align="start" gap="2">
+                  <Flex align="center" gap="2" className="mb-1  hidden sm:flex">
+                    <Text className="text-[16px] sm:text-[18px] font-[600] text-[#1A1A1A]">
                       {getUserFullName(row.staffDetails.legalName)}
                     </Text>
 
                     <CareTeamBookButton careTeamMember={row} icon />
                   </Flex>
 
-                  <Text className="mb-4 text-[14px] font-medium uppercase text-[#60646C] text-accent-12">
+                  <Text className="text-[12px] sm:text-[14px] font-medium uppercase text-[#60646C] text-accent-12">
                     Primary {row.specialist === 'Psychiatrist' ? 'Psychiatrist' : 'Therapist'}
                   </Text>
                   <CareTeamBookButton careTeamMember={row} />

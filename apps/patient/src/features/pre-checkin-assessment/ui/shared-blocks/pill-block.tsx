@@ -91,7 +91,7 @@ const PillBlock = ({
             : `border-pp-gray-4`
         } `}
       >
-        <Text className={'whitespace-nowrap text-[12px] capitalize'}>
+        <Text className={'whitespace-normal md:whitespace-nowrap text-[12px] capitalize'}>
           {data.label}
         </Text>
       </Flex>

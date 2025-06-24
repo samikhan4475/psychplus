@@ -426,7 +426,7 @@ const InsuranceForm = ({
         </Flex>
       </FormFieldContainer>
 
-      <Grid columns="4" gap="3" className="w-full">
+      <Grid columns={{initial:'1', md:'4'}} gap="3" className="w-full">
         <FormFieldContainer>
           <FormFieldLabel required>Priority</FormFieldLabel>
 
@@ -459,7 +459,7 @@ const InsuranceForm = ({
         </FormFieldContainer>
       </Grid>
 
-      <Flex width="100%" gap="3" mt="2">
+      <Flex width="100%" gap="3" mt="2" direction={{initial:'column', md:'row'}}>
         <FormFieldContainer className="flex-1">
           <FormFieldLabel required>Group Number</FormFieldLabel>
           <TextFieldInput

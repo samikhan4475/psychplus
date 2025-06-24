@@ -31,10 +31,11 @@ const PaymentMethodToggleButtons = ({
             option === PaymentType.Insurance &&
               disableInsurance &&
               disabledClasses,
+              "w-[70px] h-[30px] sm:w-[120px] sm:h-[48px]"
           )}
           disabled={option === PaymentType.Insurance && disableInsurance}
         >
-          <Text weight="medium">{option}</Text>
+          <Text weight="medium" className='text-[12px] sm:text-[16px]'>{option}</Text>
         </ToggleGroup.Item>
       ))}
     </Flex>
