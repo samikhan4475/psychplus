@@ -6,33 +6,10 @@ import { PsychiatryAssessmentPlanTabSchemaType } from './psychiatry-assessment-p
 
 const transformIn = (
   value: QuickNoteSectionItem[],
-  mseData?: QuickNoteSectionItem[],
 ): PsychiatryAssessmentPlanTabSchemaType => {
   const result = createEmptyFormValues()
-  const tcsiYesNo =
-    mseData?.find((item) => item.sectionItem === 'tcsiYesNo')
-      ?.sectionItemValue ?? ''
 
-  if (tcsiYesNo === 'yes') {
-    result.safetyPlanningIntervention = true
-  }
   value?.forEach((item) => {
-    if (item.sectionItem.includes('Other')) {
-      switch (item.sectionItem) {
-        case 'warningSignsOtherDetails':
-          result.warningSignsOtherDetails = item.sectionItemValue
-          break
-        case 'copingStrategiesOtherDetails':
-          result.copingStrategiesOtherDetails = item.sectionItemValue
-          break
-        case 'restrictingAccessOtherDetails':
-          result.restrictingAccessOtherDetails = item.sectionItemValue
-          break
-        default:
-          break
-      }
-    }
-
     switch (item.sectionItem) {
       case 'patientDiscussionCompleted':
         result.patientDiscussionCompleted = item.sectionItemValue as
@@ -41,18 +18,6 @@ const transformIn = (
         break
       case 'assessmentTreatmentPlanNotes':
         result.assessmentTreatmentPlanNotes = item.sectionItemValue
-        break
-      case 'safetyPlanningIntervention':
-        if (tcsiYesNo !== 'yes') {
-          result.safetyPlanningIntervention = item.sectionItemValue === 'true'
-        }
-        break
-      case 'warningSigns':
-      case 'copingStrategies':
-      case 'restrictingAccess':
-        result[item.sectionItem] = item.sectionItemValue
-          ? item.sectionItemValue.split(',')
-          : []
         break
       default:
         break
@@ -78,17 +43,8 @@ const transformOut =
       }
 
       if (
-        key.includes('Other') &&
-        typeof value === 'string' &&
-        value.length > 0
-      ) {
-        result.push({ ...commonProps, sectionItemValue: value })
-      }
-
-      if (
         key === 'assessmentTreatmentPlanNotes' ||
-        key === 'patientDiscussionCompleted' ||
-        key === 'safetyPlanningIntervention'
+        key === 'patientDiscussionCompleted'
       ) {
         result.push({ ...commonProps, sectionItemValue: `${value}` })
       } else if (Array.isArray(value) && value.length > 0) {

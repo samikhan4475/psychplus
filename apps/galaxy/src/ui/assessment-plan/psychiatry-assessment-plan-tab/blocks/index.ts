@@ -1,5 +1,3 @@
 export * from './assessment-treatment-plan-notes-block'
 export * from './patient-discussion-completed-block'
-export * from './safety-planning-intervention-block'
-export * from './safety-planing-view-block'
 export * from './assessment-summary-block'

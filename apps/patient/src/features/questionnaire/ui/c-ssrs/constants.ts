@@ -17,7 +17,7 @@ const QUESTION_CATEGORIES = [
     questions: [
       { text: 'Wish to be dead', options: YES_NO_OPTIONS('1') },
       {
-        text: 'Non-specific active suicidal thoughts',
+        text: 'Non-specific active suicidal ideation',
         options: YES_NO_OPTIONS('2'),
       },
       {

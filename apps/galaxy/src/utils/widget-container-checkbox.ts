@@ -1,3 +1,7 @@
+import { Appointment, QuickNoteSectionItem, VisitSequenceTypes } from '@/types'
+import { transformIn as hpiTransformIn } from '@/ui/hpi/hpi-widget/data'
+import { transformIn as mseTransformIn } from '@/ui/mse/mse-widget/data'
+import { validateYesNoEnum } from '@/ui/mse/mse-widget/utils'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 
 interface WidgetContainerCheckboxState {
@@ -6,6 +10,9 @@ interface WidgetContainerCheckboxState {
   visitSequence: string | null
   initialValue?: string
   providerType?: string
+  appointment?: Appointment
+  mseData?: QuickNoteSectionItem[]
+  hpiData?: QuickNoteSectionItem[]
 }
 
 const disabledHistoriesWidgetsVisitTypesBySequenceNew = [
@@ -57,11 +64,55 @@ const isHistoriesWidgetDisabled = (
   )
 }
 
+export const getSafetyPlanningInterventionState = (
+  widgetId: string | undefined,
+  appointment: Appointment | undefined,
+  mseData?: QuickNoteSectionItem[],
+  hpiData?: QuickNoteSectionItem[],
+): boolean => {
+  if (
+    !appointment ||
+    widgetId !== QuickNoteSectionName.QuicknoteSectionSafetyPlanningIntervention
+  )
+    return false
+
+  const mseTransformedData = mseTransformIn(mseData ?? [])
+  const hpiTransformedData = hpiTransformIn(hpiData ?? [])
+
+  const isHPIReleventDataExist =
+    hpiTransformedData?.schizophrenia?.includes('schSuicidalThoughts') ||
+    hpiTransformedData?.schizophrenia?.includes('schHomicidalThoughts') ||
+    hpiTransformedData?.bpd?.includes('bpdSelfHarm')
+
+  const isMSEReleventDataExist =
+    validateYesNoEnum(mseTransformedData.tchiYesNo) === 'yes' ||
+    validateYesNoEnum(mseTransformedData.tcsiYesNo) === 'yes'
+
+  if (appointment.isServiceTimeDependent)
+    return isHPIReleventDataExist || isMSEReleventDataExist
+
+  if (appointment.visitType === 'ED Visit') return true
+
+  switch (appointment.visitSequence) {
+    case VisitSequenceTypes.InitialDischarge:
+    case VisitSequenceTypes.Discharge:
+      return true
+    case VisitSequenceTypes.Initial:
+    case VisitSequenceTypes.Subsequent:
+    default:
+      return false
+  }
+}
+
 const createWidgetContainerCheckboxState = ({
+  widgetId,
   visitType,
   visitSequence,
   initialValue,
   providerType,
+  appointment,
+  mseData,
+  hpiData,
 }: WidgetContainerCheckboxState) => {
   const getWidgetState = (disabled: boolean, initialValue?: string) => {
     return {
@@ -90,6 +141,13 @@ const createWidgetContainerCheckboxState = ({
     initialValue,
   )
 
+  const safetyPlanningInterventionState = getSafetyPlanningInterventionState(
+    widgetId,
+    appointment,
+    mseData,
+    hpiData,
+  )
+
   return [
     {
       id: QuickNoteSectionName.QuicknoteSectionMse,
@@ -98,6 +156,13 @@ const createWidgetContainerCheckboxState = ({
     {
       id: QuickNoteSectionName.QuicknoteSectionPhysicalExam,
       ...physicalExamState,
+    },
+    {
+      id: QuickNoteSectionName.QuicknoteSectionSafetyPlanningIntervention,
+      disabled: safetyPlanningInterventionState,
+      checked: safetyPlanningInterventionState || initialValue === 'show',
+      actualNoteViewVisibility:
+        safetyPlanningInterventionState || initialValue === 'show',
     },
     ...historiesWidgetsIds.map((id) => ({ id, ...historiesState })),
   ]
@@ -109,12 +174,19 @@ const getWidgetContainerCheckboxStateByWidgetId = ({
   visitSequence,
   initialValue,
   providerType,
+  appointment,
+  mseData,
+  hpiData,
 }: WidgetContainerCheckboxState) => {
   return createWidgetContainerCheckboxState({
+    widgetId,
     visitType,
     visitSequence,
     initialValue,
     providerType,
+    appointment,
+    mseData,
+    hpiData,
   }).find((item) => item.id === widgetId)
 }
 

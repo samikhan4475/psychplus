@@ -21,6 +21,7 @@ import { PsychiatryAssessmentPlanNoteDetailView } from '@/ui/quicknotes/actual-n
 import { QuestionnairesNoteDetailView } from '@/ui/quicknotes/actual-note-view/questionnaires'
 import { ReferralNoteDetailView } from '@/ui/quicknotes/actual-note-view/referrals/referrals-note-detail-view'
 import { ReviewofSystemNoteDetailView } from '@/ui/quicknotes/actual-note-view/ros/ros-note-detail-view'
+import { SafetyPlanningAndInterventionNoteDetailView } from '@/ui/quicknotes/actual-note-view/safety-planning-intervention'
 import { SocialHxNoteDetailView } from '@/ui/quicknotes/actual-note-view/social-hx/social-hx-note-detail-view'
 import { SpravatoNoteDetailView } from '@/ui/quicknotes/actual-note-view/spravato/spravato-note-detail-view'
 import { SubstanceUseHxNoteDetailView } from '@/ui/quicknotes/actual-note-view/substance-use-hx/substance-use-hx-note-detail-view'
@@ -138,6 +139,10 @@ const widgetsArray: Array<WidgetType> = [
     id: QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
     actualNoteDetailComponent: PsychiatryAssessmentPlanNoteDetailView,
     providerTypes: [ProviderType.Psychiatry],
+  },
+  {
+    id: QuickNoteSectionName.QuicknoteSectionSafetyPlanningIntervention,
+    actualNoteDetailComponent: SafetyPlanningAndInterventionNoteDetailView,
   },
   {
     id: QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,

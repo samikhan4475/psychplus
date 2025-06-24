@@ -6,11 +6,11 @@ import {
   GroupSelectOption,
   GroupSelectSection,
 } from '@/components'
-import { PsychiatryAssessmentPlanTabSchemaType } from '../psychiatry-assessment-plan-tab-schema'
+import { SafetyPlanningInterventionSchemaType } from '../safety-planning-intervention-schema'
 
 interface SafetyPlanningBlockProps {
   title: string
-  fieldId: keyof PsychiatryAssessmentPlanTabSchemaType
+  fieldId: keyof SafetyPlanningInterventionSchemaType
   options: GroupSelectOption<string>[]
 }
 
@@ -19,7 +19,7 @@ const SafetyPlanningBlock = ({
   fieldId,
   options,
 }: SafetyPlanningBlockProps) => {
-  const form = useFormContext<PsychiatryAssessmentPlanTabSchemaType>()
+  const form = useFormContext<SafetyPlanningInterventionSchemaType>()
   const {
     watch,
     clearErrors,
@@ -27,7 +27,7 @@ const SafetyPlanningBlock = ({
   } = form
 
   const hasError = !!errors[fieldId]
-  const safetyPlanningIntervention = watch('safetyPlanningIntervention')
+  const safetyPlanningIntervention = watch('widgetContainerCheckboxField')
 
   useEffect(() => {
     if (!safetyPlanningIntervention) {
@@ -41,7 +41,7 @@ const SafetyPlanningBlock = ({
         label={title}
         field={fieldId}
         options={options}
-        blockLabelProps={{ required: safetyPlanningIntervention }}
+        blockLabelProps={{ required: safetyPlanningIntervention === 'show' }}
         chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
       />
       <FormFieldError className="ml-2" name={fieldId} />

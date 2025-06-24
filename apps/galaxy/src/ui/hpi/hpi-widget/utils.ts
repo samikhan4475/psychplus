@@ -57,7 +57,7 @@ const labels = {
     hopeless: 'Hopeless',
     slowing: 'Slowing',
     agitation: 'Agitation',
-    suicidalThoughts: 'Suicidal Thoughts',
+    suicidalThoughts: 'Suicidal Ideation',
     anger: 'Anger',
   },
 
@@ -196,8 +196,8 @@ const labels = {
     anhedonia: 'Anhedonia',
     avolition: 'Avolition',
     catatonia: 'Catatonia',
-    suicidalThoughts: 'Suicidal Thoughts',
-    homicidalThoughts: 'Homicidal Thoughts',
+    suicidalThoughts: 'Suicidal Ideation',
+    homicidalThoughts: 'Homicidal Ideation',
   },
   medicationSe: {
     giUpset: 'GI Upset',

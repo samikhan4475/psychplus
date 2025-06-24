@@ -64,11 +64,11 @@ const SCHIZOPHRENIA_BLOCK_OPTIONS = (
     value: 'schCatatonia',
   },
   {
-    label: 'Suicidal Thoughts',
+    label: 'Suicidal Ideation',
     value: 'schSuicidalThoughts',
   },
   {
-    label: 'Homicidal Thoughts',
+    label: 'Homicidal Ideation',
     value: 'schHomicidalThoughts',
   },
 ]

@@ -4,8 +4,4 @@ export const createEmptyFormValues =
   (): PsychiatryAssessmentPlanTabSchemaType => ({
     patientDiscussionCompleted: 'yes',
     assessmentTreatmentPlanNotes: '',
-    safetyPlanningIntervention: false,
-    copingStrategies: [],
-    restrictingAccess: [],
-    warningSigns: [],
   })

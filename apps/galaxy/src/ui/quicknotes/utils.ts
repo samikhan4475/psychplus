@@ -7,6 +7,7 @@ import { AddOnClientLoader } from '../add-on/add-on-widget/add-on-client-loader'
 import { PatientAllergiesClientView } from '../allergy/patient-allergies-client-view'
 import { FamilyInternalMedicineAssessmentPlanClientLoader } from '../assessment-plan/family-internal-medicine-assessment-plan-tab/family-internal-medicine-assessment-plan-client-loader'
 import { PsychiatryAssessmentPlanClientLoader } from '../assessment-plan/psychiatry-assessment-plan-tab/psychiatry-assessment-plan-client-loader'
+import { SafetyPlanningAndInterventionClientLoader } from '../assessment-plan/safety-planning-and-intervention-tab/safety-planning-and-intervention-client-loader'
 import { TcmWidgetClientLoader } from '../assessment-plan/tcm-widget/tcm-widget-client-loader'
 import { TherapyAssessmentPlanClientLoader } from '../assessment-plan/therapy-assessment-plan-tab/therapy-assessment-plan-client-loader'
 import { CodesWidgetClientLoader } from '../codes/codes-widget/codes-widget-client-loader'
@@ -56,6 +57,7 @@ import { PsychiatryAssessmentPlanClientView } from './actual-note-view/psychiatr
 import { QuestionnairesActualnoteView as QuestionnairesClientView } from './actual-note-view/questionnaires'
 import { ReferralsClientView } from './actual-note-view/referrals/referrals-client-view'
 import { ReviewOfSystemClientView } from './actual-note-view/ros/ros-client-view'
+import { SafetyPlanningAndInterventionClientView } from './actual-note-view/safety-planning-intervention/safety-planning-and-intervention-client-view'
 import { SocialHxDetailClientView } from './actual-note-view/social-hx/social-hx-detail-client-view'
 import { SpravatoDetailClientView } from './actual-note-view/spravato/spravato-detail-client-view'
 import { SubstanceUseHxClientView } from './actual-note-view/substance-use-hx/substance-use-hx-client-view'
@@ -220,6 +222,11 @@ const widgets: Array<WidgetType> = [
     ],
   },
   {
+    component: SafetyPlanningAndInterventionClientLoader,
+    id: QuickNoteSectionName.QuicknoteSectionSafetyPlanningIntervention,
+    actualNoteComponent: SafetyPlanningAndInterventionClientView,
+  },
+  {
     component: FamilyInternalMedicineAssessmentPlanClientLoader,
     id: QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,
     actualNoteComponent: FamilyInternalMedicineAssessmentPlanClientView,
@@ -362,6 +369,7 @@ const widgetErrorsMap = {
   HospitalDischarge: 'Hospital Discharge.',
   AdmittingDiagnosis: 'Admitting Diagnosis.',
   WorkingDischargeDiagnosis: 'Working Discharge Diagnosis.',
+  SafetyPlanningIntervention: 'Safety Planning Intervention.',
 }
 
 const TherapyVisitTypeNames: Partial<Record<VisitTypeEnum, string>> = {

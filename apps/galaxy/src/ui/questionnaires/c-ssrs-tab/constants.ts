@@ -15,7 +15,7 @@ const CSSRS_QUESTIONS_SUICIDAL_IDEATION = [
   {
     id: 'suicidalIdeationQ2',
     value: 0,
-    question: 'Non-specific active suicidal thoughts',
+    question: 'Non-specific active suicidal ideation',
     options: [
       { label: 'Yes', value: '2' },
       { label: 'No', value: '0' },

@@ -18,7 +18,7 @@ const BLOCK_OPTIONS = [
   { label: 'Hopeless', value: 'depHopeless' },
   { label: 'Slowing', value: 'depSlowing' },
   { label: 'Agitation', value: 'depAgitation' },
-  { label: 'Suicidal Thoughts', value: 'depSuicidalThoughts' },
+  { label: 'Suicidal Ideation', value: 'depSuicidalThoughts' },
   { label: 'Anger', value: 'depAnger' },
 ]
 

@@ -8,59 +8,67 @@ import {
 } from '@/components'
 import { useConstants } from '@/hooks/use-constants'
 import { GooglePlacesContextProvider } from '@/providers/google-places-provider'
-import { QuickNoteSectionItem, Relationship } from '@/types'
+import { Appointment, QuickNoteSectionItem, Relationship } from '@/types'
 import { RelationshipCard } from '@/ui/patient-info/patient-info-tab/relationship'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { filterAndSort } from '@/utils'
 import { AssessmentPlanTabs } from '../constants'
-import { SafetyPlaningViewBlock } from '../psychiatry-assessment-plan-tab/blocks'
-import {
-  transformIn,
-  transformOut,
-} from '../psychiatry-assessment-plan-tab/data'
-import { createEmptyFormValues } from '../psychiatry-assessment-plan-tab/psychiatry-assessment-plan-defaults'
-import { usePsychiatryAssessmentPlanTabForm } from '../psychiatry-assessment-plan-tab/psychiatry-assessment-plan-tab-form'
 import EmergencyBlock from './block/emergency-block'
+import { SafetyPlaningViewBlock } from './block/safety-planing-view-block'
+import { transformIn, transformOut } from './data'
 import { SafetyPlanningAndInterventionHeader } from './safety-planning-and-intervention-header'
+import { createEmptyFormValues } from './safety-planning-intervention-defaults'
+import { useSafetyPlanningInterventionForm } from './safety-planning-intervention-form'
 
 interface PsychiatryAssessmentPlanTabProps {
   patientId: string
-  psychiatryAssessmentPlanData: QuickNoteSectionItem[]
+  safetyPlanningInterventionData: QuickNoteSectionItem[]
   isSafetyPlanningAndInterventionTab?: boolean
-  mseData?: QuickNoteSectionItem[]
   patientRelationships: Relationship[]
+  appointment: Appointment
 }
 
 const SafetyPlanningAndInterventionTab = ({
   patientId,
-  psychiatryAssessmentPlanData,
+  safetyPlanningInterventionData,
   isSafetyPlanningAndInterventionTab = false,
-  mseData,
   patientRelationships,
+  appointment,
 }: PsychiatryAssessmentPlanTabProps) => {
-  const [data] = filterAndSort(
-    psychiatryAssessmentPlanData,
-    'assessmentTreatmentPlanNotes',
-  )
-  const initialValue = transformIn(data, mseData ?? [])
-  const form = usePsychiatryAssessmentPlanTabForm(initialValue)
+  const initialValue = transformIn(safetyPlanningInterventionData)
+  const form = useSafetyPlanningInterventionForm(initialValue)
   const { googleApiKey } = useConstants()
+
+  const defaultInitialValues = {
+    ...createEmptyFormValues(),
+    widgetContainerCheckboxField: form.watch('widgetContainerCheckboxField'),
+  }
+  const viewWidgetContainerCheckboxField = form.watch(
+    'widgetContainerCheckboxField',
+  )
+
   return (
     <FormProvider {...form}>
       <WidgetFormContainer
         patientId={patientId}
-        widgetId={QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan}
+        widgetId={
+          QuickNoteSectionName.QuicknoteSectionSafetyPlanningIntervention
+        }
+        toggleable={!isSafetyPlanningAndInterventionTab}
         title={
           !isSafetyPlanningAndInterventionTab
             ? AssessmentPlanTabs.SPAI
             : undefined
+        }
+        appointment={appointment}
+        widgetContainerCheckboxFieldInitialValue={
+          defaultInitialValues.widgetContainerCheckboxField
         }
         getData={transformOut(patientId)}
         headerRight={
           <>
             <WidgetClearButton
               shouldCheckPermission
-              defaultInitialValues={createEmptyFormValues}
+              defaultInitialValues={defaultInitialValues}
             />
             {!isSafetyPlanningAndInterventionTab && (
               <WidgetSaveButton shouldCheckPermission />
@@ -72,17 +80,26 @@ const SafetyPlanningAndInterventionTab = ({
             <SafetyPlanningAndInterventionHeader />
           )
         }
-        formResetValues={createEmptyFormValues()}
+        formResetValues={defaultInitialValues}
+        tags={
+          isSafetyPlanningAndInterventionTab
+            ? [QuickNoteSectionName.QuicknoteSectionSafetyPlanningIntervention]
+            : []
+        }
       >
-        <SafetyPlaningViewBlock />
-        <EmergencyBlock />
-        <GooglePlacesContextProvider apiKey={googleApiKey}>
-          <RelationshipCard
-            patientId={patientId}
-            title="Support System"
-            patientRelationships={patientRelationships ?? []}
-          />
-        </GooglePlacesContextProvider>
+        {viewWidgetContainerCheckboxField === 'show' && (
+          <>
+            <SafetyPlaningViewBlock />
+            <EmergencyBlock />
+            <GooglePlacesContextProvider apiKey={googleApiKey}>
+              <RelationshipCard
+                patientId={patientId}
+                title="Support System"
+                patientRelationships={patientRelationships ?? []}
+              />
+            </GooglePlacesContextProvider>
+          </>
+        )}
       </WidgetFormContainer>
     </FormProvider>
   )

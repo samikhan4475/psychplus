@@ -1,12 +1,11 @@
 'use client'
 
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
 import { VisitTypeEnum } from '@/enum'
 import { Appointment, QuickNoteSectionItem, Relationship } from '@/types'
-import { validateYesNoEnum } from '../mse/mse-widget/utils'
 import { QuickNoteSectionName } from '../quicknotes/constants'
 import { AlertDialog } from './alert-dialog'
 import { AssessmentPlanTabs } from './constants'
@@ -29,7 +28,7 @@ enum ProviderType {
   InternalMedicine = 'InternalMedicine',
   FamilyMedicine = 'FamilyMedicine',
 }
-const getSectionsData = (
+export const getSectionsData = (
   sectionsData: QuickNoteSectionItem[],
   sectionName: QuickNoteSectionName,
 ) => {
@@ -48,9 +47,9 @@ const AssessmentPlanView = ({
     setActiveTab: state.setActiveTab,
   }))
 
-  const psychiatryAssessmentPlanData = getSectionsData(
+  const safetyPlanningInterventionData = getSectionsData(
     sectionsData,
-    QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
+    QuickNoteSectionName.QuicknoteSectionSafetyPlanningIntervention,
   )
 
   const therapyAssessmentPlanData = getSectionsData(
@@ -63,10 +62,6 @@ const AssessmentPlanView = ({
     QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,
   )
 
-  const mseData = getSectionsData(
-    sectionsData,
-    QuickNoteSectionName.QuicknoteSectionMse,
-  )
   const psychiatryVisitTypes = [
     VisitTypeEnum.Outpatient,
     VisitTypeEnum.ResidentCare,
@@ -82,40 +77,22 @@ const AssessmentPlanView = ({
   const familyPsychotherapy =
     visitTypeCode === VisitTypeEnum.FamilyPsychotherapy
 
-  const safetyPlanningBoolean =
-    psychiatryAssessmentPlanData?.find(
-      (item) => item.sectionItem === 'safetyPlanningIntervention',
-    )?.sectionItemValue === 'true'
-
-  const isEnabled = useMemo(() => {
-    const tcsiYesNo =
-      mseData?.find((item) => item.sectionItem === 'tcsiYesNo')
-        ?.sectionItemValue ?? ''
-    return validateYesNoEnum(tcsiYesNo) === 'yes'
-  }, [mseData])
-
-  const shouldShowSafety = safetyPlanningBoolean || isEnabled
-
   useEffect(() => {
     const { visitTypeCode } = appointment
 
-    if (shouldShowSafety) {
-      setActiveTab(AssessmentPlanTabs.SPAI)
-    } else {
-      const tabMap: Record<string, AssessmentPlanTabs> = {
-        psychiatry: AssessmentPlanTabs.PAP,
-        therapy: AssessmentPlanTabs.TAP,
-        familyMedicine: AssessmentPlanTabs.FIMAP,
-      }
-
-      const tab =
-        visitTypeCode && tabMap[visitTypeCode.toLowerCase()]
-          ? tabMap[visitTypeCode.toLowerCase()]
-          : AssessmentPlanTabs.PAP
-
-      setActiveTab(tab)
+    const tabMap: Record<string, AssessmentPlanTabs> = {
+      psychiatry: AssessmentPlanTabs.PAP,
+      therapy: AssessmentPlanTabs.TAP,
+      familyMedicine: AssessmentPlanTabs.FIMAP,
     }
-  }, [shouldShowSafety, setActiveTab])
+
+    const tab =
+      visitTypeCode && tabMap[visitTypeCode.toLowerCase()]
+        ? tabMap[visitTypeCode.toLowerCase()]
+        : AssessmentPlanTabs.PAP
+
+    setActiveTab(tab)
+  }, [setActiveTab])
 
   let renderTab = null
   switch (appointment.visitTypeCode) {
@@ -133,17 +110,15 @@ const AssessmentPlanView = ({
               patientId={patientId}
             />
           </TabsContent>
-          {shouldShowSafety && (
-            <TabsContent value={AssessmentPlanTabs.SPAI}>
-              <SafetyPlanningAndInterventionTab
-                patientRelationships={patientRelationships}
-                mseData={mseData}
-                patientId={patientId}
-                psychiatryAssessmentPlanData={psychiatryAssessmentPlanData}
-                isSafetyPlanningAndInterventionTab={true}
-              />
-            </TabsContent>
-          )}
+          <TabsContent value={AssessmentPlanTabs.SPAI}>
+            <SafetyPlanningAndInterventionTab
+              patientRelationships={patientRelationships}
+              safetyPlanningInterventionData={safetyPlanningInterventionData}
+              patientId={patientId}
+              isSafetyPlanningAndInterventionTab={true}
+              appointment={appointment}
+            />
+          </TabsContent>
           <AlertDialog />
         </>
       )
@@ -221,11 +196,9 @@ const AssessmentPlanView = ({
               {AssessmentPlanTabs.PAP}
             </TabsTrigger>
           )}
-          {psychiatryAssessmentPlanSection && shouldShowSafety && (
-            <TabsTrigger value={AssessmentPlanTabs.SPAI}>
-              {AssessmentPlanTabs.SPAI}
-            </TabsTrigger>
-          )}
+          <TabsTrigger value={AssessmentPlanTabs.SPAI}>
+            {AssessmentPlanTabs.SPAI}
+          </TabsTrigger>
 
           {individualPsychotherapy && (
             <TabsTrigger value={AssessmentPlanTabs.TAP}>

@@ -48,6 +48,7 @@ enum QuickNoteSectionName {
   QuicknoteSectionPsychiatryAssessmentPlan = 'QuicknoteSectionPsychiatryAssessmentPlan',
   QuicknoteSectionTherapyAssessmentPlan = 'QuicknoteSectionTherapyAssessmentPlan',
   QuicknoteSectionFamilyInternalMedicineAssessmentPlan = 'QuicknoteSectionFamilyInternalMedicineAssessmentPlan',
+  QuicknoteSectionSafetyPlanningIntervention = 'QuicknoteSectionSafetyPlanningIntervention',
   QuicknoteSectionPatientAllergies = 'QuicknoteSectionPatientAllergies',
   QuicknoteSectionAssessmentPlan = 'QuicknoteSectionAssessmentPlan',
   QuicknoteSectionQuestionnaires = 'QuicknoteSectionQuestionnaires',

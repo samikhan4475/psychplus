@@ -1,13 +1,17 @@
 import { Flex } from '@radix-ui/themes'
 import { Relationship } from '@/types'
-import { PsychiatryAssessmentPlanTabSchemaType } from '@/ui/assessment-plan/psychiatry-assessment-plan-tab/psychiatry-assessment-plan-tab-schema'
+import { SafetyPlanningInterventionSchemaType } from '@/ui/assessment-plan/safety-planning-and-intervention-tab/safety-planning-intervention-schema'
+import {
+  descriptionMapping,
+  labelMapping,
+  orderMapping,
+} from '../../psychiatry-assessment-plan/constants'
 import { BlockContainer, LabelAndValue } from '../../shared'
-import { descriptionMapping, labelMapping, orderMapping } from '../constants'
 import { safetyBlockMapOptions } from '../utils'
 import { EmergencyResourcesBlock } from './emergency-resources-block'
 
 interface SafetyPlanningBlockProps {
-  data: PsychiatryAssessmentPlanTabSchemaType
+  data: SafetyPlanningInterventionSchemaType
   patientRelationships: Relationship[]
 }
 
@@ -15,7 +19,7 @@ export const SafetyPlanningBlock = ({
   data,
   patientRelationships,
 }: SafetyPlanningBlockProps) => {
-  if (!data.safetyPlanningIntervention) return null
+  if (data.widgetContainerCheckboxField !== 'show') return null
   const relevantKeys = Object.entries(data)
     .filter(
       ([key, value]) =>

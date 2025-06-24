@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { dequal } from 'dequal'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useDebouncedCallback } from 'use-debounce'
@@ -10,7 +11,9 @@ import { revalidateAction } from '@/actions/revalidate'
 import { saveWidgetAction } from '@/actions/save-widget'
 import { useDeepCompareMemo } from '@/hooks/use-deep-compare-memo'
 import type { Appointment, QuickNoteSectionItem, UpdateCptCodes } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
+import { useStore } from '@/ui/quicknotes/store'
 import { getWidgetContainerCheckboxStateByWidgetId, postEvent } from '@/utils'
 import { WidgetContainer, type WidgetContainerProps } from './widget-container'
 import { WidgetLoadingOverlay } from './widget-loading-overlay'
@@ -206,6 +209,18 @@ const WidgetFormContainer = ({
     })
   }, [isDirty])
 
+  const { hpiData, mseData } = useStore(
+    (state) => ({
+      hpiData:
+        state.actualNotewidgetsData?.[
+          QuickNoteSectionName.QuicknoteSectionHPI
+        ] ?? [],
+      mseData:
+        state.actualNotewidgetsData?.[QuickNoteSectionName.QuicknoteSectionMse],
+    }),
+    dequal,
+  )
+
   const widgetContainerCheckboxState =
     getWidgetContainerCheckboxStateByWidgetId({
       widgetId,
@@ -213,6 +228,9 @@ const WidgetFormContainer = ({
       visitSequence,
       initialValue: widgetContainerCheckboxFieldInitialValue,
       providerType: appointment?.providerType,
+      appointment,
+      mseData,
+      hpiData,
     })
   return (
     <form onSubmit={onSubmit()}>

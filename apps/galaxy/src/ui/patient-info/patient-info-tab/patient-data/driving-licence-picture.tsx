@@ -10,16 +10,7 @@ import {
 } from '@/components/form'
 import { PictureFallback } from '@/components/icons'
 import { PatientInfoSchemaType } from '../patient-info-schema'
-import dynamic from 'next/dynamic'
-
-const ImageControls = dynamic(
-  () =>
-    import('@/components/image-control.tsx').then((mod) => mod.ImageControls),
-  {
-    ssr: false,
-  },
-)
-
+import {ImageControls} from "@/components"
 interface DrivingLicensePictureProps {
   setDriverLicenseImage: (file: File | undefined) => void
   savedDriverLicenseUrl: string

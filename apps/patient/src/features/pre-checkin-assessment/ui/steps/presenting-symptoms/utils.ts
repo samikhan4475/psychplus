@@ -1,4 +1,4 @@
-import { HpiWidgetSchemaType } from "./presenting-symptoms-schema"
+import { HpiWidgetSchemaType } from './presenting-symptoms-schema'
 
 const HPIVALIDATIONMESSAGE =
   'Must have 30 characters in this OR 3 symptoms selected from above (other than chief complaint).'
@@ -57,7 +57,7 @@ const labels = {
     hopeless: 'Hopeless',
     slowing: 'Slowing',
     agitation: 'Agitation',
-    suicidalThoughts: 'Suicidal Thoughts',
+    suicidalThoughts: 'Suicidal Ideation',
     anger: 'Anger',
   },
 
@@ -196,8 +196,8 @@ const labels = {
     anhedonia: 'Anhedonia',
     avolition: 'Avolition',
     catatonia: 'Catatonia',
-    suicidalThoughts: 'Suicidal Thoughts',
-    homicidalThoughts: 'Homicidal Thoughts',
+    suicidalThoughts: 'Suicidal Ideation',
+    homicidalThoughts: 'Homicidal Ideation',
   },
   medicationSe: {
     giUpset: 'GI Upset',

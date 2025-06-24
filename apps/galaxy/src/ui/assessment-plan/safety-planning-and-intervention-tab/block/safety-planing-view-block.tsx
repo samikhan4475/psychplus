@@ -2,7 +2,7 @@ import {
   COPING_STRATEGIES_OPTIONS,
   RESTRICTING_ACCESS_OPTIONS,
   WARNING_SIGNS_OPTIONS,
-} from '../utils'
+} from '../../psychiatry-assessment-plan-tab/utils'
 import { SafetyPlanningBlock } from './safety-planning-block'
 
 const SafetyPlaningViewBlock = () => {

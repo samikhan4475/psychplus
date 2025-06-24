@@ -31,6 +31,7 @@ const AssessmentPlanLoader = async ({
       QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,
       QuickNoteSectionName.Addon,
       QuickNoteSectionName.QuicknoteSectionTcm,
+      QuickNoteSectionName.QuicknoteSectionSafetyPlanningIntervention,
     ]),
     getQuickNoteDetailAction(
       patientId,

@@ -2,16 +2,9 @@
 
 import { useState } from 'react'
 import { Avatar, Box, Flex, Text } from '@radix-ui/themes'
-import dynamic from 'next/dynamic'
 import { PictureFallback } from '@/components/icons'
+import {ImageControls} from "@/components"
 
-const ImageControls = dynamic(
-  () =>
-    import('@/components/image-control.tsx').then((mod) => mod.ImageControls),
-  {
-    ssr: false,
-  },
-)
 interface PhotoCardProps {
   title?: string
   className?: string
