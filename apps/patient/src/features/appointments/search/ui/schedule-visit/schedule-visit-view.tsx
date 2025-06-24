@@ -44,17 +44,18 @@ const schema = z.object({
   providerType: z.custom<ProviderType>(),
   appointmentType: z.custom<AppointmentType>(),
   zipCode: zipCodeSchema.optional(),
-  state: z.string().trim().min(1, 'Required'),
-  primaryStreet1: z.string().min(1, 'Required'),
+  state: z.string().optional(),
+  primaryStreet1: z.string().optional(),
   primaryStreet2: z.string().optional(),
   primaryStreet: z.string().optional(),
   primaryStreetNumber: z.string().optional(),
-  primaryCity: z.string().min(1, 'Required'),
-  primaryState: z.string().min(1, 'Required'),
-  primaryPostalCode: zipCodeSchema,
-  primaryZipLast4: zipLast4Schema,
+  primaryCity: z.string().optional(),
+  primaryState: z.string().optional(),
+  primaryPostalCode: zipCodeSchema.optional().or(z.literal('')),
+  primaryZipLast4: zipLast4Schema.optional().or(z.literal('')),
   primaryCountry: z.string().optional(),
 })
+
 
 type SchemaType = z.infer<typeof schema>
 
@@ -91,7 +92,12 @@ const ScheduleVisitView = ({
         primaryZipLast4: true,
         primaryCountry: true,
       })
-    : schema
+    : schema.omit({
+      primaryStreet2: true,
+      primaryStreet: true,
+      primaryStreetNumber: true,
+      primaryCountry: true
+    })
 
   const getZipCodeInfoApi = async (zipCode: string | undefined) => {
     setZipStates([])
@@ -227,23 +233,32 @@ const ScheduleVisitView = ({
 
   const onSubmit = async (data: SchemaType) => {
     if (!profile.contactDetails?.addresses) {
-      const primaryAddressData: PatientAddress = {
-        type: 'Home',
-        street1: data.primaryStreet1,
-        street2: data.primaryStreet2,
-        city: data.primaryCity,
-        state: data.primaryState,
-        postalCode: data.primaryPostalCode,
-        zipLast4: data?.primaryZipLast4 ?? '',
-        country: 'US',
+      const hasAddressData = data.primaryStreet1 || data.primaryCity || data.primaryState || data.primaryPostalCode;
+      
+      let updatedProfile = profile;
+      
+      if (hasAddressData) {
+        const primaryAddressData: PatientAddress = {
+          type: 'Home',
+          street1: data.primaryStreet1 || '',
+          street2: data.primaryStreet2 || '',
+          city: data.primaryCity || '',
+          state: data.primaryState || '',
+          postalCode: data.primaryPostalCode || '',
+          zipLast4: data?.primaryZipLast4 ?? '',
+          country: 'US',
+        }
+        
+        updatedProfile = {
+          ...profile,
+          contactDetails: {
+            ...profile.contactDetails,
+            addresses: [primaryAddressData],
+          },
+        };
       }
-      const res = await updateProfileAction({
-        ...profile,
-        contactDetails: {
-          ...profile.contactDetails,
-          addresses: [primaryAddressData],
-        },
-      })
+
+      const res = await updateProfileAction(updatedProfile)
 
       if (res.state === 'success') {
         setProfile(res.data)
@@ -374,6 +389,7 @@ const ScheduleVisitView = ({
                 name="primary"
                 label="Primary"
                 editable={false}
+                isFieldsRequired={false}
               />
             )}
           </Flex>

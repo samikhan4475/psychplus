@@ -45,6 +45,7 @@ interface PlacesAutocompleteProps {
   className?: string
   containerClassName?: string
   isSelfScheduling?: boolean
+  isFieldsRequired?: boolean
 }
 
 const PlacesAutocomplete = ({
@@ -56,6 +57,7 @@ const PlacesAutocomplete = ({
   className,
   containerClassName,
   isSelfScheduling = false,
+  isFieldsRequired = true,
 }: PlacesAutocompleteProps) => {
   const street1Field = `${name}Street1`
   const street2Field = `${name}Street2`
@@ -71,6 +73,7 @@ const PlacesAutocomplete = ({
   const values = form.getValues()
   const [isDirty, setIsDirty] = useState(false)
   const [showSuggestions, setShowSuggestions] = useState(false)
+  const required = !isSelfScheduling && isFieldsRequired
 
   const {
     ready,
@@ -210,7 +213,7 @@ const PlacesAutocomplete = ({
       >
         <Box className="flex-1" position="relative">
           <FormFieldContainer>
-            <FormFieldLabel required={!isSelfScheduling}>{label} Address 1</FormFieldLabel>
+            <FormFieldLabel required={required}>{label} Address 1</FormFieldLabel>
             <InputComponent
               label=""
               size={{ initial: '2', sm: '3' }}
@@ -226,7 +229,7 @@ const PlacesAutocomplete = ({
                 !editable,
               )}
             />
-            {!isSelfScheduling && <FormFieldError name={street1Field} />}
+            {required && <FormFieldError name={street1Field} />}
           </FormFieldContainer>
           {status === 'OK' && showSuggestions ? (
             <ul className="bg-white absolute top-full z-50 w-full rounded-2 shadow-3">
@@ -253,7 +256,7 @@ const PlacesAutocomplete = ({
 
       <Flex className="w-full" gap="4">
         <FormFieldContainer className="flex-1">
-          <FormFieldLabel required={!isSelfScheduling}>City</FormFieldLabel>
+          <FormFieldLabel required={required}>City</FormFieldLabel>
           <InputComponent
             label=""
             size={{ initial: '2', sm: '3' }}
@@ -262,12 +265,12 @@ const PlacesAutocomplete = ({
             disabled={true}
             placeholder={getPlaceholder('city', !editable)}
           />
-          {!isSelfScheduling && <FormFieldError name={cityField} />}
+          {required && <FormFieldError name={cityField} />}
         </FormFieldContainer>
 
         {includeState && (
           <FormFieldContainer className="flex-1">
-            <FormFieldLabel required={!isSelfScheduling}>State</FormFieldLabel>
+            <FormFieldLabel required={required}>State</FormFieldLabel>
             <InputComponent
               label=""
               size={{ initial: '2', sm: '3' }}
@@ -276,12 +279,12 @@ const PlacesAutocomplete = ({
               disabled={true}
               placeholder={getPlaceholder('state', !editable)}
             />
-            {!isSelfScheduling && <FormFieldError name={stateField} />}
+            {required && <FormFieldError name={stateField} />}
           </FormFieldContainer>
         )}
 
         <FormFieldContainer className="flex-1">
-          <FormFieldLabel required={!isSelfScheduling}>Zip</FormFieldLabel>
+          <FormFieldLabel required={required}>Zip</FormFieldLabel>
           <ZipCodeInputComponent
             label=""
             size={{ initial: '2', sm: '3' }}
@@ -291,7 +294,7 @@ const PlacesAutocomplete = ({
             placeholder={getPlaceholder('zip', !editable)}
             className={cn('text-[13px] sm:text-[14px]', className)}
           />
-          {!isSelfScheduling && <FormFieldError name={postalCodeField} />}
+          {required && <FormFieldError name={postalCodeField} />}
         </FormFieldContainer>
         {!includeState &&
           renderZipLast4Field(
@@ -300,6 +303,7 @@ const PlacesAutocomplete = ({
             !editable,
             isSelfScheduling,
             className,
+            required,
           )}
       </Flex>
       {includeState && (
@@ -451,6 +455,7 @@ const renderZipLast4Field = (
   editable: boolean,
   isSelfScheduling: boolean,
   className?: string,
+  required?: boolean,
 ) => {
   const ZipLast4InputComponent = isSelfScheduling
     ? FormTextInput
@@ -468,7 +473,7 @@ const renderZipLast4Field = (
         disabled
         placeholder={getPlaceholder('areaCode', editable)}
       />
-      {!isSelfScheduling && <FormFieldError name={zipLast4Field} />}
+      {required && <FormFieldError name={zipLast4Field} />}
     </FormFieldContainer>
   )
 }
