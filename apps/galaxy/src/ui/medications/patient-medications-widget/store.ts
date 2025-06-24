@@ -224,7 +224,7 @@ const useStore = create<StoreState>((set, get) => ({
   },
 
   fetchScriptSureSessionToken: async () => {
-    set({ scriptSureSessionToken: undefined })
+    set({ scriptSureSessionToken: undefined, isPmpReviewed: false })
     const response = await getScriptSureSessionToken(DAWSYS)
     if (response.state === 'success') {
       set({ scriptSureSessionToken: response.data })

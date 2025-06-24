@@ -272,6 +272,99 @@ interface TransmitResult {
   id: string
   writtenDate: string
 }
+
+interface Name {
+  firstName: string
+  lastName: string
+}
+
+interface PmpScore {
+  id: string
+  metadata: Metadata
+  status: string
+  pmpPrescriptionId: string
+  scoreType: string
+  scoreValue: number
+}
+interface PmpScoreResponse {
+  id: string
+  metadata: Metadata
+  status: string
+  appointmentId: number
+  patientId: number
+  staffId: number
+  staffName: Name
+  locationId: string
+  reportRequestUrl: string
+  pmpScores: PmpScore[]
+  responseMessage?: string
+}
+
+interface PmpScoreRequest {
+  appointmentId?: Number
+  staffId?: number
+  patientId: number
+  locationId?: string
+  fromDateTime?: string
+  toDateTime?: string
+  isIncludePatient?: boolean
+  isIncludeStaff?: boolean
+  isIncludeAppointment?: boolean
+  isIncludeLocation?: boolean
+  isIncludePmpScores?: boolean
+  recordStatuses?: string[]
+}
+
+interface StartPmpRequest {
+  appointmentId?: Number
+  patientId: number
+  locationId?: string
+  senderUserId?: number
+  pmpPrescriptionId?: string
+  reportId?: string
+}
+interface NarxScore {
+  scoreType: string
+  scoreValue: number
+}
+
+interface ReportRequestUrl {
+  viewableReport: string
+}
+
+interface NarxScores {
+  scores: NarxScore[]
+}
+
+interface Report {
+  narxScores: NarxScores
+  reportExpiration: string
+  reportRequestUrl: ReportRequestUrl
+  message?: string
+}
+interface StartPmpResponse {
+  requestId: string
+  report: Report
+  reportId: string
+}
+
+interface PmpReportRequest {
+  appointmentId: Number
+  staffId: number
+  patientId: string
+  locationId: string
+  senderUserId?: number
+  pmpPrescriptionId: string
+  reportId: string
+}
+interface PmpReportResponse {
+  reportRequestId: number
+  reportLink: string
+}
+interface EncounterData {
+  locationId?: string
+  providerStaffId?: number
+}
 export {
   PrescribedStatus,
   MedicationType,
@@ -290,4 +383,12 @@ export {
   type SelfPollStatusPayloadProps,
   type FavoriteMedication,
   type TransmitResult,
+  type PmpScoreRequest,
+  type PmpScoreResponse,
+  type StartPmpResponse,
+  type StartPmpRequest,
+  type PmpScore,
+  type PmpReportRequest,
+  type PmpReportResponse,
+  type EncounterData,
 }

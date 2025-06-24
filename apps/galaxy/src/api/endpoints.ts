@@ -1064,7 +1064,12 @@ const PHARMACY_CANCEL_REQUEST = (
   pharmacyNotificationResponseId: string,
 ) =>
   `${API_URL}/api/pharmacynotifications/${pharmacyNotificationId}/responses/${pharmacyNotificationResponseId}/actions/cancel/send`
-
+const PMP_SEARCH = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/pmps/actions/search`
+const PMP_START = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/prescriptions/actions/startpmp`
+const PMP_REPORT = (patientId: string, prescriptionId: string) =>
+  `${API_URL}/api/patients/${patientId}/prescriptions/${prescriptionId}/actions/pmpreport`
 export {
   PATIENT_MEDICATION_SIGN_IN,
   GET_PATIENT_MEDICATION_ENDPOINT,
@@ -1539,4 +1544,7 @@ export {
   GET_ALL_VISITS_LIST_ENDPOINT,
   GET_VISIT_BY_STATE_LIST_ENDPOINT,
   STAFF_PROFILE_IMAGE_ENDPOINT,
+  PMP_SEARCH,
+  PMP_START,
+  PMP_REPORT,
 }

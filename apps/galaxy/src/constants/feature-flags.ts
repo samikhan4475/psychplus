@@ -4,6 +4,7 @@ enum FEATURE_FLAGS {
   ehr4907LabOrdersAndResults = 'ehr4907LabOrdersAndResults',
   ehr7795RoundingAndProviderView = 'ehr7795RoundingAndProviderView',
   ehr7406Surescripts = 'ehr7406Surescripts',
+  ehr14021PmpIntegration = 'ehr14021PmpIntegration',
 }
 // Prefetching for layout and main pages
 enum MAIN_PAGE_FEATURE_FLAGS {
