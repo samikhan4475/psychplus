@@ -5,7 +5,7 @@ import {
   GetOptions,
   NetworkResult,
 } from '@/types'
-import { getErrorMessage } from '@/utils'
+import { getErrorMessage, sanitizeUrl } from '@/utils'
 
 const GET = async <T>(
   url: string,
@@ -14,7 +14,7 @@ const GET = async <T>(
   const { ...rest } = options
 
   const next = rest.next as NextFetchRequestConfig | undefined
-  const response = await fetch('/ehr' + url, {
+  const response = await fetch('/ehr' + sanitizeUrl(url), {
     cache: next?.revalidate ? undefined : 'no-store',
     ...rest,
   })
@@ -47,13 +47,15 @@ const POST = async <T>(
   const { ...rest } = options
 
   const isBodyFormData = body instanceof FormData
-
-  const response = await fetch('/ehr' + url, {
-    method: 'POST',
-    body: isBodyFormData ? body : JSON.stringify(body),
-    ...rest,
-    headers: { 'Content-Type': 'application/json' },
-  })
+  const response = await fetch(
+    '/ehr' + sanitizeUrl('https://api.psychplus.io' + url),
+    {
+      method: 'POST',
+      body: isBodyFormData ? body : JSON.stringify(body),
+      ...rest,
+      headers: { 'Content-Type': 'application/json' },
+    },
+  )
 
   const data = getResponseData(await response.text())
 
@@ -82,7 +84,7 @@ const PATCH = async <T>(
 
   const isBodyFormData = body instanceof FormData
 
-  const response = await fetch('/ehr' + url, {
+  const response = await fetch('/ehr' + sanitizeUrl(url), {
     method: 'PATCH',
     body: isBodyFormData ? body : JSON.stringify(body),
     ...rest,
@@ -114,7 +116,7 @@ const PUT = async <T>(
 ): Promise<NetworkResult<T>> => {
   const { ...rest } = options
   const isBodyFormData = body instanceof FormData
-  const response = await fetch('/ehr' + url, {
+  const response = await fetch('/ehr' + sanitizeUrl(url), {
     method: 'PUT',
     body: isBodyFormData ? body : JSON.stringify(body),
     ...rest,
@@ -148,7 +150,7 @@ const DELETE = async <T>(
 ): Promise<NetworkResult<T>> => {
   const { ...rest } = options
 
-  const response = await fetch('/ehr' + url, {
+  const response = await fetch('/ehr' + sanitizeUrl(url), {
     method: 'DELETE',
     body: body ? JSON.stringify(body) : undefined,
     ...rest,
