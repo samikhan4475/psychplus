@@ -285,8 +285,7 @@ const InsuranceForm = ({
 
     if (!insurance) delete payload.id
 
-    const verificationStatus =
-      insurance?.insurancePolicyPriority === data?.insurancePolicyPriority
+    const verificationStatus = insurance
         ? insurance?.verificationStatus
         : 'Pending'
 
