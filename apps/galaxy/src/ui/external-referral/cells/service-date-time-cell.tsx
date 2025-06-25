@@ -8,7 +8,10 @@ import { Patient } from '../types'
 const ServiceDateTimeCell = ({
   row: { original: patient },
 }: PropsWithRow<Patient>) => {
-  const requestedTime = patient.requestedTime
+  const requestedTime = patient?.requestedTime
+  if (!requestedTime) {
+    return <Text className="text-pp-black-3"></Text>
+  }
   return (
     <Flex justify="between" minWidth="130px" gap="2" className="!truncate">
       <Text className="text-pp-black-3" weight="regular" size="1">

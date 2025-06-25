@@ -66,10 +66,10 @@ const transformResponseData = (data: Patient[]): Patient[] =>
       patientGender: getPatientGender(patientGender as Gender),
       upcomingAppointmentDate: upcomingAppointmentDate
         ? getSlashedPaddedDateString(upcomingAppointmentDate)
-        : 'None',
+        : '',
       mostRecentAppointmentDate: mostRecentAppointmentDate
         ? getSlashedPaddedDateString(mostRecentAppointmentDate)
-        : 'None',
+        : '',
       insurance: getPatientInsuranceName(item?.insurancePolicies),
       ...item,
       patientLastLoginDateTime: item?.patientLastLoginDateTime,

@@ -33,7 +33,7 @@ interface Patient extends PatientProfile {
   requestTime?: string
   requestedMedium?: string
   requestClinicLocation?: string
-  requestProvider?: string
+  requestedProviderName?: string
   referrerName?: string
   referralPhone?: string
   referralEmail?: string
@@ -52,6 +52,21 @@ interface Patient extends PatientProfile {
   requestedStateCode?: string
   patientGender?: string
   contactStatus?: string
+  organizationType?: string
+  organizationName?: string
+  referrerFacility?: string
+  additionalComments?: string
+  insuranceType?: string
+  referrerStatus?: string
+  requestedLocationName?: string
+  patientEducation?: string
+  primaryInsurance?: string
+  secondaryInsurance?: string
+  authStatus?: string
+  diagnosis?: string
+  servicePriorityStatus?: string
+  initiatedBy?: string
+  orderingProvider?: string
 }
 
 interface SearchPatientsData {

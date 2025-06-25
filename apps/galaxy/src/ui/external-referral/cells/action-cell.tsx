@@ -10,7 +10,6 @@ import { LinkReferral } from './link-referral'
 const ActionCell = ({ row }: PropsWithRow<Patient>) => {
   return (
     <Flex onClick={(e) => e.stopPropagation()} gap="1" className="w-full">
-      <LinkReferral row={row} />
       <AddVisit
         showAddUser={false}
         patient={transformOutPatientRow(row.original)}
@@ -25,6 +24,7 @@ const ActionCell = ({ row }: PropsWithRow<Patient>) => {
           Book
         </Button>
       </AddVisit>
+      <LinkReferral row={row} />
     </Flex>
   )
 }

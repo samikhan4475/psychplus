@@ -2,17 +2,12 @@
 
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
-import {
-  formatDate,
-  formatDateOfBirth,
-  getPatientAge,
-  getPatientFullName,
-  getTimeLabel,
-} from '@/utils'
+import { getPatientAge, getPatientDOB, getPatientFullName } from '@/utils'
 import {
   ActionCell,
   ContactMadeSelectCell,
   ExternalReferralHistoryCell,
+  PriorAuthStatusSelectCell,
   ServiceDateTimeCell,
 } from './cells'
 import { Patient } from './types'
@@ -25,147 +20,120 @@ const columns: ColumnDef<Patient>[] = [
     maxSize: 50,
   },
   {
-    id: 'name',
-    header: () => <ColumnHeader label="Name" />,
-    cell: ({ row: { original } }) => (
-      <LongTextCell className="min-w-24">
-        {getPatientFullName(original.patientName)}
-      </LongTextCell>
+    id: 'patientDetail',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label="Patient Details" />
     ),
-  },
-  {
-    id: 'pt-status',
-    header: () => <ColumnHeader label="User Status" />,
-    cell: ({ row: { original } }) => (
-      <TextCell>{original?.matchStatus}</TextCell>
-    ),
-  },
-  {
-    id: 'age',
-    header: () => <ColumnHeader label="Age" />,
-    cell: ({ row: { original } }) => (
-      <TextCell>{getPatientAge(original.patientDateOfBirth)}</TextCell>
-    ),
-  },
-  {
-    id: 'patient-gender',
-    header: () => <ColumnHeader label="Gen." />,
-    cell: ({ row: { original } }) => (
-      <TextCell>{original?.patientGender}</TextCell>
-    ),
-  },
-  {
-    id: 'mrn',
-    header: () => <ColumnHeader label="MRN" />,
-    cell: ({ row: { original } }) => (
-      <TextCell className="truncate">{original?.patientExternalMrn}</TextCell>
-    ),
-  },
-  {
-    id: 'dob',
-    header: () => <ColumnHeader label="DOB" />,
-    cell: ({ row: { original } }) => (
-      <TextCell className="truncate">
-        {formatDateOfBirth(original?.patientDateOfBirth)}
-      </TextCell>
-    ),
-  },
-  {
-    id: 'phone',
-    header: () => <ColumnHeader label="Phone" />,
-    cell: ({ row: { original } }) => (
-      <TextCell className="truncate">
-        {original?.patientContactDetails?.phoneNumbers?.[0]?.number}
-      </TextCell>
-    ),
-  },
-  {
-    id: 'email',
-    header: () => <ColumnHeader label="Email" />,
-    cell: ({ row: { original } }) => (
-      <TextCell className="truncate">
-        {original?.patientContactDetails?.email}
-      </TextCell>
-    ),
-  },
-  {
-    id: 'state',
-    header: () => <ColumnHeader label="State" />,
-    cell: ({ row: { original } }) => (
-      <TextCell className="truncate">
-        {original?.patientContactDetails?.addresses?.[0]?.state}
-      </TextCell>
-    ),
-  },
-  {
-    id: 'insurance',
-    header: () => <ColumnHeader label="Insurance" />,
-    cell: ({ row: { original } }) => (
-      <TextCell className="truncate">{original?.insurance}</TextCell>
-    ),
-  },
-  {
-    id: 'service',
-    header: () => <ColumnHeader label="Service" />,
-    cell: ({ row: { original } }) => (
-      <TextCell className="truncate">{original?.requestedService}</TextCell>
-    ),
-  },
-  {
-    id: 'service-date-time',
-    header: () => <ColumnHeader label="Service Date/Time" />,
-    cell: ServiceDateTimeCell,
-  },
-  {
-    id: 'request',
-    header: ({ column }) => <ColumnHeader column={column} label="Request" />,
     columns: [
       {
-        id: 'date',
-        header: () => <ColumnHeader label="Date" />,
-        cell: ({ row: { original: patient } }) => (
+        id: 'patientName',
+        header: () => <ColumnHeader label="Name" />,
+        cell: ({ row: { original } }) => (
+          <LongTextCell className="min-w-24">
+            {getPatientFullName(original.patientName)}
+          </LongTextCell>
+        ),
+      },
+      {
+        id: 'pt-status',
+        header: () => <ColumnHeader label="User Status" />,
+        cell: ({ row: { original } }) => (
+          <TextCell>{original?.matchStatus}</TextCell>
+        ),
+      },
+      {
+        id: 'patientAge',
+        header: () => <ColumnHeader label="Age" />,
+        cell: ({ row: { original } }) => (
+          <TextCell>{getPatientAge(original.patientDateOfBirth)}</TextCell>
+        ),
+      },
+      {
+        id: 'patient-gender',
+        header: () => <ColumnHeader label="Gender" />,
+        cell: ({ row: { original } }) => (
+          <TextCell>{original?.patientGender}</TextCell>
+        ),
+      },
+      {
+        id: 'mrn',
+        header: () => <ColumnHeader label="MRN" />,
+        cell: ({ row: { original } }) => (
           <TextCell className="truncate">
-            {formatDate(patient?.requestedTime)}
+            {original?.patientExternalMrn}
           </TextCell>
         ),
       },
       {
-        id: 'time',
-        header: () => <ColumnHeader label="Time" />,
-        cell: ({ row: { original: patient } }) => (
+        id: 'patientDob',
+        header: () => <ColumnHeader label="DOB" />,
+        cell: ({ row: { original } }) => (
           <TextCell className="truncate">
-            {patient?.requestedTime ? getTimeLabel(patient?.requestedTime) : ''}
+            {getPatientDOB(original?.patientDateOfBirth)}
           </TextCell>
         ),
       },
       {
-        id: 'medium',
-        header: () => <ColumnHeader label="Medium" />,
-        cell: ({ row: { original: patient } }) => (
-          <TextCell>{patient?.requestedMedium}</TextCell>
-        ),
-      },
-      {
-        id: 'clinicLocation',
-        header: () => <ColumnHeader label="Clinic Location" />,
-        cell: ({ row: { original: patient } }) => (
+        id: 'patientPhone',
+        header: () => <ColumnHeader label="Phone" />,
+        cell: ({ row: { original } }) => (
           <TextCell className="truncate">
-            {patient?.requestedStateCode}
+            {original?.patientContactDetails?.phoneNumbers?.[0]?.number}
           </TextCell>
         ),
       },
       {
-        id: 'provider',
-        header: () => <ColumnHeader label="Provider" />,
-        cell: ({ row: { original: patient } }) => (
-          <TextCell className="truncate">{patient?.requestProvider}</TextCell>
+        id: 'patientEmail',
+        header: () => <ColumnHeader label="Email" />,
+        cell: ({ row: { original } }) => (
+          <TextCell className="truncate">
+            {original?.patientContactDetails?.email}
+          </TextCell>
+        ),
+      },
+      {
+        id: 'patientState',
+        header: () => <ColumnHeader label="Residence (State)" />,
+        cell: ({ row: { original } }) => (
+          <TextCell className="truncate">
+            {original?.patientContactDetails?.addresses?.[0]?.state}
+          </TextCell>
+        ),
+      },
+      {
+        id: 'patientCity',
+        header: () => <ColumnHeader label="City" />,
+        cell: ({ row: { original } }) => (
+          <TextCell className="truncate">
+            {original?.patientContactDetails?.addresses?.[0]?.city}
+          </TextCell>
+        ),
+      },
+      {
+        id: 'patientZipCode',
+        header: () => <ColumnHeader label="Zip" />,
+        cell: ({ row: { original } }) => (
+          <TextCell className="truncate">
+            {original?.patientContactDetails?.addresses?.[0]?.postalCode}
+          </TextCell>
         ),
       },
     ],
   },
   {
+    id: 'organizationType',
+    header: () => <ColumnHeader label="Organization type" />,
+    cell: ({ row: { original } }) => (
+      <LongTextCell className="min-w-24">
+        {original?.organizationType}
+      </LongTextCell>
+    ),
+  },
+  {
     id: 'referrer',
-    header: ({ column }) => <ColumnHeader column={column} label="Referrer" />,
+    header: ({ column }) => (
+      <ColumnHeader column={column} label="Referrering Organization" />
+    ),
     columns: [
       {
         id: 'name',
@@ -192,12 +160,40 @@ const columns: ColumnDef<Patient>[] = [
       },
     ],
   },
+
   {
-    id: 'dischargeTime',
-    header: () => <ColumnHeader label="DC Date" />,
-    cell: ({ row: { original } }) => (
-      <TextCell>{original?.dischargeTime ?? ''}</TextCell>
+    id: 'referrerOrderDetails',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label="Referral Order Details" />
     ),
+    columns: [
+      {
+        id: 'service-date-time',
+        header: () => <ColumnHeader label="Order Date/Time" />,
+        cell: ServiceDateTimeCell,
+      },
+      {
+        id: 'service',
+        header: () => <ColumnHeader label="Service" />,
+        cell: ({ row: { original } }) => (
+          <TextCell className="truncate">{original?.requestedService}</TextCell>
+        ),
+      },
+      {
+        id: 'referral-status',
+        header: () => <ColumnHeader label="Referral Status" />,
+        cell: ({ row: { original: patient } }) => (
+          <TextCell>{patient?.referrerStatus}</TextCell>
+        ),
+      },
+      {
+        id: 'additionalComments',
+        header: () => <ColumnHeader label="Comments" />,
+        cell: ({ row: { original } }) => (
+          <TextCell>{original?.additionalComments}</TextCell>
+        ),
+      },
+    ],
   },
   {
     id: 'facesheet',
@@ -207,16 +203,66 @@ const columns: ColumnDef<Patient>[] = [
     ),
   },
   {
+    id: 'dischargeTime',
+    header: () => <ColumnHeader label="DC Date" />,
+    cell: ({ row: { original } }) => (
+      <TextCell>{original?.dischargeTime ?? ''}</TextCell>
+    ),
+  },
+  {
     id: 'dischargeSummary',
     header: () => <ColumnHeader label="Discharge Summary" />,
     cell: ({ row: { original } }) => (
       <TextCell>{original?.dischargeSummary ?? ''}</TextCell>
     ),
   },
+
   {
-    id: 'contact-made',
-    header: () => <ColumnHeader label="Contact Initiated" />,
-    cell: ContactMadeSelectCell,
+    id: 'request',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label="Referral Service Details" />
+    ),
+    columns: [
+      {
+        id: 'contact-made',
+        header: () => <ColumnHeader label="Contact Initiated Status" />,
+        cell: ContactMadeSelectCell,
+      },
+      {
+        id: 'clinicLocation',
+        header: () => <ColumnHeader label="Location" />,
+        cell: ({ row: { original: patient } }) => (
+          <TextCell className="truncate">
+            {patient?.requestedLocationName}
+          </TextCell>
+        ),
+      },
+      {
+        id: 'provider',
+        header: () => <ColumnHeader label="Provider" />,
+        cell: ({ row: { original: patient } }) => (
+          <TextCell className="truncate">
+            {patient?.requestedProviderName}
+          </TextCell>
+        ),
+      },
+      {
+        id: 'primary-insurance',
+        header: () => <ColumnHeader label="Primary Insurance" />,
+        cell: ({ row: { original: patient } }) => (
+          <TextCell className="truncate">{patient?.primaryInsurance}</TextCell>
+        ),
+      },
+      {
+        id: 'secondary-insurance',
+        header: () => <ColumnHeader label="Secondary Insurance" />,
+        cell: ({ row: { original: patient } }) => (
+          <TextCell className="truncate">
+            {patient?.secondaryInsurance}
+          </TextCell>
+        ),
+      },
+    ],
   },
   {
     id: 'next-visit',
@@ -232,7 +278,7 @@ const columns: ColumnDef<Patient>[] = [
     header: () => <ColumnHeader label="Visit Hx" />,
     cell: ({ row: { original } }) => (
       <TextCell className="truncate">
-        {original?.upcomingAppointmentDate ?? ''}
+        {original?.mostRecentAppointmentDate ?? ''}
       </TextCell>
     ),
   },
@@ -241,6 +287,13 @@ const columns: ColumnDef<Patient>[] = [
     header: () => <ColumnHeader label="Association" />,
     cell: ({ row: { original } }) => (
       <TextCell>{original?.isLinked ? 'Yes' : 'No'}</TextCell>
+    ),
+  },
+  {
+    id: 'referrerFacility',
+    header: () => <ColumnHeader label="Referral Reason" />,
+    cell: ({ row: { original } }) => (
+      <TextCell className="truncate">{original?.referrerFacility}</TextCell>
     ),
   },
   {

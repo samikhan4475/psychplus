@@ -16,8 +16,11 @@ import {
 } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetOptions } from '@/hooks'
-import { preventInvalidZipInput } from '@/utils'
-import { GUARDIAN_SELECT_OPTIONS, YesNoOptions } from '../constants'
+import {
+  GUARDIAN_SELECT_OPTIONS,
+  ORGANIZATION_TYPE_OPTIONS,
+  YesNoOptions,
+} from '../constants'
 import { ContactInitiatedSelect } from './contact-initiated-select'
 import { InsuranceSelect } from './insurance-select'
 import { ExternalReferralSchemaType } from './schema'
@@ -29,6 +32,7 @@ const Filters = () => {
   const nextDaysOptions = useCodesetOptions(CODESETS.QueryByNextDays)
   const pastDaysOptions = useCodesetOptions(CODESETS.QueryByLastDays)
   const servicesOptions = useCodesetOptions(CODESETS.ServicesOffered)
+  const referralOptions = useCodesetOptions(CODESETS.ReferralSource)
   const patientStatuses = form.watch('patientStatuses')
   const patientCreatedFrom = form.watch('patientCreatedFrom')
   const services = form.watch('services')
@@ -56,6 +60,27 @@ const Filters = () => {
             placeholder="Last name"
             className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
             {...form.register('patientPartialLastName')}
+          />
+        </Flex>
+        <FormFieldError name="patientPartialLastName" />
+      </FormFieldContainer>
+
+      <FormFieldContainer className="flex-row gap-1">
+        <FormFieldLabel className="!text-1">Organization type</FormFieldLabel>
+        <DropdownSelect
+          field="organizationType"
+          options={ORGANIZATION_TYPE_OPTIONS}
+        />
+      </FormFieldContainer>
+
+      <FormFieldContainer className="gap-1">
+        <Flex gap="1">
+          <FormFieldLabel className="!text-1">Organization name</FormFieldLabel>
+          <TextField.Root
+            size="1"
+            placeholder="Organization name"
+            className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
+            {...form.register('organizationName')}
           />
         </Flex>
         <FormFieldError name="patientPartialLastName" />
@@ -135,7 +160,7 @@ const Filters = () => {
           <PhoneNumberInput
             field="postalCode"
             placeholder="Zip"
-            label="Zip"
+            label="Zip code"
             format="#####"
             className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
           />
@@ -187,6 +212,13 @@ const Filters = () => {
         />
       </FormFieldContainer>
 
+      <FormFieldContainer className="flex-row gap-1">
+        <FormFieldLabel className="!text-1">
+          Referring Organization
+        </FormFieldLabel>
+        <DropdownSelect field="referrerFacility" options={referralOptions} />
+      </FormFieldContainer>
+
       <InsuranceSelect />
       <FormFieldContainer className="flex-row gap-1">
         <FormFieldLabel className="!text-1">Service</FormFieldLabel>
@@ -223,18 +255,20 @@ const Filters = () => {
           placeholder="Days"
         />
       </FormFieldContainer>
-      <FormFieldContainer className="flex-row gap-1">
-        <FormFieldLabel className="!text-1">Visit Hx</FormFieldLabel>
-        <DropdownSelect
-          field="pastVisitStatus"
-          options={pastDaysOptions}
-          placeholder="Days"
-        />
-      </FormFieldContainer>
-      <FormFieldContainer className="flex-row gap-1">
-        <FormFieldLabel className="!text-1">Linked</FormFieldLabel>
-        <DropdownSelect field="linked" options={YesNoOptions} />
-      </FormFieldContainer>
+      <Grid columns="2" gap="2" align="baseline">
+        <FormFieldContainer className="flex-row gap-1">
+          <FormFieldLabel className="!text-1">Visit Hx</FormFieldLabel>
+          <DropdownSelect
+            field="pastVisitStatus"
+            options={pastDaysOptions}
+            placeholder="Days"
+          />
+        </FormFieldContainer>
+        <FormFieldContainer className="flex-row gap-1">
+          <FormFieldLabel className="!text-1">Linked</FormFieldLabel>
+          <DropdownSelect field="linked" options={YesNoOptions} />
+        </FormFieldContainer>
+      </Grid>
     </Grid>
   )
 }

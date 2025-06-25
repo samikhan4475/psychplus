@@ -32,6 +32,7 @@ const getInitialValues = (): ExternalReferralSchemaType => {
     stateCode: '',
     services: [],
     isLinked: '',
+    organizationName: '',
   }
 }
 
