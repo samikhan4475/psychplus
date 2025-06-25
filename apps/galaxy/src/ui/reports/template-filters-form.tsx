@@ -70,6 +70,12 @@ const schema = z.object({
 
 type SchemaType = z.infer<typeof schema>
 
+const singleLocationReports = [
+  'CollectionDetailReport',
+  'AgingReport',
+  'PatientClaimDetailReport',
+]
+
 const DynamicTemplateFilters = () => {
   const {
     selectedTemplate,
@@ -229,11 +235,10 @@ const DynamicTemplateFilters = () => {
 
     return search(payload)
   }
-  const isCollectionReport = matchesAnyReport(
-    'CollectionDetailReport',
-    selectedTemplate?.shortName ?? '',
-  )
 
+  const isSingleLocationReport = singleLocationReports.some((name) =>
+    matchesAnyReport(name, selectedTemplate?.shortName ?? ''),
+  )
   return (
     <>
       <FormContainer form={form} onSubmit={onSubmit}>
@@ -308,7 +313,7 @@ const DynamicTemplateFilters = () => {
                     isRequired={item.isRequired}
                     title={item.displayName}
                     name={`reportTemplateParameters.${i}.runValue`}
-                    isMultiple={isCollectionReport ? false : isMultiple}
+                    isMultiple={isSingleLocationReport ? false : isMultiple}
                   />
                 )}
                 {isSelect && item.parameterCode === 'PracticeList' && (
