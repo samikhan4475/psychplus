@@ -11,6 +11,8 @@ import { VisitMediumEnum } from '@/enum'
 import { Appointment, BookVisitPayload } from '@/types'
 import { getStaffAction } from '@/ui/staff-credentialing/actions'
 import { bookVisitAction } from '@/ui/visit/client-actions'
+import { Patient } from '@/ui/visit/types'
+import { getPatientInfoAction } from './actions/get-patient-info'
 import { AlertDialog } from './alert-dialog'
 import { CalenderView } from './calender-view'
 import { getProviderDefaultDuration } from './client-actions'
@@ -43,6 +45,7 @@ const FollowUpForm = ({
   appointmentId: string
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [patientInfo, setPatientInfo] = useState<Patient>()
   const [appointment, setAppointment] = useState<Appointment>()
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
@@ -102,6 +105,23 @@ const FollowUpForm = ({
     })
     form.setValue('location', appointmentData.locationId)
   }, [appointmentData])
+
+  useEffect(() => {
+    if (patientId) getPatientInfo()
+  }, [patientId])
+
+  const getPatientInfo = async () => {
+    setIsSubmitting(true)
+    const res = await getPatientInfoAction(patientId)
+    setIsSubmitting(false)
+    if (res.state === 'error') {
+      toast.error(res.error || 'Failed to fetch patient info')
+      return
+    }
+    if (res.data?.length) {
+      setPatientInfo(res.data[0])
+    }
+  }
 
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
     if (!appointment) return
@@ -200,6 +220,7 @@ const FollowUpForm = ({
 
         <CreateFollowUpButton loading={isLoading} onSubmit={onSubmit} />
         <CalenderView
+          isLoading={isLoading}
           appointmentDate={appointment?.appointmentDate}
           onVisitAdd={() => {
             fetchQuickNoteAppointment(patientId, appointmentId)
@@ -212,17 +233,17 @@ const FollowUpForm = ({
           patient={{
             accessToken: `${appointment?.patientId}`,
             user: {
-              id: appointment?.patientId ?? 0,
+              id: patientInfo?.id ?? 0,
               legalName: {
-                firstName: appointment?.name ?? '',
-                lastName: '',
+                firstName: patientInfo?.firstName ?? '',
+                lastName: patientInfo?.lastName ?? '',
               },
             },
-            patientStatus: appointment?.patientStatus ?? '',
-            patientMrn: appointment?.patientMrn ?? '',
-            gender: appointment?.gender ?? '',
-            dob: appointment?.dob ?? '',
-            state: appointment?.stateCode,
+            patientStatus: patientInfo?.status ?? '',
+            patientMrn: patientInfo?.medicalRecordNumber ?? '',
+            gender: patientInfo?.gender ?? '',
+            dob: patientInfo?.birthdate ?? '',
+            state: patientInfo?.state ?? appointment?.stateCode,
           }}
         />
       </Flex>

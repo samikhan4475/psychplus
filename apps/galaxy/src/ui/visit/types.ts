@@ -72,6 +72,7 @@ interface Patient {
   medicalRecordNumber: string
   status: string
   contactDetails?: { addresses: Address[] }
+  state?: string
   isSelfPay?: boolean
 }
 
@@ -224,7 +225,6 @@ interface BookVisitResponse {
   isCopayPaid: boolean
   isSelfPay: boolean
 }
-
 
 type VisitAlertType =
   | Pick<

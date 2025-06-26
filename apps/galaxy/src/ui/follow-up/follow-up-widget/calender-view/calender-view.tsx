@@ -31,11 +31,13 @@ const CalenderView = ({
   patient,
   selectedProviderId,
   appointmentDate,
+  isLoading = false,
 }: {
   onVisitAdd: () => void
   patient: undefined | NewPatient
   selectedProviderId: undefined | string
   appointmentDate: undefined | string
+  isLoading: boolean
 }) => {
   const form = useFormContext<SchemaType>()
   const isFollowupDenied = useStore((state) => state.isFollowupDenied)
@@ -65,8 +67,9 @@ const CalenderView = ({
           className="text-black data-[disabled=true]:bg-pp-states-disabled data-[disabled=true]:text-pp-dark-grey"
           size="1"
           variant="outline"
-          disabled={isFollowupDenied}
+          disabled={isFollowupDenied || isLoading}
           type="button"
+          loading={isLoading}
         >
           <Plus width={16} height={16} />
           Calendar

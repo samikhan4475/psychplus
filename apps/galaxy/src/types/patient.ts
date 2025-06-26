@@ -89,6 +89,7 @@ interface PatientProfile {
   patientTypeEstablishedOrNew?: string
   referralName?: string
   referralSource?: string
+  isSelfPay?: boolean
 }
 
 interface PatientHistoryParams {
