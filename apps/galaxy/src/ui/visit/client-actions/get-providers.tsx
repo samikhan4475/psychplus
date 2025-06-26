@@ -19,12 +19,28 @@ const getProviders = async (payload: {
   name?: string
   locationIds: string[]
   providerType?: string
+  honors?: string[]
+  isIncludeProvidersForServicePrimaryProviderType?: boolean
+  servicesOffered?: string
 }): Promise<api.ActionResult<Provider[]>> => {
+  const {
+    isIncludeProvidersForServicePrimaryProviderType,
+    servicesOffered,
+    ...rest
+  } = payload
+
+  const shouldIncludeServiceProviders =
+    isIncludeProvidersForServicePrimaryProviderType && servicesOffered
+
   const response = await api.POST<GetProviderResponse[]>(GET_STAFF_ENDPOINT, {
-    ...payload,
+    ...rest,
     roleCodes: ['1'],
     IsIncludeProviderForFacility: true,
     isIncludeProviderWithLicenseOnly: true,
+    ...(shouldIncludeServiceProviders && {
+      isIncludeProvidersForServicePrimaryProviderType,
+      servicesOffered,
+    }),
   })
   if (response.state === 'error') {
     return {

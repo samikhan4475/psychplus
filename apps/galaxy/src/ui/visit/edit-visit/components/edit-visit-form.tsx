@@ -128,7 +128,7 @@ const EditVisitForm = ({
       room: visitDetails?.roomResource?.room,
       group: visitDetails?.groupResource?.group,
 
-      admittingProvider: visitDetails?.providerId?.toString(),
+      admittingProvider: visitDetails?.admittingProviderId?.toString(),
       visitFrequency: '1',
       paymentResponsibility: visitDetails?.paymentResponsibility,
       lastCoverageDate: visitDetails?.lastCoverageDate

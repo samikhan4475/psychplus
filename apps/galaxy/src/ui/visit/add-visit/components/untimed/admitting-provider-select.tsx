@@ -6,15 +6,18 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
+import { StaffCredentials } from '@/constants'
 import { SelectOptionType } from '@/types'
 import { getProviders } from '../../../client-actions'
 import { Provider } from '../../../types'
 import { SchemaType } from '../../schema'
+import { useAddVisitStore } from '../../store'
 
 const AdmittingProviderSelector = () => {
   const form = useFormContext<SchemaType>()
   const [loading, setLoading] = useState<boolean>(false)
   const [options, setOptions] = useState<SelectOptionType[]>([])
+  const { services } = useAddVisitStore()
   const [location, patient, state, service] = useWatch({
     control: form.control,
     name: ['location', 'patient', 'state', 'service'],
@@ -22,21 +25,29 @@ const AdmittingProviderSelector = () => {
   const isDisabled = !patient || !state || !service || !location
   useEffect(() => {
     form.setValue('admittingProvider', '')
-    if (!location) return
+    if (!location || !service) return
+
+    const serviceData = services.find((s) => s.id === service)
+    if (!serviceData?.serviceOffered) return
     setLoading(true)
     getProviders({
       locationIds: [location],
+      honors: [StaffCredentials.MD, StaffCredentials.DO],
+      isIncludeProvidersForServicePrimaryProviderType: true,
+      servicesOffered: serviceData?.serviceOffered,
     }).then((res) => {
       setLoading(false)
       if (res.state === 'error') return setOptions([])
       setOptions(
         res.data.map((provider: Provider) => ({
-          label: `${provider.firstName} ${provider.lastName}`,
+          label: `${provider.firstName} ${provider.lastName}, ${
+            provider?.honors ?? ''
+          }`,
           value: `${provider.id}`,
         })),
       )
     })
-  }, [location])
+  }, [location, service])
 
   return (
     <FormFieldContainer className="flex-1">

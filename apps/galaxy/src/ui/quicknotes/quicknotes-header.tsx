@@ -67,7 +67,7 @@ const QuickNotesHeader = ({
           providerType={appointment.providerType}
         />
         <QuickNotesVisitMediumDropdown visitMedium={appointment.type} />
-        <QuickNotesProviderDropdown provider={appointment.providerName} />
+        <QuickNotesProviderDropdown appointment={appointment} />
         <QuickNotesCosignerDropdown cosigners={appointment?.cosigners ?? []} />
         <QuickNotesLocationDropdown location={appointment.locationName} />
         <QuickNotesServiceDropdown appointment={appointment} />

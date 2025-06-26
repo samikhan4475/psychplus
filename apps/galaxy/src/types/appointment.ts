@@ -172,6 +172,9 @@ interface Appointment {
   lastSeenByProvider?: string
   lastSeenByProviderName?: LegalName
   staffTimezonePreference?: string
+  admittingProviderName?: LegalName
+  admittingProviderId?: number
+  noteSignedByUserName?: LegalName
 }
 
 interface BookVisitPayload {

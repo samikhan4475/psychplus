@@ -7,6 +7,7 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
+import { StaffCredentials } from '@/constants'
 import { useHasPermission } from '@/hooks'
 import { SelectOptionType } from '@/types'
 import { PermissionAlert } from '@/ui/schedule/shared'
@@ -14,6 +15,7 @@ import { EDIT_ADMITTING_PROVIDER } from '@/ui/visit/constants'
 import { getProviders } from '../../../client-actions'
 import { Provider } from '../../../types'
 import { SchemaType } from '../../schema'
+import { useEditVisitStore } from '../../store'
 
 const AdmittingProviderSelect = ({
   isPsychiatristVisitTypeSequence,
@@ -24,17 +26,23 @@ const AdmittingProviderSelect = ({
   const [loading, setLoading] = useState<boolean>(false)
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [options, setOptions] = useState<SelectOptionType[]>([])
-  const [location] = useWatch({
+  const { services } = useEditVisitStore()
+  const [location, service] = useWatch({
     control: form.control,
-    name: ['location', 'providerType'],
+    name: ['location', 'service'],
   })
   const canChangeAdmittingProvider = useHasPermission('editAdmittingProvider')
 
   useEffect(() => {
-    if (!location) return
+    if (!location || !service) return
+    const serviceData = services.find((s) => s.id === service)
+    if (!serviceData?.serviceOffered) return
     setLoading(true)
     getProviders({
       locationIds: [location],
+      honors: [StaffCredentials.MD, StaffCredentials.DO],
+      isIncludeProvidersForServicePrimaryProviderType: true,
+      servicesOffered: serviceData?.serviceOffered,
     }).then((res) => {
       setLoading(false)
       if (res.state === 'error') {
@@ -44,11 +52,13 @@ const AdmittingProviderSelect = ({
       setOptions(
         res.data.map((provider: Provider) => ({
           value: `${provider.id}`,
-          label: `${provider.firstName} ${provider.lastName}`,
+          label: `${provider.firstName} ${provider.lastName}, ${
+            provider?.honors ?? ''
+          }`,
         })),
       )
     })
-  }, [location])
+  }, [location, service, services])
 
   return (
     <FormFieldContainer>

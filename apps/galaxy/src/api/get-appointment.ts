@@ -6,6 +6,7 @@ interface AppointmentParams {
   isIncludeCodes?: boolean
   isIncludeCosigners?: boolean
   isIncludeLocation?: boolean
+  isIncludeSignedNotes?: boolean
 }
 
 const getAppointment = async ({
@@ -13,11 +14,14 @@ const getAppointment = async ({
   isIncludeCodes = false,
   isIncludeCosigners = false,
   isIncludeLocation = false,
+  isIncludeSignedNotes = false,
 }: AppointmentParams): Promise<api.ActionResult<Appointment>> => {
   const url = new URL(api.GET_APPOINTMENT(id))
   if (isIncludeCodes) url.searchParams.append('isIncludeCodes', 'true')
   if (isIncludeCosigners) url.searchParams.append('isIncludeCosigners', 'true')
   if (isIncludeLocation) url.searchParams.append('isIncludeLocation', 'true')
+  if (isIncludeSignedNotes)
+    url.searchParams.append('isIncludeSignedNotes', 'true')
 
   const response = await api.GET<Appointment>(url.toString())
 

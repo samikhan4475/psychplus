@@ -1,12 +1,18 @@
 'use client'
 
 import { Flex, Select, Text, Tooltip } from '@radix-ui/themes'
+import { Appointment } from '@/types'
+import { getUserFullName } from '@/utils'
 
 interface Props {
-  provider?: string
+  appointment?: Appointment
 }
 
-const QuickNotesProviderDropdown = ({ provider }: Props) => {
+const QuickNotesProviderDropdown = ({ appointment }: Props) => {
+  const provider = appointment?.isServiceTimeDependent
+    ? appointment?.providerName
+    : appointment?.noteSignedByUserName &&
+      getUserFullName(appointment?.noteSignedByUserName)
   return (
     <Flex direction="column" gap="1">
       <Text size="1" weight="medium">
@@ -20,7 +26,7 @@ const QuickNotesProviderDropdown = ({ provider }: Props) => {
           highContrast
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
-          <Select.Item value="dr-john-smith">{provider}</Select.Item>
+          <Select.Item value="dr-john-smith">{provider ?? 'N/A'}</Select.Item>
         </Select.Content>
       </Select.Root>
     </Flex>

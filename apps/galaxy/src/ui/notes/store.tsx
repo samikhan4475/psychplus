@@ -223,6 +223,7 @@ const createStore = () =>
         shouldHaveCode: true,
         shouldHaveCosigners: true,
         shouldHaveLocation: true,
+        shouldHaveNoteSigner:true
       })
 
       if (appointment.state === 'error') {

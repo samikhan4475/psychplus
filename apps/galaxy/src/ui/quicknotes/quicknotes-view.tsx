@@ -28,6 +28,7 @@ const QuickNotesView = async ({
       isIncludeCodes: true,
       isIncludeCosigners: true,
       isIncludeLocation: true,
+      isIncludeSignedNotes:true
     }),
   ])
 

@@ -9,6 +9,7 @@ import {
   getCodesetDisplayName,
   getPatientFullName,
   getSlashedPaddedDateString,
+  getUserFullName,
 } from '@/utils'
 import { BlockContainer, LabelAndValue } from './shared'
 
@@ -51,6 +52,11 @@ const PsychiatricEvaluation = ({
     timeZoneCodeSets,
   )
 
+  const provider = appointment?.isServiceTimeDependent
+    ? appointment?.providerName
+    : appointment?.noteSignedByUserName &&
+      getUserFullName(appointment?.noteSignedByUserName)
+
   return (
     <BlockContainer heading={appointment.visitNoteTitle ?? ''}>
       <LabelAndValue label="Title:" value={appointment.visitNoteTitle} />
@@ -59,7 +65,7 @@ const PsychiatricEvaluation = ({
         value={`${appointment?.visitType} | ${sequence} | ${medium}`}
       />
       <LabelAndValue label="Provider Type:" value={providerTypeLabel} />
-      <LabelAndValue label="Provider:" value={appointment.providerName} />
+      <LabelAndValue label="Provider:" value={provider ?? 'N/A'} />
       <LabelAndValue label="Cosigner:" value={cosignerLabel ?? ''} />
       <LabelAndValue
         label="Location/Service:"
