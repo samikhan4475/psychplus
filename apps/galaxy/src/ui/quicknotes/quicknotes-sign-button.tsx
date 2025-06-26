@@ -364,10 +364,16 @@ const QuickNotesSignButton = ({
           text: 'Proceed',
           onClick: async () => {
             setAlertInfo(initialAlertInfo)
-            markAsError(signPayload, () => {
+            const result = await markAsError(signPayload, () => {
               refetchFollowupOnSign()
               refetchReferrals()
             })
+            if (result.state === 'error') {
+              toast.error(
+                'Primary Insurance exists when lab order billing type is Insurance',
+              )
+              return
+            }
             revalidateAction(false)
           },
         },

@@ -28,7 +28,7 @@ interface Store {
   markAsError: (
     payload: SignPayloadProps,
     onSuccess?: () => void,
-  ) => Promise<void>
+  ) => Promise<{ state: string; error?: string }>
   cosignerLabel?: string
   setCosignerLabel: (value: string) => void
   unsavedChanges: Record<string, boolean>
@@ -189,29 +189,29 @@ const createStore = (initialState: StoreInitialState) =>
     },
     markAsError: async (payload, onSuccess) => {
       try {
-        set({ loading: true })
-        const body = {
-          ...payload,
-          isError: true,
-        }
-        const signResults = await signNoteClientAction(body)
+    set({ loading: true })
+    const body = {
+      ...payload,
+      isError: true,
+    }
+    const signResults = await signNoteClientAction(body)
 
-        set({ loading: false })
-        if (signResults.state === 'success') {
-          const toastMessage = payload.signedDate
-            ? 'Quicknote signed!'
-            : 'Quicknote send to signed!'
-          toast.success(toastMessage)
-          onSuccess?.()
-          return
-        }
-        set({ isMarkedAsError: true })
-        toast.error(signResults.error)
-      } catch (e) {
-        set({ loading: false, isMarkedAsError: true })
-        toast.error(`${e}`)
-        return
-      }
+    set({ loading: false })
+    if (signResults.state === 'success') {
+      const toastMessage = payload.signedDate
+        ? 'Quicknote signed!'
+        : 'Quicknote send to signed!'
+      toast.success(toastMessage)
+      onSuccess?.()
+      return { state: 'success' } 
+    }
+    set({ isMarkedAsError: true })
+    return { state: 'error', error: signResults.error }
+  } catch (e) {
+    set({ loading: false, isMarkedAsError: true })
+    toast.error(`${e}`)
+    return { state: 'error', error: `${e}` }
+  }
     },
 
     unsavedChanges: {},
