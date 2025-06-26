@@ -105,8 +105,8 @@ const ProfileForm = ({ practice, organization }: ProfileFormProps) => {
       {
         ...sanitizedPayload,
         isAutoPaymentPostingEnabled:
-          formData.isAutoPaymentPostingEnabled === 'Active',
-        isAutoSubmissionEnabled: formData.isAutoSubmissionEnabled === 'Active',
+          formData.isAutoPaymentPostingEnabled === 'Yes',
+        isAutoSubmissionEnabled: formData.isAutoSubmissionEnabled === 'Yes',
       },
       formData.organizationId,
       formData.id,
