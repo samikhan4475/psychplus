@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "NODE_OPTIONS='--max-old-space-size=4096' next build",
+    "build": "next build",
+    "start": "next start",
     "clean": "rimraf .next .turbo *.tsbuildinfo node_modules",
     "dev": "next dev -p 3000 --turbo",
     "lint:next": "next lint",

@@ -165,23 +165,23 @@ const SearchAppointmentsView = ({
   }
 
   return (
-    <Flex position="relative" direction="column" width="100%" height="100%" className='overflow-x-hidden'>
-      <Box px={{initial:'5', sm:'7'}} className="bg-pp-blue-1 py-[20px] sticky top-[70px] z-10">
+    <Flex position="relative" direction="column" width="100%" height="100%">
+      <Box px="7" className="bg-pp-blue-1 sticky top-[70px] z-40 py-[20px]">
         <Flex
           direction={{ initial: 'column', sm: 'row' }}
           justify="between"
           wrap="wrap"
-          gap={{ initial: '2', sm: '4' }}
+          className="flex-nowrap max-lg:flex-wrap max-lg:gap-6 lg:gap-3"
         >
-          <Flex gap={{ initial: '2', sm: '9' }} wrap="wrap" className='flex-col sm:flex-row'>
+          <Flex className="flex-nowrap max-lg:flex-wrap max-lg:gap-[30px] lg:gap-[20px]">
             <ProviderTypeFilter />
             <VisitTypeFilter />
           </Flex>
           <Flex
             direction={{ initial: 'column', sm: 'row' }}
-            gap={{ initial: '2', sm: '4' }}
+            className="max-lg:gap-4 lg:gap-3"
           >
-            <Flex gap={{ initial: '2', sm: '4' }} className='flex-col sm:flex-row'>
+            <Flex className="max-lg:gap-4 lg:gap-3">
               {isSchedulingOptimizationEnabled && <AppointmentRadiusFilter />}
 
               <AppointmentSort />
@@ -195,18 +195,18 @@ const SearchAppointmentsView = ({
         <LoadingPlaceholder />
       ) : (
         <>
-          <Flex className="sticky z-10 sm:top-[191px] md:top-48 lg:top-36">
+          <Flex className="!max-md:top-[191px] sticky z-30 max-lg:top-[192px] max-sm:top-[212px] lg:top-[144px]">
             <Flex
               align="center"
               pt="6"
               pb="3"
               px="5"
-              className="bg-white flex-1 border-b border-b-gray-5 flex-col sm:flex-row gap-2"
+              className="bg-white flex-1 flex-col gap-2 border-b border-b-gray-5 sm:flex-row"
             >
               {careTeamExists && primaryProviderAvailabilityData ? (
                 <Text
                   weight="medium"
-                  className="mr-[48px] w-[240px] text-[20px] text-accent-12"
+                  className="text-accent-12 sm:!mr-0 sm:!w-[100px] sm:!text-[16px] md:!mr-[48px] md:!w-[250px] md:!text-[20px] lg:!mr-[48px] lg:!w-[250px] lg:!text-[20px]"
                 >
                   Primary Provider
                 </Text>
@@ -215,7 +215,7 @@ const SearchAppointmentsView = ({
               )}
               <DaysHeader />
             </Flex>
-            <Box className="bg-white w-1/5"></Box>
+            <Box className="bg-white w-1/5 max-md:w-0"></Box>
           </Flex>
           <Flex>
             <Flex className="flex-1" direction="column">
@@ -236,7 +236,7 @@ const SearchAppointmentsView = ({
                 <Box className="bg-white border-pp-gray-3 border-b px-5 py-6">
                   <Text
                     weight="medium"
-                    className="mr-[48px] w-[240px] text-[20px] text-accent-12"
+                    className="text-accent-12 sm:!mr-0 sm:!w-[100px] sm:!text-[16px] md:!mr-[48px] md:!w-[250px] md:!text-[20px] lg:!mr-[48px] lg:!w-[250px] lg:!text-[20px]"
                   >
                     Similar Providers
                   </Text>

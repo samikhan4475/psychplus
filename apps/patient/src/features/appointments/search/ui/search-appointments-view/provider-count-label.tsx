@@ -22,7 +22,7 @@ const ProviderCountLabel = () => {
     <Flex direction="column" align="center" justify="center">
       <Text
         weight="medium"
-        className="mr-[48px] w-[240px] text-[20px] text-accent-12"
+        className="text-accent-12 sm:!mr-0 sm:!w-[100px] sm:!text-[16px] md:!mr-[48px] md:!w-[250px] md:!text-[20px] lg:!mr-[48px] lg:!w-[250px] lg:!text-[20px]"
       >
         {label}
       </Text>

@@ -119,10 +119,14 @@ export const WebSocketConnector = () => {
 
   useEffect(() => {
     isLoggedOut.current = false
-    connectWebSocket()
+    try {
+      connectWebSocket()
+    } catch (e) {
+      console.error('WebSocket setup failed:', e)
+    }
     return () => {
-      if (wsRef.current) {
-        wsRef.current.close()
+      if (wsRef?.current) {
+        wsRef?.current?.close()
       }
       clearInterval(pingIntervalRef.current!)
     }

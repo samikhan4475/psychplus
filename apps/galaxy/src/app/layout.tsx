@@ -2,7 +2,7 @@ import './base.css'
 import { type Metadata } from 'next'
 import dynamic from 'next/dynamic'
 import { Josefin_Sans } from 'next/font/google'
-import { Flex, Theme } from '@radix-ui/themes'
+import { Flex, Text, Theme } from '@radix-ui/themes'
 import { Toaster } from 'react-hot-toast'
 import {
   getCodesets,
@@ -90,41 +90,89 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
   )
 
   if (auth) {
-    const CODESETLIST = Object.entries(CODESETS).map(([, value]) => value)
-    const [codesets, permissions, user, staffResource, featureFlags] =
-      await Promise.all([
-        getCodesets(CODESETLIST),
-        getUserPermissions(),
-        getLoggedInUser(),
-        getStaffResource(),
-        getFeatureFlags(),
-      ])
+    try {
+      const CODESETLIST = Object.entries(CODESETS).map(([, value]) => value)
+      const [codesets, permissions, user, staffResource, featureFlags] =
+        await Promise.all([
+          getCodesets(CODESETLIST),
+          getUserPermissions(),
+          getLoggedInUser(),
+          getStaffResource(),
+          getFeatureFlags(),
+        ])
 
-    const userType = await getUserType(`${user.id}`)
-    const constants = {
-      googleApiKey: GOOGLE_MAPS_API_KEY,
-      stripeApiKey: STRIPE_PUBLISHABLE_KEY,
-      scriptsureBaseApplicationUrl: SCRIPTSURE_BASE_APPLICATION_URL,
-      webSocketUrl: WEBSOCKETSERVICE_URL,
+      const userType = await getUserType(`${user.id}`)
+      const constants = {
+        googleApiKey: GOOGLE_MAPS_API_KEY,
+        stripeApiKey: STRIPE_PUBLISHABLE_KEY,
+        scriptsureBaseApplicationUrl: SCRIPTSURE_BASE_APPLICATION_URL,
+        webSocketUrl: WEBSOCKETSERVICE_URL,
+      }
+
+      return (
+        <StoreProvider
+          staffResource={staffResource}
+          user={{ ...user, staffId: userType.resourceId }}
+          permissions={permissions}
+          codesets={codesets}
+          constants={constants}
+          featureFlags={featureFlags.data}
+        >
+          <UserSessionRefresher
+            redirectUrl="/login"
+            expiry={auth.accessTokenExpiry}
+            requireAuth
+          />
+          {content}
+        </StoreProvider>
+      )
+    } catch (err) {
+      console.error('Failed to load layout data:', err)
+
+      return (
+        <html lang="en" className={cn(josefin.variable)}>
+          <body>
+            <Toaster position="top-center" toastOptions={{ duration: 5000 }} />
+            <Theme
+              accentColor="blue"
+              radius="medium"
+              className="flex h-full w-full flex-col"
+            >
+              {/* <Header /> */}
+              <Flex
+                direction="column"
+                className="text-red-600 flex-1 items-center justify-center gap-4 overflow-y-auto p-4"
+              >
+                <Flex
+                  direction="column"
+                  align="center"
+                  gap="3"
+                  className="w-full max-w-3xl"
+                >
+                  <Text size="4" weight="bold" color="red">
+                    Error:
+                  </Text>
+
+                  <Text
+                    as="span"
+                    size="2"
+                    className="bg-red-50 border-red-200 text-red-800 rounded max-h-[400px] w-full max-w-full overflow-auto whitespace-pre-wrap border p-4 text-center"
+                  >
+                    {err instanceof Error
+                      ? err?.message || err.stack
+                      : String(err)}
+                  </Text>
+
+                  <Text size="2" color="gray">
+                    Something went wrong while loading. Please reload the page.
+                  </Text>
+                </Flex>
+              </Flex>
+            </Theme>
+          </body>
+        </html>
+      )
     }
-
-    return (
-      <StoreProvider
-        staffResource={staffResource}
-        user={{ ...user, staffId: userType.resourceId }}
-        permissions={permissions}
-        codesets={codesets}
-        constants={constants}
-        featureFlags={featureFlags.data}
-      >
-        <UserSessionRefresher
-          redirectUrl="/login"
-          expiry={auth.accessTokenExpiry}
-          requireAuth
-        />
-        {content}
-      </StoreProvider>
-    )
   }
 
   return content

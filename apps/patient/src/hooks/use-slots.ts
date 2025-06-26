@@ -102,7 +102,7 @@ const useSlots = ({
         // if (controller?.signal) return
         if (result.state === 'error') {
           setErrorMessage(result?.error)
-          setHasFetchedOnce(false)
+          setHasFetchedOnce(true)
           return
         }
         const transformed = transformStaffAvailabilityResponse({
