@@ -35,23 +35,26 @@ const LabResultChart = () => {
     ? (Object.values(selectedSubRow.resultsByDate) as ResultByDateEntry[])
     : []
 
-  const filteredEntries = entries
-    .filter((entry) => !isNaN(Number(entry.resultValue)))
+  const filteredEntries = entries.filter(
+    (entry) => !isNaN(Number(entry.resultValue)),
+  )
 
-  const chartData = filteredEntries.map((entry) => {
-    const value = Number(entry.resultValue)
-    const [minStr, maxStr] = entry.recomendedValue?.split('-') ?? []
-    const min = minStr ? parseFloat(minStr) : undefined
-    const max = maxStr ? parseFloat(maxStr) : min
+  const chartData = filteredEntries
+    .map((entry) => {
+      const value = Number(entry.resultValue)
+      const [minStr, maxStr] = entry.recomendedValue?.split('-') ?? []
+      const min = minStr ? parseFloat(minStr) : undefined
+      const max = maxStr ? parseFloat(maxStr) : min
 
-    return {
-      date: entry.observationTime,
-      value,
-      unit: entry.resultUnit,
-      recommendedMin: min,
-      recommendedMax: max,
-    }
-  })
+      return {
+        date: entry.observationTime,
+        value,
+        unit: entry.resultUnit,
+        recommendedMin: min,
+        recommendedMax: max,
+      }
+    })
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 
   return (
     <Box className="bg-white rounded-lg shadow-md h-[400px] w-full p-5">

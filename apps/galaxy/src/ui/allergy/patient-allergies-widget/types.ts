@@ -69,7 +69,7 @@ interface AllergyPayload {
   id: string
   patientId: number
   allergyName: string
-  encounterId: number
+  encounterId?: number
   rxNormCode: string
   allergyType: string
   severityCode: string
@@ -79,7 +79,7 @@ interface AllergyPayload {
   staffId: number
   providerId: number
   recordStatus: string
-  appointmentId: number
+  appointmentId?: number
   comment?: string
 
   nationalDrugCode?: string

@@ -55,8 +55,10 @@ const EditAllergy = ({
       reactionId: allergy.reactionId,
       staffId: Number(staff.id),
       providerId: Number(staff.id),
-      appointmentId: Number(row.original.appointmentId),
       recordStatus: allergy.status,
+      ...(row.original.appointmentId && {
+        appointmentId: Number(row.original.appointmentId),
+      }),
     })
     if (resp.state === 'error') {
       toast.error(resp.error)

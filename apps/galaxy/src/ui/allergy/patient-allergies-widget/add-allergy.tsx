@@ -53,7 +53,6 @@ const AddAllergy = ({
         return {
           patientId: Number(patientId),
           allergyName: el.allergyName,
-          encounterId: Number(appointmentId),
           rxNormCode: '123',
           allergyType: el.allergyType,
           reactionId: el.reactionId,
@@ -63,8 +62,11 @@ const AddAllergy = ({
           onsetEnded,
           staffId: Number(staff.id),
           providerId: Number(staff.id),
-          appointmentId: Number(appointmentId),
           recordStatus: el.status,
+          ...(appointmentId && {
+            appointmentId: Number(appointmentId),
+            encounterId: Number(appointmentId),
+          }),
         }
       }),
     )

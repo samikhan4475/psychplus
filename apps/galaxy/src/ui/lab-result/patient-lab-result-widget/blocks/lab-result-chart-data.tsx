@@ -31,13 +31,15 @@ export const LabResultChartData: React.FC<{
       <CartesianGrid stroke="#e5e7eb" strokeDasharray="1 1" />
       <XAxis
         dataKey="date"
+        tickCount={2}
         tickFormatter={(t) => formatDate(new Date(t), 'MM/dd/yyyy')}
         tick={{ fontSize: 12, fill: '#6b7280' }}
         axisLine={{ stroke: '#d1d5db' }}
         tickLine={{ stroke: '#d1d5db' }}
       />
       <YAxis
-        domain={['dataMin - 100', 'dataMax + 100']}
+        dx={-10}
+        dy={-10}
         tickFormatter={(n) => `${n.toLocaleString()} ${dailyRevenue[0]?.unit}`}
         tick={{ fontSize: 12, fill: '#6b7280' }}
         axisLine={{ stroke: '#d1d5db' }}
