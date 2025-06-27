@@ -221,6 +221,36 @@ const getPreferredPartnerNavLinks = ({ ppId }: { ppId?: string | null }) => {
     },
   ]
 }
+const getPracticePlanNavLinks = ({ ppId }: { ppId?: string | null }) => {
+  const baseHref = `/practice-plan/${ppId}`
+
+  return [
+    {
+      label: 'Contract',
+      href: `${baseHref}/contract`,
+    },
+    {
+      label: 'Fee Schedule',
+      href: `${baseHref}/fee-schedule`,
+    },
+    {
+      label: 'Plan Fee Schedule Logic',
+      href: `${baseHref}/plan-fee-schedule-logic`,
+    },
+    {
+      label: 'State',
+      href: `${baseHref}/state`,
+    },
+    {
+      label: 'General Rules',
+      href: `${baseHref}/general-rules`,
+    },
+    {
+      label: 'Provider Network Status',
+      href: `${baseHref}/provider-network-status`,
+    },
+  ]
+}
 
 const getInboxNavLinks = ({
   isFeatureFlagEnabled,
@@ -279,7 +309,7 @@ const getInboxNavLinks = ({
         {
           label: 'Medication Orders',
           tab: Tabs.MEDICATION_ORDERS,
-        }
+        },
       ],
     },
   ]
@@ -463,6 +493,7 @@ export {
   constructQuickNotesUrl,
   getNavLinks,
   isHospitalCareVisit,
+  getPracticePlanNavLinks,
   getStaffNavLinks,
   getPreferredPartnerNavLinks,
   getManagementNavLinks,

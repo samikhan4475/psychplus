@@ -582,6 +582,10 @@ const GET_STAFF_BY_ID = (staffId: number) => `${API_URL}/api/staff/${staffId}`
 const GET_PAYER_PLANS_LIST = `${API_URL}/api/insurance/plans/actions/search`
 const ADD_PRACTICE_PAYER_PLAN = (practiceId: string) =>
   `${API_URL}/api/practices/${practiceId}/plans`
+const GET_PRACTICE_PLAN_STATES = (practicePlanId: string) =>
+  `${API_URL}/api/practiceplans/${practicePlanId}/states/actions/search`
+const UPDATE_PRACTICE_PLAN_STATES = (practicePlanId: string) =>
+  `${API_URL}/api/practiceplans/${practicePlanId}/states`
 const UPDATE_PRACTICE_PAYER_PLAN = (
   practiceId: string,
   practicePlanId: string,
@@ -1178,6 +1182,7 @@ export {
   CREATE_CHANNEL_SECURE_MESSAGE,
   ATTACHMENTS_SECURE_MESSAGE,
   ADD_PRACTICE_PAYER_PLAN,
+  UPDATE_PRACTICE_PLAN_STATES,
   SEARCH_PHARMACIES,
   GET_PATIENT_BILLING_HISTORY,
   ADD_PATIENT_RELATIONSHIP_ENDPOINT,
@@ -1194,6 +1199,7 @@ export {
   SET_PRIMARY_PATIENT_CREDIT_CARD,
   DELETE_PATIENT_CREDIT_CARD,
   ADD_PATIENT_CREDIT_CARD,
+  GET_PRACTICE_PLAN_STATES,
   GET_CLAIMS_LIST_ENDPOINT,
   GET_PAYMENT_SERVICELINES_ENDPOINT,
   GET_CLAIM_SUBMISSION_HISTORY,

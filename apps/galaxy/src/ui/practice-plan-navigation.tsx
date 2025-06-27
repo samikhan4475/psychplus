@@ -1,0 +1,63 @@
+'use client'
+
+import { useMemo } from 'react'
+import NextLink from 'next/link'
+import { useParams, usePathname, useSearchParams } from 'next/navigation'
+import { Box, Flex, ScrollArea } from '@radix-ui/themes'
+import { cn, getPracticePlanNavLinks } from '@/utils'
+
+const PracticePlanNavigation = () => {
+  const { id } = useParams<{
+    id: string
+  }>()
+
+  const navLinks = useMemo(() => getPracticePlanNavLinks({ ppId: id }), [id])
+  return (
+    <Box className="bg-white w-[160px] rounded-1 shadow-2">
+      <ScrollArea>
+        <Flex direction="column">
+          {navLinks.map((widget) => (
+            <NavigationLink key={widget.label} href={widget.href}>
+              {widget.label}
+            </NavigationLink>
+          ))}
+        </Flex>
+      </ScrollArea>
+    </Box>
+  )
+}
+
+interface NavigationLinkProps {
+  href?: string
+}
+
+const NavigationLink = ({
+  href,
+  children,
+}: React.PropsWithChildren<NavigationLinkProps>) => {
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const practicePlanId = searchParams.get('id')
+
+  const link = href ?? `/practice-plan`
+
+  const isActive = practicePlanId
+    ? `${pathname}/${practicePlanId}` === link
+    : pathname === link
+
+  return (
+    <NextLink
+      href={link}
+      className={cn(
+        'px-2 py-1 text-[11.5px] first:rounded-t-1 hover:bg-accent-2',
+        {
+          'text-white bg-accent-12 font-[600] hover:bg-accent-12': isActive,
+        },
+      )}
+    >
+      {children}
+    </NextLink>
+  )
+}
+
+export { PracticePlanNavigation }

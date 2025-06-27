@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { Box, Flex, ScrollArea } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
 import {
@@ -10,6 +11,7 @@ import {
   LoadingPlaceholder,
   TextCell,
 } from '@/components'
+import { useStore as useRootStore } from '@/store'
 import { Sort } from '@/types'
 import { formatDate, getSortDir } from '@/utils'
 import { ActionsCell } from './actions-cell'
@@ -171,6 +173,7 @@ const columns = (
   ]
 }
 const PracticePlanListTable = () => {
+  const router = useRouter()
   const { data, search, loading, sort, sortData } = useStore((state) => ({
     data: state.data,
     loading: state.loading,
@@ -179,6 +182,7 @@ const PracticePlanListTable = () => {
     sortData: state.sortData,
   }))
 
+  const addTab = useRootStore((state) => state.addTab)
   useEffect(() => {
     search({}, 1)
   }, [])
@@ -199,6 +203,14 @@ const PracticePlanListTable = () => {
           columns={columns(sort, sortData)}
           disablePagination
           sticky
+          onRowClick={(row) => {
+            const href = `/practice-plan/${row.original.id}`
+            addTab({
+              href,
+              label: `${row.original?.payerName}`,
+            })
+            router.push(href)
+          }}
           tableClass="bg-white "
         />
       </ScrollArea>
