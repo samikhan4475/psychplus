@@ -6,12 +6,6 @@ import { Patient } from '../types'
 
 interface ProviderRequest {
   staffId: number
-  nameContains?: string
-  isOnlyCareManagers?: boolean
-  isOnlyMedicalAssistants?: boolean
-  isNotCareManagers?: boolean
-  isNotMedicalAssistants?: boolean
-  careTeamId?: number
   recordStatus?: 'Active' | 'Inactive'
   isPrimaryProvider: boolean
   providerType: string

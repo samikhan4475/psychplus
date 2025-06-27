@@ -8,6 +8,7 @@ interface CareTeam {
   isCareManager: boolean
   isMedicalAssistant: boolean
   recordStatus: RecordStatus
+  providerId: number
 }
 
 enum RecordStatus {
@@ -19,7 +20,6 @@ enum RecordStatus {
 
 interface AddCareTeamMember {
   staffId: number
-  providerStaffId: number
   isCareManager: boolean
   isMedicalAssistant: boolean
   recordStatus: RecordStatus

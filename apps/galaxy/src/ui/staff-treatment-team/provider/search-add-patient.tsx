@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import toast from 'react-hot-toast'
 import { FormFieldContainer, FormFieldLabel } from '@/components'
 import { AsyncRowSelect } from '@/components/async-row-select'
@@ -60,30 +60,32 @@ const SearchAddPatientSelect = ({
     toast.success('Patient added successfully')
     fetchPatientsOfProvider(staffId, isPrimary, providerType)
   }
+  const fetchOptions = useCallback(
+    async (value: string): Promise<ActionResult<Option[]>> => {
+      const result = await searchPatientsAction({
+        name: value,
+      })
+      if (result.state === 'error') {
+        toast.error(result.error ?? 'Error while fetching options')
+        return { error: result.error, state: 'error' }
+      }
+      return {
+        data: result.data.map((item) => {
+          const fullName = [item.firstName, item.middleName, item.lastName]
+            .filter(Boolean)
+            .join(' ')
+          return {
+            label: fullName,
+            value: item.id.toString(),
+          }
+        }),
+        state: 'success',
+      }
+    },
+    [],
+  )
 
-  const fetchOptions: (
-    value: string,
-  ) => Promise<ActionResult<Option[]>> = async (value: string) => {
-    const result = await searchPatientsAction({
-      name: value,
-    })
-    if (result.state === 'error') {
-      toast.error(result.error ?? 'Error while fetching options')
-      return { error: result.error, state: 'error' }
-    }
-    return {
-      data: result.data.map((item) => {
-        const fullName = [item.firstName, item.middleName, item.lastName]
-          .filter(Boolean)
-          .join(' ')
-        return {
-          label: fullName,
-          value: item.id.toString(),
-        }
-      }),
-      state: 'success',
-    }
-  }
+  const fetchDependencies = useMemo(() => [staffId], [staffId])
 
   return (
     <FormFieldContainer className="flex-row">
@@ -95,6 +97,7 @@ const SearchAddPatientSelect = ({
         onRowClick={onOptionClick}
         fetchOptions={fetchOptions}
         disabledOptions={disabledOptions}
+        fetchDependencies={fetchDependencies}
       />
     </FormFieldContainer>
   )

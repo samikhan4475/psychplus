@@ -1,6 +1,7 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { GET_CARE_TEAM_MEMBER_STATUS_HISTORY } from '@/api/endpoints'
 import { CareTeam } from '../types'
 
 const defaultPayload = {
@@ -9,12 +10,18 @@ const defaultPayload = {
   isIncludeMetadataResourceStatus: true,
 }
 const getCareTeamStatusHistoryList = async (
-  staffId: string,
-  careTeamId: number,
+  providerId: number,
+  careTeam: CareTeam,
 ): Promise<api.ActionResult<CareTeam[]>> => {
   const response = await api.POST<CareTeam[]>(
-    api.GET_CARE_TEAM_MEMBER_STATUS_HISTORY(staffId, careTeamId),
-    defaultPayload,
+    GET_CARE_TEAM_MEMBER_STATUS_HISTORY(providerId, careTeam.careTeamId),
+    {
+      ...defaultPayload,
+      providerId,
+      staffId: careTeam.staffId,
+      isOnlyMedicalAssistants: careTeam.isMedicalAssistant,
+      isOnlyCareManagers: careTeam.isCareManager,
+    },
   )
 
   if (response.state === 'error') {

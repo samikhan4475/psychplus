@@ -11,6 +11,7 @@ const getNavLinks = (
     visitType = `${visitType}/${visitSequence}`
   }
   const defaultBottomLinks = [
+    { label: 'Treatment Team', href: '/treatment-team' },
     { label: 'Patient Info', href: '/patient-info' },
     { label: 'Referrals', href: '/referrals' },
     { label: 'PCP', href: '/pcp' },

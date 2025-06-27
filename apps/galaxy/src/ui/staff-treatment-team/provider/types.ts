@@ -1,9 +1,4 @@
-interface PrimaryProviderList {
-  dateTime: string
-  patientName: string
-  location: string
-  id: number
-}
+import { Metadata } from '@/types'
 
 type Patient = {
   patientId: number
@@ -14,7 +9,10 @@ type Patient = {
   }
   patientState: string
   isPrimary: boolean
-  addedOn: string
+  recordStatus: string
+  treatmentTeamId: number
+  providerType: string
+  metadata: Metadata
 }
 
-export { type PrimaryProviderList, type Patient }
+export type { Patient }

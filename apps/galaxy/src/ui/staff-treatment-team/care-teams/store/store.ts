@@ -23,7 +23,6 @@ const useStore = create<Store>((set) => ({
     const result = await getProviderCareTeams({
       staffId: staffId,
       isOnlyCareManagers: true,
-      isOnlyMedicalAssistants: false,
     })
     if (result.state === 'error') {
       toast.error(result.error ?? 'Error while fetching data')
@@ -41,7 +40,6 @@ const useStore = create<Store>((set) => ({
 
     const result = await getProviderCareTeams({
       staffId,
-      isOnlyCareManagers: false,
       isOnlyMedicalAssistants: true,
     })
 

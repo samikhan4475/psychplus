@@ -122,7 +122,7 @@ const ProviderTable = ({
           tableRowClass="border-b bg-white border-red-200"
           tableClass="max-w-[555px]"
           theadClass="z-10"
-          defaultSorting={[{ id: 'addedOn', desc: false }]}
+          defaultSorting={[{ id: 'added-on', desc: true }]}
         />
       </Flex>
     </FormContainer>

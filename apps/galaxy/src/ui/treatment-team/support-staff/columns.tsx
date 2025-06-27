@@ -1,22 +1,12 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, TextCell } from '@/components'
+import { AddedOnCell } from '@/ui/staff-treatment-team/care-teams/cells/added-on-cell'
+import { CareTeam } from '@/ui/staff-treatment-team/care-teams/types'
+import { sortOnAddedOn } from '@/ui/staff-treatment-team/care-teams/util'
 import { getUserFullName } from '@/utils'
-import { AddedOnCell } from './cells/added-on-cell'
-import { StatusCell } from './cells/status-cell'
-import { CareTeam } from './types'
-import { sortOnAddedOn } from './util'
+import { StatusCell } from './status-cell'
 
-const columns: (
-  heading: string,
-  providerStaffId: string,
-  setAlertInfo: (alertInfo: { message: string; isOpen: boolean }) => void,
-  isProfileView?: boolean,
-) => ColumnDef<CareTeam>[] = (
-  heading,
-  providerStaffId,
-  setAlertInfo,
-  isProfileView,
-) => [
+const columns: (heading: string) => ColumnDef<CareTeam>[] = (heading) => [
   {
     accessorKey: 'staffName',
     size: 200,
@@ -31,7 +21,11 @@ const columns: (
     id: 'added-on',
     accessorFn: (row) => row.metadata?.createdOn,
     header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Added on" />
+      <ColumnHeader
+        column={column}
+        clientSideSort
+        label="Added on - Date/Time"
+      />
     ),
     cell: AddedOnCell,
     sortingFn: sortOnAddedOn,
@@ -42,14 +36,7 @@ const columns: (
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="Status" />
     ),
-    cell: ({ row }) => (
-      <StatusCell
-        row={row}
-        isProfileView={isProfileView}
-        providerStaffId={providerStaffId}
-        setAlertInfo={setAlertInfo}
-      />
-    ),
+    cell: ({ row }) => <StatusCell row={row} />,
   },
 ]
 

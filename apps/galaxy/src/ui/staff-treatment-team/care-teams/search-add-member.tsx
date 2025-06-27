@@ -45,11 +45,10 @@ const SearchAddMemberSelect = ({
     const payload: AddCareTeamMember = {
       isCareManager: isAdmin,
       isMedicalAssistant: !isAdmin,
-      providerStaffId: +staffId,
       recordStatus: RecordStatus.Active,
       staffId: +option.value,
     }
-    const result = await addProviderCareTeams(payload)
+    const result = await addProviderCareTeams(staffId, payload)
     if (result.state === 'error') {
       toast.error(result.error ?? 'Error while adding member')
       return
@@ -75,6 +74,8 @@ const SearchAddMemberSelect = ({
     return { data: result.data, state: 'success' }
   }
 
+  const fetchDependencies = useMemo(() => [isAdmin], [isAdmin])
+
   return (
     <FormFieldContainer className="flex-row">
       <FormFieldLabel>Search & Add Member</FormFieldLabel>
@@ -86,6 +87,7 @@ const SearchAddMemberSelect = ({
         onRowClick={onOptionClick}
         fetchOptions={fetchOptions}
         disabledOptions={disabledOptions}
+        fetchDependencies={fetchDependencies}
       />
     </FormFieldContainer>
   )

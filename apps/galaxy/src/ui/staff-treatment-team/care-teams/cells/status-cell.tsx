@@ -45,7 +45,7 @@ const StatusCell = ({
       setAlertInfo({ isOpen: true, message: STATUS_PERMISSION_MESSAGE })
       return
     }
-    let data = isCareManager ? adminData : clinicalStaffData
+    const data = isCareManager ? adminData : clinicalStaffData
     if (value === RecordStatus.Inactive && isCareManager) {
       const canChangeToInactive =
         data.filter((a) => a.recordStatus === RecordStatus.Active).length > 1
@@ -84,10 +84,7 @@ const StatusCell = ({
   if (isProfileView) {
     return (
       <>
-        <StatusClockPopover
-          staffId={+providerStaffId}
-          careTeamId={careTeamId}
-        />
+        <StatusClockPopover providerId={+providerStaffId} careTeam={original} />
         <TextCell>{recordStatus}</TextCell>
       </>
     )
@@ -95,7 +92,7 @@ const StatusCell = ({
 
   return (
     <>
-      <StatusClockPopover staffId={+providerStaffId} careTeamId={careTeamId} />
+      <StatusClockPopover providerId={+providerStaffId} careTeam={original} />
       <SelectCell
         value={recordStatus}
         options={options}

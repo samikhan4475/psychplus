@@ -27,8 +27,6 @@ const useStore = create<Store>((set) => ({
     set({ loadingPrimaryProviders: true })
 
     const payload: ProviderRequest = {
-      isNotCareManagers: true,
-      isNotMedicalAssistants: true,
       recordStatus: 'Active',
       isIncludePatientInfo: true,
       isPrimaryProvider: isPrimary,

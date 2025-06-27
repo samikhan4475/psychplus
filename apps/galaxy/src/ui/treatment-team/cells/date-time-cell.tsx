@@ -1,0 +1,28 @@
+import { parseAbsoluteToLocal } from '@internationalized/date'
+import { Grid } from '@radix-ui/themes'
+import { TextCell } from '@/components'
+import { Metadata } from '@/types'
+import { getUtcTime } from '@/ui/schedule/utils'
+import { formatDateManually } from '@/utils'
+
+const DateTimeCell = ({
+  metadata,
+  checkUpdatedOn = false,
+}: {
+  metadata: Metadata
+  checkUpdatedOn?: boolean
+}) => {
+  let dateString = metadata.createdOn ?? ''
+  if (checkUpdatedOn)
+    dateString = metadata.updatedOn ? metadata.updatedOn : dateString
+  const date = formatDateManually(dateString)
+  const time = getUtcTime(parseAbsoluteToLocal(dateString))
+  return (
+    <Grid className="grid-cols-2 gap-1">
+      <TextCell className="px-1">{date}</TextCell>
+      <TextCell className="px-1 text-gray-9">{time?.slice(0, 5)}</TextCell>
+    </Grid>
+  )
+}
+
+export { DateTimeCell }

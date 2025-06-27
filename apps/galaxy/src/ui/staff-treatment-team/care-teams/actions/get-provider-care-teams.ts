@@ -8,11 +8,12 @@ interface ClinicalStaffListParams {
   isIncludeMetadataResourceChangeControl?: true
   isIncludeMetadataResourceIds?: true
   isIncludeMetadataResourceStatus?: true
-  staffId: number
+  staffId?: number
+  patientId?: number
   careTeamId?: number
-  nameContains?: string
   isOnlyCareManagers?: boolean
   isOnlyMedicalAssistants?: boolean
+  isIncludeStaffInfo?: boolean
 }
 
 const getProviderCareTeams = async (

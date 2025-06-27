@@ -988,10 +988,15 @@ const UPDATE_CARE_TEAM_MEMBER_STATUS = (
 ) =>
   `${API_URL}/api/staff/${staffId}/careteams/${careTeamId}/statuses/${recordStatus}`
 const GET_CARE_TEAM_MEMBER_STATUS_HISTORY = (
-  staffId: string,
+  providerId: number,
   careTeamId: number,
 ) =>
-  `${API_URL}/api/staff/${staffId}/careteams/${careTeamId}/history/actions/search`
+  `${API_URL}/api/staff/${providerId}/careteams/${careTeamId}/history/actions/search`
+const GET_PATIENTS_TREATMENT_TEAM_STATUS_HISTORY = (
+  staffId: number,
+  patientId: number,
+) =>
+  `${API_URL}/api/staff/${staffId}/patients/${patientId}/careteam/actions/history/search`
 const GET_PATIENTS_WITH_PRIMARY_STAFF = (staffId: number, isPrimary: boolean) =>
   `${API_URL}/api/patients/careteam/providers/${staffId}/actions/primaryrole/${isPrimary}`
 const TRANSFER_PRIMARY_PROVIDER = (staffId: string, providerType: string) =>
@@ -1517,6 +1522,7 @@ export {
   ADD_CARE_TEAM_MEMBER,
   UPDATE_CARE_TEAM_MEMBER_STATUS,
   GET_CARE_TEAM_MEMBER_STATUS_HISTORY,
+  GET_PATIENTS_TREATMENT_TEAM_STATUS_HISTORY,
   GET_PATIENTS_WITH_PRIMARY_STAFF,
   TRANSFER_PRIMARY_PROVIDER,
   TRANSFER_SECONDARY_PROVIDER,

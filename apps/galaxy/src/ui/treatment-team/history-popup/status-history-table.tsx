@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { parseAbsoluteToLocal } from '@internationalized/date'
 import { ScrollArea } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
 import toast from 'react-hot-toast'
@@ -8,10 +9,13 @@ import {
   LoadingPlaceholder,
   TextCell,
 } from '@/components'
-import { DateTimeCell } from '@/ui/treatment-team/cells/date-time-cell'
-import { getCareTeamStatusHistoryList } from './actions'
-import { CareTeam } from './types'
-import { sortHistory } from './util'
+import { CareTeam } from '@/ui/staff-treatment-team/care-teams/types'
+import { sortHistory } from '@/ui/staff-treatment-team/care-teams/util'
+import {
+  CareTeamHistoryFilterOptions,
+  getPatientsCareTeamStatusHistoryList,
+} from '../actions'
+import { DateTimeCell } from '../cells/date-time-cell'
 
 const columns: ColumnDef<CareTeam>[] = [
   {
@@ -26,7 +30,7 @@ const columns: ColumnDef<CareTeam>[] = [
   },
   {
     id: 'date',
-    accessorFn: (row) => row.metadata?.createdByFullName,
+    accessorFn: (row) => row.metadata?.updatedOn ?? row.metadata?.createdOn,
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="Date/Time" />
     ),
@@ -43,13 +47,15 @@ const columns: ColumnDef<CareTeam>[] = [
 ]
 
 interface StatusHistoryTableProps {
-  careTeam: CareTeam
-  providerId: number
+  staffId: number
+  patientId: string
+  isPsychiatry?: boolean
 }
 
 const StatusHistoryTable = ({
-  careTeam,
-  providerId,
+  patientId,
+  staffId,
+  isPsychiatry,
 }: StatusHistoryTableProps) => {
   const [data, setData] = useState<CareTeam[]>([])
   const [loading, setLoading] = useState(false)
@@ -57,16 +63,27 @@ const StatusHistoryTable = ({
   useEffect(() => {
     setLoading(true)
     setData([])
-    getCareTeamStatusHistoryList(providerId, careTeam)
-      .then((response) => {
-        if (response.state === 'error') {
-          setData([])
-          return toast.error(response?.error)
-        }
-        setData(response.data ?? [])
-      })
-      .finally(() => setLoading(false))
-  }, [careTeam.careTeamId, providerId])
+    fetchHistory()
+  }, [patientId, staffId])
+
+  const fetchHistory = async () => {
+    const payload: CareTeamHistoryFilterOptions = {
+      patientId: +patientId,
+      staffId,
+      isIncludeStaffInfo: true,
+    }
+    if (isPsychiatry) payload['providerType'] = 'Psychiatrist'
+    if (isPsychiatry === false) payload['providerType'] = 'Therapy'
+
+    const response = await getPatientsCareTeamStatusHistoryList(payload)
+    setLoading(false)
+    if (response.state === 'error') {
+      setData([])
+      toast.error(response?.error || 'Failed to fetch history')
+      return
+    }
+    setData(response.data ?? [])
+  }
 
   if (loading) {
     return <LoadingPlaceholder className="min-h-24" />

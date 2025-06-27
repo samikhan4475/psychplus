@@ -1,16 +1,17 @@
 import { CounterClockwiseClockIcon } from '@radix-ui/react-icons'
 import { IconButton, Popover, Text } from '@radix-ui/themes'
 import { StatusHistoryTable } from './status-history-table'
-import { CareTeam } from './types'
 
 interface StatusClockPopoverProps {
-  careTeam: CareTeam
-  providerId: number
+  staffId: number
+  patientId: string
+  isPsychiatry?: boolean
 }
 
 const StatusClockPopover = ({
-  careTeam,
-  providerId,
+  patientId,
+  staffId,
+  isPsychiatry,
 }: StatusClockPopoverProps) => {
   return (
     <Popover.Root>
@@ -23,7 +24,11 @@ const StatusClockPopover = ({
         <Text size="3" weight="medium">
           Status Hx
         </Text>
-        <StatusHistoryTable careTeam={careTeam} providerId={providerId} />
+        <StatusHistoryTable
+          patientId={patientId}
+          staffId={staffId}
+          isPsychiatry={isPsychiatry}
+        />
       </Popover.Content>
     </Popover.Root>
   )

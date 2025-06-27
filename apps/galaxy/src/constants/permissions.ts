@@ -17,6 +17,7 @@ const USER_PERMISSIONS = {
   savePatient: 'savePatient',
   favoriteMedicationAddMedicationsPage: 'favoriteMedicationAddMedicationsPage',
   makePatientVIPAsProvider: 'makePatientVIPAsProvider',
+  makePatientVIPNonProvider: 'makePatientVIPNonProvider',
   sendQuestionnaireToPatientDashboardPage:
     'sendQuestionnaireToPatientDashboardPage',
   overrideSelfSchedulePreference: 'overrideSelfSchedulePreference',
