@@ -245,6 +245,7 @@ const USER_PERMISSIONS = {
   clickEditOrganizationBtn: 'clickEditOrganizationBtn',
   clickEditStatusBtn: 'clickEditStatusBtn',
   clickResetStaffProfilePage: 'clickResetStaffProfilePage',
+  addPaidAmountCoInsCopayCustomCharge:'addPaidAmountCoInsCopayCustomCharge'
 }
 
 export { USER_PERMISSIONS }

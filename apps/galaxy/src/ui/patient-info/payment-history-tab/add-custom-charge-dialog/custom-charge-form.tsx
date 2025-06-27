@@ -5,6 +5,7 @@ import { Grid } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FormContainer } from '@/components'
+import { useHasPermission } from '@/hooks'
 import { getCalendarDateLabel, sanitizeFormData } from '@/utils'
 import { PatientTransaction } from '../types'
 import {
@@ -37,6 +38,9 @@ const CustomChargeForm = ({
   transaction,
   onClose,
 }: CustomChargeFormProps) => {
+  const hasPermissionToEditPaidFields = useHasPermission(
+    'addPaidAmountCoInsCopayCustomCharge',
+  )
   const form = useForm<CustomChargeSchemaType>({
     resolver: zodResolver(chargeSchema),
     reValidateMode: 'onChange',
@@ -68,6 +72,7 @@ const CustomChargeForm = ({
     toast.success('Charge created successfully!')
     onClose()
   }
+  const canEditPaidFields = Number(unappliedAmount ?? 0) > 0 && !!hasPermissionToEditPaidFields
 
   return (
     <FormContainer
@@ -85,8 +90,8 @@ const CustomChargeForm = ({
         <TimeSelect />
       </Grid>
       <Grid columns="3" className="overflow-hidden rounded-2 shadow-2">
-        <CoPayBlock />
-        <CoInsBlock />
+        <CoPayBlock canEditPaidFields={canEditPaidFields} />
+        <CoInsBlock canEditPaidFields={canEditPaidFields} />
         <BalanceBlock />
       </Grid>
 

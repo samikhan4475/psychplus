@@ -11,9 +11,7 @@ const getUserSessionAction = async (): Promise<
 
   url.searchParams.append('isIncludePractice', 'true')
 
-  const userResponse = await api.GET<StaffResource>(
-    api.GET_SELF_STAFF_DETAILS_ENDPOINT,
-  )
+  const userResponse = await api.GET<StaffResource>(url.toString())
 
   if (userResponse.state === 'error') {
     return {
@@ -25,13 +23,17 @@ const getUserSessionAction = async (): Promise<
   const sessionId = userResponse.headers.get('psychplus-sessionid') ?? undefined
   const practiceId = userResponse?.data?.practiceIds?.[0] ?? undefined
 
-  const sessionIdCookies: AuthSessionIds = {
+  const newCookies: AuthSessionIds = {
     ...(sessionId && { sessionId }),
     ...(practiceId && { sessionPracticeId: practiceId }),
   }
+  const existingCookies = getAuthCookies()
+  const cookiesChanged =
+    newCookies?.sessionId !== existingCookies?.sessionId ||
+    newCookies?.sessionPracticeId !== existingCookies?.practiceId
 
-  if (Object.keys(sessionIdCookies).length) {
-    setSessionIdsCookies(sessionIdCookies)
+  if (cookiesChanged && Object.keys(newCookies)?.length) {
+    setSessionIdsCookies(newCookies)
   }
 
   const authCookies = getAuthCookies()

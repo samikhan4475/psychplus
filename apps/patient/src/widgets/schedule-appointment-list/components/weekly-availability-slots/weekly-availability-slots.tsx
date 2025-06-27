@@ -241,7 +241,7 @@ const SlotComponent = ({
   }
 
   return (
-    <Flex className="flex-col whitespace-nowrap pb-4" gap="4">
+    <Flex className="flex-1 flex-col whitespace-nowrap pb-4" gap="4">
       {slots &&
         slots
           .slice(0, showAll || isMobile() ? slots.length : 3)

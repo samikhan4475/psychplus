@@ -14,7 +14,7 @@ const ViewContainer = ({
       width="100%"
       direction="column"
       gap="5"
-      className={cn('max-w-[var(--container-4)] py-[20px] sm:py-[50px]', className)}
+      className={cn('max-w-[var(--container-4)] py-[20px]', className)}
     >
       {children}
     </Flex>

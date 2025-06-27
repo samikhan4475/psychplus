@@ -81,7 +81,7 @@ const ProviderWithClinicAndWeeklyAvailability = ({
           slotsLoading,
         )}
       </Flex>
-      <Flex className="sm:w-[700px] md:min-w-[700px] lg:min-w-[700px]">
+      <Flex className="ml-6 sm:w-[700px] md:min-w-[700px] lg:min-w-[700px]">
         {isSchedulingOptimizationEnabled ? (
           <WeeklyAvailabilitySlots
             staff={staffWithClinicsAndSlots.staff}

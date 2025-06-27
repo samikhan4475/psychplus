@@ -4,7 +4,11 @@ import { Flex, Text } from '@radix-ui/themes'
 import { FormFieldError } from '@/components'
 import { PaymentInput } from './shared'
 
-const CoInsBlock = () => {
+interface CoInsBlockProps {
+  canEditPaidFields: boolean
+}
+
+const CoInsBlock = ({canEditPaidFields}:CoInsBlockProps) => {
   return (
     <Flex direction="column" className="rounded-2">
       <Flex
@@ -27,7 +31,7 @@ const CoInsBlock = () => {
           field="coInsurancePreferredPartner"
           disabled
         />
-        <PaymentInput label="Paid" field="coInsurancePaid" disabled />
+        <PaymentInput label="Paid" field="coInsurancePaid" disabled={!canEditPaidFields} />
       </Flex>
     </Flex>
   )

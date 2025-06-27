@@ -1,5 +1,6 @@
 import { DateValue } from 'react-aria-components'
 import { z } from 'zod'
+import { toNumber } from './utils'
 
 const optionalString = z.string().optional()
 
@@ -30,13 +31,12 @@ const chargeSchema = z
     transactionNumber: optionalString,
   })
   .superRefine((data, ctx) => {
-    if (data.appointmentId) return
-    const coPayDue = parseFloat(data.coPayDue ?? '0')
-    const coPayPaid = parseFloat(data.coPayPaid ?? '0')
-    const balanceDue = parseFloat(data.balanceDue ?? '0')
-    const balancePaid = parseFloat(data.balancePaid ?? '0')
-    const coInsuranceDue = parseFloat(data.coInsuranceDue ?? '0')
-    const coInsurancePaid = parseFloat(data.coInsurancePaid ?? '0')
+    const coPayDue = toNumber(data.coPayDue)
+    const coPayPaid = toNumber(data.coPayPaid)
+    const balanceDue = toNumber(data.balanceDue)
+    const balancePaid = toNumber(data.balancePaid)
+    const coInsuranceDue = toNumber(data.coInsuranceDue)
+    const coInsurancePaid = toNumber(data.coInsurancePaid)
 
     const fields = [
       {

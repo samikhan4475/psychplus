@@ -352,7 +352,7 @@ const LegacyProviderAvailabilityCard = ({
                 <Button
                   onClick={() => setShowMore((prevState) => !prevState)}
                   size="3"
-                  className="bg-pp-blue-1 text-accent-12 w-fit self-end"
+                  className="bg-pp-blue-1 text-accent-12"
                 >
                   {showMore ? 'See less' : 'See more'}
                 </Button>

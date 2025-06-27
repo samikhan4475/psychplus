@@ -32,4 +32,9 @@ const getInitialValues = (transaction?: Partial<PatientTransaction>) => ({
   transactionNumber: transaction?.transactionNumber ?? '',
 })
 
-export { toTwoDecimalString, getInitialValues }
+const toNumber = (value?: string): number => {
+  const num = parseFloat(value ?? '')
+  return isNaN(num) ? 0 : num
+}
+
+export { toTwoDecimalString, getInitialValues, toNumber }
