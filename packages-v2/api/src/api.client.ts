@@ -5,7 +5,7 @@ import {
   GetOptions,
   NetworkResult,
 } from './types'
-import { getErrorMessage, getResponseData } from './utils'
+import { getErrorMessage, getResponseData, sanitizeBaseUrl } from './utils'
 
 const PATCH = async <T>(
   url: string,
@@ -90,7 +90,7 @@ const POST = async <T>(
 
   const isFormData = body instanceof FormData
 
-  const response = await fetch(url, {
+  const response = await fetch(sanitizeBaseUrl(url), {
     method: 'POST',
     body: isFormData ? body : JSON.stringify(body),
     signal,

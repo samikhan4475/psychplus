@@ -9,7 +9,10 @@ import {
   FeatureEmpty,
   LoadingPlaceholder,
 } from '@/components-v2'
-import { getNextAvailableDateLabel } from '@/features/appointments/search/utils'
+import {
+  getNextAvailableDateLabel,
+  getStartOfWeekForCalandarDate,
+} from '@/features/appointments/search/utils'
 
 interface SlotStateRendererProps {
   slotsLoading?: boolean
@@ -106,7 +109,11 @@ export const SlotStateRenderer = ({
               className="justify-center"
               onClick={() =>
                 handleGoToAppointment(
-                  getCalendarDateLabel(getCalendarDate(nextAvailableSlotDate)),
+                  getCalendarDateLabel(
+                    getStartOfWeekForCalandarDate(
+                      getCalendarDate(nextAvailableSlotDate),
+                    ),
+                  ),
                 )
               }
               highContrast

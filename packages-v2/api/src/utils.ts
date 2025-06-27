@@ -33,4 +33,10 @@ const getResponseData = (text: string) => {
   }
 }
 
-export { getErrorMessage, getResponseData }
+
+const sanitizeBaseUrl = (url: string): string => {
+  // If it's a full URL like "https://example.com/api/foo", extract only the path
+  const cleaned = url.replace(/^https?:\/\/[^/]+/, '')
+  return cleaned
+}
+export { getErrorMessage, getResponseData,sanitizeBaseUrl }

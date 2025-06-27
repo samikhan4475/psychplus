@@ -203,6 +203,14 @@ async function updateStorage({
   storage.setItem(storageKey, JSON.stringify(updated))
 }
 
+ const getStartOfWeekForCalandarDate = (date: CalendarDate): CalendarDate => {
+  const jsDate = new Date(date.year, date.month - 1, date.day)
+  const dayOfWeek = jsDate.getDay()
+  const daysToSubtract = dayOfWeek === 0 ? 6 : dayOfWeek - 1
+
+  return date.subtract({ days: daysToSubtract })
+}
+
 export {
   generateDateRange,
   getEarliestSlot,
@@ -215,4 +223,5 @@ export {
   getStaffFullName,
   prefetchProviders,
   updateStorage,
+  getStartOfWeekForCalandarDate
 }
