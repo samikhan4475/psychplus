@@ -95,11 +95,12 @@ const transformOut = (
 
   const insurancePolicyId =
     insurancePolicies[claimPayment.processedAsCode ?? ''] ||
-    (paymentClaim?.insurancePolicyId ?? '')
+    (paymentClaim?.insurancePolicyId ?? '') ||
+    insurancePolicies[`ProcessedAs${claimPayment.paymentSource}`]
 
   const updatedModel: UpdateClaimPaymentPayload = {
     ...claimPayment,
-    id: claimPayment.id ? claimPayment.id :  null,
+    id: claimPayment.id ? claimPayment.id : null,
     insurancePolicyId,
     claimServiceLinePayments:
       claimPayment.claimServiceLinePayments?.map((serviceLine) => ({
@@ -128,13 +129,12 @@ const transformOut = (
   if (updatedModel.processedAsCode === PROCESSED_AS_REVERSAL)
     delete updatedModel.insurancePolicyId
 
-  if (!updatedModel.id)
-   {
+  if (!updatedModel.id) {
     updatedModel.claimServiceLinePayments?.forEach((serviceLine) => {
       delete serviceLine['claimPaymentId']
       delete serviceLine['id']
     })
-   }
+  }
   return updatedModel
 }
 
