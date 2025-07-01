@@ -15,14 +15,14 @@ const LabInstructionsSection = () => {
   const { labOrders } = useStore((state) => ({ labOrders: state.labOrders }))
 
   const hasPsychplus = labOrders.some(
-    (order) => order?.orderingLab?.locationName === 'PsychPlus',
+    (order) => order?.orderingLab?.name === 'PsychPlus',
   )
 
   const hasQuest = labOrders.some(
-    (order) => order?.orderingLab?.locationName === 'Quest',
+    (order) => order?.orderingLab?.name === 'Quest',
   )
   const hasPrint = labOrders.some(
-    (order) => order?.orderingLab?.locationName === 'Print',
+    (order) => order?.orderingLab?.name === 'Print',
   )
 
   const isFasting = labOrders.some((order) => order?.isFasting)
