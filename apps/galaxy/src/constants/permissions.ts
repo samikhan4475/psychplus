@@ -242,11 +242,14 @@ const USER_PERMISSIONS = {
   canUploadSignedPolicy: 'canUploadSignedPolicy',
   mainTabManagementPermission: 'mainTabManagementPermission',
   changeOrderByProviderLabResultView: 'changeOrderByProviderLabResultView',
-  clickAddStaffButtonTreament: 'clickAddStaffButtonTreament',
-  clickEditOrganizationBtn: 'clickEditOrganizationBtn',
-  clickEditStatusBtn: 'clickEditStatusBtn',
+  clickAddStaffButtonStaffTreatmentTeam:
+    'clickAddStaffButtonStaffTreatmentTeam',
+  clickEditOrganizationStaffTreatmentTeam:
+    'clickEditOrganizationStaffTreatmentTeam',
+  clickEditStatusButtonStaffTreatmentTeam:
+    'clickEditStatusButtonStaffTreatmentTeam',
   clickResetStaffProfilePage: 'clickResetStaffProfilePage',
-  addPaidAmountCoInsCopayCustomCharge:'addPaidAmountCoInsCopayCustomCharge'
+  addPaidAmountCoInsCopayCustomCharge: 'addPaidAmountCoInsCopayCustomCharge',
 }
 
 export { USER_PERMISSIONS }

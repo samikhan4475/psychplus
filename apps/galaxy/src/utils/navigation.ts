@@ -6,12 +6,17 @@ const getNavLinks = (
   visitType: string | null,
   visitSequence: string | null,
   isFeatureLabOrdersFlagEnabled: boolean,
+  isFeatureFlagEnabledForSecondPhaseFeatures: boolean,
 ): ChartNavLink[] => {
   if (isHospitalCareVisit(visitType)) {
     visitType = `${visitType}/${visitSequence}`
   }
   const defaultBottomLinks = [
-    { label: 'Treatment Team', href: '/treatment-team' },
+    {
+      label: 'Treatment Team',
+      href: '/treatment-team',
+      conditions: [isFeatureFlagEnabledForSecondPhaseFeatures],
+    },
     { label: 'Patient Info', href: '/patient-info' },
     { label: 'Referrals', href: '/referrals' },
     { label: 'PCP', href: '/pcp' },

@@ -37,7 +37,9 @@ const StatusCell = ({
     'Deleted',
     'Archived',
   ])
-  const canChangeStatus = useHasPermission('clickEditStatusBtn')
+  const canChangeStatus = useHasPermission(
+    'clickEditStatusButtonStaffTreatmentTeam',
+  )
   const { careTeamId, recordStatus, isCareManager } = original
 
   const handleStatusChange = async (value: string) => {

@@ -16,6 +16,9 @@ const ChartNavigation = () => {
   const isFeatureLabOrdersFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr4907LabOrdersAndResults,
   )
+  const isFeatureFlagEnabledForSecondPhaseFeatures = useFeatureFlagEnabled(
+    FEATURE_FLAGS.ehr11786EnableGalaxySecondPhaseFeatures,
+  )
 
   const navLinks = useMemo(
     () =>
@@ -24,6 +27,7 @@ const ChartNavigation = () => {
         visitType,
         visitSequence,
         isFeatureLabOrdersFlagEnabled,
+        isFeatureFlagEnabledForSecondPhaseFeatures,
       ),
     [appointmentId, visitType, isFeatureLabOrdersFlagEnabled, visitSequence],
   )

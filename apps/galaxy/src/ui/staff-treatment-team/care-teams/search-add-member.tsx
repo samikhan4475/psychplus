@@ -27,7 +27,7 @@ const SearchAddMemberSelect = ({
       adminData: state.adminData,
       clinicalStaffData: state.clinicalStaffData,
     }))
-  const canAddStaff = useHasPermission('clickAddStaffButtonTreament')
+  const canAddStaff = useHasPermission('clickAddStaffButtonStaffTreatmentTeam')
 
   const disabledOptions = useMemo(() => {
     const data = isAdmin ? adminData : clinicalStaffData
