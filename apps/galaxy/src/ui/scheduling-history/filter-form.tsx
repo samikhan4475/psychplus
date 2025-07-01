@@ -103,6 +103,7 @@ const FilterForm = () => {
       appointmentDateTime: getDateString(dateOfService),
       dischargeHospitalDate: getDateString(data.dischargeHospitalDate),
       visitStatuses: data.visitStatuses ? [data.visitStatuses] : undefined,
+      patientIds: data?.patientId ? [Number(data?.patientId)] : undefined,
     }
     const sanitizedData = sanitizeFormData(formattedData)
     fetchSchedulingHistory(id, sanitizedData)

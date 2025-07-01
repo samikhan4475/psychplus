@@ -156,7 +156,7 @@ interface PatientTransactionHistory {
 }
 
 interface SchedulingHistoryPayload {
-  patientId?: string
+  patientIds?: number[]
   fromDate?: string | null
   toDate?: string | null
   visitId?: string
