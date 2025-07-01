@@ -12,6 +12,18 @@ const CLINIC_LOCATIONS_ENDPOINT = `${API_URL}/api/clinics`
 const FACILITY_ADMISSION_ID_ENDPOINT = `${API_URL}/api/facilityadmissionids`
 const LOCATION_SERVICES_ENDPOINT = `${API_URL}/api/locationservices/actions/search`
 const LOCATION_ENDPOINT = `${API_URL}/api/locations/actions/search`
+const LOCATION_PRACTICES_ENDPOINT = (locationId: string) =>
+  `${API_URL}/api/locations/${locationId}/practices/actions/search`
+const ATTACH_PRACTICE_LOCATION_ENDPOINT = (
+  locationId: string,
+  practiceId: string,
+) =>
+  `${API_URL}/api/locations/${locationId}/practices/${practiceId}/actions/attach`
+const MARK_AS_PRIMARY_PRACTICE_LOCATION_ENDPOINT = (
+  locationId: string,
+  practiceId: string,
+) =>
+  `${API_URL}/api/locations/${locationId}/locationpractices/${practiceId}/primary`
 const ADD_USER_SETTINGS = (userId: string) =>
   `${API_URL}/api/users/${userId}/settings`
 const UPDATE_USER_SETTINGS = (userId: string, settingId: string) =>
@@ -1556,6 +1568,9 @@ export {
   GET_ALL_VISITS_LIST_ENDPOINT,
   GET_VISIT_BY_STATE_LIST_ENDPOINT,
   STAFF_PROFILE_IMAGE_ENDPOINT,
+  LOCATION_PRACTICES_ENDPOINT,
+  ATTACH_PRACTICE_LOCATION_ENDPOINT,
+  MARK_AS_PRIMARY_PRACTICE_LOCATION_ENDPOINT,
   PMP_SEARCH,
   PMP_START,
   PMP_REPORT,

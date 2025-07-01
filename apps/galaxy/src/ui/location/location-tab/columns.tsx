@@ -3,6 +3,7 @@ import { ColumnHeader, LongTextCell, TextCell } from '@/components'
 import { Location, Sort } from '@/types'
 import { getMaskedPhoneNumber, getSortDir } from '@/utils'
 import { ActionCell, GMBCell, StateCell, StatusCell } from './cells'
+import { LocationNameCell } from './table-row-location-name-cell'
 
 const columns = (
   googleApiKey: string,
@@ -16,11 +17,7 @@ const columns = (
       header: ({ column }) => (
         <ColumnHeader label="ID" column={column} clientSideSort />
       ),
-      cell: ({ row: { original } }) => (
-        <LongTextCell className="max-w-36">
-          {original?.locationNameGenerated}
-        </LongTextCell>
-      ),
+      cell: LocationNameCell,
     },
     {
       id: 'locationType',

@@ -16,6 +16,10 @@ interface Practice {
   taxonomy: string
   users?: StaffResource[]
   organizationId: string
+  organizationShortName?: string
+  practiceAddress: Partial<PatientAddress>
+  tin?: string
+  npi?: string
 }
 
 interface PracticeResource {

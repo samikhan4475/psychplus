@@ -1,6 +1,7 @@
 import { ClinicAddress } from './address'
 import { Metadata } from './metadata'
 import { PhoneNumber } from './phone'
+import { Practice } from './practice'
 
 interface Location {
   id: string
@@ -43,4 +44,17 @@ interface LocationSearchParams {
   isIncludeTestLocations: boolean
 }
 
-export type { Location, LocationSearchParams }
+interface LocationPractice {
+  id: string
+  metadata: Metadata
+  recordStatus: string
+  practiceId: string
+  locationId: string
+  practiceType: string
+  isPrimaryPractice: boolean
+  isOverRideExistingPrimary: boolean
+  practice: Practice
+  location: Location
+}
+
+export type { Location, LocationSearchParams, LocationPractice }
