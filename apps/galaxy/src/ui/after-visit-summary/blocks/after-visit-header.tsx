@@ -46,20 +46,22 @@ const AfterSummaryHeaderWidgetHeader = ({
       title="After Visit Summary"
       className="sticky top-0 z-[11]"
     >
-      <Flex ml={'2'}>
-        <SelectCell
-          value={String(selectedAppointment.appointmentId)}
-          onValueChange={(value: string) => {
-            const appointment = appointments.find(
-              (app) => String(app.appointmentId) === value,
-            )
-            if (appointment) {
-              onAppointmentChange(appointment)
-            }
-          }}
-          options={options}
-        />
-      </Flex>
+      {selectedAppointment && Object.keys(selectedAppointment).length > 0 && (
+        <Flex ml={'2'}>
+          <SelectCell
+            value={String(selectedAppointment.appointmentId)}
+            onValueChange={(value: string) => {
+              const appointment = appointments.find(
+                (app) => String(app.appointmentId) === value,
+              )
+              if (appointment) {
+                onAppointmentChange(appointment)
+              }
+            }}
+            options={options}
+          />
+        </Flex>
+      )}
       <Flex align="center" justify="end" gap="2" className="flex-1">
         <PrintButton onClick={onPrint} />
       </Flex>

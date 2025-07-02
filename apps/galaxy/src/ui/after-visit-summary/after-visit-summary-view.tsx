@@ -109,10 +109,12 @@ const AfterVisitSummaryView = ({
       <Separator className="w-full" />
 
       <Flex id={printId} direction="column" width="100%">
-        <AfterVisitHeaderItemsBlock
-          headerItems={headerItems}
-          appointment={selectedAppointment}
-        />
+        {selectedAppointment && Object.keys(selectedAppointment).length > 0 && (
+          <AfterVisitHeaderItemsBlock
+            headerItems={headerItems}
+            appointment={selectedAppointment}
+          />
+        )}
         <ProvidersRecommendationsBlock
           appointmentId={String(selectedAppointment.appointmentId)}
         />
