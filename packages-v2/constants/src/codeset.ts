@@ -27,6 +27,7 @@ const CODESETS = {
   ContactMadeStatus: 'ContactMadeStatus',
   ServicesOffered: 'ServicesOffered',
   SpecialistType: 'SpecialistType',
+  AppointmentType:'AppointmentType'
 }
 
 export {

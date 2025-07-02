@@ -44,7 +44,7 @@ const MANAGEMENT_SERVICES_LIST_WIDGET = 'management-services-list'
 const ADD_MANAGEMENT_LOCATIONS_WIDGET = 'add-management-locations'
 const NOTES_WIDGET = 'notes-widget'
 const MANAGEMENT_LOCATION_TABS_WIDGET = 'management-location-tabs'
-
+const ADD_EXT_REFERRALS_FORM = 'add-ext-referrals-form'
 export {
   USER_WIDGET,
   PATIENT_WIDGET,
@@ -90,4 +90,5 @@ export {
   ADD_MANAGEMENT_LOCATIONS_WIDGET,
   NOTES_WIDGET,
   MANAGEMENT_LOCATION_TABS_WIDGET,
+  ADD_EXT_REFERRALS_FORM
 }

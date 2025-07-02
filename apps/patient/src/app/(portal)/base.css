@@ -26,12 +26,12 @@
     border-radius: var(--radius-3);
   }
 
-  .rt-SelectTrigger:where(.rt-variant-surface):where([data-placeholder]) :where(.rt-SelectTriggerInner) {
+  .rt-SelectTrigger:where(.rt-variant-surface):where([data-placeholder])
+    :where(.rt-SelectTriggerInner) {
     color: var(--accent-12);
     font-size: 16px;
     font-weight: 500;
-
-}
+  }
 
   :root {
     --color-page-background: var(--gray-1) !important;
@@ -45,18 +45,15 @@
     overflow-x: hidden;
   }
 
-  .react-add-to-calendar li{
+  .react-add-to-calendar li {
     padding-left: 10px;
-
   }
 
-  .react-add-to-calendar li:hover{
-    background-color: #151B4A;
+  .react-add-to-calendar li:hover {
+    background-color: #151b4a;
     color: white;
     border-radius: 5px;
   }
-
-
 }
 
 .react-aria-DateField {
@@ -107,11 +104,16 @@
 @layer utilities {
   /* Hide scrollbar for Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
-      display: none;
+    display: none;
   }
- /* Hide scrollbar for IE, Edge and Firefox */
+  /* Hide scrollbar for IE, Edge and Firefox */
   .no-scrollbar {
-      -ms-overflow-style: none;  /* IE and Edge */
-      scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 }
+.custom-time-select .rt-SelectTriggerInner {
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  color: #b9bbc6;
 }

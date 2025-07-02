@@ -51,15 +51,18 @@ const POST = async <T>(
   options: PostOptions = {},
 ): Promise<NetworkResult<T>> => {
   const { headers, ...rest } = options
-
+  const isBodyFormData = body instanceof FormData
   const reqHeaders = rest.ignoreHeaders
     ? createJsonHeader()
-    : createHeaders({ ...createJsonHeader(), ...headers })
+    : createHeaders({
+        ...(isBodyFormData ? {} : createJsonHeader()),
+        ...headers,
+      })
 
   const response = await fetch(url, {
     method: 'POST',
     headers: reqHeaders,
-    body: JSON.stringify(body),
+    body: isBodyFormData ? body : JSON.stringify(body),
     ...rest,
   })
 

@@ -1,5 +1,14 @@
-import { z } from 'zod'
+import { z, ZodString } from 'zod'
 
+//Enums
+const phoneNumberTypeEnum = z.enum([
+  'Contact',
+  'Home',
+  'Business',
+  'Work',
+  'Contact',
+  'Mobile',
+]);
 // ======= Regex ========
 const phoneRegex = /^\+?[1-9]\d{7,14}$/
 const charRegex = /^[A-Za-z]*$/
@@ -8,11 +17,22 @@ const passwordRegex =
 const zipCodeRegex = /(^\d{5}$)|(^\d{5}-\d{4}$)/
 const nameRegex = /^[^\d]*$/
 const phoneExtensionRegex = /^\d*$|^$/
-
 const requiredString = z.string().min(1, 'Required')
-const requiredName = z.string().regex(nameRegex, 'Numbers are not allowed').min(1, 'Required').max(35, {message: 'Cannot exceed 35 characters'})
-const optionalName = z.string().regex(nameRegex, 'Numbers are not allowed').max(35, {message: 'Cannot exceed 35 characters'}).optional()
-const phoneExtension = z.string().regex(phoneExtensionRegex, 'Invalid extension').max(4, 'Cannot exceed 4 digits').optional()
+const requiredName = z
+  .string()
+  .regex(nameRegex, 'Numbers are not allowed')
+  .min(1, 'Required')
+  .max(35, { message: 'Cannot exceed 35 characters' })
+const optionalName = z
+  .string()
+  .regex(nameRegex, 'Numbers are not allowed')
+  .max(35, { message: 'Cannot exceed 35 characters' })
+  .optional()
+const phoneExtension = z
+  .string()
+  .regex(phoneExtensionRegex, 'Invalid extension')
+  .max(4, 'Cannot exceed 4 digits')
+  .optional()
 const nullableString = z.string().nullable().default(null)
 const email = requiredString.email()
 const phoneNumber = requiredString.regex(phoneRegex, 'Invalid phone number')
@@ -28,7 +48,7 @@ const passwordStrong = requiredString.regex(
 const zipCode = requiredString.regex(zipCodeRegex, 'Invalid zip code format!')
 const optionalString = z.string().optional().default('')
 const anyString = z.coerce.string()
-const numberOnly = z.coerce.number() 
+const numberOnly = z.coerce.number()
 const charOnly = anyString.regex(charRegex, 'only charactors are allowed')
 
 // can be empity but if had a value then validate
@@ -37,6 +57,26 @@ const emptyOrStringArray = z
   .refine((value) => value.every((item) => typeof item === 'string'), {
     message: 'Array must be empty or contain only strings',
   })
+
+const limitedString = ({
+  min,
+  max,
+}: {
+  min?: number
+  max?: number
+}): ZodString => {
+  let schema = z.string()
+
+  if (min) {
+    schema = schema.min(min, { message: `Required` })
+  }
+
+  if (max) {
+    schema = schema.max(max, { message: `Cannot exceed ${max} characters` })
+  }
+
+  return schema
+}
 
 const nullOrBoolean = z.union([z.null(), z.boolean()])
 const nullOrString = z.union([z.null(), anyString])
@@ -65,6 +105,8 @@ const validate = {
   requiredName,
   optionalName,
   phoneExtension,
+  limitedString,
+  phoneNumberTypeEnum,
 }
 
 export { validate }

@@ -9,6 +9,7 @@ interface PatientAddress {
   country?: string
   postalCode: string
   postalPlus4Code?: string
+  zipLast4?: string
   geoCoordinates?: {
     longitude: number
     latitude: number

@@ -3,8 +3,10 @@ import {
   DateFormatter,
   getDayOfWeek,
   parseDate,
+  parseZonedDateTime,
   type DateValue,
 } from '@internationalized/date'
+import { TimeInterval } from '@psychplus-v2/types'
 
 const MONTH_LABELS = [
   'January',
@@ -166,6 +168,42 @@ const convertToCalendarDate = (storedDate: DateValue | string) => {
   return new CalendarDate(year, month, day)
 }
 
+function generateTimeIntervals(): TimeInterval[] {
+  const intervals: TimeInterval[] = []
+  let time = '00.00'
+
+  for (let r = 0; r < 100; r++) {
+    const formattedTime = time.replace('.', ':')
+    intervals.push({ label: formattedTime, value: formattedTime })
+
+    if (time === '23.40') {
+      break
+    }
+
+    time = (parseFloat(time) + parseFloat('0.20')).toFixed(2)
+
+    if (time.includes('.60')) {
+      const [hours] = time.split('.')
+      const newHours = parseInt(hours) + 1
+      time = (newHours < 10 ? '0' : '') + newHours + '.00'
+    } else if (parseInt(time) < 10) {
+      time = '0' + time
+    }
+  }
+
+  return intervals
+}
+
+function mapToUTCString(date: string): string {
+  const parsedDateTime = parseZonedDateTime(date)
+  return parsedDateTime.toAbsoluteString()
+}
+
+const parseLocalDate = (isoDate: string): Date => {
+  const [year, month, day] = isoDate.split('-').map(Number)
+  return new Date(year, month - 1, day) // month is 0-based
+}
+
 export {
   getCalendarDate,
   getLocalCalendarDate,
@@ -180,4 +218,7 @@ export {
   convertUtcISOToLocalISOString,
   convertToCalendarDate,
   convertDateField,
+  generateTimeIntervals,
+  mapToUTCString,
+  parseLocalDate,
 }

@@ -1,0 +1,49 @@
+'use client'
+
+import { useMemo } from 'react'
+import { generateTimeIntervals, parseLocalDate } from '@psychplus-v2/utils'
+import { addHours, isToday } from 'date-fns'
+import { useFormContext } from 'react-hook-form'
+import { FormField } from '@/components-v2'
+import { SelectInput } from '@/components-v2/select-input'
+import { SchemaType } from './schema'
+
+const TimeSelect = () => {
+  const { watch } = useFormContext<SchemaType>()
+  const selectedDate = watch('requestedTime')
+
+  const options = useMemo(() => {
+    const allOptions = generateTimeIntervals()
+
+    if (!selectedDate) return allOptions
+
+    const selected = parseLocalDate(selectedDate)
+
+    if (!isToday(selected)) return allOptions
+
+    const nowPlus2 = addHours(new Date(), 2)
+
+    return allOptions.filter((opt) => {
+      const [h, m] = opt.value.split(':').map(Number)
+      const optionTime = new Date()
+      optionTime.setHours(h, m, 0, 0)
+      return optionTime >= nowPlus2
+    })
+  }, [selectedDate])
+
+  return (
+    <FormField containerClassName="flex-1" name="time" label="Select Time">
+      <SelectInput
+        field="time"
+        placeholder="--Please Select--"
+        options={options}
+        buttonClassName="border-pp-gray-2 custom-time-select !text-2  h-[38px] border border-solid !outline-none [box-shadow:none] w-full"
+        className="text-2 font-regular"
+        disabled={!selectedDate}
+        size="1"
+      />
+    </FormField>
+  )
+}
+
+export { TimeSelect }

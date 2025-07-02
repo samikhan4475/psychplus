@@ -6,6 +6,8 @@ interface FormFieldProps {
   name: string
   label: string
   containerClassName?: string
+  required?: boolean
+  showError?: boolean
 }
 
 const FormField = ({
@@ -13,11 +15,13 @@ const FormField = ({
   label,
   children,
   containerClassName,
+  required,
+  showError = true,
 }: React.PropsWithChildren<FormFieldProps>) => (
   <FormFieldContainer className={containerClassName}>
-    <FormFieldLabel>{label}</FormFieldLabel>
+    <FormFieldLabel required={required}>{label}</FormFieldLabel>
     {children}
-    <FormFieldError name={name} />
+    {showError && <FormFieldError name={name} />}
   </FormFieldContainer>
 )
 

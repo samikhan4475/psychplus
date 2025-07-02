@@ -35,6 +35,7 @@ const config = {
         'pp-gray-8': '#E3E5F2',
         'pp-gray-9': '#575759',
         'pp-warning-border': '#F2AE40',
+        'pp-table-border': '#CAD8FD',
         'pp-info-text': '#1E75BB',
         'pp-info-bg-1': '#E6F4FF',
       },

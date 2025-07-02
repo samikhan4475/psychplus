@@ -1,0 +1,121 @@
+'use client'
+
+import React, { useMemo } from 'react'
+import { useParams } from 'next/navigation'
+import { CODESETS } from '@psychplus-v2/constants'
+import { Box, Flex, Grid, Separator, Text } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
+import {
+  CodesetFormSelect,
+  FormField,
+  MultiSelectDropdown,
+} from '@/components-v2'
+import { useCodesetCodes } from '@/providers'
+import { ReferralType } from '../types'
+import { AppointmentTypeSelect } from './appointment-type-select'
+import { DischargeDate } from './discharge-date'
+import { RequestedDateInput } from './requested-date-input'
+import { SchemaType } from './schema'
+import { TimeSelect } from './time-select'
+import { UploadDocumentButton } from './upload-document-button'
+import { ZipInput } from './zip-input'
+
+interface AppointmentDetailProps {
+  onFaceSheetFileChange: (file: File | undefined) => void
+  onFileChange: (file: File | undefined) => void
+  fileResetCounter?: number
+}
+
+const AppointmentDetail = ({
+  onFaceSheetFileChange,
+  onFileChange,
+  fileResetCounter,
+}: AppointmentDetailProps) => {
+  const codes = useCodesetCodes(CODESETS.ServicesOffered)
+  const form = useFormContext<SchemaType>()
+  const { type: formType } = useParams<{ type: string }>()
+
+  const servicesOfferedOptions = useMemo(
+    () =>
+      codes
+        .filter((code) => code.value !== 'NotSet')
+        .map(({ display, value }) => ({ display, value })),
+    [codes],
+  )
+
+  const sharedUploadProps = {
+    resetTrigger: fileResetCounter,
+    disableControls: form.formState.isSubmitting,
+  }
+
+  const secondLabel =
+    formType === ReferralType.Facility ? 'Discharge Summary' : 'Medical Records'
+
+  return (
+    <Flex direction="column" gap="4">
+      <Text size="5" weight="medium" className="mt-5">
+        Appointment Details
+      </Text>
+      <Separator className="bg-pp-gray-2 w-full" />
+      <Grid className="col-span-full max-xs:grid-cols-1" columns="3" gap="3">
+        <Box className="col-span-full">
+          <FormField
+            containerClassName="flex-1"
+            name="requestedServices"
+            label="Reason For Referral"
+          >
+            <MultiSelectDropdown
+              name="requestedServices"
+              options={servicesOfferedOptions}
+              showOptionsAtBottom
+            />
+          </FormField>
+        </Box>
+
+        <RequestedDateInput />
+        <TimeSelect />
+        <AppointmentTypeSelect />
+        <Box className="max-xs:col-span-full xs:col-span-3">
+          <Grid columns="2" className="max-xs:grid-cols-1" gap="3">
+            <FormField
+              containerClassName="flex-1"
+              name="patientContactDetails.addresses.0.state"
+              label="State"
+            >
+              <CodesetFormSelect
+                name="patientContactDetails.addresses.0.state"
+                placeholder="Select"
+                className={buttonClassName}
+                codeset={CODESETS.UsStates}
+                size="1"
+              />
+            </FormField>
+
+            <ZipInput />
+            {formType === ReferralType.Facility && <DischargeDate />}
+          </Grid>
+        </Box>
+        {formType !== ReferralType.Generic && (
+          <Box className="max-xs:col-span-full xs:col-span-3">
+            <Grid columns="2" className="px-2.5 max-xs:grid-cols-1" gap="6">
+              <UploadDocumentButton
+                label="Facesheet/Demographics"
+                onFileChange={onFaceSheetFileChange}
+                {...sharedUploadProps}
+              />
+
+              <UploadDocumentButton
+                label={secondLabel}
+                onFileChange={onFileChange}
+                {...sharedUploadProps}
+              />
+            </Grid>
+          </Box>
+        )}
+      </Grid>
+    </Flex>
+  )
+}
+const buttonClassName =
+  'font-[400] h-[38px] text-gray-12  text-2 w-full [&_span]:bg-red-500 bg-[white] outline outline-1 outline-gray-7'
+export { AppointmentDetail }
