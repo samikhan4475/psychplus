@@ -69,7 +69,7 @@ interface PatientReferral {
   residence?: string
   city?: string
   zip?: string
-  zipLast4?: string
+  postalPlus4Code?: string
   state?: string
   userCreated?: string
   insurance?: string

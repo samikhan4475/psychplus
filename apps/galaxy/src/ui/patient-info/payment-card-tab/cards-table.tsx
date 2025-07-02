@@ -86,13 +86,13 @@ const columns: ColumnDef<CreditCard>[] = [
   },
   {
     id: 'areaCode',
-    accessorKey: 'billingAddress.zipLast4',
+    accessorKey: 'billingAddress.postalPlus4Code',
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="Billing Area code" />
     ),
     cell: ({ row }) => (
       <TextCell className="!text-1">
-        {row?.original?.billingAddress?.zipLast4 ?? ''}
+        {row?.original?.billingAddress?.postalPlus4Code ?? ''}
       </TextCell>
     ),
   },

@@ -84,13 +84,13 @@ const columns: ColumnDef<Practice>[] = [
     ),
   },
   {
-    id: 'practiceAddress.zipLast4',
-    accessorKey: 'practiceAddress.zipLast4',
+    id: 'practiceAddress.postalPlus4Code',
+    accessorKey: 'practiceAddress.postalPlus4Code',
     header: ({ column }) => (
-      <ColumnHeader column={column} label="Area Code" clientSideSort />
+      <ColumnHeader column={column} label="Postal+4" clientSideSort />
     ),
     cell: ({ row }) => (
-      <TextCell>{row.original.practiceAddress?.zipLast4 ?? ''}</TextCell>
+      <TextCell>{row.original.practiceAddress?.postalPlus4Code ?? ''}</TextCell>
     ),
   },
   {

@@ -14,7 +14,7 @@ interface Address {
   state: string
   country: string
   postalCode: string
-  zipLast4?: string
+  postalPlus4Code?: string
   geoCoordinates: GeoCoordinates
   timeZoneId: string
 }

@@ -144,9 +144,11 @@ const columns = (
       cell: ({ row }) => <TextCell>{row.original?.zip}</TextCell>,
     },
     {
-      id: 'areaCode',
-      header: () => <ColumnHeader label="Area Code" />,
-      cell: ({ row }) => <TextCell>{row.original?.zipLast4 ?? ''}</TextCell>,
+      id: 'postalPlus4Code',
+      header: () => <ColumnHeader label="Postal+4" />,
+      cell: ({ row }) => (
+        <TextCell>{row.original?.postalPlus4Code ?? ''}</TextCell>
+      ),
     },
     {
       id: 'insurance',

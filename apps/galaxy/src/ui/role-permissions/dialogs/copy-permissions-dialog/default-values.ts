@@ -10,7 +10,7 @@ const defaultValues = (data?: any) => {
     city: data?.city ?? '',
     state: data?.state ?? '',
     zip: data?.zip ?? '',
-    zipLast4: data?.zipLast4 ?? '',
+    postalPlus4Code: data?.postalPlus4Code ?? '',
     status: data?.status ?? '',
     isMailingAddressSameAsHome: 'no',
   }

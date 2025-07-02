@@ -44,7 +44,7 @@ const patientLookupSchema = z
       .trim()
       .regex(zipCodeRegex, 'Invalid zip code!')
       .optional(),
-    zipLast4: zipLast4Schema,
+    postalPlus4Code: zipLast4Schema,
     hasGuardian: z.string().trim().optional(),
     telephone: z.string().trim().optional(),
     consentVerificationStatuses: z.array(z.string()).optional(),

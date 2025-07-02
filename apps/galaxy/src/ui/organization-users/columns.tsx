@@ -207,9 +207,9 @@ const columns: ColumnDef<Users>[] = [
     ),
   },
   {
-    id: 'areaCode',
-    accessorKey: 'zipLast4',
-    header: () => <ColumnHeader label="Area Code" />,
+    id: 'postalPlus4Code',
+    accessorKey: 'postalPlus4Code',
+    header: () => <ColumnHeader label="Postal+4" />,
     cell: ({ row: { original } }) => (
       <TextCell>
         {getPatientZipLast4(original?.contactDetails?.addresses)}

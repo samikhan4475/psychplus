@@ -48,10 +48,10 @@ const columns = (payerId: string): ColumnDef<PayerPlanAddressResponse>[] => {
       ),
     },
     {
-      id: 'areaCode',
-      header: () => <ColumnHeader label="Area Code" />,
+      id: 'address.postalPlus4Code',
+      header: () => <ColumnHeader label="Postal+4" />,
       cell: ({ row }) => (
-        <TextCell>{row.original?.address?.zipLast4 ?? ''}</TextCell>
+        <TextCell>{row.original?.address?.postalPlus4Code ?? ''}</TextCell>
       ),
     },
     {

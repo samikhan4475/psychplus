@@ -122,10 +122,10 @@ const columns = (
       cell: ({ row: { original } }) => <TextCell>{original?.zip}</TextCell>,
     },
     {
-      id: 'areaCode',
-      header: () => <ColumnHeader label="Area Code" />,
+      id: 'postalPlus4Code',
+      header: () => <ColumnHeader label="Postal+4" />,
       cell: ({ row: { original } }) => (
-        <TextCell>{original?.zipLast4 ?? ''}</TextCell>
+        <TextCell>{original?.postalPlus4Code ?? ''}</TextCell>
       ),
     },
     {

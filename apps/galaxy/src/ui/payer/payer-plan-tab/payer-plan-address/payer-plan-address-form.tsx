@@ -30,7 +30,7 @@ const addressSchema = z.object({
   city: z.string().min(1, { message: 'City is required' }),
   state: z.string().min(1, { message: 'State is required' }),
   zip: z.string().min(1, { message: 'Zip is required' }),
-  zipLast4: zipLast4Schema,
+  postalPlus4Code: zipLast4Schema,
   status: z.boolean(),
   isDefaultLocation: z.boolean(),
 })
@@ -62,7 +62,7 @@ const PayerPlanAddressForm = ({
       city: '',
       state: '',
       zip: '',
-      zipLast4: '',
+      postalPlus4Code: '',
       status: true,
       isDefaultLocation: addressData.length === 0,
     },
@@ -74,7 +74,8 @@ const PayerPlanAddressForm = ({
         setLoading(true)
         const result = await getPayerPlanAddressById(payerId, data?.id)
         if (result.state === 'success') {
-          const { street1, street2, postalCode, zipLast4 } = result.data.address
+          const { street1, street2, postalCode, postalPlus4Code } =
+            result.data.address
 
           form.reset({
             ...result.data.address,
@@ -83,7 +84,7 @@ const PayerPlanAddressForm = ({
             address1: street1,
             address2: street2,
             zip: postalCode,
-            zipLast4: zipLast4,
+            postalPlus4Code: postalPlus4Code,
           })
         } else if (result.state === 'error') {
           toast.error(result.error ?? 'Failed to get payer plan address')
@@ -117,7 +118,7 @@ const PayerPlanAddressForm = ({
           city: formData.city,
           state: formData.state,
           postalCode: formData.zip,
-          zipLast4: formData.zipLast4 ?? '',
+          postalPlus4Code: formData.postalPlus4Code ?? '',
         },
       }
 

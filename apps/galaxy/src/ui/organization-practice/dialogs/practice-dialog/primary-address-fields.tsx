@@ -21,7 +21,7 @@ const PrimaryAddressFields = ({
       'city',
       'state',
       'postalCode',
-      'zipLast4',
+      'postalPlus4Code',
     ]
     const formFields = [
       'address1',
@@ -29,7 +29,7 @@ const PrimaryAddressFields = ({
       'city',
       'state',
       'zip',
-      'zipLast4',
+      'postalPlus4Code',
     ]
 
     formFields.forEach((field, index) => {

@@ -110,10 +110,10 @@ const getPatientZipLast4 = (
   const address = addresses.find((addr) => addr.type === type)
 
   if (!address) {
-    return addresses[0].zipLast4
+    return addresses[0].postalPlus4Code
   }
 
-  return address.zipLast4 ?? ''
+  return address.postalPlus4Code ?? ''
 }
 
 const getPatientCity = (

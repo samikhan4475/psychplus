@@ -121,9 +121,9 @@ const AddressFieldsGroup = ({
         />
         {addAreaCode && (
           <AddressTextField
-            label="Area Code"
-            field={fieldName('zipLast4', prefix)}
-            placeholder="Area Code"
+            label="Postal+4"
+            field={fieldName('postalPlus4Code', prefix)}
+            placeholder="Postal+4"
             type="number"
             maxLength={4}
             disabled={disabled}

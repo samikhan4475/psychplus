@@ -14,7 +14,7 @@ const schema = z.object({
   primaryStreet2: z.string().optional(),
   primaryCity: z.string().min(1, 'Required'),
   primaryPostalCode: zipCodeSchema,
-  primaryZipLast4: zipLast4Schema,
+  primaryPostalPlus4Code: zipLast4Schema,
 })
 
 export { schema }

@@ -11,7 +11,9 @@ const defaultValues = (data: PracticeResource) => {
     organizationId: data.organizationId,
     defaultClearinghouseReceiverId: data.defaultClearinghouseReceiverId,
     defaultClearinghouseReceiverName: data.defaultClearinghouseReceiverName,
-    isAutoPaymentPostingEnabled: data.isAutoPaymentPostingEnabled ? 'Yes' : 'No',
+    isAutoPaymentPostingEnabled: data.isAutoPaymentPostingEnabled
+      ? 'Yes'
+      : 'No',
     isAutoSubmissionEnabled: data.isAutoSubmissionEnabled ? 'Yes' : 'No',
     recordStatus: data.recordStatus,
     practicePhone: data.practicePhone,
@@ -28,14 +30,14 @@ const defaultValues = (data: PracticeResource) => {
     city: data.practiceAddress?.city,
     state: data.practiceAddress?.state,
     zip: data.practiceAddress?.postalCode,
-    zipLas4: data.practiceAddress?.zipLast4,
+    postalPlus4Code: data.practiceAddress?.postalPlus4Code,
     payer: {
       street1: data.practicePaymentAddress?.street1,
       street2: data.practicePaymentAddress?.street2,
       city: data.practicePaymentAddress?.street2,
       state: data.practicePaymentAddress?.state,
       postalCode: data.practicePaymentAddress?.postalCode,
-      zipLas4: data.practiceAddress?.zipLast4,
+      postalPlus4Code: data.practiceAddress?.postalPlus4Code,
     },
   }
 }

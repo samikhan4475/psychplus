@@ -29,7 +29,7 @@ const ProfileSchema = z.object({
   city: z.string().min(1, { message: 'Required' }),
   state: z.string().min(1, { message: 'Required' }),
   zip: z.string().min(1, { message: 'Required' }),
-  zipLast4: zipLast4Schema,
+  postalPlus4Code: zipLast4Schema,
 })
 
 type ProfileSchemaType = z.infer<typeof ProfileSchema>
@@ -51,7 +51,7 @@ const ProfileForm = ({ defaultValues }: ProfileFormProps) => {
         : '',
       address2: defaultValues.organizationAddress?.street2 ?? '',
       zip: defaultValues.organizationAddress?.postalCode ?? '',
-      zipLast4: defaultValues.organizationAddress?.zipLast4 ?? '',
+      postalPlus4Code: defaultValues.organizationAddress?.postalPlus4Code ?? '',
       state: defaultValues.organizationAddress?.state ?? '',
       city: defaultValues.organizationAddress?.city ?? '',
     },
@@ -68,7 +68,7 @@ const ProfileForm = ({ defaultValues }: ProfileFormProps) => {
         city: data.city,
         state: data.state,
         postalCode: data.zip,
-        zipLast4: data.zipLast4,
+        postalPlus4Code: data.postalPlus4Code,
         type: 'Business',
       },
     }

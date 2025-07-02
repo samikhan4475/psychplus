@@ -15,7 +15,7 @@ const ZipLast4Input = forwardRef<HTMLInputElement, ZipLast4InputProps>(
       type="text"
       inputMode="numeric"
       format="####"
-      placeholder="Area Code"
+      placeholder="Postal+4"
       customInput={TextFieldInput}
       getInputRef={ref}
       {...rest}

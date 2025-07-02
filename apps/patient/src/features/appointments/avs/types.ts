@@ -97,7 +97,7 @@ interface Address {
   city: string
   state: string
   postalCode: string
-  zipLast4: string
+  postalPlus4Code: string
 }
 
 interface LabTest {
@@ -229,7 +229,7 @@ interface Address {
   city: string
   state: string
   postalCode: string
-  zipLast4: string
+  postalPlus4Code: string
   geoCoordinates?: GeoCoordinates
   timeZoneId?: string
 }

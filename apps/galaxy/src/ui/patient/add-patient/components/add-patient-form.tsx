@@ -59,7 +59,7 @@ const AddPatientForm = ({
             state: '',
             country: '',
             postalCode: '',
-            zipLast4: '',
+            postalPlus4Code: '',
           },
           {
             type: 'Mailing',
@@ -69,7 +69,7 @@ const AddPatientForm = ({
             state: '',
             country: '',
             postalCode: '',
-            zipLast4: '',
+            postalPlus4Code: '',
           },
         ],
         isMailingAddressSameAsPrimary: 'yes',

@@ -24,7 +24,7 @@ const getInitialLocationValues = (location?: Location): LocationSchemaType => {
       state: location?.address?.state ?? '',
       address2: location?.address?.street2 ?? '',
       zip: location?.address?.postalCode ?? '',
-      zipLast4: location?.address?.zipLast4 ?? '',
+      postalPlus4Code: location?.address?.postalPlus4Code ?? '',
     },
     isTestLocation: location?.isTestLocation ? 'yes' : 'no',
     locationType: location?.locationType ?? 'Clinic',

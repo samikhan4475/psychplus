@@ -112,13 +112,13 @@ const columns = (
       ),
     },
     {
-      id: 'areaCode',
-      accessorKey: 'address.zipLast4',
+      id: 'address.postalPlus4Code',
+      accessorKey: 'address.postalPlus4Code',
       header: ({ column }) => (
-        <ColumnHeader label="Area Code" column={column} clientSideSort />
+        <ColumnHeader label="Postal+4" column={column} clientSideSort />
       ),
       cell: ({ row: { original } }) => (
-        <TextCell>{original?.address?.zipLast4 || 'N/A'}</TextCell>
+        <TextCell>{original?.address?.postalPlus4Code || 'N/A'}</TextCell>
       ),
     },
     {

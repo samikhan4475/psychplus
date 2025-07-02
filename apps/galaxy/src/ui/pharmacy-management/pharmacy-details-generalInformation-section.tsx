@@ -44,8 +44,8 @@ const PharmacyDetailsGeneralInformationSection = ({
           value={pharmacy.contactDetails?.addresses?.[0]?.postalCode}
         />
         <TextInputField
-          label="Area Code"
-          value={pharmacy.contactDetails?.addresses?.[0]?.zipLast4 ?? ''}
+          label="Postal+4"
+          value={pharmacy.contactDetails?.addresses?.[0]?.postalPlus4Code ?? ''}
         />
         <TextInputField
           label="Primary Phone"
@@ -65,7 +65,7 @@ const PharmacyDetailsGeneralInformationSection = ({
           label="Active Start Date"
           value={formatDate(pharmacy.enabledDateFrom) || ''}
         />
-         <TextInputField
+        <TextInputField
           label="Active End Date"
           value={formatDate(pharmacy.enabledDateTo) || ''}
         />

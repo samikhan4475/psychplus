@@ -62,7 +62,7 @@ interface ScheduledAppointment {
   primaryCity: string
   primaryState: string
   primaryPostalCode: string
-  primaryZipLast4: string
+  primaryPostalPlus4Code: string
   primaryCountry: string
 }
 
@@ -88,7 +88,7 @@ const schema = z
     primaryCity: z.string().optional(),
     primaryState: z.string().optional(),
     primaryPostalCode: zipCodeSchema.optional(),
-    primaryZipLast4: zipLast4Schema.optional(),
+    primaryPostalPlus4Code: zipLast4Schema.optional(),
     primaryCountry: z.string().optional(),
   })
   .superRefine(({ dateOfBirth, zipCode }, ctx) => {
@@ -146,7 +146,7 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
     primaryCity: '',
     primaryState: '',
     primaryPostalCode: '',
-    primaryZipLast4: '',
+    primaryPostalPlus4Code: '',
     primaryCountry: '',
   })
 

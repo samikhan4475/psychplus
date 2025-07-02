@@ -24,7 +24,7 @@ const transformIn = (profile: PreferredPartnerItem): SchemaType => {
       addresses: profile.contactDetails.addresses.map((addr) => ({
         ...addr,
         timeZoneId: addr.timeZoneId ?? '',
-        zipLast4: addr.zipLast4 ?? '',
+        postalPlus4Code: addr.postalPlus4Code ?? '',
       })),
       isMailingAddressSameAsPrimary:
         profile.contactDetails?.isMailingAddressSameAsPrimary ?? false,
@@ -74,7 +74,7 @@ const transformOut = (data: SchemaType): Partial<PreferredPartnerItem> => {
           altitude: 0,
         },
         timeZoneId: '',
-        zipLast4: '',
+        postalPlus4Code: '',
       },
       {
         type: 'Billing',
@@ -90,7 +90,7 @@ const transformOut = (data: SchemaType): Partial<PreferredPartnerItem> => {
           altitude: 0,
         },
         timeZoneId: '',
-        zipLast4: '',
+        postalPlus4Code: '',
       },
     ]
   }
@@ -115,7 +115,7 @@ const transformOut = (data: SchemaType): Partial<PreferredPartnerItem> => {
       state: address.state,
       country: address.country,
       postalCode: address.postalCode,
-      zipLast4: address.zipLast4 ?? '',
+      postalPlus4Code: address.postalPlus4Code ?? '',
       geoCoordinates: address.geoCoordinates,
       timeZoneId: address.timeZoneId ?? '',
     }

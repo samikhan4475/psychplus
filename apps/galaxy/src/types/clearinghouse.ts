@@ -28,7 +28,7 @@ interface ClearingHouseReceiver {
   city: string
   state: string
   zip: string
-  zipLast4?: string
+  postalPlus4Code?: string
   recordStatus: string
   isSupportMultipleDirectory: boolean
   practiceId?: string

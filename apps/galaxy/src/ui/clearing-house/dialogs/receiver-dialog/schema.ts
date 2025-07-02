@@ -53,7 +53,7 @@ const schema = z.object({
   city: z.string().min(1, { message: 'City is required' }),
   state: z.string().min(1, { message: 'State is required' }),
   zip: z.string().min(1, { message: 'Zip is required' }),
-  zipLast4: zipLast4Schema,
+  postalPlus4Code: zipLast4Schema,
   isSupportMultipleDirectory: z.string().optional(),
 })
 

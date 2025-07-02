@@ -35,7 +35,7 @@ const addressSchema = z.object({
     .regex(zipCodeRegex, 'Invalid zip code!')
     .optional()
     .default(''),
-  zipLast4: zipLast4Schema,
+  postalPlus4Code: zipLast4Schema,
 })
 const ContactInfoSchema = z.object({
   addresses: z.array(addressSchema),

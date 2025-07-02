@@ -20,7 +20,7 @@ const MailAddressGroup = () => {
       street1,
       street2,
       type,
-      zipLast4,
+      postalPlus4Code,
     },
     isMailingAddressSameAsPrimary,
   } = contactDetails
@@ -30,7 +30,7 @@ const MailAddressGroup = () => {
       resetField('contactDetails.mailingAddress', {
         defaultValue: {
           postalCode: isMailingAddressSameAsPrimary ? postalCode : '',
-          zipLast4: isMailingAddressSameAsPrimary ? zipLast4 : '',
+          postalPlus4Code: isMailingAddressSameAsPrimary ? postalPlus4Code : '',
           type: 'Mailing',
           street1: isMailingAddressSameAsPrimary ? street1 : '',
           street2: isMailingAddressSameAsPrimary ? street2 : '',
@@ -45,7 +45,7 @@ const MailAddressGroup = () => {
     city,
     country,
     postalCode,
-    zipLast4,
+    postalPlus4Code,
     state,
     street1,
     street2,

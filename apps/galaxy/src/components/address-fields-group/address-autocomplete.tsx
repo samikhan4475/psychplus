@@ -29,7 +29,7 @@ interface AddressForm {
   city?: string
   state?: string
   postalCode?: string
-  zipLast4?: string
+  postalPlus4Code?: string
   country?: string
 }
 
@@ -72,8 +72,27 @@ const GooglePlacesAutocomplete = ({
   const cityField = fieldName('city', prefix)
   const stateField = fieldName('state', prefix)
   const zipField = zipFieldName
-  const zipLast4Field = fieldName('zipLast4', prefix)
+  const zipLast4Field = fieldName('postalPlus4Code', prefix)
   const countryField = fieldName('country', prefix)
+  const suggestionsRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node
+
+      if (
+        autocompleteFieldRef.current?.contains(target) ||
+        suggestionsRef.current?.contains(target)
+      ) {
+        return
+      }
+
+      setShowSuggestions(false)
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   const state = form?.getFieldState(address1Field, form?.formState)
   const {
@@ -88,7 +107,7 @@ const GooglePlacesAutocomplete = ({
       city: form.watch(cityField),
       state: form.watch(stateField),
       postalCode: form.watch(zipField),
-      zipLast4: form.watch(zipLast4Field),
+      postalPlus4Code: form.watch(zipLast4Field),
     }),
     requestOptions: {
       types: ['address'],
@@ -116,7 +135,7 @@ const GooglePlacesAutocomplete = ({
         form.setValue(cityField, address?.city ?? '')
         form.setValue(stateField, address?.state ?? '')
         form.setValue(zipField, address?.postalCode ?? '')
-        form.setValue(zipLast4Field, address?.zipLast4 ?? '')
+        form.setValue(zipLast4Field, address?.postalPlus4Code ?? '')
         form.setValue(countryField, address?.country ?? '')
         form.trigger([
           address1Field,
@@ -133,6 +152,7 @@ const GooglePlacesAutocomplete = ({
   )
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
+    form?.setValue(address1Field, e?.target?.value)
     setValue(e.target.value)
     if (!e.target.value) {
       form?.setValue(address1Field, '')
@@ -185,6 +205,7 @@ const GooglePlacesAutocomplete = ({
             <Flex className="-mt-2 h-0 w-full" />
           </Popover.Trigger>
           <Popover.Content
+            ref={suggestionsRef}
             onOpenAutoFocus={(e) => e.preventDefault()}
             className="flex flex-col !rounded-1 !p-0"
             size="1"

@@ -70,7 +70,7 @@ const transformResponseData = (data: PatientProfile[]): Patient[] =>
       city: getPatientCity(item?.contactDetails?.addresses),
       state: getPatientState(item?.contactDetails?.addresses),
       zip: getPatientPostalCode(item?.contactDetails?.addresses),
-      zipLast4: getPatientZipLast4(item?.contactDetails?.addresses),
+      postalPlus4Code: getPatientZipLast4(item?.contactDetails?.addresses),
       userCreated: getSlashedPaddedDateString(item?.metadata?.createdOn),
       gender: getPatientGender(gender as Gender),
       upcomingAppointmentDate: upcomingAppointmentDate

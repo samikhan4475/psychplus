@@ -68,12 +68,12 @@ const columns: ColumnDef<Practice>[] = [
     ),
   },
   {
-    id: 'practiceAddress.zipLast4',
+    id: 'practiceAddress.postalPlus4Code',
     header: ({ column }) => (
-      <ColumnHeader label="Area Code" column={column} clientSideSort />
+      <ColumnHeader label="Postal+4" column={column} clientSideSort />
     ),
     cell: ({ row }) => (
-      <TextCell>{row.original.practiceAddress?.zipLast4 ?? ''}</TextCell>
+      <TextCell>{row.original.practiceAddress?.postalPlus4Code ?? ''}</TextCell>
     ),
   },
   {

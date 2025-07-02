@@ -29,7 +29,7 @@ const getInitialValues = (): SchemaType => ({
         state: '',
         country: '',
         postalCode: '',
-        zipLast4: '',
+        postalPlus4Code: '',
         geoCoordinates: {
           longitude: 0,
           latitude: 0,
@@ -45,7 +45,7 @@ const getInitialValues = (): SchemaType => ({
         state: '',
         country: '',
         postalCode: '',
-        zipLast4: '',
+        postalPlus4Code: '',
         geoCoordinates: {
           longitude: 0,
           latitude: 0,

@@ -1,7 +1,7 @@
 import { Organization } from '../../types'
 
 const defaultValues = (data?: Partial<Organization>) => {
-  const { street1, street2, city, state, postalCode, zipLast4 } =
+  const { street1, street2, city, state, postalCode, postalPlus4Code } =
     data?.organizationAddress ?? {}
   return {
     organizationId: data?.id ?? '',
@@ -12,7 +12,7 @@ const defaultValues = (data?: Partial<Organization>) => {
     city: city ?? '',
     state: state ?? '',
     zip: postalCode ?? '',
-    zipLast4: zipLast4 ?? '',
+    postalPlus4Code: postalPlus4Code ?? '',
     recordStatus: data?.recordStatus ?? 'Active',
     practicePaymentAddress: {
       street1: street1 ?? '',
@@ -20,7 +20,7 @@ const defaultValues = (data?: Partial<Organization>) => {
       city: city ?? '',
       state: state ?? '',
       postalCode: postalCode ?? '',
-      zipLast4: zipLast4 ?? '',
+      postalPlus4Code: postalPlus4Code ?? '',
     },
   }
 }

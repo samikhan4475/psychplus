@@ -16,7 +16,7 @@ interface PatientBody {
       state: string
       country: string
       postalCode: string
-      zipLast4?: string
+      postalPlus4Code?: string
     }[]
     isMailingAddressSameAsPrimary: boolean
     phoneNumbers: Array<{

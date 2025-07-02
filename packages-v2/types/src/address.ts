@@ -8,7 +8,7 @@ interface Address {
   country?: string
   postalCode: string
   stateCode?: string
-  zipLast4?: string
+  postalPlus4Code?: string
   type?: string
   longitude?: number
   latitude?: number

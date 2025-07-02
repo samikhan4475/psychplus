@@ -55,15 +55,16 @@ const columns: ColumnDef<PharmacyFilter>[] = [
     ),
   },
   {
-    accessorKey: 'zipLast4',
+    accessorKey: 'postalPlus4Code',
     size: 100,
     header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Area Code" />
+      <ColumnHeader column={column} clientSideSort label="Postal+4" />
     ),
-    accessorFn: (row) => row.contactDetails?.addresses?.[0]?.zipLast4 ?? '',
+    accessorFn: (row) =>
+      row.contactDetails?.addresses?.[0]?.postalPlus4Code ?? '',
     cell: ({ row }) => (
       <TextCell>
-        {row.original.contactDetails?.addresses?.[0]?.zipLast4 ?? ''}
+        {row.original.contactDetails?.addresses?.[0]?.postalPlus4Code ?? ''}
       </TextCell>
     ),
   },

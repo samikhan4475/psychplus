@@ -152,10 +152,10 @@ const columns: ColumnDef<Patient>[] = [
     cell: ({ row: { original } }) => <TextCell>{original?.zip}</TextCell>,
   },
   {
-    id: 'zipLast4',
-    header: () => <ColumnHeader label="Area Code" />,
+    id: 'postalPlus4Code',
+    header: () => <ColumnHeader label="Postal+4" />,
     cell: ({ row: { original } }) => (
-      <TextCell>{original?.zipLast4 ?? ''}</TextCell>
+      <TextCell>{original?.postalPlus4Code ?? ''}</TextCell>
     ),
   },
   //Todo in phase 2

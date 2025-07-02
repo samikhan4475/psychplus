@@ -13,7 +13,7 @@ const secondaryFields = [
   'secondaryCity',
   'secondaryState',
   'secondaryPostalCode',
-  'secondaryZipLast4',
+  'secondaryPostalPlus4Code',
   'secondaryStreet1',
   'secondaryStreet2',
 ]
@@ -127,7 +127,10 @@ const onChangeMailingSameAsPrimary = (value: string, form: UseFormReturn) => {
       'secondaryPostalCode',
       form.getValues('primaryPostalCode') || '',
     )
-    form.setValue('secondaryZipLast4', form.getValues('primaryZipLast4') || '')
+    form.setValue(
+      'secondaryPostalPlus4Code',
+      form.getValues('primaryPostalPlus4Code') || '',
+    )
     form.setValue('secondaryStreet1', form.getValues('primaryStreet1') || '')
     form.setValue('secondaryStreet2', form.getValues('primaryStreet2') || '')
   } else {

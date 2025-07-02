@@ -48,7 +48,7 @@ const FirstNameInput = () => {
               city: '',
               state: '',
               postalCode: '',
-              zipLast4: '',
+              postalPlus4Code: '',
               country: 'US',
             })
             form.setValue('mailingAddress', {
@@ -58,7 +58,7 @@ const FirstNameInput = () => {
               city: '',
               state: '',
               postalCode: '',
-              zipLast4: '',
+              postalPlus4Code: '',
               country: 'US',
             })
           }}
@@ -89,7 +89,8 @@ const FirstNameInput = () => {
               state: value?.contactDetails?.addresses?.[0]?.state || '',
               postalCode:
                 value?.contactDetails?.addresses?.[0]?.postalCode || '',
-              zipLast4: value?.contactDetails?.addresses?.[0]?.zipLast4 || '',
+              postalPlus4Code:
+                value?.contactDetails?.addresses?.[0]?.postalPlus4Code || '',
               country: 'US',
             })
             form.setValue('mailingAddress', {
@@ -102,7 +103,8 @@ const FirstNameInput = () => {
               state: value?.contactDetails?.addresses?.[1]?.state || '',
               postalCode:
                 value?.contactDetails?.addresses?.[1]?.postalCode || '',
-              zipLast4: value?.contactDetails?.addresses?.[0]?.zipLast4 || '',
+              postalPlus4Code:
+                value?.contactDetails?.addresses?.[0]?.postalPlus4Code || '',
               country: 'US',
             })
           }}

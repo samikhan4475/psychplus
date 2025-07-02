@@ -124,13 +124,13 @@ const columns = (googleApiKey: string): ColumnDef<Service>[] => [
     ),
   },
   {
-    id: 'areaCode',
-    accessorKey: 'address.zipLast4',
+    id: 'address.postalPlus4Code',
+    accessorKey: 'address.postalPlus4Code',
     header: ({ column }) => (
-      <ColumnHeader clientSideSort column={column} label="Area Code" />
+      <ColumnHeader clientSideSort column={column} label="Postal+4" />
     ),
     cell: ({ row: { original } }) => (
-      <TextCell>{original?.address?.zipLast4 || 'N/A'}</TextCell>
+      <TextCell>{original?.address?.postalPlus4Code || 'N/A'}</TextCell>
     ),
   },
   {

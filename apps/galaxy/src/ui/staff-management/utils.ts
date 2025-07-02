@@ -51,7 +51,7 @@ const getInitialValues = (id?: string, type?: string): SchemaType => ({
     city: '',
     country: '',
     postalCode: '',
-    zipLast4: '',
+    postalPlus4Code: '',
     type: '',
     state: '',
     street1: '',
@@ -62,7 +62,7 @@ const getInitialValues = (id?: string, type?: string): SchemaType => ({
     city: '',
     country: '',
     postalCode: '',
-    zipLast4: '',
+    postalPlus4Code: '',
     type: '',
     state: '',
     street1: '',
@@ -75,7 +75,7 @@ const getInitialValues = (id?: string, type?: string): SchemaType => ({
   referralSource: '',
   termsOfServiceConsentOn: '',
   privacyPolicyConsentOn: '',
-  hasPhoto: false
+  hasPhoto: false,
 })
 
 const createOptionsLookup = (options: SelectOptionType[]) =>

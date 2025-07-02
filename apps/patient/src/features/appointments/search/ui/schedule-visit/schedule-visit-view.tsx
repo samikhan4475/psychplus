@@ -52,7 +52,7 @@ const schema = z.object({
   primaryCity: z.string().optional(),
   primaryState: z.string().optional(),
   primaryPostalCode: zipCodeSchema.optional().or(z.literal('')),
-  primaryZipLast4: zipLast4Schema.optional().or(z.literal('')),
+  primaryPostalPlus4Code: zipLast4Schema.optional().or(z.literal('')),
   primaryCountry: z.string().optional(),
 })
 
@@ -89,7 +89,7 @@ const ScheduleVisitView = ({
         primaryCity: true,
         primaryState: true,
         primaryPostalCode: true,
-        primaryZipLast4: true,
+        primaryPostalPlus4Code: true,
         primaryCountry: true,
       })
     : schema.omit({
@@ -126,7 +126,7 @@ const ScheduleVisitView = ({
       primaryCity: '',
       primaryState: '',
       primaryPostalCode: '',
-      primaryZipLast4: '',
+      primaryPostalPlus4Code: '',
     },
   })
 
@@ -245,7 +245,7 @@ const ScheduleVisitView = ({
           city: data.primaryCity || '',
           state: data.primaryState || '',
           postalCode: data.primaryPostalCode || '',
-          zipLast4: data?.primaryZipLast4 ?? '',
+          postalPlus4Code: data?.primaryPostalPlus4Code ?? '',
           country: 'US',
         }
         
@@ -279,7 +279,7 @@ const ScheduleVisitView = ({
 
     if (prefetchPromise) {
       await prefetchPromise
-    } else if(isSchedulingOptimizationEnabled) {
+    } else if (isSchedulingOptimizationEnabled) {
       const providers = await prefetchProviders<AppointmentAvailability[]>({
         filters: {
           ...appointmentData,
@@ -304,7 +304,7 @@ const ScheduleVisitView = ({
       },
       storageKey: APPOINTMENTS_SEARCH_SESSION_KEY,
       storageType: StorageType.Session,
-     isCacheNeeded:isSchedulingOptimizationEnabled
+      isCacheNeeded: isSchedulingOptimizationEnabled,
     })
 
     router.push(`/appointments/search`)

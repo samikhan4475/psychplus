@@ -53,7 +53,7 @@ export const transformData = (data: OriginalData) => {
           city: officeAddress.city,
           state: officeAddress.state,
           postalCode: officeAddress.postalCode,
-          zipLast4: officeAddress.zipLast4 ?? '',
+          postalPlus4Code: officeAddress.postalPlus4Code ?? '',
         },
         isMailingAddressSameAsHome === 'yes'
           ? {
@@ -63,7 +63,7 @@ export const transformData = (data: OriginalData) => {
               city: officeAddress.city,
               state: officeAddress.state,
               postalCode: officeAddress.postalCode,
-              zipLast4: officeAddress.zipLast4 ?? '',
+              postalPlus4Code: officeAddress.postalPlus4Code ?? '',
             }
           : {
               type: 'Mailing',
@@ -72,7 +72,7 @@ export const transformData = (data: OriginalData) => {
               city: mailingAddress.city,
               state: mailingAddress.state,
               postalCode: mailingAddress.postalCode,
-              zipLast4: officeAddress.zipLast4 ?? '',
+              postalPlus4Code: officeAddress.postalPlus4Code ?? '',
             },
       ],
     },

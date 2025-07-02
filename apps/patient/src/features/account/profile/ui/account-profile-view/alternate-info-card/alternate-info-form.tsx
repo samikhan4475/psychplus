@@ -49,9 +49,9 @@ const AlternateInfoForm = ({
         profile.alternateOrPreviousContactDetails?.addresses?.[0]?.city,
       primaryPostalCode:
         profile.alternateOrPreviousContactDetails?.addresses?.[0]?.postalCode,
-      primaryZipLast4:
-        profile.alternateOrPreviousContactDetails?.addresses?.[0]?.zipLast4 ??
-        '',
+      primaryPostalPlus4Code:
+        profile.alternateOrPreviousContactDetails?.addresses?.[0]
+          ?.postalPlus4Code ?? '',
     },
   })
 
@@ -73,7 +73,7 @@ const AlternateInfoForm = ({
             street2: data.primaryStreet2,
             city: data.primaryCity ?? '',
             postalCode: data.primaryPostalCode ?? '',
-            zipLast4: data.primaryZipLast4 ?? '',
+            postalPlus4Code: data.primaryPostalPlus4Code ?? '',
           },
         ],
       },

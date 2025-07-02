@@ -52,7 +52,7 @@ const schema = z.object({
   city: z.string().min(1, 'Required'),
   state: z.string().min(1, 'Required'),
   zip: zipCodeSchema,
-  zipLast4: zipLast4Schema,
+  postalPlus4Code: zipLast4Schema,
 })
 export type AddCardFormSchemaType = z.infer<typeof schema>
 
@@ -78,7 +78,7 @@ const AddCardForm = ({
       city: '',
       name: '',
       zip: '',
-      zipLast4: '',
+      postalPlus4Code: '',
       state: '',
     },
   })
@@ -137,7 +137,7 @@ const AddCardForm = ({
         city: data.city,
         state: data.state,
         postalCode: data.zip,
-        zipLast4: data.zipLast4,
+        postalPlus4Code: data.postalPlus4Code,
       },
     })
 
@@ -167,7 +167,7 @@ const AddCardForm = ({
       city: '',
       state: '',
       zip: '',
-      zipLast4: '',
+      postalPlus4Code: '',
     })
     onClose?.()
   }

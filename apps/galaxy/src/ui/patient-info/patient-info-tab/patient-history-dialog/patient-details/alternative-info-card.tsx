@@ -56,8 +56,8 @@ const AlternativeInfoCard = () => {
         <LabelledText title="State" content={AlternateInfoAddress?.state} />
         <LabelledText title="Zip" content={AlternateInfoAddress?.postalCode} />
         <LabelledText
-          title="Area Code"
-          content={AlternateInfoAddress?.zipLast4}
+          title="Postal+4"
+          content={AlternateInfoAddress?.postalPlus4Code}
         />
       </Flex>
     </Flex>

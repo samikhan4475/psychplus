@@ -13,7 +13,7 @@ const defaultValues = (
     city: data?.city ?? '',
     state: data?.state ?? '',
     zip: data?.zip ?? '',
-    zipLast4: data?.zipLast4 ?? '',
+    postalPlus4Code: data?.postalPlus4Code ?? '',
     username: data?.username ?? '',
     password: data?.password ?? '',
     submitterId: data?.submitterId ?? '',

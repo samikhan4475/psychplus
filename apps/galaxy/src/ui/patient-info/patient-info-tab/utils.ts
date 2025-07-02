@@ -37,7 +37,7 @@ const initialAddress = {
   state: '',
   country: '',
   postalCode: '',
-  zipLast4: '',
+  postalPlus4Code: '',
 }
 
 const isEmptyDriverLicense = (driverObj: PatientProfile['driversLicense']) => {

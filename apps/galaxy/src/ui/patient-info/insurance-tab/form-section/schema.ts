@@ -36,7 +36,7 @@ const insuranceSchema = z
     city: z.string().max(28, 'Max 28 characters are allowed').optional(),
     state: z.string().max(28, 'Max 28 characters are allowed').optional(),
     zip: z.string().max(5, 'Invalid ZIP').optional(),
-    zipLast4: zipLast4Schema,
+    postalPlus4Code: zipLast4Schema,
     verificationStatus: z.string().min(1, 'Required'),
   })
   .superRefine((data, ctx) => {

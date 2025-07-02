@@ -37,7 +37,7 @@ interface InsuranceParams {
   policyHolderCity?: string
   policyHolderState?: string
   policyHolderPostalCode?: string
-  policyHolderZipLast4?: string
+  policyHolderPostalPlus4Code?: string
   verificationStatus?: string
   contactInfo?: {
     addresses: PatientAddress[]

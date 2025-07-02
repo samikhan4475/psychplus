@@ -20,7 +20,7 @@ const MailingAddressGroup = () => {
       resetField('mailingAddress', {
         defaultValue: {
           postalCode: homeAddress?.postalCode ?? '',
-          zipLast4: homeAddress?.zipLast4 ?? '',
+          postalPlus4Code: homeAddress?.postalPlus4Code ?? '',
           type: 'Mailing',
           street1: homeAddress?.street1 ?? '',
           street2: homeAddress?.street2 ?? '',

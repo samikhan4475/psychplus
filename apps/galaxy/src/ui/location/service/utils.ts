@@ -38,8 +38,10 @@ const getServiceClaimAddress = (
   state: location?.address?.state ?? service?.locationAddress?.state ?? '',
   postalCode:
     location?.address?.postalCode ?? service?.locationAddress?.postalCode ?? '',
-  zipLast4:
-    location?.address?.zipLast4 ?? service?.locationAddress?.zipLast4 ?? '',
+  postalPlus4Code:
+    location?.address?.postalPlus4Code ??
+    service?.locationAddress?.postalPlus4Code ??
+    '',
   cityId: location?.cityId ?? service?.locationCityId ?? '',
   stateId: location?.stateId ?? service?.locationStateId ?? '',
 })
@@ -174,7 +176,10 @@ const getInitialValues = (
   city: location?.address?.city ?? service?.address?.city ?? '',
   state: location?.address?.state ?? service?.address?.state ?? '',
   zip: location?.address?.postalCode ?? service?.address?.postalCode ?? '',
-  zipLast4: location?.address?.zipLast4 ?? service?.address?.zipLast4 ?? '',
+  postalPlus4Code:
+    location?.address?.postalPlus4Code ??
+    service?.address?.postalPlus4Code ??
+    '',
   serviceVisitTypes: service
     ? service?.serviceVisitTypes?.map((v) => constructVisitId(v)) ?? []
     : [],

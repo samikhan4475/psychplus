@@ -37,7 +37,7 @@ interface LocationSearchParams {
   stateCode: string
   stateName: string
   zip: string
-  zipLast4?: string
+  postalPlus4Code?: string
   npi: string
   phone: string
   recordStatuses: string[]

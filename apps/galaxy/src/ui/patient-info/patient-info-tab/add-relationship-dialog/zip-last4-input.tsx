@@ -5,9 +5,9 @@ import { AddressTextField } from '@/components'
 const ZipLast4Input = () => {
   return (
     <AddressTextField
-      label="Area Code"
-      field="contactDetails.addresses.0.zipLast4"
-      placeholder="Area code"
+      label="Postal+4"
+      field="contactDetails.addresses.0.postalPlus4Code"
+      placeholder="Postal+4"
       type="number"
       maxLength={4}
       labelClassName="!text-1"

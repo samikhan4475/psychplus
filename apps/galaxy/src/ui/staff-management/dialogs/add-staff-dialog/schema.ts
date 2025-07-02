@@ -47,7 +47,7 @@ const getAddressSchema = (type: PatientAddressType) =>
       state: type === 'Mailing' ? optionalString : requiredString,
       country: optionalString,
       postalCode: type === 'Mailing' ? optionalString : requiredString,
-      zipLast4: zipLast4Schema,
+      postalPlus4Code: zipLast4Schema,
       geoCoordinates: z
         .object({
           longitude: z.number(),

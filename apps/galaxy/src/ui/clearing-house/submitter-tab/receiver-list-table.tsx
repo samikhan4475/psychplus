@@ -155,10 +155,10 @@ const columns = (
     },
 
     {
-      id: 'areaCode',
+      id: 'postalPlus4Code',
       header: ({ column }) => (
         <ColumnHeader
-          label="Area Code"
+          label="Postal+4"
           sortable
           sortDir={getSortDir(column.id, sort)}
           onClick={() => {
@@ -166,7 +166,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original?.zipLast4 ?? ''}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original?.postalPlus4Code ?? ''}</TextCell>
+      ),
     },
 
     {

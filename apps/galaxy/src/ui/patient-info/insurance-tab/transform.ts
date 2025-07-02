@@ -59,7 +59,7 @@ const addPolicyHolderFields = (
         city: data.city ?? '',
         state: data.state ?? '',
         postalCode: data.zip ?? '',
-        zipLast4: data.zipLast4 ?? '',
+        postalPlus4Code: data.postalPlus4Code ?? '',
       },
     ],
   }

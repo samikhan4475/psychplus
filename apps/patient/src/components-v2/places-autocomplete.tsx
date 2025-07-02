@@ -1,17 +1,8 @@
 'use client'
 
-import {
-  FormFieldContainer,
-  FormFieldError,
-  FormFieldLabel,
-  ZipcodeInput,
-  ZipLast4Input,
-} from '@/components-v2'
-import { getPlaceholder } from '@/features/account/profile/utils'
-import { cn } from '@psychplus-v2/utils'
-import { FormTextInput } from '@psychplus/form'
-import { Box, Flex, Responsive, Text, TextFieldInput } from '@radix-ui/themes'
 import { useCallback, useState, type ChangeEvent } from 'react'
+import { cn } from '@psychplus-v2/utils'
+import { Box, Flex, Responsive, Text, TextFieldInput } from '@radix-ui/themes'
 import useOnclickOutside from 'react-cool-onclickoutside'
 import {
   useFormContext,
@@ -23,6 +14,15 @@ import usePlacesAutocomplete, {
   type DetailsResult,
   type Suggestion,
 } from 'use-places-autocomplete'
+import { FormTextInput } from '@psychplus/form'
+import {
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+  ZipcodeInput,
+  ZipLast4Input,
+} from '@/components-v2'
+import { getPlaceholder } from '@/features/account/profile/utils'
 
 interface AddressForm {
   street1?: string
@@ -32,7 +32,7 @@ interface AddressForm {
   city?: string
   state?: string
   postalCode?: string
-  zipLast4?: string
+  postalPlus4Code?: string
   country?: string
 }
 
@@ -66,7 +66,7 @@ const PlacesAutocomplete = ({
   const cityField = `${name}City`
   const stateField = `${name}State`
   const postalCodeField = `${name}PostalCode`
-  const zipLast4Field = `${name}ZipLast4`
+  const zipLast4Field = `${name}PostalPlus4Code`
   const countryField = `${name}Country`
 
   const form = useFormContext()
@@ -113,7 +113,7 @@ const PlacesAutocomplete = ({
       form.trigger(stateField)
       form.setValue(postalCodeField, address?.postalCode)
       form.trigger(postalCodeField)
-      form.setValue(zipLast4Field, address?.zipLast4 ?? '')
+      form.setValue(zipLast4Field, address?.postalPlus4Code ?? '')
       form.trigger(zipLast4Field)
       form.setValue(countryField, address?.country)
       form.trigger(countryField)
@@ -213,7 +213,9 @@ const PlacesAutocomplete = ({
       >
         <Box className="flex-1" position="relative">
           <FormFieldContainer>
-            <FormFieldLabel required={required}>{label} Address 1</FormFieldLabel>
+            <FormFieldLabel required={required}>
+              {label} Address 1
+            </FormFieldLabel>
             <InputComponent
               label=""
               size={{ initial: '2', sm: '3' }}
@@ -325,14 +327,14 @@ const getInitialAutocompleteValue = (
   address: FieldValues,
   includeState?: boolean,
 ) => {
-  const { street1, city, state, postalCode, zipLast4 } = address
+  const { street1, city, state, postalCode, postalPlus4Code } = address
   if (!street1 || !city || !postalCode || (includeState && !state)) {
     return undefined
   }
   const parts = [street1, city]
   if (includeState) parts.push(state)
   parts.push(postalCode)
-  if (zipLast4) parts.push(zipLast4)
+  if (postalPlus4Code) parts.push(postalPlus4Code)
   return parts.join(', ')
 }
 
@@ -353,7 +355,7 @@ const getAddressFromPlacesResult = (
   let city: string | undefined
   let state: string | undefined
   let postalCode: string | undefined
-  let zipLast4: string | undefined
+  let postalPlus4Code: string | undefined
   let country: string | undefined
 
   for (const component of result.address_components) {
@@ -370,11 +372,11 @@ const getAddressFromPlacesResult = (
             }
             break
           case 'postal_code_suffix':
-            if (!zipLast4) {
+            if (!postalPlus4Code) {
               if (component.long_name) {
-                zipLast4 = component.long_name
+                postalPlus4Code = component.long_name
               } else if (component.short_name) {
-                zipLast4 = component.short_name
+                postalPlus4Code = component.short_name
               }
             }
             break
@@ -444,7 +446,7 @@ const getAddressFromPlacesResult = (
     city,
     state,
     postalCode,
-    zipLast4,
+    postalPlus4Code,
     country,
   }
 }
@@ -463,7 +465,7 @@ const renderZipLast4Field = (
 
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel>Area Code</FormFieldLabel>
+      <FormFieldLabel>Postal+4</FormFieldLabel>
       <ZipLast4InputComponent
         label=""
         size={{ initial: '2', sm: '3' }}
@@ -486,6 +488,9 @@ const isCompleteAddress = (address?: AddressForm) =>
   address?.country
 
 export {
-  getAddressFromPlacesResult, getInitialAutocompleteValue, isCompleteAddress, PlacesAutocomplete, type AddressForm
+  getAddressFromPlacesResult,
+  getInitialAutocompleteValue,
+  isCompleteAddress,
+  PlacesAutocomplete,
+  type AddressForm,
 }
-

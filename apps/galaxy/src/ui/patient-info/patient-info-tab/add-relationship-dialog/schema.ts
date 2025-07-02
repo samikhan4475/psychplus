@@ -32,7 +32,7 @@ const schema = z
           state: z.string().optional().default(''),
           country: z.string().optional().default(''),
           postalCode: zipCodeSchema,
-          zipLast4: zipLast4Schema,
+          postalPlus4Code: zipLast4Schema,
         }),
       ),
     }),

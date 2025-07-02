@@ -72,8 +72,8 @@ const PatientDetails = () => {
         required
       />
       <LabeledContent
-        title="Area Code"
-        content={selectedRow?.contactInfo?.addresses[0]?.zipLast4}
+        title="Postal+4"
+        content={selectedRow?.contactInfo?.addresses[0]?.postalPlus4Code}
       />
     </Grid>
   )

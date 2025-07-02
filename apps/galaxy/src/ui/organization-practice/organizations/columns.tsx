@@ -183,7 +183,7 @@ const columns = (
       ),
     },
     {
-      id: 'organizationAddress.zipLast4',
+      id: 'organizationAddress.postalPlus4Code',
       header: ({ column }) => (
         <ColumnHeader
           label="Area code"
@@ -195,7 +195,9 @@ const columns = (
         />
       ),
       cell: ({ row }) => (
-        <TextCell>{row.original.organizationAddress?.zipLast4 ?? ''}</TextCell>
+        <TextCell>
+          {row.original.organizationAddress?.postalPlus4Code ?? ''}
+        </TextCell>
       ),
     },
     {

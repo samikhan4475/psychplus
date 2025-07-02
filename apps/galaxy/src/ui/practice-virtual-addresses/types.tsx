@@ -9,7 +9,7 @@ interface VirtualAddressDetails {
   provider?: string
   state?: string
   zip?: string
-  zipLast4?: string
+  postalPlus4Code?: string
 }
 
 export type { VirtualAddressDetails }

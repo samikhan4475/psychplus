@@ -86,7 +86,7 @@ const columns: ColumnDef<Patient>[] = [
     id: 'areaCode',
     header: () => <ColumnHeader label="AreaCode" />,
     cell: ({ row: { original: patient } }) => (
-      <TextCell>{patient?.zipLast4 ?? ''}</TextCell>
+      <TextCell>{patient?.postalPlus4Code ?? ''}</TextCell>
     ),
   },
   {

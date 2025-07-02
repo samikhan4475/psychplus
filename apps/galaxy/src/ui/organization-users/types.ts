@@ -25,7 +25,7 @@ interface Users {
   residence?: string
   city?: string
   zip?: string
-  zipLast4?: string
+  postalPlus4Code?: string
   hasGuardian?: boolean
   organization?: string
   practice?: string
@@ -59,7 +59,7 @@ interface UsersSearchParam {
   dateOfBirth?: string | DateValue
   city?: string
   postalCode?: string
-  zipLast4?: string
+  postalPlus4Code?: string
   hasGuardian?: string
   telephone?: string
   consentVerificationStatuses?: []

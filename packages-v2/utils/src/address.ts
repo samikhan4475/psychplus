@@ -136,7 +136,7 @@ const createAddress = (
     city: data[`${prefix}City`] ?? '',
     state: data[`${prefix}State`] ?? '',
     postalCode: data[`${prefix}PostalCode`] ?? '',
-    zipLast4: data[`${prefix}ZipLast4`] ?? '',
+    postalPlus4Code: data[`${prefix}PostalPlus4Code`] ?? '',
     country: data[`${prefix}Country`] ?? 'US',
   }
 }
@@ -171,5 +171,5 @@ export {
   getClinicAddressLabel,
   getBillingAddressLabel,
   createAddress,
-  buildClinicContactAddresses
+  buildClinicContactAddresses,
 }

@@ -20,6 +20,7 @@ import { AdditionalContactInfoCard } from './additional-contact-info'
 import { AlternativeInfoCard } from './alternate-info'
 import { CreateUserCard } from './create-user'
 import { DescriptiveCard } from './descriptive'
+import { LinkAccountCard } from './link-account'
 // import { LinkAccountCard } from './link-account'
 import { LockPageSwitch } from './lock-page-switch'
 import { PatientDataCard } from './patient-data'
@@ -31,7 +32,6 @@ import { SaveButton } from './save-button'
 import { StatusSelect } from './status-selector'
 import { TestPatientCheckbox } from './test-patient-checkbox'
 import { AddressCard } from './user-address'
-import { LinkAccountCard } from './link-account'
 
 const TAB_TITLE = 'Patient Info'
 
@@ -60,6 +60,7 @@ const PatientInfoTab = ({
   const { patient } = useStore((state) => ({
     patient: state.patient,
   }))
+
   const patientConsent = patient.patientConsent === 'Unverifiable'
   const [isPolicyAlertOpen, setIsPolicyAlertOpen] = useState(patientConsent)
 

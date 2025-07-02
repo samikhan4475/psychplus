@@ -12,9 +12,9 @@ const ZIPLast4Cell = ({
   return (
     <Flex width="100%" height="100%" align="center">
       {editingRow === index ? (
-        <TextField.Root size="1" defaultValue={address.zipLast4 ?? ''} />
+        <TextField.Root size="1" defaultValue={address.postalPlus4Code ?? ''} />
       ) : (
-        <TextCell>{address.zipLast4}</TextCell>
+        <TextCell>{address.postalPlus4Code}</TextCell>
       )}
     </Flex>
   )

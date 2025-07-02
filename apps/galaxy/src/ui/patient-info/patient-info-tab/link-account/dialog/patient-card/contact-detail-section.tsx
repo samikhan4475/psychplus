@@ -24,7 +24,7 @@ const PatientContactDetailsSection = ({ patient }: PatientCardContactProps) => {
         }
       />
       <LabelAndValue
-        label="City/State/Zip/Area Code"
+        label="City/State/Zip/Postal+4"
         value={
           patient?.contactDetails.addresses
             ? `${getPatientCity(

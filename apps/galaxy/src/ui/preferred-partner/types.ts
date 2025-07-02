@@ -20,7 +20,7 @@ interface PreferredPartnerItem {
     email: string
     emailVerificationStatus: string
     phoneNumbers?: Array<{
-      type:  string
+      type: string
       number: string
       extension: string
       comment: string
@@ -33,7 +33,7 @@ interface PreferredPartnerItem {
       state: string
       country: string
       postalCode: string
-      zipLast4: string
+      postalPlus4Code: string
       geoCoordinates?: {
         longitude: number
         latitude: number

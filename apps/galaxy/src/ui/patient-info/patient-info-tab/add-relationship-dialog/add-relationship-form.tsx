@@ -59,7 +59,7 @@ const AddRelationshipForm = ({
             state: '',
             country: '',
             postalCode: '',
-            zipLast4: '',
+            postalPlus4Code: '',
           },
         ],
       },

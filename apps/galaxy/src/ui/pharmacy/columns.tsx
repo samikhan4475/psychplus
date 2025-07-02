@@ -47,16 +47,17 @@ const columns = (isFeatureFlagEnabled: boolean): ColumnDef<Pharmacy>[] => {
       ),
     },
     {
-      accessorKey: 'areaCode',
+      accessorKey: 'postalPlus4Code',
       size: 100,
       header: ({ column }) => (
-        <ColumnHeader column={column} clientSideSort label="Area Code" />
+        <ColumnHeader column={column} clientSideSort label="Postal+4" />
       ),
       accessorFn: (row) =>
-        row.pharmacyContactDetails?.addresses?.[0]?.zipLast4 ?? '',
+        row.pharmacyContactDetails?.addresses?.[0]?.postalPlus4Code ?? '',
       cell: ({ row }) => (
         <TextCell>
-          {row.original.pharmacyContactDetails?.addresses?.[0]?.zipLast4 ?? ''}
+          {row.original.pharmacyContactDetails?.addresses?.[0]
+            ?.postalPlus4Code ?? ''}
         </TextCell>
       ),
     },

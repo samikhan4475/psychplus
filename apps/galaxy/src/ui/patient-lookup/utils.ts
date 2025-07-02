@@ -23,7 +23,7 @@ const getInitialValues = (): PatientLookUpSchemaType => {
     city: '',
     hasGuardian: '',
     postalCode: '',
-    zipLast4: '',
+    postalPlus4Code: '',
     telephone: '',
     consentVerificationStatuses: [],
     creditCardVerificationStatuses: [],

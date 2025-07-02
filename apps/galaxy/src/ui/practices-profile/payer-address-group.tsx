@@ -15,7 +15,7 @@ const PayerAddressGroup = () => {
       'city',
       'state',
       'postalCode',
-      'zipLast4',
+      'postalPlus4Code',
     ]
     const primaryFormFields = [
       'address1',
@@ -23,7 +23,7 @@ const PayerAddressGroup = () => {
       'city',
       'state',
       'zip',
-      'zipLast4',
+      'postalPlus4Code',
     ]
 
     fields.forEach((field, index) => {

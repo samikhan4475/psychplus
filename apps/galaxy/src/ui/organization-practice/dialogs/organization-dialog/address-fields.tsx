@@ -52,9 +52,9 @@ const AddressFields = () => {
             required
           />
           <AddressTextField
-            label="Area Code"
-            field="zipLast4"
-            placeholder="Area code"
+            label="Postal+4"
+            field="postalPlus4Code"
+            placeholder="Postal+4"
             type="number"
             maxLength={4}
           />

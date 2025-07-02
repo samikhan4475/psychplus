@@ -13,7 +13,7 @@ interface OrganizationAddress {
   state: string
   country?: string
   postalCode: string
-  zipLast4?: string
+  postalPlus4Code?: string
   timeZoneId?: string
 }
 
@@ -27,7 +27,7 @@ interface Practice {
   taxonomy: string
   socialSecurityNumber: string
   defaultClearinghouseReceiverId: string
-  defaultClearinghouseReceiverName:string
+  defaultClearinghouseReceiverName: string
   taxId: string
   practiceAddress: OrganizationAddress
   practicePaymentAddress: OrganizationAddress
@@ -57,7 +57,7 @@ interface Organization extends OrganizationRoot {
   city: string
   state: string
   zip: string
-  zipLast4?: string
+  postalPlus4Code?: string
   status: string
   last4: string
   users: User[]
@@ -82,7 +82,7 @@ interface OrganizationsSearchParams {
   includePractices?: boolean
   includeUsers?: boolean
   includeRoles?: boolean
-  isIncludeClearingHouseReceiver?:boolean
+  isIncludeClearingHouseReceiver?: boolean
   includePermissions?: boolean
   organizationId?: string
   practiceId?: string

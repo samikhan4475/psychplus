@@ -19,7 +19,7 @@ const AddressSchema = z.object({
   state: requiredString,
   country: requiredString,
   postalCode: requiredString,
-  zipLast4: optionalString,
+  postalPlus4Code: optionalString,
   geoCoordinates: z
     .object({
       longitude: z.number(),

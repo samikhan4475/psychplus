@@ -16,7 +16,10 @@ const schema = z.object({
   city: z.string().min(1, { message: 'City is required' }),
   state: z.string().min(1, { message: 'State is required' }),
   zip: z.string().min(1, { message: 'Zip is required' }),
-  zipLast4: z.string().max(4, { message: 'Invalid area code!' }).optional(),
+  postalPlus4Code: z
+    .string()
+    .max(4, { message: 'Invalid area code!' })
+    .optional(),
   practiceAddressId: z.string().optional(),
   paymentAddressId: z.string().optional(),
   practicePaymentAddress: z.object({
@@ -25,7 +28,10 @@ const schema = z.object({
     city: z.string().min(1, { message: 'City is required' }),
     state: z.string().min(1, { message: 'State is required' }),
     postalCode: z.string().min(1, { message: 'Zip is required' }),
-    zipLast4: z.string().max(4, { message: 'Invalid area code!' }).optional(),
+    postalPlus4Code: z
+      .string()
+      .max(4, { message: 'Invalid area code!' })
+      .optional(),
   }),
   recordStatus: z.string().optional(),
   sameAsOrganizationAddress: z.boolean().optional().default(true),

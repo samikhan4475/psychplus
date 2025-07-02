@@ -44,23 +44,23 @@ const AddressForm = ({
     defaultValues: {
       ...(homeAddress
         ? {
-          primaryStreet1: homeAddress.street1,
-          primaryStreet2: homeAddress.street2,
-          primaryCity: homeAddress.city,
-          primaryState: homeAddress.state,
-          primaryPostalCode: homeAddress.postalCode,
-          primaryZipLast4: homeAddress.zipLast4 ?? '',
-        }
+            primaryStreet1: homeAddress.street1,
+            primaryStreet2: homeAddress.street2,
+            primaryCity: homeAddress.city,
+            primaryState: homeAddress.state,
+            primaryPostalCode: homeAddress.postalCode,
+            primaryPostalPlus4Code: homeAddress.postalPlus4Code ?? '',
+          }
         : undefined),
       ...(mailingAddress
         ? {
-          secondaryStreet1: mailingAddress.street1,
-          secondaryStreet2: mailingAddress.street2,
-          secondaryCity: mailingAddress.city,
-          secondaryState: mailingAddress.state,
-          secondaryPostalCode: mailingAddress.postalCode,
-          secondaryZipLast4: mailingAddress.zipLast4 ?? '',
-        }
+            secondaryStreet1: mailingAddress.street1,
+            secondaryStreet2: mailingAddress.street2,
+            secondaryCity: mailingAddress.city,
+            secondaryState: mailingAddress.state,
+            secondaryPostalCode: mailingAddress.postalCode,
+            secondaryPostalPlus4Code: mailingAddress.postalPlus4Code ?? '',
+          }
         : undefined),
       primaryCountry: 'US',
       secondaryCountry: 'US',
@@ -76,14 +76,14 @@ const AddressForm = ({
       form.register('secondaryCity')
       form.register('secondaryState')
       form.register('secondaryPostalCode')
-      form.register('secondaryZipLast4')
+      form.register('secondaryPostalPlus4Code')
       form.register('secondaryStreet1')
       form.register('secondaryStreet2')
     } else {
       form.unregister('secondaryCity')
       form.unregister('secondaryState')
       form.unregister('secondaryPostalCode')
-      form.unregister('secondaryZipLast4')
+      form.unregister('secondaryPostalPlus4Code')
       form.unregister('secondaryStreet1')
       form.unregister('secondaryStreet2')
     }
@@ -92,7 +92,7 @@ const AddressForm = ({
         'secondaryCity',
         'secondaryState',
         'secondaryPostalCode',
-        'secondaryZipLast4',
+        'secondaryPostalPlus4Code',
         'secondaryStreet1',
         'secondaryStreet2',
       ])
@@ -106,22 +106,22 @@ const AddressForm = ({
       city: data.primaryCity,
       state: data.primaryState,
       postalCode: data.primaryPostalCode,
-      zipLast4: data.primaryZipLast4 ?? '',
+      postalPlus4Code: data.primaryPostalPlus4Code ?? '',
       country: 'US',
     }
 
     const mailingAddressData = mailingSameAsPrimary
       ? { ...primaryAddressData, type: 'Mailing' }
       : {
-        type: 'Mailing',
-        street1: data.secondaryStreet1,
-        street2: data.secondaryStreet2,
-        city: data.secondaryCity,
-        state: data.secondaryState,
-        postalCode: data.secondaryPostalCode,
-        zipLast4: data.secondaryZipLast4 ?? '',
-        country: 'US',
-      }
+          type: 'Mailing',
+          street1: data.secondaryStreet1,
+          street2: data.secondaryStreet2,
+          city: data.secondaryCity,
+          state: data.secondaryState,
+          postalCode: data.secondaryPostalCode,
+          postalPlus4Code: data.secondaryPostalPlus4Code ?? '',
+          country: 'US',
+        }
 
     return updateProfileAction({
       ...profile,
