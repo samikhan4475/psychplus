@@ -6,13 +6,13 @@ import { Service } from '@/types'
 import { GetUnitsGroupsResponse } from '../types'
 
 const getUnitsGroupsAction = async (
-  locationServiceIds: string[],
+  servicesOffered: string[],
 ): Promise<api.ActionResult<GetUnitsGroupsResponse>> => {
   const body = {
     includeServiceUnit: true,
     includeServiceGroup: true,
     isIncludeServiceRoom: true,
-    locationServiceIds,
+    servicesOffered,
   }
 
   const response = await api.POST<Service[]>(

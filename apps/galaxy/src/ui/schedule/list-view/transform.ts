@@ -38,7 +38,7 @@ const numericFields = [
 const multiselectFields = [
   'stateIds',
   'locationIds',
-  'serviceIds',
+  'servicesOffered',
   'appointmentStatuses',
   'patientStatuses',
   'providerTypes',
@@ -160,7 +160,7 @@ const transformParamsToFilterValues = (
     stateIds: params.stateIds ?? [],
     roomIds: params.roomIds ?? [],
     locationIds: params.locationIds ?? [],
-    serviceIds: params.serviceIds ?? [],
+    servicesOffered: params.servicesOffered ?? [],
     appointmentStatuses: params.appointmentStatuses ?? [],
     providerTypes: params.providerTypes ?? [],
     unitIds: params.unitIds ?? [],

@@ -37,7 +37,7 @@ const StateSelect = () => {
         onChange={(values) => {
           form.setValue('stateIds', values, { shouldDirty: true })
           form.resetField('locationIds')
-          form.setValue('serviceIds', [])
+          form.setValue('servicesOffered', [])
         }}
       />
     </FormFieldContainer>

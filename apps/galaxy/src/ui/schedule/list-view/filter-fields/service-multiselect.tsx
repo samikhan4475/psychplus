@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { MultiSelectField } from '@/components'
-import { getLocationServicesAction } from '../../client-actions'
+import { getLocationServiceOfferedOptionsAction } from '../../client-actions'
 import { useFiltersContext } from '../../context'
 import { useServiceCodesMap } from '../../hooks'
 import { BookedAppointmentsSchemaType } from '../../schema'
@@ -16,18 +16,20 @@ const ServiceMultiSelect = () => {
   const { filters } = useFiltersContext()
   const [loading, setLoading] = useState<boolean>(false)
   const selectedLocations = form.watch('locationIds')
-  const services = form.watch('serviceIds')
+  const services = form.watch('servicesOffered')
   const [servicesOptions, setServicesOptions] = useState<Option[]>([])
   const mappedServices = useServiceCodesMap()
 
   useEffect(() => {
     if (selectedLocations.length) {
       setLoading(true)
-      getLocationServicesAction(selectedLocations).then((response) => {
-        setLoading(false)
-        if (response.state === 'error') setServicesOptions([])
-        else setServicesOptions(response.data)
-      })
+      getLocationServiceOfferedOptionsAction(selectedLocations).then(
+        (response) => {
+          setLoading(false)
+          if (response.state === 'error') setServicesOptions([])
+          else setServicesOptions(response.data)
+        },
+      )
     }
   }, [selectedLocations])
 
@@ -42,7 +44,7 @@ const ServiceMultiSelect = () => {
         options={getServiceFilterOptions(mappedServices, servicesOptions)}
         className="flex-1"
         onChange={(values) =>
-          form.setValue('serviceIds', values, { shouldDirty: true })
+          form.setValue('servicesOffered', values, { shouldDirty: true })
         }
         menuClassName="w-[155px]"
         loading={loading}

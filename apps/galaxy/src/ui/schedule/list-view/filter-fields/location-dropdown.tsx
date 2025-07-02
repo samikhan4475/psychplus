@@ -44,7 +44,7 @@ const LocationDropdown = () => {
         className="flex-1"
         onChange={(values) => {
           form.setValue('locationIds', values, { shouldDirty: true })
-          form.setValue('serviceIds', [])
+          form.setValue('servicesOffered', [])
         }}
         menuClassName="w-[155px]"
         loading={loading}

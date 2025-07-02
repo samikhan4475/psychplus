@@ -24,7 +24,7 @@ const bookedAppointmentsSchema = z
     dateOfBirth: dateValidation.optional(),
     patientStatuses: arrayOfIdsValidation,
     locationIds: arrayOfIdsValidation,
-    serviceIds: arrayOfIdsValidation,
+    servicesOffered: arrayOfIdsValidation,
     providerTypes: arrayOfIdsValidation,
     providerIds: arrayOfIdsValidation,
     unitIds: arrayOfIdsValidation,

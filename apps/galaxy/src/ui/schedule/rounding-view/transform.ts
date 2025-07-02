@@ -154,7 +154,7 @@ const transformParamsToFilterValues = (
     unitIds: params.unitIds ?? [],
     groupIds: params.groupIds ?? [],
     locationIds: params.locationIds ?? [],
-    serviceIds: params.serviceIds ?? [],
+    servicesOffered: params.servicesOffered ?? [],
     appointmentStatuses: params.appointmentStatuses ?? [],
     providerTypes: params.providerTypes ?? [],
     primaryInsuranceNames: params.primaryInsuranceNames ?? [],

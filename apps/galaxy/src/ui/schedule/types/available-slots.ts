@@ -226,6 +226,7 @@ interface AppointmentParams {
   patientStatuses?: string[]
   locationIds?: string[]
   serviceIds?: string[]
+  servicesOffered?: string[]
   stateIds?: string[]
   providerIds?: number[]
   providerTypes?: string[]
@@ -349,7 +350,7 @@ enum SchedulerFilters {
   VisitType = 'Visit Type',
   CptCode = 'CPT Code',
   Diagnosis = 'Diagnosis',
-  FacilityAdmissionId = 'Facility Admission Id'
+  FacilityAdmissionId = 'Facility Admission Id',
 }
 
 export type {

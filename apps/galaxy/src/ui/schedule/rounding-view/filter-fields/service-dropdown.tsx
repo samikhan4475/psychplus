@@ -3,18 +3,18 @@
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { MultiSelectField } from '@/components'
+import { getLocationServicesAction } from '../../client-actions'
 import { useServiceCodesMap } from '../../hooks'
+import { BookedAppointmentsSchemaType } from '../../schema'
 import { FieldLabel, FormFieldContainer } from '../../shared'
 import { Option } from '../../types'
 import { getServiceFilterOptions } from '../../utils'
-import { getLocationServicesAction } from '../../client-actions'
-import { BookedAppointmentsSchemaType } from '../../schema'
 
 const ServiceDropdown = () => {
   const form = useFormContext<BookedAppointmentsSchemaType>()
   const [loading, setLoading] = useState<boolean>(false)
   const selectedLocations = form.watch('locationIds')
-  const services = form.getValues('serviceIds')
+  const services = form.getValues('servicesOffered')
   const [servicesOptions, setServicesOptions] = useState<Option[]>([])
   const mappedServices = useServiceCodesMap()
 
@@ -37,7 +37,7 @@ const ServiceDropdown = () => {
         defaultValues={services}
         options={getServiceFilterOptions(mappedServices, servicesOptions)}
         className="flex-1"
-        onChange={(values) => form.setValue('serviceIds', values)}
+        onChange={(values) => form.setValue('servicesOffered', values)}
         menuClassName="w-[155px]"
         loading={loading}
       />

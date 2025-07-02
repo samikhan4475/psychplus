@@ -33,13 +33,13 @@ const LocationDropdown = () => {
         field="locationsIds"
         fieldValue={fieldValues[0] ?? ''}
         options={clinicLocations}
-        className='h-full'
+        className="h-full"
         onValueChange={(val) => {
           form.setValue('locationIds', [val], { shouldDirty: true })
-          form.setValue('serviceIds', [])
+          form.setValue('servicesOffered', [])
         }}
         loading={loading}
-        buttonClassName='min-w-1 max-w-full truncate'
+        buttonClassName="min-w-1 max-w-full truncate"
       />
     </FormFieldContainer>
   )

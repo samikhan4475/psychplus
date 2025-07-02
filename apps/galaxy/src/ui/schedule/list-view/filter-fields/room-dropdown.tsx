@@ -1,11 +1,11 @@
 'use client'
 
-import { SelectInput } from '@/components'
-import { FieldLabel, FormFieldContainer } from '../../shared'
 import { useFormContext } from 'react-hook-form'
+import { SelectInput } from '@/components'
 import { useFiltersContext } from '../../context'
-import { SchedulerFilters } from '../../types'
 import { BookedAppointmentsSchemaType } from '../../schema'
+import { FieldLabel, FormFieldContainer } from '../../shared'
+import { SchedulerFilters } from '../../types'
 
 const options = [
   {
@@ -24,7 +24,7 @@ const options = [
 
 const RoomDropdown = () => {
   const form = useFormContext<BookedAppointmentsSchemaType>()
-  const services = form.watch('serviceIds')
+  const services = form.watch('servicesOffered')
   const { filters } = useFiltersContext()
   if (!filters.includes(SchedulerFilters.Room)) return null
 
