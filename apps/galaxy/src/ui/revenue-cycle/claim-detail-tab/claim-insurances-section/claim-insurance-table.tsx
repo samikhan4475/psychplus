@@ -16,9 +16,19 @@ const ClaimInsuranceTable = () => {
 
   const columns = getColumns(editRowId, setEditRowId)
   const transformedInsurances = useMemo(() => {
+    const primaryStatusCode = form.getValues('primaryStatusCode')
+    const secondaryStatusCode = form.getValues('secondaryStatusCode')
+    const tertiaryStatusCode = form.getValues('tertiaryStatusCode')
+
     return claimInsurancePolicies.map((insurance) => ({
       ...insurance,
-      viewHcfa: true,
+      viewHcfa:
+        (!!primaryStatusCode?.trim() &&
+          insurance.insurancePolicyPriority === 'Primary') ||
+        (!!secondaryStatusCode?.trim() &&
+          insurance.insurancePolicyPriority === 'Secondary') ||
+        (!!tertiaryStatusCode?.trim() &&
+          insurance.insurancePolicyPriority === 'Tertiary'),
     })) as InsuranceClaimPolicy[]
   }, [claimInsurancePolicies])
 
