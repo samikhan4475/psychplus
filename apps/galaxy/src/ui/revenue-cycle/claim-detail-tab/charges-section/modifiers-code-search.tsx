@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import {
   Box,
@@ -43,7 +43,9 @@ const SearchModifierCodes = ({
   const [open, setOpen] = useState(false)
   const [results, setResults] = useState<CodeItem[]>([])
   const [loading, setLoading] = useState(false)
+  const [focusedIndex, setFocusedIndex] = useState(-1)
   const inputRef = useRef<HTMLInputElement>(null)
+  const listRef = useRef<HTMLDivElement>(null)
 
   const handleOpenChange = useCallback(
     (isOpen: boolean) => {
@@ -56,6 +58,7 @@ const SearchModifierCodes = ({
     (item: CodeItem) => {
       onChange?.(item)
       inputRef.current?.focus()
+      setOpen(false)
     },
     [onChange],
   )
@@ -70,13 +73,42 @@ const SearchModifierCodes = ({
       toast.error('Error fetching modifier codes')
     }
     setLoading(false)
+    setFocusedIndex(-1)
   }, 500)
 
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Tab') {
-      inputRef.current?.focus()
+    if (!open) return
+
+    switch (e.key) {
+      case 'ArrowDown':
+        setFocusedIndex((prev) => (prev < results.length - 1 ? prev + 1 : prev))
+        e.preventDefault()
+        break
+      case 'ArrowUp':
+        setFocusedIndex((prev) => (prev > 0 ? prev - 1 : prev))
+        e.preventDefault()
+        break
+      case 'Enter':
+        if (focusedIndex >= 0) {
+          handleSelectItem(results[focusedIndex])
+        }
+        e.preventDefault()
+        break
+      case 'Escape':
+        setOpen(false)
+        e.preventDefault()
+        break
+      case 'Tab':
+        inputRef.current?.focus()
+        break
     }
   }
+
+  useEffect(() => {
+    if (!listRef.current || focusedIndex === -1) return
+    const item = listRef.current.children[focusedIndex] as HTMLElement
+    item?.scrollIntoView({ block: 'nearest' })
+  }, [focusedIndex])
 
   const renderTriggerContent = (value: string | undefined) => (
     <Box
@@ -102,13 +134,15 @@ const SearchModifierCodes = ({
     </Box>
   )
 
-  const renderResultItem = (item: CodeItem) => (
+  const renderResultItem = (item: CodeItem, index: number) => (
     <Box
       key={item.code}
       py="1"
       px="2"
-      className={cn('hover:bg-pp-black-1 hover:text-white mx-1 rounded-1', {
+      className={cn('mx-1 cursor-pointer rounded-1', {
         'bg-pp-states-disabled cursor-not-allowed': disabled,
+        'bg-pp-black-1 text-white': focusedIndex === index,
+        'hover:bg-pp-black-1 hover:text-white': focusedIndex !== index,
       })}
       onClick={() => handleSelectItem(item)}
     >
@@ -132,7 +166,7 @@ const SearchModifierCodes = ({
             <Popover.Trigger disabled={disabled}>
               {renderTriggerContent(field.value || initialValue)}
             </Popover.Trigger>
-            <Popover.Content className="p-0">
+            <Popover.Content className="p-0" onKeyDown={handleInputKeyDown}>
               <Flex className="py-1">
                 <TextField.Root
                   size="1"
@@ -140,7 +174,6 @@ const SearchModifierCodes = ({
                   onChange={(e) => handleSearch(e.target.value)}
                   placeholder={placeholder}
                   autoFocus
-                  onKeyDown={handleInputKeyDown}
                   required={required}
                   disabled={disabled}
                   className="bg-white h-6 flex-1 border-0 outline-none [&>*]:bg-transparent [&>*]:outline-none"
@@ -170,7 +203,11 @@ const SearchModifierCodes = ({
 
               <Flex direction="column" py="1" gap="1">
                 <ScrollArea scrollbars="vertical" className="max-h-[100px]">
-                  {results.map(renderResultItem)}
+                  <Box ref={listRef}>
+                    {results.map((item, index) =>
+                      renderResultItem(item, index),
+                    )}
+                  </Box>
                 </ScrollArea>
               </Flex>
             </Popover.Content>

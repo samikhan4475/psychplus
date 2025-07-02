@@ -161,7 +161,7 @@ const AsyncAutoCompleteTextField = ({
       value = item.label
     }
     form.setValue(field, value)
-    valueKey == 'insurancePlanObject'
+    valueKey === 'insurancePlanObject'
       ? setSelectedLabel(item.insurancePlanObject)
       : setSelectedLabel(item.label)
     setOpen(false)

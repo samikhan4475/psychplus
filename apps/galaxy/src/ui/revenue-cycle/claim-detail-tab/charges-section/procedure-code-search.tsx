@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import {
   Box,
@@ -37,7 +37,9 @@ const SearchProcedureCodes = ({
   const [open, setOpen] = useState(false)
   const [results, setResults] = useState<CodeItem[]>([])
   const [loading, setLoading] = useState(false)
+  const [focusedIndex, setFocusedIndex] = useState(-1)
   const inputRef = useRef<HTMLInputElement>(null)
+  const listRef = useRef<HTMLDivElement>(null)
 
   const handleOpenChange = useCallback(
     (isOpen: boolean) => {
@@ -45,10 +47,6 @@ const SearchProcedureCodes = ({
     },
     [disabled],
   )
-
-  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Tab') inputRef.current?.focus()
-  }
 
   const handleDebouncedSearch = useDebouncedCallback(async (value: string) => {
     if (value.length < 2) return
@@ -67,9 +65,42 @@ const SearchProcedureCodes = ({
     (item: CodeItem) => {
       onChange?.(item)
       inputRef.current?.focus()
+      setOpen(false)
+      setFocusedIndex(-1)
     },
     [onChange],
   )
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!open) return
+
+    switch (e.key) {
+      case 'ArrowDown':
+        setFocusedIndex((prev) => (prev < results.length - 1 ? prev + 1 : prev))
+        e.preventDefault()
+        break
+      case 'ArrowUp':
+        setFocusedIndex((prev) => (prev > 0 ? prev - 1 : prev))
+        e.preventDefault()
+        break
+      case 'Enter':
+        if (focusedIndex >= 0) {
+          onItemSelect(results[focusedIndex])
+        }
+        e.preventDefault()
+        break
+      case 'Escape':
+        setOpen(false)
+        e.preventDefault()
+        break
+    }
+  }
+
+  useEffect(() => {
+    if (!listRef.current || focusedIndex === -1) return
+    const focusedItem = listRef.current.children[focusedIndex] as HTMLElement
+    focusedItem?.scrollIntoView({ block: 'nearest' })
+  }, [focusedIndex])
 
   const renderTrigger = (value?: string) => {
     const display = value ? (
@@ -103,17 +134,16 @@ const SearchProcedureCodes = ({
     )
   }
 
-  const renderItem = (item: CodeItem) => (
+  const renderItem = (item: CodeItem, index: number) => (
     <Box
       key={item.code}
       py="1"
       px="2"
-      className={cn(
-        'hover:bg-pp-black-1 hover:text-white mx-1 cursor-pointer rounded-1',
-        {
-          'bg-pp-states-disabled cursor-not-allowed': disabled,
-        },
-      )}
+      className={cn('mx-1 cursor-pointer rounded-1', {
+        'bg-pp-states-disabled cursor-not-allowed': disabled,
+        'bg-pp-black-1 text-white': focusedIndex === index,
+        'hover:bg-pp-black-1 hover:text-white': focusedIndex !== index,
+      })}
       onClick={() => onItemSelect(item)}
     >
       <Text size="1">{item.code}</Text>
@@ -144,7 +174,7 @@ const SearchProcedureCodes = ({
                   onChange={(e) => handleDebouncedSearch(e.target.value)}
                   placeholder={placeholder}
                   autoFocus
-                  onKeyDown={onKeyDown}
+                  onKeyDown={handleKeyDown}
                   required={required}
                   disabled={disabled}
                   className="bg-white h-6 flex-1 border-0 outline-none [&>*]:bg-transparent [&>*]:outline-none"
@@ -174,7 +204,9 @@ const SearchProcedureCodes = ({
 
               <Flex direction="column" py="1" gap="1">
                 <ScrollArea scrollbars="vertical" className="max-h-[100px]">
-                  {results.map(renderItem)}
+                  <Box ref={listRef}>
+                    {results.map((item, index) => renderItem(item, index))}
+                  </Box>
                 </ScrollArea>
               </Flex>
             </Popover.Content>
