@@ -5,6 +5,7 @@ import { getSortDir } from '@/utils'
 import { ProviderTypeCell, ServiceCell } from '../shared/table-cells'
 import { GenderCell } from '../shared/table-cells/gender-cell'
 import { formatDateCell } from '../utils'
+import { PlusActionCol } from './plus-action-col'
 import { GroupSelectCell, RoomSelectCell, UnitSelectCell } from './table-cells'
 import { ActionsCell } from './table-cells/actions-cell'
 import { CptCodeCell } from './table-cells/table-cpt-code-cell'
@@ -413,6 +414,11 @@ const columns = (
       enableHiding: true,
     },
     ...generateColumns(currentWeekDays),
+    {
+      id: 'plus-actions-column',
+      header: () => <PlusActionCol />,
+      enableHiding: false,
+    },
   ]
 }
 

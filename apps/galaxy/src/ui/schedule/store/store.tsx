@@ -11,6 +11,12 @@ interface Store {
   tableFilters: string[]
   providerCodingFilters: string[]
   timezoneType: TIMEZONE_TYPES
+  cachedTableColumnsList: string[]
+  cachedTableColumnsRounding: string[]
+  cachedTableColumnsProviderCoding: string[]
+  saveListTableColumns: (columns: string[]) => void
+  saveRoundingTableColumns: (columns: string[]) => void
+  saveProviderCodingTableColumns: (columns: string[]) => void
   setTimezoneType: (timeZone: TIMEZONE_TYPES) => void
   setActiveTab?: (tab: string) => void
   saveRoundingFilters: (filter: string[]) => void
@@ -28,6 +34,9 @@ const useStore = create<Store>()(
       cachedFiltersList: [],
       providerCodingFilters: [],
       tableFilters: [],
+      cachedTableColumnsList: [],
+      cachedTableColumnsRounding: [],
+      cachedTableColumnsProviderCoding: [],
       timezoneType: TIMEZONE_TYPES.LOCATION_PREFERRED,
       setTimezoneType: (timeZone) => {
         set({ timezoneType: timeZone })
@@ -38,6 +47,21 @@ const useStore = create<Store>()(
         set({
           activeTab,
           visitedTabs,
+        })
+      },
+      saveListTableColumns: (columns: string[]) => {
+        set({
+          cachedTableColumnsList: columns,
+        })
+      },
+      saveRoundingTableColumns: (columns: string[]) => {
+        set({
+          cachedTableColumnsRounding: columns,
+        })
+      },
+      saveProviderCodingTableColumns: (columns: string[]) => {
+        set({
+          cachedTableColumnsProviderCoding: columns,
         })
       },
       saveRoundingFilters: (filters: string[]) => {
@@ -69,6 +93,10 @@ const useStore = create<Store>()(
         cachedFiltersList: state.cachedFiltersList,
         providerCodingFilters: state.providerCodingFilters,
         activeTab: state.activeTab,
+        cachedTableColumnsList: state.cachedTableColumnsList,
+        cachedTableColumnsRounding: state.cachedTableColumnsRounding,
+        cachedTableColumnsProviderCoding:
+          state.cachedTableColumnsProviderCoding,
       }),
     },
   ),

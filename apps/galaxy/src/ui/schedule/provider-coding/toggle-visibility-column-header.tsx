@@ -66,9 +66,7 @@ const ToggleVisibilityColumnHeader = <TData, TValue>({
   onClick,
   clientSideSort,
 }: ColumnHeaderProps<TData, TValue>) => {
-  const [arrowDirection, setArrowDirection] = useState<'right' | 'left'>(
-    'right',
-  )
+  const [arrowDirection, setArrowDirection] = useState<'right' | 'left'>('left')
 
   const toggleColumnsVisibility = (isVisible: boolean) => {
     if (column?.columns?.length) {
@@ -81,7 +79,7 @@ const ToggleVisibilityColumnHeader = <TData, TValue>({
   }
 
   useEffect(() => {
-    toggleColumnsVisibility(false)
+    toggleColumnsVisibility(true)
   }, [column, table])
 
   const handleColumns = (action: 'show' | 'remove') => {

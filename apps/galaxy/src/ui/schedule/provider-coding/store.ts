@@ -16,7 +16,11 @@ import {
   getUnitsGroupsAction,
   updateSelfUserSetting,
 } from '../client-actions'
-import { CategoryValue, PROVIDER_CODING_VIEW_FILTERS_KEY } from '../constants'
+import {
+  CategoryValue,
+  PROVIDER_CODING_VIEW_COLUMNS,
+  PROVIDER_CODING_VIEW_FILTERS_KEY,
+} from '../constants'
 import { AppointmentDate } from '../scheduler-view/types'
 import { AppointmentParams, GetUnitsGroupsResponse } from '../types'
 import {
@@ -30,6 +34,7 @@ import { DayString, MergedRecord, WeekDay, WeekdayData } from './types'
 import { extractWeekDay } from './util'
 
 interface Store {
+  columnsStore: string[]
   data?: MergedRecord[]
   error?: string
   loading?: boolean
@@ -42,6 +47,7 @@ interface Store {
   persistedFormData?: AppointmentParams
   setting?: UserSetting
   settingMap: Map<string, UserSetting>
+  setColumnsStore: (columns: string[]) => void
   fetchProviderCodingView: (formValues?: AppointmentParams) => void
   generateCurrentWeekDays: (value: Date) => void
   setDates: (value: Date) => void
@@ -56,6 +62,7 @@ interface Store {
 const useStore = create<Store>()(
   persist(
     (set, get) => ({
+      columnsStore: PROVIDER_CODING_VIEW_COLUMNS,
       data: [],
       error: undefined,
       loading: false,
@@ -69,6 +76,12 @@ const useStore = create<Store>()(
         serviceGroups: [],
         serviceUnits: [],
         serviceRooms: [],
+      },
+
+      setColumnsStore: (columns: string[]) => {
+        set({
+          columnsStore: columns,
+        })
       },
 
       generateCurrentWeekDays: (startDate) => {

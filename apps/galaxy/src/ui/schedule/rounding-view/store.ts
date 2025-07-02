@@ -17,7 +17,11 @@ import {
   getUnitsGroupsAction,
   updateSelfUserSetting,
 } from '../client-actions'
-import { CategoryValue, ROUNDING_VIEW_FILTERS_KEY } from '../constants'
+import {
+  CategoryValue,
+  ROUNDING_VIEW_COLUMNS,
+  ROUNDING_VIEW_FILTERS_KEY,
+} from '../constants'
 import { AppointmentParams, GetUnitsGroupsResponse } from '../types'
 import {
   getCalendarDateFromUtc,
@@ -28,6 +32,7 @@ import {
 import { transformSettingToParams } from './transform'
 
 interface Store {
+  columnsStore: string[]
   appointments: Appointment[]
   data: GetUnitsGroupsResponse
   error?: string
@@ -40,6 +45,7 @@ interface Store {
   page: number
   totalRecords: number
   pageCache: Record<number, Appointment[]>
+  setColumnsStore: (columns: string[]) => void
   fetchAppointments: (
     body?: AppointmentParams,
     page?: number,
@@ -58,6 +64,7 @@ interface Store {
 const useStore = create<Store>()(
   persist(
     (set, get) => ({
+      columnsStore: ROUNDING_VIEW_COLUMNS,
       appointments: [],
       data: { serviceGroups: [], serviceUnits: [], serviceRooms: [] },
       formData: undefined,
@@ -70,6 +77,11 @@ const useStore = create<Store>()(
       error: undefined,
       loading: undefined,
       isSettingsSaving: false,
+      setColumnsStore: (columns: string[]) => {
+        set({
+          columnsStore: columns,
+        })
+      },
       fetchAppointments: async (body, page = 1, reset = true) => {
         set({
           error: undefined,

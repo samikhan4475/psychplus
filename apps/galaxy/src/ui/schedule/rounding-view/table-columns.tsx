@@ -13,6 +13,7 @@ import {
 } from '../shared/table-cells'
 import { GenderCell } from '../shared/table-cells/gender-cell'
 import { formatDateCell, formatTimeCell } from '../utils'
+import { PlusActionCol } from './plus-action-col'
 import {
   ActionsCell,
   GroupSelectCell,
@@ -254,6 +255,7 @@ const columns: ColumnDef<Appointment>[] = [
     enableHiding: true,
   },
   {
+    id: 'visit',
     accessorKey: 'visit',
     header: ({ column }) => (
       <ColumnHeader
@@ -593,6 +595,10 @@ const columns: ColumnDef<Appointment>[] = [
     id: 'actions-column',
     header: () => <ColumnHeader label="Actions" className="!font-medium" />,
     cell: ActionsCell,
+  },
+  {
+    id: 'plus-actions-column',
+    header: () => <PlusActionCol />,
   },
 ]
 

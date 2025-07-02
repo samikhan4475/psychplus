@@ -10,6 +10,7 @@ import { useCodesetCodes } from '@/hooks'
 import { useStore as useRootStore } from '@/store'
 import { Appointment } from '@/types'
 import { capitalizeName, constructQuickNotesUrl, getPatientMRN } from '@/utils'
+import { ALWAYS_VISIBLE_COLUMNS } from '../constants'
 import { useStore as RootStore } from '../store'
 import { useStore } from './store'
 import { columns } from './table-columns'
@@ -39,7 +40,22 @@ const DataTableHeader = (table: Table<Appointment>) => {
 }
 
 const ListViewTable = () => {
-  const data = useStore((state) => state.appointments)
+  const { columnsStore, setColumnsStore, data } = useStore((state) => ({
+    columnsStore: state.columnsStore,
+    setColumnsStore: state.setColumnsStore,
+    data: state.appointments,
+  }))
+
+  const { cachedColumns } = RootStore((state) => ({
+    cachedColumns: state.cachedTableColumnsList,
+  }))
+
+  useEffect(() => {
+    if (cachedColumns.length > 0) {
+      setColumnsStore(cachedColumns)
+    }
+  }, [cachedColumns])
+
   const router = useRouter()
   const addTab = useRootStore((state) => state.addTab)
   const visitStatusCodes = useCodesetCodes(CODESETS.AppointmentStatus)
@@ -79,6 +95,15 @@ const ListViewTable = () => {
 
   const isTestPatient = (row: Row<Appointment>) => row.original.isTestPatient
 
+  const filteredColumns = useMemo(() => {
+    return columns.filter((col) => {
+      const colId = col.id ?? ''
+      return (
+        columnsStore.includes(colId) || ALWAYS_VISIBLE_COLUMNS.includes(colId)
+      )
+    })
+  }, [columnsStore])
+
   return (
     <ScrollArea
       className="bg-white h-full flex-1 px-2.5 py-2"
@@ -104,7 +129,7 @@ const ListViewTable = () => {
         tableClass="[&_.rt-ScrollAreaScrollbar]:!hidden"
         theadClass="z-10"
         disablePagination
-        columns={columns}
+        columns={filteredColumns}
         isRowDisabled={isRowDisabled}
         isTestResource={isTestPatient}
         isRowHighlightedRed={isTcmVisit}

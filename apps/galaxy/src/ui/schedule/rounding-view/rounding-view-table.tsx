@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { ScrollArea } from '@radix-ui/themes'
 import { Table } from '@tanstack/react-table'
 import { DataTable } from '@/components'
 import { Appointment } from '@/types'
+import { ALWAYS_VISIBLE_COLUMNS } from '../constants'
 import { useStore as useRootStore } from '../store'
 import { useStore as useRoundingViewStore, useStore } from './store'
 import { columns } from './table-columns'
@@ -34,7 +35,22 @@ const DataTableHeader = (table: Table<Appointment>) => {
 }
 
 const RoundingViewTable = () => {
-  const data = useStore((state) => state.appointments)
+  const { columnsStore, setColumnsStore, data } = useStore((state) => ({
+    columnsStore: state.columnsStore,
+    setColumnsStore: state.setColumnsStore,
+    data: state.appointments,
+  }))
+
+  const { cachedColumns } = useRootStore((state) => ({
+    cachedColumns: state.cachedTableColumnsRounding,
+  }))
+
+  useEffect(() => {
+    if (cachedColumns.length > 0) {
+      setColumnsStore(cachedColumns)
+    }
+  }, [cachedColumns])
+
   const fetchUnitsAndGroups = useRoundingViewStore(
     (state) => state.fetchUnitsAndGroups,
   )
@@ -47,13 +63,22 @@ const RoundingViewTable = () => {
     fetchUnitsAndGroups(serviceIds)
   }, [data])
 
+  const filteredColumns = useMemo(() => {
+    return columns.filter((col) => {
+      const colId = col.id ?? ''
+      return (
+        columnsStore.includes(colId) || ALWAYS_VISIBLE_COLUMNS.includes(colId)
+      )
+    })
+  }, [columnsStore])
+
   return (
     <ScrollArea
       className="bg-white h-full flex-1 px-2.5 py-2"
       scrollbars="both"
     >
       <DataTable
-        columns={columns}
+        columns={filteredColumns}
         data={data}
         renderHeader={DataTableHeader}
         disablePagination
