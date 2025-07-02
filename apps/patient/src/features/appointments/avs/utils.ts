@@ -2,14 +2,14 @@ import { Appointment } from '@psychplus-v2/types'
 import { format } from 'date-fns'
 import { formatDateTime } from '@psychplus/utils/time'
 
-const formatUTCDate = (dateString: string, dateFormat = 'MM/dd/yyyy HH:mm') => {
-  const utcDate = new Date(dateString)
+const formatLocalDate = (dateString: string, dateFormat = 'MM/dd/yyyy HH:mm') => {
+  const localDate = new Date(dateString)
   const adjustedDate = new Date(
-    utcDate.getUTCFullYear(),
-    utcDate.getUTCMonth(),
-    utcDate.getUTCDate(),
-    utcDate.getUTCHours(),
-    utcDate.getUTCMinutes(),
+    localDate.getFullYear(),
+    localDate.getMonth(),
+    localDate.getDate(),
+    localDate.getHours(),
+    localDate.getMinutes(),
   )
   return format(adjustedDate, dateFormat)
 }
@@ -89,4 +89,4 @@ const getVisitDropdownOptions = (appointment: Appointment) => ({
   value: `${appointment?.id}`,
 })
 
-export { formatUTCDate, handlePrint, getVisitDropdownOptions }
+export { formatLocalDate, handlePrint, getVisitDropdownOptions }

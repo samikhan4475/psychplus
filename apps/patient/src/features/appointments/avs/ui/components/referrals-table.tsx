@@ -4,7 +4,7 @@ import { EmptyFileIcon } from '@/components-v2'
 import { useCodesetCodes } from '@/providers'
 import { CommonTable } from '../../common'
 import { Referral, TableColumn } from '../../types'
-import { formatUTCDate } from '../../utils'
+import { formatLocalDate } from '../../utils'
 import { TextCell } from './text-cell'
 
 const ReferralsTable = ({
@@ -24,7 +24,7 @@ const ReferralsTable = ({
       render: (row) => (
         <TextCell>
           {row?.referralDate
-            ? formatUTCDate(row?.referralDate, 'MM/dd/yy HH:mm')
+            ? formatLocalDate(row?.referralDate, 'MM/dd/yy HH:mm')
             : ''}
         </TextCell>
       ),
@@ -77,7 +77,7 @@ const ReferralsTable = ({
       label: 'Next Visit',
       render: (row) => (
         <TextCell>
-          {row?.nextVisit ? formatUTCDate(row?.nextVisit, 'MM/dd/yy') : 'N/A'}
+          {row?.nextVisit ? formatLocalDate(row?.nextVisit, 'MM/dd/yy') : 'N/A'}
         </TextCell>
       ),
     },

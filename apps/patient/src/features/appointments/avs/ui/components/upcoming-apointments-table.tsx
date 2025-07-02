@@ -2,7 +2,7 @@ import React from 'react'
 import { EmptyFileIcon } from '@/components-v2'
 import { CommonTable } from '../../common'
 import { Appointment, TableColumn } from '../../types'
-import { formatUTCDate } from '../../utils'
+import { formatLocalDate } from '../../utils'
 import { TextCell } from './text-cell'
 
 const UpcomingApointmentsTable = ({
@@ -19,7 +19,7 @@ const UpcomingApointmentsTable = ({
       render: (row) => (
         <TextCell>
           {row?.startDate
-            ? formatUTCDate(row?.startDate, 'MM/dd/yy HH:mm')
+            ? formatLocalDate(row?.startDate, 'MM/dd/yy hh:mm a')
             : ''}
         </TextCell>
       ),

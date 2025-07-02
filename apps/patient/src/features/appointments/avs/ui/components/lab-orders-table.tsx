@@ -2,7 +2,7 @@ import React from 'react'
 import { EmptyFileIcon } from '@/components-v2'
 import { CommonTable } from '../../common'
 import { LabOrder, TableColumn } from '../../types'
-import { formatUTCDate } from '../../utils'
+import { formatLocalDate } from '../../utils'
 import { LabResultsCell } from './lab-results-cell'
 import { LabTestCell } from './lab-test-cell'
 import { StatusCell } from './status-cell'
@@ -22,7 +22,7 @@ const LabOrdersTable = ({
       render: (row) => (
         <TextCell>
           {row?.labOrderDate
-            ? formatUTCDate(row?.labOrderDate, 'MM/dd/yy HH:mm')
+            ? formatLocalDate(row?.labOrderDate, 'MM/dd/yy HH:mm')
             : ''}
         </TextCell>
       ),

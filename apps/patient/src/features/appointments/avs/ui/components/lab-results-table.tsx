@@ -2,7 +2,7 @@ import React from 'react'
 import { EmptyFileIcon } from '@/components-v2'
 import { CommonTable } from '../../common'
 import { LabResult, TableColumn } from '../../types'
-import { formatUTCDate } from '../../utils'
+import { formatLocalDate } from '../../utils'
 import { TextCell } from './text-cell'
 
 const LabResultsTable = ({
@@ -24,7 +24,7 @@ const LabResultsTable = ({
       render: (row) => (
         <TextCell>
           {row?.observationTime
-            ? formatUTCDate(row?.observationTime, 'MM/dd/yyyy')
+            ? formatLocalDate(row?.observationTime, 'MM/dd/yyyy')
             : ''}
         </TextCell>
       ),
