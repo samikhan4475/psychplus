@@ -81,15 +81,11 @@ const ProviderSlots = ({
     }
   }, [sortBy, data, dateRange])
 
-  const checkHasMoreSlots = () => {
-    const allSlotsByDay = Object.entries(slotState.current)
-    return allSlotsByDay.some(([, value]) => value && value.length > 3)
-  }
+  const checkHasMoreSlots = () =>
+    dateRange.some((d) => (slotState?.current[d.toString()]?.length ?? 0) > 3)
 
   return (
     <Flex className="flex-1 px-[40px] pt-2" ref={ref}>
-
-      
       <Flex direction="column" gap="4" className="w-full">
         <SlotStateRenderer
           slotsLoading={slotsLoading}

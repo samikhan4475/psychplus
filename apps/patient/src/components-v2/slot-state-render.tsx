@@ -88,14 +88,6 @@ export const SlotStateRenderer = ({
     )
   }
 
-  if (Object.keys(slotState)?.length === 0) {
-    return (
-      <FeatureEmpty
-        description="No slots available for this provider"
-      />
-    )
-  }
-
   if (dateIsInFuture) {
     return (
       <FeatureEmpty
@@ -126,7 +118,14 @@ export const SlotStateRenderer = ({
       />
     )
   }
-
+  const hasNoSlots = Object.keys(slotState)?.length === 0
+  const hasSlotsInDateRange = dateRange.some((date) => {
+    const key = getCalendarDateLabel(date)
+    return (slotState[key]?.length ?? 0) > 0
+  })
+  if (hasNoSlots || (!hasSlotsInDateRange && !dateIsInFuture)) {
+    return <FeatureEmpty description="No slots available for this provider" />
+  }
   return (
     <>
       <Flex className="w-full" gap="4">
