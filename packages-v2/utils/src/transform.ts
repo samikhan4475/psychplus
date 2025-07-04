@@ -137,6 +137,7 @@ const transformStaffAvailabilityResponse = ({
         startDateUtc: slot.startDate,
         endDate: slot.endDate,
         type: slot.type,
+        locationId: slot.locationId,
         clinicId,
       })
     }

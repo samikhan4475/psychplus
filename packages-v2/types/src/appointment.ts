@@ -175,6 +175,7 @@ interface StaffAppointmentAvailabilityResponse {
   isPlusSlot: boolean
   serviceId: string
   type: AppointmentType
+  locationId:string
 }
 
 interface TransformStaffAvailabilityParams {
