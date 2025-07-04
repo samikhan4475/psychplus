@@ -204,6 +204,18 @@ const parseLocalDate = (isoDate: string): Date => {
   return new Date(year, month - 1, day) // month is 0-based
 }
 
+const getLocalTimeWithOriginalDate = (
+  utcString: string,
+  timeZone: string = 'America/Chicago',
+): string => {
+  const datePart = utcString?.split('T')[0] ?? ''
+  const timePart =
+    convertUtcISOToLocalISOString(utcString, timeZone)?.split('T')[1] ??
+    '00:00:00'
+
+  return `${datePart}T${timePart}`
+}
+
 export {
   getCalendarDate,
   getLocalCalendarDate,
@@ -221,4 +233,5 @@ export {
   generateTimeIntervals,
   mapToUTCString,
   parseLocalDate,
+  getLocalTimeWithOriginalDate,
 }

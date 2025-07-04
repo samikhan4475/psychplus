@@ -15,8 +15,8 @@ import {
 } from '@psychplus-v2/types'
 import {
   buildClinicContactAddresses,
-  convertUtcISOToLocalISOString,
   getLocalCalendarDate,
+  getLocalTimeWithOriginalDate,
 } from '.'
 import { binaryInsertSorted, compareAsc, compareDesc } from './sort'
 
@@ -127,7 +127,7 @@ const transformStaffAvailabilityResponse = ({
     duration: slot.durationMinutes,
     isPlusSlot: slot?.isPlusSlot ?? false,
     servicesOffered: [slot.serviceId],
-    startDate: convertUtcISOToLocalISOString(slot.startDate, timeZone),
+    startDate: getLocalTimeWithOriginalDate(slot.startDate,timeZone),
     startDateUtc: slot.startDate,
     endDate: slot.endDate,
     type: slot.type,

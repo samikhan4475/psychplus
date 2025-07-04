@@ -91,7 +91,7 @@ const useSlots = ({
         appointmentType,
         serviceOffered: getServiceOfferedByProviderType(providerType),
         startDate: startingDate,
-        maxLookoutDays: 7,
+        maxLookoutDays: 6,
         staffId: providerId,
         locationId: clinicId,
         maxRepeatOnNoneAvailable: DEFAULT_SLOTS_FUTURE_OUTLOOK,
