@@ -19,7 +19,7 @@ const ServiceDropdown = () => {
   const mappedServices = useServiceCodesMap()
 
   useEffect(() => {
-    if (selectedLocations.length) {
+    if (selectedLocations?.length) {
       setLoading(true)
       getLocationServicesAction(selectedLocations).then((response) => {
         setLoading(false)
@@ -33,7 +33,7 @@ const ServiceDropdown = () => {
     <FormFieldContainer className="flex-1">
       <FieldLabel>Service</FieldLabel>
       <MultiSelectField
-        disabled={!selectedLocations.length}
+        disabled={!selectedLocations?.length}
         defaultValues={services}
         options={getServiceFilterOptions(mappedServices, servicesOptions)}
         className="flex-1"

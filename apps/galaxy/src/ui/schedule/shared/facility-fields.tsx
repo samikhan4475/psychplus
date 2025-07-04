@@ -17,7 +17,7 @@ const FacilityFields = () => {
   const services = form.watch('servicesOffered')
 
   useEffect(() => {
-    if (!services.length) return
+    if (!services?.length) return
     setLoading(true)
     getUnitsGroupsAction(services).then((response) => {
       setLoading(false)

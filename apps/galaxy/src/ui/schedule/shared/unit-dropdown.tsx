@@ -42,7 +42,7 @@ const UnitDropdown = ({
         }}
         menuClassName="w-[155px]"
         loading={loading}
-        disabled={services.length === 0}
+        disabled={services?.length === 0}
       />
     </FormFieldContainer>
   )
