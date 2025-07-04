@@ -123,16 +123,28 @@ const transformStaffAvailabilityResponse = ({
   clinicId,
   timeZone,
 }: TransformStaffAvailabilityParams): AppointmentSlot[] => {
-  return response.map((slot) => ({
-    duration: slot.durationMinutes,
-    isPlusSlot: slot?.isPlusSlot ?? false,
-    servicesOffered: [slot.serviceId],
-    startDate: getLocalTimeWithOriginalDate(slot.startDate,timeZone),
-    startDateUtc: slot.startDate,
-    endDate: slot.endDate,
-    type: slot.type,
-    clinicId,
-  }))
+  const seen = new Map<string, AppointmentSlot>()
+
+  response.forEach((slot) => {
+    const localStart = getLocalTimeWithOriginalDate(slot.startDate, timeZone)
+
+    if (!seen.has(localStart)) {
+      seen.set(localStart, {
+        duration: slot.durationMinutes,
+        isPlusSlot: slot?.isPlusSlot ?? false,
+        servicesOffered: [slot.serviceId],
+        startDate: localStart,
+        startDateUtc: slot.startDate,
+        endDate: slot.endDate,
+        type: slot.type,
+        clinicId,
+      })
+    }
+  })
+
+  return Array.from(seen.values()).sort((a, b) =>
+    a.startDate.localeCompare(b.startDate),
+  )
 }
 
 const transformSlotsByDay = (data: AppointmentSlot[]): SlotsByDay => {
