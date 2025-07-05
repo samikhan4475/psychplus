@@ -104,13 +104,15 @@ const columns: ColumnDef<LocationPractice>[] = [
     cell: StateCell,
   },
   {
-    id: 'practice?.practiceAddress?.zipLast4',
-    accessorKey: 'practice?.practiceAddress?.zipLast4',
+    id: 'practice?.practiceAddress?.postalPlus4Code',
+    accessorKey: 'practice?.practiceAddress?.postalPlus4Code',
     header: ({ column }) => (
       <ColumnHeader label="ZIP" column={column} clientSideSort />
     ),
     cell: ({ row: { original } }) => (
-      <TextCell>{original?.practice?.practiceAddress?.zipLast4}</TextCell>
+      <TextCell>
+        {original?.practice?.practiceAddress?.postalPlus4Code}
+      </TextCell>
     ),
   },
 

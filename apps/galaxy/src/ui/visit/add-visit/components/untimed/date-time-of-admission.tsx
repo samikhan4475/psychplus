@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
+import { getLocalTimeZone, today } from '@internationalized/date'
 import { Box, Flex } from '@radix-ui/themes'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { DatePickerInput, SelectInput } from '@/components'
@@ -34,6 +35,7 @@ const DateTimeOfAdmission = () => {
               form.setValue('dischargeDate', undefined)
             }
           }}
+          maxValue={today(getLocalTimeZone())}
         />
         <Box>
           <SelectInput

@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { getLocalTimeZone, today } from '@internationalized/date'
 import { Box, Flex, Grid } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { DatePickerInput, SelectInput } from '@/components'
@@ -50,6 +51,7 @@ const DateTimeOfAdmission = ({
                     setIsOpen(true)
                   }
                 }}
+                maxValue={today(getLocalTimeZone())}
               />
               <FormFieldError name="dateOfAdmission" />
             </Box>
