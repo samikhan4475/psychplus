@@ -10,6 +10,7 @@ interface PharmacyNotifications  {
   transactionType: string
   notificationType:string
   notificationStatus:string
+  userNotificationStatus:string
 }
 
 interface PharmacyNotificationsPayload {

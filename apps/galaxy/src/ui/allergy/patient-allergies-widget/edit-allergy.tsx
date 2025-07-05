@@ -35,27 +35,37 @@ const EditAllergy = ({
 
   const handleEditAllergy = async (e: AddAllergySchemaType) => {
     const allergy = e.allergies[0]
-    const onsetBegan = mapToUTCString(
-      `${allergy.startDate}T${allergy.startTime}[${getLocalTimeZone()}]`,
-    )
-    const onsetEnded = mapToUTCString(
-      `${allergy.endDate}T${allergy.endTime}[${getLocalTimeZone()}]`,
-    )
+    const onsetBegan = allergy.startDate
+      ? mapToUTCString(
+          `${allergy.startDate}T${
+            allergy.startTime ?? '00:00:00'
+          }[${getLocalTimeZone()}]`,
+        )
+      : ''
+
+    const onsetEnded = allergy.endDate
+      ? mapToUTCString(
+          `${allergy.endDate}T${
+            allergy.endTime ?? '00:00:00'
+          }[${getLocalTimeZone()}]`,
+        )
+      : null
+
     const resp = await updateAllergy(patientId, row.original.id, {
       id: row.original.id,
       patientId: Number(patientId),
       allergyName: allergy.allergyName,
       encounterId: 0,
-      rxNormCode: '123',
+      rxNormCode: null,
       allergyType: allergy.allergyType,
       severityCode: allergy.severityCode,
       comment: allergy.comment,
       onsetBegan,
       onsetEnded,
-      reactionId: allergy.reactionId,
+      reactionId: allergy.reactionId ?? null,
       staffId: Number(staff.id),
       providerId: Number(staff.id),
-      recordStatus: allergy.status,
+      recordStatus: allergy.status ?? 'Active',
       ...(row.original.appointmentId && {
         appointmentId: Number(row.original.appointmentId),
       }),
@@ -69,7 +79,7 @@ const EditAllergy = ({
 
   return (
     <FormContainer form={form} onSubmit={handleEditAllergy}>
-      <AllergySpecificationView index={0} />
+      <AllergySpecificationView index={0} isEditMode />
       <Flex my="2" justify="end">
         <AllergySaveButton />
       </Flex>
@@ -80,17 +90,20 @@ const EditAllergy = ({
 export { EditAllergy }
 
 const getDefaultValues = (row: Row<AllergyDataResponse>) => async () => {
-  const startDateTime = convertToTimezone(row.original.onsetBegan)
-  const endDateTime = convertToTimezone(row.original.onsetEnded)
+  const startDateTime = convertToTimezone(row.original.onsetBegan) || {}
+
+  const endDateTime = convertToTimezone(row.original.onsetEnded) || {}
   return {
     allergies: [
       {
         ...row.original,
         status: getStatusLabel(Number(row.original.archive)),
         startDate: startDateTime.date ?? parseDate(row.original.onsetBegan),
-        startTime: parseTime(startDateTime.time),
-        endDate: endDateTime.date ?? parseDate(row.original.onsetEnded),
-        endTime: parseTime(endDateTime.time),
+        endDate:
+          endDateTime.date ??
+          (row.original.onsetEnded
+            ? parseDate(row.original.onsetEnded)
+            : undefined),
       },
     ],
   }

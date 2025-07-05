@@ -19,11 +19,11 @@ import { useStore } from './store'
 type SchemaType = z.infer<typeof schema>
 
 const schema = z.object({
-  onsetStartDate: z.custom<DateValue>().nullable(),
-  onsetEndDate: z.custom<DateValue>().nullable(),
+  onsetBegan: z.custom<DateValue>().nullable(),
+  onsetEnded: z.custom<DateValue>().nullable(),
   allergyName: z.string().trim().optional(),
-  allergyTypeCode: z.string().optional(),
-  recordStatuses: z.string().trim().optional(),
+  allergyType: z.string().optional(),
+  taskStatus: z.string().trim().optional(),
   severityCode: z.string().trim().optional(),
 })
 
@@ -32,11 +32,11 @@ const PatientAllergiesFilterForm = ({ patientId }: { patientId: string }) => {
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
     defaultValues: {
-      onsetStartDate: undefined,
-      onsetEndDate: undefined,
+      onsetBegan: undefined,
+      onsetEnded: undefined,
       allergyName: '',
-      allergyTypeCode: '',
-      recordStatuses: '',
+      allergyType: '',
+      taskStatus: '',
       severityCode: '',
     },
   })
@@ -45,9 +45,9 @@ const PatientAllergiesFilterForm = ({ patientId }: { patientId: string }) => {
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
     const formattedData = {
       ...data,
-      onsetStartDate: formatDateToISOString(data.onsetStartDate),
-      onsetEndDate: formatDateToISOString(data.onsetEndDate, true),
-      recordStatuses: data.recordStatuses ? [data.recordStatuses] : undefined,
+      onsetBegan: formatDateToISOString(data.onsetBegan),
+      onsetEnded: formatDateToISOString(data.onsetEnded, true),
+      taskStatus: data.taskStatus,
     }
     const _cleanedData = sanitizeFormData(formattedData)
     allergiesListSearch(patientId, { ..._cleanedData }, true)

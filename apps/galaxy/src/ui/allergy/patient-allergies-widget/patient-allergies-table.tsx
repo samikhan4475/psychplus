@@ -10,7 +10,8 @@ import {
   LongTextCell,
   TextCell,
 } from '@/components'
-import { getSlashedPaddedDateString } from '@/utils'
+import { Sort } from '@/types'
+import { getSlashedPaddedDateString, getSortDir } from '@/utils'
 import {
   ActionsCell,
   AllergyType,
@@ -27,46 +28,102 @@ interface PatientAllergiesTableProps {
 
 const columns = (
   scriptSureAppUrl: string,
+  sort?: Sort,
+  onSort?: (column: string) => void,
 ): ColumnDef<AllergyDataResponse>[] => [
   {
-    id: 'allergy-type',
+    id: 'allergyType',
+    accessorKey: 'allergyType',
     header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Type" />
+      <ColumnHeader
+        column={column}
+        sortable
+        sortDir={getSortDir(column.id, sort)}
+        onClick={() => {
+          onSort?.(column.id)
+        }}
+        label="Type"
+      />
     ),
     cell: ({ row }) => <AllergyType row={row} />,
   },
   {
-    id: 'allergy-name',
+    id: 'allergyName',
+    accessorKey: 'allergyName',
     header: ({ column }) => (
-      <ColumnHeader clientSideSort column={column} label="Allergy" />
+      <ColumnHeader
+        sortable
+        sortDir={getSortDir(column.id, sort)}
+        onClick={() => {
+          onSort?.(column.id)
+        }}
+        column={column}
+        label="Allergy"
+      />
     ),
     cell: ({ row }) => <TextCell>{row.original.allergyName}</TextCell>,
   },
   {
-    id: 'allergy-reaction',
+    id: 'reactionId',
+    accessorKey: 'reactionId',
     header: ({ column }) => (
-      <ColumnHeader clientSideSort column={column} label="Reaction" />
+      <ColumnHeader
+        sortable
+        sortDir={getSortDir(column.id, sort)}
+        onClick={() => {
+          onSort?.(column.id)
+        }}
+        column={column}
+        label="Reaction"
+      />
     ),
     cell: ({ row }) => <Reaction row={row} />,
   },
   {
-    id: 'allergy-severity',
+    id: 'severityCode',
+    accessorKey: 'severityCode',
     header: ({ column }) => (
-      <ColumnHeader clientSideSort column={column} label="Severity" />
+      <ColumnHeader
+        sortable
+        sortDir={getSortDir(column.id, sort)}
+        onClick={() => {
+          onSort?.(column.id)
+        }}
+        column={column}
+        label="Severity"
+      />
     ),
     cell: SeverityCell,
   },
   {
-    id: 'allergy-status',
+    id: 'recordStatus',
+    accessorKey: 'recordStatus',
     header: ({ column }) => (
-      <ColumnHeader clientSideSort column={column} label="Status" />
+      <ColumnHeader
+        sortable
+        sortDir={getSortDir(column.id, sort)}
+        onClick={() => {
+          onSort?.(column.id)
+        }}
+        column={column}
+        label="Status"
+      />
     ),
     cell: ({ row }) => <Status row={row} />,
   },
   {
-    id: 'allergy-observation-date',
+    id: 'onsetBegan',
+    accessorKey: 'onsetBegan',
     header: ({ column }) => (
-      <ColumnHeader clientSideSort column={column} label="Observation Date" />
+      <ColumnHeader
+        sortable
+        sortDir={getSortDir(column.id, sort)}
+        onClick={() => {
+          onSort?.(column.id)
+        }}
+        column={column}
+        label="Observation Date"
+      />
     ),
     cell: ({ row }) => (
       <DateCell>
@@ -76,9 +133,18 @@ const columns = (
     ),
   },
   {
-    id: 'allergy-end-date',
+    id: 'onsetEnded',
+    accessorKey: 'onsetEnded',
     header: ({ column }) => (
-      <ColumnHeader clientSideSort column={column} label="End Date" />
+      <ColumnHeader
+        sortable
+        sortDir={getSortDir(column.id, sort)}
+        onClick={() => {
+          onSort?.(column.id)
+        }}
+        column={column}
+        label="End Date"
+      />
     ),
     cell: ({ row }) => (
       <DateCell>
@@ -88,9 +154,13 @@ const columns = (
     ),
   },
   {
-    id: 'allergy-notes',
+    id: 'comment',
+    accessorKey: 'comment',
     header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Notes" />
+      <ColumnHeader
+        column={column}
+        label="Notes"
+      />
     ),
     cell: ({ row }) => <LongTextCell>{row.original.comment}</LongTextCell>,
   },
@@ -106,9 +176,11 @@ const columns = (
 const PatientAllergiesTable = ({
   scriptSureAppUrl,
 }: PatientAllergiesTableProps) => {
-  const { data, allergiesListLoading } = useStore((state) => ({
+  const { data, allergiesListLoading, sort, sortData } = useStore((state) => ({
     data: state.allergiesListData,
     allergiesListLoading: state.allergiesListLoading,
+    sort: state.sort,
+    sortData: state.sortData,
   }))
 
   if (allergiesListLoading) {
@@ -123,7 +195,7 @@ const PatientAllergiesTable = ({
     <ScrollArea>
       <DataTable
         data={data ?? []}
-        columns={columns(scriptSureAppUrl)}
+        columns={columns(scriptSureAppUrl, sort, sortData)}
         disablePagination
         sticky
       />

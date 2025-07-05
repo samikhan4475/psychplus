@@ -21,7 +21,7 @@ interface AllergyDataResponse {
   scriptSurePatientId: number
   allergyName: string
   encounterId: number
-  rxNormCode: string
+  rxNormCode?: string
   nationalDrugCode: string
   allergyType: string
   reaction: string
@@ -63,19 +63,20 @@ interface GetPatientAllergiesParams {
 
 interface PropsWithIndex {
   index: number
+  isEditMode?: boolean
 }
 
 interface AllergyPayload {
   id: string
   patientId: number
   allergyName: string
+  rxNormCode: string | null
   encounterId?: number
-  rxNormCode: string
   allergyType: string
-  severityCode: string
+  severityCode?: string
   onsetBegan: string
-  onsetEnded: string
-  reactionId: string
+  onsetEnded: string | null
+  reactionId: string | null
   staffId: number
   providerId: number
   recordStatus: string
@@ -96,6 +97,11 @@ interface SearchAllergiesResponse {
   picklistId: number
   picklistDesc: string
   picklistConceptType: string
+}
+
+export enum RecordStatus {
+  Active = 'Active',
+  Archived = 'Archived',
 }
 
 export type {

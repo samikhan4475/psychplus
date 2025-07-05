@@ -21,7 +21,7 @@ const AllergiesTypeSelect = () => {
       <FormFieldLabel>Type</FormFieldLabel>
       <SelectInput
         options={options}
-        field="allergyTypeCode"
+        field="allergyType"
         buttonClassName="w-[101px] h-6"
       />
     </FormFieldContainer>

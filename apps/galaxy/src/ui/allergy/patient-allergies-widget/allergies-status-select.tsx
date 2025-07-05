@@ -5,8 +5,7 @@ import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
 const AllergiesStatusSelect = () => {
   const options = [
     { value: 'active', label: 'Active' },
-    { value: 'archived', label: 'Archived' },
-    { value: 'discontinued', label: 'Discontinued' },
+    { value: 'archived', label: 'Archived' }
   ]
 
   return (
@@ -14,7 +13,7 @@ const AllergiesStatusSelect = () => {
       <FormFieldLabel>Status</FormFieldLabel>
       <SelectInput
         options={options}
-        field="recordStatuses"
+        field="taskStatus"
         buttonClassName="w-[101px] h-6"
       />
     </FormFieldContainer>

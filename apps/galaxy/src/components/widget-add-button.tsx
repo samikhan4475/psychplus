@@ -2,7 +2,7 @@
 
 import { PropsWithChildren, useState } from 'react'
 import { Cross2Icon, PlusIcon } from '@radix-ui/react-icons'
-import { Button, Dialog, Flex, Text } from '@radix-ui/themes'
+import { Box, Button, Dialog, Flex, Text } from '@radix-ui/themes'
 import { useHasPermission } from '@/hooks'
 import { PermissionAlert } from '@/ui/schedule/shared'
 import { cn } from '@/utils'
@@ -11,6 +11,7 @@ type FillOutButtonProps = PropsWithChildren<{
   title?: string
   className?: string
   onClose?: () => void
+  stickyHeader?: boolean
 }>
 
 const WidgetAddButtonUnauthrized = () => {
@@ -45,6 +46,7 @@ const WidgetAddButton = ({
   children,
   className,
   onClose,
+  stickyHeader,
 }: FillOutButtonProps) => {
   const hasPermission = useHasPermission('addDiagnosisWorkingDiagnosisTab')
 
@@ -68,7 +70,14 @@ const WidgetAddButton = ({
           className,
         )}
       >
-        <Flex justify="between" align="center" mb="2">
+        <Flex
+          justify="between"
+          align="center"
+          mb="2"
+          className={cn(
+            stickyHeader !== false && 'bg-white sticky top-0 z-10 px-4 py-2',
+          )}
+        >
           <Dialog.Title
             size="5"
             weight="bold"
@@ -76,9 +85,11 @@ const WidgetAddButton = ({
           >
             {title}
           </Dialog.Title>
-          <Dialog.Close className="cursor-pointer" onClick={onClose}>
-            <Cross2Icon />
-          </Dialog.Close>
+          <Box className="bg-white sticky top-0 z-10">
+            <Dialog.Close className="cursor-pointer" onClick={onClose}>
+              <Cross2Icon />
+            </Dialog.Close>
+          </Box>
         </Flex>
         {children}
       </Dialog.Content>

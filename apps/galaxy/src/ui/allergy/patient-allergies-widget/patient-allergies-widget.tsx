@@ -87,6 +87,7 @@ const PatientAllergiesWidget = ({
               title="Add Allergies"
               className="max-w-[45vw]"
               onClose={fetchAllergies}
+              stickyHeader
             >
               {!isFeatureFlagEnabled ? (
                 <AddAllergy

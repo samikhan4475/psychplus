@@ -85,7 +85,7 @@ const columns = (
         label="Notification Status"
       />
     ),
-    cell: ({ row }) => <TextCell>{row.original?.notificationStatus}</TextCell>,
+    cell: ({ row }) => <TextCell>{row.original?.userNotificationStatus}</TextCell>,
   },
   {
     id: 'notificationType',

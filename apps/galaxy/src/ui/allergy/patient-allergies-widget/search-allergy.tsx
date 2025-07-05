@@ -15,11 +15,12 @@ const SearchAllergy = () => {
   const [showOptions, setShowOptions] = useState(false)
   const [loadingOptions, setLoadingOptions] = useState(false)
   const [options, setOptions] = useState<SearchAllergiesResponse[]>([])
+  const [searchText, setSearchText] = useState('')
 
-  const handleSearchService = useDebouncedCallback(
-    (value: string) => fetchAllergies(value),
-    500,
-  )
+  const handleSearchService = useDebouncedCallback((value: string) => {
+    setSearchText(value)
+    fetchAllergies(value)
+  }, 500)
   const ref = useOnclickOutside(() => setShowOptions(false))
 
   const fetchAllergies = async (searchText: string) => {
@@ -33,6 +34,10 @@ const SearchAllergy = () => {
     }
     setLoadingOptions(false)
     setOptions(response.data)
+  }
+
+  const handleSearchButtonClick = () => {
+    fetchAllergies(searchText)
   }
 
   return (
@@ -76,7 +81,10 @@ const SearchAllergy = () => {
           </ScrollArea>
         )}
       </Box>
-      <SearchButton />
+      <SearchButton
+        onClick={handleSearchButtonClick}
+        disabled={loadingOptions}
+      />
     </Flex>
   )
 }

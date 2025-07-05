@@ -20,7 +20,7 @@ const AllergyTypeField = ({ index }: PropsWithIndex) => {
 
   return (
     <Flex direction="column" width="70%">
-      <BlockLabel name="allergyType">Allergy Type</BlockLabel>
+      <BlockLabel name="allergyType" required>Allergy Type</BlockLabel>
       <SelectInput
         field={`allergies.${index}.allergyType`}
         options={options}

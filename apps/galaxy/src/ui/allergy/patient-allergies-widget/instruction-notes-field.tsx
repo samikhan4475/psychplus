@@ -17,6 +17,7 @@ const InstructionOrNotesField = ({ index }: PropsWithIndex) => {
         size="1"
         placeholder="Add notes"
         className="mt-1"
+        maxLength={2048}
         {...form.register(`allergies.${index}.comment`)}
       />
     </Flex>

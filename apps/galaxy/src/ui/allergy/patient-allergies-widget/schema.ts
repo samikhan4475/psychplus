@@ -1,5 +1,6 @@
 import { DateValue, TimeValue } from 'react-aria-components'
 import z from 'zod'
+import { isValidDateRange } from '@/utils'
 
 const dateValidation = z
   .custom<DateValue>()
@@ -7,21 +8,24 @@ const dateValidation = z
     message: 'Required',
   })
 
-const singleAllergySchema = z.object({
-  allergyName: z.string(),
-  allergyType: z.string(),
-  severityCode: z.string(),
-  reactionId: z.string(),
-  status: z.string(),
-  startDate: dateValidation,
-  endDate: dateValidation,
-  startTime: z.custom<TimeValue>().refine((val) => val !== undefined, {
-    message: 'Required',
-  }),
-  endTime: z.custom<TimeValue>(),
-  comment: z.string().optional(),
-  allergyId: z.number().optional(),
-})
+const singleAllergySchema = z
+  .object({
+    allergyName: z.string(),
+    allergyType: z.string(),
+    severityCode: z.string().optional(),
+    reactionId: z.string().optional(),
+    status: z.string().optional(),
+    startDate: dateValidation,
+    endDate: z.custom<DateValue>().optional(),
+    startTime: z.custom<TimeValue>().optional(),
+    endTime: z.custom<TimeValue>().optional(),
+    comment: z.string().optional(),
+    allergyId: z.number().optional(),
+  })
+  .refine((data) => isValidDateRange(data.startDate, data.endDate ?? null), {
+    message: 'End date cannot be earlier than start date',
+    path: ['endDate'],
+  })
 
 const schema = z.object({
   allergies: z.array(singleAllergySchema).min(1),

@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { getLocalTimeZone } from '@internationalized/date'
-import { Flex } from '@radix-ui/themes'
+import { Box, Flex } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FormContainer } from '@/components'
@@ -43,26 +43,35 @@ const AddAllergy = ({
     const resp = await createAllergy(
       patientId,
       e.allergies.map((el) => {
-        const onsetBegan = mapToUTCString(
-          `${el.startDate}T${el.startTime}[${getLocalTimeZone()}]`,
-        )
-        const onsetEnded = mapToUTCString(
-          `${el.endDate}T${el.endTime}[${getLocalTimeZone()}]`,
-        )
+        const onsetBegan = el.startDate
+          ? mapToUTCString(
+              `${el.startDate}T${
+                el.startTime ?? '00:00:00'
+              }[${getLocalTimeZone()}]`,
+            )
+          : ''
+
+        const onsetEnded = el.endDate
+          ? mapToUTCString(
+              `${el.endDate}T${
+                el.endTime ?? '00:00:00'
+              }[${getLocalTimeZone()}]`,
+            )
+          : null
         //todo: Remove number class from appointmentId and encounterId once appointmentId becomes required in props
         return {
           patientId: Number(patientId),
           allergyName: el.allergyName,
-          rxNormCode: '123',
+          rxNormCode: null,
           allergyType: el.allergyType,
-          reactionId: el.reactionId,
+          reactionId: el?.reactionId ?? null,
           severityCode: el.severityCode,
           comment: el.comment,
           onsetBegan,
           onsetEnded,
           staffId: Number(staff.id),
           providerId: Number(staff.id),
-          recordStatus: el.status,
+          recordStatus: el.status ?? 'Active',
           ...(appointmentId && {
             appointmentId: Number(appointmentId),
             encounterId: Number(appointmentId),
@@ -89,17 +98,18 @@ const AddAllergy = ({
           />
         ))}
         <Flex className="mt-5" justify="end" gap="2">
-          {!isPatientAllergiesTab ? (
-            <AllergySaveButton />
-          ) : (
-            <>
-              <AllergySaveButton
-                isPatientAllergiesTab={isPatientAllergiesTab}
-              />
-              {/* This button will be made functional after the surescript work on the BE.*/}
-              {/* <AllergySignButton /> */}
-            </>
-          )}
+          {allergies.length > 0 &&
+            (!isPatientAllergiesTab ? (
+              <AllergySaveButton />
+            ) : (
+              <>
+                <AllergySaveButton
+                  isPatientAllergiesTab={isPatientAllergiesTab}
+                />
+                {/* This button will be made functional after the surescript work on the BE.*/}
+                {/* <AllergySignButton /> */}
+              </>
+            ))}
         </Flex>
       </Flex>
     </FormContainer>

@@ -5,7 +5,7 @@ import { LoadingPlaceholder } from '@/components'
 import { cn } from '@/utils'
 import { AddAllergySchemaType } from './schema'
 import { SearchAllergiesResponse } from './types'
-
+import { getCalendarDate } from '@/utils'
 interface AllergyOptionsListProps {
   loadingOptions: boolean
   options: SearchAllergiesResponse[]
@@ -24,6 +24,7 @@ const AllergyOptionsList = ({
     append({
       allergyName: selectedOption.picklistDesc,
       allergyId: selectedOption.picklistId,
+      startDate: getCalendarDate()
     })
   }
 

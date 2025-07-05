@@ -15,6 +15,7 @@ interface PatientAddress {
     latitude: number
     altitude?: number
   }
+  zipLast4?:string
   timeZoneId?: string
 }
 interface GeoCoordinates {

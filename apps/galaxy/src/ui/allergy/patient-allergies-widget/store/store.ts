@@ -38,7 +38,7 @@ const useStore = create<Store>((set, get) => ({
       allergiesListError: undefined,
       allergiesListLoading: true,
       allergiesListData: undefined,
-      allergiesListPayload: payload,
+      allergiesListPayload: updatedPayload,
       allergiesError: false,
     })
     const { sort } = get()
@@ -72,11 +72,10 @@ const useStore = create<Store>((set, get) => ({
       },
     })
     const { allergiesListPayload } = get()
-    get().allergiesListSearch(
-      allergiesListPayload?.patientIds?.[0] || '',
-      allergiesListPayload,
-      true,
-    )
+    const patientId = allergiesListPayload?.patientIds?.[0]
+    if (patientId) {
+      get().allergiesListSearch(patientId, allergiesListPayload, true)
+    }
   },
 }))
 
