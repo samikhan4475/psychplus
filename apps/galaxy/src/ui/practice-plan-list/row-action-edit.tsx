@@ -11,8 +11,14 @@ const RowActionEdit = ({
 }: PropsWithRow<InsurancePlanItem>) => {
   return (
     <AddPlanDialog plan={record}>
-      <IconButton size="1" color="gray" variant="ghost">
+      <IconButton
+        onClick={(e) => e.stopPropagation()}
+        size="1"
+        color="gray"
+        variant="ghost"
+      >
         <Edit2Icon
+          onClick={(e) => e.stopPropagation()}
           width={16}
           height={16}
           className="cursor-pointer"

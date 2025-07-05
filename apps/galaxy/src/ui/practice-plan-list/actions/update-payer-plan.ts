@@ -1,16 +1,14 @@
 'use server'
 
 import * as api from '@/api'
-import { getAuthCookies } from '@/utils/auth'
 import { InsurancePlanItemPayload } from '../types'
 
 const updatePayerPlanAction = async (
   payload: Partial<InsurancePlanItemPayload>,
 ): Promise<api.ActionResult<boolean>> => {
-  const authTokens = getAuthCookies()
   const url = new URL(
     api.UPDATE_PRACTICE_PAYER_PLAN(
-      authTokens?.practiceId ?? '',
+      payload?.practiceId ?? '',
       payload.id ?? '',
     ),
   )

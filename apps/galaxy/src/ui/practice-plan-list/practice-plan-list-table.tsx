@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useParams, useRouter } from 'next/navigation'
 import { Box, Flex, ScrollArea } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
+import toast from 'react-hot-toast'
 import {
   ColumnHeader,
   DataTable,
@@ -14,6 +15,8 @@ import {
 import { useStore as useRootStore } from '@/store'
 import { Sort } from '@/types'
 import { formatDate, getSortDir } from '@/utils'
+import { Practice } from '../organization-practice/types'
+import { getAllOrganizationPracticesListAction } from '../organization-practices/actions'
 import { ActionsCell } from './actions-cell'
 import { RevalidateDateCell } from './cells/revalidate-date-cell'
 import { useStore } from './store'
@@ -174,6 +177,15 @@ const columns = (
 }
 const PracticePlanListTable = () => {
   const router = useRouter()
+
+  const [practiceInfo, setPracticeInfo] = useState<Practice>()
+
+  const { id: practiceId } = useParams<{
+    id: string
+  }>()
+
+  const addTab = useRootStore((state) => state.addTab)
+
   const { data, search, loading, sort, sortData } = useStore((state) => ({
     data: state.data,
     loading: state.loading,
@@ -181,13 +193,21 @@ const PracticePlanListTable = () => {
     sort: state.sort,
     sortData: state.sortData,
   }))
+  const getPracticeInfo = async () => {
+    const result = await getAllOrganizationPracticesListAction({
+      payload: { practiceId },
+    })
+    if (result.state === 'error')
+      return toast.error('Failed to get practice info')
 
-  const addTab = useRootStore((state) => state.addTab)
+    setPracticeInfo(result.data[0])
+  }
   useEffect(() => {
-    search({}, 1)
+    if (!practiceInfo) getPracticeInfo()
+    search({ practiceId }, 1)
   }, [])
 
-  if (loading) {
+  if (loading || !practiceInfo) {
     return (
       <Flex height="100%" align="center" justify="center">
         <LoadingPlaceholder />
@@ -207,11 +227,11 @@ const PracticePlanListTable = () => {
             const href = `/practice-plan/${row.original.id}`
             addTab({
               href,
-              label: `${row.original?.payerName}`,
+              label: `${row.original?.payerName} - (${practiceInfo.displayName})`,
             })
             router.push(href)
           }}
-          tableClass="bg-white "
+          tableClass="bg-white"
         />
       </ScrollArea>
     </Box>

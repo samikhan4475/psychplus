@@ -1,5 +1,6 @@
 'use client'
 
+import { useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Button, TextField } from '@radix-ui/themes'
@@ -38,6 +39,10 @@ const networkStatusOptions = [
 ]
 
 const PracticePlanListForm = () => {
+  const { id } = useParams<{
+    id: string
+  }>()
+
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
@@ -69,6 +74,7 @@ const PracticePlanListForm = () => {
 
     search({
       ...cleanedData,
+      practiceId: id,
       ...(data.planStatus && { planStatus: data.planStatus === 'Active' }),
     })
   }
@@ -76,7 +82,7 @@ const PracticePlanListForm = () => {
   const onClear = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     form.reset()
-    search()
+    search({ practiceId: id }, 1, true)
   }
 
   return (

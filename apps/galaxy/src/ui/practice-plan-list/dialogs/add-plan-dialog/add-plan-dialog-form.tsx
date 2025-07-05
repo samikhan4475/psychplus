@@ -1,11 +1,10 @@
 import React from 'react'
+import { useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { parseDate } from '@internationalized/date'
 import { Button, Grid, TextField } from '@radix-ui/themes'
 import { SaveIcon } from 'lucide-react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { getUserAuthAction } from '@/actions'
 import {
   AsyncAutoCompleteTextField,
   CodesetSelect,
@@ -18,11 +17,7 @@ import {
 } from '@/components'
 import { CODESETS } from '@/constants'
 import { SelectOptionType } from '@/types'
-import {
-  formatDateToISOString,
-  getLocalCalendarDate,
-  sanitizeFormData,
-} from '@/utils'
+import { formatDateToISOString, getLocalCalendarDate } from '@/utils'
 import { addPayerPlanAction, updatePayerPlanAction } from '../../actions'
 import { useStore } from '../../store'
 import { InsurancePlanItem, SelectPayerOption } from '../../types'
@@ -47,7 +42,9 @@ const AddPlanDialogForm = ({ onCloseModal, plan }: AddPlanDialogFormProps) => {
   const { search } = useStore((state) => ({
     search: state.search,
   }))
-
+  const { id: practiceId } = useParams<{
+    id: string
+  }>()
   const planStatus = (() => {
     if (plan?.id) {
       return plan.planStatus ? 'Active' : 'Inactive'
@@ -80,7 +77,6 @@ const AddPlanDialogForm = ({ onCloseModal, plan }: AddPlanDialogFormProps) => {
   })
 
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
-    const userInfo = await getUserAuthAction()
     const {
       isRevalidationRequired,
       isProviderRevalidationRequired,
@@ -96,7 +92,7 @@ const AddPlanDialogForm = ({ onCloseModal, plan }: AddPlanDialogFormProps) => {
       effectiveDate: effectiveDate
         ? formatDateToISOString(effectiveDate)
         : undefined,
-      practiceId: userInfo?.practiceId,
+      practiceId,
       revalidationDate: revalidationDate
         ? formatDateToISOString(revalidationDate)
         : undefined,
@@ -111,7 +107,7 @@ const AddPlanDialogForm = ({ onCloseModal, plan }: AddPlanDialogFormProps) => {
 
     toast.success('Plan created successfully')
     onCloseModal(false)
-    search({}, 1)
+    search({ practiceId }, 1, true)
   }
 
   const onPlanSelect = (option: SelectOptionType | SelectPayerOption) => {

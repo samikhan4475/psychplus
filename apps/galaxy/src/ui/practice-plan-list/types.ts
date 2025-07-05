@@ -31,6 +31,7 @@ interface GetPlanListResponse {
 
 interface InsurancePlanListSearchParams {
   recordStatuses: string[]
+  practiceId: string
   payerName: string
   insurancePlanName: string
   effectiveDate: string | null

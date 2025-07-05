@@ -1,7 +1,7 @@
 export interface IconProps {
   width?: string | number
   height?: string | number
-  onClick?: () => void
+  onClick?: (e: React.MouseEvent<HTMLButtonElement | SVGElement>) => void
   className?: string
   fill?: string
 }

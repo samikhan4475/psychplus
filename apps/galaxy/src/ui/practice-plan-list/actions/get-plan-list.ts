@@ -28,10 +28,9 @@ const getPlanListAction = async ({
   sort,
 }: GetPlanListParams): Promise<api.ActionResult<GetPlanListResponse>> => {
   const offset = (page - 1) * INSURANCE_PLAN_LIST_PAGE_SIZE
-  const authTokens = getAuthCookies()
 
   const url = new URL(
-    api.GET_INSURANCE_PLAN_LIST_ENDPOINT(authTokens?.practiceId ?? ''),
+    api.GET_INSURANCE_PLAN_LIST_ENDPOINT(payload?.practiceId ?? ''),
   )
   url.searchParams.append('limit', String(INSURANCE_PLAN_LIST_PAGE_SIZE))
   url.searchParams.append('offset', String(offset))
@@ -42,7 +41,7 @@ const getPlanListAction = async ({
   const response = await api.POST<InsurancePlanItem[]>(`${url}`, {
     ...defaultPayLoad,
     ...payload,
-    practiceId: authTokens?.practiceId,
+    practiceId: payload?.practiceId,
   })
 
   if (response.state === 'error') {
