@@ -1,10 +1,13 @@
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { Button, Flex, IconButton } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
 import { PropsWithRow } from '@/components'
 import { TableEditIcon } from '@/components/icons'
 import { useHasPermission } from '@/hooks'
+import { useStore as useGlobalStore } from '@/store'
 import { PermissionAlert } from '@/ui/schedule/shared'
+import { isPrescriber } from '@/utils'
 import { useStore } from '../../clinic-time-tab/store'
 import { EditClinicScheduleDialog } from '../../dialogs/clinic-schedule-dialog'
 import { ClinicAlertMessages, ClinicScheduleStatus } from '../constants'
@@ -19,18 +22,28 @@ const ActionCell = ({
   showApproveButton = false,
 }: ActionCellProps) => {
   const staffId = String(clinicTime.staffId)
-  const [showUpdateAlert, setShowUpdateAlert] = useState(false)
+  const pathname = usePathname()
   const [showApproveScheduleAlert, setShowApproveScheduleAlert] =
     useState(false)
-  const canUpdateSchedule = useHasPermission('clickEditClinicTimeTab')
+
+  const hasPermissionToUpdateSchedule = useHasPermission(
+    'clickEditClinicTimeTab',
+  )
   const hasPermissionToApproveSchedule = useHasPermission(
     'clickApprovedClinicTimeTab',
   )
-  const { updateClinicScheduleStatus, staff, refetch } = useStore((store) => ({
+
+  const loggedInStaff = useGlobalStore((state) => state.staffResource)
+  const isAdminView = pathname.includes('staff')
+  const isProvider = isPrescriber(loggedInStaff)
+
+  const { updateClinicScheduleStatus, refetch } = useStore((store) => ({
     updateClinicScheduleStatus: store.updateClinicScheduleStatus,
-    staff: store.staff,
     refetch: store.refetch,
   }))
+  const canUpdateSchedule = isProvider
+    ? loggedInStaff?.id.toString() === staffId && hasPermissionToUpdateSchedule
+    : hasPermissionToUpdateSchedule
 
   const handleApproveClinicSchedule = async () => {
     if (!hasPermissionToApproveSchedule) {
@@ -53,34 +66,22 @@ const ActionCell = ({
   return (
     <Flex justify="start" px="1" gap="1" align="center">
       <PermissionAlert
-        isOpen={showUpdateAlert}
-        message={ClinicAlertMessages.CLICK_UPDATE_CLINIC_SCHEDULE}
-        onClose={() => setShowUpdateAlert(false)}
-      />
-      <PermissionAlert
         isOpen={showApproveScheduleAlert}
         message={ClinicAlertMessages.APPROVE_CLINIC_SCHEDULES_MESSAGE}
         onClose={() => setShowApproveScheduleAlert(false)}
       />
-      {!showApproveButton && staff && (
+      {!showApproveButton && isAdminView && (
         <>
-          {canUpdateSchedule ? (
+          {canUpdateSchedule && (
             <EditClinicScheduleDialog staffId={staffId} clinicTime={clinicTime}>
               <IconButton variant="ghost">
                 <TableEditIcon height={18} />
               </IconButton>
             </EditClinicScheduleDialog>
-          ) : (
-            <IconButton
-              variant="ghost"
-              onClick={() => setShowUpdateAlert(true)}
-            >
-              <TableEditIcon height={18} />
-            </IconButton>
           )}
         </>
       )}
-      {showApproveButton &&
+      {(showApproveButton || !isAdminView) &&
         clinicTime.status === ClinicScheduleStatus.Pending && (
           <Button
             variant="outline"
