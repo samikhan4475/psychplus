@@ -8,6 +8,7 @@ interface ClaimAccordionItemProps extends PropsWithChildren {
   title: string
   buttons?: ReactNode
   className?: string
+  isDisabled?: boolean
 }
 
 const ClaimAccordionItem = ({
@@ -15,6 +16,7 @@ const ClaimAccordionItem = ({
   children,
   buttons,
   className,
+  isDisabled,
 }: ClaimAccordionItemProps) => {
   const [isOpen, setIsOpen] = useState(false)
   return (
@@ -27,10 +29,17 @@ const ClaimAccordionItem = ({
     >
       <Accordion.Header>
         <Accordion.Trigger asChild onClick={() => setIsOpen(!isOpen)}>
-          <Flex className="bg-pp-table-subRows flex w-full cursor-pointer items-center justify-between rounded-1 p-1">
+          <Flex
+            className={cn(
+              'bg-pp-table-subRows flex w-full cursor-pointer items-center justify-between rounded-1 p-1',
+              {
+                'cursor-not-allowed': isDisabled,
+              },
+            )}
+          >
             <Flex align="center">
               <Flex className="mr-3 transition-transform duration-200">
-                {isOpen ? (
+                {isOpen || isDisabled ? (
                   <ChevronDownIcon
                     className="text-gray-700 h-4 w-4"
                     aria-hidden="true"
@@ -50,7 +59,9 @@ const ClaimAccordionItem = ({
           </Flex>
         </Accordion.Trigger>
       </Accordion.Header>
-      <Accordion.Content className="p-4">{children}</Accordion.Content>
+      {!isDisabled && (
+        <Accordion.Content className="p-4">{children}</Accordion.Content>
+      )}
     </Accordion.Item>
   )
 }

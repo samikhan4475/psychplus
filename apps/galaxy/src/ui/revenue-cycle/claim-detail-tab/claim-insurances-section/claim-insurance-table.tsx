@@ -13,6 +13,7 @@ const ClaimInsuranceTable = () => {
 
   const claimInsurancePolicies = form.watch('claimInsurancePolicies') ?? []
   const [editRowId, setEditRowId] = useState<number | null>(null)
+  const isSelfPay = form.watch('isSelfPay')
 
   const columns = getColumns(editRowId, setEditRowId)
   const transformedInsurances = useMemo(() => {
@@ -37,6 +38,9 @@ const ClaimInsuranceTable = () => {
       setEditRowId(null)
     }
   }, [isSubmitSuccessful])
+
+  if (isSelfPay) return null
+
   return (
     <>
       <DataTable columns={columns} data={transformedInsurances} />

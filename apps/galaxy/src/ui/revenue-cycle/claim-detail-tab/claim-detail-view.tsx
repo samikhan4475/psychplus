@@ -329,6 +329,22 @@ const ClaimDetailView = () => {
     fetchClaimData(claimId)
     setReloadClaimDialog(false)
   }
+  const isSelfPay = form.watch('isSelfPay')
+
+  useEffect(() => {
+    setOpenItems((prevOpenItems) => {
+      if (isSelfPay) {
+        return prevOpenItems.filter(
+          (item) => item !== ClaimDetailsTab.Insurances,
+        )
+      } else {
+        if (!prevOpenItems.includes(ClaimDetailsTab.Insurances)) {
+          return [...prevOpenItems, ClaimDetailsTab.Insurances]
+        }
+        return prevOpenItems
+      }
+    })
+  }, [isSelfPay])
 
   return (
     <Box>
@@ -377,6 +393,7 @@ const ClaimDetailView = () => {
               <ClaimAccordionItem
                 title={ClaimDetailsTab.Insurances}
                 buttons={<ClaimInsuranceHeaders />}
+                isDisabled={isSelfPay}
               >
                 <ClaimInsuranceTable />
               </ClaimAccordionItem>
