@@ -13,6 +13,7 @@ export const schema = z.object({
   locationId: z.string().optional(),
   visitStatuses: z.string().optional(),
   admittingProviderName: z.string().optional(),
+  admittingProviderStaffId: z.string().optional(),
   admissionDateTime: dateValidation.optional(),
   admitTime: z.custom<TimeValue>(),
   dischargeVisitSequenceDate: dateValidation.optional(),

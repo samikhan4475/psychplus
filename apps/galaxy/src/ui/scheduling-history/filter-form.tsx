@@ -66,6 +66,7 @@ const FilterForm = () => {
       locationId: '',
       visitStatuses: '',
       admittingProviderName: '',
+      admittingProviderStaffId:'',
       admissionDateTime: undefined,
       admitTime: undefined,
       dischargeVisitSequenceDate: undefined,

@@ -12,7 +12,7 @@ const AdmittingProviderSelect = () => {
     <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel>Admitting Provider</FormFieldLabel>
       <SelectInput
-        field="providerStaffId"
+        field="admittingProviderStaffId"
         placeholder="Select"
         loading={providers?.loading}
         options={providers?.data ?? []}
