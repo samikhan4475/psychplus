@@ -7,7 +7,7 @@ import { DataTable, LoadingPlaceholder } from '@/components'
 import { usePatientMedicationColumns } from './columns'
 import { PatientMedicationDialog } from './patient-medication-dialog'
 import { useStore } from './store'
-import { PatientMedication } from './types'
+import { EditOptions, PatientMedication } from './types'
 
 const PatientMedicationsDataTable = ({ actionsHide = false }) => {
   const { data, loading } = useStore(
@@ -19,9 +19,16 @@ const PatientMedicationsDataTable = ({ actionsHide = false }) => {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [selectedMedication, setSelectedMedication] =
     useState<PatientMedication | null>(null)
+  const [editOptions, setEditOptions] = useState<EditOptions | undefined>(
+    undefined,
+  )
 
-  const handleEditClick = (medication: PatientMedication) => {
+  const handleEditClick = (
+    medication: PatientMedication,
+    options?: EditOptions,
+  ) => {
     setSelectedMedication(medication)
+    setEditOptions(options)
     setDialogOpen(true)
   }
 
@@ -51,9 +58,10 @@ const PatientMedicationsDataTable = ({ actionsHide = false }) => {
       </ScrollArea>
 
       <PatientMedicationDialog
-        title="Edit Medication"
+        title={editOptions?.rePrescribe ? 'Re-Prescribe Medication' : 'Edit Medication'}
         medication={selectedMedication ?? undefined}
         open={dialogOpen}
+        editOptions={editOptions}
         onOpenChange={(open) => {
           if (!open) setSelectedMedication(null)
           setDialogOpen(open)

@@ -7,7 +7,7 @@ import { LoadingPlaceholder } from '@/components'
 import { cn } from '@/utils'
 import { getPatientPrescriptionAction } from '../actions'
 import { useStore } from '../store'
-import { PatientMedication, Prescription } from '../types'
+import { EditOptions, PatientMedication, Prescription } from '../types'
 import { dialogTitles } from './data'
 import { useSteps } from './hooks'
 import { PatientMedicationForm } from './patient-medication-form'
@@ -18,6 +18,7 @@ interface PatientMedicationDialogProps {
   medication?: PatientMedication
   open: boolean
   onOpenChange: (open: boolean) => void
+  editOptions?: EditOptions
 }
 
 const PatientMedicationDialog = ({
@@ -26,6 +27,7 @@ const PatientMedicationDialog = ({
   medication,
   open,
   onOpenChange,
+  editOptions
 }: PropsWithChildren<PatientMedicationDialogProps>) => {
   const [loading, setLoading] = useState(false)
   const { id: patientId } = useParams<{ id: string }>()
@@ -101,6 +103,7 @@ const PatientMedicationDialog = ({
             prescription={prescriptionData}
             patientId={Number(patientId)}
             step={step}
+            editOptions={editOptions}
             {...stepsProp}
           />
         )}

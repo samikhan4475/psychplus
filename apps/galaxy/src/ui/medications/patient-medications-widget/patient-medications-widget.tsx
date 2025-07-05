@@ -60,6 +60,7 @@ const PatientMedicationsWidget = () => {
     fetchPatientMedication,
     fetchScriptSureSessionToken,
     fetchExternalScriptsurePatientId,
+    refetch,
     error,
     errorStatus,
   } = useStore()
@@ -187,7 +188,7 @@ const PatientMedicationsWidget = () => {
         headerLeft={
           <Fragment>
             <SearchMedications />
-            <AddMedicationButton />
+            <AddMedicationButton onRefresh={refetch} />
           </Fragment>
         }
       >

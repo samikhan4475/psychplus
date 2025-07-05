@@ -7,6 +7,7 @@ import { FilterForm } from '@/ui/medications/patient-medications-widget/filter-f
 import { AddMedicationButton } from './add-medication-button'
 import { PrintButton } from './print-button'
 import { SearchMedications } from './search-medications'
+import { useStore } from './store'
 
 interface PatientMedicationsTabContentProps {
   tabTitle: string
@@ -18,6 +19,9 @@ const PatientMedicationsTabContent = ({
   patientId,
   children,
 }: PropsWithChildren<PatientMedicationsTabContentProps>) => {
+  const { refetch } = useStore((state) => ({
+    refetch: state.refetch,
+  }))
   return (
     <Flex id="patient-medications" direction="column" className="gap-1">
       <TabContentHeading title={tabTitle} className="gap-2">
@@ -25,7 +29,7 @@ const PatientMedicationsTabContent = ({
           <SearchMedications />
           <Flex align="center" gap="2">
             <PrintButton id="patient-medications" />
-            <AddMedicationButton />
+            <AddMedicationButton onRefresh={refetch} />
           </Flex>
         </Flex>
       </TabContentHeading>

@@ -125,6 +125,10 @@ const getInitialValuesPatientMedication = (
         doseUnitCode: prescriptionSignature?.doseUnitCode ?? '',
         duration: String(prescriptionSignature?.duration ?? ''),
         durationUnitCode: prescriptionSignature?.durationUnitCode ?? '',
+        DaysSupply:
+          prescriptionDrug?.daysSupply !== null
+            ? String(prescriptionDrug.daysSupply)
+            : '',
         medicationStatus: prescriptionDrug?.medicationStatus ?? '',
         prescribingStaffId: String(medication?.prescribingStaffId ?? ''),
         refills: String(prescriptionDrug?.refills ?? ''),

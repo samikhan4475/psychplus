@@ -12,6 +12,9 @@ enum ConfirmationMethod {
   Otp = 'Otp',
   Authenticator = 'Authenticator',
 }
+interface StepContext {
+  transmissionResult?: TransmitResult[]
+}
 interface StepComponentProps {
   onNext: () => void
   onPrev: () => void
@@ -22,6 +25,8 @@ interface StepComponentProps {
   onTransmit?: (isVerificationStep?: boolean) => Promise<void | string>
   isTransmiting?: boolean
   transmissionResult?: TransmitResult[]
+  stepContext?: StepContext
+  setStepContext?: React.Dispatch<React.SetStateAction<StepContext>>
 }
 
-export { ConfirmationMethod, Step, type StepComponentProps }
+export { ConfirmationMethod, Step, type StepComponentProps,type StepContext }

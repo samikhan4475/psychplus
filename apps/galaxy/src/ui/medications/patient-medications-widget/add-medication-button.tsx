@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
-import { Button, Dialog } from '@radix-ui/themes'
-import { PlusIcon } from 'lucide-react'
+import { Button, Dialog, Text } from '@radix-ui/themes'
+import { PlusIcon, RefreshCcw } from 'lucide-react'
 import { FEATURE_FLAGS } from '@/constants'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { PatientMedicationDialog } from './patient-medication-dialog'
 import { ScriptSureMedicationDialog } from './script-sure-medication-dialog'
+import { useStore } from './store'
 
-const AddMedicationButton = () => {
+const AddMedicationButton = ({ onRefresh }: { onRefresh?: () => void }) => {
+  const loading = useStore((state) => state.loading)
+
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
   )
@@ -17,6 +20,15 @@ const AddMedicationButton = () => {
   if (!isFeatureFlagEnabled) {
     return (
       <>
+        <Button
+          className="border-pp-grey bg-white h-6 flex-row gap-1 rounded-2 border border-solid align-middle"
+          type="button"
+          disabled={loading}
+          onClick={onRefresh}
+        >
+          <RefreshCcw className="text-pp-gray-3" width="16px" height="16px" />
+          <Text className="text-pp-black-3 text-1">Refresh</Text>
+        </Button>
         <Button
           size="1"
           variant="outline"

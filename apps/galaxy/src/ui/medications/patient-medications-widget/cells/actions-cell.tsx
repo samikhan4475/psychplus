@@ -13,18 +13,20 @@ interface ActionsCellProps extends PropsWithRow<PatientMedication> {
 
 const ActionsCell = ({ row, onEditClick }: ActionsCellProps) => {
   const rowActions: RowAction<PatientMedication>[] = [
-    {
+    { 
       id: 'row-action-cancel',
       render: RowActionCancel,
     },
     {
       id: 'row-action-refresh',
-      render: RowActionRefresh,
+      render: (props) => (
+        <RowActionRefresh {...props} onEditClick={onEditClick} />
+      ),
     },
     {
       id: 'row-action-edit',
       render: (props) => <RowActionEdit {...props} onEditClick={onEditClick} />,
-    }
+    },
   ]
 
   return <AdaptiveRowActionsCell actions={rowActions} row={row} />

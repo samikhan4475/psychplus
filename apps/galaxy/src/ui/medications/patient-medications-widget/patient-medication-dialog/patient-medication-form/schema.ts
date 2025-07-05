@@ -60,6 +60,7 @@ const schema = z
         sigDescription: z.string().min(1, 'Required'),
         medicationStatus: z.string().min(1, 'Required'),
         diagnosis: z.array(diagnosesSchema).optional(),
+        DaysSupply: z.ostring().optional()
       }),
     ),
     pharmacyNcpdpId: z.ostring(),

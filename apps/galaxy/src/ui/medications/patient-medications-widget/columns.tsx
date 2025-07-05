@@ -133,7 +133,7 @@ const usePatientMedicationColumns = ({
             maxSize: 100,
             header: () => <ColumnHeader label="Transmit Status" />,
             cell: ({ row }: { row: Row<PatientMedication> }) => (
-              <TextCell>{row.original?.transactionStatus}</TextCell>
+              <TextCell>{row.original?.userTransactionStatus}</TextCell>
             ),
           },
         ]

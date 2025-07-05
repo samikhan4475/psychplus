@@ -18,18 +18,24 @@ import { PatientMedication, PatientPrescriptionStatus } from '../types'
 
 interface RowActionRefreshProps {
   row: Row<PatientMedication>
+  onEditClick: (
+    medication: PatientMedication,
+    options?: { rePrescribe?: boolean },
+  ) => void
 }
 
-const RowActionRefresh = ({ row }: RowActionRefreshProps) => {
-  const { prescriptionStatusTypeId } = row.original
-
+const RowActionRefresh = ({ row, onEditClick }: RowActionRefreshProps) => {
+  const { prescriptionStatusTypeId, medicationStatus } = row.original
   const { original: record } = row
   const patientId = useParams().id as string
-  const isDisabled =
-    prescriptionStatusTypeId?.toString() !== PatientPrescriptionStatus.ACTIVE
+
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
   )
+  const isDisabled = !isFeatureFlagEnabled
+    ? medicationStatus !== 'Active'
+    : prescriptionStatusTypeId?.toString() !== PatientPrescriptionStatus.ACTIVE
+
   const pathname = usePathname()
   const isQuickNoteSection = pathname.includes('quicknotes')
   const { refetch, scriptSureSessionToken } = useStore()
@@ -42,6 +48,10 @@ const RowActionRefresh = ({ row }: RowActionRefreshProps) => {
   }))
 
   const onRefresh = async () => {
+    if (!isFeatureFlagEnabled) {
+      onEditClick(record, { rePrescribe: true })
+      return
+    }
     setIsLoading(true)
     const result = await getPatientMedicationOrderAction({
       patientId,

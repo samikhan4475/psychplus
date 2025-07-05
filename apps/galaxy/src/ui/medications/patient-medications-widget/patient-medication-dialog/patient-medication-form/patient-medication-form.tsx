@@ -11,13 +11,13 @@ import { addPatientPrescriptions, prescribingSignInAction } from '../../actions'
 import { updatePatientMedicationsAction } from '../../actions/update-patient-medication'
 import { useStore } from '../../store'
 import { transformOutPatientMedication } from '../../transform'
-import { Prescription, TransmitResult } from '../../types'
+import { EditOptions, Prescription, TransmitResult } from '../../types'
 import { getInitialValuesPatientMedication } from '../../utils'
 import { ConfirmMedication } from '../confirm-medication'
 import { CredentialsVerificationForm } from '../credentials-verification'
 import { PrescriptionComplete } from '../prescription-complete'
 import { ReviewPrescription } from '../review-prescription'
-import { Step, StepComponentProps } from '../types'
+import { Step, StepComponentProps, StepContext } from '../types'
 import { FormFields } from './form-fields'
 import { PatientMedicationSchemaType, schema } from './schema'
 
@@ -26,12 +26,14 @@ interface PatientMedicationFormProps extends StepComponentProps {
   prescription?: Prescription
   patientId: number
   transmissionResult?: TransmitResult[]
+  editOptions?: EditOptions
 }
 
 const PatientMedicationForm = ({
   onClose,
   prescription,
   patientId,
+  editOptions,
   ...stepProps
 }: PatientMedicationFormProps) => {
   const { refetch } = useStore((state) => ({
@@ -53,6 +55,7 @@ const PatientMedicationForm = ({
   const [transmissionResult, setTransmissionResult] = useState<Prescription[]>(
     [],
   )
+  const [stepContext, setStepContext] = useState<StepContext>({})
 
   const { setValue } = form
 
@@ -88,7 +91,10 @@ const PatientMedicationForm = ({
     }
   }, [stepProps.step, wasCompleteStep])
 
-  const addUpdatePrecriptions = (payloads: Partial<Prescription>[]) =>
+  const addUpdatePrecriptions = (
+    payloads: Partial<Prescription>[],
+    options?: EditOptions,
+  ) =>
     Promise.all(
       payloads.map(async (item, ind) => {
         if (item?.id) {
@@ -114,19 +120,28 @@ const PatientMedicationForm = ({
           if (response?.data) {
             const { drugs } = getInitialValuesPatientMedication(response?.data)
             form.setValue(`drugs.${ind}`, drugs?.[0])
-            setPrescriptions((prev) => [...prev, response.data])
+            const newPrescription = response.data
+
+            setPrescriptions((prev) =>
+              options?.rePrescribe
+                ? [newPrescription]
+                : [...prev, newPrescription],
+            )
           }
         }
       }),
     )
 
   const onSubmit = async (data: PatientMedicationSchemaType) => {
-    const payloads = transformOutPatientMedication(
+    let payloads = transformOutPatientMedication(
       data,
       patientId,
       Number(appointmentId),
     )
-    const results = await addUpdatePrecriptions(payloads)
+    if (editOptions?.rePrescribe) {
+      payloads = payloads.map(({ id, ...rest }) => rest)
+    }
+    const results = await addUpdatePrecriptions(payloads, editOptions)
     const errorResult = results.find((result) => result?.state === 'error')
     if (errorResult) {
       form.setValue('isReviewing', false)
@@ -215,6 +230,8 @@ const PatientMedicationForm = ({
         isTransmiting={isTransmitting}
         transmissionResult={transmissionResult}
         onClose={onClose}
+        stepContext={stepContext}
+        setStepContext={setStepContext}
         onJump={(nextStep) => {
           if (stepProps?.step === Step.Form && nextStep === Step.Review) {
             return form.handleSubmit(onSubmit)()

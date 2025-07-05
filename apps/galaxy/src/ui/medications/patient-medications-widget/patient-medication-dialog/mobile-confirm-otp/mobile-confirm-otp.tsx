@@ -13,10 +13,10 @@ import {
   pushSign,
   selfPollStatus,
 } from '../../actions'
+import { SelfPollStatusPayloadProps, TransmitResult } from '../../types'
 import { IconBlock } from '../shared'
-import { ConfirmationMethod } from '../types'
+import { ConfirmationMethod, StepContext } from '../types'
 import { OtpInput } from './otp-input'
-import { SelfPollStatusPayloadProps } from '../../types'
 
 const otpSchemaRequired = z.object({
   otp: z.string().optional(),
@@ -33,6 +33,7 @@ interface MobileConfirmOtpProps {
   confirmationMethod?: ConfirmationMethod.Otp | ConfirmationMethod.Authenticator
   prescriptionDrugIds: string[]
   controlledPrescriptionIds?: string[]
+  setStepContext?: React.Dispatch<React.SetStateAction<StepContext>>
 }
 
 const MobileConfirmOtp = ({
@@ -41,6 +42,7 @@ const MobileConfirmOtp = ({
   confirmationMethod,
   prescriptionDrugIds,
   controlledPrescriptionIds,
+  setStepContext,
 }: MobileConfirmOtpProps) => {
   const form = useForm<SchemaType>({
     defaultValues: { otp: '' },
@@ -76,7 +78,14 @@ const MobileConfirmOtp = ({
       setIsOpen(true)
       return false
     }
+    toast.success('Transmitted Successfully')
 
+    if (resp?.data && setStepContext) {
+      setStepContext((prev) => ({
+        ...prev,
+        transmissionResult: resp.data as TransmitResult[],
+      }))
+    }
     return true
   }
 

@@ -96,6 +96,7 @@ interface PatientMedication {
   prescriptionStatus: PrescriptionStatus
   isControlledSubstance: boolean
   transactionStatus: string
+  userTransactionStatus:string
 }
 
 interface GetPatientMedicationsResponse {
@@ -365,6 +366,9 @@ interface EncounterData {
   locationId?: string
   providerStaffId?: number
 }
+interface EditOptions {
+  rePrescribe?: boolean
+}
 export {
   PrescribedStatus,
   MedicationType,
@@ -391,4 +395,5 @@ export {
   type PmpReportRequest,
   type PmpReportResponse,
   type EncounterData,
+  type EditOptions
 }

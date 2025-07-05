@@ -7,14 +7,17 @@ import { IconBlock } from '../shared'
 import { Step, StepComponentProps } from '../types'
 import { CompleteNextStep } from './complete-next-step'
 import { PrescriptionBlock } from './prescription-block'
+import { TransmitResult } from '../../types'
 
 const PrescriptionComplete = ({
   onClose,
   onJump,
   transmissionResult,
+  stepContext
 }: StepComponentProps) => {
-  const transactionId = transmissionResult?.[0]?.id ?? ''
-  const transactionDate = transmissionResult?.[0]?.writtenDate ?? ''
+  const effectiveResult = transmissionResult ?? (stepContext?.transmissionResult as TransmitResult[]) ?? []
+  const transactionId = effectiveResult?.[0]?.id ?? ''
+  const transactionDate = effectiveResult?.[0]?.writtenDate ?? ''
   return (
     <Flex direction="column" justify="between" className="min-h-[491px]">
       <Flex direction="column" gap="3">

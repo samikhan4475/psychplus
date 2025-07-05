@@ -71,7 +71,8 @@ const transformOutPatientMedication = (
           DrugCodeQualifier: drug?.DrugCodeQualifier ?? 'ND',
           drugCode: drug?.drugCode ?? '',
           DeaSchedule: drug?.DeaSchedule,
-          DrugNote:drug.instructionOrNotes
+          DrugNote:drug.instructionOrNotes,
+          DaysSupply: Number(drug.duration),
         }),
       ],
       prescriptionSignatures: [
