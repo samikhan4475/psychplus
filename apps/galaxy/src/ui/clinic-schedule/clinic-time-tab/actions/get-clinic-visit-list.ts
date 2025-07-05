@@ -1,6 +1,7 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { GET_CLINIC_SCHEDULES_LIST } from '@/api/endpoints'
 import { transformIn } from '../transform'
 import { ClinicSchedule, GetClinicVisitListParams } from '../types'
 
@@ -20,9 +21,8 @@ const getClinicVisitList = async ({
   page = 1,
 }: GetClinicVisitListParams): Promise<api.ActionResult<ClinicSchedule[]>> => {
   const offset = (page - 1) * 20
-  const url = new URL(api.GET_CLINIC_SCHEDULES_LIST(staffId))
-  url.searchParams.append('limit', String(20))
-  url.searchParams.append('offset', String(offset))
+  let url = GET_CLINIC_SCHEDULES_LIST(staffId)
+  url += `?limit=${String(20)}&offset=${String(offset)}`
   const response = await api.POST<ClinicSchedule[]>(url.toString(), {
     ...defaultPayload,
     ...formValues,
