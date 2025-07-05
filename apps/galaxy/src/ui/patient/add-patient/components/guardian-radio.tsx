@@ -12,11 +12,15 @@ const GuardianRadio = () => {
   const age = dob ? getAgeFromDate(dob) : 18
 
   useEffect(() => {
-    if (age < 18) {
-      form.setValue('hasGuardian', 'yes')
-    } else {
-      form.setValue('hasGuardian', 'no')
-    }
+    const timeoutId = setTimeout(() => {
+      if (age < 18) {
+        form.setValue('hasGuardian', 'yes')
+      } else {
+        form.setValue('hasGuardian', 'no')
+      }
+    }, 500)
+
+    return () => clearTimeout(timeoutId)
   }, [age])
 
   return (
