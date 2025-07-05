@@ -15,6 +15,7 @@ import {
   createInsurancePaymentAttachmentsAction,
   updateInsurancePaymentAction,
 } from '../../actions'
+import { PaymentListTypes } from '../../insurance-payment-detail-tab/types'
 import { useStore } from '../../insurance-payment-tab/store'
 import { InsurancePayment, PaymentAttachments } from '../../types'
 import { AmountField } from './amount-field'
@@ -55,7 +56,7 @@ const InsurancePaymentForm = ({
       checkNumber: data?.checkNumber ?? '',
       comments: data?.comments ?? '',
       checkDate: data?.checkDate && getLocalCalendarDate(data?.checkDate),
-      insurancePlanId:data?.insurancePlanId ?? '',
+      insurancePlanId: data?.insurancePlanId ?? '',
       receivedDate:
         data?.receivedDate && getLocalCalendarDate(data?.receivedDate),
       depositDate: data?.depositDate && getLocalCalendarDate(data?.depositDate),
@@ -120,11 +121,10 @@ const InsurancePaymentForm = ({
         }
       : {
           ...reqPayload,
-          status: 'NeedPosted',
+          status: PaymentListTypes.Unposted,
           paymentType: 'Eob',
         }
 
-    delete finalPayload['postedAmount']
     delete finalPayload['claimPayments']
     const sanitizedPayload = sanitizeFormData(finalPayload)
     const response = data?.id
