@@ -20,7 +20,7 @@ const PATCH = async <T>(
     method: 'PATCH',
     body: isFormData ? body : JSON.stringify(body),
     ...rest,
-    headers: { 'Content-Type': 'application/json' },
+    headers: isFormData ? {} : { 'Content-Type': 'application/json' },
   })
 
   const data = getResponseData(await response.text())
@@ -44,7 +44,8 @@ const PATCH = async <T>(
 
 interface PostOptions extends RequestInit {
   ignoreHeaders?: boolean
-   signal?: AbortSignal
+  signal?: AbortSignal
+  binaryResponse?: boolean
 }
 
 const PUT = async <T>(
@@ -59,7 +60,7 @@ const PUT = async <T>(
     body: isFormData ? body : JSON.stringify(body),
     signal,
     ...rest,
-    headers: { 'Content-Type': 'application/json' },
+    headers: isFormData ? {} : { 'Content-Type': 'application/json' },
   })
 
   const data = getResponseData(await response.text())
@@ -86,7 +87,7 @@ const POST = async <T>(
   body?: FormData | object,
   options: PostOptions = {},
 ): Promise<NetworkResult<T>> => {
-  const { signal,...rest } = options
+  const { signal, binaryResponse = false, ...rest } = options
 
   const isFormData = body instanceof FormData
 
@@ -95,25 +96,38 @@ const POST = async <T>(
     body: isFormData ? body : JSON.stringify(body),
     signal,
     ...rest,
-    headers: { 'Content-Type': 'application/json' },
+    headers: isFormData ? {} : { 'Content-Type': 'application/json' },
   })
 
-  const data = getResponseData(await response.text())
-
   if (!response.ok) {
+    const errorText = await response.text()
+    let errorData
+    try {
+      errorData = JSON.parse(errorText)
+    } catch {
+      errorData = errorText
+    }
+    
     return {
-      error: getErrorMessage(data),
+      error: getErrorMessage(errorData),
       state: 'error',
-
       headers: response.headers,
       status: response.status,
     }
   }
 
+  let data: T
+  if (binaryResponse) {
+    // For binary responses, return the blob directly
+    data = await response.blob() as T
+  } else {
+    // For JSON responses, parse as usual
+    data = getResponseData(await response.text())
+  }
+
   return {
     data,
     state: 'success',
-
     headers: response.headers,
   }
 }

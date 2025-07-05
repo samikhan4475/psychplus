@@ -29,6 +29,10 @@ const NAV_LINKS = [
     href: '/billing/credit-debit-cards',
     label: 'Billing',
   },
+  {
+    href: '/journal',
+    label: 'Journal',
+  },
   // {
   //   href: '/messages',
   //   label: 'Messages',

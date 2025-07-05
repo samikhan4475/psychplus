@@ -145,6 +145,12 @@ const ResponsiveMenuLinks = () => {
           },
         ]}
       />
+        <MenuItem
+        value="journal"
+        label="Journal"
+        href="/journal"
+      
+      />
     </Accordion.Root>
   )
 }
