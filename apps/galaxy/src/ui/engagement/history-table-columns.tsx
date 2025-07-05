@@ -3,9 +3,11 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, DateTimeCell, TextCell } from '@/components'
 import { formatDate, formatDateTime } from '@/utils'
+import HistoryVisitTypeCell from './history-visit-type-cell'
+import { WaitlistResponse } from '@/types'
 
 const getWaitlistHistoryColumns = () => {
-  const columns: ColumnDef<any>[] = [
+  const columns: ColumnDef<WaitlistResponse>[] = [
     {
       id: 'username',
       accessorKey: 'username',
@@ -45,11 +47,7 @@ const getWaitlistHistoryColumns = () => {
       header: ({ column }) => (
         <ColumnHeader clientSideSort label="Visit Type" column={column} />
       ),
-      cell: ({ row }) => (
-        <TextCell className="whitespace-nowrap">
-          {row.original?.visitType}
-        </TextCell>
-      ),
+      cell: HistoryVisitTypeCell,
     },
     {
       id: 'patientName',

@@ -5,6 +5,9 @@ interface WaitlistResponse {
   id: number
   metadata: Metadata
   visitTypeCode: string
+  visitType:string
+  visitSequence:string
+  visitMedium:string
   providerId: number
   waitingStatus: string
   priority: string

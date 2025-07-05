@@ -6,16 +6,18 @@ import { ColumnHeader, DateTimeCell, SelectCell, TextCell } from '@/components'
 import { formatDate } from '@/utils'
 import { ActionsCell } from './actions-cell'
 import { WAITLIST_STATUS_CODESET } from './constant'
+import VisitTypeCell from './visit-type-cell'
+import { WaitlistResponse } from '@/types'
 
 const getWaitlistColumns = (isManagement: boolean) => {
-  const columns: ColumnDef<any>[] = [
+  const columns: ColumnDef<WaitlistResponse>[] = [
     {
       id: 'visitType',
       accessorKey: 'visitType',
       header: ({ column }) => (
         <ColumnHeader clientSideSort label="Visit Type" column={column} />
       ),
-      cell: ({ row }) => <TextCell>{row.original?.visitType}</TextCell>,
+      cell: VisitTypeCell,
     },
     ...(!isManagement
       ? [
