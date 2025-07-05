@@ -6,8 +6,8 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { FormContainer } from '@/components'
 import { formatDateToISOString } from '@/utils'
 import { useStore as useMessagesStore } from '../messages/store'
-import { Filter } from './filter'
-import { FiltersButton } from './filter-button'
+import { Filter } from './list-filter/filter'
+import { FiltersButton } from './list-filter/filter-button'
 import { MessageSearch } from './message-search'
 import { NewMessageButton } from './new-message-button'
 import { schema, SchemaType } from './schema'
@@ -40,7 +40,7 @@ const MessageHeader = ({ tab }: { tab: string }) => {
       search({ messageStatus: activeTab as SecureMessagesTab }, page, true)
 
     setPreviewSecureMessage({
-      activeTab: activeTab as SecureMessagesTab,
+      activeTab: tab as SecureMessagesTab,
       secureMessage: null,
     })
     setActiveComponent(ActiveComponent.NEW_EMAIL_PLACEHOLDER)
@@ -61,9 +61,11 @@ const MessageHeader = ({ tab }: { tab: string }) => {
     const cleanedPayload = {
       ...data,
       messageStatus: activeTab as SecureMessagesTab,
-      to: data.to ? formatDateToISOString(data.to as DateValue) : undefined,
+      to: data.to
+        ? formatDateToISOString(data.to as DateValue, true)
+        : undefined,
       from: data.from
-        ? formatDateToISOString(data.from as DateValue, true)
+        ? formatDateToISOString(data.from as DateValue)
         : undefined,
     }
     if (

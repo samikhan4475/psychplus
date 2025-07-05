@@ -15,7 +15,13 @@ import { useStore as useMessagesStore } from '../../messages/store'
 import { updateChannelAction } from '../actions'
 import { PAGE_SIZE } from '../contants'
 import { useStore } from '../store'
-import { ActiveComponent, SecureMessage, SecureMessagesTab } from '../types'
+import {
+  ActiveComponent,
+  Channel,
+  SecureMessage,
+  SecureMessagesTab,
+} from '../types'
+import { sortOnLastMessage } from '../utils'
 import {
   MessageDateTimeCell,
   MessageFromCell,
@@ -120,7 +126,7 @@ const SecureMessagesTable = () => {
         cell: MessageUserNameCell,
       },
       {
-        id: 'datatime',
+        id: 'data-time',
         size: 140,
         header: ({ column }) =>
           ColumnHeader({
@@ -156,31 +162,107 @@ const SecureMessagesTable = () => {
         setActiveComponent(ActiveComponent.DRAFT)
       } else {
         setActiveComponent(ActiveComponent.PREVIEW_EMAIL)
-        if (
-          activeTab === SecureMessagesTab.INBOX ||
-          activeTab === SecureMessagesTab.ARCHIVED
-        ) {
-          const channel = secureMessage?.channels?.find(
-            (channel) => channel.receiverUserId === user.id,
-          )
-          if (!channel?.id || !secureMessage.id) return
+        if (activeTab === SecureMessagesTab.INBOX) {
+          const conversation = secureMessage.secureMessageConversations || []
+          const hasConversation = conversation?.length
+          let channel: Channel | undefined
 
-          const payload = { ...channel, isRead: true }
-          const result = await updateChannelAction(
-            secureMessage.id,
-            channel.id,
-            payload,
-          )
-
-          if (result.state === 'error') {
-            toast.error('Failed to update channel')
-          } else {
-            if (!channel.isRead) setUnreadCount(unreadCount - 1)
-            channel.isRead = true
-            const updatedMessages = secureMessages.map((msg) =>
-              msg.id === secureMessage.id ? secureMessage : msg,
+          const ownChannels: Channel[] = []
+          let channelsToUpdate: Channel[] = []
+          if (hasConversation) {
+            conversation
+              .slice()
+              .reverse()
+              .forEach((c) =>
+                c?.channels.some((ch) => {
+                  const matched = ch.receiverUserId === user.id
+                  if (matched) ownChannels.push(ch)
+                  return matched
+                }),
+              )
+            channelsToUpdate = ownChannels.filter(
+              (ch) => !ch.isRead && ch.receiverUserId === user.id,
             )
+          } else {
+            channel = secureMessage?.channels?.find(
+              (channel) => channel.receiverUserId === user.id,
+            )
+            if (channel?.id) {
+              channelsToUpdate.push(channel)
+            }
+          }
+          if (!channelsToUpdate?.length || !secureMessage.id) return
+
+          const responses = await Promise.all(
+            channelsToUpdate.map((ch) => {
+              const payload = { ...ch, isRead: true }
+              return updateChannelAction(secureMessage.id, ch.id, payload)
+            }),
+          )
+
+          if (responses.some((response) => response.state === 'error')) {
+            return toast.error('Failed to mark read')
+          } else {
+            // Mark isRead in channels and update secureMessages in store
+            channelsToUpdate.forEach((ch) => {
+              ch.isRead = true
+            })
+
+            // Update the secureMessage's channels in the secureMessages array
+            const updatedMessages = secureMessages.map((msg) => {
+              if (msg.id !== secureMessage.id) {
+                return msg
+              }
+              // Update channels in the root message
+
+              const updatedChannels =
+                msg.channels?.map((ch) => {
+                  const updated = channelsToUpdate.find((c) => c.id === ch.id)
+                  return updated ? { ...ch, isRead: true } : ch
+                }) ?? msg.channels
+
+              // Update channels in conversations
+              const updatedConversations = msg.secureMessageConversations?.map(
+                (conv) => ({
+                  ...conv,
+                  channels:
+                    conv.channels?.map((ch) => {
+                      const updated = channelsToUpdate.find(
+                        (c) => c.id === ch.id,
+                      )
+                      if (!updated?.isRead) setUnreadCount(unreadCount - 1)
+                      return updated ? { ...ch, isRead: true } : ch
+                    }) ?? conv.channels,
+                }),
+              )
+
+              return {
+                ...msg,
+                channels: updatedChannels,
+                secureMessageConversations: updatedConversations,
+              }
+            })
             setSecureMessages(updatedMessages)
+            // to update the isRead status in the preview
+            setPreviewSecureMessage({
+              secureMessage: {
+                ...secureMessage,
+                channels: secureMessage.channels?.map((ch) => ({
+                  ...ch,
+                  isRead: true,
+                })),
+                secureMessageConversations:
+                  secureMessage.secureMessageConversations?.map((conv) => ({
+                    ...conv,
+                    channels: conv.channels.map((ch) =>
+                      ch.receiverUserId === user.id
+                        ? { ...ch, isRead: true }
+                        : ch,
+                    ),
+                  })) ?? [],
+              },
+              activeTab: activeTab as SecureMessagesTab,
+            })
           }
         }
       }

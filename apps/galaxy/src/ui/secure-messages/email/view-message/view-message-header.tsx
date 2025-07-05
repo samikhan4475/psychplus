@@ -4,7 +4,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from '@radix-ui/react-icons'
-import { Button, Flex } from '@radix-ui/themes'
+import { Button, Flex, Tooltip } from '@radix-ui/themes'
 import { Text } from 'react-aria-components'
 import toast from 'react-hot-toast'
 import { ArchiveIcon } from '@/components/icons'
@@ -14,7 +14,16 @@ import { useStore as useMessagesStore } from '../../../messages/store'
 import { updateChannelAction } from '../../actions'
 import { PAGE_SIZE } from '../../contants'
 import { useStore } from '../../store'
-import { ActiveComponent, RecordStatus, SecureMessagesTab } from '../../types'
+import {
+  ActiveComponent,
+  RecordStatus,
+  SecureMessage,
+  SecureMessagesTab,
+} from '../../types'
+import {
+  getLatestMessageWithOwnChannel,
+  hasUnreadInConversation,
+} from '../../utils'
 import { MarkAsReadButton } from './mark-as-read-button'
 import { MarkAsUnreadButton } from './mark-as-unread-button'
 
@@ -23,20 +32,26 @@ const ViewMessageHeader = () => {
   const fetchUnreadCount = useMessagesStore((state) => state.fetchUnreadCount)
   const {
     secureMessages = [],
+    formValues,
     page,
     total,
     previewSecureMessage,
     setPreviewSecureMessage,
+    setSecureMessages,
+    search,
     next,
     prev,
     setActiveComponent,
     activeTab,
   } = useStore((state) => ({
     secureMessages: state.secureMessages,
+    formValues: state.formValues,
     page: state.page,
     total: state.total,
     previewSecureMessage: state.previewSecureMessage,
     setPreviewSecureMessage: state.setPreviewSecureMessage,
+    setSecureMessages: state.setSecureMessages,
+    search: state.search,
     next: state.next,
     prev: state.prev,
     setActiveComponent: state.setActiveComponent,
@@ -55,11 +70,24 @@ const ViewMessageHeader = () => {
     }
   }, [secureMessages, previewSecureMessage.secureMessage?.id, page])
 
-  const channel = useMemo(() => {
-    return previewSecureMessage?.secureMessage?.channels?.find(
-      (channel) => channel.receiverUserId === user.id,
+  // to find the latest logged in user's own channel and message in the conversation
+  const { channel: latestChannel, message: latestMessage } = useMemo(() => {
+    return getLatestMessageWithOwnChannel(
+      previewSecureMessage?.secureMessage,
+      user.id,
     )
-  }, [previewSecureMessage?.secureMessage?.channels])
+  }, [previewSecureMessage?.secureMessage?.id])
+
+  const hasUnread = useMemo(
+    () =>
+      previewSecureMessage?.secureMessage
+        ? hasUnreadInConversation(
+            previewSecureMessage.secureMessage as SecureMessage,
+            user.id,
+          )
+        : false,
+    [previewSecureMessage?.secureMessage, user.id],
+  )
 
   const nextMessageHandler = async () => {
     const totalMessagesLoaded = (page - 1) * PAGE_SIZE + secureMessages.length
@@ -110,20 +138,20 @@ const ViewMessageHeader = () => {
   }
 
   const onSubmit = async (type: string) => {
-    if (channel?.id && previewSecureMessage?.secureMessage?.id) {
-      const payload = {
-        ...channel,
-      }
+    const conversation =
+      previewSecureMessage?.secureMessage?.secureMessageConversations || []
+    if (!conversation?.length) return
 
-      if (type === 'messageStatus') {
-        payload.isRead = !payload.isRead
-      } else if (type === 'recordStatus') {
-        payload.recordStatus = RecordStatus.ARCHIVED
+    if (type === 'messageStatus') {
+      if (!latestChannel?.id) return
+      const payload = {
+        ...latestChannel,
+        isRead: !latestChannel.isRead,
       }
 
       const result = await updateChannelAction(
-        previewSecureMessage.secureMessage.id,
-        channel.id,
+        latestMessage.id,
+        latestChannel.id,
         payload,
       )
 
@@ -131,17 +159,80 @@ const ViewMessageHeader = () => {
         toast.error(result.error || 'Failed to update channel')
         return
       }
-      const updatedChannels =
-        previewSecureMessage?.secureMessage?.channels?.map((ch) =>
-          ch.id === channel.id ? { ...ch, ...payload } : ch,
+      toast.success('Message updated successfully')
+    } else if (type === 'recordStatus') {
+      // Find all ownChannels and update them as Archived using Promise.all
+      const ownChannels = conversation.flatMap((message) =>
+        (message?.channels || [])
+          .filter((ch) => ch.receiverUserId === user.id)
+          .map((ch) => ({ messageId: message.id, channel: ch })),
+      )
+
+      const responses = await Promise.all(
+        ownChannels.map(async ({ messageId, channel }) => {
+          const payload = {
+            ...channel,
+            recordStatus:
+              channel.recordStatus === RecordStatus.ARCHIVED
+                ? RecordStatus.ACTIVE
+                : RecordStatus.ARCHIVED,
+          }
+          return updateChannelAction(messageId, channel.id, payload)
+        }),
+      )
+      if (responses.some((response) => response.state === 'error')) {
+        toast.error('Failed to update channels')
+        return
+      }
+      toast.success(
+        `${
+          activeTab === SecureMessagesTab.ARCHIVED ? 'Archived' : 'Unarchived'
+        } successfully`,
+      )
+      setPreviewSecureMessage({ activeTab, secureMessage: null })
+      setActiveComponent(ActiveComponent.NEW_EMAIL_PLACEHOLDER)
+      search({ messageStatus: activeTab, ...formValues }, page, true)
+
+      return
+    } else return
+
+    if (latestChannel?.id && previewSecureMessage?.secureMessage?.id) {
+      // Update all channels in all conversations where receiverUserId matches user.id
+      const updatedConversations =
+        previewSecureMessage?.secureMessage?.secureMessageConversations?.map(
+          (conv) => ({
+            ...conv,
+            channels: conv.channels?.map((ch) => {
+              const payload = { ...ch }
+              if (type === 'messageStatus') {
+                payload.isRead = !payload.isRead
+              } else if (type === 'recordStatus') {
+                payload.recordStatus =
+                  payload.recordStatus !== RecordStatus.ARCHIVED
+                    ? RecordStatus.ARCHIVED
+                    : RecordStatus.ACTIVE
+              }
+              return ch.receiverUserId === user.id ? { ...payload } : ch
+            }),
+          }),
         )
       setPreviewSecureMessage({
         ...previewSecureMessage,
         secureMessage: {
           ...previewSecureMessage.secureMessage,
-          channels: updatedChannels,
+          secureMessageConversations: updatedConversations,
         },
       })
+      setSecureMessages(
+        secureMessages.map((msg) =>
+          msg.id === previewSecureMessage?.secureMessage?.id
+            ? {
+                ...msg,
+                secureMessageConversations: updatedConversations,
+              }
+            : msg,
+        ),
+      )
 
       if (type === 'messageStatus') {
         fetchUnreadCount()
@@ -171,43 +262,51 @@ const ViewMessageHeader = () => {
           }}
           className="text-pp-gray-1 cursor-pointer"
         />
-        {activeTab === SecureMessagesTab.INBOX && (
-          <Button
-            type="button"
-            variant="outline"
-            className="hover:bg-pp-table-subRows h-[16px] rounded-2 bg-transparent p-[2px] [box-shadow:none]"
-            onClick={(e) => {
-              e?.stopPropagation()
-              onSubmit('recordStatus')
-            }}
+
+        {(activeTab === SecureMessagesTab.INBOX ||
+          activeTab === SecureMessagesTab.ARCHIVED) && (
+          <Tooltip
+            content={
+              activeTab === SecureMessagesTab.INBOX ? 'Archive' : 'Unarchive'
+            }
           >
-            <ArchiveIcon
-              width={16}
-              height={16}
-              className="fill-pp-icon-sub cursor-pointer"
-            />
-          </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="hover:bg-pp-table-subRows h-[16px] rounded-2 bg-transparent p-[2px] [box-shadow:none]"
+              onClick={(e) => {
+                e?.stopPropagation()
+                onSubmit('recordStatus')
+              }}
+            >
+              <ArchiveIcon
+                width={16}
+                height={16}
+                className="fill-pp-icon-sub cursor-pointer"
+              />
+            </Button>
+          </Tooltip>
         )}
         {isInboxOrArchived && (
           <>
-            {isInboxOrArchived && channel?.isRead && (
+            {isInboxOrArchived && !hasUnread && (
               <MarkAsUnreadButton onSubmit={onSubmit} />
             )}
-            {isInboxOrArchived && !channel?.isRead && (
+            {isInboxOrArchived && hasUnread && (
               <MarkAsReadButton onSubmit={onSubmit} />
             )}
           </>
         )}
       </Flex>
       <Flex align="center" gap="4" className="pr-6">
-        <Text>
-          {currentActiveMessage} of {total}
-        </Text>
-        <Flex>
+        <Flex align="center">
           <ChevronLeftIcon
             onClick={previousMessageHandler}
             className="cursor-pointer"
           />
+          <Text>
+            {currentActiveMessage} of {total}
+          </Text>
           <ChevronRightIcon
             onClick={nextMessageHandler}
             className={cn(

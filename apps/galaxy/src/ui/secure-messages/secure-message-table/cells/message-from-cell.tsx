@@ -9,6 +9,7 @@ import { getRecipientLabel } from '../../utils'
 
 const MessageFromCell = ({ row }: { row: Row<SecureMessage> }) => {
   const { channels } = row.original || []
+  const [text, Icon] = getRecipientLabel(channels)
 
   return (
     <Badge color={'gray'}>
@@ -19,8 +20,8 @@ const MessageFromCell = ({ row }: { row: Row<SecureMessage> }) => {
           'text-[11px]',
         )}
       >
-        <UserSharedLineIcon />
-        {getRecipientLabel(channels)}
+        {Icon ? <Icon width={14} height={14} /> : <UserSharedLineIcon />}
+        {text}
       </TextCell>
     </Badge>
   )

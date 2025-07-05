@@ -1,9 +1,12 @@
 import { Text } from '@radix-ui/themes'
-import { useStore } from '../../store'
+import { ConversationMessage, SecureMessage } from '../../types'
 
-const ViewMessagePopoverTo = () => {
-  const { previewSecureMessage } = useStore((state) => state)
-  const channels = previewSecureMessage.secureMessage?.channels
+const ViewMessagePopoverTo = ({
+  message,
+}: {
+  message: ConversationMessage | Partial<SecureMessage>
+}) => {
+  const channels = message?.channels
 
   const to = channels
     ?.map((channel) => {

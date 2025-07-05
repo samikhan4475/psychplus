@@ -77,7 +77,7 @@ const NavigationLink = ({
 }: React.PropsWithChildren<NavigationLinkProps>) => {
   const pathname = usePathname()
   const { id, apptId } = useParams<{ id: string; apptId?: string }>()
-  let fullHref = href
+  let fullHref
   const isVisitView = Boolean(apptId || appointmentId)
   if (isVisitView) {
     fullHref = `/p-chart/${id}/${appointmentId}${href}`

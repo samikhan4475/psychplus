@@ -1,6 +1,7 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { CREATE_CHANNEL_SECURE_MESSAGE } from '@/api/endpoints'
 import { Channel } from '../types'
 
 const createChannelsAction = async (
@@ -8,7 +9,7 @@ const createChannelsAction = async (
   data: Partial<Channel>[],
 ): Promise<api.ActionResult<Channel>> => {
   const response = await api.POST(
-    api.CREATE_CHANNEL_SECURE_MESSAGE(messageId),
+    CREATE_CHANNEL_SECURE_MESSAGE(messageId),
     data,
   )
 

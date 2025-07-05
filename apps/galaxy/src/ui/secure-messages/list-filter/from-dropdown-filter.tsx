@@ -2,8 +2,8 @@ import React from 'react'
 import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { SelectInput } from '@/components'
-import { SchemaType } from './schema'
-import { SendMode } from './types'
+import { SchemaType } from '../schema'
+import { SendMode } from '../types'
 
 const FromDropdownFilter = () => {
   const form = useFormContext<SchemaType>()

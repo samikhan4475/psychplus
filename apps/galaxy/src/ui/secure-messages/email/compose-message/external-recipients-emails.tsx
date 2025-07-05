@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { Box, Button, Flex, IconButton, Text } from '@radix-ui/themes'
 import { XIcon } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
@@ -7,19 +7,20 @@ import { ReactTags, Tag } from 'react-tag-autocomplete'
 import { FormFieldError } from '@/components'
 import { cn } from '@/utils'
 import 'react-tag-autocomplete/example/src/styles.css'
-import { SendExternalTitle } from '.'
-import { useStore as useMessagesStore } from '../../messages/store'
+import { useStore as useMessagesStore } from '../../../messages/store'
 import {
   getAllChannelsAgainstMessageIdAction,
   updateChannelAction,
-} from '../actions'
-import { EMAIL_REGEX } from '../contants'
-import { useStore } from '../store'
+} from '../../actions'
+import { EMAIL_REGEX } from '../../contants'
+import { useStore } from '../../store'
 import {
   ActiveComponent,
   EmailRecipientTypes,
   ExternalRecipientProps,
-} from '../types'
+} from '../../types'
+import { getLastMessageOfConversation } from '../../utils'
+import { InputTitle } from './input-title'
 import { SendMessageSchemaType } from './send-message-schema'
 
 const ExternalRecipientsEmails = ({
@@ -37,9 +38,12 @@ const ExternalRecipientsEmails = ({
     isEmrDirectUser: state.isEmrDirectUser,
   }))
 
+  const message = useMemo(() => {
+    return getLastMessageOfConversation(previewSecureMessage?.secureMessage)
+  }, [previewSecureMessage?.secureMessage])
+
   const handleReply = () => {
-    const { externalEmailAddress: email } =
-      previewSecureMessage?.secureMessage ?? {}
+    const { externalEmailAddress: email } = message ?? {}
 
     if (!email) return
 
@@ -65,10 +69,8 @@ const ExternalRecipientsEmails = ({
   }
 
   const handleReplyAll = async () => {
-    if (previewSecureMessage?.secureMessage?.id) {
-      const channels = await fetchChannels(
-        previewSecureMessage?.secureMessage?.id,
-      )
+    if (message?.id) {
+      const channels = await fetchChannels(message?.id)
       if (channels === 'error') {
         toast.error('Failed to get channels')
         return 'error'
@@ -91,7 +93,7 @@ const ExternalRecipientsEmails = ({
   const handleDraft = () => {
     setExternalRecipientsTag([])
     setExternalEmailSuggestions([])
-    const channels = previewSecureMessage?.secureMessage?.channels || []
+    const channels = message?.channels || []
     const externalTags = channels
       .filter((item) => item.sendMode === EmailRecipientTypes.EXTERNAL)
       .map((item) => {
@@ -108,7 +110,7 @@ const ExternalRecipientsEmails = ({
   }
 
   useEffect(() => {
-    if (!previewSecureMessage.secureMessage?.id) return
+    if (!message?.id) return
 
     switch (activeComponent) {
       case ActiveComponent.REPLY:
@@ -126,7 +128,7 @@ const ExternalRecipientsEmails = ({
       default:
         break
     }
-  }, [activeComponent, previewSecureMessage.secureMessage?.id])
+  }, [activeComponent, message?.id])
 
   const fetchChannels = async (messageId: string) => {
     const channels = await getAllChannelsAgainstMessageIdAction(messageId)
@@ -163,21 +165,17 @@ const ExternalRecipientsEmails = ({
 
   const removeExternalRecipients = async (index: number) => {
     if (activeComponent === ActiveComponent.DRAFT) {
-      const channels = previewSecureMessage?.secureMessage?.channels || []
+      const channels = message?.channels || []
       const channel = channels.find(
         (item, index) =>
           item.sendMode === EmailRecipientTypes.EXTERNAL &&
           externalRecipientsTag?.[index]?.value === item?.externalEmail,
       )
-      if (previewSecureMessage?.secureMessage?.id && channel?.id) {
-        const result = await updateChannelAction(
-          previewSecureMessage?.secureMessage?.id,
-          channel?.id,
-          {
-            ...channel,
-            recordStatus: 'Deleted',
-          },
-        )
+      if (message?.id && channel?.id) {
+        const result = await updateChannelAction(message?.id, channel?.id, {
+          ...channel,
+          recordStatus: 'Deleted',
+        })
         if (result.state === 'error') {
           toast.error('Failed to remove email')
           return
@@ -193,12 +191,12 @@ const ExternalRecipientsEmails = ({
     <>
       <Flex
         direction="row"
-        className="border-pp-gray-4 min-h-[40px] border-b"
+        className="border-pp-gray-4 !mt-0 border-b"
         align={'center'}
         position="relative"
       >
-        <SendExternalTitle />
-        <Box className="min-h-[40px] flex-1 flex-wrap">
+        <InputTitle label="To External" />
+        <Box className="flex-1 flex-wrap">
           <ReactTags
             selected={externalRecipientsTag}
             suggestions={externalEmailSuggestions}
@@ -210,7 +208,12 @@ const ExternalRecipientsEmails = ({
             noOptionsText="No Matches"
             placeholderText=""
             labelText=""
-            renderInput={({ className, ...inputProps }) => (
+            renderInput={({
+              className,
+              classNames,
+              inputWidth,
+              ...inputProps
+            }) => (
               <input
                 {...inputProps}
                 className={cn(className, 'flex-grow outline-none ', {
@@ -225,10 +228,15 @@ const ExternalRecipientsEmails = ({
               onClick,
               title,
               color,
+              className,
               ...tagProps
             }) => {
               return (
-                <Button type="button" className={classNames.tag} {...tagProps}>
+                <Box
+                  as="span"
+                  className={cn('gap-1', classNames.tag)}
+                  {...tagProps}
+                >
                   <Text
                     className={cn(
                       'text-pp-black-3 text-[12px] font-[510]',
@@ -246,10 +254,18 @@ const ExternalRecipientsEmails = ({
                   >
                     <XIcon size="16" color="gray" />
                   </IconButton>
-                </Button>
+                </Box>
               )
             }}
-            renderRoot={({ children, className, ...rootProps }) => (
+            renderRoot={({
+              children,
+              className,
+              classNames,
+              isActive,
+              isDisabled,
+              isInvalid,
+              ...rootProps
+            }) => (
               <Flex
                 align="center"
                 gap="1"

@@ -1,18 +1,17 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { Text } from '@radix-ui/themes'
 import { format } from 'date-fns'
-import { useStore } from '../../store'
+import { formatDateTime } from '@/utils'
+import { ConversationMessage, SecureMessage } from '../../types'
 
-const ViewMessagePopoverDate = () => {
-  const { previewSecureMessage } = useStore((state) => state)
-
+const ViewMessagePopoverDate = ({
+  message,
+}: {
+  message: ConversationMessage | Partial<SecureMessage>
+}) => {
   const emailCreatedOn = useMemo(
-    () =>
-      format(
-        new Date(previewSecureMessage.secureMessage?.metadata?.createdOn ?? ''),
-        'dd/mm/yy, HH:MM',
-      ),
-    [previewSecureMessage.secureMessage?.metadata?.createdOn],
+    () => formatDateTime(message?.metadata?.createdOn),
+    [message?.metadata?.createdOn],
   )
   return (
     <>

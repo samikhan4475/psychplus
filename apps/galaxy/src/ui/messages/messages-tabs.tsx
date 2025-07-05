@@ -48,20 +48,20 @@ const MessagesTabs = () => {
     <Tabs.Root
       value={activeTab}
       onValueChange={setActiveTab}
-      className="flex w-full flex-1 gap-3 overflow-y-auto"
+      className="flex w-full flex-1 gap-3"
     >
       <InboxNavigation />
       <TabsContent value={TabsEnum.INBOX}>
-        <SecureMessagesView tab={TabsEnum.INBOX} />
+        <SecureMessagesView tab={TabsEnum.INBOX} activeTab={activeTab} />
       </TabsContent>
       <TabsContent value={TabsEnum.SENT}>
-        <SecureMessagesView tab={TabsEnum.SENT} />
+        <SecureMessagesView tab={TabsEnum.SENT} activeTab={activeTab} />
       </TabsContent>
       <TabsContent value={TabsEnum.ARCHIVED}>
-        <SecureMessagesView tab={TabsEnum.ARCHIVED} />
+        <SecureMessagesView tab={TabsEnum.ARCHIVED} activeTab={activeTab} />
       </TabsContent>
       <TabsContent value={TabsEnum.DRAFT}>
-        <SecureMessagesView tab={TabsEnum.DRAFT} />
+        <SecureMessagesView tab={TabsEnum.DRAFT} activeTab={activeTab} />
       </TabsContent>
       <TabsContent value={TabsEnum.PENDING_NOTES}>
         <NotesView

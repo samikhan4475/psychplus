@@ -1,10 +1,12 @@
-import React from 'react'
 import { Text } from '@radix-ui/themes'
-import { useStore } from '../../store'
+import { ConversationMessage, SecureMessage } from '../../types'
 
-const ViewMessageCreatedByFullName = () => {
-  const { previewSecureMessage } = useStore((state) => state)
-  const senderName = previewSecureMessage.secureMessage?.senderName
+const ViewMessageCreatedByFullName = ({
+  message,
+}: {
+  message: ConversationMessage | Partial<SecureMessage>
+}) => {
+  const senderName = message.senderName
 
   if (!senderName) {
     return null
@@ -13,7 +15,7 @@ const ViewMessageCreatedByFullName = () => {
   const createdByFullName = `${senderName.firstName} ${senderName.lastName}`
 
   return (
-    <Text size="1" className="mr-1 text-[14px]">
+    <Text size="1" className="mr-1 text-[14px]" weight='medium'>
       {createdByFullName || 'N/A'}
     </Text>
   )

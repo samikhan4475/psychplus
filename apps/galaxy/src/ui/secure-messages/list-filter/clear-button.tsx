@@ -1,8 +1,8 @@
 import React from 'react'
 import { Button } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { SchemaType } from './schema'
-import { useStore } from './store'
+import { SchemaType } from '../schema'
+import { useStore } from '../store'
 
 const ClearButton = () => {
   const form = useFormContext<SchemaType>()

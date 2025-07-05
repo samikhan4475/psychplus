@@ -12,7 +12,7 @@ const MessageSearch = () => {
     <FormFieldContainer className="border-pp-gray-2 relative flex h-[24px] flex-1 items-center rounded-3 border-[1px]">
       <TextField.Root
         size="1"
-        placeholder="Search message"
+        placeholder="Search Subject"
         {...form.register('subject')}
         className="h-[24px] w-full flex-1 border-0 outline-none [box-shadow:none]"
       />

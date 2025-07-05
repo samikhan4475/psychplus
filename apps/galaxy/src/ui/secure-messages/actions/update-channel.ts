@@ -1,6 +1,7 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { UPDATE_CHANNEL_MESSAGES_STATUS } from '@/api/endpoints'
 import { Channel } from '../types'
 
 const updateChannelAction = async (
@@ -9,7 +10,7 @@ const updateChannelAction = async (
   data: Partial<Channel>,
 ): Promise<api.ActionResult<Channel>> => {
   const response = await api.PUT<Channel>(
-    api.UPDATE_CHANNEL_MESSAGES_STATUS(messageId, channelId),
+    UPDATE_CHANNEL_MESSAGES_STATUS(messageId, channelId),
     data,
   )
   if (response.state === 'error') {

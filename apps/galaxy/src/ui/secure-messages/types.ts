@@ -126,6 +126,7 @@ interface Attachment {
 interface SecureMessage {
   id: string
   metadata: MetadataMapping
+  lastMessageDate: string
   recordStatus: string
   senderUserId: number
   senderEmail: string
@@ -139,7 +140,13 @@ interface SecureMessage {
   isMessageSent: boolean
   channels: Channel[]
   attachments: Attachment[]
+  secureMessageConversations: ConversationMessage[]
 }
+
+type ConversationMessage = Omit<
+  SecureMessage,
+  'conversationId' | 'externalEmailAddress' | 'isMessageSent'
+>
 
 interface EmailPreview {
   id: string
@@ -365,6 +372,7 @@ export {
   type CustomTable,
   type SecureMessageData,
   type SecureMessage,
+  type ConversationMessage,
   type EmailPreviewTypes,
   type EmailPreview,
   type ChannelMessageStatus,

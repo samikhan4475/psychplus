@@ -1,6 +1,7 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { GET_CHANNEL_SECURE_MESSAGE } from '@/api/endpoints'
 import { PAGE_SIZE } from '../contants'
 import { Channel } from '../types'
 
@@ -10,11 +11,11 @@ const getAllChannelsAgainstMessageIdAction = async (
 ): Promise<api.ActionResult<Channel[]>> => {
   const offset = (page - 1) * PAGE_SIZE
 
-  const url = new URL(api.GET_CHANNEL_SECURE_MESSAGE(messageId))
-  url.searchParams.append('limit', String(PAGE_SIZE))
-  url.searchParams.append('offset', String(offset))
-
-  const response = await api.GET<Channel[]>(url.toString())
+  const response = await api.GET<Channel[]>(
+    `${GET_CHANNEL_SECURE_MESSAGE(
+      messageId,
+    )}?limit=${PAGE_SIZE}&offset=${offset}`,
+  )
   if (response.state === 'error') {
     return {
       state: 'error',

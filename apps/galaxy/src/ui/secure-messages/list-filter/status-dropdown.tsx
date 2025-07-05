@@ -2,8 +2,8 @@ import React, { useEffect } from 'react'
 import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { SelectInput } from '@/components'
-import { SchemaType } from './schema'
-import { messageStatus } from './types'
+import { SchemaType } from '../schema'
+import { messageStatus } from '../types'
 
 const StatusDropdownFilter = () => {
   const form = useFormContext<SchemaType>()

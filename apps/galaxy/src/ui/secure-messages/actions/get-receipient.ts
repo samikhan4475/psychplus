@@ -1,14 +1,15 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
-import { GetEmailRecipientPayload, EmailRecipients } from '../types'
+import * as api from '@/api/api.client'
+import { GET_RECIPIENT_SECURE_MESSAGE } from '@/api/endpoints'
+import { EmailRecipients, GetEmailRecipientPayload } from '../types'
 
 const getAllRecipientSuggestionsAction = async (
   messageId: string,
   data: GetEmailRecipientPayload,
 ): Promise<api.ActionResult<EmailRecipients[]>> => {
   const response = await api.POST<EmailRecipients[]>(
-    api.GET_RECIPIENT_SECURE_MESSAGE(messageId),
+    GET_RECIPIENT_SECURE_MESSAGE(messageId),
     data,
   )
   if (response.state === 'error') {

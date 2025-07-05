@@ -9,10 +9,14 @@ import { LegalName } from '@/types'
 import 'react-quill/dist/quill.snow.css'
 import { Tag } from 'react-tag-autocomplete'
 import {
+  DiscardButton,
   ExternalRecipientsEmails,
+  InternalRecipientsEmails,
+  NewMessageHeader,
   SaveDraftButton,
   SendButton,
   SubjectInput,
+  UserRecipientsEmails,
 } from '.'
 import {
   createChannelsAction,
@@ -21,8 +25,8 @@ import {
   updateChannelAction,
   updateMessageAction,
   uploadAttachmentAction,
-} from '../actions'
-import { useStore } from '../store'
+} from '../../actions'
+import { useStore } from '../../store'
 import {
   ActiveComponent,
   Attachment,
@@ -34,19 +38,17 @@ import {
   SecureMessagesTab,
   SendMode,
   SendType,
-} from '../types'
-import { mapEmailData } from '../utils'
-import { InternalRecipientsEmails } from './internal-recipients-emails'
-import { NewMessageHeader } from './new-message-header'
-import { RichTextEditor } from './quill-editor'
+} from '../../types'
+import { mapEmailData } from '../../utils'
+import { RichTextEditor } from '../quill-editor'
 import { sendMessageSchema, SendMessageSchemaType } from './send-message-schema'
-import { UserRecipientsEmails } from './user-recipients-emails'
 
-const ComposeNewEmail = () => {
+const ComposeNewEmail = ({ isActiveTab }: { isActiveTab: boolean }) => {
   const {
     previewSecureMessage,
     activeComponent,
     setActiveComponent,
+    setPreviewSecureMessage,
     search,
     activeTab,
     page,
@@ -152,7 +154,11 @@ const ComposeNewEmail = () => {
       return setIsSubmitting(false)
     }
     await handleReplyAction()
-    toast.success(`Message sent successfully`)
+    toast.success(
+      sendType === SendType.SEND
+        ? `Message sent successfully`
+        : `Draft saved successfully`,
+    )
     setActiveComponent(ActiveComponent.NEW_EMAIL_PLACEHOLDER)
     setIsSubmitting(false)
     search({ messageStatus: activeTab }, page, true)
@@ -164,7 +170,8 @@ const ComposeNewEmail = () => {
         ActiveComponent.COMPOSE_MAIL,
         ActiveComponent.REPLY,
         ActiveComponent.REPLY_TO_ALL,
-      ].includes(activeComponent)
+      ].includes(activeComponent) &&
+      isActiveTab
     ) {
       createNewMessageId()
     }
@@ -249,7 +256,8 @@ const ComposeNewEmail = () => {
     }
     if (
       activeComponent === ActiveComponent.REPLY ||
-      activeComponent === ActiveComponent.REPLY_TO_ALL
+      activeComponent === ActiveComponent.REPLY_TO_ALL ||
+      activeComponent === ActiveComponent.FORWARD
     ) {
       secureMessageData.conversationId =
         secureMessage?.conversationId ?? secureMessage?.id
@@ -344,6 +352,9 @@ const ComposeNewEmail = () => {
       secureMessagePayload.conversationId =
         previewSecureMessage?.secureMessage?.conversationId ||
         previewSecureMessage?.secureMessage?.id
+    } else if (previewSecureMessage?.secureMessage?.conversationId) {
+      secureMessagePayload.conversationId =
+        previewSecureMessage?.secureMessage?.conversationId
     }
     if (sendType !== SendType.SEND) {
       delete secureMessagePayload.isMessageSent
@@ -436,9 +447,6 @@ const ComposeNewEmail = () => {
     const payload = {
       ...channel,
       isReplied: true,
-      // messageId,
-      // externalEmail: null,
-      // externalMessageId: null,
     }
     const updateChannel = await updateChannelAction(
       messageId,
@@ -450,33 +458,6 @@ const ComposeNewEmail = () => {
       return false
     }
   }
-
-  // const replyAll = async (messageId: string) => {
-  //   const channels = await getAllChannelsAgainstMessageIdAction(messageId)
-  //   if (channels.state === 'error') {
-  //     toast.error('Failed to get channels')
-  //     return
-  //   }
-
-  //   await Promise.all(
-  //     channels.data.map(async (item) => {
-  //       if (!item?.id) {
-  //         toast.error(`Invalid channel item:`)
-  //         return null
-  //       }
-  //       const result = await updateChannelAction(messageId, item.id, {
-  //         isReplied: true,
-  //         messageId,
-  //         externalEmail: null,
-  //         externalMessageId: null,
-  //       })
-  //       console.log('replyAll:', result)
-  //       if (result.state === 'error') {
-  //         toast.error('Failed to reply email')
-  //       }
-  //     }),
-  //   )
-  // }
 
   const handleReplyAction = async () => {
     const { activeTab } = previewSecureMessage
@@ -496,25 +477,20 @@ const ComposeNewEmail = () => {
     ) {
       return await replyEmail(messageId, channel)
     }
-    // else if (
-    //   activeComponent === ActiveComponent.REPLY_TO_ALL &&
-    //   messageId &&
-    //   (activeTab === SecureMessagesTab.INBOX ||
-    //     activeTab === SecureMessagesTab.ARCHIVED)
-    // ) {
-    //   await replyAll(messageId)
-    // }
   }
 
   return (
     <FormContainer
       form={form}
       onSubmit={onSubmit}
-      className="h-fit min-w-fit  pt-2"
+      className="my- h-fit min-w-fit pt-2"
     >
-      <Flex direction="column" className="w-full">
+      <Flex
+        direction="column"
+        className="Xbg-pp-bg-table-cell border-pp-gray-2 !mt-6 w-full rounded-4 border"
+      >
         <NewMessageHeader />
-        <Flex direction="column" className="w-full space-y-2 p-4">
+        <Flex direction="column" className="w-full space-y-2">
           <InternalRecipientsEmails
             internalRecipientsTag={internalRecipientsTag}
             setInternalRecipientsTag={setInternalRecipientsTag}
@@ -554,19 +530,27 @@ const ComposeNewEmail = () => {
             deletingAttachmentIds={deletingAttachmentIds}
             setDeletingAttachmentIds={setDeletingAttachmentIds}
           />
-          <Flex gap="3" pt="3">
-            <SendButton
-              onClick={() => setSendType(SendType.SEND)}
-              loading={isSubmitting && sendType === SendType.SEND}
-              disabled={isSubmitting}
-            />
-            <SaveDraftButton
-              onClick={() => setSendType(SendType.DRAFT)}
-              loading={isSubmitting && sendType === SendType.DRAFT}
-              disabled={isSubmitting}
-            />
-          </Flex>
         </Flex>
+      </Flex>
+      <Flex gap="3" pt="3" mb="3">
+        <SendButton
+          onClick={() => setSendType(SendType.SEND)}
+          loading={isSubmitting && sendType === SendType.SEND}
+          disabled={isSubmitting}
+        />
+        <SaveDraftButton
+          onClick={() => setSendType(SendType.DRAFT)}
+          loading={isSubmitting && sendType === SendType.DRAFT}
+          disabled={isSubmitting}
+        />
+        <DiscardButton
+          onClick={() => {
+            setPreviewSecureMessage({ activeTab, secureMessage: null })
+            setActiveComponent(ActiveComponent.NEW_EMAIL_PLACEHOLDER)
+          }}
+          loading={isSubmitting && sendType === SendType.DRAFT}
+          disabled={isSubmitting}
+        />
       </Flex>
     </FormContainer>
   )

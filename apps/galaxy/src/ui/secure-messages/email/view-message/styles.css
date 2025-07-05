@@ -1,3 +1,6 @@
 .view-message-container .ql-container.ql-snow {
   border: 0px !important;
 }
+.view-message-container .ql-container.ql-snow.ql-disabled .ql-editor {
+  padding: 0;
+}

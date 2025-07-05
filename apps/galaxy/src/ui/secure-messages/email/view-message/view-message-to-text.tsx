@@ -1,11 +1,12 @@
-import React from 'react'
 import { Text } from '@radix-ui/themes'
-import { useStore } from '../../store'
+import { ConversationMessage, SecureMessage } from '../../types'
 
-const ViewMessageToText = () => {
-  const { previewSecureMessage } = useStore((state) => state)
-
-  const to = previewSecureMessage.secureMessage?.channels
+const ViewMessageToText = ({
+  message,
+}: {
+  message: ConversationMessage | Partial<SecureMessage>
+}) => {
+  const to = message?.channels
     ?.map((channel) => {
       const name = [
         channel?.receiverName?.firstName,

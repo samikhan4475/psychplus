@@ -3,9 +3,9 @@ import { Cross1Icon } from '@radix-ui/react-icons'
 import { Flex } from '@radix-ui/themes'
 import { LeftIcon } from '@/components/icons'
 import { cn } from '@/utils'
-import { useStore } from '../store'
-import { ActiveComponent } from '../types'
-import { MessageHeading } from './message-heading'
+import { useStore } from '../../store'
+import { ActiveComponent } from '../../types'
+import { MessageHeading } from '.'
 
 const NewMessageHeader = () => {
   const {
@@ -19,9 +19,10 @@ const NewMessageHeader = () => {
     setPreviewSecureMessage({ activeTab, secureMessage: null })
     setActiveComponent(ActiveComponent.NEW_EMAIL_PLACEHOLDER)
   }
+  if (noComposeEmail) return null
   return (
     <Flex
-      className="bg-pp-table-subRows h-[40px] w-full"
+      className="bg-pp-table-subRows h-[40px] w-full rounded-t-4"
       justify="between"
       align="center"
     >
@@ -38,9 +39,9 @@ const NewMessageHeader = () => {
       </Flex>
 
       <Cross1Icon
-        className="text-pp-text-sub pr-6"
-        width="40"
-        height="40"
+        className="text-pp-text-sub pr-4"
+        width="32"
+        height="32"
         onClick={closeMessageEditor}
       />
     </Flex>

@@ -4,7 +4,11 @@ import { Mail1Icon } from '@/components/icons'
 import { useStore } from '../store'
 import { ActiveComponent } from '../types'
 
-const EmailPlaceHolder = () => {
+const EmailPlaceHolder = ({
+  showNewMessageButton = true,
+}: {
+  showNewMessageButton?: boolean
+}) => {
   const {
     previewSecureMessage: { activeTab },
     setActiveComponent,
@@ -12,7 +16,7 @@ const EmailPlaceHolder = () => {
   } = useStore((state) => state)
   return (
     <Flex
-      className="h-full w-full"
+      className="h-full w-full flex-1"
       justify="center"
       align="center"
       direction="column"
@@ -25,17 +29,19 @@ const EmailPlaceHolder = () => {
         <br />
         Write a new message.
       </Text>
-      <Button
-        variant="outline"
-        color="gray"
-        className="text-black hover:bg-black hover:text-white  mt-4 bg-transparent transition-colors"
-        onClick={() => {
-          setPreviewSecureMessage({ activeTab, secureMessage: null })
-          setActiveComponent(ActiveComponent.COMPOSE_MAIL)
-        }}
-      >
-        <PlusIcon /> New Message
-      </Button>
+      {showNewMessageButton && (
+        <Button
+          variant="outline"
+          color="gray"
+          className="text-black hover:bg-black hover:text-white  mt-4 bg-transparent transition-colors"
+          onClick={() => {
+            setPreviewSecureMessage({ activeTab, secureMessage: null })
+            setActiveComponent(ActiveComponent.COMPOSE_MAIL)
+          }}
+        >
+          <PlusIcon /> New Message
+        </Button>
+      )}
     </Flex>
   )
 }

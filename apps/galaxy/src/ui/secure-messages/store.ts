@@ -6,8 +6,6 @@ import {
   createForwardMessageAction,
   getAllSecureMessagesAction,
 } from './actions'
-import { getEmrDirectAccountStatus } from './client-actions/get-emr-direct-account-status'
-import { getUnreadCountAction } from './client-actions/get-unread-count'
 import { SchemaType } from './schema'
 import {
   ActiveComponent,
@@ -61,11 +59,16 @@ const useStore = create<SecureMessageStoreType>((set, get) => ({
       loading: true,
       formValues,
     })
-
-    const result = await getAllSecureMessagesAction({
+    const isInboxOrArchived = ['Inbox', 'Archived'].includes(
+      formValues.messageStatus as string,
+    )
+    const payload = {
       page,
       ...formValues,
-    })
+      isConversationalView: isInboxOrArchived,
+      isConversationRequired: isInboxOrArchived,
+    }
+    const result = await getAllSecureMessagesAction(payload)
 
     if (result.state === 'error') {
       toast.error(result.error || 'Failed to fetch data')

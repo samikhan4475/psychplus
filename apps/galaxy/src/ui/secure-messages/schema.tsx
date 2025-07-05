@@ -26,6 +26,8 @@ const schema = z.object({
   status: z.string().optional(),
   isReplied: z.boolean().optional(),
   isRead: z.boolean().optional(),
+  isConversationalView: z.boolean().default(true),
+  isConversationRequired: z.boolean().default(true),
 })
 
 export { schema, type SchemaType }

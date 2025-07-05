@@ -1,11 +1,13 @@
-import React from 'react'
 import { Text } from '@radix-ui/themes'
-import { useStore } from '../../store'
+import { ConversationMessage, SecureMessage } from '../../types'
 
-const ViewMessagePopoverFrom = () => {
-  const { previewSecureMessage } = useStore((state) => state)
-  const email = previewSecureMessage.secureMessage?.senderEmail
-  const { senderName } = previewSecureMessage.secureMessage ?? {}
+const ViewMessagePopoverFrom = ({
+  message,
+}: {
+  message: ConversationMessage | Partial<SecureMessage>
+}) => {
+  const email = message?.senderEmail
+  const { senderName } = message ?? {}
   const name = [senderName?.firstName, senderName?.lastName]
     .filter(Boolean)
     .join(' ')

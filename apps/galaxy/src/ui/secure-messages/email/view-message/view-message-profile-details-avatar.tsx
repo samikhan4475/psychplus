@@ -1,17 +1,14 @@
-import React from 'react'
 import { Avatar, Box } from '@radix-ui/themes'
-import { useStore } from '../../store'
+import { getNameInitials } from '@/utils'
+import { ConversationMessage, SecureMessage } from '../../types'
 
-const ViewMessageProfileDetailsAvatar = () => {
-  const { previewSecureMessage } = useStore((state) => state)
-  const createdByFullName =
-    previewSecureMessage?.secureMessage?.metadata?.createdByFullName
-  const initials = createdByFullName
-    ? createdByFullName
-        .split(' ')
-        .map((name) => name.charAt(0))
-        .join('')
-    : 'NA'
+const ViewMessageProfileDetailsAvatar = ({
+  message,
+}: {
+  message: ConversationMessage | Partial<SecureMessage>
+}) => {
+  const { firstName, lastName } = message?.senderName || {}
+  const initials = getNameInitials(`${firstName} ${lastName}`)
 
   return (
     <Box className="bg-gray-200 rounded-full mr-4 flex h-10 w-10 items-center justify-center">

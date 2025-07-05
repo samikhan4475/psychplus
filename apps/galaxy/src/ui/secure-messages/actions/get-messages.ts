@@ -1,6 +1,7 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { GET_SECURE_MESSAGES } from '@/api/endpoints'
 import { PAGE_SIZE } from '../contants'
 import { SchemaType } from '../schema'
 import { SecureMessage } from '../types'
@@ -19,11 +20,12 @@ const getAllSecureMessagesAction = async ({
   }>
 > => {
   const offset = (page - 1) * PAGE_SIZE
-  const url = new URL(api.GET_SECURE_MESSAGES)
-  url.searchParams.append('limit', String(PAGE_SIZE))
-  url.searchParams.append('offset', String(offset))
 
-  const response = await api.POST<SecureMessage[]>(url.toString(), rest)
+  let url = `${GET_SECURE_MESSAGES}?limit=${PAGE_SIZE}&offset=${offset}`
+  if (['Inbox', 'Archived'].includes(rest.messageStatus as string)) {
+    url += `&orderBy=lastMessageDate desc`
+  }
+  const response = await api.POST<SecureMessage[]>(url, rest)
   if (response.state === 'error') {
     return {
       state: 'error',

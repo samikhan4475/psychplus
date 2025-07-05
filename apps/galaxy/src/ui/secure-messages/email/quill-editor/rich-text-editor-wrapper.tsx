@@ -7,9 +7,9 @@ import { initializeQuillIcons, RichTextEditor } from '.'
 import { deleteAttachmentsAction } from '../../actions'
 import { MAX_FILE_UPLOAD_UNIT } from '../../contants'
 import { RichTextEditorWrapperProps } from '../../types'
-import { SendMessageSchemaType } from '../send-message-schema'
 import { Attachments } from './attachments'
 import './styles.css'
+import { SendMessageSchemaType } from '../compose-message/send-message-schema'
 
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
@@ -21,7 +21,7 @@ if (typeof window !== 'undefined') {
   initializeQuillIcons(Quill)
 }
 
-export const RichTextEditorWrapper = ({
+const RichTextEditorWrapper = ({
   children,
   attachments,
   setAttachments,
@@ -90,11 +90,11 @@ export const RichTextEditorWrapper = ({
   }
 
   return (
-    <Box className="bg-pp-bg-table-cell border-pp-gray-2 !mt-6 rounded-4 border">
+    <Box className="bg-pp-bg-table-cell border-pp-gray-2 X!mt-6 !mt-0 rounded-4 border-t">
       {children}
       <ReactQuill
         value={text || ''}
-        className="rounded-t-4"
+        className="bgX-pp-red-2 rounded-t-4"
         onChange={(newValue) => {
           form.setValue('text', newValue)
         }}
@@ -117,4 +117,5 @@ export const RichTextEditorWrapper = ({
     </Box>
   )
 }
-RichTextEditorWrapper.displayName = 'RichTextEditorWrapper'
+
+export { RichTextEditorWrapper }

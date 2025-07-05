@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Box, Button, Flex, IconButton, Text } from '@radix-ui/themes'
 import { XIcon } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
@@ -13,8 +13,8 @@ import {
   getAllChannelsAgainstMessageIdAction,
   getAllRecipientSuggestionsAction,
   updateChannelAction,
-} from '../actions'
-import { useStore } from '../store'
+} from '../../actions'
+import { useStore } from '../../store'
 import {
   ActiveComponent,
   EmailRecipients,
@@ -23,10 +23,10 @@ import {
   ReceiverUserRole,
   SendMode,
   UserRecipientProps,
-} from '../types'
-import { isEmail } from '../utils'
+} from '../../types'
+import { getLastMessageOfConversation, isEmail } from '../../utils'
+import { InputTitle } from './input-title'
 import { SendMessageSchemaType } from './send-message-schema'
-import { SendToUserTitle } from './send-to-user-title'
 
 const UserRecipientsEmails = ({
   userEmailSuggestions,
@@ -39,6 +39,10 @@ const UserRecipientsEmails = ({
   >([])
   const { previewSecureMessage, activeComponent } = useStore((state) => state)
   const form = useFormContext<SendMessageSchemaType>()
+
+  const message = useMemo(() => {
+    return getLastMessageOfConversation(previewSecureMessage?.secureMessage)
+  }, [previewSecureMessage?.secureMessage])
 
   const fetchRecipientSuggestions = useCallback(
     async (keyword: string): Promise<EmailRecipients[] | []> => {
@@ -94,10 +98,8 @@ const UserRecipientsEmails = ({
   }
 
   const handleReplyAll = async () => {
-    if (previewSecureMessage?.secureMessage?.id) {
-      const res = await getAllChannelsAgainstMessageIdAction(
-        previewSecureMessage?.secureMessage?.id,
-      )
+    if (message?.id) {
+      const res = await getAllChannelsAgainstMessageIdAction(message?.id)
       if (res.state === 'error') {
         toast.error('Failed to get channels')
         return 'error'
@@ -139,7 +141,7 @@ const UserRecipientsEmails = ({
   const handleDraft = async () => {
     setUserRecipientsTag([])
     setUserEmailSuggestions([])
-    const channels = previewSecureMessage?.secureMessage?.channels ?? []
+    const channels = message?.channels ?? []
     const patientTags = channels
       .filter(
         (item) =>
@@ -179,7 +181,7 @@ const UserRecipientsEmails = ({
   }
 
   useEffect(() => {
-    if (!previewSecureMessage.secureMessage?.id) return
+    if (!message?.id) return
 
     switch (activeComponent) {
       case ActiveComponent.REPLY:
@@ -197,7 +199,7 @@ const UserRecipientsEmails = ({
       default:
         break
     }
-  }, [activeComponent, previewSecureMessage.secureMessage?.id])
+  }, [activeComponent, message?.id])
 
   const handleChange = useCallback(
     async (keyword: string) => {
@@ -239,19 +241,18 @@ const UserRecipientsEmails = ({
 
   const handleOnDelete = async (index: number) => {
     if (activeComponent === ActiveComponent.DRAFT) {
-      const channels = previewSecureMessage?.secureMessage?.channels ?? []
+      const channels = message?.channels ?? []
       const channel = channels.find(
         (item, index) =>
           item.sendMode === EmailRecipientTypes.INTERNAL &&
           item.receiverUserRole === EmailRecipientTypes.PATIENT &&
           userRecipientsTag?.[index]?.value === item?.externalEmail,
       )
-      if (previewSecureMessage?.secureMessage?.id && channel?.id) {
-        const result = await updateChannelAction(
-          previewSecureMessage?.secureMessage?.id,
-          channel?.id,
-          { ...channel, recordStatus: 'Deleted' },
-        )
+      if (message?.id && channel?.id) {
+        const result = await updateChannelAction(message?.id, channel?.id, {
+          ...channel,
+          recordStatus: 'Deleted',
+        })
         if (result.state === 'error') {
           toast.error('Failed to remove email')
           return
@@ -271,12 +272,12 @@ const UserRecipientsEmails = ({
     <>
       <Flex
         direction="row"
-        className="border-pp-gray-4 hidden min-h-[40px] border-b"
+        className="border-pp-gray-4 hidden !mt-0 border-b"
         align={'center'}
         position="relative"
       >
-        <SendToUserTitle />
-        <Box className="min-h-[40px] flex-1 flex-wrap">
+        <InputTitle label="To User" />
+        <Box className="flex-1 flex-wrap">
           <ReactTags
             selected={userRecipientsTag}
             suggestions={userEmailSuggestionsTags}
@@ -287,7 +288,12 @@ const UserRecipientsEmails = ({
             noOptionsText="No Matches"
             placeholderText=""
             labelText=""
-            renderInput={({ className, ...inputProps }) => (
+            renderInput={({
+              className,
+              classNames,
+              inputWidth,
+              ...inputProps
+            }) => (
               <input
                 {...inputProps}
                 className={cn(className, 'flex-grow outline-none')}
@@ -302,7 +308,11 @@ const UserRecipientsEmails = ({
               ...tagProps
             }) => {
               return (
-                <Button type="button" className={classNames.tag} {...tagProps}>
+                <Box
+                  as="span"
+                  className={cn('gap-1', classNames.tag)}
+                  {...tagProps}
+                >
                   <Text
                     className={cn(
                       'text-pp-black-3 text-[12px] font-[510]',
@@ -320,10 +330,18 @@ const UserRecipientsEmails = ({
                   >
                     <XIcon size="16" color="gray" />
                   </IconButton>
-                </Button>
+                </Box>
               )
             }}
-            renderRoot={({ children, className, ...rootProps }) => (
+            renderRoot={({
+              children,
+              className,
+              classNames,
+              isActive,
+              isDisabled,
+              isInvalid,
+              ...rootProps
+            }) => (
               <Flex
                 align="center"
                 gap="1"

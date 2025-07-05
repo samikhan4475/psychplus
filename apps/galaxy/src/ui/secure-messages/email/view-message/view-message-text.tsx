@@ -1,15 +1,18 @@
-import dynamic from 'next/dynamic'
-import { useStore } from '../../store'
-import './styles.css'
 import { Flex } from '@radix-ui/themes'
+import dynamic from 'next/dynamic'
+import { ConversationMessage, SecureMessage } from '../../types'
+import './styles.css'
 
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
 })
 
-const ViewMessageText = () => {
-  const previewSecureMessage = useStore((state) => state.previewSecureMessage)
-  const text = previewSecureMessage?.secureMessage?.text
+const ViewMessageText = ({
+  message,
+}: {
+  message: ConversationMessage | Partial<SecureMessage>
+}) => {
+  const text = message?.text
   if (!text) return
   return (
     <Flex className="view-message-container">
@@ -17,7 +20,7 @@ const ViewMessageText = () => {
         value={text || ''}
         readOnly
         modules={{ toolbar: null }}
-        className="w-full"
+        className="w-full min-h-[80px]"
         placeholder="Write your message here..."
       />
     </Flex>
