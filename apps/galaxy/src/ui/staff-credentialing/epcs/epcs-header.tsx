@@ -1,12 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Button, Dialog, Flex, Text } from '@radix-ui/themes'
+import { Button, Flex, Text } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
-import { CloseDialogTrigger } from '@/components'
 import { useStore as useGlobalStore } from '@/store'
 import { cn } from '@/utils'
 import { getSelfProofing } from '../client-actions'
+import { CredentialingDialog } from './blocks/epcs-credentialing-dialog'
+import { useSelfCredentialing } from './hooks/use-self-credentialing'
 import { useSelfProofing } from './hooks/use-self-proofing'
 import { useStore } from './store'
 
@@ -14,12 +15,11 @@ interface EPCSHeaderProps {
   userId: string | null
   staffId: string | null
 }
+
+const getEspcButtonLabel = (isVerified: boolean) =>
+  isVerified ? 'ESPC Verified' : 'Start EPCS Verification'
+
 const EPCSHeader = ({ userId, staffId }: EPCSHeaderProps) => {
-  const { start, loading, iframeSrc, setIframeSrc } = useSelfProofing()
-  const [isVerificationInProgress, setIsVerificationInProgress] = useState<
-    boolean | null
-  >(null)
-  const [isEpcsVerified, setIsEpcsVerified] = useState(false)
   const { staff, loginUserId } = useGlobalStore((state) => ({
     staff: state.staffResource,
     loginUserId: state.user.id,
@@ -29,109 +29,148 @@ const EPCSHeader = ({ userId, staffId }: EPCSHeaderProps) => {
     setEpcsIframeLoaded: state.setEpcsIframeLoaded,
   }))
 
-  const handleStart = () => {
-    if (userId && typeof isVerificationInProgress === 'boolean') {
+  const {
+    start: startProofing,
+    loading: proofingLoading,
+    iframeSrc: proofingIframeSrc,
+    setIframeSrc: setProofingIframeSrc,
+  } = useSelfProofing()
+
+  const {
+    start: startCredentialing,
+    loading: credentialingLoading,
+    iframeSrc: credentialingIframeSrc,
+    setIframeSrc: setCredentialingIframeSrc,
+  } = useSelfCredentialing()
+
+  const [verificationStatus, setVerificationStatus] = useState({
+    isInProgress: null as boolean | null,
+    isVerified: false,
+    pendingSubStatus: null as string | null,
+  })
+
+  const fetchVerificationStatus = async () => {
+    if (!userId) return
+    
+    const proofingTypeResponse = await getSelfProofing(userId, String(loginUserId))
+    
+    if (proofingTypeResponse.state === 'error') {
+      setVerificationStatus(prev => ({ ...prev, isInProgress: false }))
+      return
+    }
+
+    const { proofingTransaction, pendingProofing, subStatus } = proofingTypeResponse.data
+    setVerificationStatus({
+      isInProgress: proofingTransaction.pendingUserAction,
+      isVerified: proofingTransaction.successfulProofing,
+      pendingSubStatus: pendingProofing && subStatus ? subStatus : null,
+    })
+  }
+
+  const handleStartProofing = () => {
+    if (verificationStatus.pendingSubStatus === 'WTG_PROCESS') {
+      toast.error('Proofing already in process')
+      return
+    }
+    if (userId && typeof verificationStatus.isInProgress === 'boolean') {
       const callbackUrl = `${window.location.origin}/ehr/staff/${staffId}/credentialing?id=${userId}`
-      start(userId, callbackUrl, isVerificationInProgress)
+      startProofing(userId, callbackUrl, verificationStatus.isInProgress)
     } else {
       toast.error('User ID is required to start the proofing process')
     }
   }
 
-  const fetchVerificationStatus = async () => {
-    if (!userId) return
-    const proofingTypeResponse = await getSelfProofing(
-      userId,
-      String(loginUserId),
-    )
-    if (proofingTypeResponse.state === 'error') {
-      setIsVerificationInProgress(false)
-      return
-    }
-    if (proofingTypeResponse.data.proofingTransaction.successfulProofing) {
-      setIsEpcsVerified(true)
-      setIsVerificationInProgress(false)
-      return
-    }
-    const isPending =
-      proofingTypeResponse.data.proofingTransaction.pendingUserAction
-    setIsVerificationInProgress(isPending)
-  }
-
-  const handleLoad = () => {
-    if (!epcsIframeLoaded && iframeSrc) {
-      handleOpen()
+  const handleStartCredentialing = () => {
+    if (userId && staffId) {
+      const callbackUrl = `${window.location.origin}/ehr/staff/${staffId}/credentialing?id=${userId}`
+      startCredentialing(userId, callbackUrl)
     } else {
-      handleClose()
+      toast.error('User ID and Staff ID are required to start credentialing')
     }
   }
 
-  const handleClose = async () => {
-    setIframeSrc('')
-    setIsVerificationInProgress(null)
-    await fetchVerificationStatus()
-    setEpcsIframeLoaded(false)
+  const handleProofingIframeLoad = (isOpen: boolean) => {
+    if (!epcsIframeLoaded && proofingIframeSrc) {
+      setEpcsIframeLoaded(true)
+    } else {
+      setProofingIframeSrc('')
+      fetchVerificationStatus()
+      setEpcsIframeLoaded(false)
+    }
   }
 
-  const handleOpen = () => {
-    setEpcsIframeLoaded(true)
+  const handleCredentialingIframeLoad = (isOpen: boolean) => {
+    if (!epcsIframeLoaded && credentialingIframeSrc) {
+      setEpcsIframeLoaded(true)
+    } else {
+      setCredentialingIframeSrc('')
+      setEpcsIframeLoaded(false)
+    }
   }
 
   useEffect(() => {
     fetchVerificationStatus()
-  }, [])
+  }, [userId, loginUserId])
+
+  const getButtonClassName = (isVerified: boolean) => 
+    cn(`${isVerified ? 'text-pp-success-text' : 'text-black'}`)
 
   return (
     <>
-      <Flex direction="column" gap="1" className="bg-pp-bg-accent">
-        <Flex className="bg-white" p="2" align="center" justify="between">
-          <Text size="4" weight="medium" className="min-w-[80px]">
-            EPCS Manager
-          </Text>
+      <Flex className="bg-white" p="2" align="center" justify="between">
+        <Text size="4" weight="medium" className="min-w-[80px]">
+          EPCS Manager
+        </Text>
+        <Flex gap="2" justify="end">
           <Button
             color="gray"
-            className={cn(
-              `${isEpcsVerified ? 'text-pp-success-text' : 'text-black'} `,
-            )}
+            className={getButtonClassName(verificationStatus.isVerified)}
             size="1"
             variant="outline"
             type="button"
-            onClick={handleStart}
+            onClick={handleStartProofing}
             disabled={
-              loading || isVerificationInProgress === null || isEpcsVerified
+              proofingLoading || 
+              verificationStatus.isInProgress === null || 
+              verificationStatus.isVerified
             }
-            loading={loading}
+            loading={proofingLoading}
           >
-            {getEspcButtonLabel(isEpcsVerified)}
+            {getEspcButtonLabel(verificationStatus.isVerified)}
+          </Button>
+          <Button
+            color="gray"
+            className="text-black"
+            size="1"
+            variant="outline"
+            type="button"
+            onClick={handleStartCredentialing}
+            disabled={credentialingLoading || !userId || !staffId}
+            loading={credentialingLoading}
+          >
+            Start Self Credentialing
           </Button>
         </Flex>
       </Flex>
-      <Dialog.Root open={!!iframeSrc}>
-        <Dialog.Content className=" h-[800px] max-w-[1200px] overflow-hidden pb-16">
-          <Flex justify="between" className="mb-4">
-            <Text size="5" weight="medium">
-              ID Proofing {staff?.legalName.firstName}
-            </Text>
-            <CloseDialogTrigger onClick={handleClose} />
-          </Flex>
-          <iframe
-            src={iframeSrc}
-            title="EPCS Verification"
-            width="100%"
-            height="100%"
-            style={{
-              border: 'none',
-              display: iframeSrc ? 'block' : 'none',
-            }}
-            onLoad={handleLoad}
-          />
-        </Dialog.Content>
-      </Dialog.Root>
+      
+      <CredentialingDialog
+        open={!!proofingIframeSrc}
+        title="ID Proofing"
+        staffName={staff?.legalName.firstName}
+        iframeSrc={proofingIframeSrc}
+        onClose={() => handleProofingIframeLoad(false)}
+        onLoad={() => handleProofingIframeLoad(true)}
+      />
+      <CredentialingDialog
+        open={!!credentialingIframeSrc}
+        title="Credentialing"
+        staffName={staff?.legalName.firstName}
+        iframeSrc={credentialingIframeSrc}
+        onClose={() => handleCredentialingIframeLoad(false)}
+        onLoad={() => handleCredentialingIframeLoad(true)}
+      />
     </>
   )
 }
 
 export { EPCSHeader }
-
-const getEspcButtonLabel = (isVerified: boolean) =>
-  isVerified ? 'ESPC Verified' : 'Start EPCS Verification'

@@ -17,6 +17,7 @@ const QuantityField = ({ index }: DrugBlockProps) => {
         decimalScale={3}
         allowNegative={false}
         formatOnBlurOnly={true}
+        maxLimit={999999999}
       />
     </FormFieldContainer>
   )

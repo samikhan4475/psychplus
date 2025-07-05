@@ -175,7 +175,13 @@ interface GetIdProofingResponse {
   validUntil: string
   requestByStaffname?: StaffData
 }
-
+interface PendingProofing {
+  proofType?: string
+  proofingRecordLink?: {
+    href: string
+    rel: string
+  }
+}
 interface StartSelfProofingResponse {
   clientRef: string
   userRef: string
@@ -204,6 +210,10 @@ interface LaunchProofingResponse {
   launchScreenUrl: string
 }
 
+interface LaunchCredentialingResponse {
+  launchSelfAdminUrl: string
+}
+
 interface Credential {
   type: string
   ref: string
@@ -229,6 +239,8 @@ interface SelfProofingResponse {
   credentials: Credential[]
   activeProofing: ActiveProofing
   proofingTransaction: StartSelfProofingResponse
+  pendingProofing?: PendingProofing
+  subStatus?: string
 }
 
 export {
@@ -263,4 +275,5 @@ export type {
   GetIdProofingActionResponse,
   GetIdProofingResponse,
   SelfProofingResponse,
+  LaunchCredentialingResponse
 }

@@ -19,13 +19,17 @@ export const useSelfProofing = () => {
     if (!isVerificationInProgress) {
       let proofingType: ProofingType
       const proofingTypeResponse = await getProofingTypes(userId)
+
       if (proofingTypeResponse.state === 'error') {
         proofingType = ProofingType.mobile
       } else if (proofingTypeResponse.data.length) {
-        proofingType =
-          proofingTypeResponse.data[0]?.abandonCount >= 3
-            ? ProofingType.web
-            : ProofingType.mobile
+        const type = proofingTypeResponse.data[0]
+
+        if (type.proofType === 'ial2xo' && type.abandonCount < 2) {
+          proofingType = ProofingType.mobile
+        } else {
+          proofingType = ProofingType.web
+        }
       } else {
         proofingType = ProofingType.mobile
       }

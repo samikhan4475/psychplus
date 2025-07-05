@@ -1091,6 +1091,9 @@ const PMP_START = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/prescriptions/actions/startpmp`
 const PMP_REPORT = (patientId: string, prescriptionId: string) =>
   `${API_URL}/api/patients/${patientId}/prescriptions/${prescriptionId}/actions/pmpreport`
+const LAUNCH_SELF_CREDENTIALING_ENDPOINT = `${API_URL}/api/users/self/idproofings/actions/launchManagementUrl`
+const LAUNCH_USER_CREDENTIALING_ENDPOINT = (userId:string) =>
+  `${API_URL}/api/users/${userId}/idproofings/actions/launchManagementUrl`
 export {
   PATIENT_MEDICATION_SIGN_IN,
   GET_PATIENT_MEDICATION_ENDPOINT,
@@ -1574,4 +1577,6 @@ export {
   PMP_SEARCH,
   PMP_START,
   PMP_REPORT,
+  LAUNCH_SELF_CREDENTIALING_ENDPOINT,
+  LAUNCH_USER_CREDENTIALING_ENDPOINT
 }
