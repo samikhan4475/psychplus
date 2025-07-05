@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { getLocations } from '@/actions/get-locations'
 import { FormContainer, FormSubmitButton } from '@/components'
 import { ClinicScheduleStatus } from '../../clinic-time-tab/constants'
@@ -58,6 +59,14 @@ const ClinicScheduleForm = ({
   const noVisitsSelected = form.formState.errors.visitTypes
   const noAgeGroupSelected = form.formState.errors.groups
 
+  const handleSubmit = (data: SchemaType) => {
+    if (!Object.keys(form.formState.dirtyFields).length) {
+      toast.error('No changes detected.')
+      return
+    }
+    onSubmit(data)
+  }
+
   useEffect(() => {
     if (!staff) return
     fetchStates(providerId ?? Number(staff.id))
@@ -75,7 +84,7 @@ const ClinicScheduleForm = ({
   }, [location])
 
   return (
-    <FormContainer form={form} onSubmit={onSubmit} className="gap-y-3">
+    <FormContainer form={form} onSubmit={handleSubmit} className="gap-y-3">
       <Flex gap="3" align="start">
         <PrimaryStateSelect />
         <PrimaryLocationSelect />
