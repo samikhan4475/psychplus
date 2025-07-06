@@ -9,7 +9,8 @@
     "dev": "next dev -p 3000 --turbo",
     "lint:next": "next lint",
     "lint": "tsc --noEmit && eslint \"src/**/*.ts*\"",
-    "lint:fix": "tsc --noEmit && eslint --fix \"src/**/*.ts*\""
+    "lint:fix": "tsc --noEmit && eslint --fix \"src/**/*.ts*\"",
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "@azure/communication-calling": "^1.35.1",

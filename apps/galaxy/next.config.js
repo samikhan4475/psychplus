@@ -7,6 +7,9 @@ const config = {
   output: 'standalone',
   transpilePackages: [],
   eslint: { ignoreDuringBuilds: true },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   webpack: (config) => {
     config.resolve.alias['@azure/communication-calling'] =
       '@azure/communication-calling/dist-esm/sdk.bundle.js'

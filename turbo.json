@@ -18,6 +18,10 @@
     },
     "clean": {
       "cache": false
+    },
+    "check-types": {
+      "dependsOn": ["^build", "^check-types"],
+      "outputs": []
     }
   },
   "globalEnv": [

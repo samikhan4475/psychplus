@@ -44,7 +44,7 @@ COPY turbo.json turbo.json
 
 ENV APP_CODE p+galaxy-ui
 ENV APP_PATH ehr
-
+RUN turbo run check-types --filter=@psychplus/galaxy-app...
 RUN turbo run build --filter=@psychplus/galaxy-app...
 
 # Run app
