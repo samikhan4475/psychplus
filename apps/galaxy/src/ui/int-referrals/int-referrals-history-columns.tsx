@@ -5,11 +5,7 @@ import { ColumnHeader, LongTextCell, TextCell } from '@/components'
 import { PatientReferral } from '@/types'
 import { formatDate, formatDateTime, getPatientFullName } from '@/utils'
 import { ServiceNameCell } from '../referrals/patient-referrals-widget/cells'
-import {
-  ContactMadeSelectCell,
-  ReferralStatusCell,
-  ServiceStatusSelectCell,
-} from './cells'
+import { ReferralStatusCell, ServiceStatusSelectCell } from './cells'
 import { getPrimaryInsuranceName, getSecondaryInsuranceName } from './utils'
 
 const columns: ColumnDef<PatientReferral>[] = [
@@ -100,11 +96,6 @@ const columns: ColumnDef<PatientReferral>[] = [
           getPatientFullName(referral?.referredByName)}
       </TextCell>
     ),
-  },
-  {
-    id: 'contact-made',
-    header: () => <ColumnHeader label="Contact Made" />,
-    cell: ({ row }) => <ContactMadeSelectCell row={row} disabled />,
   },
   {
     id: 'referral-status',

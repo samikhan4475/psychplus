@@ -8,6 +8,15 @@ import type {
   PatientReferral,
 } from '../types'
 
+const defaultPayload = {
+  isIncludeMetadataResourceChangeControl: true,
+  isIncludeMetadataResourceIds: true,
+  isIncludeMetadataResourceStatus: true,
+  isIncludeAppointment: true,
+  isIncludeInsurance: true,
+  isIncludeVisitType: true,
+}
+
 const searchPatientReferralsAction = async ({
   patientIds,
   payload,
@@ -33,6 +42,7 @@ const searchPatientReferralsAction = async ({
     patientIds,
     IsIncludeInsurance,
     ...payload,
+    ...defaultPayload,
   })
   if (response.state === 'error') {
     return {

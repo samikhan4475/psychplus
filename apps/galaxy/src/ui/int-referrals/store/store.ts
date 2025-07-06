@@ -3,6 +3,8 @@ import toast from 'react-hot-toast'
 import { createStore as zustandCreateStore } from 'zustand'
 import { PatientReferral, SelectOptionType, Sort, StaffResource } from '@/types'
 import {
+  getLocationOptionsAction,
+  getProviderOptionsAction,
   getStaffOptionsAction,
   searchPatientReferralsAction,
 } from '@/ui/referrals/patient-referrals-widget/actions'
@@ -22,6 +24,10 @@ interface StoreState {
   pageCache: Record<number, GetPatientReferralsResponse>
   showFilters: boolean
   staff?: StaffResource
+  providersList?: SelectOptionType[]
+  getProvidersList: () => void
+  locationsList?: SelectOptionType[]
+  getLocationsList: () => void
   fetchPatientReferrals: (
     formValues?: Partial<PatientReferralsPayload>,
     page?: number,
@@ -54,6 +60,36 @@ const createStore = () => {
     page: 1,
     pageCache: {},
     showFilters: true,
+    providersList: [],
+    locationsList: [],
+    getProvidersList: async () => {
+      const result = await getProviderOptionsAction()
+
+      if (result.state === 'error') {
+        return set({
+          error: result.error,
+          loading: false,
+        })
+      }
+
+      set({
+        providersList: result.data,
+      })
+    },
+    getLocationsList: async () => {
+      const result = await getLocationOptionsAction()
+
+      if (result.state === 'error') {
+        return set({
+          error: result.error,
+          loading: false,
+        })
+      }
+
+      set({
+        locationsList: result.data,
+      })
+    },
     setData: (referrals) =>
       set({ data: { referrals, total: get().data?.total } }),
     toggleFilters: () => set({ showFilters: !get().showFilters }),

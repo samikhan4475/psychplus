@@ -6,7 +6,7 @@ import { Flex, Grid, Separator } from '@radix-ui/themes'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { z } from 'zod'
-import { FormContainer, FormError } from '@/components'
+import { FormContainer } from '@/components'
 import { StaffResource } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
@@ -21,14 +21,19 @@ import { ProviderSelector } from './provider-selector'
 import { SaveButton } from './save-button'
 import { ServiceSelect } from './service-select'
 import { ServiceStatusSelect } from './service-status-selector'
+import { VisitTypeSelect } from './visit-type-select'
 
 const REFERRAL_90_DAYS_ERROR = 'already exist'
 
 const schema = z.object({
   patientId: z.string(),
   appointmentId: z.string().optional(),
+  serviceId: z.string().optional(),
   service: z.string(),
   servicesStatus: z.string(),
+  visitTypeId: z.string(),
+  visitType: z.string().optional(),
+  referredByProviderStaffId: z.number().optional(),
   isByPass90DayRule: z.boolean().optional(),
   comments: z
     .string()
@@ -69,6 +74,9 @@ const CreateReferralForm = ({
       appointmentId: appointmentId ?? undefined,
       servicesStatus: DEFAULT_REFERRAL_SERVICE_STATUS,
       comments: '',
+      referredByProviderStaffId: isPrescriber(staff)
+        ? Number(staff.id)
+        : undefined,
       referredByName: isPrescriber(staff)
         ? {
             firstName: staff?.legalName.firstName,
@@ -136,8 +144,9 @@ const CreateReferralForm = ({
 
   return (
     <FormContainer form={form} onSubmit={onSubmit}>
+      <ServiceSelect />
       <Grid columns="2" gap="2">
-        <ServiceSelect />
+        <VisitTypeSelect />
         <ServiceStatusSelect />
         <ProviderSelector staff={staff} />
         <CommentsInput />

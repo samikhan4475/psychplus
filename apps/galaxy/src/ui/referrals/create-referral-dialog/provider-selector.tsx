@@ -31,6 +31,7 @@ const ProviderSelector = ({ staff }: ProviderSelectorProps) => {
             lastName: value?.lastName,
             honors: value?.honors,
           })
+          form.setValue('referredByProviderStaffId', Number(value?.id))
         }}
       />
       <FormFieldError name="referredByName" />

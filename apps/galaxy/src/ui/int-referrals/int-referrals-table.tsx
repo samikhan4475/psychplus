@@ -10,17 +10,28 @@ import { useStore } from './store'
 
 const IntReferralsTable = () => {
   const store = useStore()
-  const { loading, data, sort, sortData, fetchPatientReferrals } =
-    zustandUseStore(store, (state) => ({
-      data: state.data,
-      fetchPatientReferrals: state.fetchPatientReferrals,
-      loading: state.loading,
-      sort: state.sort,
-      sortData: state.sortData,
-    }))
+  const {
+    loading,
+    data,
+    sort,
+    sortData,
+    fetchPatientReferrals,
+    getProvidersList,
+    getLocationsList,
+  } = zustandUseStore(store, (state) => ({
+    data: state.data,
+    fetchPatientReferrals: state.fetchPatientReferrals,
+    loading: state.loading,
+    sort: state.sort,
+    sortData: state.sortData,
+    getProvidersList: state.getProvidersList,
+    getLocationsList: state.getLocationsList,
+  }))
 
   useEffect(() => {
     fetchPatientReferrals()
+    getProvidersList()
+    getLocationsList()
   }, [fetchPatientReferrals])
 
   if (loading) {

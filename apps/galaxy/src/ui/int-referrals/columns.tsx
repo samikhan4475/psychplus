@@ -1,26 +1,32 @@
 'use client'
 
 import { ColumnDef } from '@tanstack/react-table'
-import { ColumnHeader, LongTextCell, TextCell } from '@/components'
+import { ColumnHeader, TextCell } from '@/components'
 import { PatientReferral, Sort } from '@/types'
 import {
-  formatDate,
   formatDateOfBirth,
   formatDateTime,
-  getMaskedPhoneNumber,
-  getNewSortDir,
-  getPatientDOB,
   getPatientFullName,
+  getSlashedPaddedDateString,
+  getSortDir,
 } from '@/utils'
-import {
-  GenderLabelCell,
-  ServiceNameCell,
-} from '../referrals/patient-referrals-widget/cells'
+import { ServiceNameCell } from '../referrals/patient-referrals-widget/cells'
 import {
   ActionCell,
+  AppointmentIdCell,
   CollapseCell,
-  ContactMadeSelectCell,
+  DiagnosisCell,
+  LocationCell,
+  OrderDetailLocationCell,
+  OrderDetailProviderCell,
+  PatientEducationCell,
+  PriorAuthStatusCell,
+  ProcurementCell,
+  ProviderCell,
   ReferralStatusCell,
+  RemsEnrolledCell,
+  ServicePriorityStatusCell,
+  VisitTypeCell,
 } from './cells'
 import { getPrimaryInsuranceName, getSecondaryInsuranceName } from './utils'
 
@@ -36,216 +42,329 @@ const columns = (
       size: 20,
     },
     {
-      id: 'ptname',
-      header: () => <ColumnHeader label="Name" />,
-      cell: ({ row: { original } }) => {
-        return (
-          <LongTextCell className="min-w-24">
-            {original?.patientName && getPatientFullName(original?.patientName)}
-          </LongTextCell>
-        )
-      },
-    },
-    {
-      id: 'pt-status',
-      header: () => <ColumnHeader label="User Status" />,
-      cell: GenderLabelCell,
-    },
-    {
-      id: 'age',
-      header: () => <ColumnHeader label="Age" />,
-      cell: ({ row: { original } }) => (
-        <TextCell>{original?.patientAge}</TextCell>
-      ),
-    },
-    {
-      id: 'patient-gender',
-      header: () => <ColumnHeader label="Gender" />,
-      cell: ({ row: { original } }) => (
-        <TextCell>{original?.patientGender}</TextCell>
-      ),
-    },
-    {
-      id: 'mrn',
-      header: () => <ColumnHeader label="MRN" />,
-      cell: ({ row: { original } }) => (
-        <TextCell className="truncate">{original?.patientMrn}</TextCell>
-      ),
-    },
-    {
-      id: 'dob',
-      header: () => <ColumnHeader label="DOB" />,
-      cell: ({ row: { original } }) => (
-        <TextCell className="truncate">
-          {original?.patientDateOfBirth &&
-            formatDateOfBirth(original?.patientDateOfBirth)}
-        </TextCell>
-      ),
-    },
-    {
-      id: 'phone',
-      header: () => <ColumnHeader label="Phone" />,
-      cell: ({ row: { original } }) => (
-        <TextCell className="truncate">
-          {getMaskedPhoneNumber(
-            original?.contactDetails?.phoneNumbers?.[0]?.number ?? '',
-          ) ?? ''}
-        </TextCell>
-      ),
-    },
-    {
-      id: 'email',
-      header: () => <ColumnHeader label="Email" />,
-      cell: ({ row: { original } }) => (
-        <TextCell className="truncate">
-          {original?.contactDetails?.email}
-        </TextCell>
-      ),
-    },
-    {
-      id: 'state',
-      header: () => <ColumnHeader label="State" />,
-      cell: ({ row: { original } }) => (
-        <TextCell>{original?.stateCode}</TextCell>
-      ),
-    },
-    {
-      id: 'city',
-      header: () => <ColumnHeader label="City" />,
-      cell: ({ row: { original } }) => (
-        <TextCell className="truncate">{original?.city}</TextCell>
-      ),
-    },
-    {
-      id: 'zip',
-      header: () => <ColumnHeader label="Zip" />,
-      cell: ({ row: { original } }) => <TextCell>{original?.zip}</TextCell>,
-    },
-    {
-      id: 'postalPlus4Code',
-      header: () => <ColumnHeader label="Postal+4" />,
-      cell: ({ row: { original } }) => (
-        <TextCell>{original?.postalPlus4Code ?? ''}</TextCell>
-      ),
-    },
-    {
-      id: 'primaryInsurance',
-      header: () => <ColumnHeader label="Primary Insurance" />,
-      cell: ({ row: { original } }) => (
-        <TextCell>
-          {getPrimaryInsuranceName(original.patientInsurancePolicies)}
-        </TextCell>
-      ),
-    },
-    {
-      id: 'secondaryInsurance',
-      header: () => <ColumnHeader label="Secondary Insurance" />,
-      cell: ({ row: { original } }) => (
-        <TextCell>
-          {getSecondaryInsuranceName(original.patientInsurancePolicies)}
-        </TextCell>
-      ),
-    },
-    {
-      id: 'service',
-      header: () => <ColumnHeader label="Service" />,
-      cell: ServiceNameCell,
-    },
-    {
-      id: 'referralDate',
+      id: 'patientName',
       header: ({ column }) => (
-        <ColumnHeader
-          label="Order date/time"
-          sortable
-          sortDir={getNewSortDir(column.id, sort)}
-          onClick={() => {
-            onSort?.(column.id)
-          }}
-        />
+        <ColumnHeader column={column} label="Patient Details" />
       ),
-      cell: ({ row: { original: referral } }) => (
-        <TextCell className="truncate" wrapperClass="bg-gray-3 w-full">
-          {referral?.referralDate &&
-            formatDateTime(referral?.referralDate, false)}
-        </TextCell>
-      ),
+      columns: [
+        {
+          id: 'patientName.firstName',
+          header: ({ column }) => <ColumnHeader label="Name" column={column} />,
+          cell: ({ row }) => (
+            <TextCell>{getPatientFullName(row.original.patientName)}</TextCell>
+          ),
+        },
+        {
+          id: 'patientStatus',
+          header: ({ column }) => (
+            <ColumnHeader label="Status" column={column} />
+          ),
+          cell: ({ row }) => <TextCell>{row.original.patientStatus}</TextCell>,
+        },
+        {
+          id: 'patientAge',
+          header: ({ column }) => <ColumnHeader label="Age" column={column} />,
+          cell: ({ row }) => <TextCell>{row.original.patientAge}</TextCell>,
+        },
+        {
+          id: 'patientGender',
+          header: ({ column }) => <ColumnHeader label="Gen." column={column} />,
+          cell: ({ row }) => <TextCell>{row.original.patientGender}</TextCell>,
+        },
+        {
+          id: 'patientMrn',
+          header: ({ column }) => <ColumnHeader label="MRN" column={column} />,
+          cell: ({ row }) => <TextCell>{row.original.patientMrn}</TextCell>,
+        },
+        {
+          id: 'patientDateOfBirth',
+          header: ({ column }) => <ColumnHeader label="DOB" column={column} />,
+          cell: ({ row }) => (
+            <TextCell className="truncate">
+              {row.original?.patientDateOfBirth &&
+                formatDateOfBirth(row.original?.patientDateOfBirth)}
+            </TextCell>
+          ),
+        },
+        {
+          id: 'contactDetails.phoneNumbers[0].number',
+          header: ({ column }) => (
+            <ColumnHeader label="Phone" column={column} />
+          ),
+          cell: ({ row }) => (
+            <TextCell className="w-[100px]">
+              {row.original.contactDetails?.phoneNumbers?.length
+                ? row.original.contactDetails.phoneNumbers[0].number
+                : ''}
+            </TextCell>
+          ),
+        },
+        {
+          id: 'contactDetails?.email',
+          header: ({ column }) => (
+            <ColumnHeader label="Email" column={column} />
+          ),
+          cell: ({ row }) => (
+            <TextCell>{row.original.contactDetails?.email}</TextCell>
+          ),
+        },
+        {
+          id: 'contactDetails.addresses[0].state',
+          header: ({ column }) => (
+            <ColumnHeader label="Residence(State)" column={column} />
+          ),
+          cell: ({ row }) => (
+            <TextCell>
+              {row.original.contactDetails?.addresses?.length
+                ? row.original.contactDetails.addresses[0].state
+                : ''}
+            </TextCell>
+          ),
+        },
+        {
+          id: 'contactDetails.addresses[0].city',
+          header: ({ column }) => <ColumnHeader label="City" column={column} />,
+          cell: ({ row }) => (
+            <TextCell>
+              {row.original.contactDetails?.addresses?.length
+                ? row.original.contactDetails.addresses[0].city
+                : ''}
+            </TextCell>
+          ),
+        },
+        {
+          id: 'contactDetails.addresses[0].postalCode',
+          header: ({ column }) => <ColumnHeader label="Zip" column={column} />,
+          cell: ({ row }) => (
+            <TextCell>
+              {row.original.contactDetails?.addresses?.length
+                ? row.original.contactDetails.addresses[0].postalCode
+                : ''}
+            </TextCell>
+          ),
+        },
+      ],
     },
     {
-      id: 'visitID',
-      header: () => <ColumnHeader label="Visit ID" />,
-      cell: ({ row: { original } }) => (
-        <TextCell className="truncate">{original?.appointmentId}</TextCell>
+      id: 'referral-order-details',
+      header: ({ column }) => (
+        <ColumnHeader column={column} label="Referral Order Details" />
       ),
+      columns: [
+        {
+          id: 'serviceDateTime',
+          header: ({ column }) => (
+            <ColumnHeader label="Order Date/Time" column={column} />
+          ),
+          cell: ({ row }) => (
+            <TextCell>
+              {row.original.visitDateTime
+                ? formatDateTime(row.original.visitDateTime)
+                : ''}
+            </TextCell>
+          ),
+        },
+        {
+          id: 'service',
+          header: ({ column }) => (
+            <ColumnHeader label="Service" column={column} />
+          ),
+          cell: ServiceNameCell,
+        },
+        {
+          id: 'appointment.visitType',
+          header: ({ column }) => (
+            <ColumnHeader label="Visit Type" column={column} />
+          ),
+          cell: VisitTypeCell,
+        },
+        {
+          id: 'visitId',
+          header: ({ column }) => (
+            <ColumnHeader label="Visit ID" column={column} />
+          ),
+          cell: AppointmentIdCell,
+        },
+        {
+          id: 'servicesStatus',
+          header: ({ column }) => (
+            <ColumnHeader label="Service Priority Status" column={column} />
+          ),
+          cell: ServicePriorityStatusCell,
+        },
+        {
+          id: 'referredByName',
+          header: ({ column }) => (
+            <ColumnHeader label="Initiated By" column={column} />
+          ),
+          cell: ({ row }) => (
+            <TextCell>
+              {getPatientFullName(row.original.referredByName)}
+            </TextCell>
+          ),
+        },
+        {
+          id: 'appointment?.providerName',
+          header: ({ column }) => (
+            <ColumnHeader label="Provider" column={column} />
+          ),
+          cell: ProviderCell,
+        },
+        {
+          id: 'appointment?.locationName1',
+          header: ({ column }) => (
+            <ColumnHeader label="Location" column={column} />
+          ),
+          cell: LocationCell,
+        },
+        {
+          id: 'resourceStatus',
+          header: ({ column }) => (
+            <ColumnHeader label="Referral Status" column={column} />
+          ),
+          cell: ReferralStatusCell,
+        },
+        {
+          id: 'comments',
+          header: ({ column }) => (
+            <ColumnHeader label="Comments" column={column} />
+          ),
+          cell: ({ row }) => <TextCell>{row.original.comments}</TextCell>,
+        },
+      ],
     },
     {
-      id: 'service-status',
-      header: () => <ColumnHeader label="Service Priority Status" />,
-      cell: ({ row: { original } }) => (
-        <TextCell className="truncate" wrapperClass="bg-gray-3 w-full">
-          {original?.servicesStatus}
-        </TextCell>
+      id: 'referral-service-details',
+      header: ({ column }) => (
+        <ColumnHeader column={column} label="Referral Service Details" />
       ),
+      columns: [
+        {
+          id: 'metadata?.createdOn',
+          header: ({ column }) => (
+            <ColumnHeader
+              label="Contact Initiated Status"
+              column={column}
+              sortable
+              sortDir={getSortDir(column.id, sort)}
+              onClick={() => {
+                onSort?.(column.id)
+              }}
+            />
+          ),
+          cell: ({ row }) => (
+            <TextCell>
+              {row.original.metadata?.createdOn
+                ? formatDateTime(row.original.metadata?.createdOn)
+                : ''}
+            </TextCell>
+          ),
+        },
+        {
+          id: 'appointment?.locationName',
+          header: ({ column }) => (
+            <ColumnHeader label="Location" column={column} />
+          ),
+          cell: OrderDetailLocationCell,
+        },
+        {
+          id: 'providerName',
+          header: ({ column }) => (
+            <ColumnHeader label="Provider" column={column} />
+          ),
+          cell: OrderDetailProviderCell,
+        },
+        {
+          id: 'patientEducation',
+          header: ({ column }) => (
+            <ColumnHeader label="Patient Education" column={column} />
+          ),
+          cell: PatientEducationCell,
+        },
+        {
+          id: 'insurancePolicies',
+          header: ({ column }) => (
+            <ColumnHeader label="Primary Insurance" column={column} />
+          ),
+          cell: ({ row: { original } }) => (
+            <TextCell>
+              {getPrimaryInsuranceName(original.patientInsurancePolicies)}
+            </TextCell>
+          ),
+        },
+        {
+          id: 'patientInsurancePolicies',
+          header: ({ column }) => (
+            <ColumnHeader label="Secondary Insurance" column={column} />
+          ),
+          cell: ({ row: { original } }) => (
+            <TextCell>
+              {getSecondaryInsuranceName(original.patientInsurancePolicies)}
+            </TextCell>
+          ),
+        },
+        {
+          id: 'priorAuthStatus',
+          header: ({ column }) => (
+            <ColumnHeader label="Prior Auth Status" column={column} />
+          ),
+          cell: PriorAuthStatusCell,
+        },
+        {
+          id: 'diagnosis',
+          header: ({ column }) => (
+            <ColumnHeader label="Diagnosis" column={column} />
+          ),
+          cell: DiagnosisCell,
+        },
+        {
+          id: 'procurement',
+          header: ({ column }) => (
+            <ColumnHeader label="Procurement" column={column} />
+          ),
+          cell: ProcurementCell,
+        },
+        {
+          id: 'remsEnrolled',
+          header: ({ column }) => (
+            <ColumnHeader label="REMS enrolled" column={column} />
+          ),
+          cell: RemsEnrolledCell,
+        },
+      ],
     },
     {
-      id: 'initiated-by',
-      header: () => <ColumnHeader label="Initiated By" />,
+      accessorKey: 'nextVisit',
+      header: ({ column }) => (
+        <ColumnHeader column={column} clientSideSort label="Next Visit" />
+      ),
       cell: ({ row: { original } }) => (
         <TextCell className="truncate">
-          {original?.metadata?.createdByFullName}
-        </TextCell>
-      ),
-    },
-    {
-      id: 'provider',
-      header: () => <ColumnHeader label="Provider" />,
-      cell: ({ row: { original } }) => (
-        <TextCell className="truncate">
-          {original?.referredByName &&
-            getPatientFullName(original?.referredByName)}
-        </TextCell>
-      ),
-    },
-    {
-      id: 'contact-made',
-      header: () => <ColumnHeader label="Contact Made" />,
-      cell: ContactMadeSelectCell,
-    },
-    {
-      id: 'referral-status',
-      header: () => <ColumnHeader label="Referral Status" />,
-      cell: ReferralStatusCell,
-    },
-    {
-      id: 'next-visit',
-      header: () => <ColumnHeader label="Next Visit" />,
-      cell: ({ row: { original } }) => (
-        <TextCell className="truncate" wrapperClass="bg-gray-3 w-full">
-          {formatDate(original?.nextVisit, 'MM/dd/yy') ?? 'N/A'}
+          {original?.nextVisit
+            ? getSlashedPaddedDateString(original?.nextVisit)
+            : 'N/A'}
         </TextCell>
       ),
     },
     {
       id: 'visit-hx',
-      header: () => <ColumnHeader label="Visit Hx" />,
+      accessorKey: 'patientVisitHistory',
+      header: ({ column }) => (
+        <ColumnHeader column={column} clientSideSort label="Visit Hx" />
+      ),
       cell: ({ row: { original } }) => (
-        <TextCell className="truncate" wrapperClass="bg-gray-3 w-full">
-          {formatDate(original?.patientVisitHistory, 'MM/dd/yy') ?? 'N/A'}
+        <TextCell className="truncate">
+          {original?.patientVisitHistory
+            ? getSlashedPaddedDateString(original?.patientVisitHistory)
+            : 'N/A'}
         </TextCell>
       ),
     },
     {
-      id: 'comments',
-      header: () => <ColumnHeader label="Comments" />,
-      size: 40,
-      cell: ({ row: { original } }) => (
-        <LongTextCell className="max-w-32">{original.comments}</LongTextCell>
-      ),
-    },
-
-    {
       id: 'action',
       header: () => <ColumnHeader label="Action" />,
       cell: ActionCell,
+      size: 60,
     },
   ]
 }

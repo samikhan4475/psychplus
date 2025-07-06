@@ -15,6 +15,15 @@ enum QueryByNextDays {
   Disregard = 'Disregard',
 }
 
+enum VisitTypes {
+  ExposureResponseTherapy = 'Exposure Response Therapy',
+}
+
+enum referralServiceType {
+  OCD = 'OCD',
+  ReferrerShortName = 'Nocd',
+}
+
 interface PatientRaw {
   id: number
   metadata: Metadata
@@ -109,6 +118,8 @@ interface PatientReferralsPayload {
 
 export {
   QueryByNextDays,
+  VisitTypes,
+  referralServiceType,
   type Patient,
   type PatientRaw,
   type SearchPatientsData,

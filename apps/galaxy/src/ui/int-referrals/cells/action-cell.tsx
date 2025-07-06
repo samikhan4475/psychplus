@@ -6,6 +6,7 @@ import { PropsWithRow } from '@/components'
 import { PatientReferral } from '@/types'
 import { EditIntReferralDialog } from '../edit-int-referral-dialog'
 import { useStore } from '../store'
+import { SubmitExternalReferralButton } from './submit-external-referral-button'
 
 interface ActionCellProps extends PropsWithRow<PatientReferral> {
   isTabView?: boolean
@@ -20,8 +21,9 @@ const ActionCell = ({ row: { original: referral } }: ActionCellProps) => {
   }
 
   return (
-    <Flex justify="center" gap="1" width="100%">
+    <Flex justify="center" gap="1" className="w-[150px]">
       <EditIntReferralDialog referral={referral} onClose={onClose} />
+      <SubmitExternalReferralButton referral={referral} />
     </Flex>
   )
 }

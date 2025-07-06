@@ -1,3 +1,5 @@
+import { PatientAddress } from './address'
+import { Appointment } from './appointment'
 import { Insurance } from './insurance'
 import { Metadata } from './metadata'
 import { LegalName } from './name'
@@ -36,10 +38,12 @@ interface PatientReferral {
       type: string
       number: string
     }>
+    addresses: PatientAddress[]
   }
   id: number
   metadata?: Metadata
   patientId: number
+  providerName: LegalName
   patientName: LegalName
   patientStatus: string
   patientDateOfBirth?: string
@@ -78,6 +82,26 @@ interface PatientReferral {
   patientVisitHistory?: string
   intiatedByUserRole?: string
   stateCode?: string
+  appointment: Partial<Appointment>
+  procurement?: string
+  diagnosis?: string
+  priorAuthStatus?: string
+  remsEnrolled?: boolean
+  serviceDateTime?: string
+  patientEducation?: boolean
+  contactMade?: string
+  visitType?: string
+  visitTypeId?: string
+  providerId?: string
+  diagnosisCode?: string
+  priorAuthorizationStatus?: string
+  sentToNocdDate?: string
+  referralId?: string
+  referredByProviderStaffId?: number
+  referredByStaffLocationId?: string
+  referralProviderStaffId?: number
+  referralProviderLocationId?: string
+  referrerShortName?: string
 }
 
 interface GetPatientReferralsParams {

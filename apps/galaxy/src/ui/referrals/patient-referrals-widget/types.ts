@@ -1,5 +1,5 @@
 import { type Row } from '@tanstack/react-table'
-import { Sort, type PatientReferral } from '@/types'
+import { LegalName, PatientAddress, Sort, type PatientReferral } from '@/types'
 
 enum QueryByNextDays {
   NoVisits = 'NoVisits',
@@ -27,6 +27,22 @@ interface GetPatientReferralsParams {
   IsIncludeInsurance?: boolean
   sort?: Sort
 }
+interface SubmitExternalReferral {
+  practiceStateCode: string
+  patientName: LegalName
+  patientContactDetails: {
+    email: string
+    phoneNumbers?: Array<{
+      type: string
+      number: string
+    }>
+    addresses: PatientAddress[]
+  }
+  patientStateCode: string
+  patientDob: string
+  additionalNotes: string
+  referralServiceType: string
+}
 export {
   QueryByNextDays,
   type PatientReferral,
@@ -34,4 +50,5 @@ export {
   type GetPatientReferralsResponse,
   type GetPatientReferralsParams,
   type PatientReferralsPayload,
+  type SubmitExternalReferral,
 }

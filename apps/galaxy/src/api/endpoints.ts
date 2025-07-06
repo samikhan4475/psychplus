@@ -474,6 +474,7 @@ const UPDATE_PATIENT_ENDPOINT = (patientId: number) =>
 const SEARCH_STAFF_ENDPOINT = `${API_URL}/api/staff/search`
 const GET_SELF_STAFF_DETAILS_ENDPOINT = `${API_URL}/api/staff/self`
 const GET_PATIENT_REFERRALS_ENDPOINT = `${API_URL}/api/referrals/search`
+const SEND_TO_NOCD_REFERRAL_ENDPOINT = `${API_URL}/api/externalreferrals/actions/submitexternalreferral`
 const GET_PATIENT_REFERRALS_HISTORY_ENDPOINT = (liveReferralId: string) =>
   `${API_URL}/api/referrals/${liveReferralId}/history/search`
 const GET_PREFERRED_PARTNER_USERS = (ppId: string) =>
@@ -1571,6 +1572,7 @@ export {
   GET_ALL_VISITS_LIST_ENDPOINT,
   GET_VISIT_BY_STATE_LIST_ENDPOINT,
   STAFF_PROFILE_IMAGE_ENDPOINT,
+  SEND_TO_NOCD_REFERRAL_ENDPOINT,
   LOCATION_PRACTICES_ENDPOINT,
   ATTACH_PRACTICE_LOCATION_ENDPOINT,
   MARK_AS_PRIMARY_PRACTICE_LOCATION_ENDPOINT,
