@@ -37,7 +37,7 @@ const sanitizeBaseUrl = (url: string): string => {
   if (!url) return ''
 
   // Always keep from `/api` onwards
-  const apiIndex = url.indexOf('/api')
+  const apiIndex = url.indexOf('/api/')
   if (apiIndex !== -1) {
     return url.slice(apiIndex)
   }
