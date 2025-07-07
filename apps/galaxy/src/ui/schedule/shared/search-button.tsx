@@ -1,17 +1,11 @@
 import { IconButton } from '@radix-ui/themes'
 import { SearchIcon } from 'lucide-react'
 
-interface SearchButtonProps extends React.ComponentProps<typeof IconButton> {}
+const SearchButton = (props: React.ComponentProps<typeof IconButton>) => {
+  const { onClick, type = onClick ? 'button' : 'submit', ...rest } = props
 
-const SearchButton = ({ disabled, onClick }: SearchButtonProps) => {
   return (
-    <IconButton
-      size="1"
-      highContrast
-      type="button"
-      disabled={disabled}
-      onClick={onClick}
-    >
+    <IconButton size="1" highContrast type={type} onClick={onClick} {...rest}>
       <SearchIcon width={14} height={14} strokeWidth={2} />
     </IconButton>
   )

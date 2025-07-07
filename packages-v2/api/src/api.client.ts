@@ -1,3 +1,5 @@
+'use client'
+
 import {
   ActionErrorState,
   ActionResult,
@@ -55,7 +57,7 @@ const PUT = async <T>(
 ): Promise<NetworkResult<T>> => {
   const { signal,...rest } = options
   const isFormData = body instanceof FormData
-  const response = await fetch('/ehr' + url, {
+  const response = await fetch(sanitizeBaseUrl(url), {
     method: 'PUT',
     body: isFormData ? body : JSON.stringify(body),
     signal,
@@ -107,7 +109,7 @@ const POST = async <T>(
     } catch {
       errorData = errorText
     }
-    
+
     return {
       error: getErrorMessage(errorData),
       state: 'error',
