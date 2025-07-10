@@ -57,10 +57,19 @@ const RoundingViewTable = () => {
 
   useEffect(() => {
     // some serviceIds are missing and appearing as undefined from backend
-    const serviceIds = data
-      .filter((appointment) => appointment.serviceId)
-      .map((appointment) => appointment.serviceId)
-    fetchUnitsAndGroups(serviceIds)
+    if (data?.length) {
+      const serviceIds = Array.from(
+        new Set(
+          data
+            .filter((appointment) => appointment?.service)
+            .map((appointment) => appointment?.service),
+        ),
+      )
+
+      if (serviceIds?.length) {
+        fetchUnitsAndGroups(serviceIds)
+      }
+    }
   }, [data])
 
   const filteredColumns = useMemo(() => {

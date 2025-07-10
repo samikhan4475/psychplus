@@ -14,6 +14,7 @@ const defaultValues = {
   roomIds: [],
   stateIds: [],
   groupIds: [],
+  servicesOffered: [],
   primaryInsuranceNames: [],
   secondaryInsuranceNames: [],
   visitTypes: [],
