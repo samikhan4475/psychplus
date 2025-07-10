@@ -25,6 +25,9 @@ interface StepComponentProps {
   onTransmit?: (isVerificationStep?: boolean) => Promise<void | string>
   isTransmiting?: boolean
   transmissionResult?: TransmitResult[]
+  isRefillTab?: boolean
+  isRefillAndChangeRequest?: boolean
+  onCloseModal?: (open: boolean) => void
   stepContext?: StepContext
   setStepContext?: React.Dispatch<React.SetStateAction<StepContext>>
 }

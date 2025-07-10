@@ -9,11 +9,22 @@ import z from 'zod'
 import { FormContainer } from '@/components'
 import { AlertDialog } from '@/ui/alerts'
 import {
+  rxChangeRequestAction,
+  rxRenewalAction,
+} from '@/ui/medication-orders/medication-order-refill-widget/actions'
+import { UpdateMedicationSchema } from '@/ui/medication-orders/medication-order-refill-widget/dialogs/schema'
+import { RenewalResponseTypeEnum } from '@/ui/medication-orders/medication-order-refill-widget/types'
+import {
+  handleChangeRequestApproval,
+  handleRxApproval,
+} from '@/ui/medication-orders/medication-order-refill-widget/utils'
+import { sanitizeFormData } from '@/utils'
+import {
   prescribingSignInAction,
   pushSign,
   selfPollStatus,
 } from '../../actions'
-import { SelfPollStatusPayloadProps, TransmitResult } from '../../types'
+import { SelfPollStatusPayloadProps, TransmitResult, Prescription } from '../../types'
 import { IconBlock } from '../shared'
 import { ConfirmationMethod, StepContext } from '../types'
 import { OtpInput } from './otp-input'
@@ -33,6 +44,10 @@ interface MobileConfirmOtpProps {
   confirmationMethod?: ConfirmationMethod.Otp | ConfirmationMethod.Authenticator
   prescriptionDrugIds: string[]
   controlledPrescriptionIds?: string[]
+  isRefillTab?: boolean
+  isRefillAndChangeRequest?: boolean
+  prescriptions?: Prescription[]
+  onClose?: (open: boolean) => void
   setStepContext?: React.Dispatch<React.SetStateAction<StepContext>>
 }
 
@@ -42,6 +57,10 @@ const MobileConfirmOtp = ({
   confirmationMethod,
   prescriptionDrugIds,
   controlledPrescriptionIds,
+  isRefillTab,
+  isRefillAndChangeRequest,
+  prescriptions,
+  onClose,
   setStepContext,
 }: MobileConfirmOtpProps) => {
   const form = useForm<SchemaType>({
@@ -62,7 +81,6 @@ const MobileConfirmOtp = ({
     confirmationMethod === ConfirmationMethod.Authenticator
   const handleControlledPrescriptions = async () => {
     if (!controlledPrescriptionIds?.length) return true
-
     const resp = await prescribingSignInAction(controlledPrescriptionIds)
 
     if (resp?.state === 'error') {
@@ -88,7 +106,6 @@ const MobileConfirmOtp = ({
     }
     return true
   }
-
   const pollAuthenticatorStatus = async (
     payload: SelfPollStatusPayloadProps,
     attempt = 0,
@@ -115,8 +132,25 @@ const MobileConfirmOtp = ({
     ) {
       setShowPollingInfo(false)
       toast.success('Polling verification successful!')
-      const shouldProceed = await handleControlledPrescriptions()
-      if (shouldProceed) onNext()
+      if (isRefillAndChangeRequest) {
+        if (!prescriptions?.length) return
+
+        const data = prescriptions[0] as unknown as UpdateMedicationSchema
+        if (isRefillTab) {
+          const approvalResponse = await handleRxApproval(data)
+          if (approvalResponse) {
+            onClose?.(false)
+          }
+        } else {
+          const changeResponse = await handleChangeRequestApproval(data)
+          if (changeResponse) {
+            onClose?.(false)
+          }
+        }
+      } else {
+        const shouldProceed = await handleControlledPrescriptions()
+        if (shouldProceed) onNext()
+      }
     } else {
       setTimeout(
         () => pollAuthenticatorStatus(payload, attempt + 1, maxAttempts),
@@ -127,13 +161,11 @@ const MobileConfirmOtp = ({
 
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
     setPollingTimedOut(false)
-
     const payload = {
       prescriptionDrugIds,
-      isSourcePharmacyNotification: false,
+      isSourcePharmacyNotification: !!isRefillAndChangeRequest,
       ...(isOtp && { otpCode: data.otp }),
     }
-
     const response = await pushSign(payload)
     if (response?.state === 'error') {
       return toast.error(response?.error)
@@ -144,6 +176,20 @@ const MobileConfirmOtp = ({
     if (isAuthenticator) {
       setShowPollingInfo(true)
       pollAuthenticatorStatus(payload)
+    } else if (isRefillAndChangeRequest) {
+      if (!prescriptions?.length) return
+      const data = prescriptions[0] as unknown as UpdateMedicationSchema
+      if (isRefillTab) {
+        const approvalResponse = await handleRxApproval(data)
+        if (approvalResponse) {
+          onClose?.(false)
+        }
+      } else {
+        const changeResponse = await handleChangeRequestApproval(data)
+        if (changeResponse) {
+          onClose?.(false)
+        }
+      }
     } else {
       const shouldProceed = await handleControlledPrescriptions()
       if (shouldProceed) onNext()

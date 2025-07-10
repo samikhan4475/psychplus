@@ -16,14 +16,16 @@ const ConfirmMedication = ({
   onPrev,
   onNext,
   prescriptions,
+  isRefillTab,
+  isRefillAndChangeRequest,
+  onClose,
 }: StepComponentProps) => {
   const form = useFormContext<PatientMedicationSchemaType>()
   const confirmationMethod = form.getValues('confirmationMethod')
   const controlledPrescriptionIds: string[] = []
   const prescriptionDrugIds: string[] = []
-
   prescriptions?.forEach((prescription) => {
-    const drugs = prescription.prescriptionDrugs || []
+    const drugs = prescription.prescriptionDrugs || prescription.drugList || []
     const controlledDrugs = drugs.filter(
       (drug) => drug?.isControlledSubstance && drug.id,
     )
@@ -58,6 +60,10 @@ const ConfirmMedication = ({
           confirmationMethod={confirmationMethod}
           prescriptionDrugIds={prescriptionDrugIds}
           controlledPrescriptionIds={controlledPrescriptionIds}
+          isRefillTab={isRefillTab}
+          isRefillAndChangeRequest={isRefillAndChangeRequest}
+          prescriptions={prescriptions}
+          onClose={onClose}
         />
       </Flex>
       {!form.watch('confirmationMethod') && (

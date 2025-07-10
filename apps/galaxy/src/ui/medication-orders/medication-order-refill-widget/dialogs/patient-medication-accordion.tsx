@@ -3,13 +3,15 @@
 import { useState } from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
 import { TriangleDownIcon } from '@radix-ui/react-icons'
-import { Box, Flex, Text } from '@radix-ui/themes'
-import { Pencil } from 'lucide-react'
+import { Box, Flex, Grid, ScrollArea, Text } from '@radix-ui/themes'
+import { Pencil, TriangleAlert } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 import { DeleteIcon } from '@/components/icons'
 import { DrugInfo } from '@/types'
+import { FavoriteView } from '@/ui/medications/patient-medications-widget/patient-medication-dialog/shared'
 import { FavoriteIcon } from '@/ui/medications/patient-medications-widget/patient-medication-dialog/shared/favorite-icon'
 import { PatientMedicationForm } from './patient-medicaiton-form'
+import { PatientSelect } from './patient-select'
 import { UpdateMedicationSchema } from './schema'
 import { SearchableDrug } from './searchable-drug'
 
@@ -44,57 +46,89 @@ const PatientPrescriptionAccordian = () => {
     setEditIndex(null)
   }
   return (
-    <Accordion.Root
-      type="single"
-      collapsible
-      className="mt-1"
-      value={openItem ?? undefined}
-      onValueChange={(value) => setOpenItem(value)}
-    >
-      {drugs.map((item, index) => (
-        <Accordion.Item
-          key={`drugs-${item.drugDescription}`}
-          value={item.drugDescription ?? ''}
-          className="border-pp-table-border mt-1 w-full rounded-2 border p-1"
+    <Grid columns="2" gap="2">
+      <Flex direction="column" gap="1" flexGrow="1">
+        <PatientSelect />
+        <ScrollArea
+          scrollbars="vertical"
+          className="max-h-[70dvh] overflow-visible pr-2"
         >
-          <Accordion.Header>
-            <Accordion.Trigger className="flex w-full cursor-pointer items-center justify-between px-2 py-1 text-left">
-              <Flex gap="2">
-                <TriangleDownIcon />
-                <Text size="1">
-                  {item.drugDescription ?? 'No Description Found'}
-                </Text>
-              </Flex>
-              <Flex gap="1">
-                <Box
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    setEditIndex((prev) => (prev === index ? null : index))
-                    setOpenItem(item.drugDescription ?? '')
-                  }}
-                  className="cursor-pointer"
-                >
-                  <Pencil size={14} />
-                </Box>
-                <Box>
-                  <DeleteIcon />
-                </Box>
-                <FavoriteIcon name={item?.drugDescription ?? ''} />
-              </Flex>
-            </Accordion.Trigger>
-          </Accordion.Header>
-          <Accordion.Content className="p-1">
-            {editIndex === index && (
-              <SearchableDrug
-                onSelectItem={handleReplace}
-                selectedDrugList={[]}
-              />
-            )}
-            <PatientMedicationForm index={index} />
-          </Accordion.Content>
-        </Accordion.Item>
-      ))}
-    </Accordion.Root>
+          <Accordion.Root
+            type="single"
+            collapsible
+            className="mt-1"
+            value={openItem ?? undefined}
+            onValueChange={(value) => setOpenItem(value)}
+          >
+            {drugs.map((item, index) => (
+              <Accordion.Item
+                key={`drugs-${item.drugDescription}`}
+                value={item.drugDescription ?? ''}
+                className="border-pp-table-border mt-1 w-full rounded-2 border p-1"
+              >
+                <Accordion.Header>
+                  <Accordion.Trigger className="flex w-full cursor-pointer items-center justify-between px-2 py-1 text-left">
+                    <Flex gap="2">
+                      <TriangleDownIcon />
+                      <Text size="1">
+                        {item.drugDescription ?? 'No Description Found'}
+                      </Text>
+                    </Flex>
+                    <Flex gap="1">
+                      <Box
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setEditIndex((prev) =>
+                            prev === index ? null : index,
+                          )
+                          setOpenItem(item.drugDescription ?? '')
+                        }}
+                        className="cursor-pointer"
+                      >
+                        <Pencil size={14} />
+                      </Box>
+                      <Box>
+                        <DeleteIcon />
+                      </Box>
+                      <FavoriteIcon name={item?.drugDescription ?? ''} />
+                    </Flex>
+                  </Accordion.Trigger>
+                </Accordion.Header>
+                <Accordion.Content className="p-1">
+                  {editIndex === index && (
+                    <SearchableDrug
+                      onSelectItem={handleReplace}
+                      selectedDrugList={[]}
+                    />
+                  )}
+                  {item.isControlledSubstance && (
+                    <Flex
+                      className="bg-pp-warning-bg-1 border-pp-warning-border mb-1 rounded-2 border p-1 px-2"
+                      align="start"
+                      gap="3"
+                    >
+                      <TriangleAlert
+                        className="min-w-6 text-pp-warning-border"
+                        size={24}
+                      />
+                      <Text size="1" weight="regular">
+                        This medication is classified as a controlled substance
+                        and may pose a risk of dependency or misuse. Advanced
+                        provider verification is required before prescribing or
+                        dispensing.
+                      </Text>
+                    </Flex>
+                  )}
+
+                  <PatientMedicationForm index={index} />
+                </Accordion.Content>
+              </Accordion.Item>
+            ))}
+          </Accordion.Root>
+        </ScrollArea>
+      </Flex>
+      <FavoriteView />
+    </Grid>
   )
 }
 

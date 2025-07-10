@@ -1,4 +1,5 @@
 import { Metadata, StaffResource } from '@/types'
+import { Prescription } from '@/ui/medications/patient-medications-widget/types'
 
 interface DrugSignature {
   id: string
@@ -42,6 +43,8 @@ interface PharmacyNotificationDrugModel {
   note?: string
   drugNote?: string
   pharmacyNotificationResponseId?: string
+  isControlledSubstance?: boolean
+  deaSchedule?: string
 }
 interface PharmacyAddress {
   type?: string
@@ -237,9 +240,10 @@ interface MapPatientTypes {
 enum RenewalResponseTypeEnum {
   Approved = 'Approved',
   Denied = 'Denied',
+  Validated = 'Validated',
 }
 
-type RenewalResponseType = 'Approved' | 'Denied'
+type RenewalResponseType = 'Approved' | 'Denied' | 'Validated'
 type denialReasonType = 'UnknownPatient'
 interface RxRenewalResponseDrugDetail {
   drugDescription?: string
@@ -392,6 +396,28 @@ const PASTATUS = [
       'The action of obtaining a prior authorization approval is being sought.',
   },
 ]
+
+enum Step {
+  Form = 'Form',
+  CredentialVerification = 'CredentialVerification',
+  OrderConfirm = 'OrderConfirm',
+}
+
+enum ConfirmationMethod {
+  Otp = 'Otp',
+  Authenticator = 'Authenticator',
+}
+interface StepComponentProps {
+  onNext: () => void
+  onPrev: () => void
+  onJump: (step: Step) => void
+  onClose?: () => void
+  step: Step
+  prescriptions?: Prescription[]
+  isRefillTab?: boolean
+  isRefillAndChangeRequest?: boolean
+}
+
 export {
   RefillMedicationType,
   type MedicationRefill,
@@ -411,4 +437,7 @@ export {
   CHANGERESPONSEDENIEDOPTIONS,
   MEDICATIONSSTATUS,
   PASTATUS,
+  ConfirmationMethod,
+  Step,
+  type StepComponentProps,
 }

@@ -86,6 +86,8 @@ const drugSchema = z.object({
   deniedReason: z.string().optional(),
   priorAuthorizationCode: z.string().optional(),
   priorAuthorizationStatus: z.string().optional(),
+  deaSchedule: z.string().optional(),
+  isControlledSubstance: z.boolean().optional()
 })
 
 const schema = z.object({
@@ -103,7 +105,7 @@ const schema = z.object({
   patientLastName: z.string(),
   patientFirstName: z.string(),
   patientGender: z.string(),
-  patientDateOfBirth: z.string().datetime(),
+  patientDateOfBirth: z.string(),
   patientAddressLine1: z.string(),
   patientCity: z.string(),
   patientStateCode: z.string(),

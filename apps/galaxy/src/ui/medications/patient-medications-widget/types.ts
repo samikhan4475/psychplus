@@ -172,6 +172,8 @@ interface Prescription {
   validationErrors: string[]
   pharmacyFax: string
   writtenDate: string
+  drugList?: Partial<PrescriptionDrug>[]
+  rxChangeRequestCode?: string
 }
 
 interface PrescriptionDrug {

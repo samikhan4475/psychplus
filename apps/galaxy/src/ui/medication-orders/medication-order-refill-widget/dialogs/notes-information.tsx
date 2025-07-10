@@ -11,15 +11,11 @@ interface NotesInformationProps {
 const NotesInformation = ({ index }: NotesInformationProps) => {
   const form = useFormContext<UpdateMedicationSchema>()
   const drugDiagnosisList =
-    useWatch({
-      control: form.control,
-      name: `drugList.${index}.drugDiagnosisList`,
-      defaultValue: [],
-    }) ?? []
+    form.getValues(`drugList.${index}.drugDiagnosisList`) ?? []
+
   return (
     <>
-
-     <FormFieldContainer className="flex-1">
+      <FormFieldContainer className="flex-1">
         <FormFieldLabel>Pharmacy Instructions</FormFieldLabel>
         <TextArea
           placeholder="Notes here"

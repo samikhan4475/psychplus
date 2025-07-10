@@ -10,13 +10,14 @@ const PatientSelect = () => {
   const patientDateOfBirth = form.watch('patientDateOfBirth')
   const patientGender = form.watch('patientGender')
   const patientName = `${patientFirstName} ${patientLastName}`
+  if (!patientDateOfBirth) return null
   return (
     <Flex className="bg-pp-bg-table-label rounded-[5px] p-2">
       <Flex gap="1" className="whitespace-nowrap">
         <Text className={cn('text-[11.5px]')}>
-          {patientName},{formatDateOfBirth(patientDateOfBirth)}
+          {patientName},{formatDateOfBirth(patientDateOfBirth.toString())}
           {` | ${getAgeFromDate(
-            getCalendarDate(patientDateOfBirth),
+            getCalendarDate(patientDateOfBirth.toString()),
           )} yo ${patientGender?.charAt(0)}`}
         </Text>
       </Flex>

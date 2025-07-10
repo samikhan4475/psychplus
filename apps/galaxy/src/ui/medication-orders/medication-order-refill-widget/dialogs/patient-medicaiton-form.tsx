@@ -19,12 +19,7 @@ interface PatientMedicationFormProps {
 
 const PatientMedicationForm = ({ index }: PatientMedicationFormProps) => {
   const form = useFormContext<UpdateMedicationSchema>()
-  const rxChangeRequestCode =
-    useWatch({
-      control: form.control,
-      name: `rxChangeRequestCode`,
-      defaultValue: '',
-    }) ?? []
+  const rxChangeRequestCode = form.getValues('rxChangeRequestCode')
   const { activeTab } = useStore()
   const isRefillTab = activeTab.includes('Refill')
   return (
@@ -36,8 +31,9 @@ const PatientMedicationForm = ({ index }: PatientMedicationFormProps) => {
       <PharmacyInformation index={index} />
       <PrescriberInformation index={index} />
       <NotesInformation index={index} />
-      {rxChangeRequestCode === 'PriorAuthorizationRequired' ||
-        (isRefillTab && <AuthorizationInformation index={index} />)}
+      {rxChangeRequestCode === 'PriorAuthorizationRequired' || isRefillTab ? (
+        <AuthorizationInformation index={index} />
+      ) : null}
     </Flex>
   )
 }

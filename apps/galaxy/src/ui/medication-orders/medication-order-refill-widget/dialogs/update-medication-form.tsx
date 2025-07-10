@@ -1,24 +1,18 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Flex, Grid, ScrollArea } from '@radix-ui/themes'
+import { Button, Flex } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import { FormContainer } from '@/components'
-import { FavoriteView } from '@/ui/medications/patient-medications-widget/patient-medication-dialog/shared'
-import { sanitizeFormData } from '@/utils'
-import { rxChangeRequestAction, rxRenewalAction } from '../actions'
+import { ConfirmMedication } from '@/ui/medications/patient-medications-widget/patient-medication-dialog/confirm-medication'
+import { CredentialsVerificationForm } from '@/ui/medications/patient-medications-widget/patient-medication-dialog/credentials-verification'
+import { Prescription } from '@/ui/medications/patient-medications-widget/types'
 import { useStore } from '../store'
-import {
-  MedicationRefill,
-  MedicationRefillAPIRequest,
-  PharmacyNotificationType,
-  RenewalResponseTypeEnum,
-} from '../types'
+import { MedicationRefill, Step, StepComponentProps } from '../types'
+import { handleChangeRequestApproval, handleRxApproval } from '../utils'
 import { PatientPrescriptionAccordian } from './patient-medication-accordion'
-import { PatientSelect } from './patient-select'
 import { schema, UpdateMedicationSchema } from './schema'
 
-interface UpdateMedicationFormProps {
+interface UpdateMedicationFormProps extends StepComponentProps {
   data: MedicationRefill
   onCloseModal: (open: boolean) => void
 }
@@ -26,8 +20,10 @@ interface UpdateMedicationFormProps {
 const UpdateMedicationForm = ({
   data,
   onCloseModal,
+  ...stepProps
 }: UpdateMedicationFormProps) => {
-  const { searchMedicationsList, activeTab } = useStore()
+  const Component = useMemo(() => Components[stepProps.step], [stepProps.step])
+  const { activeTab } = useStore()
   const isRefillTab = activeTab.includes('Refill')
 
   const form = useForm<UpdateMedicationSchema>({
@@ -35,130 +31,100 @@ const UpdateMedicationForm = ({
     mode: 'onChange',
     defaultValues: data,
   })
+
+  const drugList = form.watch('drugList') ?? []
+  const dataList = form.getValues()
   const [isLoading, setIsLoading] = useState(false)
+  const [isControlledSubstance, setIsControlledSubstance] = useState(false)
+
+  useEffect(() => {
+    if (!data.drugList || data.drugList.length === 0) return
+    if (data.drugList.length > 0) {
+      const drug = data?.drugList?.[0]
+      setIsControlledSubstance(drug.isControlledSubstance ?? false)
+    }
+  }, [drugList])
+
   const onSubmit = async (data: UpdateMedicationSchema) => {
     if (!data.drugList || data.drugList.length === 0) return
+    setIsLoading(true)
+    if (isControlledSubstance) {
+      return stepProps.onJump(Step.CredentialVerification)
+    }
+
     if (isRefillTab) {
-      await handleRxApproval(data)
+      const approvalResponse = await handleRxApproval(data)
+      if (approvalResponse) {
+        onCloseModal?.(false)
+      }
     } else {
-      await handleChangeRequestApproval(data)
-    }
-    const formattedData: MedicationRefillAPIRequest = {
-      notificationType: isRefillTab
-        ? PharmacyNotificationType.PharmacyRxRenewalRequest
-        : PharmacyNotificationType.PharmacyRxChangeRequest,
-    }
-
-    searchMedicationsList(formattedData)
-    onCloseModal(false)
-  }
-  const handleRxApproval = async (data: UpdateMedicationSchema) => {
-    setIsLoading(true)
-
-    for (const row of data.drugList ?? []) {
-      const payload = {
-        responseType: RenewalResponseTypeEnum.Approved,
-        note: row.notes,
-        rxRenewalResponseDrugDetail: {
-          drugDescription: row?.drugDescription ?? '',
-          quantityValue: row?.quantityValue?.toString() ?? '0',
-          isSubstitutionsAllowed: row?.isSubstitutionsAllowed ?? false,
-          drugCode: row?.drugCode ?? '',
-          drugCodeQualifier: row?.drugCodeQualifier ?? '',
-          daysSupply: row?.daysSupply?.toString() ?? '0',
-          signatureText: row?.drugSignatureList?.[0]?.signatureText,
-          quantityCodeListQualifier: row?.quantityCodeListQualifier,
-          quantityUnitOfMeasureCode: row?.quantityUnitOfMeasureCode,
-          refills: row.refills,
-          drugNote: row.notes,
-          priorAuthorizationCode: row?.priorAuthorizationCode,
-          priorAuthorizationStatus: row?.priorAuthorizationStatus,
-        },
-      }
-      const sanitizeData = sanitizeFormData(payload)
-      const response = await rxRenewalAction(
-        data.pharmacyNotificationId ?? '',
-        sanitizeData,
-      )
-
-      if (response.state === 'success') {
-        toast.success('Medication request is approved successfully')
-      } else {
-        toast.error(response.error ?? 'Failed to approve')
+      const changeResponse = await handleChangeRequestApproval(data)
+      if (changeResponse) {
+        onCloseModal?.(false)
       }
     }
     setIsLoading(false)
   }
-  const handleChangeRequestApproval = async (data: UpdateMedicationSchema) => {
-    setIsLoading(true)
-
-    for (const row of data.drugList ?? []) {
-      const payload = {
-        responseType: RenewalResponseTypeEnum.Approved,
-        note: '',
-        rxChangeResponseDrugDetail: {
-          drugCode: row?.drugCode ?? '',
-          drugCodeQualifier: row?.drugCodeQualifier ?? '',
-          drugDescription: row?.drugDescription ?? '',
-          quantityValue: row?.quantityValue?.toString() ?? '0',
-          quantityCodeListQualifier: row?.quantityCodeListQualifier,
-          quantityUnitOfMeasureCode: row?.quantityUnitOfMeasureCode,
-          signatureText: row?.drugSignatureList?.[0]?.signatureText,
-          refills: row.refills,
-          isSubstitutionsAllowed: row?.isSubstitutionsAllowed ?? false,
-          daysSupply: row?.daysSupply?.toString() ?? '0',
-          priorAuthorizationCode: row?.priorAuthorizationCode,
-          priorAuthorizationStatus: row?.priorAuthorizationStatus,
-        },
-      }
-
-      const sanitizeData = sanitizeFormData(payload)
-
-      const response = await rxChangeRequestAction(
-        data.pharmacyNotificationId ?? '',
-        sanitizeData,
-      )
-      if (response.state === 'success') {
-        toast.success('Medication request is approved successfully')
-      } else {
-        toast.error(response.error ?? 'Failed to approve')
-      }
-    }
+  const handleClose = () => {
     setIsLoading(false)
+    onCloseModal?.(false)
   }
-
   return (
     <FormContainer form={form} onSubmit={onSubmit}>
       <Flex gap="2" justify="between" direction="column" className="relative">
-        <Grid columns="2" gap="2">
-          <Flex direction="column" gap="1" flexGrow="1">
-            <PatientSelect />
-            <ScrollArea
-              scrollbars="vertical"
-              className="max-h-[70dvh] overflow-visible pr-2"
+        <Component
+          {...stepProps}
+          prescriptions={[dataList as unknown as Prescription]}
+          onClose={handleClose}
+          isRefillTab={isRefillTab}
+          isRefillAndChangeRequest={true}
+          onJump={(nextStep) => {
+            stepProps.onJump(nextStep)
+          }}
+        />
+        {stepProps?.step === Step.Form && (
+          <Flex gap="2" justify="end">
+            <Button
+              type="submit"
+              size="2"
+              highContrast
+              variant="outline"
+              color="gray"
+              className="text-black"
+              disabled={isLoading}
+              loading={isLoading}
             >
-              <PatientPrescriptionAccordian />
-            </ScrollArea>
+              Save & Approve
+            </Button>
           </Flex>
-          <FavoriteView />
-        </Grid>
-        <Flex gap="2" justify="end">
-          <Button
-            type="submit"
-            size="2"
-            highContrast
-            variant="outline"
-            color="gray"
-            className="text-black"
-            disabled={isLoading}
-            loading={isLoading}
-          >
-            Save & Approve
-          </Button>
-        </Flex>
+        )}
+        {stepProps?.step === Step.Form && isControlledSubstance && (
+          <Flex gap="2" justify="end">
+            <Button
+              type="button"
+              size="2"
+              highContrast
+              variant="outline"
+              color="gray"
+              className="text-black"
+              onClick={() => stepProps.onJump(Step.CredentialVerification)}
+            >
+              Next
+            </Button>
+          </Flex>
+        )}
       </Flex>
     </FormContainer>
   )
+}
+
+const Components: Record<Step, React.ComponentType<StepComponentProps>> = {
+  [Step.Form]:
+    PatientPrescriptionAccordian as React.ComponentType<StepComponentProps>,
+  [Step.CredentialVerification]:
+    CredentialsVerificationForm as React.ComponentType<StepComponentProps>,
+  [Step.OrderConfirm]:
+    ConfirmMedication as React.ComponentType<StepComponentProps>,
 }
 
 export { UpdateMedicationForm }
