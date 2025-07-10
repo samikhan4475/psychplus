@@ -46,7 +46,7 @@ const SecureMessagesView = ({
         className="border-pp-gray-2 w-[42%] overflow-auto  border-r pt-1"
         direction="column"
       >
-        <MessageHeader tab={activeTab} />
+        <MessageHeader tab={activeTab} isActiveTab={activeTab === tab} />
         <SecureMessagesTable />
       </Flex>
       <Box className="w-[60%] overflow-auto">{renderEmailBody}</Box>

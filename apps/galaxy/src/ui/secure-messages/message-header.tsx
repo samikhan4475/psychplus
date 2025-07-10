@@ -15,7 +15,13 @@ import { useStore } from './store'
 import { ActiveComponent, messageStatus, SecureMessagesTab } from './types'
 import { sanitizeFormData } from './utils'
 
-const MessageHeader = ({ tab }: { tab: string }) => {
+const MessageHeader = ({
+  tab,
+  isActiveTab,
+}: {
+  tab: string
+  isActiveTab: boolean
+}) => {
   const [showFilter, setShowFilter] = useState(false)
   const { activeTab } = useMessagesStore((state) => ({
     activeTab: state.activeTab,
@@ -36,6 +42,7 @@ const MessageHeader = ({ tab }: { tab: string }) => {
   }))
 
   useEffect(() => {
+    if (!isActiveTab) return
     if (tab === activeTab)
       search({ messageStatus: activeTab as SecureMessagesTab }, page, true)
 
