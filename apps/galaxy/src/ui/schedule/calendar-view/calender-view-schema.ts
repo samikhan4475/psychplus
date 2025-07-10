@@ -16,6 +16,11 @@ const calenderViewSchema = z
     providerTypes: z.string().optional(),
     gender: z.string().optional(),
     providerLanguage: z.string().optional(),
+    servicesOffered: arrayOfIdsValidation.optional(),
+    unitIds:arrayOfIdsValidation.optional(),
+    roomIds:arrayOfIdsValidation.optional(),
+    groupIds:arrayOfIdsValidation.optional(),
+    visitTypes:arrayOfIdsValidation.optional()
   })
 
 export { calenderViewSchema }

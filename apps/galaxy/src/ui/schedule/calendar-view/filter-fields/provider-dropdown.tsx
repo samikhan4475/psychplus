@@ -3,8 +3,9 @@ import { useFormContext, useWatch } from 'react-hook-form'
 import { DropdownSelect } from '@/components'
 import { SelectOptionType } from '@/types'
 import { getProvidersOptionsAction } from '../../client-actions'
+import { useFiltersContext } from '../../context'
 import { FieldLabel, FormFieldContainer } from '../../shared'
-import { CalenderViewSchemaType } from '../../types'
+import { CalenderViewSchemaType, SchedulerFilters } from '../../types'
 import { getSelectedOption } from '../../utils'
 
 const ProviderDropdown = () => {
@@ -15,6 +16,7 @@ const ProviderDropdown = () => {
     control: form.control,
     name: ['stateIds', 'locationIds'],
   })
+  const { filters } = useFiltersContext()
 
   useEffect(() => {
     setLoading(true)
@@ -31,6 +33,8 @@ const ProviderDropdown = () => {
       }
     })
   }, [stateIds, locationIds])
+
+  if (!filters.includes(SchedulerFilters.Provider)) return null
 
   return (
     <FormFieldContainer>

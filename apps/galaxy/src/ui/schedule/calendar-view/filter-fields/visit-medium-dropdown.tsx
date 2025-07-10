@@ -1,7 +1,9 @@
 import { DropdownSelect } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
+import { useFiltersContext } from '../../context'
 import { FieldLabel, FormFieldContainer } from '../../shared'
+import { SchedulerFilters } from '../../types'
 
 const VisitMediumDropdown = () => {
   const codes = useCodesetCodes(CODESETS.VisitMedium)
@@ -9,6 +11,9 @@ const VisitMediumDropdown = () => {
     label: code.display,
     value: code.value,
   }))
+  const { filters } = useFiltersContext()
+
+  if (!filters.includes(SchedulerFilters.VisitMedium)) return null
 
   return (
     <FormFieldContainer>

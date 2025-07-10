@@ -42,6 +42,10 @@ const StateSelect = () => {
             form.setValue('stateIds', values, { shouldDirty: true })
             form.setValue('locationIds', [])
             form.setValue('serviceIds', [])
+            form.setValue('servicesOffered', [])
+            form.setValue('unitIds', [])
+            form.setValue('roomIds', [])
+            form.setValue('groupIds', [])
           }}
         />
       </Flex>

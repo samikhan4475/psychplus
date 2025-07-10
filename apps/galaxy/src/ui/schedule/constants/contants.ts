@@ -53,6 +53,18 @@ const LIST_VIEW_FILTERS = [
   'Note Signed',
 ]
 
+const CALENDAR_VIEW_FILTERS = [
+  'Location',
+  'Service',
+  'Unit',
+  'Room',
+  'Group',
+  'Provider Type',
+  'Provider',
+  'Visit Type',
+  'Visit Medium',
+]
+
 const ALWAYS_VISIBLE_COLUMNS = [
   'plus-actions-column',
   'patient-name',
@@ -349,6 +361,7 @@ export {
   ROUNDING_FILTERS,
   PROVIDER_CODING_FILTERS,
   LIST_VIEW_FILTERS,
+  CALENDAR_VIEW_FILTERS,
   NOTE_SIGNED,
   START_OF_WEEK_LOCALE,
   INITIAL_VISIT_STATUS,

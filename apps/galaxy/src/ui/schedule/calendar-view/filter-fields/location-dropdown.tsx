@@ -4,8 +4,9 @@ import toast from 'react-hot-toast'
 import { MultiSelectField } from '@/components'
 import { SelectOptionType } from '@/types'
 import { searchLocationOptionsAction } from '../../client-actions'
+import { useFiltersContext } from '../../context'
 import { FieldLabel, FormFieldContainer } from '../../shared'
-import { CalenderViewSchemaType } from '../../types'
+import { CalenderViewSchemaType, SchedulerFilters } from '../../types'
 
 const LocationDropdown = () => {
   const form = useFormContext<CalenderViewSchemaType>()
@@ -13,6 +14,7 @@ const LocationDropdown = () => {
   const [clinicLocations, setClinicLocations] = useState<SelectOptionType[]>([])
   const stateIds = form.watch('stateIds')
   const locationIds = form.watch('locationIds')
+  const { filters } = useFiltersContext()
 
   useEffect(() => {
     if (stateIds.length) {
@@ -29,6 +31,8 @@ const LocationDropdown = () => {
     }
   }, [stateIds])
 
+  if (!filters.includes(SchedulerFilters.Location)) return null
+
   return (
     <FormFieldContainer>
       <FieldLabel>Location</FieldLabel>
@@ -40,6 +44,10 @@ const LocationDropdown = () => {
         onChange={(values) => {
           form.setValue('locationIds', values, { shouldDirty: true })
           form.setValue('serviceIds', [])
+          form.setValue('servicesOffered', [])
+          form.setValue('unitIds', [])
+          form.setValue('roomIds', [])
+          form.setValue('groupIds', [])
         }}
         menuClassName="w-[155px]"
         loading={loading}

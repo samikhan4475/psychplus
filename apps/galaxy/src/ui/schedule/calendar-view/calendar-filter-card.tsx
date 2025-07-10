@@ -1,10 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FormContainer } from '@/components'
 import { sanitizeFormData } from '@/utils'
+import { CALENDAR_VIEW_FILTERS } from '../constants'
+import { FiltersContext } from '../context'
 import { useProviderId } from '../hooks'
+import { AddFiltersPopover, FacilityFields } from '../shared'
+import { useStore as useRootStore } from '../store'
 import { CalenderViewSchemaType } from '../types'
 import { calenderViewSchema } from './calender-view-schema'
 import { ClearFilterButton } from './clear-filter-button'
@@ -30,8 +34,10 @@ import {
   transformParamsToFilterValues,
   transformSettingToFilterValues,
 } from './transform'
+import { VisitTypeSelect } from '../list-view/filter-fields'
 
 const CalendarFilterCard = () => {
+  const [filters, setFilters] = useState<string[]>(CALENDAR_VIEW_FILTERS)
   const [isPartialFilterView, setIsPartialFilterView] = useState<boolean>(false)
   const {
     fetchData,
@@ -44,9 +50,19 @@ const CalendarFilterCard = () => {
     isSettingsSaving,
   } = useStore()
   const [hasHydrated, setHasHydrated] = useState<boolean>(false)
+  const { cachedFilters, saveFilters } = useRootStore((state) => ({
+    cachedFilters: state.cachedFiltersList,
+    saveFilters: state.saveListFilters,
+  }))
   const providerId = useProviderId()
   const defaultValues = getDefaultValues(providerId)
-
+  const ctxValue = useMemo(
+    () => ({
+      filters,
+      setFilters,
+    }),
+    [filters],
+  )
   const form = useForm<CalenderViewSchemaType>({
     resolver: zodResolver(calenderViewSchema),
     criteriaMode: 'all',
@@ -65,7 +81,7 @@ const CalendarFilterCard = () => {
       const map = await fetchUserSetting()
       if (persistedFormData) {
         const filterValues = transformParamsToFilterValues(persistedFormData)
-        form.reset(filterValues)
+        form.reset({ ...defaultValues, ...filterValues })
         applyFilters(filterValues)
       } else if (map && map.size > 0) {
         const filterValues = transformSettingToFilterValues(map)
@@ -74,6 +90,9 @@ const CalendarFilterCard = () => {
       } else if (providerId) {
         fetchData({ providerIds: [Number(providerId)] })
       }
+    }
+     if (cachedFilters.length > 0) {
+      setFilters(cachedFilters)
     }
     fetchCalendarViewData()
   }, [hasHydrated])
@@ -112,8 +131,9 @@ const CalendarFilterCard = () => {
 
   return (
     <Flex className="bg-white z-10 rounded-[4px] px-2.5 shadow-3">
+    <FiltersContext.Provider value={ctxValue}>
       <FormContainer form={form} onSubmit={onSubmit}>
-        <Flex className="sticky top-0" wrap="wrap" gap="2" align="start" py="1">
+        <Flex wrap="wrap" gap="2" align="start" py="1">
           <DateRangeInput />
           <StateSelect />
           <LocationDropdown />
@@ -133,10 +153,17 @@ const CalendarFilterCard = () => {
         </Flex>
         {!isPartialFilterView && (
           <Flex width="full" gap="2" py="1" align="start">
+            <FacilityFields/>
+            <VisitTypeSelect/>
             <ProviderTypeDropdown />
             <GenderSelect />
             <LanguageSelect />
-            <Flex className="flex-1" justify="end" gap="2" align="center">
+            <AddFiltersPopover
+                view="Calendar View"
+                onSave={saveFilters}
+                viewFilters={CALENDAR_VIEW_FILTERS}
+              />
+            <Flex className="flex-1" justify="end" gap="2" align="center" wrap={"wrap"}>
               <FilterButton
                 onClick={() => setIsPartialFilterView(!isPartialFilterView)}
               />
@@ -147,7 +174,8 @@ const CalendarFilterCard = () => {
           </Flex>
         )}
       </FormContainer>
-    </Flex>
+    </FiltersContext.Provider>
+     </Flex>
   )
 }
 

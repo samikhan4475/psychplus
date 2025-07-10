@@ -9,6 +9,11 @@ const getDefaultValues = (providerId?: string) => ({
   providerType: '',
   gender: '',
   providerLanguage: '',
+  servicesOffered: [],
+  unitIds: [],
+  roomIds: [],
+  groupIds: [],
+  visitTypes: [],
 })
 
 export { getDefaultValues }
