@@ -29,7 +29,7 @@ const HpiNarration = ({
   hallucinationTypeCodeset,
 }: Props) => {
   const generateNarration = () => {
-    const chiefComplaints = symptoms.chiefComplaint || []
+    const chiefComplaints = symptoms.chiefComplaint ?? []
 
     if (!hasValues(symptoms)) return ''
 
@@ -45,7 +45,7 @@ const HpiNarration = ({
 
     const formattedSymptoms = formatSymptoms(formattedComplaints)
     if (chiefComplaints.length) {
-      narration += ` who reports Chief Complaint of ` + formattedSymptoms + '.'
+      narration += ` who reports Chief Complaint/s of ` + formattedSymptoms + '.'
     }
 
     Object.keys(symptoms).forEach((complaint) => {
