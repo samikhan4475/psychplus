@@ -7,6 +7,7 @@ import { CodesetSelectCell, PropsWithRow } from '@/components'
 import { PatientReferral } from '@/types'
 import { updatePatientReferralAction } from '@/ui/referrals/actions'
 import { useStore } from '../store'
+import { VisitTypes } from '../types'
 
 interface Props extends PropsWithRow<PatientReferral> {
   disabled?: boolean
@@ -18,23 +19,23 @@ const ProcurementCell = ({ row: { original: referral } }: Props) => {
     setData: state.setData,
     data: state.data,
   }))
-  const [selectedValue, setSelectedValue] = useState(referral?.procurement)
+  const [selectedValue, setSelectedValue] = useState(referral?.procurementType)
 
   const updateREMSStatus = async (value: string) => {
     setSelectedValue(value)
     const result = await updatePatientReferralAction({
       ...referral,
-      procurement: value,
+      procurementType: value,
     })
     if (result.state === 'error') {
-      setSelectedValue(referral?.procurement ?? '')
+      setSelectedValue(referral?.procurementType ?? '')
       return toast.error(result.error ?? 'Failed to update!')
     }
     const updatedData = data?.referrals.map((item) => {
       if (referral.id === item.id) {
         return {
           ...item,
-          procurement: value,
+          procurementType: value,
         }
       }
       return item
@@ -48,6 +49,7 @@ const ProcurementCell = ({ row: { original: referral } }: Props) => {
       value={selectedValue}
       onValueChange={updateREMSStatus}
       codeset="Procurement"
+      disabled={referral.service !== VisitTypes.SPRAVATO}
     />
   )
 }

@@ -102,6 +102,10 @@ interface PatientReferral {
   referralProviderStaffId?: number
   referralProviderLocationId?: string
   referrerShortName?: string
+  initiatedByUserRole?: string
+  procurementType?: string
+  isPatientEducation?: boolean
+  isRemsEnrolled?: boolean
 }
 
 interface GetPatientReferralsParams {

@@ -9,6 +9,8 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
+import { CODE_NOT_SET, CODESETS } from '@/constants'
+import { useCodesetOptions } from '@/hooks'
 import { SelectOptionType, Service } from '@/types'
 import { getLocationServices } from '@/ui/visit/client-actions'
 
@@ -17,6 +19,9 @@ const ServiceSelect = () => {
   const form = useFormContext()
   const [services, setServices] = useState<Service[]>([])
   const [serviceOptions, setServiceOptions] = useState<SelectOptionType[]>([])
+  const options = useCodesetOptions(CODESETS.ServicesOffered, '', [
+    CODE_NOT_SET,
+  ])
 
   useEffect(() => {
     form.resetField('service')
@@ -35,7 +40,9 @@ const ServiceSelect = () => {
           duplicated.add(data.serviceOffered)
           transformedData.push({
             value: data.serviceOffered,
-            label: data.serviceOffered,
+            label:
+              options?.find((option) => option.value === data.serviceOffered)
+                ?.label ?? data.serviceOffered,
           })
         }
       })

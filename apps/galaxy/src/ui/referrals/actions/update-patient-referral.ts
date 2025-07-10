@@ -26,6 +26,9 @@ const updatePatientReferralAction = async (
     'referralProviderStaffId',
     'referralProviderLocationId',
     'remsEnrolled',
+    'isPatientEducation',
+    'isRemsEnrolled',
+    'procurementType',
   ])
   const response = await api.PUT<PatientReferral>(
     api.UPDATE_PATIENT_REFERRAL_ENDPOINT(referral.patientId, referral.id),

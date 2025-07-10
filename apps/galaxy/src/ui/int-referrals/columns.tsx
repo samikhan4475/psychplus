@@ -5,12 +5,15 @@ import { ColumnHeader, TextCell } from '@/components'
 import { PatientReferral, Sort } from '@/types'
 import {
   formatDateOfBirth,
-  formatDateTime,
+  formatUTCDate,
   getPatientFullName,
   getSlashedPaddedDateString,
   getSortDir,
 } from '@/utils'
-import { ServiceNameCell } from '../referrals/patient-referrals-widget/cells'
+import {
+  GenderLabelCell,
+  ServiceNameCell,
+} from '../referrals/patient-referrals-widget/cells'
 import {
   ActionCell,
   AppointmentIdCell,
@@ -59,7 +62,7 @@ const columns = (
           header: ({ column }) => (
             <ColumnHeader label="Status" column={column} />
           ),
-          cell: ({ row }) => <TextCell>{row.original.patientStatus}</TextCell>,
+          cell: GenderLabelCell,
         },
         {
           id: 'patientAge',
@@ -113,13 +116,7 @@ const columns = (
           header: ({ column }) => (
             <ColumnHeader label="Residence(State)" column={column} />
           ),
-          cell: ({ row }) => (
-            <TextCell>
-              {row.original.contactDetails?.addresses?.length
-                ? row.original.contactDetails.addresses[0].state
-                : ''}
-            </TextCell>
-          ),
+          cell: ({ row }) => <TextCell>{row.original.stateCode}</TextCell>,
         },
         {
           id: 'contactDetails.addresses[0].city',
@@ -159,7 +156,7 @@ const columns = (
           cell: ({ row }) => (
             <TextCell>
               {row.original.visitDateTime
-                ? formatDateTime(row.original.visitDateTime)
+                ? formatUTCDate(row.original.visitDateTime)
                 : ''}
             </TextCell>
           ),
@@ -198,9 +195,7 @@ const columns = (
             <ColumnHeader label="Initiated By" column={column} />
           ),
           cell: ({ row }) => (
-            <TextCell>
-              {getPatientFullName(row.original.referredByName)}
-            </TextCell>
+            <TextCell>{row.original.initiatedByUserRole}</TextCell>
           ),
         },
         {
@@ -255,7 +250,7 @@ const columns = (
           cell: ({ row }) => (
             <TextCell>
               {row.original.metadata?.createdOn
-                ? formatDateTime(row.original.metadata?.createdOn)
+                ? formatUTCDate(row.original.metadata?.createdOn)
                 : ''}
             </TextCell>
           ),

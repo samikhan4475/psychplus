@@ -31,24 +31,24 @@ const RemsEnrolledCell = ({ row: { original: referral } }: Props) => {
     data: state.data,
   }))
   const [selectedValue, setSelectedValue] = useState(
-    referral?.remsEnrolled ? 'Yes' : 'No',
+    referral?.isRemsEnrolled ? 'Yes' : 'No',
   )
 
   const updateREMSStatus = async (value: string) => {
     setSelectedValue(value)
     const result = await updatePatientReferralAction({
       ...referral,
-      remsEnrolled: value === 'Yes',
+      isRemsEnrolled: value === 'Yes',
     })
     if (result.state === 'error') {
-      setSelectedValue(referral?.remsEnrolled ? 'Yes' : 'No')
+      setSelectedValue(referral?.isRemsEnrolled ? 'Yes' : 'No')
       return toast.error(result.error ?? 'Failed to update!')
     }
     const updatedData = data?.referrals.map((item) => {
       if (referral.id === item.id) {
         return {
           ...item,
-          remsEnrolled: value === 'Yes',
+          isRemsEnrolled: value === 'Yes',
         }
       }
       return item

@@ -12,7 +12,7 @@ const GenderLabelCell = ({
   const options = useCodesetOptions(CODESETS.CustomerStatus)
 
   return (
-    <LongTextCell>
+    <LongTextCell className="w-[100px]">
       {getUserStatus(options, referral.patientStatus)}
     </LongTextCell>
   )

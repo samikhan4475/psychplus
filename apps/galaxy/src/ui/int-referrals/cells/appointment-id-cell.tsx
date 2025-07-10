@@ -5,7 +5,12 @@ import { Text } from '@radix-ui/themes'
 import { PropsWithRow } from '@/components'
 import { useStore as useRootStore } from '@/store'
 import { PatientReferral } from '@/types'
-import { capitalizeName, constructQuickNotesUrl, getPatientMRN } from '@/utils'
+import {
+  capitalizeName,
+  constructQuickNotesUrl,
+  getPatientFullName,
+  getPatientMRN,
+} from '@/utils'
 
 interface Props extends PropsWithRow<PatientReferral> {
   disabled?: boolean
@@ -19,9 +24,9 @@ const AppointmentIdCell = ({ row: { original: referral } }: Props) => {
     if (
       referral.appointmentId &&
       referral.appointment.visitSequence &&
-      referral?.appointment?.name &&
       referral.appointment.patientId
     ) {
+      const patientName = getPatientFullName(referral.patientName)
       const href = constructQuickNotesUrl(
         referral.appointment.patientId,
         parseInt(referral.appointmentId),
@@ -31,7 +36,7 @@ const AppointmentIdCell = ({ row: { original: referral } }: Props) => {
 
       addTab({
         href,
-        label: `${capitalizeName(referral?.appointment?.name)}-${getPatientMRN(
+        label: `${capitalizeName(patientName)}-${getPatientMRN(
           referral.patientId,
         )}-${referral.appointmentId}`,
       })
