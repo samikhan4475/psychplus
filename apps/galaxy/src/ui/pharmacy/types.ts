@@ -47,7 +47,13 @@ interface PharmacySearchParams {
   state?: string
   zip?: string
   postalPlus4Code?: string
-  phone?: string
+  phone?: string,
+  page?:number
+}
+
+interface GetPharmacyResponse {
+  pharmacies: Pharmacy[]
+  total: number
 }
 
 export type {
@@ -57,4 +63,5 @@ export type {
   PharmacyRow,
   PharmacySearchParams,
   PharmacyFilter,
+  GetPharmacyResponse
 }

@@ -17,9 +17,10 @@ import { StateField } from './state-field'
 import { ZipCodeField } from './zipcode-field'
 
 const PharmacyFilterFrom = () => {
-  const { patient, fetchPharmacies } = useStore((state) => ({
+  const { patient, fetchPharmacies, setFilterApplied } = useStore((state) => ({
     patient: state.patient,
     fetchPharmacies: state.fetchPharmacies,
+    setFilterApplied: state.setFilterApplied,
   }))
 
   const form = useForm<FilterSchemaType>({
@@ -54,6 +55,7 @@ const PharmacyFilterFrom = () => {
   const onSubmit: SubmitHandler<FilterSchemaType> = (data) => {
     const payload = transformFormValuesToPayload(data)
     fetchPharmacies(payload)
+    setFilterApplied(true)
   }
 
   useEffect(() => {
@@ -61,6 +63,7 @@ const PharmacyFilterFrom = () => {
       pharmacyStateCode: patient?.contactDetails.addresses?.[0].state,
     })
     fetchPharmacies(payload)
+    setFilterApplied(false)
   }, [])
 
   return (

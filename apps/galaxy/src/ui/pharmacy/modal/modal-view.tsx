@@ -6,9 +6,10 @@ import { ListIcon, Map } from 'lucide-react'
 import { useStore } from '../store'
 import { PharmacyTable } from './pharmacy-table'
 import { TabsTrigger } from './tab-trigger'
+import { PharmacyTablePagination } from './pharmacy-table-pagination'
 
 const ModalView = () => {
-  const { activeTab, setActiveTab } = useStore()
+  const { activeTab, setActiveTab, filterApplied } = useStore()
 
   return (
     <Flex
@@ -44,7 +45,12 @@ const ModalView = () => {
             </Tabs.List>
           </Flex>
           <TabsContent value="ListView">
-            <PharmacyTable />
+            {filterApplied && (
+              <>
+                <PharmacyTable />
+                <PharmacyTablePagination />
+              </>
+            )}
           </TabsContent>
 
           <TabsContent value="MapView">

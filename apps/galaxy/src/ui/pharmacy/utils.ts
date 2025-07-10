@@ -7,7 +7,7 @@ const transformFormValuesToPayload = (
   organizationName: values.pharmacyName,
   address1: values.pharmacyAddress,
   city: values.pharmacyCity,
-  state: values.pharmacyStateCode,
+  state: values.pharmacyStateCode === 'all' ? '' : values.pharmacyStateCode,
   zip: values.pharmacyZip ? parseInt(values.pharmacyZip, 10).toString() : '',
   phone: values.pharmacyPhone,
 })
