@@ -115,6 +115,7 @@ const PatientMedicationsWidget = () => {
     }
     const response = await startPMPAction({ payload })
     if (response.state === 'success') {
+      await fetchPMPMSearch()
       setCheckPMPResponse(response.data)
       if (response.data) {
         setPmpReviewed(true)
@@ -127,8 +128,11 @@ const PatientMedicationsWidget = () => {
 
   const handlePMPReport = async () => {
     setGeneratePMPReport(true)
-    const pmpResponse = pmpScoresResponse[0]
-    const uuid = getUUIDWithSplit(pmpResponse.reportRequestUrl)
+    const pmpResponse = pmpScoresResponse?.[0]
+    const fallbackReportUrl =
+      checkPMPResponse?.report?.reportRequestUrl?.viewableReport ?? ''
+     const reportRequestUrl = pmpResponse?.reportRequestUrl ?? fallbackReportUrl
+    const uuid = getUUIDWithSplit(reportRequestUrl)
 
     const payload = {
       patientId: String(patientId),
@@ -144,8 +148,6 @@ const PatientMedicationsWidget = () => {
       const reportLink = response.data.reportLink
       if (reportLink) {
         window.open(reportLink, '_blank')
-      } else {
-        toast.error('No report link found')
       }
     } else {
       toast.error(response.error || 'Failed to fetch report')
