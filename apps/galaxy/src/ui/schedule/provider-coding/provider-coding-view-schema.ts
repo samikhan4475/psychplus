@@ -11,7 +11,7 @@ const providerCodingViewSchema = z
     startingDate: z.custom<DateValue>().optional(),
     endingDate: z.custom<DateValue>().optional(),
     name: z.string().optional(),
-    age: z.coerce.number().positive('Invalid age').optional().nullable(),
+    age: z.array(z.string()).optional(),
     gender: z.string().optional(),
     dateOfBirth: z.custom<DateValue>().optional(),
     locationIds: z.string().optional(),

@@ -1,8 +1,9 @@
 'use client'
 
-import { Flex, TextField } from '@radix-ui/themes'
+import { Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { FormFieldError } from '@/components'
+import { FormFieldError, MultiSelectField } from '@/components'
+import { AGE_GROUP_OPTIONS } from '../../constants'
 import { BookedAppointmentsSchemaType } from '../../schema'
 import { FieldLabel, FormFieldContainer } from '../../shared'
 
@@ -12,15 +13,15 @@ const AgeInput = () => {
   return (
     <Flex className="flex-1" direction="column" gap="1">
       <FormFieldContainer>
-        <FieldLabel>Age</FieldLabel>
-        <TextField.Root
-          placeholder="Add Age"
+        <FieldLabel>Age Group</FieldLabel>
+        <MultiSelectField
+          defaultValues={form.watch('age')}
+          options={AGE_GROUP_OPTIONS}
           className="flex-1"
-          size="1"
-          type="number"
-          {...form.register('age', {
-            setValueAs: (val) => val || undefined,
-          })}
+          onChange={(values) => {
+            form.setValue('age', values, { shouldDirty: true })
+          }}
+          menuClassName="w-[155px]"
         />
       </FormFieldContainer>
       <FormFieldError name="age" />

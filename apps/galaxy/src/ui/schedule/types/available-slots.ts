@@ -220,7 +220,7 @@ interface AppointmentParams {
   startingDate?: string
   endingDate?: string
   name?: string
-  age?: number | null
+  age?: string[]
   gender?: string
   dateOfBirth?: string
   patientStatuses?: string[]

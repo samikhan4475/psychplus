@@ -346,6 +346,13 @@ enum TIMEZONE_TYPES {
   PROVIDER_PREFERRED = 'ProviderPreferred',
   LOCATION_PREFERRED = 'LocationPreferred',
 }
+enum AgeGroupType {
+  Infant = 'Infant',
+  Child = 'Child',
+  Adolescent = 'Adolescent',
+  Adult = 'Adult',
+  Geriatric = 'Geriatric',
+}
 
 const CACHED_FILTERS_KEY = 'cached-filters-key'
 
@@ -355,6 +362,23 @@ const EXCLUDED_PROVIDER_TYPES: string[] = [
   ProviderType.FamilyMedicine,
   ProviderType.NotSet,
   ProviderType.Pmnr,
+]
+
+const AGE_GROUP_OPTIONS = [
+  {
+    label: 'Infant (0 yo to 4 yo)',
+    value: AgeGroupType.Infant,
+  },
+  { label: 'Child (5 yo to 12 yo)', value: AgeGroupType.Child },
+  { label: 'Adolescent (13 yo to 17 yo)', value: AgeGroupType.Adolescent },
+  {
+    label: 'Adult (18 yo to 54 yo)',
+    value: AgeGroupType.Adult,
+  },
+  {
+    label: 'Geriatric (55 yo+)',
+    value: AgeGroupType.Geriatric,
+  },
 ]
 
 export {
@@ -399,4 +423,5 @@ export {
   PROVIDER_CODING_VIEW_COLUMNS_KEY,
   DAY_PATTERN,
   ALWAYS_VISIBLE_COLUMNS,
+  AGE_GROUP_OPTIONS,
 }

@@ -2,7 +2,7 @@ const defaultValues = {
   startingDate: undefined,
   endingDate: undefined,
   name: '',
-  age: null,
+  age: [],
   gender: '',
   dateOfBirth: undefined,
   patientStatuses: [],

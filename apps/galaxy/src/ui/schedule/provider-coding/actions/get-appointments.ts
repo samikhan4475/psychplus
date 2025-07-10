@@ -2,8 +2,8 @@
 
 import { getLocalTimeZone, today } from '@internationalized/date'
 import * as api from '@/api'
-import { AppointmentParams } from '../../types'
 import { Appointment } from '@/types'
+import { AppointmentParams } from '../../types'
 
 const getAppointmentsAction = async (
   params?: AppointmentParams,
@@ -12,6 +12,7 @@ const getAppointmentsAction = async (
   const year = startDate.year
   const month = `${startDate.month}`.padStart(2, '0')
   const day = `${startDate.day}`.padStart(2, '0')
+  const { age, ...rest } = params ?? {}
 
   const body = {
     startingDate: `${year}-${month}-${day}`,
@@ -26,7 +27,8 @@ const getAppointmentsAction = async (
     includeCptCodes: true,
     includePatientNotes: true,
     isServiceTimeDependant: false,
-    ...params,
+    ageGroups: age ?? undefined,
+    ...rest,
   }
 
   const response = await api.POST<Appointment[]>(

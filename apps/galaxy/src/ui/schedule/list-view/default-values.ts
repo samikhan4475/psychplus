@@ -3,7 +3,7 @@ const getDefaultValues = (providerId?: string) => ({
   endingDate: undefined,
   bookedAppointmentTime: undefined,
   name: '',
-  age: null,
+  age: [],
   gender: '',
   dateOfBirth: undefined,
   patientStatuses: [],

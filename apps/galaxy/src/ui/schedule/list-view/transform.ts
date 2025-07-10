@@ -174,6 +174,7 @@ const transformParamsToFilterValues = (
       params.patientInsuranceVerificationStatuses ?? [],
     legalStatuses: params.legalStatuses ?? [],
     noteSignedStatuses: params.noteSignedStatuses ?? [],
+    age: params.age ?? [],
   }
 }
 

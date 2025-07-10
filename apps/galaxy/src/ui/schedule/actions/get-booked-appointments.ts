@@ -2,13 +2,14 @@
 
 import * as api from '@/api'
 import { Appointment } from '@/types'
-import { AppointmentParams } from '../types'
 import { SCHEDULER_PAGE_SIZE_LIMIT } from '../constants'
+import { AppointmentParams } from '../types'
 
 const getBookedAppointmentsAction = async (
   params?: AppointmentParams,
-  page?: number
+  page?: number,
 ): Promise<api.ActionResult<Appointment[]>> => {
+  const { age, ...rest } = params ?? {}
   const body = {
     includePatientData: true,
     includeFinancialData: true,
@@ -20,10 +21,11 @@ const getBookedAppointmentsAction = async (
     includeServiceGroup: true,
     includeCptCodes: true,
     includePatientNotes: true,
-    ...params,
+    ageGroups: age ?? undefined,
+    ...rest,
   }
-  const pageSize = page? SCHEDULER_PAGE_SIZE_LIMIT: 0
-  const pages = page? page: 1
+  const pageSize = page ? SCHEDULER_PAGE_SIZE_LIMIT : 0
+  const pages = page ? page : 1
   const offset = (pages - 1) * pageSize
   const url = new URL(api.SEARCH_BOOKED_APPOINTMENTS_ENDPOINT)
   url.searchParams.append('limit', String(pageSize))
