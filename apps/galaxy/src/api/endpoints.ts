@@ -468,6 +468,15 @@ const UPLOAD_TEMPLATE_REPORT_ENDPOINT = (templateId: string) =>
 const EDIT_TEMPLATE_ENDPOINT = (templateId: string) =>
   `${API_URL}/api/reporting/templates/${templateId}/`
 const GET_ALL_STAFF_ENDPOINT = `${API_URL}/api/staff`
+const ADD_PRACTICE_PLAN_ADDRESS = (practicePlanId: string) =>
+  `${API_URL}/api/practiceplans/${practicePlanId}/addresses`
+const GET_PRACTICE_PLAN_ADDRESS = (practicePlanId: string) =>
+  `${API_URL}/api/practiceplans/${practicePlanId}/addresses/actions/search`
+const UPDATE_PRACTICE_PLAN_ADDRESS = (
+  practicePlanId: string,
+  practicePlanAddressId: string,
+) =>
+  `${API_URL}/api/practiceplans/${practicePlanId}/addresses/${practicePlanAddressId}`
 const UPDATE_PATIENT_ENDPOINT = (patientId: number) =>
   `${API_URL}/api/patients/${patientId}`
 
@@ -1122,6 +1131,9 @@ export {
   EXPORT_CLAIMS_LIST_ENDPOINT,
   EXPORT_PAYMENTS_LIST_ENDPOINT,
   ADD_PROVIDER_LOCATION_ENDPOINT,
+  ADD_PRACTICE_PLAN_ADDRESS,
+  GET_PRACTICE_PLAN_ADDRESS,
+  UPDATE_PRACTICE_PLAN_ADDRESS,
   GET_PROVIDER_LOCATIONS_ENDPOINT,
   EXPORT_SUBMISSIONS_LIST_ENDPOINT,
   UPDATE_PROVIDER_LOCATION_STATUS_ENDPOINT,

@@ -255,6 +255,10 @@ const getPracticePlanNavLinks = ({ ppId }: { ppId?: string | null }) => {
       label: 'Provider Network Status',
       href: `${baseHref}/provider-network-status`,
     },
+    {
+      label: 'Plan Address',
+      href: `${baseHref}/plan-address`,
+    },
   ]
 }
 
