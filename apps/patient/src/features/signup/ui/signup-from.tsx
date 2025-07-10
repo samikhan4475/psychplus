@@ -5,7 +5,7 @@ import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormContainer } from '@psychplus-v2/components'
-import { DocumentType, SharedCode } from '@psychplus-v2/types'
+import { ConfigurationResponse, SharedCode } from '@psychplus-v2/types'
 import {
   getAgeFromDate,
   getCalendarDate,
@@ -106,7 +106,13 @@ const schema = z
 
 export type SchemaType = z.infer<typeof schema>
 
-const SignupForm = ({ genderCodes }: { genderCodes: SharedCode[] }) => {
+const SignupForm = ({
+  genderCodes,
+  configuration,
+}: {
+  genderCodes: SharedCode[]
+  configuration: ConfigurationResponse
+}) => {
   const [error, setError] = useState<string>()
   const [openVerifyDialog, setOpenVerifyDialog] = useState(false)
   const [showConsentView, setShowConsentView] = useState(false)
@@ -293,6 +299,7 @@ const SignupForm = ({ genderCodes }: { genderCodes: SharedCode[] }) => {
           <PasswordRequirements
             newPassword={form.watch('newPassword')}
             confirmPassword={form.watch('confirmPassword')}
+            configuration={configuration}
           />
 
           <FormFieldContainer>

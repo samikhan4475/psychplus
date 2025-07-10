@@ -1,36 +1,33 @@
 const useValidateNewPassword = ({
   newPassword,
   confirmPassword,
+  helpLineRegex = [],
 }: {
   newPassword: string
   confirmPassword: string
+  helpLineRegex?: string[]
 }) => {
-  const passwordMinLength = newPassword.length >= 8
   const passwordsMatch = newPassword === confirmPassword
-  const oneUppercaseLetter = /[A-Z]/.test(newPassword)
-  const oneLowercaseLetter = /[a-z]/.test(newPassword)
-  const oneNumber = /[0-9]/.test(newPassword)
-  // eslint-disable-next-line no-useless-escape
-  const oneSpecialCharacter = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(
-    newPassword,
-  )
+
+  const regexValidations = helpLineRegex.map((regexStr,index) => {
+    if (!regexStr && index === 0) {
+      return newPassword.length >= 8 && newPassword.length <= 256
+    }
+    if (!regexStr) return true
+    try {
+      const regex = new RegExp(regexStr)
+      return regex.test(newPassword)
+    } catch {
+      return false // Handle malformed regex gracefully
+    }
+  })
+
+  const allRegexValid = regexValidations.every(Boolean)
 
   return {
-    isValid:
-      passwordMinLength &&
-      passwordsMatch &&
-      oneUppercaseLetter &&
-      oneLowercaseLetter &&
-      oneNumber &&
-      oneSpecialCharacter,
-    validation: {
-      passwordMinLength,
-      passwordsMatch,
-      oneUppercaseLetter,
-      oneLowercaseLetter,
-      oneSpecialCharacter,
-      oneNumber,
-    },
+    isValid: allRegexValid && passwordsMatch,
+    validationResults: regexValidations,
+    passwordsMatch,
   }
 }
 

@@ -1,11 +1,24 @@
 import { CODESETS } from '@psychplus-v2/constants'
-import { getCodesets } from '@/api'
+import { getCodesets, getConfiguration } from '@/api'
 import { SignupView } from '@/features/signup'
+import { Text } from '@radix-ui/themes'
 
 const SignupPage = async () => {
-  const codesetsResp = await getCodesets([CODESETS.Gender])
+  const [codesetsResp, configurationResponse] = await Promise.all([
+    getCodesets([CODESETS.Gender]),
+    getConfiguration(),
+  ])
 
-  return <SignupView genderCodes={codesetsResp.Gender.codes} />
+  if (configurationResponse.state === 'error') {
+    return <Text>Error: {configurationResponse.error}</Text>
+  }
+
+  return (
+    <SignupView
+      genderCodes={codesetsResp.Gender.codes}
+      configuration={configurationResponse.data}
+    />
+  )
 }
 
 export default SignupPage

@@ -1,3 +1,4 @@
+import { ConfigurationResponse } from '@psychplus-v2/types'
 import { Flex, Text } from '@radix-ui/themes'
 import { CheckIcon, XIcon } from 'lucide-react'
 import { useValidateNewPassword } from '@/hooks'
@@ -5,40 +6,49 @@ import { useValidateNewPassword } from '@/hooks'
 interface PasswordRequirementsProps {
   newPassword: string
   confirmPassword: string
+  configuration?: ConfigurationResponse
 }
 
 const PasswordRequirements = ({
   newPassword,
   confirmPassword,
+  configuration,
 }: PasswordRequirementsProps) => {
-  const { validation } = useValidateNewPassword({
+  const passwordValidationConfig = configuration?.configuration?.find(
+    (item) => item.tag === 'passwordValidation',
+  )
+
+  const helpLines = passwordValidationConfig?.helpLines || []
+  const helpLineRegex = passwordValidationConfig?.helpLineExtraData || []
+
+  const {
+    passwordsMatch,
+    validationResults,
+  } = useValidateNewPassword({
     newPassword,
     confirmPassword,
+    helpLineRegex,
   })
 
   return (
     <Flex direction="column" gap="1">
-      <PasswordRequirement satisfied={validation.passwordMinLength}>
-        8 characters minimum
-      </PasswordRequirement>
-      <PasswordRequirement satisfied={validation.oneUppercaseLetter}>
-        One uppercase letter
-      </PasswordRequirement>
-      <PasswordRequirement satisfied={validation.oneLowercaseLetter}>
-        One lowercase letter
-      </PasswordRequirement>
-      <PasswordRequirement satisfied={validation.oneNumber}>
-        One number
-      </PasswordRequirement>
-      <PasswordRequirement satisfied={validation.oneSpecialCharacter}>
-        One special character e.g. !, @, #, $
-      </PasswordRequirement>
-      <PasswordRequirement satisfied={validation.passwordsMatch}>
+      {helpLines.map((line, index) => {
+        const satisfied = validationResults[index]
+        return (
+          <PasswordRequirement key={line} satisfied={satisfied}>
+            {line}
+          </PasswordRequirement>
+        )
+      })}
+
+      <PasswordRequirement satisfied={passwordsMatch}>
         Your new & confirmation passwords must match
       </PasswordRequirement>
     </Flex>
   )
 }
+
+
 
 const PasswordRequirement = ({
   satisfied,

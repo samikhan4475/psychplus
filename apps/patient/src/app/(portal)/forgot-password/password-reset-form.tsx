@@ -20,6 +20,7 @@ import { useValidateNewPassword } from '@/hooks'
 import { useToast } from '@/providers'
 import { resetPasswordAction } from './reset-password'
 import { startForgotPasswordAction } from './start-forgot-password'
+import { ConfigurationResponse } from '@psychplus-v2/types'
 
 const schema = z.object({
   email: z.string().min(1, 'Required').email('Invalid email'),
@@ -39,11 +40,12 @@ type SchemaType = z.infer<typeof schema>
 interface PasswordResetFormProps {
   email: string
   reset: string | null
+  configuration: ConfigurationResponse
 }
 
 type CodeSendStatus = 'success' | 'error' | 'idle' | 'sending'
 
-const PasswordResetForm = ({ email, reset }: PasswordResetFormProps) => {
+const PasswordResetForm = ({ email, reset, configuration }: PasswordResetFormProps) => {
   const { toast } = useToast()
   const router = useRouter()
   const [resendStatus, setResendStatus] = useState<CodeSendStatus>('idle')
@@ -168,6 +170,7 @@ const PasswordResetForm = ({ email, reset }: PasswordResetFormProps) => {
           <PasswordRequirements
             newPassword={form.watch('newPassword')}
             confirmPassword={form.watch('confirmPassword')}
+            configuration={configuration}
           />
         </Flex>
         <FormSubmitButton size="4" className="mt-4" disabled={!isValid}>
