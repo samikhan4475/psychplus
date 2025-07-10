@@ -15,6 +15,7 @@ import { DiagnosisWidgetClientLoader } from '../diagnosis/diagnosis-widget/diagn
 import { DischargeDiagnosisClientLoader } from '../discharge-diagnosis/discharge-diagnosis-widget/discharge-diagnosis-client-loader'
 import { FamilyPsychHxClientLoader } from '../family-psych-hx/family-psych-hx-widget/family-psych-hx-client-loader'
 import { FollowUpWidgetLoader } from '../follow-up/follow-up-widget-client-loader'
+import { HospitalOrderQuickNotesView } from '../hospital-orders/hospital-order-quick-notes-view'
 import { HospitalDischargeClientLoader } from '../hospital/hospital-discharge-widget/hospital-discharge-client-loader'
 import { HospitalInitialClientLoader } from '../hospital/hospital-initial-widget/hospital-initial-client-loader'
 import { LabOrdersWidget } from '../lab-orders/lab-orders-widget'
@@ -44,6 +45,7 @@ import { FamilyPsychDetailClientView } from './actual-note-view/family-psych-hx/
 import { FollowUpClient } from './actual-note-view/follow-up/follow-up-client-view'
 import { HospitalDischargeClientView } from './actual-note-view/hospital-discharge/hospital-discharge-client-view'
 import { HospitalInitialClientView } from './actual-note-view/hospital-initial/hospital-initial-client-view'
+import { HospitalOrderClientView } from './actual-note-view/hospital-order'
 import { HpiDetailClientView } from './actual-note-view/hpi/hpi-detail-client-view'
 import { LabOrderClient } from './actual-note-view/lab-orders'
 import { LabResultsClient } from './actual-note-view/lab-results'
@@ -269,6 +271,11 @@ const widgets: Array<WidgetType> = [
     component: UdsWidget,
     id: QuickNoteSectionName.QuicknoteSectionUds,
     actualNoteComponent: UdsClientView,
+  },
+  {
+    component: HospitalOrderQuickNotesView,
+    id: QuickNoteSectionName.QuickNoteSectionHospitalOrders,
+    actualNoteComponent: HospitalOrderClientView,
   },
 ]
 

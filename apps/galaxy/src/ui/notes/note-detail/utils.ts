@@ -8,6 +8,7 @@ import { FamilyPsychNoteDetailView } from '@/ui/quicknotes/actual-note-view/fami
 import { FollowUpNoteDetailView } from '@/ui/quicknotes/actual-note-view/follow-up/follow-up-note-detail-view'
 import { HospitalDischargeNoteDetailView } from '@/ui/quicknotes/actual-note-view/hospital-discharge/hospital-discharge-note-detail-view'
 import { HospitalInitialNoteDetailView } from '@/ui/quicknotes/actual-note-view/hospital-initial/hospital-initial-note-detail-view'
+import { HospitalOrderClientView } from '@/ui/quicknotes/actual-note-view/hospital-order'
 import { HpiNoteDetailView } from '@/ui/quicknotes/actual-note-view/hpi/hpi-note-detail-view'
 import { LabOrderClientNote } from '@/ui/quicknotes/actual-note-view/lab-orders'
 import { LabResultsClientNoteView } from '@/ui/quicknotes/actual-note-view/lab-results'
@@ -185,6 +186,10 @@ const widgetsArray: Array<WidgetType> = [
   {
     id: QuickNoteSectionName.QuicknoteSectionUds,
     actualNoteDetailComponent: UdsNoteDetailView,
+  },
+  {
+    id: QuickNoteSectionName.QuickNoteSectionHospitalOrders,
+    actualNoteDetailComponent: HospitalOrderClientView,
   },
 ]
 

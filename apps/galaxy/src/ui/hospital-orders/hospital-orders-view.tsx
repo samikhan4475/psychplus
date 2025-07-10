@@ -1,3 +1,5 @@
+'use client'
+
 import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
 import { XIcon } from 'lucide-react'
@@ -6,7 +8,7 @@ import { HospitalWidget } from './hospital-orders-widget'
 
 interface HospitalViewProps {
   patientId: string
-  quicknotesHospitalLabOrderResponse: QuickNoteSectionItem[]
+  data?: QuickNoteSectionItem[]
 }
 
 enum TabsValue {
@@ -15,10 +17,7 @@ enum TabsValue {
   MAR = 'MAR',
 }
 
-const HospitalOrdersView = ({
-  patientId,
-  quicknotesHospitalLabOrderResponse,
-}: HospitalViewProps) => {
+const HospitalOrdersView = ({ patientId, data }: HospitalViewProps) => {
   return (
     <Tabs.Root
       defaultValue={TabsValue.LabsOrders}
@@ -42,10 +41,7 @@ const HospitalOrdersView = ({
       </Flex>
 
       <TabsContent value={TabsValue.LabsOrders}>
-        <HospitalWidget
-          patientId={patientId}
-          data={quicknotesHospitalLabOrderResponse}
-        />
+        <HospitalWidget patientId={patientId} data={data} />
       </TabsContent>
       <TabsContent value={TabsValue.FacilityMedications}>
         {TabsValue.FacilityMedications}

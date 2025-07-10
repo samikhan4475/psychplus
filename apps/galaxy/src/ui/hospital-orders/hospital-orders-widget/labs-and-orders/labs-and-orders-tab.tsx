@@ -8,11 +8,11 @@ import { HospitalWidgetSchema, HospitalWidgetSchemaType } from './schema'
 
 interface LabsOrderProps {
   patientId: string
-  data: QuickNoteSectionItem[]
+  data?: QuickNoteSectionItem[]
 }
 
 const LabsAndOrderTab = ({ patientId, data }: LabsOrderProps) => {
-  const initialValue = transformIn(data)
+  const initialValue = transformIn(data ?? [])
   const form = useForm<HospitalWidgetSchemaType>({
     resolver: zodResolver(HospitalWidgetSchema),
     reValidateMode: 'onChange',

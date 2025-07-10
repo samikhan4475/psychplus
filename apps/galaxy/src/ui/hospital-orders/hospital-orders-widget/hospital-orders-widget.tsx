@@ -6,24 +6,22 @@ import { LabsAndOrderTab } from './labs-and-orders'
 
 interface HospitalWidgetProps {
   patientId: string
-  data: QuickNoteSectionItem[]
+  data?: QuickNoteSectionItem[]
+  title?: string
 }
 
-const HospitalWidget = ({ patientId, data }: HospitalWidgetProps) => {
+const HospitalWidget = ({
+  title = 'Labs & Orders',
+  patientId,
+  data,
+}: HospitalWidgetProps) => {
   return (
-    <Flex direction="column" gap="1">
-      <Flex
-        width="100%"
-        justify="between"
-        align="center"
-        p="2"
-        className="bg-white -mt-[1px] border border-gray-5"
-      >
-        <Text className="text-[16px] font-[600] text-accent-12">
-          Labs & Orders
-        </Text>
+    <Flex direction="column">
+      <Flex width="100%" direction="column" gap="2" p="2" className="bg-white">
+        <Text className="text-[16px] font-[600] text-accent-12">{title}</Text>
+
+        <LabsAndOrderTab patientId={patientId} data={data} />
       </Flex>
-      <LabsAndOrderTab patientId={patientId} data={data} />
     </Flex>
   )
 }

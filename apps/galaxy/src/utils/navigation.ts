@@ -88,6 +88,11 @@ const getNavLinks = (
       href: '/hospital',
       conditions: [isHospitalCareVisit(visitType)],
     },
+    {
+      label: 'Hospital Order',
+      href: '/hospital-order',
+      conditions: [isHospitalCareVisit(visitType)],
+    },
     { label: 'Follow Up', href: '/follow-up' },
     { label: 'Assessment & Plan', href: '/assessment-plan' },
     { label: 'Screening', href: '/screening' },
