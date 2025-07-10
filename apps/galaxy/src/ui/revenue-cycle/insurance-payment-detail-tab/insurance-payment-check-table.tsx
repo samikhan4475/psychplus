@@ -57,7 +57,9 @@ const getColumns = (includeUnlinked?: boolean): ColumnDef<ClaimPayment>[] => {
       header: ({ column }) => (
         <ColumnHeader column={column} label="Claim Status" />
       ),
-      cell: ({ row }) => <TextCell>{row.original.claimStatusCode}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell className="truncate">{row.original.claimStatusCode}</TextCell>
+      ),
     },
     {
       id: 'patientName',
@@ -65,14 +67,18 @@ const getColumns = (includeUnlinked?: boolean): ColumnDef<ClaimPayment>[] => {
         <ColumnHeader column={column} label="Patient Name" />
       ),
       cell: ({ row }) => (
-      <TextCell>{`${row.original.patientName?.firstName ?? ''} ${row.original.patientName?.lastName ?? ''}`}</TextCell>
+        <TextCell className="truncate">{`${
+          row.original.patientName?.firstName ?? ''
+        } ${row.original.patientName?.lastName ?? ''}`}</TextCell>
       ),
     },
     {
       id: 'processedAsCode',
-    header: ({ column }) => <ColumnHeader column={column} label="Process As" />,
+      header: ({ column }) => (
+        <ColumnHeader column={column} label="Process As" />
+      ),
       cell: ({ row }) => (
-        <TextCell className="min-w-fit">
+        <TextCell className="truncate">
           {addSpaceToCamelCase(row.original.processedAsCode)}
         </TextCell>
       ),
@@ -122,7 +128,9 @@ const getColumns = (includeUnlinked?: boolean): ColumnDef<ClaimPayment>[] => {
     },
     {
       id: 'deductibleAmount',
-    header: ({ column }) => <ColumnHeader column={column} label="Deductible" />,
+      header: ({ column }) => (
+        <ColumnHeader column={column} label="Deductible" />
+      ),
       cell: ({ row }) => (
         <TextCell hasPayment>{row.original.deductibleAmount}</TextCell>
       ),
@@ -144,7 +152,11 @@ const getColumns = (includeUnlinked?: boolean): ColumnDef<ClaimPayment>[] => {
     {
       id: 'status',
       header: ({ column }) => <ColumnHeader column={column} label="Status" />,
-    cell: ({ row }) => <TextCell>{addSpaceToCamelCase(row.original.status)}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell className="truncate">
+          {addSpaceToCamelCase(row.original.status)}
+        </TextCell>
+      ),
     },
     {
       id: 'noindex',
