@@ -358,6 +358,7 @@ const SignupForm = ({
                 I agree to electronically sign all the {' '}
                 <Button
                   className="bg-transparent px-2 pt-[5px]"
+                  type='button'
                   variant="ghost"
                   onClick={() =>
                     setShowConsentView(true)
