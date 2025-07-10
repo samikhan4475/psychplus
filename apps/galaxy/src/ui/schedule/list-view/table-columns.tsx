@@ -332,6 +332,30 @@ const columns: ColumnDef<Appointment>[] = [
     enableHiding: true,
   },
   {
+    id: 'cosigner',
+    accessorKey: 'cosignerName',
+    header: ({ column }) => (
+      <ColumnHeader
+        clientSideSort
+        className="!text-black justify-center !font-medium"
+        column={column}
+        label="Cosigner"
+      />
+    ),
+    cell: ({
+      row: {
+        original: { cosignerName },
+      },
+    }) => {
+      return (
+        <TextCell className="whitespace-nowrap">
+          {(cosignerName && getUserFullName(cosignerName)) || 'N/A'}
+        </TextCell>
+      )
+    },
+    enableHiding: true,
+  },
+  {
     id: 'primary-insurance',
     accessorKey: 'primaryInsuranceName',
     header: ({ column }) => (

@@ -175,6 +175,7 @@ interface Appointment {
   admittingProviderName?: LegalName
   admittingProviderId?: number
   noteSignedByUserName?: LegalName
+  cosignerName?: LegalName
 }
 
 interface BookVisitPayload {
