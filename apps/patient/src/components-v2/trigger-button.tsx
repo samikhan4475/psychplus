@@ -16,7 +16,7 @@ const TriggerButton = ({ title, onClick, className }: TriggerButtonProps) => (
     highContrast
     onClick={onClick}
     size="2"
-    className={cn(className, 'p-2 md:p-0')}
+    className={cn(className)}
   >
     + {title}
   </Button>
