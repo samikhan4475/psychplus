@@ -88,7 +88,8 @@ const MultiSelectField = ({
   const ref = useRef<HTMLButtonElement>(null)
 
   const handleChange = (value: string) => {
-    const isSelected = selectedValues.includes(value)
+    const currentValues = Array.isArray(selectedValues) ? selectedValues : []
+    const isSelected = currentValues.includes(value)
     const tempSelectedValues = isSelected
       ? selectedValues.filter((v) => v !== value)
       : [...selectedValues, value]
@@ -134,7 +135,7 @@ const MultiSelectField = ({
             width={12}
             height={12}
             className={cn('absolute right-6 top-1.5 z-[2] cursor-pointer', {
-              hidden: hideSelectedCount || selectedValues.length < 1,
+              hidden: hideSelectedCount || selectedValues?.length < 1,
             })}
             onClick={onClose}
           />
@@ -156,7 +157,7 @@ const MultiSelectField = ({
                 },
               )}
             >
-              {hideSelectedCount || selectedValues.length < 1 ? (
+              {hideSelectedCount || selectedValues?.length < 1 ? (
                 <Text
                   as="span"
                   className="text-[12px] font-regular text-grayA-10"
@@ -236,7 +237,9 @@ const MultiSelectField = ({
                         color="indigo"
                         size="2"
                         highContrast
-                        checked={selectedValues.includes(item.value)}
+                        checked={
+                         Array.isArray(selectedValues) && selectedValues.includes(item.value)
+                        }
                         onCheckedChange={() => handleChange(item.value)}
                       />
                       {item.label}

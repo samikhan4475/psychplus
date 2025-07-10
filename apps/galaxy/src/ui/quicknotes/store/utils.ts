@@ -6,8 +6,6 @@ import { Appointment, QuickNoteSectionItem } from '@/types'
 import { ALLERGIES_ERROR_MESSAGE } from '@/ui/allergy/patient-allergies-widget/constants'
 import { AllergyDataResponse } from '@/ui/allergy/patient-allergies-widget/types'
 import { transformVisitUpdatePayload } from '@/ui/assessment-plan/tcm-widget/data'
-import { LabResultResponse } from '@/ui/lab-result/patient-lab-result-widget/types'
-import { PatientVital } from '@/ui/vitals'
 import { postEvent, sanitizeFormData, saveAbleWdgets } from '@/utils'
 import { QuickNoteSectionName } from '../constants'
 import { ValidateDiagnosisParams } from '../types'
@@ -194,7 +192,7 @@ const validateDiagnosis = ({
   }
   const wCodes = workingDiagnosisData.map(({ code }) => code)?.join(',')
   //actual note data
-  const enCodes = encounterNoteDx[0]?.sectionItemValue
+  const enCodes = encounterNoteDx?.[0]?.sectionItemValue ?? ''
   if (wCodes !== enCodes) {
     setActualNoteData([
       {

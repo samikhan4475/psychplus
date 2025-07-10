@@ -18,7 +18,7 @@ const UnitSelect = ({
 }) => {
   const { filters } = useFiltersContext()
   const { watch } = useFormContext<ProviderCodingSchema>()
-  const services = watch('serviceIds')
+  const services = watch('servicesOffered')
   const unitOptions = useMemo(
     () =>
       units.map((unit) => ({
@@ -36,7 +36,7 @@ const UnitSelect = ({
         field="unitIds"
         placeholder="Select"
         options={unitOptions}
-        disabled={services.length === 0}
+        disabled={services?.length === 0}
         buttonClassName="w-full h-6"
         className="h-full flex-1"
         loading={loading}

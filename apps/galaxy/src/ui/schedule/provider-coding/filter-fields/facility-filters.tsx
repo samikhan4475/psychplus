@@ -14,7 +14,7 @@ const FacilityFilters = () => {
   const [units, setUnits] = useState<ServiceUnit[]>([])
   const [groups, setGroups] = useState<ServiceGroup[]>([])
   const [rooms, setRooms] = useState<ServiceRoom[]>([])
-  const services = form.watch('serviceIds')
+  const services = form.watch('servicesOffered')
 
   useEffect(() => {
     if (services && !services.length) return

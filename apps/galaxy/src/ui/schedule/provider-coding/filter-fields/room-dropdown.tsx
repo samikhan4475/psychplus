@@ -18,7 +18,7 @@ const RoomSelect = ({
 }) => {
   const { filters } = useFiltersContext()
   const { watch } = useFormContext<ProviderCodingSchema>()
-  const services = watch('serviceIds')
+  const services = watch('servicesOffered')
   const roomOptions = useMemo(
     () =>
       rooms.map((room) => ({
@@ -36,7 +36,7 @@ const RoomSelect = ({
         field="roomIds"
         placeholder="Select"
         options={roomOptions}
-        disabled={services.length === 0}
+        disabled={services?.length === 0}
         buttonClassName="w-full h-6"
         className="h-full flex-1"
         loading={loading}

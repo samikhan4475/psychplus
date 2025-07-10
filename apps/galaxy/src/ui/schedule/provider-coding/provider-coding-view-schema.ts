@@ -15,7 +15,7 @@ const providerCodingViewSchema = z
     gender: z.string().optional(),
     dateOfBirth: z.custom<DateValue>().optional(),
     locationIds: z.string().optional(),
-    serviceIds: z
+    servicesOffered: z
       .array(z.string())
       .refine((value) => value.every((item) => typeof item === 'string'), {
         message: 'Array must be empty or contain only strings',

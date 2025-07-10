@@ -38,7 +38,14 @@ const AppointmentDetail = ({
   const servicesOfferedOptions = useMemo(
     () =>
       codes
-        .filter((code) => code.value !== 'NotSet')
+        .filter((code) => {
+          if (code.value === 'NotSet') return false
+
+          const attrs = code.attributes ?? []
+          return attrs.some(
+            (attr) => attr?.name === 'IsActive' && attr?.value === 'True',
+          )
+        })
         .map(({ display, value }) => ({ display, value })),
     [codes],
   )

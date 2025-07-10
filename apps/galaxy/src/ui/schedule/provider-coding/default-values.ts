@@ -1,3 +1,4 @@
+
 const defaultValues = {
   startingDate: undefined,
   endingDate: undefined,
@@ -7,7 +8,7 @@ const defaultValues = {
   dateOfBirth: undefined,
   patientStatuses: '',
   locationIds: '',
-  serviceIds: [],
+  servicesOffered: [],
   providerType: '',
   unitId: '',
   roomId: '',

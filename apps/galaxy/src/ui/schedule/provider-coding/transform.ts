@@ -171,7 +171,7 @@ const transformParamsToFilterValues = (
     )?.subtract({ days: 1 }),
     locationIds: params.locationIds?.[0] ?? '',
     facilityAdmissionIds: params.facilityAdmissionIds?.[0] ?? '',
-    serviceIds: params.serviceIds ?? [],
+    servicesOffered: params.servicesOffered ?? [],
     appointmentStatuses: params.appointmentStatuses ?? [],
     legalStatuses: params.legalStatuses?.[0] ?? '',
     unitIds: params.unitIds?.[0] ?? '',

@@ -14,7 +14,7 @@ const ServiceMultiSelect = () => {
   const form = useFormContext<ProviderCodingSchema>()
   const [loading, setLoading] = useState<boolean>(false)
   const selectedLocation = form.watch('locationIds')
-  const services = form.watch('serviceIds')
+  const services = form.watch('servicesOffered')
   const [servicesOptions, setServicesOptions] = useState<Option[]>([])
   const mappedServices = useServiceCodesMap()
 
@@ -37,7 +37,7 @@ const ServiceMultiSelect = () => {
         defaultValues={services}
         options={getServiceFilterOptions(mappedServices, servicesOptions)}
         className="flex-1"
-        onChange={(values) => form.setValue('serviceIds', values)}
+        onChange={(values) => form.setValue('servicesOffered', values)}
         menuClassName="w-[155px]"
         loading={loading}
       />

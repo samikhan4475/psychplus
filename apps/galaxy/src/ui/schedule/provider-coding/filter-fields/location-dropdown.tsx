@@ -34,7 +34,7 @@ const LocationDropdown = () => {
         className="h-full"
         onValueChange={(value) => {
           form.setValue('locationIds', value, { shouldDirty: true })
-          form.setValue('serviceIds', [])
+          form.setValue('servicesOffered', [])
         }}
         loading={loading}
         buttonClassName="min-w-1 max-w-full truncate"
