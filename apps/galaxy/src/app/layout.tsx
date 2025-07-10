@@ -65,6 +65,11 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
           position="top-center"
           toastOptions={{
             duration: 5000,
+            error: {
+              style: {
+                wordBreak: 'break-word',
+              },
+            },
           }}
         />
         <Theme
