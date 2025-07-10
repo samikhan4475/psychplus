@@ -9,14 +9,19 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
-import { SelectOptionType } from '@/types'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
+import { Encounter, SelectOptionType } from '@/types'
 import { getVisitTypesAction } from '@/ui/location/service/actions'
+import { getCodesetDisplayName } from '@/utils'
 
 const VisitTypeSelect = () => {
   const [loading, setLoading] = useState(false)
   const form = useFormContext()
   const service = form.watch('service')
   const [visitTypes, setVisitTypes] = useState<SelectOptionType[]>([])
+  const sequenceCcodes = useCodesetCodes(CODESETS.VisitSequence)
+  const mediumCcodes = useCodesetCodes(CODESETS.VisitMedium)
 
   useEffect(() => {
     if (service) {
@@ -27,11 +32,24 @@ const VisitTypeSelect = () => {
           setVisitTypes([])
           return toast.error(res.error || 'Failed to fetch visit types')
         }
-        const visitTypesList: SelectOptionType[] = res.data.map((item) => ({
-          label: item.encounterName,
-          value: `${item.id}`,
-        }))
-        setVisitTypes(visitTypesList)
+
+        const visitTypes: SelectOptionType[] = res.data.map(
+          (visitType: Encounter) => {
+            const sequence = getCodesetDisplayName(
+              visitType.visitSequence,
+              sequenceCcodes,
+            )
+            const medium = getCodesetDisplayName(
+              visitType?.visitMedium,
+              mediumCcodes,
+            )
+            return {
+              label: `${visitType.typeOfVisit} | ${sequence} | ${medium}`,
+              value: String(visitType.id),
+            }
+          },
+        )
+        setVisitTypes(visitTypes)
         setLoading(false)
       })
     }
