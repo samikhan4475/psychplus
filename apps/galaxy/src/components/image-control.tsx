@@ -37,7 +37,7 @@ const ImageControls = ({
 
   return (
     <Flex align="center" className={cn('gap-[14px]', className)}>
-      <ImageViewDialog previewSrc={previewSrc} />
+      <ImageViewDialog previewSrc={previewSrc} disabled={disableControls} />
       <button
         onClick={handleFileInputClick}
         onKeyDown={(e) => e.stopPropagation()}

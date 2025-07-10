@@ -47,7 +47,7 @@ const ProfilePicture = ({
       <ImageControls
         onFileChange={handleProfileImageUpload}
         previewSrc={profileImageUrl}
-        disableControls={form.formState?.disabled}
+        disableControls={form.formState?.disabled || form.formState.isSubmitting}
       />
       <FormFieldError name="profilePicture" />
     </FormFieldContainer>
