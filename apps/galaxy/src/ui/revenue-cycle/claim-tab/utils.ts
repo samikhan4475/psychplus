@@ -1,18 +1,6 @@
 import { Claim, InsurancePolicyPriority } from '@/types'
 
-const allowedStatuses = new Set([
-  'Submitted',
-  'BilledToPrimary',
-  'BilledToSecondary',
-  'Denied',
-  'DeniedPrimary',
-  'DeniedSecondary',
-  'DeniedTertiary',
-  'Rejected',
-  'RejectedPrimary',
-  'RejectedSecondary',
-  'RejectedTertiary',
-])
+const allowedStatuses = new Set(['Submitted', 'Billed', 'Denied', 'Rejected'])
 
 const getExcludedPolicies = (claim: Claim) => {
   const excludedOptions: string[] = []

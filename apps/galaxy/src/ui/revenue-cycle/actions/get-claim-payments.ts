@@ -1,6 +1,7 @@
 'use server'
 
 import * as api from '@/api'
+import { sanitizeFormData } from '@/utils'
 import { ClaimPayment } from '../types'
 
 const defaultPayload = {
@@ -14,10 +15,15 @@ const defaultPayload = {
 
 const getClaimPaymentsAction = async (
   paymentId: string,
+  isIncludeUnlinkedClaims?: boolean,
 ): Promise<api.ActionResult<ClaimPayment[]>> => {
-  const response = await api.POST<ClaimPayment[]>(api.GET_CLAIM_PAYMENTS, {
+  const payload = {
     ...defaultPayload,
     paymentId,
+    ...(isIncludeUnlinkedClaims !== undefined && { isIncludeUnlinkedClaims }),
+  }
+  const response = await api.POST<ClaimPayment[]>(api.GET_CLAIM_PAYMENTS, {
+    ...sanitizeFormData(payload),
   })
 
   if (response.state === 'error') {

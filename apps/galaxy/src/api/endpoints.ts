@@ -111,6 +111,8 @@ const UPDATE_STAFF_ENDPOINT = (staffId: string) =>
 const GET_VISIT_TYPE_ENDPOINT = `${API_URL}/api/encounters/actions/search`
 const GET_PAYMENT_ADJUSTMENT_CODES = `${API_URL}/api/paymentadjustmentcodes/actions/search`
 const GET_CLAIM_PAYMENTS = `${API_URL}/api/claimpayments/actions/search`
+const MARK_CLAIM_POSTED = (claimPaymentId: string) =>
+  `${API_URL}/api/claimpayments/${claimPaymentId}/actions/markposted`
 const GET_CLAIM_SERVICELINE_PAYMENTS = `${API_URL}/api/claimservicelinepayments/actions/search`
 const GET_FACILITY_ADMISSION_IDS_ENDPOINT = (patientId: number) =>
   `${API_URL}/api/patients/${patientId}/appointments/actions/facilityadmitids`
@@ -1591,6 +1593,7 @@ export {
   PMP_SEARCH,
   PMP_START,
   PMP_REPORT,
+  MARK_CLAIM_POSTED,
   LAUNCH_SELF_CREDENTIALING_ENDPOINT,
   LAUNCH_USER_CREDENTIALING_ENDPOINT
 }

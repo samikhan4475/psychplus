@@ -4,6 +4,7 @@ import { ClaimPayment } from '../types'
 import { RowActionDelete } from './row-action-delete'
 import { RowActionEdit } from './row-action-edit'
 import { RowActionHistory } from './row-action-history'
+import { RowActionPaymentPost } from './row-action-payment-post'
 
 const rowActions: RowAction<ClaimPayment>[] = [
   {
@@ -20,12 +21,25 @@ const rowActions: RowAction<ClaimPayment>[] = [
   },
 ]
 
+const unLinkrowActions: RowAction<ClaimPayment>[] = [
+  {
+    id: 'unlink-list-row-action-markPosted',
+    render: RowActionPaymentPost,
+  },
+]
+
 interface ActionsCellProps {
   row: Row<ClaimPayment>
+  includeUnlinked?: boolean
 }
 
-const ActionsCell = ({ row }: ActionsCellProps) => {
-  return <AdaptiveRowActionsCell actions={rowActions} row={row} />
+const ActionsCell = ({ row, includeUnlinked }: ActionsCellProps) => {
+  return (
+    <AdaptiveRowActionsCell
+      actions={includeUnlinked ? unLinkrowActions : rowActions}
+      row={row}
+    />
+  )
 }
 
 export { ActionsCell }

@@ -1,4 +1,3 @@
-import React, { Dispatch, SetStateAction } from 'react'
 import { Flex } from '@radix-ui/themes'
 import { InsPaymentTabButton } from './insurance-payment-table-tab-button'
 import { PaymentListTypes } from './types'
@@ -6,7 +5,7 @@ import { PaymentListTypes } from './types'
 
 interface InsurancePaymentTableTabsProps {
   paymentListType: PaymentListTypes
-  setPaymentListType: Dispatch<SetStateAction<PaymentListTypes>>
+  setPaymentListType: (paymentListType: PaymentListTypes) => void
 }
 const InsurancePaymentTableTabs = ({ ...props }: InsurancePaymentTableTabsProps) => {
   return (

@@ -27,3 +27,4 @@ export * from './get-practice'
 export * from "./get-payer-plan-option"
 export * from './download-edi-files'
 export * from './claim-resubmit'
+export * from './mark-claim-posted'
