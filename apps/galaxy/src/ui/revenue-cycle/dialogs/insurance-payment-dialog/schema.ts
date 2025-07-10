@@ -32,7 +32,7 @@ const schema = z
           required_error: 'Amount is required and should be valid number',
           invalid_type_error: 'Amount must be a valid number',
         })
-        .min(0.01, { message: 'Amount must be greater than 0' }),
+        .min(0, { message: 'Amount is required and should not be less than 0' }),
     ),
     comments: z.string().optional(),
     checkDate: z
