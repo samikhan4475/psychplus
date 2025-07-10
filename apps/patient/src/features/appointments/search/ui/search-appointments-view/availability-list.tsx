@@ -428,12 +428,14 @@ const AppointmentTimeSlots = ({
     setCurrentBookingAppointmentData(bookingData)
 
     if (appointmentType === AppointmentType.InPerson) {
-      if (profileState !== clinicState) {
-        setShowDifferentStateDialog({
-          isOpen: true,
-          clinic: bookingData.clinic,
-        })
-        return
+      if (profileState) {
+        if (profileState !== clinicState) {
+          setShowDifferentStateDialog({
+            isOpen: true,
+            clinic: bookingData.clinic,
+          })
+          return
+        }
       }
     }
 
