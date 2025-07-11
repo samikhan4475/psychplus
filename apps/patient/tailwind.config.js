@@ -38,6 +38,9 @@ const config = {
         'pp-table-border': '#CAD8FD',
         'pp-info-text': '#1E75BB',
         'pp-info-bg-1': '#E6F4FF',
+        'pp-warning-bg-1': '#E97135',
+        'pp-info-1': '#0B68CB',
+        'pp-info-2': '#E1F0FF',
       },
       borderRadius: {
         full: '100%',

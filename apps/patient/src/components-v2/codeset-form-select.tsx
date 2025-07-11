@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { SharedCode } from '@psychplus-v2/types'
 import { cn } from '@psychplus-v2/utils'
 import { Select } from '@radix-ui/themes'
 import { Controller, useFormContext } from 'react-hook-form'
@@ -9,9 +10,10 @@ import { useCodesetCodes } from '@/providers'
 interface CodesetFormSelectProps
   extends React.ComponentProps<typeof Select.Root> {
   name: string
-  codeset: string
+  codeset?: string
   exclude?: string[]
   placeholder?: string
+  options?: SharedCode[]
   className?: string
 }
 
@@ -21,13 +23,14 @@ const CodesetFormSelect = ({
   exclude,
   placeholder,
   className,
+  options,
   ...selectProps
 }: CodesetFormSelectProps) => {
   const form = useFormContext()
   const [resetSelectedValue, setResetSelectedValue] = useState(true)
-  const codes = useCodesetCodes(codeset)
+  let codes = useCodesetCodes(codeset ?? '')
+  codes = options ?? codes
   const selectedValue = form.watch(name)
-
   const items = codes
     .filter((code) => !exclude?.includes(code.value))
     .map((code) => (
@@ -69,7 +72,8 @@ const CodesetFormSelect = ({
               radius="full"
               className={cn(
                 'font-[400] text-gray-12 outline outline-1 outline-gray-7',
-                selectProps.disabled ? 'bg-gray-3 text-gray-11' : 'bg-[white]', className
+                selectProps.disabled ? 'bg-gray-3 text-gray-11' : 'bg-[white]',
+                className,
               )}
               onClick={() => setResetSelectedValue(true)}
             />

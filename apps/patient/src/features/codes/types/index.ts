@@ -1,3 +1,4 @@
+import { Metadata } from '@psychplus-v2/types'
 import { NoteSectionItem } from '@/features/note/types'
 import { CodesWidgetSchemaType } from '../codes-schema'
 
@@ -20,6 +21,7 @@ interface SelectOptionType {
   value: string
   disabled?: boolean
 }
+
 
 export {
   type CodesWidgetItem,

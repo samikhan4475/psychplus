@@ -26,13 +26,15 @@ const Badge = ({
         return 'border-[#B9BBC6] bg-[#F9F9FB] text-[#60646C]'
       case 'highContrast':
         return 'border-[#194595] bg-[#194595] text-[white]'
+      case 'info':
+        return 'border-pp-info-1 bg-pp-info-2 text-pp-info-1'
     }
   }
 
   return (
     <Flex
       className={cn(
-        'items-center rounded-6 border px-2 py-[2px] text-[12px]',
+        'items-center rounded-6 border px-2 py-[2px] text-[12px] font-regular',
         getBadgeColor(),
         className,
       )}
@@ -42,9 +44,7 @@ const Badge = ({
     >
       {addIcon && <Icon type={type} label={label} />}
 
-      <Text className="whitespace-nowrap" weight="regular">
-        {label}
-      </Text>
+      <Text className="whitespace-nowrap">{label}</Text>
     </Flex>
   )
 }

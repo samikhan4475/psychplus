@@ -7,6 +7,7 @@ interface FeatureCardProps {
   containerClassName?: string
   contentClassName?: string
   showTitleInsideCard?: boolean
+  headerRight?: React.ReactNode
 }
 
 const FeatureCard = ({
@@ -16,6 +17,7 @@ const FeatureCard = ({
   containerClassName,
   contentClassName,
   showTitleInsideCard,
+  headerRight,
 }: React.PropsWithChildren<FeatureCardProps>) => (
   <Flex
     id={id}
@@ -37,9 +39,14 @@ const FeatureCard = ({
     )}
     <Flex direction="column" py="5" px={{ initial: '3', md: '5' }} className={cn(contentClassName)}>
       {showTitleInsideCard && title && (
-        <Text className="md:text-[22px] text-[18px] font-medium" mb="2">
-          {title}
-        </Text>
+        <Flex align="center" justify="between" gap="2" wrap="wrap">
+          <Flex align="center" gap="2">
+          <Text className="md:text-[22px] text-[18px] font-medium" mb="2">
+            {title}
+          </Text>
+          </Flex>
+          <Flex gap="2">{headerRight}</Flex>
+        </Flex>
       )}
       {children}
     </Flex>

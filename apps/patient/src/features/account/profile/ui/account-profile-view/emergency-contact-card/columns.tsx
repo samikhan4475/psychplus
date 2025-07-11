@@ -105,7 +105,7 @@ const columns = (
     cell: ({ row }: any) => (
       <TableCellText
         text={getMaskedPhoneNumber(
-          row.original.contactDetails.phoneNumbers[1].number ?? '',
+          row.original?.contactDetails?.phoneNumbers?.[1]?.number ?? '',
         )}
       />
     ),
@@ -174,7 +174,7 @@ const columns = (
     cell: ({ row }: any) => (
       <TableCellText
         text={getMaskedPhoneNumber(
-          row.original.contactDetails.phoneNumbers[0].number ?? '',
+          row.original?.contactDetails?.phoneNumbers?.[0]?.number ?? '',
         )}
       />
     ),

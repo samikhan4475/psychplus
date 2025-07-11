@@ -114,7 +114,7 @@ const ConfirmAppointment = ({
                   Tel:{' '}
                   <Text className="text-[#194595]">
                     {getMaskedPhoneNumber(
-                      clinic.contact.phoneNumbers[0].number,
+                      clinic.contact?.phoneNumbers?.[0].number,
                     )}
                   </Text>
                 </Text>

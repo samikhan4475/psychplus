@@ -13,12 +13,12 @@ import { SCHEDULE_APPOINTMENT_LIST } from '@psychplus/widgets'
 import { usePublishSize } from '@psychplus/widgets/hooks'
 import AppointmentDetailCard from '@/components/appointment-detail-card/appointment-detail-card'
 import { psychPlusBlueColor, whiteColor } from '@/components/colors'
+import { enums, PSYCHPLUS_LIVE_URL } from '@/constants'
 import { LocationMap } from '@/widgets/schedule-appointment-list/components'
 import { confirmationNotes } from '@/widgets/schedule-appointment-list/constants'
 import { useStore } from '@/widgets/schedule-appointment-list/store'
 import { BookedSlot } from '@/widgets/schedule-appointment-list/store/types'
 import { renderStaffName } from '@/widgets/schedule-appointment-list/utils'
-import { enums, PSYCHPLUS_LIVE_URL } from '@/constants'
 
 const ConfirmationPage = () => {
   const ref = React.useRef<HTMLDivElement>(null)
@@ -31,9 +31,12 @@ const ConfirmationPage = () => {
     BookedSlot | undefined
   >()
 
-  useEffect(()=> {
-    parent.postMessage({ event: enums.APPOINTMENT_SCHEDULED }, PSYCHPLUS_LIVE_URL)
-  },[])
+  useEffect(() => {
+    parent.postMessage(
+      { event: enums.APPOINTMENT_SCHEDULED },
+      PSYCHPLUS_LIVE_URL,
+    )
+  }, [])
 
   useEffect(() => {
     setBookedSlotState(bookedSlot)
@@ -98,7 +101,7 @@ const ConfirmationPage = () => {
                   Tel:{' '}
                   <Text className="text-[#194595]">
                     {getMaskedPhoneNumber(
-                      bookedSlotState.clinic.contact.phoneNumbers[0].number,
+                      bookedSlotState.clinic.contact?.phoneNumbers?.[0]?.number,
                     )}
                   </Text>
                 </Text>

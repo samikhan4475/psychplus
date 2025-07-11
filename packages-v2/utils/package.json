@@ -16,7 +16,8 @@
     "clsx": "^2.0.0",
     "react": "^18.2.0",
     "tailwind-merge": "^1.14.0",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "react-aria-components": "^1.2.1"
   },
   "devDependencies": {
     "@psychplus-v2/eslint-config": "^0.1.0",

@@ -1,6 +1,6 @@
 'use client'
 
-import { CalendarDate } from '@internationalized/date'
+import { CalendarDate, ZonedDateTime } from '@internationalized/date'
 import { cn } from '@psychplus-v2/utils'
 import { Box, Text } from '@radix-ui/themes'
 import {
@@ -27,7 +27,7 @@ import {
 import { Controller, useFormContext } from 'react-hook-form'
 import { FormFieldContainer, FormFieldError } from './form'
 
-interface DatePickerInputProps<T extends DateValue> extends DatePickerProps<T> {
+interface DatePickerInputProps {
   label?: string
   field: string
   isRequired?: boolean
@@ -37,10 +37,12 @@ interface DatePickerInputProps<T extends DateValue> extends DatePickerProps<T> {
   showError?: boolean
   datePickerClass?: string
   className?: string
+  maxValue?: DateValue | ZonedDateTime | CalendarDate
+  minValue?: DateValue | ZonedDateTime | CalendarDate
   showIcon?: boolean
 }
 
-const DatePickerInput = <T extends DateValue>({
+const DatePickerInput = ({
   label,
   field,
   isRequired,
@@ -50,15 +52,19 @@ const DatePickerInput = <T extends DateValue>({
   showError = true,
   dateInputClass,
   className,
+  maxValue,
+  minValue,
   showIcon = true,
   ...props
-}: DatePickerInputProps<T>) => {
+}: DatePickerInputProps) => {
   const form = useFormContext()
   const { control, formState } = form
 
   return (
     <I18nProvider locale="en-US">
-      <FormFieldContainer className={cn('w-full gap-0.5', className)}>
+      <FormFieldContainer
+        className={cn('w-full gap-0.5 text-[12px]', className)}
+      >
         {label && (
           <Text size="1" weight="medium">
             {label}
@@ -79,6 +85,8 @@ const DatePickerInput = <T extends DateValue>({
             <DatePicker
               name={name}
               value={value ?? null}
+              maxValue={maxValue as DateValue}
+              minValue={minValue as DateValue}
               onChange={(date) => {
                 if (yearFormat === 'YY' && date instanceof CalendarDate) {
                   const currentYear = new Date().getFullYear()
@@ -105,11 +113,11 @@ const DatePickerInput = <T extends DateValue>({
             >
               <Group
                 className={cn(
-                  'flex h-6 w-full items-center gap-2 rounded-6 border border-gray-8 bg-[white] px-2',
+                  'flex h-6 w-full items-center gap-2 rounded-6 border border-gray-8 bg-[white] px-2 data-[disabled]:cursor-not-allowed data-[disabled]:bg-gray-3',
                   dateInputClass,
                 )}
               >
-                <DateInput className="flex w-full overflow-hidden text-[12px]">
+                <DateInput className="flex w-full overflow-hidden">
                   {(segment) => (
                     <DateSegment segment={segment}>
                       {({ text, placeholder, isPlaceholder, type }) => (

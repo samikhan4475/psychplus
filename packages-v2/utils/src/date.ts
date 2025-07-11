@@ -2,11 +2,15 @@ import {
   CalendarDate,
   DateFormatter,
   getDayOfWeek,
+  getLocalTimeZone,
   parseDate,
   parseZonedDateTime,
+  toCalendarDateTime,
+  today,
   type DateValue,
 } from '@internationalized/date'
 import { TimeInterval } from '@psychplus-v2/types'
+import { TimeValue } from 'react-aria-components'
 
 const MONTH_LABELS = [
   'January',
@@ -49,6 +53,16 @@ const getTimeLabel = (dateString: string) => {
     hour: 'numeric',
     minute: 'numeric',
   }).format(new Date(dateString))
+}
+
+function convertTo12HourFormat(time24: string): string {
+  const [hours, minutes] = time24.split(':').map(Number)
+
+  let hour12 = hours % 12 || 12
+  const ampm = hours >= 12 ? 'PM' : 'AM'
+  const hourStr = hour12.toString().padStart(2, '0')
+
+  return `${hourStr}:${minutes.toString().padStart(2, '0')} ${ampm}`
 }
 
 const getLocalCalendarDate = (dateString?: string): CalendarDate => {
@@ -167,6 +181,55 @@ const convertToCalendarDate = (storedDate: DateValue | string) => {
   }
   return new CalendarDate(year, month, day)
 }
+const isDateValue = (val: unknown): val is DateValue =>
+  !!val && typeof val === 'object' && 'calendar' in val
+
+const isTimeValue = (val: unknown): val is TimeValue =>
+  !!val && typeof val === 'object' && 'hour' in val
+
+const isLaterDate = (
+  a: DateValue | null | undefined,
+  b: DateValue | null | undefined,
+): boolean => {
+  if (!a || !b) return false
+
+  if (a.year !== b.year) return a.year >= b.year
+  if (a.month !== b.month) return a.month >= b.month
+  return a.day >= b.day
+}
+
+const isLaterTime = (a: TimeValue, b: TimeValue): boolean => {
+  const aTotal = a.hour * 3600 + a.minute * 60 + a.second
+  const bTotal = b.hour * 3600 + b.minute * 60 + b.second
+  return aTotal > bTotal
+}
+
+const isWithinNextDays = (
+  date: DateValue | null | undefined,
+  days: number,
+): boolean => {
+  if (!date) return false
+
+  const max = today('UTC').add({ days })
+
+  if (date.year > max.year) return false
+  if (date.year === max.year && date.month > max.month) return false
+  if (date.year === max.year && date.month === max.month && date.day > max.day)
+    return false
+
+  return true
+}
+
+const getLocalTime = (time?: TimeValue) => {
+  if (!time) return undefined
+  const calendarDate = today(getLocalTimeZone())
+  const calendarDateTime = toCalendarDateTime(calendarDate, time)
+  const date = calendarDateTime.toDate(getLocalTimeZone())
+  const hour = `${date.getHours()}`.padStart(2, '0')
+  const minutes = `${date.getMinutes()}`.padStart(2, '0')
+  const seconds = `${date.getSeconds()}`.padStart(2, '0')
+  return `${hour}:${minutes}:${seconds}`
+}
 
 function generateTimeIntervals(): TimeInterval[] {
   const intervals: TimeInterval[] = []
@@ -230,8 +293,15 @@ export {
   convertUtcISOToLocalISOString,
   convertToCalendarDate,
   convertDateField,
+  isDateValue,
+  isTimeValue,
+  isLaterDate,
+  isLaterTime,
+  isWithinNextDays,
+  getLocalTime,
   generateTimeIntervals,
   mapToUTCString,
   parseLocalDate,
   getLocalTimeWithOriginalDate,
+  convertTo12HourFormat,
 }
