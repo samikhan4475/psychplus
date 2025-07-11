@@ -18,6 +18,7 @@ import {
   ActionCell,
   AppointmentIdCell,
   CollapseCell,
+  ContactMadeSelectCell,
   DiagnosisCell,
   LocationCell,
   OrderDetailLocationCell,
@@ -247,13 +248,7 @@ const columns = (
               }}
             />
           ),
-          cell: ({ row }) => (
-            <TextCell>
-              {row.original.metadata?.createdOn
-                ? formatUTCDate(row.original.metadata?.createdOn)
-                : ''}
-            </TextCell>
-          ),
+          cell: ContactMadeSelectCell,
         },
         {
           id: 'appointment?.locationName',
