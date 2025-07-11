@@ -608,6 +608,8 @@ const ADD_PRACTICE_PAYER_PLAN = (practiceId: string) =>
   `${API_URL}/api/practices/${practiceId}/plans`
 const GET_PRACTICE_PLAN_STATES = (practicePlanId: string) =>
   `${API_URL}/api/practiceplans/${practicePlanId}/states/actions/search`
+const PRACTICE_PLAN_CONFIGURATION_ENDPOINT = (practicePlanId: string) =>
+  `${API_URL}/api/practiceplans/${practicePlanId}/configurations`
 const UPDATE_PRACTICE_PLAN_STATES = (practicePlanId: string) =>
   `${API_URL}/api/practiceplans/${practicePlanId}/states`
 const UPDATE_PRACTICE_PAYER_PLAN = (
@@ -1245,6 +1247,7 @@ export {
   UPDATE_LOCATION_ENDPOINT,
   DELETE_PATIENT_POLICY_ENDPOINT,
   GET_PATIENT_PAYMENT_HISTORY,
+  PRACTICE_PLAN_CONFIGURATION_ENDPOINT,
   GET_PATIENT_TRANSACTIONS_HISTORY,
   GET_PATIENT_POLICY_HISTORY_ENDPOINT,
   GET_REPORTS_CATEGORY_ENDPOINT,

@@ -68,8 +68,9 @@ const CODESETS = {
   MembershipType: 'MembershipType',
   FixedPaymentType: 'FixedPaymentType',
   PaymentStatus: 'PaymentStatus',
-
+  
   // PsychPlusPublic Codesets
+  PracticePlanRule:'PsychPlusPublic.PracticePlanRule',
   TMSCoilType: 'PsychPlusPublic.TMSCoilType',
   TMSStimulationSite: 'PsychPlusPublic.TMSStimulationSite',
   ProviderAttributions: 'PsychPlusPublic.ProviderAttributions',
