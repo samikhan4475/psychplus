@@ -69,7 +69,7 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.insuranceName}</TextCell>,
+      cell: ({ row }) => <LongTextCell className='w-[150px]'>{row.original.insuranceName}</LongTextCell>,
     },
     {
       id: 'amount',
