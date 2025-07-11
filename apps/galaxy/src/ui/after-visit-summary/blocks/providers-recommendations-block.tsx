@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Flex, Text, TextArea } from '@radix-ui/themes'
 import { SaveIcon } from 'lucide-react'
+import { providerRecommendationDefaultText } from '../constants/texts'
 import { useProviderRecommendationsStore } from '../store'
 import { HistoryButton } from './history-button'
-import { providerRecommendationDefaultText } from '../constants/texts'
 
 interface ProvidersRecommendationsBlockProps {
   appointmentId: string
@@ -15,10 +15,13 @@ const ProvidersRecommendationsBlock = ({
   const { saveRecommendation, loading, history, getHistory } =
     useProviderRecommendationsStore()
   const [text, setText] = useState(
-    history.length ? history[0].recommendation : providerRecommendationDefaultText,
+    history.length
+      ? history[0].recommendation
+      : providerRecommendationDefaultText,
   )
 
   useEffect(() => {
+    if (!appointmentId) return
     getHistory(appointmentId, {})
   }, [appointmentId])
 

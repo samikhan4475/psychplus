@@ -68,7 +68,7 @@ const AfterVisitSummaryView = ({
   }, [patientId, fetchPatientMedication])
 
   useEffect(() => {
-    if (patientId) {
+    if (patientId && selectedAppointment.appointmentId) {
       fetchWorkingDiagnosis(
         patientId,
         String(selectedAppointment.appointmentId),
@@ -110,14 +110,16 @@ const AfterVisitSummaryView = ({
 
       <Flex id={printId} direction="column" width="100%">
         {selectedAppointment && Object.keys(selectedAppointment).length > 0 && (
-          <AfterVisitHeaderItemsBlock
-            headerItems={headerItems}
-            appointment={selectedAppointment}
-          />
+          <>
+            <AfterVisitHeaderItemsBlock
+              headerItems={headerItems}
+              appointment={selectedAppointment}
+            />
+            <ProvidersRecommendationsBlock
+              appointmentId={String(selectedAppointment.appointmentId)}
+            />
+          </>
         )}
-        <ProvidersRecommendationsBlock
-          appointmentId={String(selectedAppointment.appointmentId)}
-        />
         <UpcomingAppointmentsBlock appointments={upcomingAppointments} />
         <MedicationsBlock />
         <ReferralView referrals={referrals} />

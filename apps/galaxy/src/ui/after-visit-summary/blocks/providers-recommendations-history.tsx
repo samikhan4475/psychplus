@@ -29,6 +29,7 @@ const ProviderRecommendationsHistory = ({
   const { history, getHistory, loading } = useProviderRecommendationsStore()
 
   useEffect(() => {
+    if (!appointmentId) return
     getHistory(appointmentId, {})
   }, [appointmentId])
 

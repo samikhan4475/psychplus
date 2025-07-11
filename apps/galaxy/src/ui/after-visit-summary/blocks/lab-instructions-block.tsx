@@ -1,10 +1,10 @@
 import { Flex, Text, TextArea } from '@radix-ui/themes'
 import { LabOrders } from '@/types'
 import {
+  fastingText,
+  printText,
   psychplusText,
   questText,
-  printText,
-  fastingText,
 } from '../constants/texts'
 
 type LabInstructionsBlockProps = {
@@ -13,14 +13,14 @@ type LabInstructionsBlockProps = {
 
 const LabInstructionsBlock = ({ labOrders }: LabInstructionsBlockProps) => {
   const hasPsychplus = labOrders.some(
-    (order) => order.orderingLab?.locationName === 'PsychPlus',
+    (order) => order.orderingLab?.name === 'PsychPlus',
   )
 
   const hasQuest = labOrders.some(
-    (order) => order.orderingLab?.locationName === 'Quest',
+    (order) => order.orderingLab?.name === 'Quest',
   )
   const hasPrint = labOrders.some(
-    (order) => order.orderingLab?.locationName === 'Print',
+    (order) => order.orderingLab?.name === 'Print',
   )
 
   const isFasting = labOrders.some((order) => order.isFasting)
