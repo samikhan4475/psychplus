@@ -2,12 +2,7 @@ import toast from 'react-hot-toast'
 import { create } from 'zustand'
 import * as api from '@/api/api.client'
 import { GET_WAITLISTS_ENDPOINT } from '@/api/endpoints'
-import {
-  SelectOptionType,
-  Sort,
-  WaitlistPayload,
-  WaitlistResponse,
-} from '@/types'
+import { Sort, WaitlistPayload, WaitlistResponse } from '@/types'
 
 interface Option {
   label: string
@@ -18,8 +13,6 @@ interface Store {
   sort?: Sort
   data?: WaitlistResponse[]
   error?: string
-  visitTypes: SelectOptionType[]
-  setVisitTypes: (visitTypes: SelectOptionType[]) => void
   providers: Option[]
   setProviders: (providers: Option[]) => void
   providerLoading?: boolean
@@ -30,11 +23,6 @@ interface Store {
   resetFormValues: () => void
   page: number
   pageCache: Record<number, WaitlistResponse>
-  isOpen: boolean
-  setIsOpen: (isOpen: boolean) => void
-  formData?: WaitlistResponse
-  setFormData?: (formData: WaitlistResponse) => void
-  resetFormData?: () => void
   fetchWaitlists: (payload?: WaitlistPayload) => Promise<void>
 }
 
@@ -42,8 +30,6 @@ const useStore = create<Store>((set, get) => ({
   page: 1,
   pageCache: {},
   sort: undefined,
-  visitTypes: [],
-  setVisitTypes: (visitTypes) => set({ visitTypes }),
   providers: [],
   setProviders: (providers) => set({ providers }),
   providerLoading: false,
@@ -54,11 +40,6 @@ const useStore = create<Store>((set, get) => ({
   formValues: undefined,
   setFormValues: (values) => set({ formValues: values }),
   resetFormValues: () => set({ formValues: undefined }),
-  isOpen: false,
-  setIsOpen: (isOpen) => set({ isOpen }),
-  formData: undefined,
-  setFormData: (formData) => set({ formData }),
-  resetFormData: () => set({ formData: undefined }),
 
   fetchWaitlists: async (payload?: WaitlistPayload) => {
     set({ loading: true, error: undefined })

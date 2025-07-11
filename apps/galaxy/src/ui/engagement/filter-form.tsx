@@ -9,12 +9,7 @@ import { useForm } from 'react-hook-form'
 import z from 'zod'
 import { FormContainer } from '@/components'
 import { WaitlistPayload } from '@/types'
-import {
-  getLocalDateWithoutTime,
-  getLocalTime,
-  getUtcDateWithoutTime,
-  getUtcTime,
-} from '../schedule/utils'
+import { getLocalDateWithoutTime, getLocalTime } from '../schedule/utils'
 import {
   AlertSelect,
   FromDateField,
@@ -38,7 +33,7 @@ const schema = z
     initiatedFromTime: z.custom<TimeValue>().optional(),
     initiatedToDate: z.custom<DateValue>().optional(),
     initiatedToTime: z.custom<TimeValue>().optional(),
-    visitTypeCode: z.string().optional(),
+    serviceOffered: z.string().optional(),
     patientName: z.string().optional(),
     providerId: z.string().optional(),
     waitlistStatus: z.string().optional(),
@@ -55,7 +50,7 @@ const schema = z
       (data.initiatedFromDate && data.initiatedFromTime),
     {
       message:
-        'Both initiatedFromDate and initiatedFromTime must be provided together',
+        'Both initiated from date and initiated from time must be provided together',
       path: ['initiatedFromDate'],
     },
   )
@@ -65,7 +60,7 @@ const schema = z
       (data.initiatedToDate && data.initiatedToTime),
     {
       message:
-        'Both initiatedToDate and initiatedToTime must be provided together',
+        'Both initiated to date and initiated to time must be provided together',
       path: ['initiatedToDate'],
     },
   )
@@ -73,7 +68,7 @@ const schema = z
 const FilterForm = ({ isQuickNote }: { isQuickNote: boolean }) => {
   const form = useForm<WaitlistPayload>({
     defaultValues: {
-      visitTypeCode: '',
+      serviceOffered: '',
       patientName: '',
       timeRangeStart: '',
       timeRangeEnd: '',
@@ -147,7 +142,7 @@ const FilterForm = ({ isQuickNote }: { isQuickNote: boolean }) => {
       initiatedDateRangeEnd,
     }
     const filteredData = filterFalsey(finalData)
-    setFormValues(data)
+    setFormValues(filteredData)
     await fetchWaitlists(filteredData)
   }
 

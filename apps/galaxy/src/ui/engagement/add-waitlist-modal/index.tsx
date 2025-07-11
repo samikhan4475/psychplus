@@ -1,9 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { DateValue } from '@internationalized/date'
-import { Button, Dialog, Flex } from '@radix-ui/themes'
+import { Box, Button, Dialog, Flex, Grid } from '@radix-ui/themes'
 import { X } from 'lucide-react'
 import { TimeValue } from 'react-aria-components'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -18,7 +19,6 @@ import {
 } from '@/components'
 import { WaitlistResponse } from '@/types/waitlists'
 import {
-  isDateValue,
   isLaterDate,
   isLaterTime,
   isWithinNextDays,
@@ -26,7 +26,6 @@ import {
 } from '@/utils'
 import { createWaitlistAction } from '../actions/create-waitlist-action'
 import { updateWaitlistAction } from '../actions/update-waitlist-action'
-import { WAITLIST_STATUS_CODESET } from '../constant'
 import { useStore } from '../store'
 import { transformIn, transformOut } from '../utils'
 import {
@@ -34,26 +33,26 @@ import {
   RequestedDateField,
   RequestedTimeField,
 } from './add-form-fields'
+import VisitMediumSelectField from './add-form-fields/visit-medium-select-field'
 import VisitTypeSelectField from './add-form-fields/visit-type-select-field'
 
 interface AddWaitlistModalProps {
   isOpen?: boolean
   closeDialog?: () => void
-  patientId: string
   data?: WaitlistResponse
 }
 
 const Schema = z
   .object({
-    visitTypeCode: z.string().min(1, 'required'),
-    providerId: z.string().min(1, 'required'),
-    waitingStatus: z.string().min(1, 'required'),
-    priority: z.string().min(1, 'required'),
+    serviceOffered: z.string().min(1, 'Required'),
+    visitMedium: z.string().min(1, 'Required'),
+    providerId: z.string().min(1, 'Required'),
+    priority: z.string().min(1, 'Required'),
     fromDate: z.custom<DateValue>((val) => !!val && typeof val === 'object', {
-      message: 'required',
+      message: 'Required',
     }),
     toDate: z.custom<DateValue>((val) => !!val && typeof val === 'object', {
-      message: 'required',
+      message: 'Required',
     }),
     fromTime: z.custom<TimeValue>().nullable(),
     toTime: z.custom<TimeValue>().nullable(),
@@ -99,35 +98,35 @@ type FormData = z.infer<typeof Schema>
 const AddWaitlistModal = ({
   isOpen,
   closeDialog,
-  patientId,
   data: waitlistData,
 }: AddWaitlistModalProps) => {
   const form = useForm<FormData>({
     resolver: zodResolver(Schema),
     reValidateMode: 'onChange',
     defaultValues: {
-      visitTypeCode: '',
+      serviceOffered: '',
       providerId: '',
-      waitingStatus: '',
       fromTime: '',
       toTime: '',
       priority: '',
     },
   })
 
+  const params = useParams()
+  const patientId = params.id
+
   useEffect(() => {
     if (waitlistData) {
       const values = transformIn(waitlistData)
-      Object.entries(values).forEach(([key, value]) => {
-        form.setValue(`${key as keyof FormData}`, value)
-      })
+      form.reset(values)
+    } else {
+      form.reset()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [waitlistData])
 
   const [loading, setLoading] = useState(false)
 
-  const { fetchWaitlists, providers, providerLoading } = useStore()
+  const { fetchWaitlists, providers, providerLoading, formValues } = useStore()
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     setLoading(true)
@@ -150,7 +149,6 @@ const AddWaitlistModal = ({
 
     if (response.state === 'error') {
       toast.error(response.error)
-      console.log(response.error)
       setLoading(false)
       return
     }
@@ -159,9 +157,13 @@ const AddWaitlistModal = ({
       waitlistData ? 'Updated successfully!' : 'Created successfully!',
     )
 
+    const sanitizedFilterData = sanitizeFormData(formValues || {})
     patientId
-      ? fetchWaitlists({ patientIds: [Number(patientId)] })
-      : fetchWaitlists({})
+      ? fetchWaitlists({
+          ...sanitizedFilterData,
+          patientIds: [Number(patientId)],
+        })
+      : fetchWaitlists(formValues)
     form.reset()
     closeDialog?.()
     setLoading(false)
@@ -171,7 +173,6 @@ const AddWaitlistModal = ({
     <Dialog.Root
       open={isOpen}
       onOpenChange={() => {
-        form.reset()
         closeDialog?.()
       }}
     >
@@ -185,43 +186,39 @@ const AddWaitlistModal = ({
           <X size={20} strokeWidth={1.5} />
         </Dialog.Close>
         <FormContainer
-          className="grid grid-cols-2 justify-center gap-2 px-2 py-1"
+          className="justify-center gap-2 px-2 py-1"
           form={form}
           onSubmit={onSubmit}
         >
-          <VisitTypeSelectField />
-          <PriorityRadioField />
-          <RequestedDateField />
-          <RequestedTimeField />
-          <FormFieldContainer className="flex gap-1">
-            <FormFieldLabel required>Provider</FormFieldLabel>
-            <SelectInput
-              field="providerId"
-              buttonClassName={buttonClassName}
-              options={providers}
-              loading={providerLoading}
-              disabled={!form.watch('visitTypeCode')}
-            />
-            <FormFieldError name="providerId" />
-          </FormFieldContainer>
-          <FormFieldContainer className="flex gap-1">
-            <FormFieldLabel required>Waitlist Status</FormFieldLabel>
-            <SelectInput
-              field="waitingStatus"
-              buttonClassName={buttonClassName}
-              options={WAITLIST_STATUS_CODESET}
-            />
-            <FormFieldError name="waitingStatus" />
-          </FormFieldContainer>
-          <Button
-            size="1"
-            type="submit"
-            className="col-start-2 w-min justify-self-end rounded-2"
-            highContrast
-            disabled={loading}
-          >
-            Save
-          </Button>
+          <Grid columns="2" gap="2">
+            <VisitTypeSelectField />
+            <VisitMediumSelectField />
+            <FormFieldContainer className="flex gap-1">
+              <FormFieldLabel required>Provider</FormFieldLabel>
+              <SelectInput
+                field="providerId"
+                buttonClassName={buttonClassName}
+                options={providers}
+                loading={providerLoading}
+                disabled={!form.watch('serviceOffered')}
+              />
+              <FormFieldError name="providerId" />
+            </FormFieldContainer>
+            <PriorityRadioField />
+            <RequestedDateField />
+            <RequestedTimeField />
+          </Grid>
+          <Box className="flex justify-end ">
+            <Button
+              size="1"
+              type="submit"
+              className="w-min rounded-2"
+              highContrast
+              disabled={loading}
+            >
+              Save
+            </Button>
+          </Box>
         </FormContainer>
       </Dialog.Content>
     </Dialog.Root>

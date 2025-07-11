@@ -1,13 +1,15 @@
 import { parseDate, parseTime } from '@internationalized/date'
+import { VisitMediumEnum } from '@/enum'
 import { UpdateWaitlistpayload, WaitlistResponse } from '@/types'
-import { getLocalDateWithoutTime, getLocalTime, getUtcDateWithoutTime } from '../schedule/utils'
+import { getLocalDateWithoutTime, getLocalTime } from '../schedule/utils'
 
 export const transformOut = (formValues: any): UpdateWaitlistpayload => {
   return {
     id: formValues?.id,
-    visitTypeCode: formValues.visitTypeCode,
+    serviceOfferedDescription: formValues?.serviceOfferedDescription,
+    serviceOffered: formValues.serviceOffered,
+    visitMedium: formValues.visitMedium,
     providerId: Number(formValues.providerId),
-    waitingStatus: formValues.waitingStatus,
     priority: formValues.priority,
     fromDate: getLocalDateWithoutTime(formValues.fromDate) as string,
     toDate: getLocalDateWithoutTime(formValues.toDate) as string,
@@ -19,7 +21,8 @@ export const transformOut = (formValues: any): UpdateWaitlistpayload => {
 
 export const transformIn = (waitlistData: WaitlistResponse) => {
   return {
-    visitTypeCode: String(waitlistData.visitTypeCode),
+    serviceOffered: waitlistData.serviceOffered,
+    visitMedium: waitlistData.visitMedium,
     providerId: String(waitlistData.providerId),
     waitingStatus: waitlistData.waitingStatus,
     priority: waitlistData.priority,
@@ -36,4 +39,12 @@ export function filterFalsey(obj: Record<string, any>) {
       ([_, value]) => typeof value === 'boolean' || Boolean(value),
     ),
   )
+}
+
+export const getVisitMediumLabel = (value: string) => {
+  if (!value) return ''
+  if (value === VisitMediumEnum.InPerson) return 'In-Person'
+  if (value === VisitMediumEnum.TeleVisit) return 'Virtual'
+
+  return value
 }

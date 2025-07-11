@@ -26,12 +26,12 @@ export const WAITLIST_STATUS_CODESET = [
 ]
 
 export const ALERT_SENT_OPTIONS = [
-    {
-      label: 'Yes',
-      value: 'true', 
-    },
-    {
-      label: 'No',
-      value: 'false',
-    },
-  ]
+  {
+    label: 'Yes',
+    value: 'true',
+  },
+  {
+    label: 'No',
+    value: 'false',
+  },
+]

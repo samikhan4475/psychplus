@@ -29,6 +29,7 @@ const PriorityRadioField = () => {
 
       form.setValue('fromDate', from)
       form.setValue('toDate', to)
+      if (form.formState.isSubmitted) form.trigger()
     }
   }
 

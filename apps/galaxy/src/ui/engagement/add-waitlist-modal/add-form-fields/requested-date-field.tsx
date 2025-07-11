@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { fromDate } from '@internationalized/date'
 import { Box } from '@radix-ui/themes'
 import { addDays } from 'date-fns'
@@ -16,6 +16,10 @@ const RequestedDateField = () => {
     Intl.DateTimeFormat().resolvedOptions().timeZone,
   )
 
+  useEffect(() => {
+    if (form.formState.isSubmitted) form.trigger()
+  }, [form.watch('fromDate'), form.watch('toDate')])
+
   return (
     <FormFieldContainer className="flex-col gap-1">
       <FormFieldLabel required>Requested Date</FormFieldLabel>
@@ -26,7 +30,7 @@ const RequestedDateField = () => {
             field="fromDate"
             className="w-[101px]"
             maxValue={maxValue}
-            isDisabled={!form.watch('visitTypeCode')}
+            isDisabled={!form.watch('serviceOffered')}
           />
         </Box>
         <Box className="flex gap-1">
@@ -36,7 +40,7 @@ const RequestedDateField = () => {
             className="w-[101px]"
             minValue={form.watch('fromDate')}
             maxValue={maxValue}
-            isDisabled={!form.watch('visitTypeCode')}
+            isDisabled={!form.watch('serviceOffered')}
           />
         </Box>
       </Box>

@@ -5,7 +5,7 @@ import { GET_STAFF_ENDPOINT } from '@/api/endpoints'
 import { StaffResource } from '@/types'
 
 const getStaffByVisitTypeAction = async (payload?: {
-  servicesOffered?: string
+  roleCodes?: string[]
   isIncludeTestProviders?: boolean
 }): Promise<api.ActionResult<StaffResource[]>> => {
   const response = await api.POST<StaffResource[]>(GET_STAFF_ENDPOINT, payload)

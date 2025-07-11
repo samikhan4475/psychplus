@@ -17,7 +17,9 @@ const RequestedTimeField = () => {
             dateInputClass="h-6"
             className="w-[70px]"
             showError={true}
-            isDisabled={!form.watch('visitTypeCode') || !form.watch('fromDate')}
+            isDisabled={
+              !form.watch('serviceOffered') || !form.watch('fromDate')
+            }
           />
         </Box>
         <Box className="flex gap-1">
@@ -27,7 +29,9 @@ const RequestedTimeField = () => {
             dateInputClass="h-6"
             className="w-[70px]"
             showError={true}
-            isDisabled={!form.watch('visitTypeCode') || !form.watch('fromDate')}
+            isDisabled={
+              !form.watch('serviceOffered') || !form.watch('fromDate')
+            }
           />
         </Box>
       </Box>

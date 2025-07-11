@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams, usePathname } from 'next/navigation'
 import * as Tabs from '@radix-ui/react-tabs'
 import { Box, Button, Flex, Heading } from '@radix-ui/themes'
@@ -10,9 +10,8 @@ import { useStore } from './store'
 import WaitlistTable from './waitlist-table'
 
 const EngagementTabs = () => {
-  const { isOpen, setIsOpen, formData, resetFormData, fetchWaitlists, data } =
-    useStore()
-
+  const { fetchWaitlists, data } = useStore()
+  const [open, setOpen] = useState(false)
   const pathName = usePathname()
 
   const params = useParams()
@@ -28,9 +27,7 @@ const EngagementTabs = () => {
 
   const isQuickNote = !pathName.includes('management')
 
-  const closeDialog = () => {
-    setIsOpen(false)
-  }
+  const toggleModal = () => setOpen((prev) => !prev)
 
   return (
     <Tabs.Root className="flex w-full flex-col" defaultValue={'Waitlist'}>
@@ -63,10 +60,7 @@ const EngagementTabs = () => {
                 size="1"
                 highContrast
                 className="h-auto px-1 py-1 text-[11px] font-[300]"
-                onClick={() => {
-                  resetFormData?.()
-                  setIsOpen(true)
-                }}
+                onClick={toggleModal}
               >
                 <AddIcon width={10} height={10} />
                 Add Waitlist
@@ -77,12 +71,12 @@ const EngagementTabs = () => {
             <WaitlistTable isQuickNote={isQuickNote} waitlists={data ?? []} />
           </Flex>
         </Flex>
-        <AddWaitlistModal
-          isOpen={isOpen}
-          closeDialog={closeDialog}
-          patientId={String(patientId)}
-          data={formData}
-        />
+        {open && (
+          <AddWaitlistModal
+            isOpen={open}
+            closeDialog={toggleModal}
+          />
+        )}
       </Tabs.Content>
     </Tabs.Root>
   )

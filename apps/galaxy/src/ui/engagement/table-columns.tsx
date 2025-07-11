@@ -3,11 +3,11 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { ColumnHeader, DateTimeCell, SelectCell, TextCell } from '@/components'
+import { WaitlistResponse } from '@/types'
 import { formatDate } from '@/utils'
 import { ActionsCell } from './actions-cell'
 import { WAITLIST_STATUS_CODESET } from './constant'
-import VisitTypeCell from './visit-type-cell'
-import { WaitlistResponse } from '@/types'
+import { getVisitMediumLabel } from './utils'
 
 const getWaitlistColumns = (isManagement: boolean) => {
   const columns: ColumnDef<WaitlistResponse>[] = [
@@ -17,7 +17,19 @@ const getWaitlistColumns = (isManagement: boolean) => {
       header: ({ column }) => (
         <ColumnHeader clientSideSort label="Visit Type" column={column} />
       ),
-      cell: VisitTypeCell,
+      cell: ({ row }) => (
+        <TextCell>{row.original?.serviceOfferedDescription}</TextCell>
+      ),
+    },
+    {
+      id: 'visitMedium',
+      accessorKey: 'visitMedium',
+      header: ({ column }) => (
+        <ColumnHeader clientSideSort label="Visit Medium" column={column} />
+      ),
+      cell: ({ row }) => (
+        <TextCell>{getVisitMediumLabel(row.original?.visitMedium)}</TextCell>
+      ),
     },
     ...(!isManagement
       ? [

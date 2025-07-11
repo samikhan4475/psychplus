@@ -4,10 +4,9 @@ import { LegalName } from './name'
 interface WaitlistResponse {
   id: number
   metadata: Metadata
-  visitTypeCode: string
-  visitType:string
-  visitSequence:string
-  visitMedium:string
+  serviceOffered: string
+  serviceOfferedDescription: string
+  visitMedium: string
   providerId: number
   waitingStatus: string
   priority: string
@@ -26,7 +25,8 @@ interface WaitlistPayload {
   isIncludeMetadataResourceChangeControl?: boolean
   isIncludeMetadataResourceIds?: boolean
   isIncludeMetadataResourceStatus?: boolean
-  visitTypeCode?: string
+  serviceOffered?: string
+  visitMedium?: string
   patientName?: string
   dateRangeStart?: string
   dateRangeEnd?: string
@@ -49,10 +49,11 @@ interface WaitlistPayload {
 interface CreateWaitlistPayload {
   id?: string | number
   metadata?: Metadata
-  visitTypeCode: string
+  serviceOffered: string
+  serviceOfferedDescription?: string
+  visitMedium: string
   providerId: number
   providerName?: string
-  waitingStatus: string
   priority: string
   fromDate: string
   fromTime?: string

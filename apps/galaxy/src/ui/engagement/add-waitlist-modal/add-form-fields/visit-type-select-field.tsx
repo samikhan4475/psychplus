@@ -7,21 +7,27 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
+import { CODESETS } from '@/constants'
+import { useCodesetOptions } from '@/hooks'
 import { StaffResource } from '@/types'
+import { Services } from '@/ui/location/service/types'
 import { getStaffByVisitTypeAction } from '../../actions/get-staff-by-visitType-action'
 import { useStore } from '../../store'
 
 const VisitTypeSelectField = () => {
   const form = useFormContext()
 
-  const { visitTypes, setProviders, setProviderLoading } = useStore()
+  const { setProviders, setProviderLoading } = useStore()
+  const visitTypes = useCodesetOptions(CODESETS.ServicesOffered).filter(
+    (item) =>
+      [Services.Psychiatry, Services.Therapy].includes(item.value as Services),
+  )
 
   const getStaffOptions = async (visitType: string) => {
     setProviderLoading(true)
-    const servicesOffered = visitTypes.find((item) => item.value === visitType)
 
     const res = await getStaffByVisitTypeAction({
-      servicesOffered: servicesOffered?.servicesOffered ?? '',
+      roleCodes: [visitType === Services.Psychiatry ? '1' : '2'],
       isIncludeTestProviders: false,
     })
 
@@ -32,7 +38,7 @@ const VisitTypeSelectField = () => {
     }
 
     const staffOptions = res.data.map((item: StaffResource) => ({
-      label: `${item.legalName?.firstName} ${item.legalName?.lastName}, ${item.legalName?.honors}`,
+      label: `${item.legalName?.firstName} ${item.legalName?.lastName}`,
       value: String(item.id),
     }))
 
@@ -41,21 +47,21 @@ const VisitTypeSelectField = () => {
   }
 
   useEffect(() => {
-    const visitType = form.watch('visitTypeCode')
+    const visitType = form.watch('serviceOffered')
     if (visitType) {
       getStaffOptions(visitType)
     }
-  }, [form.watch('visitTypeCode')])
+  }, [form.watch('serviceOffered')])
 
   return (
     <FormFieldContainer className="w-full flex-col">
       <FormFieldLabel required>Visit Type</FormFieldLabel>
       <SelectInput
-        field="visitTypeCode"
+        field="serviceOffered"
         buttonClassName={buttonClassName}
         options={visitTypes}
       />
-      <FormFieldError name="visitTypeCode" />
+      <FormFieldError name="serviceOffered" />
     </FormFieldContainer>
   )
 }
