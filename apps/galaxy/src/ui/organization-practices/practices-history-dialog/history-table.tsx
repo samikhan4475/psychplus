@@ -27,8 +27,8 @@ const columns: ColumnDef<Practice>[] = [
     header: () => <ColumnHeader label="Date/Time" />,
     cell: ({ row }) => (
       <TextCell>
-        {row.original.metadata?.createdOn &&
-          formatDateTime(row.original.metadata?.createdOn)}
+        {row.original.metadata?.updatedOn &&
+          formatDateTime(row.original.metadata?.updatedOn)}
       </TextCell>
     ),
   },
@@ -203,6 +203,10 @@ const HistoryDataTable = ({ id }: HistoryDataTableProps) => {
       </Flex>
     )
   }
-  return <DataTable columns={columns} data={practiceHx} />
+  return (
+    <Flex maxHeight={'300px'}>
+      <DataTable columns={columns} data={practiceHx} />
+    </Flex>
+  )
 }
 export { HistoryDataTable }

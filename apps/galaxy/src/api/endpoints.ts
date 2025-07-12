@@ -815,7 +815,7 @@ const ATTACH_PRACTICE_STAFF_ENDPOINT = (userId: string, practiceId: string) =>
 const DETACH_PRACTICE_STAFF_ENDPOINT = (userId: string, practiceId: string) =>
   `${API_URL}/api/users/${userId}/practices/${practiceId}/actions/deassociate`
 const GET_PRACTICE_HISTORY_ENDPOINT = (practiceId: string) =>
-  `${API_URL}/api/practices/${practiceId}/history/actions/search`
+  `${API_URL}/api/practices/${practiceId}/history/actions/search?&orderBy=updatedOn desc`
 const GET_SERVICES_COSIGNERS = `${API_URL}/api/locationservices/actions/cosigners/search`
 const GET_SERVICE_LOCATIONS = `${API_URL}/api/locations/actions/search/unauthenticated`
 const GET_STAFF_LIST = `${API_URL}/api/staff`
