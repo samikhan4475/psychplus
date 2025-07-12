@@ -4,8 +4,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from '@radix-ui/react-icons'
-import { Button, Flex, Tooltip } from '@radix-ui/themes'
-import { Text } from 'react-aria-components'
+import { Button, Flex, Text, Tooltip } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
 import { ArchiveIcon } from '@/components/icons'
 import { useStore as globalStore } from '@/store'
@@ -26,6 +25,7 @@ import {
 } from '../../utils'
 import { MarkAsReadButton } from './mark-as-read-button'
 import { MarkAsUnreadButton } from './mark-as-unread-button'
+import { ViewMessageActions } from './view-message-actions'
 
 const ViewMessageHeader = () => {
   const user = globalStore((state) => state.user)
@@ -71,7 +71,7 @@ const ViewMessageHeader = () => {
   }, [secureMessages, previewSecureMessage.secureMessage?.id, page])
 
   // to find the latest logged in user's own channel and message in the conversation
-  const { channel: latestChannel, message: latestMessage } = useMemo(() => {
+  const { channel: latestChannel } = useMemo(() => {
     return getLatestMessageWithOwnChannel(
       previewSecureMessage?.secureMessage,
       user.id,
@@ -150,7 +150,7 @@ const ViewMessageHeader = () => {
       }
 
       const result = await updateChannelAction(
-        latestMessage.id,
+        latestChannel.messageId,
         latestChannel.id,
         payload,
       )
@@ -169,7 +169,7 @@ const ViewMessageHeader = () => {
       )
 
       const responses = await Promise.all(
-        ownChannels.map(async ({ messageId, channel }) => {
+        ownChannels.map(async ({ channel }) => {
           const payload = {
             ...channel,
             recordStatus:
@@ -177,7 +177,7 @@ const ViewMessageHeader = () => {
                 ? RecordStatus.ACTIVE
                 : RecordStatus.ARCHIVED,
           }
-          return updateChannelAction(messageId, channel.id, payload)
+          return updateChannelAction(channel.messageId, channel.id, payload)
         }),
       )
       if (responses.some((response) => response.state === 'error')) {
@@ -247,7 +247,7 @@ const ViewMessageHeader = () => {
 
   return (
     <Flex
-      className="bg-pp-table-subRows  h-8 w-full"
+      className="bg-pp-table-subRows sticky top-0 z-10 h-8 w-full"
       justify="between"
       align="center"
     >
@@ -299,15 +299,21 @@ const ViewMessageHeader = () => {
         )}
       </Flex>
       <Flex align="center" gap="4" className="pr-6">
+        <ViewMessageActions />
+
+        <Text size="2">
+          {currentActiveMessage} of {total}
+        </Text>
         <Flex align="center">
           <ChevronLeftIcon
+            width={18}
+            height={18}
             onClick={previousMessageHandler}
-            className="cursor-pointer"
+            className="mr-2 cursor-pointer"
           />
-          <Text>
-            {currentActiveMessage} of {total}
-          </Text>
           <ChevronRightIcon
+            width={18}
+            height={18}
             onClick={nextMessageHandler}
             className={cn(
               'cursor-pointer',

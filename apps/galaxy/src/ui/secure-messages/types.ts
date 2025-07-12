@@ -127,6 +127,7 @@ interface SecureMessage {
   id: string
   metadata: MetadataMapping
   lastMessageDate: string
+  sentOn: string
   recordStatus: string
   senderUserId: number
   senderEmail: string
@@ -240,6 +241,7 @@ interface SecureMessageStore {
   formValues?: Partial<SchemaType>
   page: number
   pageCache: Record<number, SecureMessage[]>
+  abortController: AbortController | null
   search: (
     formValues: Partial<SchemaType>,
     page?: number,

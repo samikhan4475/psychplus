@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button } from '@radix-ui/themes'
+import { Box, Button, Tooltip } from '@radix-ui/themes'
 import { ForwardIcon, ReplyAllIcon, ReplyIcon } from '@/components/icons'
 import { useStore } from '../../store'
 import { ActiveComponent } from '../../types'
@@ -37,40 +37,46 @@ const ViewMessageActions = ({
     scrollToBottom()
   }
   return (
-    <Box className="flex space-x-2">
-      <Button
-        color="gray"
-        type="button"
-        onClick={onReplyAllClick}
-        className="w-[38px] rounded-3 p-0 text-[14px]"
-        variant="outline"
-        disabled={creatingForwardMessage}
-      >
-        <ReplyAllIcon />
-      </Button>
+    <Box className="flex space-x-2 items-center border-r border-gray-10 h-4">
+      <Tooltip content="Reply All" side="top">
+        <Button
+          color="gray"
+          type="button"
+          onClick={onReplyAllClick}
+          className="w-[38px] rounded-3 p-0 text-[14px]"
+          variant="ghost"
+          disabled={creatingForwardMessage}
+        >
+          <ReplyAllIcon />
+        </Button>
+      </Tooltip>
 
-      <Button
-        color="gray"
-        onClick={onReply}
-        className="text-black w-[80px] rounded-3 p-0 text-[14px]"
-        variant="outline"
-        disabled={creatingForwardMessage}
-      >
-        <ReplyIcon />
-        Reply
-      </Button>
+      <Tooltip content="Reply" side="top">
+        <Button
+          color="gray"
+          onClick={onReply}
+          className="text-black w-[80px] rounded-3 p-0 text-[14px]"
+          variant="ghost"
+          disabled={creatingForwardMessage}
+        >
+          <ReplyIcon />
+          Reply
+        </Button>
+      </Tooltip>
 
-      <Button
-        onClick={onForwardClick}
-        color="gray"
-        className="text-black w-[97px] gap-1 rounded-3 p-0 text-[14px]"
-        variant="outline"
-        disabled={creatingForwardMessage}
-        loading={creatingForwardMessage}
-      >
-        <ForwardIcon />
-        Forward
-      </Button>
+      <Tooltip content="Forward" side="top">
+        <Button
+          onClick={onForwardClick}
+          color="gray"
+          className="text-black w-[97px] gap-1 rounded-3 p-0 text-[14px]"
+          variant="ghost"
+          disabled={creatingForwardMessage}
+          loading={creatingForwardMessage}
+        >
+          <ForwardIcon />
+          Forward
+        </Button>
+      </Tooltip>
     </Box>
   )
 }

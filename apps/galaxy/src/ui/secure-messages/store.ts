@@ -1,7 +1,9 @@
 'use client'
 
+import { DateValue } from 'react-aria-components'
 import toast from 'react-hot-toast'
 import { create } from 'zustand'
+import { formatDateToISOString } from '@/utils'
 import {
   createForwardMessageAction,
   getAllSecureMessagesAction,
@@ -13,6 +15,7 @@ import {
   SecureMessagesTab,
   SecureMessageStoreType,
 } from './types'
+import { sanitizeFormData } from './utils'
 
 const useStore = create<SecureMessageStoreType>((set, get) => ({
   secureMessages: [],
@@ -41,6 +44,7 @@ const useStore = create<SecureMessageStoreType>((set, get) => ({
   page: 1,
   total: 0,
   pageCache: {},
+  abortController: null,
   activeTab: SecureMessagesTab.INBOX,
   setActiveTab: (activeTab: SecureMessagesTab) => {
     set({ activeTab })
@@ -54,11 +58,19 @@ const useStore = create<SecureMessageStoreType>((set, get) => ({
     page = 1,
     reset = false,
   ) => {
+    if (get().abortController) {
+      get().abortController!.abort()
+    }
+
+    const abortController = new AbortController()
+
     set({
       error: undefined,
       loading: true,
       formValues,
+      abortController,
     })
+
     const isInboxOrArchived = ['Inbox', 'Archived'].includes(
       formValues.messageStatus as string,
     )
@@ -67,28 +79,58 @@ const useStore = create<SecureMessageStoreType>((set, get) => ({
       ...formValues,
       isConversationalView: isInboxOrArchived,
       isConversationRequired: isInboxOrArchived,
+      from: formValues.from
+        ? formatDateToISOString(formValues.from as DateValue)
+        : undefined,
+      to: formValues.to
+        ? formatDateToISOString(formValues.to as DateValue, true)
+        : undefined,
     }
-    const result = await getAllSecureMessagesAction(payload)
+    const finalPayload = sanitizeFormData(payload)
 
-    if (result.state === 'error') {
-      toast.error(result.error || 'Failed to fetch data')
+    try {
+      const result = await getAllSecureMessagesAction(finalPayload, {
+        signal: abortController.signal,
+      })
+
+      if (abortController.signal.aborted) return []
+
+      if (result.state === 'error') {
+        toast.error(result.error || 'Failed to fetch data')
+        set({
+          error: result.error,
+          loading: false,
+          abortController: null,
+        })
+        return []
+      }
+      const { messages, total } = result.data
       set({
-        error: result.error,
+        secureMessages: messages,
+        total,
         loading: false,
+        pageCache: reset
+          ? { [page]: messages }
+          : { ...get().pageCache, [page]: messages },
+        page,
+        abortController: null,
+      })
+      return messages
+    } catch (error) {
+      if (abortController.signal.aborted) {
+        return []
+      }
+
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to fetch data'
+      toast.error(errorMessage)
+      set({
+        error: errorMessage,
+        loading: false,
+        abortController: null,
       })
       return []
     }
-    const { messages, total } = result.data
-    set({
-      secureMessages: messages,
-      total,
-      loading: false,
-      pageCache: reset
-        ? { [page]: messages }
-        : { ...get().pageCache, [page]: messages },
-      page,
-    })
-    return messages
   },
   createForwardMessage: async () => {
     set({ creatingForwardMessage: true })
@@ -141,11 +183,15 @@ const useStore = create<SecureMessageStoreType>((set, get) => ({
   prev: () => {
     const page = get().page - 1
 
-    set({
-      secureMessages: get().pageCache[page],
-      page,
-    })
-    return get().pageCache[page]
+    if (get().pageCache[page]) {
+      set({
+        secureMessages: get().pageCache[page],
+        page,
+      })
+      return get().pageCache[page]
+    }
+
+    return []
   },
 }))
 

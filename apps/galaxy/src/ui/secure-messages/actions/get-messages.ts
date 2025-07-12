@@ -6,14 +6,16 @@ import { PAGE_SIZE } from '../contants'
 import { SchemaType } from '../schema'
 import { SecureMessage } from '../types'
 
-interface SearchSecureMessagesParams extends Partial<SchemaType> {
+interface SearchSecureMessagesParams extends Omit<SchemaType, 'from' | 'to'> {
   page?: number
+  from: string | undefined | null
+  to: string | undefined | null
 }
 
-const getAllSecureMessagesAction = async ({
-  page = 1,
-  ...rest
-}: SearchSecureMessagesParams): Promise<
+const getAllSecureMessagesAction = async (
+  { page = 1, ...rest }: SearchSecureMessagesParams,
+  options?: { signal?: AbortSignal },
+): Promise<
   api.ActionResult<{
     messages: SecureMessage[]
     total: number
@@ -25,7 +27,7 @@ const getAllSecureMessagesAction = async ({
   if (['Inbox', 'Archived'].includes(rest.messageStatus as string)) {
     url += `&orderBy=lastMessageDate desc`
   }
-  const response = await api.POST<SecureMessage[]>(url, rest)
+  const response = await api.POST<SecureMessage[]>(url, rest, options)
   if (response.state === 'error') {
     return {
       state: 'error',

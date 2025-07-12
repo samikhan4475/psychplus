@@ -44,7 +44,7 @@ const MessageSubjectCell = ({ row }: { row: Row<SecureMessage> }) => {
   const user = globalStore((state) => state.user)
 
   // to find the latest logged in user's own channel and message in the conversation
-  const { channel: latestChannel, message: latestMessage } = useMemo(() => {
+  const { channel: latestChannel } = useMemo(() => {
     return getLatestMessageWithOwnChannel(row.original, user.id)
   }, [row.original?.id])
 
@@ -63,7 +63,7 @@ const MessageSubjectCell = ({ row }: { row: Row<SecureMessage> }) => {
         isRead: false,
       }
       const result = await updateChannelAction(
-        latestMessage.id,
+        latestChannel.messageId,
         latestChannel.id,
         payload,
       )
@@ -88,7 +88,7 @@ const MessageSubjectCell = ({ row }: { row: Row<SecureMessage> }) => {
       )
 
       const responses = await Promise.all(
-        ownChannels.map(async ({ messageId, channel }) => {
+        ownChannels.map(async ({ channel }) => {
           const payload = {
             ...channel,
           }
@@ -100,7 +100,7 @@ const MessageSubjectCell = ({ row }: { row: Row<SecureMessage> }) => {
                 ? RecordStatus.ACTIVE
                 : RecordStatus.ARCHIVED
           }
-          return updateChannelAction(messageId, channel.id, payload)
+          return updateChannelAction(channel.messageId, channel.id, payload)
         }),
       )
       if (responses.some((response) => response.state === 'error')) {

@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Box, Button, Flex, IconButton, Text } from '@radix-ui/themes'
+import { Box, Flex, IconButton, Text } from '@radix-ui/themes'
 import { XIcon } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { ReactTags, Tag } from 'react-tag-autocomplete'
-import { FormFieldError } from '@/components'
+import { FormFieldError, LoadingPlaceholder } from '@/components'
 import { LegalName } from '@/types'
 import { cn } from '@/utils'
 import 'react-tag-autocomplete/example/src/styles.css'
@@ -34,6 +34,7 @@ const UserRecipientsEmails = ({
   setUserEmailSuggestions,
   setUserRecipientsTag,
 }: UserRecipientProps) => {
+  const [isLoading, setIsLoading] = useState(false)
   const [userEmailSuggestionsTags, setUserEmailSuggestionsTags] = useState<
     Tag[]
   >([])
@@ -46,6 +47,7 @@ const UserRecipientsEmails = ({
 
   const fetchRecipientSuggestions = useCallback(
     async (keyword: string): Promise<EmailRecipients[] | []> => {
+      setIsLoading(true)
       const payload: GetEmailRecipientPayload = {
         userType: EmailRecipientTypes.PATIENT,
       }
@@ -55,11 +57,15 @@ const UserRecipientsEmails = ({
       } else {
         payload.name = keyword
       }
-      if (!messageId) return []
+      if (!messageId) {
+        setIsLoading(false)
+        return []
+      }
       const response = await getAllRecipientSuggestionsAction(
         messageId,
         payload,
       )
+      setIsLoading(false)
       if (response.state === 'error') {
         toast.error(response.error)
         return []
@@ -248,11 +254,15 @@ const UserRecipientsEmails = ({
           item.receiverUserRole === EmailRecipientTypes.PATIENT &&
           userRecipientsTag?.[index]?.value === item?.externalEmail,
       )
-      if (message?.id && channel?.id) {
-        const result = await updateChannelAction(message?.id, channel?.id, {
-          ...channel,
-          recordStatus: 'Deleted',
-        })
+      if (channel?.messageId && channel?.id) {
+        const result = await updateChannelAction(
+          channel.messageId,
+          channel?.id,
+          {
+            ...channel,
+            recordStatus: 'Deleted',
+          },
+        )
         if (result.state === 'error') {
           toast.error('Failed to remove email')
           return
@@ -272,7 +282,7 @@ const UserRecipientsEmails = ({
     <>
       <Flex
         direction="row"
-        className="border-pp-gray-4 hidden !mt-0 border-b"
+        className="border-pp-gray-4 !mt-0 hidden border-b"
         align={'center'}
         position="relative"
       >
@@ -289,8 +299,8 @@ const UserRecipientsEmails = ({
             placeholderText=""
             labelText=""
             renderInput={({
-              className,
               classNames,
+              className,
               inputWidth,
               ...inputProps
             }) => (
@@ -299,18 +309,29 @@ const UserRecipientsEmails = ({
                 className={cn(className, 'flex-grow outline-none')}
               />
             )}
+            renderListBox={({ children, classNames, ...listBoxProps }) => {
+              return (
+                <Box className={classNames.listBox} {...listBoxProps}>
+                  {isLoading ? (
+                    <LoadingPlaceholder className="bg-white min-h-24" />
+                  ) : (
+                    children
+                  )}
+                </Box>
+              )
+            }}
             renderTag={({
               classNames,
-              tag,
               onClick,
+              tag,
               title,
               color,
               ...tagProps
             }) => {
               return (
                 <Box
-                  as="span"
                   className={cn('gap-1', classNames.tag)}
+                  as="span"
                   {...tagProps}
                 >
                   <Text
@@ -324,8 +345,8 @@ const UserRecipientsEmails = ({
                   <IconButton
                     type="button"
                     onClick={onClick}
-                    size="1"
                     variant="ghost"
+                    size="1"
                     title={title}
                   >
                     <XIcon size="16" color="gray" />
@@ -338,8 +359,8 @@ const UserRecipientsEmails = ({
               className,
               classNames,
               isActive,
-              isDisabled,
               isInvalid,
+              isDisabled,
               ...rootProps
             }) => (
               <Flex

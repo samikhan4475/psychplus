@@ -21,7 +21,6 @@ import {
   SecureMessage,
   SecureMessagesTab,
 } from '../types'
-import { sortOnLastMessage } from '../utils'
 import {
   MessageDateTimeCell,
   MessageFromCell,
@@ -196,25 +195,19 @@ const SecureMessagesTable = () => {
           const responses = await Promise.all(
             channelsToUpdate.map((ch) => {
               const payload = { ...ch, isRead: true }
-              return updateChannelAction(secureMessage.id, ch.id, payload)
+              return updateChannelAction(ch.messageId, ch.id, payload)
             }),
           )
 
           if (responses.some((response) => response.state === 'error')) {
             return toast.error('Failed to mark read')
           } else {
-            // Mark isRead in channels and update secureMessages in store
-            channelsToUpdate.forEach((ch) => {
-              ch.isRead = true
-            })
-
             // Update the secureMessage's channels in the secureMessages array
             const updatedMessages = secureMessages.map((msg) => {
               if (msg.id !== secureMessage.id) {
                 return msg
               }
               // Update channels in the root message
-
               const updatedChannels =
                 msg.channels?.map((ch) => {
                   const updated = channelsToUpdate.find((c) => c.id === ch.id)

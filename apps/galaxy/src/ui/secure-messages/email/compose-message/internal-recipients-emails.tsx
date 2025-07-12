@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Box, Button, Flex, IconButton, Text } from '@radix-ui/themes'
+import { Box, Flex, IconButton, Text } from '@radix-ui/themes'
 import { XIcon } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { ReactTags, Tag } from 'react-tag-autocomplete'
-import { FormFieldError } from '@/components'
+import { FormFieldError, LoadingPlaceholder } from '@/components'
+import { useStore as useGlobalStore } from '@/store'
 import { LegalName } from '@/types'
 import { cn } from '@/utils'
 import 'react-tag-autocomplete/example/src/styles.css'
 import { useDebouncedCallback } from 'use-debounce'
-import { useStore as useGlobalStore } from '@/store'
 import {
   getAllChannelsAgainstMessageIdAction,
   getAllRecipientSuggestionsAction,
@@ -35,6 +35,7 @@ const InternalRecipientsEmails = ({
   setInternalEmailSuggestions,
   internalEmailSuggestions,
 }: InternalRecipientProps) => {
+  const [isLoading, setIsLoading] = useState(false)
   const [internalEmailSuggestionsTags, setInternalEmailSuggestionsTags] =
     useState<Tag[]>([])
   const form = useFormContext<SendMessageSchemaType>()
@@ -54,6 +55,7 @@ const InternalRecipientsEmails = ({
       userType: EmailRecipientTypes,
       messageId?: string,
     ): Promise<EmailRecipients[] | []> => {
+      setIsLoading(true)
       const payload: GetEmailRecipientPayload = {
         userType,
       }
@@ -62,11 +64,15 @@ const InternalRecipientsEmails = ({
       } else {
         payload.name = keyword
       }
-      if (!messageId) return []
+      if (!messageId) {
+        setIsLoading(false)
+        return []
+      }
       const response = await getAllRecipientSuggestionsAction(
         messageId,
         payload,
       )
+      setIsLoading(false)
       if (response.state === 'error') {
         toast.error(response.error)
         return []
@@ -292,11 +298,15 @@ const InternalRecipientsEmails = ({
             item.receiverUserRole === EmailRecipientTypes.STAFF &&
             internalRecipientsTag?.[index]?.value === item?.externalEmail,
         )
-        if (message?.id && channel?.id) {
-          const result = await updateChannelAction(message?.id, channel?.id, {
-            ...channel,
-            recordStatus: 'Deleted',
-          })
+        if (channel?.messageId && channel?.id) {
+          const result = await updateChannelAction(
+            channel.messageId,
+            channel?.id,
+            {
+              ...channel,
+              recordStatus: 'Deleted',
+            },
+          )
           if (result.state === 'error') {
             toast.error('Failed to remove email')
             return
@@ -331,8 +341,8 @@ const InternalRecipientsEmails = ({
             onAdd={handleAddTag}
             onDelete={handleOnDelete}
             collapseOnSelect
-            noOptionsText="No Matches"
             placeholderText=""
+            noOptionsText="No Matches"
             labelText=""
             renderInput={({
               className,
@@ -345,6 +355,17 @@ const InternalRecipientsEmails = ({
                 className={cn(className, 'flex-grow outline-none')}
               />
             )}
+            renderListBox={({ children, classNames, ...listBoxProps }) => {
+              return (
+                <Box className={classNames.listBox} {...listBoxProps}>
+                  {isLoading ? (
+                    <LoadingPlaceholder className="bg-white min-h-24" />
+                  ) : (
+                    children
+                  )}
+                </Box>
+              )
+            }}
             renderTag={({
               classNames,
               tag,

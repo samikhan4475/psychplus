@@ -90,7 +90,10 @@ const RichTextEditorWrapper = ({
   }
 
   return (
-    <Box className="bg-pp-bg-table-cell border-pp-gray-2 X!mt-6 !mt-0 rounded-4 border-t">
+    <Box
+      className="bg-pp-bg-table-cell border-pp-gray-2 X!mt-6 !mt-0 rounded-4 border-t"
+      data-text-editor="rich-text-editor"
+    >
       {children}
       <ReactQuill
         value={text || ''}
@@ -100,6 +103,7 @@ const RichTextEditorWrapper = ({
         }}
         modules={RichTextEditor.modules}
         placeholder="Write your message here..."
+        bounds={`[data-text-editor="rich-text-editor"]`}
       />
       <input
         id="fileInput"

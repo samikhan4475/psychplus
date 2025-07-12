@@ -11,10 +11,10 @@ import { Tabs, type Store, type StoreInitialState } from './types'
 
 const createStore = (initialState: StoreInitialState) =>
   zustandCreateStore<Store>()((set, get) => ({
-    visitedTabs: new Set([Tabs.PENDING_NOTES]),
+    visitedTabs: new Set([Tabs.INBOX]),
     notesData: undefined,
     loading: true,
-    activeTab: initialState.tab ?? Tabs.PENDING_NOTES,
+    activeTab: initialState.tab ?? Tabs.INBOX,
     setActiveTab: (activeTab: string) => {
       const visitedTabs = get().visitedTabs
       visitedTabs.add(activeTab)

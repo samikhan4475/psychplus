@@ -1,8 +1,10 @@
-import React from 'react'
 import { Flex, Text } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import { DatePickerInput } from '@/components'
+import { SchemaType } from '../schema'
 
 const EndDate = () => {
+  const form = useFormContext<SchemaType>()
   return (
     <Flex width="100%" className="gap-[6px]" align="center">
       <Text size="4" weight="medium">
@@ -11,7 +13,9 @@ const EndDate = () => {
       <DatePickerInput
         className="w-[248px] "
         field="to"
-        aria-label="date-to-filter-input"
+        granularity="day"
+        dateInputClass="h-6"
+        minValue={form.watch('from') ?? undefined}
       />
     </Flex>
   )

@@ -23,8 +23,8 @@ const MessageStatusCell = ({ row }: { row: Row<SecureMessage> }) => {
         )
         if (channel?.isReplied) {
           hasReplied = true
-          break
         }
+        if (channel?.id) break
       }
       return {
         isRead: !hasUnreadInConversation(row.original, user.id),

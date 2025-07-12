@@ -171,11 +171,15 @@ const ExternalRecipientsEmails = ({
           item.sendMode === EmailRecipientTypes.EXTERNAL &&
           externalRecipientsTag?.[index]?.value === item?.externalEmail,
       )
-      if (message?.id && channel?.id) {
-        const result = await updateChannelAction(message?.id, channel?.id, {
-          ...channel,
-          recordStatus: 'Deleted',
-        })
+      if (channel?.messageId && channel?.id) {
+        const result = await updateChannelAction(
+          channel.messageId,
+          channel?.id,
+          {
+            ...channel,
+            recordStatus: 'Deleted',
+          },
+        )
         if (result.state === 'error') {
           toast.error('Failed to remove email')
           return

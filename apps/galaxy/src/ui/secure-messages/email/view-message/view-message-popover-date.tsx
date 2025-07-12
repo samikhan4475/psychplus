@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 import { Text } from '@radix-ui/themes'
-import { format } from 'date-fns'
 import { formatDateTime } from '@/utils'
 import { ConversationMessage, SecureMessage } from '../../types'
 
@@ -9,10 +8,12 @@ const ViewMessagePopoverDate = ({
 }: {
   message: ConversationMessage | Partial<SecureMessage>
 }) => {
-  const emailCreatedOn = useMemo(
-    () => formatDateTime(message?.metadata?.createdOn),
-    [message?.metadata?.createdOn],
-  )
+  const emailCreatedOn = useMemo(() => {
+    if (!message?.sentOn) return ''
+    const { sentOn } = message
+    const dateTime = formatDateTime(sentOn)
+    return dateTime
+  }, [message?.sentOn])
   return (
     <>
       <Text className="text-pp-gray-3 text-right text-[12px] font-[510]">

@@ -11,11 +11,11 @@ const MessageUserNameCell = ({ row }: { row: Row<SecureMessage> }) => {
   const { channels, senderName } = row.original ?? {}
 
   const getFirstChannelName = () => {
-    if (!channels || channels.length === 0) return '-'
+    if (!channels?.length) return '-'
 
     const firstChannel = channels[0]
 
-    const { sendMode, externalEmail, receiverName } = firstChannel ?? {}
+    const { sendMode, externalEmail, receiverName } = firstChannel
 
     let firstChannelName = '-'
     if (sendMode === SendMode.EXTERNAL && externalEmail) {

@@ -1,10 +1,8 @@
-import React, { act, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex } from '@radix-ui/themes'
-import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FormContainer } from '@/components'
-import { formatDateToISOString } from '@/utils'
 import { useStore as useMessagesStore } from '../messages/store'
 import { Filter } from './list-filter/filter'
 import { FiltersButton } from './list-filter/filter-button'
@@ -13,7 +11,6 @@ import { NewMessageButton } from './new-message-button'
 import { schema, SchemaType } from './schema'
 import { useStore } from './store'
 import { ActiveComponent, messageStatus, SecureMessagesTab } from './types'
-import { sanitizeFormData } from './utils'
 
 const MessageHeader = ({
   tab,
@@ -68,12 +65,6 @@ const MessageHeader = ({
     const cleanedPayload = {
       ...data,
       messageStatus: activeTab as SecureMessagesTab,
-      to: data.to
-        ? formatDateToISOString(data.to as DateValue, true)
-        : undefined,
-      from: data.from
-        ? formatDateToISOString(data.from as DateValue)
-        : undefined,
     }
     if (
       activeTab === SecureMessagesTab.INBOX ||
@@ -90,8 +81,7 @@ const MessageHeader = ({
       delete data.sendMode
     }
 
-    const finalPayload = sanitizeFormData(cleanedPayload)
-    search(finalPayload, page, true)
+    search(cleanedPayload, page, true)
   }
 
   return (

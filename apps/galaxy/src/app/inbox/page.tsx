@@ -6,7 +6,7 @@ import { Tabs } from '@/ui/messages/types'
 const MessagesPage = ({ searchParams }: { searchParams: { tab: Tabs } }) => {
   let tab = searchParams.tab
   if (!Object.values(Tabs).includes(tab)) {
-    tab = Tabs.PENDING_NOTES
+    tab = Tabs.INBOX
   }
 
   return <MessagesView tab={tab} />

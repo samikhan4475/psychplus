@@ -8,6 +8,7 @@ import { useStore as globalStore } from '@/store'
 import { LegalName } from '@/types'
 import 'react-quill/dist/quill.snow.css'
 import { Tag } from 'react-tag-autocomplete'
+import { getUserFullName } from '@/utils'
 import {
   DiscardButton,
   ExternalRecipientsEmails,
@@ -39,11 +40,12 @@ import {
   SendMode,
   SendType,
 } from '../../types'
-import { mapEmailData } from '../../utils'
+import { getLatestMessageWithOwnChannel, mapEmailData } from '../../utils'
 import { RichTextEditor } from '../quill-editor'
 import { sendMessageSchema, SendMessageSchemaType } from './send-message-schema'
 
 const ComposeNewEmail = ({ isActiveTab }: { isActiveTab: boolean }) => {
+  const user = globalStore((state) => state.user)
   const {
     previewSecureMessage,
     activeComponent,
@@ -73,6 +75,8 @@ const ComposeNewEmail = ({ isActiveTab }: { isActiveTab: boolean }) => {
   >([])
   const [sendType, setSendType] = useState<SendType>(SendType.SEND)
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+  const [isCreatingNewMessage, setIsCreatingNewMessage] =
+    useState<boolean>(false)
   const [uploadingAttachmentIds, setUploadingAttachmentIds] = useState<
     string[]
   >([])
@@ -83,7 +87,7 @@ const ComposeNewEmail = ({ isActiveTab }: { isActiveTab: boolean }) => {
     const baseValues = {
       messageId: undefined,
       subject: '',
-      text: '',
+      text: '<br/><br/><br/> ' + getUserFullName(user.legalName),
       externalEmails: [],
       internalEmails: [],
       userRecipients: [],
@@ -122,7 +126,6 @@ const ComposeNewEmail = ({ isActiveTab }: { isActiveTab: boolean }) => {
     criteriaMode: 'all',
     defaultValues: getDefaultValues(),
   })
-  const user = globalStore((state) => state.user)
 
   const onSubmit: SubmitHandler<SendMessageSchemaType> = async ({
     subject,
@@ -244,6 +247,7 @@ const ComposeNewEmail = ({ isActiveTab }: { isActiveTab: boolean }) => {
   }
 
   const createNewMessageId = async () => {
+    setIsCreatingNewMessage(true)
     const { secureMessage } = previewSecureMessage || {}
     const secureMessageData: Partial<SecureMessage> = {
       subject: form.getValues('subject'),
@@ -264,6 +268,7 @@ const ComposeNewEmail = ({ isActiveTab }: { isActiveTab: boolean }) => {
     }
     const result = await postSecureMessagesAction(secureMessageData)
     if (result.state === 'error') {
+      setIsCreatingNewMessage(false)
       return toast.error('Failed to create message')
     } else {
       form.setValue('messageId', result.data.id)
@@ -271,8 +276,10 @@ const ComposeNewEmail = ({ isActiveTab }: { isActiveTab: boolean }) => {
       if (
         activeComponent !== ActiveComponent.REPLY &&
         activeComponent !== ActiveComponent.REPLY_TO_ALL
-      )
+      ) {
+        setIsCreatingNewMessage(false)
         return
+      }
       let channels: Partial<Channel>[] = []
       const internalRecipient: EmailRecipients = {
         id: secureMessage?.senderUserId ?? 0,
@@ -310,6 +317,7 @@ const ComposeNewEmail = ({ isActiveTab }: { isActiveTab: boolean }) => {
           toast.error('Failed to create some channels')
         }
       }
+      setIsCreatingNewMessage(false)
     }
   }
 
@@ -442,14 +450,14 @@ const ComposeNewEmail = ({ isActiveTab }: { isActiveTab: boolean }) => {
     await Promise.all(uploadPromises)
   }
 
-  const replyEmail = async (messageId: string, channel: Channel) => {
-    if (!messageId || !channel.id) return
+  const replyEmail = async (channel: Channel) => {
+    if (!channel.messageId || !channel.id) return
     const payload = {
       ...channel,
       isReplied: true,
     }
     const updateChannel = await updateChannelAction(
-      messageId,
+      channel.messageId,
       channel.id,
       payload,
     )
@@ -461,21 +469,22 @@ const ComposeNewEmail = ({ isActiveTab }: { isActiveTab: boolean }) => {
 
   const handleReplyAction = async () => {
     const { activeTab } = previewSecureMessage
-    const messageId = previewSecureMessage.secureMessage?.id
-    const channel = previewSecureMessage.secureMessage?.channels?.find(
-      (a) => a.receiverUserId === user.id,
+    const { channel } = getLatestMessageWithOwnChannel(
+      previewSecureMessage.secureMessage,
+      user.id,
     )
+
     if (
       [ActiveComponent.REPLY, ActiveComponent.REPLY_TO_ALL].includes(
         activeComponent,
       ) &&
       channel?.id &&
-      messageId &&
+      channel?.messageId &&
       // @TODO: We may not need this condition for activeTab because user can change the tab during replying
       (activeTab === SecureMessagesTab.INBOX ||
         activeTab === SecureMessagesTab.ARCHIVED)
     ) {
-      return await replyEmail(messageId, channel)
+      return await replyEmail(channel)
     }
   }
 
@@ -536,12 +545,12 @@ const ComposeNewEmail = ({ isActiveTab }: { isActiveTab: boolean }) => {
         <SendButton
           onClick={() => setSendType(SendType.SEND)}
           loading={isSubmitting && sendType === SendType.SEND}
-          disabled={isSubmitting}
+          disabled={isSubmitting || isCreatingNewMessage}
         />
         <SaveDraftButton
           onClick={() => setSendType(SendType.DRAFT)}
           loading={isSubmitting && sendType === SendType.DRAFT}
-          disabled={isSubmitting}
+          disabled={isSubmitting || isCreatingNewMessage}
         />
         <DiscardButton
           onClick={() => {
@@ -549,7 +558,7 @@ const ComposeNewEmail = ({ isActiveTab }: { isActiveTab: boolean }) => {
             setActiveComponent(ActiveComponent.NEW_EMAIL_PLACEHOLDER)
           }}
           loading={isSubmitting && sendType === SendType.DRAFT}
-          disabled={isSubmitting}
+          disabled={isSubmitting || isCreatingNewMessage}
         />
       </Flex>
     </FormContainer>

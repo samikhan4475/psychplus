@@ -3,7 +3,6 @@ import { Box, Flex, Separator } from '@radix-ui/themes'
 import { useStore } from '../../store'
 import { ActiveComponent } from '../../types'
 import { ComposeNewEmail } from '../compose-message/compose-new-email-template'
-import { ViewMessageActions } from './view-message-actions'
 import { ViewMessageAttachment } from './view-message-attachment'
 import { ViewMessageHeader } from './view-message-header'
 import { ViewMessageHeaderTitle } from './view-message-header-title'
@@ -69,9 +68,7 @@ const ViewMessage = ({
       <Box className="bg-white rounded-lg shadow-lg p-4">
         {isReplyingOrForwarding ? (
           <ComposeNewEmail isActiveTab={isActiveTab} />
-        ) : (
-          <ViewMessageActions boxRef={boxRef} />
-        )}
+        ) : null}
       </Box>
     </Flex>
   )
