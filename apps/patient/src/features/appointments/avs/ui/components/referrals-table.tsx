@@ -1,7 +1,7 @@
-import React from 'react'
-import { CODESETS } from '@psychplus-v2/constants'
 import { EmptyFileIcon } from '@/components-v2'
 import { useCodesetCodes } from '@/providers'
+import { CODESETS } from '@psychplus-v2/constants'
+import { formatDateTime } from '@psychplus/utils/time'
 import { CommonTable } from '../../common'
 import { Referral, TableColumn } from '../../types'
 import { formatLocalDate } from '../../utils'
@@ -24,7 +24,7 @@ const ReferralsTable = ({
       render: (row) => (
         <TextCell>
           {row?.referralDate
-            ? formatLocalDate(row?.referralDate, 'MM/dd/yy HH:mm')
+            ? formatDateTime(new Date(row?.referralDate),true)
             : ''}
         </TextCell>
       ),

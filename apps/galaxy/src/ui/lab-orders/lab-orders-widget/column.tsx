@@ -1,7 +1,7 @@
-import { Row, type ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, DateTimeCell, TextCell } from '@/components'
 import { LabOrders, Sort } from '@/types'
-import { formatUTCDate, getSortDir } from '@/utils'
+import { formatDateTime, getSortDir } from '@/utils'
+import { Row, type ColumnDef } from '@tanstack/react-table'
 import { TableHeaderCheckboxCell } from '../lab-order-results-widget/cells/table-header-checkbox-cell'
 import { TableRowCheckboxCell } from '../lab-order-results-widget/cells/table-row-checkbox-cell'
 import { LabTestCell, ResultsCell, StatusCell } from './cells'
@@ -37,7 +37,7 @@ const getColumns = ({
       ),
       cell: ({ row }) => (
         <DateTimeCell>
-          {formatUTCDate(row.original.labOrderDate, 'MM/dd/yy HH:mm')}
+          {formatDateTime(row.original.labOrderDate)}
         </DateTimeCell>
       ),
     },

@@ -71,6 +71,7 @@ const formatTimeWithAmPm = (date: string) => {
 }
 
 const formatTime = (date: Date) => {
+
   let hours: number | string = date.getHours()
   hours = hours < 10 ? `0${hours}` : hours
 
@@ -78,7 +79,14 @@ const formatTime = (date: Date) => {
   minutes = minutes < 10 ? `0${minutes}` : minutes
 
   return `${hours}:${minutes}`
+
 }
+
+const formatTimeIntl = (date: Date, hour12?: boolean) => new Intl.DateTimeFormat('en-US', {
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: hour12,
+}).format(date)
 
 const formatLocaleDate = (date: Date) => {
   const options: Intl.DateTimeFormatOptions = {
@@ -108,7 +116,7 @@ function formatLocalToCustom(dateString: Date): string {
   );
 }
 
-const formatDateTime = (date: Date) => `${formatDate(date)} ${formatTime(date)}`
+const formatDateTime = (date: Date, isIntl = false, hour12 = true) => `${formatDate(date)} ${isIntl ? formatTimeIntl(date, true) : formatTime(date)}`
 
 const calculateAge = (date?: string | Date) => {
   const today = new Date()
@@ -117,8 +125,8 @@ const calculateAge = (date?: string | Date) => {
     today.getFullYear() -
     birthDate.getFullYear() -
     (today.getMonth() - birthDate.getMonth() < 0 ||
-    (today.getMonth() === birthDate.getMonth() &&
-      today.getDate() < birthDate.getDate())
+      (today.getMonth() === birthDate.getMonth() &&
+        today.getDate() < birthDate.getDate())
       ? 1
       : 0)
 
@@ -171,21 +179,9 @@ const convertToLocalISOString = (dateString: string) => {
 }
 
 export {
-  isEmptyDate,
-  daysAgo,
-  formatDate,
-  formatDateYmd,
-  formatStartDate,
+  calculateAge, convertToLocalISOString, daysAgo, formatCurrency, formatDate, formatDateTime,
+  formatDateToCst, formatDateYmd, formatLocaleDate, formatLocalToCustom, formatStartDate,
   formatTime,
-  formatTimeWithAmPm,
-  formatLocaleDate,
-  formatDateTime,
-  formatDateToCst,
-  calculateAge,
-  formatCurrency,
-  getFirstDayOfWeek,
-  parseDateString,
-  getLastDayOfWeek,
-  convertToLocalISOString,
-  formatLocalToCustom
+  formatTimeIntl,
+  formatTimeWithAmPm, getFirstDayOfWeek, getLastDayOfWeek, isEmptyDate, parseDateString
 }

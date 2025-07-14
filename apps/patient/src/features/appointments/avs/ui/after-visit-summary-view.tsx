@@ -1,8 +1,8 @@
 'use client'
 
-import React, { useEffect } from 'react'
-import { Box, Flex } from '@radix-ui/themes'
 import { LoadingPlaceholder } from '@/components-v2'
+import { Box, Flex } from '@radix-ui/themes'
+import { useEffect } from 'react'
 import { useStore } from '../../history/store'
 import {
   AdditionalInfoSection,
@@ -37,7 +37,7 @@ const AfterVisitSummaryView = () => {
   }
 
   return (
-    <Flex direction="column" width="100%" gap="5">
+    <Flex direction="column" width="100%" gap="5" px={"4"}>
       <Box className="text-pp-blue-8 text-[24px] font-[600] leading-6 tracking-[0.36px]">
         After Visit Summary
       </Box>
