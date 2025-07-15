@@ -31,7 +31,8 @@ const previewFile = async <TBody>(
     throw new Error(result.statusText)
   }
   const blob = await result.blob()
-  const url = window.URL.createObjectURL(blob)
+  const pdfBlob = new Blob([blob], { type: 'application/pdf' })
+  const url = window.URL.createObjectURL(pdfBlob)
   if (returnUrl) {
     return url
   }

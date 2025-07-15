@@ -8,7 +8,10 @@ interface FileViewProps {
 const FileView = ({ url }: FileViewProps) => {
   return (
     <Flex direction="column">
-      <iframe src={url} className="h-[calc(80vh)] w-full"></iframe>
+      <iframe
+        src={`${url}#toolbar=0`}
+        className="h-[calc(80vh)] w-full"
+      ></iframe>
     </Flex>
   )
 }
