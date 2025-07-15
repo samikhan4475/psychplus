@@ -39,6 +39,8 @@ services:
       - REVCYCLE_URL=http://localhost:8003
       - PLATFORM_URL=http://localhost:8000
       - API_URL=https://api-pr-2000.ode.psychplus.dev
+      - SERVICE_TO_SERVICE_AUTH_URL=https://auth-pr-2000.ode.psychplus.dev
+      - SERVICE_TO_SERVICE_API_URL=https://api-pr-2000.ode.psychplus.dev
       - LOGIN_ENDPOINT=https://auth-pr-2000.ode.psychplus.dev/login
     ports:
       - 8002:3000

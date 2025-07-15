@@ -54,6 +54,18 @@
         name: app-config
         key: authApiUrl
 
+  - name: SERVICE_TO_SERVICE_AUTH_URL
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: internalServiceUrlsAuth
+
+  - name: SERVICE_TO_SERVICE_API_URL
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: internalServiceUrlsApi
+
   - name: AUTH_ACCESS_TOKEN_COOKIE_NAME
     valueFrom:
       configMapKeyRef:
