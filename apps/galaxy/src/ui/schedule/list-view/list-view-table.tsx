@@ -137,7 +137,11 @@ const ListViewTable = () => {
         renderHeader={DataTableHeader}
         isRowSpan
         sticky
-        defaultSorting={[{ id: 'appointment-date', desc: false }]}
+        defaultSorting={[
+          { id: 'appointment-date', desc: false },
+          { id: 'patient-name', desc: false },
+          { id: 'provider-type', desc: true },
+        ]}
       />
     </ScrollArea>
   )
