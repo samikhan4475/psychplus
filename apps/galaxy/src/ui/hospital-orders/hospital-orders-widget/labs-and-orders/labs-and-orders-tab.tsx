@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { transformIn, transformOut } from '../data'
 import { LabsAndOrdersForm } from './labs-and-orders-form'
 import { HospitalWidgetSchema, HospitalWidgetSchemaType } from './schema'
@@ -23,8 +24,9 @@ const LabsAndOrderTab = ({ patientId, data }: LabsOrderProps) => {
     <FormProvider {...form}>
       <WidgetFormContainer
         patientId={patientId}
-        widgetId="Hospital_Labs_Order"
+        widgetId={QuickNoteSectionName.QuickNoteSectionHospitalOrders}
         getData={transformOut(patientId)}
+        onSuccess={() => form.reset(form.getValues())}
         title=""
       >
         <LabsAndOrdersForm />

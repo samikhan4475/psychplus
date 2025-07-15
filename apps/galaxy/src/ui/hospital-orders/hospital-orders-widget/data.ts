@@ -9,7 +9,10 @@ const transformIn = (
   value: QuickNoteSectionItem[],
 ): HospitalLabsOrdersSchemaType => {
   const result: HospitalLabsOrdersSchemaType = {
-    HospitalLabsOrders: value[0]?.sectionItemValue || '',
+    HospitalLabsOrders:
+      value[0]?.sectionItemValue === '__empty__'
+        ? ''
+        : value[0]?.sectionItemValue || '',
   }
 
   return result
@@ -21,14 +24,12 @@ const transformOut =
     const result: QuickNoteSectionItem[] = []
 
     Object.entries(schema).forEach(([key, value]) => {
-      if (value !== '') {
-        result.push({
-          pid: Number(patientId),
-          sectionName: QuickNoteSectionName.QuickNoteSectionHospitalOrders,
-          sectionItem: key,
-          sectionItemValue: value?.toString() || '',
-        })
-      }
+      result.push({
+        pid: Number(patientId),
+        sectionName: QuickNoteSectionName.QuickNoteSectionHospitalOrders,
+        sectionItem: key,
+        sectionItemValue: value?.toString() || '__empty__',
+      })
     })
 
     return result
