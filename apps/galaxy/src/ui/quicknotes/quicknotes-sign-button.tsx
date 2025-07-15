@@ -20,7 +20,10 @@ import { useStore as useMedicationStore } from '@/ui/medications/patient-medicat
 import { filterDefaultCosigner, sendEvent } from '@/utils'
 import { AlertDialog } from '../alerts'
 import { shouldDisableDiagnosisActions } from '../diagnosis/diagnosis/utils'
-import { PatientMedication } from '../medications/patient-medications-widget/types'
+import {
+  PatientMedication,
+  PatientPrescriptionStatus,
+} from '../medications/patient-medications-widget/types'
 import {
   QuickNoteSectionName,
   SEND_TO_SIGNATURE_BUTTON,
@@ -213,8 +216,16 @@ const QuickNotesSignButton = ({
   const checkIfPmpReviewRequired = (
     medications: PatientMedication[] | undefined,
   ) => {
+    if (visitType === VisitTypeEnum.Tms) {
+      return false
+    }
+
     const hasControlledSubstanceMedication = medications?.some(
-      (med) => med.isControlledSubstance === true,
+      (med) =>
+        med.prescriptionStatusTypeId &&
+        med.prescriptionStatusTypeId.toString() ===
+          PatientPrescriptionStatus.ACTIVE &&
+        med.isControlledSubstance === true,
     )
 
     if (hasControlledSubstanceMedication) {
