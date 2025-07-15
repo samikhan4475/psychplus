@@ -27,6 +27,7 @@ const numericFields = [
 const multiselectFields = [
   'serviceIds',
   'locationIds',
+  'servicesOffered',
   'appointmentStatuses',
   'patientStatuses',
   'providerTypes',
