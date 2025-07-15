@@ -14,6 +14,7 @@ import { Service } from '@/types'
 import { getLocationServices } from '@/ui/visit/client-actions'
 import { SchemaType } from '../../schema'
 import { useAddVisitStore } from '../../store'
+import { sortCodesetBySortAttribute } from '@/ui/patient-lookup/utils'
 
 const VisitSequenceSelect = () => {
   const form = useFormContext<SchemaType>()
@@ -81,7 +82,7 @@ const VisitSequenceSelect = () => {
 
   const visitSequenceCodes = useMemo(
     () =>
-      codes.filter((code) =>
+      sortCodesetBySortAttribute(codes).filter((code) =>
         groupedVisitTypes?.[visitType]?.find(
           (vt) =>
             vt.visitSequence === code.value && vt.visitMedium === visitMedium,
@@ -106,15 +107,14 @@ const VisitSequenceSelect = () => {
             )
           })
           .map((option) => ({
-            label: option.display,
+            label: option.label,
             value: option.value,
           }))
       : visitSequenceCodes.map((option) => ({
-          label: option.display,
+          label: option.label,
           value: option.value,
         }))
   }, [dateOfAdmission, dischargeDate, visitSequenceCodes])
-
   return (
     <FormFieldContainer className="flex-1">
       <FormFieldLabel required>Visit Sequence</FormFieldLabel>

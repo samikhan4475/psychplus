@@ -13,6 +13,7 @@ import { Appointment, SelectOptionType, Service } from '@/types'
 import { getLocationServices } from '@/ui/visit/client-actions'
 import { SchemaType } from '../../schema'
 import { useEditVisitStore } from '../../store'
+import { sortCodesetBySortAttribute } from '@/ui/patient-lookup/utils'
 
 const VisitSequenceSelect = ({
   visitDetails,
@@ -96,17 +97,17 @@ const VisitSequenceSelect = ({
         }
       })
       setOptions(
-        filteredOptions
+        sortCodesetBySortAttribute(filteredOptions
           .filter(
             (code) =>
               code.attributes?.some(
                 (attr) =>
                   attr.name === 'Group' && attr.value === 'NonTimedServices',
               ) || visitDetails.visitSequence === code.value,
-          )
+          ))
           .map((option) => ({
             value: option.value,
-            label: option.display,
+            label: option.label,
             disabled: option.value === visitDetails.visitSequence,
           })),
       )
