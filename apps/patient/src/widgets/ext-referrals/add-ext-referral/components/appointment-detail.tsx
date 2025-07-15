@@ -37,19 +37,25 @@ const AppointmentDetail = ({
 
   const servicesOfferedOptions = useMemo(
     () =>
-      codes
-        .filter((code) => {
-          if (code.value === 'NotSet') return false
-
-          const attrs = code.attributes ?? []
-          return attrs.some(
-            (attr) => attr?.name === 'IsActive' && attr?.value === 'True',
-          )
-        })
-        .map(({ display, value }) => ({ display, value })),
+      Array.isArray(codes)
+        ? codes
+            .filter(
+              (c) =>
+                c.value !== 'NotSet' &&
+                c?.attributes?.some(
+                  (a) => a?.name === 'IsUsedInReferral' && a?.value === 'True',
+                ),
+            )
+            .map((c) => ({
+              value: c.value,
+              display:
+                c?.attributes?.find((a) => a?.name === 'ReferralDescription')
+                  ?.value ?? c.display,
+            }))
+        : [],
     [codes],
   )
-
+  
   const sharedUploadProps = {
     resetTrigger: fileResetCounter,
     disableControls: form.formState.isSubmitting,

@@ -58,7 +58,7 @@ const getTimeLabel = (dateString: string) => {
 function convertTo12HourFormat(time24: string): string {
   const [hours, minutes] = time24.split(':').map(Number)
 
-  let hour12 = hours % 12 || 12
+  const hour12 = hours % 12 || 12
   const ampm = hours >= 12 ? 'PM' : 'AM'
   const hourStr = hour12.toString().padStart(2, '0')
 
@@ -237,7 +237,15 @@ function generateTimeIntervals(): TimeInterval[] {
 
   for (let r = 0; r < 100; r++) {
     const formattedTime = time.replace('.', ':')
-    intervals.push({ label: formattedTime, value: formattedTime })
+    const [hourStr, minute] = formattedTime.split(':')
+    const hourNum = parseInt(hourStr, 10)
+    const period = hourNum < 12 ? 'AM' : 'PM'
+    const hour12 = (((hourNum + 11) % 12) + 1).toString().padStart(2, '0')
+
+    intervals.push({
+      label: `${hour12}:${minute} ${period}`,
+      value: formattedTime,
+    })
 
     if (time === '23.40') {
       break

@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { CalendarDate } from '@internationalized/date'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import {
@@ -19,13 +20,13 @@ import {
   DateValue,
   Dialog,
   Group,
-  Heading,
   I18nProvider,
   Popover,
 } from 'react-aria-components'
 import { Controller, useFormContext } from 'react-hook-form'
 import { FormFieldContainer, FormFieldError } from '@/components/form'
-import { cn } from '@/utils'
+import { cn, getLocalCalendarDate } from '@/utils'
+import { DatePickerYearSelector } from './date-picker-year-selector'
 
 interface DatePickerInputProps<T extends DateValue> extends DatePickerProps<T> {
   label?: string
@@ -57,6 +58,9 @@ const DatePickerInput = <T extends DateValue>({
 }: DatePickerInputProps<T>) => {
   const form = useFormContext()
 
+  const [focusedDate, setFocusedDate] = useState<CalendarDate>(
+    getLocalCalendarDate(),
+  )
   return (
     <I18nProvider locale="en-US">
       <FormFieldContainer className={cn('w-full gap-0.5', className)}>
@@ -80,13 +84,22 @@ const DatePickerInput = <T extends DateValue>({
           }) => (
             <DatePicker
               name={name}
-              value={value ?? null} // Ensure it handles null or undefined
+              value={value ?? null}
+              onOpenChange={(open) => {
+                if (!open || !value) return
+                setFocusedDate(value)
+              }}
+              // Ensure it handles null or undefined
               onChange={(date) => {
                 if (yearFormat === 'YY') {
                   if (!date || !(date instanceof CalendarDate)) return null
                   const num = date.year % 100 // Extract last two digits
                   const currentYear = new Date().getFullYear()
-                  const century = Math.floor(currentYear / 100) * 100 // Get current century
+
+                  const century =
+                    date.year >= 1800 && date.year < 2000
+                      ? Math.floor(date.year / 100) * 100
+                      : Math.floor(currentYear / 100) * 100
 
                   const updatedDate = new CalendarDate(
                     century + num,
@@ -164,7 +177,10 @@ const DatePickerInput = <T extends DateValue>({
               <Popover className="bg-white pointer-events-auto rounded-1 p-3 shadow-[0px_7px_29px_rgba(100,100,111,0.2)]">
                 <Dialog>
                   <I18nProvider locale="en-UK">
-                    <Calendar>
+                    <Calendar
+                      focusedValue={focusedDate}
+                      onFocusChange={setFocusedDate}
+                    >
                       <Box className="mx-[0.5rem] mb-1 flex justify-between">
                         <Button
                           slot="previous"
@@ -174,7 +190,13 @@ const DatePickerInput = <T extends DateValue>({
                         >
                           <ChevronLeftIcon className="h-4 w-4" />
                         </Button>
-                        <Heading className="flex-1 text-center text-[14px] font-medium" />
+                        <DatePickerYearSelector
+                          focusedValue={focusedDate}
+                          onFocusedDateChange={setFocusedDate}
+                          minValue={props?.minValue}
+                          maxValue={props?.maxValue}
+                        />
+
                         <Button
                           slot="next"
                           className={

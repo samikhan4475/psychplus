@@ -18,25 +18,25 @@ const ReferrerInformation = () => {
   return (
     <Flex direction="column" gap="4">
       <Text size="5" weight="medium" className="mt-5">
-        Referrer Information
+        Referring Organization
       </Text>
       <Separator className="bg-pp-gray-2 w-full" />
       <Grid columns="3" className="max-xs:grid-cols-1" gap="3">
         <FormField
           containerClassName="flex-1"
           name="referrerFacility"
-          label="Referrer Facility"
+          label="Facility Name"
         >
           <TextFieldInput
             {...form.register('referrerFacility')}
-            placeholder="Referrer Facility"
+            placeholder="Facility Name"
             className="h-[38px]"
           />
         </FormField>
         <FormField
           containerClassName="flex-1"
           name="referrerName"
-          label="Name/Organization"
+          label="Referrer Name"
         >
           <TextFieldInput
             {...form.register('referrerName')}
@@ -52,6 +52,7 @@ const ReferrerInformation = () => {
           <PhoneNumberInput
             name="referrerContactDetails.phoneNumbers.0.number"
             classNames="h-[38px] !text-2"
+            placeholder="000-000-0000"
           />
         </FormField>
         <FormField

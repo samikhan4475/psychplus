@@ -121,7 +121,7 @@ export const SlotStateRenderer = ({
   const hasNoSlots = Object.keys(slotState)?.length === 0
   const hasSlotsInDateRange = dateRange.some((date) => {
     const key = getCalendarDateLabel(date)
-    return (slotState[key]?.length ?? 0) > 0
+  return (slotState[key]?.length ?? 0) > 0
   })
   if (hasNoSlots || (!hasSlotsInDateRange && !dateIsInFuture)) {
     return <FeatureEmpty description="No slots available for this provider" />

@@ -41,6 +41,7 @@ const config = {
         'pp-warning-bg-1': '#E97135',
         'pp-info-1': '#0B68CB',
         'pp-info-2': '#E1F0FF',
+        'pp-focus-bg': '#D9E2FC',
       },
       borderRadius: {
         full: '100%',

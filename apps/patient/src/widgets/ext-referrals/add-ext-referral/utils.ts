@@ -1,13 +1,15 @@
 import { getLocalTimeZone } from '@internationalized/date'
+import { ActionResult } from '@psychplus-v2/api'
 import { AppointmentType } from '@psychplus-v2/constants'
 import { mapToUTCString } from '@psychplus-v2/utils'
+import { getDateString } from '@/utils'
 import type {
   Address,
   ContactDetails,
   PhoneNumber,
   SchemaType,
 } from '../add-ext-referral/components/schema'
-import { PhoneNumberType } from './types'
+import { PatientExtReferralParams, PhoneNumberType } from './types'
 
 const isEmptyPhoneNumber = (phone: PhoneNumber): boolean =>
   Object.entries(phone).every(([key, value]) => key === 'type' || value === '')
@@ -42,7 +44,7 @@ const addExtReferralInitialValues = (shortName?: string) => ({
     firstName: '',
     lastName: '',
   },
-  patientDateOfBirth: '',
+  patientDateOfBirth: undefined,
   patientContactDetails: {
     phoneNumbers: [
       {
@@ -65,12 +67,13 @@ const addExtReferralInitialValues = (shortName?: string) => ({
     email: '',
   },
   requestedService: '',
-  requestedMedium: '',
+  requestedMedium: AppointmentType.Virtual,
   requestedStateCode: '',
   requestedPostalCode: '',
-  requestedTime: '',
+  requestedTime: undefined,
   startDate: '',
-  dischargeTime: '',
+  dischargeTime: undefined,
+  referrerFacility: '',
   referrerName: '',
   referrerShortName: shortName ?? 'anonymous',
   referrerContactDetails: {
@@ -100,14 +103,14 @@ const addExtReferralInitialValues = (shortName?: string) => ({
   payerName: '',
 })
 
-function transformOut(data: SchemaType): SchemaType {
+function transformOut(data: SchemaType): PatientExtReferralParams {
   const isTeleVisit =
     data.requestedMedium && data.requestedMedium === AppointmentType.Virtual
 
   const patientAddress = data?.patientContactDetails?.addresses?.[0]
-
-  const cleanedData: SchemaType = {
-    ...data,
+  const { requestedTime, dischargeTime, patientDateOfBirth, ...rest } = data
+  const cleanedData: PatientExtReferralParams = {
+    ...rest,
     patientContactDetails: cleanContactDetails(data.patientContactDetails),
     referrerContactDetails: cleanContactDetails(data.referrerContactDetails),
   }
@@ -120,17 +123,21 @@ function transformOut(data: SchemaType): SchemaType {
     cleanedData.requestedPostalCode = patientAddress.postalCode
   }
   const timeZone = getLocalTimeZone()
-  if (data.requestedTime) {
+  if (requestedTime) {
     const zonedString = data.time
       ? `${data.requestedTime}T${data.time}:00[${timeZone}]`
       : `${data.requestedTime}T00:00:00[${timeZone}]`
 
     cleanedData.requestedTime = mapToUTCString(zonedString)
   }
-  if (data.dischargeTime) {
+  if (dischargeTime) {
     cleanedData.dischargeTime = mapToUTCString(
-      `${data.requestedTime}T00:00:00[${timeZone}]`,
+      `${data.dischargeTime}T00:00:00[${timeZone}]`,
     )
+  }
+
+  if (patientDateOfBirth) {
+    cleanedData.patientDateOfBirth = getDateString(patientDateOfBirth)
   }
 
   if (isTeleVisit) {
@@ -140,4 +147,23 @@ function transformOut(data: SchemaType): SchemaType {
   return cleanedData
 }
 
-export { addExtReferralInitialValues, transformOut }
+function withRetry<T>(
+  fn: () => Promise<ActionResult<T>>,
+  retries = 3,
+  delayMs = 500,
+): Promise<ActionResult<T>> {
+  const attempt = (remaining: number): Promise<ActionResult<T>> => {
+    return fn().then((result) => {
+      if (result.state === 'success' || remaining === 1) {
+        return result
+      }
+      return new Promise<ActionResult<T>>((res) =>
+        setTimeout(() => attempt(remaining - 1).then(res), delayMs),
+      )
+    })
+  }
+
+  return attempt(retries)
+}
+
+export { addExtReferralInitialValues, transformOut, withRetry }

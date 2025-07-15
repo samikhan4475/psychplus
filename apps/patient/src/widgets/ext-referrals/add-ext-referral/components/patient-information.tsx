@@ -54,7 +54,7 @@ const PatientInformation = () => {
         >
           <PhoneNumberInput
             name="patientContactDetails.phoneNumbers.0.number"
-            placeholder="Phone Number"
+            placeholder="000-000-0000"
             classNames="h-[38px] !text-2"
           />
         </FormField>

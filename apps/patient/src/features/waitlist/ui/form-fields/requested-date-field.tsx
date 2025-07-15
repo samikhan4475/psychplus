@@ -1,22 +1,14 @@
 import React from 'react'
-import { fromDate, ZonedDateTime } from '@internationalized/date'
 import { Box, Flex } from '@radix-ui/themes'
-import { addDays } from 'date-fns'
 import { useFormContext } from 'react-hook-form'
-import {
-  FormFieldContainer,
-  FormFieldError,
-  FormFieldLabel,
-} from '@/components-v2'
+import { FormFieldContainer, FormFieldLabel } from '@/components-v2'
 import { DatePickerInput } from '@/components-v2/date-picker-input'
+import { getCalendarDateOffsetFromToday } from '@/utils'
 import { WaitlistSchemaType } from '../waitlist-form'
 
 const RequestedDateField = () => {
   const form = useFormContext<WaitlistSchemaType>()
-  const maxValue = fromDate(
-    addDays(new Date(), 90),
-    Intl.DateTimeFormat().resolvedOptions().timeZone,
-  )
+  const maxValue = getCalendarDateOffsetFromToday(90)
 
   return (
     <FormFieldContainer className="w-full">
@@ -47,7 +39,7 @@ const RequestedDateField = () => {
                 className="text-[15px]"
                 isDisabled={!form.watch('serviceOffered')}
                 maxValue={maxValue}
-                minValue={form.watch('fromDate') as ZonedDateTime}
+                minValue={form.watch('fromDate')}
               />
             </Box>
           </Flex>

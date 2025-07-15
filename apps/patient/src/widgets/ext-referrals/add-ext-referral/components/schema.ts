@@ -1,9 +1,9 @@
 'use client'
 
-import { getLocalTimeZone, parseDate, today } from '@internationalized/date'
 import { AppointmentType } from '@psychplus-v2/constants'
 import { z } from 'zod'
 import { validate } from '@psychplus/form'
+import { DateValue } from 'react-aria-components'
 
 const addressSchema = z.object({
   type: validate.optionalString.default('Home'),
@@ -25,7 +25,7 @@ const schema = z
       firstName: validate.requiredName,
       lastName: validate.requiredName,
     }),
-    patientDateOfBirth: validate.optionalString,
+    patientDateOfBirth: z.custom<DateValue>().optional(),
     patientContactDetails: z.object({
       phoneNumbers: z.array(phoneNumberSchema).optional(),
       addresses: z.array(addressSchema).optional(),
@@ -37,9 +37,9 @@ const schema = z
     requestedMedium: validate.optionalString,
     requestedStateCode: validate.optionalString,
     requestedPostalCode: validate.optionalString,
-    requestedTime: validate.optionalString,
+    requestedTime: z.custom<DateValue>().optional(),
     time: validate.optionalString,
-    dischargeTime: validate.optionalString,
+    dischargeTime: z.custom<DateValue>().optional(),
     referrerFacility: validate.limitedString({ max: 256 }).optional(),
     referrerName: validate.limitedString({ max: 256 }).optional(),
     referrerShortName: validate.limitedString({ max: 256 }).optional(),
@@ -65,20 +65,6 @@ const schema = z
           })
         }
       })
-    }
-    if (data.requestedTime) {
-      const tz = getLocalTimeZone()
-      const selected = parseDate(data.requestedTime)
-      const min = today(tz)
-      const max = min.add({ days: 90 })
-
-      if (selected.compare(max) > 0) {
-        ctx.addIssue({
-          path: ['requestedTime'],
-          code: z.ZodIssueCode.custom,
-          message: 'Date must be within 90 days from today',
-        })
-      }
     }
   })
 

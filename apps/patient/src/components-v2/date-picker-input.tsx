@@ -1,6 +1,7 @@
 'use client'
 
-import { CalendarDate, ZonedDateTime } from '@internationalized/date'
+import { useState } from 'react'
+import { CalendarDate } from '@internationalized/date'
 import { cn } from '@psychplus-v2/utils'
 import { Box, Text } from '@radix-ui/themes'
 import {
@@ -20,14 +21,15 @@ import {
   DateValue,
   Dialog,
   Group,
-  Heading,
   I18nProvider,
   Popover,
 } from 'react-aria-components'
 import { Controller, useFormContext } from 'react-hook-form'
+import { generateCalendarDateToday } from '@/utils'
+import { DatePickerYearDropdown } from './date-picker-year-dropdown'
 import { FormFieldContainer, FormFieldError } from './form'
 
-interface DatePickerInputProps {
+interface DatePickerInputProps<T extends DateValue> extends DatePickerProps<T> {
   label?: string
   field: string
   isRequired?: boolean
@@ -37,12 +39,10 @@ interface DatePickerInputProps {
   showError?: boolean
   datePickerClass?: string
   className?: string
-  maxValue?: DateValue | ZonedDateTime | CalendarDate
-  minValue?: DateValue | ZonedDateTime | CalendarDate
   showIcon?: boolean
 }
 
-const DatePickerInput = ({
+const DatePickerInput = <T extends DateValue>({
   label,
   field,
   isRequired,
@@ -52,13 +52,14 @@ const DatePickerInput = ({
   showError = true,
   dateInputClass,
   className,
-  maxValue,
-  minValue,
   showIcon = true,
   ...props
-}: DatePickerInputProps) => {
+}: DatePickerInputProps<T>) => {
   const form = useFormContext()
   const { control, formState } = form
+  const [focusedDate, setFocusedDate] = useState<CalendarDate>(
+    generateCalendarDateToday(),
+  )
 
   return (
     <I18nProvider locale="en-US">
@@ -85,13 +86,17 @@ const DatePickerInput = ({
             <DatePicker
               name={name}
               value={value ?? null}
-              maxValue={maxValue as DateValue}
-              minValue={minValue as DateValue}
               onChange={(date) => {
                 if (yearFormat === 'YY' && date instanceof CalendarDate) {
+                  const num = date.year % 100
                   const currentYear = new Date().getFullYear()
+
+                  const century =
+                    date.year >= 1800 && date.year < 2000
+                      ? Math.floor(date.year / 100) * 100
+                      : Math.floor(currentYear / 100) * 100
                   const updatedDate = new CalendarDate(
-                    Math.floor(currentYear / 100) * 100 + (date.year % 100),
+                    century + num,
                     date.month,
                     date.day,
                   )
@@ -99,6 +104,10 @@ const DatePickerInput = ({
                 } else {
                   onChange(date)
                 }
+              }}
+              onOpenChange={(open) => {
+                if (!open || !value) return
+                setFocusedDate(value)
               }}
               onBlur={onBlur}
               isRequired
@@ -155,12 +164,20 @@ const DatePickerInput = ({
               <Popover className="bg-white pointer-events-auto rounded-1 p-3 shadow-[0px_7px_29px_rgba(100,100,111,0.2)]">
                 <Dialog>
                   <I18nProvider locale="en-UK">
-                    <Calendar>
+                    <Calendar
+                      focusedValue={focusedDate}
+                      onFocusChange={setFocusedDate}
+                    >
                       <Box className="mx-[0.5rem] mb-1 flex justify-between">
                         <Button slot="previous" className={buttonClasses}>
                           <ChevronLeftIcon className="h-4 w-4" />
                         </Button>
-                        <Heading className="flex-1 text-center text-[14px] font-medium" />
+                        <DatePickerYearDropdown
+                          focusedValue={focusedDate}
+                          onFocusedDateChange={setFocusedDate}
+                          minValue={props?.minValue}
+                          maxValue={props?.maxValue}
+                        />
                         <Button slot="next" className={buttonClasses}>
                           <ChevronRightIcon className="h-4 w-4" />
                         </Button>

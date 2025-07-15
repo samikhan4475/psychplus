@@ -6,7 +6,7 @@ import { FormSubmitButton } from '@/components-v2'
 
 const SubmitButtonBlock = () => {
   return (
-    <Flex justify="between">
+    <Flex justify="between" className="max-xs:flex-col max-xs:gap-3">
       <Text size="1" weight="medium">
         This form is HIPAA-compliant <br />
         By using this referral tool, you are consenting to <br />

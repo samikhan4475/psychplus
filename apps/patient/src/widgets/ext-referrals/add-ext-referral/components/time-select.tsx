@@ -1,7 +1,8 @@
 'use client'
 
 import { useMemo } from 'react'
-import { generateTimeIntervals, parseLocalDate } from '@psychplus-v2/utils'
+import { getLocalTimeZone } from '@internationalized/date'
+import { generateTimeIntervals } from '@psychplus-v2/utils'
 import { addHours, isToday } from 'date-fns'
 import { useFormContext } from 'react-hook-form'
 import { FormField } from '@/components-v2'
@@ -17,9 +18,9 @@ const TimeSelect = () => {
 
     if (!selectedDate) return allOptions
 
-    const selected = parseLocalDate(selectedDate)
-
-    if (!isToday(selected)) return allOptions
+    const selectedDateObj = selectedDate.toDate(getLocalTimeZone())
+    
+    if (!isToday(selectedDateObj)) return allOptions
 
     const nowPlus2 = addHours(new Date(), 2)
 

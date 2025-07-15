@@ -1,25 +1,22 @@
 'use client'
 
-import { format } from 'date-fns'
-import { useFormContext } from 'react-hook-form'
-import { FormTextInput } from '@psychplus/form'
 import { FormField } from '@/components-v2'
-import { SchemaType } from './schema'
+import { DatePickerInput } from '@/components-v2/date-picker-input'
+import { generateCalendarDateToday } from '@/utils'
 
 const DobInput = () => {
-  const form = useFormContext<SchemaType>()
   return (
     <FormField
       containerClassName="flex-1"
       name="patientDateOfBirth"
       label="Date Of Birth"
     >
-      <FormTextInput
-        type="date"
-        label=""
-        max={format(new Date(), 'yyyy-MM-dd')}
-        {...form.register('patientDateOfBirth')}
-        className="text-pp-gray-1 h-[38px] p-2 text-[14px] font-regular uppercase"
+      <DatePickerInput
+        yearFormat="YYYY"
+        field="patientDateOfBirth"
+        className="text-pp-gray-1 h-[38px] text-[14px] font-regular uppercase"
+        dateInputClass="h-[38px]"
+        maxValue={generateCalendarDateToday()}
       />
     </FormField>
   )

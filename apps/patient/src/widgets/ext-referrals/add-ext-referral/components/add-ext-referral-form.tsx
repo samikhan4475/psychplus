@@ -14,8 +14,8 @@ import {
   AddPatientExternalReferralClient,
   LinkExternalReferralsAttachmentsClientAction,
 } from '../client-actions'
-import { AddReferralResponse, ExternalReferralDocument } from '../types'
-import { addExtReferralInitialValues, transformOut } from '../utils'
+import { ExternalReferralDocument, ReferralSuccess } from '../types'
+import { addExtReferralInitialValues, transformOut, withRetry } from '../utils'
 import { AppointmentDetail } from './appointment-detail'
 import { PatientInformation } from './patient-information'
 import { ReferrerInformation } from './referrer-information'
@@ -43,42 +43,53 @@ const AddExtReferralForm = ({ scrollToTop }: AddExtReferralFormProps) => {
   })
 
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
-    const { requestedServices, ...sanitizedWithoutServices } =
-      recursiveSanitize(transformOut(data))
+    const { requestedServices = [], ...rest } = transformOut(data)
 
-    const services = requestedServices ?? []
+    const base = recursiveSanitize(rest)
 
-    const referralTasks: (() => Promise<ActionResult<AddReferralResponse>>)[] =
-      []
+    // build all payloads (first service, then the rest)
 
-    services.length > 0
-      ? services.map((service) => {
-          referralTasks.push(() =>
-            AddPatientExternalReferralClient({
-              ...sanitizedWithoutServices,
-              requestedService: service,
-            }),
-          )
-        })
-      : referralTasks.push(() =>
-          AddPatientExternalReferralClient(sanitizedWithoutServices),
-        )
+    const payloads = requestedServices.length
+      ? requestedServices.map((svc) => ({
+          ...base,
+          requestedService: svc,
+        }))
+      : [{ ...base }]
 
-    const created = await Promise.all(referralTasks.map((fn) => fn()))
-
-    const error = created.find((r) => r.state === 'error')
-    if (error) {
+    const firstResult = await withRetry(() =>
+      AddPatientExternalReferralClient(payloads[0]),
+    )
+    if (firstResult.state === 'error') {
       scrollToTop?.()
-      toast({
-        type: 'error',
-        title: error.error,
-      })
-      return
+      return toast({ type: 'error', title: firstResult.error })
     }
 
-    const referrals = created as { state: 'success'; data: { id: string } }[]
+    const { id: firstReferralId, patientId } = firstResult.data
+    let restResults: ReferralSuccess[] = []
 
-    const firstReferral = referrals[0].data
+    if (requestedServices.length > 1) {
+      const restPayloads = payloads.slice(1).map((p) => ({ ...p, patientId }))
+
+      const results = await Promise.all(
+        restPayloads.map((p) =>
+          withRetry(() => AddPatientExternalReferralClient(p)),
+        ),
+      )
+
+      const error = results.find((r) => r.state === 'error')
+      if (error) {
+        scrollToTop?.()
+        toast({
+          type: 'error',
+          title: error.error,
+        })
+        return
+      }
+      restResults = results as ReferralSuccess[]
+    }
+
+    const referrals = [firstResult, ...restResults] as ReferralSuccess[]
+
     const uploadedFiles: {
       file: File
       documentType: ExternalReferralDocument
@@ -104,11 +115,13 @@ const AddExtReferralForm = ({ scrollToTop }: AddExtReferralFormProps) => {
       const formData = new FormData()
       formData.append('file', file)
 
-      const uploadResult = await uploadExternalReferralFileAction({
-        data: formData,
-        externalReferralId: firstReferral.id,
-        documentType,
-      })
+      const uploadResult = await withRetry(() =>
+        uploadExternalReferralFileAction({
+          data: formData,
+          externalReferralId: firstReferralId,
+          documentType,
+        }),
+      )
 
       if (uploadResult.state === 'error') {
         scrollToTop?.()
@@ -123,10 +136,12 @@ const AddExtReferralForm = ({ scrollToTop }: AddExtReferralFormProps) => {
 
       for (const referral of referrals.slice(1)) {
         linkTasks.push(() =>
-          LinkExternalReferralsAttachmentsClientAction({
-            externalReferralId: referral.data.id,
-            externalReferralAttachmentId: attachmentId,
-          }),
+          withRetry(() =>
+            LinkExternalReferralsAttachmentsClientAction({
+              externalReferralId: referral.data.id,
+              externalReferralAttachmentId: attachmentId,
+            }),
+          ),
         )
       }
     }

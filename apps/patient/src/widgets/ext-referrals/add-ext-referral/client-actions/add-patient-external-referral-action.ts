@@ -3,8 +3,7 @@
 import type { ActionResult } from '@psychplus-v2/api/client'
 import * as api from '@psychplus-v2/api/client'
 import { API_URL } from '@psychplus-v2/env'
-import { SchemaType as PatientExtReferralParams } from '../components/schema'
-import { AddReferralResponse } from '../types'
+import {  PatientExtReferralParams,AddReferralResponse } from '../types'
 
 const AddPatientExternalReferralClient = async ({
   ...params
