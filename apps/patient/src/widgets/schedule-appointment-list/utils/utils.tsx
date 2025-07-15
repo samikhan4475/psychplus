@@ -36,6 +36,7 @@ import {
   type Location,
   type StaffWithClinicsAndSlots,
 } from '../types'
+import { APP_ENV } from '@psychplus/utils/constants'
 
 function groupStaffWithClinicsAndSlots(
   appointmentAvailabilities: StaffAppointmentAvailabilities | [],
@@ -329,7 +330,9 @@ const getCodsetValue = (codes: SharedCode[], display: string) => {
 }
 
 function getLoginRedirectUrl() {
-  return 'https://ui.psychplus.io/login'
+  return String(APP_ENV).toLocaleLowerCase() === 'production'
+    ? 'https://ui.psychplus.io/login'
+    : 'https://ui.staging.psychplus.dev/login'
 }
 
 const transformStaffWithClinicsAndSlots = ({
