@@ -10,6 +10,7 @@ import {
   DiagnosisIcd10Code,
   DrugInfo,
   FavouriteDiagnosisData,
+  SelectOptionType,
   Sort,
 } from '@/types'
 import { getFavouriteDiagnosis } from '@/ui/diagnosis/diagnosis/actions/get-favorites-diagnosis'
@@ -30,6 +31,7 @@ import {
   PatientPrescriptionStatus,
   RecordStatus,
 } from './types'
+import { getProvidersOptionsAction } from '@/actions'
 
 interface StoreState {
   patientId?: number
@@ -81,6 +83,9 @@ interface StoreState {
   favoritesData?: FavoriteMedication[]
   markMedicationFavorites: (medicationName: string, id?: string) => void
   favoritesLoaded: boolean
+  providerOptions: SelectOptionType[]
+  loadingProviderOptions: boolean
+  fetchProviderOptions: () => Promise<void>
 }
 
 const useStore = create<StoreState>((set, get) => ({
@@ -106,6 +111,21 @@ const useStore = create<StoreState>((set, get) => ({
   isPmpReviewed: false,
   DiagnosisLoading: false,
   scriptSureSessionToken: undefined,
+  providerOptions: [],
+  loadingProviderOptions: false,
+  fetchProviderOptions: async () => {
+  const { providerOptions } = get()
+  if (providerOptions.length > 0) return
+
+  set({ loadingProviderOptions: true })
+  const res = await getProvidersOptionsAction()
+  if (res?.state === 'success') {
+    set({ providerOptions: res.data, loadingProviderOptions: false })
+  } else {
+    toast.error(res?.error || 'Failed to fetch provider options')
+    set({ loadingProviderOptions: false })
+  }
+},
   setPmpReviewed: (value: boolean) => set({ isPmpReviewed: value }),
   updateStatus: (updatedMedication: PatientMedication[]) => {
     set({

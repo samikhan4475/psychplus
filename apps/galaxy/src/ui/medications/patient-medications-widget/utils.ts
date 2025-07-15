@@ -19,7 +19,7 @@ import { MedicationType, Prescription } from './types'
 
 const getYesNoValue = (value?: boolean) => {
   if (value === undefined) return ''
-  return value ? 'yes' : 'no'
+  return value ? 'no' : 'yes'
 }
 const formatDiagnosisList = (drug: Prescription): string => {
   return (
@@ -142,7 +142,7 @@ const getInitialValuesPatientMedication = (
         isSubstitutionsAllowed:
           getYesNoValue(prescriptionDrug?.isSubstitutionsAllowed) ?? '',
 
-        prescriptionStatusType: medication?.prescriptionStatusType != null ? String(medication.prescriptionStatusType) : '',
+        prescriptionStatusType: medication?.prescriptionStatusType !== null ? String(medication.prescriptionStatusType) : '',
         quantityValue: String(prescriptionDrug?.quantityValue ?? ''),
         reasonForPrn: prescriptionDrug?.reasonForPrn ?? '',
         quantityUnitOfMeasureCode:

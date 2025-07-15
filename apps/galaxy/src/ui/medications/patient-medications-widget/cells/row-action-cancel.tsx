@@ -6,7 +6,10 @@ import { IconButton, Tooltip } from '@radix-ui/themes'
 import { Row } from '@tanstack/react-table'
 import { CircleX } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { FEATURE_FLAGS } from '@/constants'
+import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { cancelPatientPrescriptions } from '../actions'
+import { cancelNonFeatureFlagPrescriptions } from '../actions/cancel-non-feature-flag-prescription'
 import { useStore } from '../store'
 import { PatientMedication, PatientPrescriptionStatus } from '../types'
 
@@ -16,6 +19,7 @@ interface RowActionRefreshProps {
 
 const RowActionCancel = ({ row }: RowActionRefreshProps) => {
   const {
+    id,
     externalPrescriptionId,
     externalMessageId,
     writtenDate,
@@ -29,6 +33,9 @@ const RowActionCancel = ({ row }: RowActionRefreshProps) => {
     refetch: state.refetch,
   }))
 
+  const isFeatureFlagEnabled = useFeatureFlagEnabled(
+    FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
+  )
   const isDisabled =
     prescriptionStatusTypeId?.toString() ===
       PatientPrescriptionStatus.AWAITING_APPROVAL ||
@@ -38,22 +45,37 @@ const RowActionCancel = ({ row }: RowActionRefreshProps) => {
   const [isLoading, setIsLoading] = useState(false)
 
   const onCancel = async () => {
-    if (!externalPatientId) return
     setIsLoading(true)
-    const result = await cancelPatientPrescriptions({
-      patientId,
-      externalPatientId,
-      externalPrescriptionId,
-      externalMessageId,
-      writtenDate,
-    })
-    if (result.state === 'success') {
-      toast.success('Prescription cancelled successfully.')
-      refetch(isQuickNoteSection)
-    } else if (result.state === 'error') {
-      toast.error('Unable to cancel prescription.')
+
+    let result
+
+    if (!isFeatureFlagEnabled) {
+      result = await cancelNonFeatureFlagPrescriptions({
+        prescriptionId: id,
+      })
+    } else {
+      if (!externalPatientId) {
+        setIsLoading(false)
+        return
+      }
+
+      result = await cancelPatientPrescriptions({
+        patientId,
+        externalPatientId,
+        externalPrescriptionId,
+        externalMessageId,
+        writtenDate,
+      })
     }
+
+    if (result?.state === 'error') {
+      toast.error(result.error)
+      setIsLoading(false)
+      return
+    }
+    toast.success('Cancelled Successfully')
     setIsLoading(false)
+    refetch(isQuickNoteSection)
   }
 
   return (

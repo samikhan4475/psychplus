@@ -6,6 +6,8 @@ interface SelectOptionType {
   servicesOffered?: string
   insurancePlanObject?: { id: string; name: string }
   parentTitle?: string
+  externalPharmacyId?:string,
+  pharmacyId?:string
 }
 
 export type { SelectOptionType }

@@ -95,7 +95,12 @@ const ReviewDrugDetail = ({ drug }: ReviewDrugDetailProps) => {
       <Flex gap="4" align="center" wrap="wrap">
         <ReviewLabel
           title="Prescriber"
-          value={getPatientFullName(drug?.providerName)}
+          value={
+            drug?.providerName &&
+            `${getPatientFullName(drug.providerName, true)} ${
+              drug.providerName.title ?? ''
+            }`
+          }
         />
         <ReviewLabel title="NPI" value={drug?.providerNpi} />
         <ReviewLabel title="DEA" value={drug?.providerDea} />

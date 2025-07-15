@@ -35,11 +35,17 @@ const RowActionEdit = ({ row, onEditClick }: RowActionEditProps) => {
     constant: state.constants,
   }))
 
-  const isDisabled = useMemo(
-    () =>
-      prescriptionStatusTypeId?.toString() !== PatientPrescriptionStatus.ACTIVE,
-    [prescriptionStatusTypeId],
-  )
+  const transactionStatus = row.original.userTransactionStatus?.toLowerCase()
+  const isTransactionBlocked =
+    transactionStatus === 'success' || transactionStatus === 'pending'
+
+  const isPrescriptionNotActive =
+    prescriptionStatusTypeId?.toString() !== PatientPrescriptionStatus.ACTIVE
+
+  const isDisabled = useMemo(() => {
+    return isFeatureFlagEnabled ? isPrescriptionNotActive : isTransactionBlocked
+  }, [isFeatureFlagEnabled, isPrescriptionNotActive, isTransactionBlocked])
+
   const onRefresh = async () => {
     setIsLoading(true)
     const result = await getPatientMedicationOrderAction({
@@ -64,6 +70,7 @@ const RowActionEdit = ({ row, onEditClick }: RowActionEditProps) => {
           color="gray"
           variant="ghost"
           onClick={() => onEditClick(row.original)}
+          disabled={isDisabled}
         >
           <EditIcon size={18} color="black" />
         </IconButton>

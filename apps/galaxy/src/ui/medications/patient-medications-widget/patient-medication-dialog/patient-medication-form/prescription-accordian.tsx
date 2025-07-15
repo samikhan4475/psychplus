@@ -31,6 +31,20 @@ const PrescriptionAccordian = ({
     }
   }, [errorIndex, drugs])
 
+
+  const [prevLength, setPrevLength] = useState(drugs.length)
+
+  useEffect(() => {
+    if (drugs.length > prevLength) {
+      const lastDrug = drugs[drugs.length - 1]
+      if (lastDrug?.prescribableDrugDesc) {
+        setOpenItem(lastDrug.prescribableDrugDesc)
+      }
+    }
+
+    setPrevLength(drugs.length)
+  }, [drugs])
+
   const handleDelete = (drugName?: string) => (e: React.MouseEvent) => {
     e.stopPropagation()
     if (!drugName) return

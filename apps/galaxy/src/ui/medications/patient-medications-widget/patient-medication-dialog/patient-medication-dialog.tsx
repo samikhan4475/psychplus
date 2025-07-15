@@ -35,10 +35,11 @@ const PatientMedicationDialog = ({
   const [prescriptionData, setPrescriptionData] = useState<
     Prescription | undefined
   >()
-  const { step, stepCount, totalSteps, ...stepsProp } = useSteps()
+  const { step, stepCount, ...stepsProp } = useSteps()
   const { refetch } = useStore((state) => ({
     refetch: state.refetch,
   }))
+  const totalSteps = 4;
   const fetchData = useCallback(
     async (id: number) => {
       setLoading(true)
@@ -87,9 +88,14 @@ const PatientMedicationDialog = ({
         </Dialog.Close>
         <Dialog.Title>
           <Flex className="gap-6">
+         {
+          step !== Step.Form && (
             <Text size="3" className="bg-pp-bg-accent rounded-full p-1">
               {stepCount}/{totalSteps}
             </Text>
+          )
+        }
+            
             {step === Step.Form ? title : dialogTitles[step]}
           </Flex>
         </Dialog.Title>

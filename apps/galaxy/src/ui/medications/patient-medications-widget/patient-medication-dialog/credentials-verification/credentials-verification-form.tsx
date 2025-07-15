@@ -12,14 +12,18 @@ import { StepComponentProps } from '../types'
 import { PasswordInput } from './password-input'
 import { CredentialsVerificationSchemaType, schema } from './schema'
 import { UsernameInput } from './username-input'
+import { useStore as useGlobalStore } from '@/store'
 
 const CredentialsVerificationForm = ({
   onPrev,
   onNext,
 }: StepComponentProps) => {
+  const { username } = useGlobalStore((state) => ({
+      username: state.user.username
+  }))
   const form = useForm({
     defaultValues: {
-      username: '',
+      username: username || '',
       password: '',
     },
     resolver: zodResolver(schema),

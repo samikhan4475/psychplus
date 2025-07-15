@@ -30,8 +30,17 @@ const filterDefaultCosigner = (cosigners: Cosigner[]) => {
   return cosigners.find((item) => item?.isDefaultCosigner === true)
 }
 
-const getPatientFullName = (name: LegalName) =>
-  `${getPatientFirstName(name)} ${getPatientLastName(name)}`
+const getPatientFullName = (name: LegalName, includeMiddle = false) => {
+  const parts = [getPatientFirstName(name)]
+
+  if (includeMiddle && getPatientMiddleName(name)) {
+    parts.push(getPatientMiddleName(name))
+  }
+
+  parts.push(getPatientLastName(name))
+
+  return parts.join(' ')
+}
 
 const getPatientMRN = (id: number) => {
   const diff = PADDED_MRN_LENGTH - String(id).length

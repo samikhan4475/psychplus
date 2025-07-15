@@ -28,7 +28,8 @@ const searchPharmaciesAction = async (
   const transformedData = response?.data?.reduce(
     (acc: SelectOptionType[], item) => {
       if (item?.externalPharmacyId) {
-        acc.push({ value: item?.pharmacyId, label: item?.pharmacyName })
+        acc.push({ value: item?.pharmacyId, label: item?.pharmacyName,externalPharmacyId: item?.externalPharmacyId,
+ })
       }
       return acc
     },

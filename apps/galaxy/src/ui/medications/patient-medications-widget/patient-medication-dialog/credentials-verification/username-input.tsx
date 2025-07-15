@@ -20,6 +20,7 @@ const UsernameInput = () => {
         size="2"
         className="border-pp-gray-2 w-full border border-solid !outline-none [box-shadow:none]"
         {...form.register('username')}
+        readOnly
       />
       <FormFieldError name="username" />
     </FormFieldContainer>

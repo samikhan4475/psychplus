@@ -61,7 +61,11 @@ const transformOutPatientMedication = (
           quantityCodeListQualifier: '38',
           quantityUnitOfMeasureCode: drug?.quantityUnitOfMeasureCode ?? '',
           writtenDate: drug?.writtenDate,
-          isSubstitutionsAllowed: drug?.isSubstitutionsAllowed === 'yes',
+          isSubstitutionsAllowed: (() => {
+            if (drug?.isSubstitutionsAllowed === undefined) return false
+            if (drug.isSubstitutionsAllowed === 'yes') return false
+            return true
+          })(),
           refills: Number(drug.refills),
           isMedicationAsNeeded: drug?.isMedicationAsNeeded,
           reasonForPrn: drug.reasonForPrn,

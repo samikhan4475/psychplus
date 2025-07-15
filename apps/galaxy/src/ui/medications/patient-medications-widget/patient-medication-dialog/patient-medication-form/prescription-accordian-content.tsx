@@ -1,6 +1,6 @@
 'use client'
 
-import { Flex } from '@radix-ui/themes'
+import { Flex,Box } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { BlockLabel } from '@/components'
 import { DrugBlockProps, MedicationType } from '../../types'
@@ -49,6 +49,8 @@ const PrescriptionAccordianContent = ({ index }: DrugBlockProps) => {
             <PrnReasonField index={index} />
           </>
         )}
+      </Flex>
+      <Flex align="end" gap="2">
 
         <QuantityField index={index} />
         <DoseUnitField index={index} />
@@ -61,13 +63,18 @@ const PrescriptionAccordianContent = ({ index }: DrugBlockProps) => {
         <MedicationStatusField index={index} />
       </Flex>
 
-      <Flex gap="2">
+      <Flex gap="2" wrap="wrap">
         <StartDateTime index={index} />
-        
-        {
-          prnShow && <EndDateTime index={index} />
-        }
-        <PrescriberField index={index} />
+
+        {prnShow && <EndDateTime index={index} />}
+
+        {prnShow ? (
+          <Box width="100%">
+            <PrescriberField index={index} />
+          </Box>
+        ) : (
+          <PrescriberField index={index} />
+        )}
       </Flex>
       <InstructionsOrNotesField index={index} />
       <Flex width="100%" direction="column">

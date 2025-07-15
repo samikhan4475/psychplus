@@ -103,7 +103,6 @@ const PatientMedicationForm = ({
             id: item.id,
             payload: item,
           })
-
           if (response?.state === 'error') return response
           if (response?.data) {
             const index = prescriptions?.findIndex(
@@ -121,7 +120,6 @@ const PatientMedicationForm = ({
             const { drugs } = getInitialValuesPatientMedication(response?.data)
             form.setValue(`drugs.${ind}`, drugs?.[0])
             const newPrescription = response.data
-
             setPrescriptions((prev) =>
               options?.rePrescribe
                 ? [newPrescription]
@@ -138,6 +136,17 @@ const PatientMedicationForm = ({
       patientId,
       Number(appointmentId),
     )
+    payloads = payloads.map((prescription) => ({
+      ...prescription,
+      prescriptionDrugs:
+        prescription.prescriptionDrugs?.map((drug) => ({
+          ...drug,
+          isSubstitutionsAllowed:
+            drug.isSubstitutionsAllowed !== undefined
+              ? drug.isSubstitutionsAllowed
+              : false,
+        })) ?? [],
+    }))
     if (editOptions?.rePrescribe) {
       payloads = payloads.map(({ id, ...rest }) => rest)
     }

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { ScrollArea } from '@radix-ui/themes'
 import { useShallow } from 'zustand/react/shallow'
 import { DataTable, LoadingPlaceholder } from '@/components'
@@ -10,12 +10,16 @@ import { useStore } from './store'
 import { EditOptions, PatientMedication } from './types'
 
 const PatientMedicationsDataTable = ({ actionsHide = false }) => {
-  const { data, loading } = useStore(
+ const { data, loading, fetchProviderOptions } = useStore(
     useShallow((state) => ({
       data: state.data,
       loading: state.loading,
+      fetchProviderOptions: state.fetchProviderOptions,
     })),
   )
+  useEffect(() => {
+    fetchProviderOptions()
+  }, [fetchProviderOptions])
   const [dialogOpen, setDialogOpen] = useState(false)
   const [selectedMedication, setSelectedMedication] =
     useState<PatientMedication | null>(null)

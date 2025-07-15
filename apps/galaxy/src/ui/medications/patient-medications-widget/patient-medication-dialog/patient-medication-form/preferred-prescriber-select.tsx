@@ -32,13 +32,13 @@ const PreferredPrescriberSelect = () => {
     [id],
   )
   const handleAddOption = (option: SelectOptionType) => {
-    const existingOption = options.find((opt) => opt.value === option.value);
+    const existingOption = options.find((opt) => opt.value === option.value)
     if (!existingOption) {
-      setOptions((prevOptions) => [...prevOptions, option]);
+      setOptions((prevOptions) => [...prevOptions, option])
     }
-    form.setValue('prescriptionPharmacyName',option.label)
-    form.setValue('pharmacyNcpdpId', option.ncpdpId || undefined);
-  };
+    form.setValue('prescriptionPharmacyName', option.label)
+    form.setValue('pharmacyNcpdpId', option.ncpdpId || undefined)
+  }
 
   useEffect(() => {
     if (pharmacyNcpdpId && prescriptionPharmacyName && pharmacyId) {
@@ -70,6 +70,17 @@ const PreferredPrescriberSelect = () => {
       })
   }, [getPharmaciesAction, prescribedStatus])
 
+  useEffect(() => {
+    if (options.length > 0 && !form.watch('pharmacyId')) {
+      const first = options[0]
+      form.setValue('pharmacyId', first.value)
+      if (first.externalPharmacyId) {
+        form.setValue('pharmacyNcpdpId', first.externalPharmacyId)
+      }
+      form.setValue('prescriptionPharmacyName', first.label)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [options])
   if (PrescribedStatus.Pharmacy !== prescribedStatus) return null
   return (
     <Flex align="start" gap="1" className="flex-1">

@@ -4,7 +4,7 @@ import { Step } from './types'
 const useSteps = () => {
   const [step, setStep] = useState<Step>(Step.Form)
   const stepKeys = Object.values(Step)
-  const stepCount = stepKeys.indexOf(step) + 1
+  const stepCount = stepKeys.indexOf(step)
   const totalSteps = stepKeys.length
   const onNextStep = () => {
     setStep((prevStep) => {
