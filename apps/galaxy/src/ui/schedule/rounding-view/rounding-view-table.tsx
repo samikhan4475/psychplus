@@ -1,10 +1,13 @@
 'use client'
 
 import { useEffect, useMemo } from 'react'
+import { useRouter } from 'next/navigation'
 import { ScrollArea } from '@radix-ui/themes'
-import { Table } from '@tanstack/react-table'
+import { Row, Table } from '@tanstack/react-table'
 import { DataTable } from '@/components'
+import { useStore as useGlobalStore } from '@/store'
 import { Appointment } from '@/types'
+import { capitalizeName, constructQuickNotesUrl, getPatientMRN } from '@/utils'
 import { ALWAYS_VISIBLE_COLUMNS } from '../constants'
 import { useStore as useRootStore } from '../store'
 import { useStore as useRoundingViewStore, useStore } from './store'
@@ -35,6 +38,8 @@ const DataTableHeader = (table: Table<Appointment>) => {
 }
 
 const RoundingViewTable = () => {
+  const addTab = useGlobalStore((state) => state.addTab)
+  const router = useRouter()
   const { columnsStore, setColumnsStore, data } = useStore((state) => ({
     columnsStore: state.columnsStore,
     setColumnsStore: state.setColumnsStore,
@@ -81,12 +86,30 @@ const RoundingViewTable = () => {
     })
   }, [columnsStore])
 
+  const onRowClick = (row: Row<Appointment>) => {
+    const href = constructQuickNotesUrl(
+      row.original.patientId,
+      row.original.appointmentId,
+      row.original.visitTypeCode,
+      row.original.visitSequence,
+    )
+
+    addTab({
+      href,
+      label: `${capitalizeName(row.original?.name)}-${getPatientMRN(
+        row.original.patientId,
+      )}-${row.original.appointmentId}`,
+    })
+    router.push(href)
+  }
+
   return (
     <ScrollArea
       className="bg-white h-full flex-1 px-2.5 py-2"
       scrollbars="both"
     >
       <DataTable
+        onRowClick={onRowClick}
         columns={filteredColumns}
         data={data}
         renderHeader={DataTableHeader}
