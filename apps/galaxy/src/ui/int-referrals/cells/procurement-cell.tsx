@@ -9,11 +9,9 @@ import { updatePatientReferralAction } from '@/ui/referrals/actions'
 import { useStore } from '../store'
 import { VisitTypes } from '../types'
 
-interface Props extends PropsWithRow<PatientReferral> {
-  disabled?: boolean
-}
-
-const ProcurementCell = ({ row: { original: referral } }: Props) => {
+const ProcurementCell = ({
+  row: { original: referral },
+}: PropsWithRow<PatientReferral>) => {
   const store = useStore()
   const { data, setData } = zustandUseStore(store, (state) => ({
     setData: state.setData,
@@ -48,7 +46,7 @@ const ProcurementCell = ({ row: { original: referral } }: Props) => {
     <CodesetSelectCell
       value={selectedValue}
       onValueChange={updateREMSStatus}
-      codeset="Procurement"
+      codeset="ProcurementType"
       disabled={referral.service !== VisitTypes.SPRAVATO}
     />
   )

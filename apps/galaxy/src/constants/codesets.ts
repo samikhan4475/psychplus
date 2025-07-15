@@ -134,7 +134,7 @@ const CODESETS = {
   PreferredPartnerUserStatus: 'PreferredPartnerUserStatus',
   ConfirmatoryTesting: 'PsychPlusPublic.ConfirmatoryTesting',
   UDSMedicalNecessity: 'PsychPlusPublic.UDSMedicalNecessity',
-  Procurement: 'Procurement',
+  ProcurementType: 'ProcurementType',
   PriorAuthorizationStatus: 'PriorAuthorizationStatus',
 
   //Standard Codesets having groupingCodeStartsWith at last

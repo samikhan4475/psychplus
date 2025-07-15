@@ -21,7 +21,7 @@ const updatePatientReferralAction = async (
     'diagnosis',
     'diagnosisCode',
     'priorAuthorizationStatus',
-    'procurement',
+    'procurementType',
     'providerId',
     'referralProviderStaffId',
     'referralProviderLocationId',

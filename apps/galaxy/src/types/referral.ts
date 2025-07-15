@@ -83,7 +83,6 @@ interface PatientReferral {
   intiatedByUserRole?: string
   stateCode?: string
   appointment: Partial<Appointment>
-  procurement?: string
   diagnosis?: string
   priorAuthStatus?: string
   remsEnrolled?: boolean
