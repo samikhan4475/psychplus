@@ -25,6 +25,7 @@ import { schema, SchemaType } from '../schema'
 import { useEditVisitStore } from '../store'
 import { transformRequestPayload } from '../transform'
 import { EditVisitAlert } from './edit-visit-alert'
+import { PatientPhoneText } from './patient-phone-text'
 import { PatientText } from './patient-text'
 import { ServiceSelect } from './service-select'
 import { StateAndLocationFilters } from './state-and-location-filters'
@@ -91,6 +92,7 @@ const EditVisitForm = ({
         state: visitDetails?.state,
         medicalRecordNumber: '',
         birthdate: visitDetails?.dob,
+        phone: visitDetails?.patientPhoneNumber?.number || '',
       },
       visitDate: date,
       duration: visitDetails?.appointmentDuration?.toString(),
@@ -236,8 +238,11 @@ const EditVisitForm = ({
           }}
         />
         <Grid columns="12" className="min-w-[648px] gap-3">
-          <Box className="col-span-12">
+          <Box className="col-span-8">
             <PatientText visitDetails={visitDetails} />
+          </Box>
+          <Box className="col-span-4">
+            <PatientPhoneText />
           </Box>
           <StateAndLocationFilters />
           <Box className="col-span-4">

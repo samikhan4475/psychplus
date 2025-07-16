@@ -16,6 +16,7 @@ const schema = z
       medicalRecordNumber: z.string().optional(),
       status: z.string().optional(),
       state: z.string().optional(),
+      phone: z.string().optional(),
     }),
     state: z.string().min(1, 'Required'),
     location: z.string().min(1, 'Required'),

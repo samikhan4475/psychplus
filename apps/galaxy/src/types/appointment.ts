@@ -88,6 +88,7 @@ interface Appointment {
   dob: string
   patientMrn: string
   patientStatus: string
+  patientPhoneNumber?: { number: string; type: string }
   service: string
   serviceId: string
   isServiceTimeDependent: boolean
