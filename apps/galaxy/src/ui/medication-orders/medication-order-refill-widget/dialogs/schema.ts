@@ -6,7 +6,7 @@ const drugSignatureSchema = z.object({
 })
 
 const drugDiagnosisSchema = z.object({
-  id: z.string().uuid(),
+  id: z.string().uuid().optional(),
   diagnosisCode: z.string(),
   notificationId: z.string().optional(),
   pharmacyNotificationDrugId: z.string().optional(),

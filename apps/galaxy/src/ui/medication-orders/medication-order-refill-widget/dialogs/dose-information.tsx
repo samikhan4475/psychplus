@@ -35,32 +35,32 @@ const DoseInformation = ({ index }: DoseInformationProps) => {
   }, [codes])
   return (
     <Flex gap="2">
-      <FormFieldContainer>
+      <FormFieldContainer className="flex-1">
         <FormFieldLabel>Dose Strength</FormFieldLabel>
         <TextField.Root
           {...form.register(`drugList.${index}.doseStrength`)}
-          className="h-6 w-[155px]"
+          className="h-6 w-full"
           size="1"
         />
       </FormFieldContainer>
 
-      <FormFieldContainer>
+      <FormFieldContainer className="flex-1">
         <FormFieldLabel>Quantity Unit</FormFieldLabel>
         <SelectInput
           field={`drugList.${index}.quantityUnitOfMeasureCode`}
           options={qualityUnitsCodesets}
           onValueChange={handleValueChange}
           className=""
-          buttonClassName="h-6 w-[155px]"
+          buttonClassName="h-6 w-full"
           size="1"
           value={form.getValues(`drugList.${index}.quantityUnitOfMeasureCode`)}
         />
       </FormFieldContainer>
 
-      <FormFieldContainer>
+      <FormFieldContainer className="flex-1">
         <FormFieldLabel>Drug Form</FormFieldLabel>
         <CodesetSelect
-          className="h-6 w-[155px]"
+          className="h-6 w-full"
           name={`drugList.${index}.doseFormCode`}
           codeset={CODESETS.PrescriptionDosageFormList}
           size="1"

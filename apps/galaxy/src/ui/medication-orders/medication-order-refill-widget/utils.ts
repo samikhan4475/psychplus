@@ -47,6 +47,29 @@ export const handleChangeRequestApproval = async (
 ): Promise<boolean> => {
   const date = new Date()
   for (const row of data.drugList ?? []) {
+    const diagnosisList = row.drugDiagnosisList ?? []
+    const diagnoses = []
+
+    for (let i = 0; i < diagnosisList.length; i += 2) {
+      const primary = diagnosisList[i]
+      const secondary = diagnosisList[i + 1]
+
+      diagnoses.push({
+        clinicalInformationQualifier: 0,
+        primary: {
+          code: primary.diagnosisCode,
+          qualifier: 'ABF',
+          description: primary.diagnosisDescription ?? '',
+        },
+        secondary: secondary
+          ? {
+              code: secondary.diagnosisCode,
+              qualifier: 'ABF',
+              description: secondary.diagnosisDescription ?? '',
+            }
+          : undefined,
+      })
+    }
     const payload = {
       responseType:
         data?.rxChangeRequestCode === 'PrescriberAuthorizationRequired'
@@ -69,6 +92,7 @@ export const handleChangeRequestApproval = async (
         priorAuthorizationStatus: row?.priorAuthorizationStatus,
         drugNote: row.notes,
         ...('deaSchedule' in row && { deaSchedule: row.deaSchedule }),
+        diagnoses: diagnoses,
       },
     }
 

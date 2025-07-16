@@ -1,8 +1,11 @@
 'use client'
 
 import { useEffect, useMemo } from 'react'
+import { CalendarDate } from '@internationalized/date'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { DataTable, LoadingPlaceholder } from '@/components'
+import { getCurrentLocalDate } from '@/ui/schedule/utils'
+import { formatDateToISOString } from '@/utils'
 import { columns } from './columns'
 import { useStore } from './store'
 import {
@@ -13,33 +16,41 @@ import {
 
 const MedicationOrderRefillTable = () => {
   const {
-    searchMedicationsList,
     data,
     loading,
     sort,
     sortData,
     activeTab,
     changeRequestData,
+    searchMedicationsList,
   } = useStore((state) => ({
-    searchMedicationsList: state.searchMedicationsList,
     loading: state.loading,
     data: state.data,
     changeRequestData: state.changeRequestData,
     sort: state.sort,
     sortData: state.sortData,
     activeTab: state.activeTab,
+    searchMedicationsList: state.searchMedicationsList,
   }))
+  const today = new Date()
+
   const isRefillTab = activeTab.includes('Refill')
   useEffect(() => {
+    const todayDate = new CalendarDate(
+      today.getFullYear(),
+      today.getMonth() + 1,
+      today.getDate(),
+    )
     const formattedData: MedicationRefillAPIRequest = {
       notificationType: isRefillTab
         ? PharmacyNotificationType.PharmacyRxRenewalRequest
         : PharmacyNotificationType.PharmacyRxChangeRequest,
+      notificationDateFrom: formatDateToISOString(todayDate) ?? undefined,
+      notificationDateTo: formatDateToISOString(todayDate, true) ?? undefined,
     }
 
     searchMedicationsList(formattedData)
   }, [activeTab])
-
   const filteredRefillRequests = useMemo(() => {
     let newList = isRefillTab
       ? data.refillRequests

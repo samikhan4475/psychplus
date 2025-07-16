@@ -18,7 +18,6 @@ const getIcd10Diagnosis = async (payload: {
       error: response.error,
     }
   }
-
   return {
     state: 'success',
     data: response.data,

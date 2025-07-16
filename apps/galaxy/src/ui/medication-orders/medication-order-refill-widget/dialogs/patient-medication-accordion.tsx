@@ -6,10 +6,7 @@ import { TriangleDownIcon } from '@radix-ui/react-icons'
 import { Box, Flex, Grid, ScrollArea, Text } from '@radix-ui/themes'
 import { Pencil, TriangleAlert } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
-import { DeleteIcon } from '@/components/icons'
 import { DrugInfo } from '@/types'
-import { FavoriteView } from '@/ui/medications/patient-medications-widget/patient-medication-dialog/shared'
-import { FavoriteIcon } from '@/ui/medications/patient-medications-widget/patient-medication-dialog/shared/favorite-icon'
 import { PatientMedicationForm } from './patient-medicaiton-form'
 import { PatientSelect } from './patient-select'
 import { UpdateMedicationSchema } from './schema'
@@ -28,7 +25,8 @@ const PatientPrescriptionAccordian = () => {
       hour: '2-digit',
       minute: '2-digit',
     })
-
+    const deaCode = newDrug?.representativeErxPackagedDrug?.federalDeaClassCode
+    const isControlledSubstance = ['2', '3', '4', '5'].includes(deaCode)
     const updated = [...drugs]
 
     updated[editIndex] = {
@@ -40,13 +38,15 @@ const PatientPrescriptionAccordian = () => {
       doseUnitCode: newDrug.medStrengthUnit,
       rxNormCode: newDrug.rxCui.toString(),
       drugCode: newDrug?.representativeErxPackagedDrug?.packagedDrugId ?? '',
+      deaSchedule: deaCode,
+      isControlledSubstance,
     }
 
     form.setValue('drugList', updated)
     setEditIndex(null)
   }
   return (
-    <Grid columns="2" gap="2">
+    <Grid columns="1" gap="2">
       <Flex direction="column" gap="1" flexGrow="1">
         <PatientSelect />
         <ScrollArea
@@ -87,10 +87,6 @@ const PatientPrescriptionAccordian = () => {
                       >
                         <Pencil size={14} />
                       </Box>
-                      <Box>
-                        <DeleteIcon />
-                      </Box>
-                      <FavoriteIcon name={item?.drugDescription ?? ''} />
                     </Flex>
                   </Accordion.Trigger>
                 </Accordion.Header>
@@ -127,7 +123,6 @@ const PatientPrescriptionAccordian = () => {
           </Accordion.Root>
         </ScrollArea>
       </Flex>
-      <FavoriteView />
     </Grid>
   )
 }

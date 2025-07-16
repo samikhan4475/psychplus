@@ -7,9 +7,9 @@ interface DrugSignature {
 }
 
 interface DrugDiagnosis {
-  id: string
-  notificationId: string
-  pharmacyNotificationDrugId: string
+  id?: string
+  notificationId?: string
+  pharmacyNotificationDrugId?: string
   diagnosisCode?: string
   diagnosisCodeQualifier?: string
   diagnosisDescription?: string
@@ -186,6 +186,8 @@ interface MedicationRefillAPIRequest {
   diagnosisCode?: string
   pharmacyNotesContains?: string
   diagnosisDescriptionStartsWith?: string
+  notificationDateFrom?: string
+  notificationDateTo?: string
 }
 interface PatientPersonInfo {
   patientGender?: string
@@ -256,6 +258,18 @@ interface RxRenewalResponseDrugDetail {
   priorAuthorizationStatus?: string
 }
 
+interface DiagnosisDetail {
+  code: string
+  qualifier: string
+  description: string
+}
+
+interface MedicationDiagnosis {
+  clinicalInformationQualifier: number
+  primary?: DiagnosisDetail
+  secondary?: DiagnosisDetail
+}
+
 interface RenewalResponsePayload {
   responseType: RenewalResponseType
   referenceNumber?: string
@@ -277,6 +291,7 @@ interface RxChangeResponseDrugDetail {
   isSubstitutionsAllowed?: boolean
   daysSupply?: string
   refills?: string
+  diagnoses?: MedicationDiagnosis[]
 }
 
 interface ChangeRequestPayload {
@@ -295,6 +310,10 @@ enum PharmacyNotificationType {
   PharmacyRxChangeRequest = 'PharmacyRxChangeRequest',
 }
 
+enum PharmacyRxChangeRequest {
+  TherapeuticSubstitution = 'TherapeuticSubstitution',
+  PriorAuthorizationRequired = 'PriorAuthorizationRequired',
+}
 const REFILLDENIEDOPTIONS = [
   { value: 'UnknownPatient', label: 'Patient unknown to the Provider' },
   { value: 'NeverUnderCare', label: 'Patient never under Provider care' },
@@ -431,8 +450,11 @@ export {
   type RxRenewalResponseDrugDetail,
   type ChangeRequestPayload,
   type PrescriberRxRenewalResponse,
+  type PharmacyNotificationDrugModel,
+  type DrugDiagnosis,
   RenewalResponseTypeEnum,
   PharmacyNotificationType,
+  PharmacyRxChangeRequest,
   REFILLDENIEDOPTIONS,
   CHANGERESPONSEDENIEDOPTIONS,
   MEDICATIONSSTATUS,

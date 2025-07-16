@@ -279,6 +279,10 @@ interface TransmitResult {
 interface Name {
   firstName: string
   lastName: string
+  preferredName: string
+  title: string
+  suffix: string
+  honors: string
 }
 
 interface PmpScore {

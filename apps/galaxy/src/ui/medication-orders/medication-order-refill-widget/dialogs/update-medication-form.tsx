@@ -38,9 +38,9 @@ const UpdateMedicationForm = ({
   const [isControlledSubstance, setIsControlledSubstance] = useState(false)
 
   useEffect(() => {
-    if (!data.drugList || data.drugList.length === 0) return
-    if (data.drugList.length > 0) {
-      const drug = data?.drugList?.[0]
+    if (!drugList || drugList.length === 0) return
+    if (drugList.length > 0) {
+      const drug = drugList?.[0]
       setIsControlledSubstance(drug.isControlledSubstance ?? false)
     }
   }, [drugList])
@@ -84,33 +84,32 @@ const UpdateMedicationForm = ({
         />
         {stepProps?.step === Step.Form && (
           <Flex gap="2" justify="end">
-            <Button
-              type="submit"
-              size="2"
-              highContrast
-              variant="outline"
-              color="gray"
-              className="text-black"
-              disabled={isLoading}
-              loading={isLoading}
-            >
-              Save & Approve
-            </Button>
-          </Flex>
-        )}
-        {stepProps?.step === Step.Form && isControlledSubstance && (
-          <Flex gap="2" justify="end">
-            <Button
-              type="button"
-              size="2"
-              highContrast
-              variant="outline"
-              color="gray"
-              className="text-black"
-              onClick={() => stepProps.onJump(Step.CredentialVerification)}
-            >
-              Next
-            </Button>
+            {isControlledSubstance ? (
+              <Button
+                type="button"
+                size="2"
+                highContrast
+                variant="outline"
+                color="gray"
+                className="text-black"
+                onClick={() => stepProps.onJump(Step.CredentialVerification)}
+              >
+                Next
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                size="2"
+                highContrast
+                variant="outline"
+                color="gray"
+                className="text-black"
+                disabled={isLoading}
+                loading={isLoading}
+              >
+                Save & Approve
+              </Button>
+            )}
           </Flex>
         )}
       </Flex>

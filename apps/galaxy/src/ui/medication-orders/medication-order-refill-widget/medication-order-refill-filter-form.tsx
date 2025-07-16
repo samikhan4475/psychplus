@@ -1,6 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { CalendarDate } from '@internationalized/date'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Button } from '@radix-ui/themes'
 import { DateValue } from 'react-aria-components'
@@ -47,13 +48,22 @@ export type MedicationFormFilterSchemaType = z.infer<typeof schema>
 const MedicationOrderRefillFilterForm = () => {
   const { searchMedicationsList, activeTab } = useStore()
   const isRefillTab = activeTab.includes('Refill')
+  const today = new Date()
 
   const form = useForm<MedicationFormFilterSchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
     defaultValues: {
-      notificationDateFrom: undefined,
-      notificationDateTo: undefined,
+      notificationDateFrom: new CalendarDate(
+        today.getFullYear(),
+        today.getMonth() + 1,
+        today.getDate(),
+      ),
+      notificationDateTo: new CalendarDate(
+        today.getFullYear(),
+        today.getMonth() + 1,
+        today.getDate(),
+      ),
       patientFirstNameContains: '',
       prescriptionId: '',
       pharmacyNcpdpId: '',
@@ -65,8 +75,8 @@ const MedicationOrderRefillFilterForm = () => {
   const onClear = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     form.reset({
-      notificationDateFrom: undefined,
-      notificationDateTo: undefined,
+      notificationDateFrom: null,
+      notificationDateTo: null,
       patientFirstNameContains: '',
       prescriptionId: '',
       pharmacyNcpdpId: '',
@@ -123,7 +133,7 @@ const MedicationOrderRefillFilterForm = () => {
       <FromField />
       <ToField />
       <PatientField />
-      <PrescriberSelect />
+      {/* <PrescriberSelect /> */}
       <PharmacySelect />
       <MedicationField />
       <StatusSelect />

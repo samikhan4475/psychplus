@@ -21,7 +21,6 @@ import { UpdateMedicationDialog } from '../dialogs/update-medication-dialog'
 import PatientMapDialog from '../patient-map/map-patient-dialog'
 import { useStore } from '../store'
 import {
-  MedicationHistoryResponse,
   MedicationRefill,
   MedicationRefillAPIRequest,
   PharmacyNotificationType,
