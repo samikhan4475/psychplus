@@ -21,6 +21,8 @@ const defaultPayload = {
   isIncludeProvider: true,
   isIncludePatient: true,
   isIncludeLocation: true,
+  isIncludeInitialAppointment: true,
+  isIncludeAttachments: true,
 }
 
 const searchExternalReferralsAction = async ({

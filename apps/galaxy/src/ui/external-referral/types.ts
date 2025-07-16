@@ -33,7 +33,7 @@ interface Patient extends PatientProfile {
   requestTime?: string
   requestedMedium?: string
   requestClinicLocation?: string
-  requestedProviderName?: string
+  requestedProviderName?: LegalName
   referrerName?: string
   referralPhone?: string
   referralEmail?: string
@@ -67,6 +67,9 @@ interface Patient extends PatientProfile {
   servicePriorityStatus?: string
   initiatedBy?: string
   orderingProvider?: string
+  pAndC?: string
+  cc?: string
+  attachments?: Attachment[]
 }
 
 interface SearchPatientsData {
@@ -128,10 +131,67 @@ interface SearchPatientsParams
 interface SortCodesetOptions {
   includeDisabled?: boolean
 }
+interface Location {
+  type: string
+  street1: string
+  street2: string
+  city: string
+  stateCode: string
+  countryCode: string
+  postalCode: string
+  postalPlus4Code: string
+  longitude: number
+  latitude: number
+  altitude: number
+  timeZoneId: string
+}
+
+interface MatchDetail {
+  field: string
+  scoreAdjustment: number
+}
+
+interface Match {
+  matchScore: number
+  userId: number
+  socialSecurityNumber: string
+  patientId: number
+  recordStatus: string
+  isTestPatient: boolean
+  name: LegalName
+  dateOfBirth: string
+  gender: string
+  email: string
+  phoneNumber: string
+  location: Location
+  matchDetails: MatchDetail[]
+  pAndC?: string
+  cc?: string
+  patientExternalMrn?: string
+  primaryInsurance?: string
+  createdOn?: string
+  createdBy?: string
+  mostRecentAppointmentDate?: string
+  upcomingAppointmentDate?: string
+}
+
+interface MatchingPatient {
+  matchStatus: string
+  matches: Match[]
+}
+interface Attachment {
+  id: string
+  metadata?: Metadata
+  recordStatus: string
+  documentType: string
+  isHasDocumentDownload: boolean
+}
 export {
   QueryByNextDays,
   type Patient,
   type SearchPatientsData,
   type SearchPatientsParams,
   type SortCodesetOptions,
+  type MatchingPatient,
+  type Match,
 }

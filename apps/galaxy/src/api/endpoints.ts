@@ -1106,9 +1106,20 @@ const PMP_START = (patientId: string) =>
 const PMP_REPORT = (patientId: string, prescriptionId: string) =>
   `${API_URL}/api/patients/${patientId}/prescriptions/${prescriptionId}/actions/pmpreport`
 const LAUNCH_SELF_CREDENTIALING_ENDPOINT = `${API_URL}/api/users/self/idproofings/actions/launchManagementUrl`
-const LAUNCH_USER_CREDENTIALING_ENDPOINT = (userId:string) =>
+const LAUNCH_USER_CREDENTIALING_ENDPOINT = (userId: string) =>
   `${API_URL}/api/users/${userId}/idproofings/actions/launchManagementUrl`
 const CANCEL_PRESCRIPTIONS_ENDPOINT = `${API_URL}/api/prescribing/prescriptions`
+const GET_MATCHING_REFERRAL_PATIENTS_ENDPOINT = `${API_URL}/api/matching/patients/actions/search`
+const ASSOCIATE_MATCHING_REFERRAL_PATIENTS_ENDPOINT = (
+  patientId: number,
+  externalreferralId: string,
+) =>
+  `${API_URL}/api/patients/${patientId}/externalreferrals/${externalreferralId}/actions/associate`
+const GET_EXTERNAL_REFERRAL_ATTACHMENT = (
+  externalReferralId: string,
+  externalReferralAttachmenttId: string,
+) =>
+  `${API_URL}/api/externalreferrals/${externalReferralId}/attachments/${externalReferralAttachmenttId}/actions/download`
 export {
   PATIENT_MEDICATION_SIGN_IN,
   GET_PATIENT_MEDICATION_ENDPOINT,
@@ -1600,5 +1611,8 @@ export {
   MARK_CLAIM_POSTED,
   LAUNCH_SELF_CREDENTIALING_ENDPOINT,
   LAUNCH_USER_CREDENTIALING_ENDPOINT,
-  CANCEL_PRESCRIPTIONS_ENDPOINT
+  CANCEL_PRESCRIPTIONS_ENDPOINT,
+  GET_MATCHING_REFERRAL_PATIENTS_ENDPOINT,
+  ASSOCIATE_MATCHING_REFERRAL_PATIENTS_ENDPOINT,
+  GET_EXTERNAL_REFERRAL_ATTACHMENT,
 }

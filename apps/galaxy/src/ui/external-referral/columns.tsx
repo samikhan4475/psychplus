@@ -2,12 +2,18 @@
 
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
-import { getPatientAge, getPatientDOB, getPatientFullName } from '@/utils'
+import {
+  getPatientAge,
+  getPatientDOB,
+  getPatientFullName,
+  getSlashedPaddedDateString,
+} from '@/utils'
 import {
   ActionCell,
   ContactMadeSelectCell,
   ExternalReferralHistoryCell,
-  PriorAuthStatusSelectCell,
+  FacesheetAttachmentCell,
+  MedicalRecordAttachmentCell,
   ServiceDateTimeCell,
 } from './cells'
 import { Patient } from './types'
@@ -38,14 +44,17 @@ const columns: ColumnDef<Patient>[] = [
         id: 'pt-status',
         header: () => <ColumnHeader label="User Status" />,
         cell: ({ row: { original } }) => (
-          <TextCell>{original?.matchStatus}</TextCell>
+          <TextCell>{original?.status}</TextCell>
         ),
       },
       {
         id: 'patientAge',
         header: () => <ColumnHeader label="Age" />,
         cell: ({ row: { original } }) => (
-          <TextCell>{getPatientAge(original.patientDateOfBirth)}</TextCell>
+          <TextCell>
+            {original?.patientDateOfBirth &&
+              getPatientAge(original.patientDateOfBirth)}
+          </TextCell>
         ),
       },
       {
@@ -69,7 +78,8 @@ const columns: ColumnDef<Patient>[] = [
         header: () => <ColumnHeader label="DOB" />,
         cell: ({ row: { original } }) => (
           <TextCell className="truncate">
-            {getPatientDOB(original?.patientDateOfBirth)}
+            {original?.patientDateOfBirth &&
+              getPatientDOB(original?.patientDateOfBirth)}
           </TextCell>
         ),
       },
@@ -198,15 +208,20 @@ const columns: ColumnDef<Patient>[] = [
   {
     id: 'facesheet',
     header: () => <ColumnHeader label="Facesheet" />,
-    cell: ({ row: { original } }) => (
-      <TextCell>{original?.facesheet ?? ''}</TextCell>
-    ),
+    cell: FacesheetAttachmentCell,
+  },
+  {
+    id: 'medical-record',
+    header: () => <ColumnHeader label="Medical Record" />,
+    cell: MedicalRecordAttachmentCell,
   },
   {
     id: 'dischargeTime',
     header: () => <ColumnHeader label="DC Date" />,
     cell: ({ row: { original } }) => (
-      <TextCell>{original?.dischargeTime ?? ''}</TextCell>
+      <TextCell>
+        {getSlashedPaddedDateString(original?.dischargeTime) ?? ''}
+      </TextCell>
     ),
   },
   {
@@ -242,7 +257,8 @@ const columns: ColumnDef<Patient>[] = [
         header: () => <ColumnHeader label="Provider" />,
         cell: ({ row: { original: patient } }) => (
           <TextCell className="truncate">
-            {patient?.requestedProviderName}
+            {patient?.requestedProviderName &&
+              getPatientFullName(patient.requestedProviderName)}
           </TextCell>
         ),
       },
@@ -283,10 +299,17 @@ const columns: ColumnDef<Patient>[] = [
     ),
   },
   {
+    id: 'match-status',
+    header: () => <ColumnHeader label="Status" />,
+    cell: ({ row: { original } }) => (
+      <TextCell className="truncate">{original?.matchStatus ?? ''}</TextCell>
+    ),
+  },
+  {
     id: 'isLinked',
     header: () => <ColumnHeader label="Association" />,
     cell: ({ row: { original } }) => (
-      <TextCell>{original?.isLinked ? 'Yes' : 'No'}</TextCell>
+      <TextCell>{original?.matchStatus === 'Existing' ? 'Yes' : 'No'}</TextCell>
     ),
   },
   {

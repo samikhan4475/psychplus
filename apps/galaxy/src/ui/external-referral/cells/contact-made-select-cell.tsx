@@ -21,6 +21,7 @@ const ContactMadeSelectCell = ({
   const updateContactMadeStatus = async (value: string) => {
     setSelectedValue(value)
     const result = await updateExternalReferralAction(patient.id, {
+      ...patient,
       contactStatus: value,
     })
     if (result.state === 'success') {

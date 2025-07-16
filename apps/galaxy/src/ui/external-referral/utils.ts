@@ -1,6 +1,9 @@
 import { DateValue } from 'react-aria-components'
 import { FieldErrors } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { GET_EXTERNAL_REFERRAL_ATTACHMENT } from '@/api/endpoints'
 import { convertToCalendarDate } from '@/utils'
+import { downloadFile } from '@/utils/download'
 import { ExternalReferralSchemaType } from './external-referral-filter-form'
 
 const getInitialValues = (): ExternalReferralSchemaType => {
@@ -10,7 +13,7 @@ const getInitialValues = (): ExternalReferralSchemaType => {
     age: '',
     patientDateOfBirth: null,
     patientPartialFirstName: '',
-    patientGender: 'Male',
+    patientGender: '',
     patientPartialLastName: '',
     city: '',
     hasGuardian: '',
@@ -48,6 +51,21 @@ const validateDate = (
   referenceDate: DateValue | undefined | null,
 ) => {
   return referenceDate ? date?.compare(referenceDate) : 0
+}
+
+export const handleExternalReferralAttachmentExport = async (
+  externalReferralId: number,
+  attachmentId: string,
+) => {
+  try {
+    const endpoint = GET_EXTERNAL_REFERRAL_ATTACHMENT(
+      externalReferralId.toString(),
+      attachmentId,
+    )
+    await downloadFile(endpoint, '', 'POST', {})
+  } catch (error) {
+    toast.error(`Failed to download`)
+  }
 }
 
 export { getInitialValues, convertDateField, hasFieldErrors, validateDate }
