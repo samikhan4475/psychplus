@@ -1,9 +1,9 @@
-import toast from 'react-hot-toast'
-import { create } from 'zustand'
 import { DiagnosisIcd10Code } from '@/types'
 import { getIcd10Diagnosis } from '@/ui/discharge-diagnosis/actions'
 import { getNoteDetailsAction } from '@/ui/notes/actions'
 import { groupBySectionName } from '@/ui/notes/utils'
+import toast from 'react-hot-toast'
+import { create } from 'zustand'
 import {
   getProviderRecommendationsHistory,
   saveProviderRecommendation,
@@ -64,40 +64,53 @@ export const useProviderRecommendationsStore =
       set({ history: res.data, loading: false })
     },
     fetchWorkingDiagnosis: async (patientId, appointmentId) => {
-      set({ loadingWorkingDiagnosis: true })
+      set({ loadingWorkingDiagnosis: true });
       const payload = {
         patientId: patientId,
         appointmentId: appointmentId,
         isIncludeDetails: true,
-      }
-      const quickNotesResponse = await getNoteDetailsAction(payload)
+      };
+      const quickNotesResponse = await getNoteDetailsAction(payload);
 
       if (quickNotesResponse.state === 'error') {
-        toast.error('Failed to fetch working diagnosis')
-        set({ loadingWorkingDiagnosis: false })
-        return
+        toast.error('Failed to fetch working diagnosis');
+        set({ loadingWorkingDiagnosis: false });
+        return;
       }
 
-      const noteData = groupBySectionName(quickNotesResponse.data)
-      if (!noteData) {
-        set({ loadingWorkingDiagnosis: false, workingDiagnosisData: [] })
-        return
+      const noteData = groupBySectionName(quickNotesResponse.data);
+      if (!noteData || !noteData.QuicknoteSectionDiagnosis) {
+        set({ loadingWorkingDiagnosis: false, workingDiagnosisData: [] });
+        return;
       }
-      const { sectionItemValue } =
-        noteData?.QuicknoteSectionDiagnosis?.[0] || {}
-      const DiagnosisCodes = sectionItemValue?.split(',') || []
-      if (sectionItemValue === 'empty' || DiagnosisCodes?.length === 0) {
-        set({ loadingWorkingDiagnosis: false, workingDiagnosisData: [] })
-      } else {
-        const response = await getIcd10Diagnosis({
-          DiagnosisCodes,
-        })
-        set({ loadingWorkingDiagnosis: false })
-        if (response.state === 'error') return
-        const sortedData = response.data.toSorted((a, b) => {
-          return DiagnosisCodes.indexOf(a.code) - DiagnosisCodes.indexOf(b.code)
-        })
-        set({ workingDiagnosisData: sortedData })
+
+      const sectionValues = noteData.QuicknoteSectionDiagnosis
+        .map(item => item.sectionItemValue)
+        .filter(Boolean);
+
+      const codes = sectionValues
+        .flatMap(value => value.split(','))
+        .map(code => code.trim())
+        .filter(code => code && code !== 'empty');
+
+      const diagnosisCodes = [...new Set(codes)];
+
+      if (diagnosisCodes.length === 0) {
+        set({ loadingWorkingDiagnosis: false, workingDiagnosisData: [] });
+        return;
       }
+
+      const response = await getIcd10Diagnosis({ DiagnosisCodes: diagnosisCodes });
+
+      set({ loadingWorkingDiagnosis: false });
+
+      if (response.state === 'error') return;
+
+      const sortedData = response.data.toSorted((a, b) => {
+        return diagnosisCodes.indexOf(a.code) - diagnosisCodes.indexOf(b.code);
+      });
+
+      set({ workingDiagnosisData: sortedData });
     },
+
   }))

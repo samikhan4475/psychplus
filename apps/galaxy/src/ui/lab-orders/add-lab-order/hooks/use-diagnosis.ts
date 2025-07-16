@@ -56,32 +56,42 @@ export default () => {
   }
 
   const getQuickNoteDiagnosis = async () => {
-    setTableLoading(true)
-    const response = await getQuickNotesWorkingDiagnosis({ patientId: id })
+    setTableLoading(true);
+    const response = await getQuickNotesWorkingDiagnosis({ patientId: id });
+  
     if (response.state === 'success') {
-      const { sectionItemValue } = response.data?.[0] || {}
-      const diagnosisCodes = sectionItemValue?.split(',') || []
-      if (sectionItemValue !== 'empty' && diagnosisCodes?.length > 0) {
-        const diagnoseResponse = await getDiagnosisLimit({
-          diagnosisCodes,
-        })
+      const allSectionItemValues = response.data
+        ?.map((item) => item.sectionItemValue)
+        .filter(Boolean);
+  
+      const rawCodes = allSectionItemValues
+        .flatMap((value) => value.split(','))
+        .map((code) => code.trim())
+        .filter((code) => code && code !== 'empty');
+  
+      const diagnosisCodes = [...new Set(rawCodes)];
+  
+      if (diagnosisCodes.length > 0) {
+        const diagnoseResponse = await getDiagnosisLimit({ diagnosisCodes });
+  
         if (diagnoseResponse.state === 'success') {
-          setDiagnosisList(diagnoseResponse?.data ?? [])
+          setDiagnosisList(diagnoseResponse?.data ?? []);
           if (diagnoseResponse?.data?.length) {
             const diagnosises = diagnoseResponse?.data?.map((item) => ({
               ...item,
               checked: true,
               newDignoses: true,
-            }))
-            form.setValue('diagnosis', diagnosises)
+            }));
+            form.setValue('diagnosis', diagnosises);
           }
         }
       }
     } else {
-      toast.error('Failed to fetch diagnosis')
+      toast.error('Failed to fetch diagnosis');
     }
-    setTableLoading(false)
-  }
+  
+    setTableLoading(false);
+  };  
 
   useEffect(() => {
     if (orderId && appointmentId) {

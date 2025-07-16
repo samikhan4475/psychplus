@@ -49,33 +49,44 @@ const useStore = create<Store>((set, get) => ({
 
   encodeId: (id: string) => id.replace(/\./g, '%2E'),
   fetchWorkingDiagnosis: async (patientId: string) => {
-    set({ loadingWorkingDiagnosis: true })
-    const quickNotesResponse = await getQuickNotesWorkingDiagnosis({
-      patientId,
-    })
-
+    set({ loadingWorkingDiagnosis: true });
+  
+    const quickNotesResponse = await getQuickNotesWorkingDiagnosis({ patientId });
+  
     if (quickNotesResponse.state === 'error') {
-      toast.error('Failed to fetch working diagnosis')
-      set({ loadingWorkingDiagnosis: false })
-      return
+      toast.error('Failed to fetch working diagnosis');
+      set({ loadingWorkingDiagnosis: false });
+      return;
     }
-    const { sectionItemValue } = quickNotesResponse.data?.[0] || {}
-    const DiagnosisCodes = sectionItemValue?.split(',') || []
-    if (sectionItemValue === 'empty' || DiagnosisCodes?.length === 0) {
-      set({ loadingWorkingDiagnosis: false, workingDiagnosisData: [] })
-    } else {
-      const response = await getIcd10Diagnosis({
-        DiagnosisCodes,
-      })
-      set({ loadingWorkingDiagnosis: false })
-      if (response.state === 'error') return
-      const sortedData = response.data.toSorted((a, b) => {
-        return DiagnosisCodes.indexOf(a.code) - DiagnosisCodes.indexOf(b.code)
-      })
-      set({ workingDiagnosisData: sortedData })
+  
+    const allSectionItemValues = quickNotesResponse.data
+      ?.map(item => item.sectionItemValue)
+      .filter(Boolean);
+  
+    const rawCodes = allSectionItemValues
+      .flatMap(value => value.split(','))
+      .map(code => code.trim()) 
+      .filter(code => code && code !== 'empty'); 
+  
+    const DiagnosisCodes = [...new Set(rawCodes)];
+  
+    if (DiagnosisCodes.length === 0) {
+      set({ loadingWorkingDiagnosis: false, workingDiagnosisData: [] });
+      return;
     }
+  
+    const response = await getIcd10Diagnosis({ DiagnosisCodes });
+  
+    set({ loadingWorkingDiagnosis: false });
+  
+    if (response.state === 'error') return;
+  
+    const sortedData = response.data.toSorted((a, b) => {
+      return DiagnosisCodes.indexOf(a.code) - DiagnosisCodes.indexOf(b.code);
+    });
+    set({ workingDiagnosisData: sortedData });
   },
-
+  
   updateWorkingDiagnosisData: async (data) => {
     set({ workingDiagnosisData: data })
   },

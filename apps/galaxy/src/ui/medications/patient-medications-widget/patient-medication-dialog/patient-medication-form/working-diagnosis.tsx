@@ -29,40 +29,46 @@ const WorkingDiagnosis = ({ index }: DrugBlockProps) => {
 
   useEffect(() => {
     const fetchTopDiagnoses = () => {
-      setTopDiagnosisLoading(true)
-
+      setTopDiagnosisLoading(true);
+    
       getQuickNotesWorkingDiagnosis({ patientId: String(patientId) })
         .then((response) => {
-          if (response.state !== 'success') return
-
-          const { sectionItemValue } = response.data?.[0] || {}
-          const diagnosisCodes = sectionItemValue?.split(',') || []
-
-          if (sectionItemValue !== 'empty' && diagnosisCodes.length > 0) {
-            return getDiagnosisLimit({ diagnosisCodes }).then(
-              (diagnoseResponse) => {
-                if (diagnoseResponse.state === 'success') {
-                  const top3 = diagnoseResponse.data
-                    .slice(0, 3)
-                    .map((item) => ({
-                      ...item,
-                      checked: true,
-                      newDignoses: true,
-                    }))
-
-                  form.setValue(`drugs[${index}].diagnosis`, top3)
-                }
-              },
-            )
+          if (response.state !== 'success') return;
+    
+          const allSectionItemValues = response.data
+            ?.map((item) => item.sectionItemValue)
+            .filter(Boolean);
+    
+          const rawCodes = allSectionItemValues
+            .flatMap((value) => value.split(','))
+            .map((code) => code.trim())
+            .filter((code) => code && code !== 'empty');
+    
+          const diagnosisCodes = [...new Set(rawCodes)];
+    
+          if (diagnosisCodes.length > 0) {
+            return getDiagnosisLimit({ diagnosisCodes }).then((diagnoseResponse) => {
+              if (diagnoseResponse.state === 'success') {
+                const top3 = diagnoseResponse.data
+                  .slice(0, 3)
+                  .map((item) => ({
+                    ...item,
+                    checked: true,
+                    newDignoses: true,
+                  }));
+    
+                form.setValue(`drugs[${index}].diagnosis`, top3);
+              }
+            });
           }
         })
         .catch((err) => {
-          console.error('Failed to fetch top diagnoses', err)
+          console.error('Failed to fetch top diagnoses', err);
         })
         .finally(() => {
-          setTopDiagnosisLoading(false)
-        })
-    }
+          setTopDiagnosisLoading(false);
+        });
+    };    
 
     if (
       !hasLoadedTopDiagnoses.current &&
