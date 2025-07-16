@@ -80,15 +80,20 @@ const PatientMedicationsWidget = () => {
   }, [patientId])
 
   const fetchPMPMSearch = async () => {
+    let encounterData: EncounterData | undefined
+
     const appointmentResult = await getAppointment({
       id: apptId,
       shouldHaveLocation: true,
     })
+
     if (appointmentResult.state === 'success') {
-      setEncounterInfo({
+      encounterData = {
         locationId: appointmentResult.data.locationId,
         providerStaffId: appointmentResult.data.providerStaffId,
-      })
+      }
+
+      setEncounterInfo(encounterData)
     }
     setCheckPMPLoading(false)
     const payload = {
@@ -101,17 +106,22 @@ const PatientMedicationsWidget = () => {
       setPmpScoresResponse(response.data)
       if (response.data.length > 0) {
         setPmpReviewed(true)
+      } else {
+        await handlePMPCheck(encounterData)
       }
     }
   }
-  const handlePMPCheck = async () => {
+  const handlePMPCheck = async (encounterDataOverride?: EncounterData) => {
     setCheckPMPLoading(true)
     setStartPMP(true)
+
+    const encounter = encounterDataOverride || encounterInfo
+
     const payload = {
       patientId: Number(patientId),
       appointmentId: Number(apptId),
-      locationId: encounterInfo.locationId,
-      staffId: encounterInfo.providerStaffId,
+      locationId: encounter.locationId,
+      staffId: encounter.providerStaffId,
     }
     const response = await startPMPAction({ payload })
     if (response.state === 'success') {
@@ -131,14 +141,14 @@ const PatientMedicationsWidget = () => {
     const pmpResponse = pmpScoresResponse?.[0]
     const fallbackReportUrl =
       checkPMPResponse?.report?.reportRequestUrl?.viewableReport ?? ''
-     const reportRequestUrl = pmpResponse?.reportRequestUrl ?? fallbackReportUrl
+    const reportRequestUrl = pmpResponse?.reportRequestUrl ?? fallbackReportUrl
     const uuid = getUUIDWithSplit(reportRequestUrl)
 
     const payload = {
       patientId: String(patientId),
       appointmentId: Number(apptId),
-      staffId: pmpResponse.staffId,
-      locationId: pmpResponse.locationId,
+      locationId: encounterInfo.locationId?.toString(),
+      staffId: encounterInfo.providerStaffId,
       pmpPrescriptionId: pmpResponse.pmpScores[0]?.pmpPrescriptionId,
       reportId: uuid,
     }
@@ -246,7 +256,7 @@ const PatientMedicationsWidget = () => {
                   variant="outline"
                   color="gray"
                   className="text-black"
-                  onClick={handlePMPCheck}
+                  onClick={() => handlePMPCheck()}
                   loading={checkPMPLoading}
                 >
                   Check PMP

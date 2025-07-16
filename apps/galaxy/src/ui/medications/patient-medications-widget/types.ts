@@ -356,10 +356,10 @@ interface StartPmpResponse {
 }
 
 interface PmpReportRequest {
-  appointmentId: Number
-  staffId: number
+  appointmentId: number
+  staffId?: number
   patientId: string
-  locationId: string
+  locationId?: string
   senderUserId?: number
   pmpPrescriptionId: string
   reportId: string
