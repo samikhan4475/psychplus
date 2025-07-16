@@ -3,12 +3,16 @@ import { EPCSHeader } from './epcs-header'
 import { EPCSPagination } from './epcs-pagination'
 import { EPCSTable } from './epcs-table'
 import { useSearchParams } from 'next/navigation'
+import { useStore as useGlobalStore } from '@/store'
 interface EPCSViewProps {
   staffId: string | null
 }
 const EPCSView = ({ staffId }: EPCSViewProps) => {
+  const { userId } = useGlobalStore((state) => ({
+      userId: state.user.id,
+    }))
   const searchParams = useSearchParams()
-  const userId = searchParams.get('id') ?? ''
+  const staffUserId = searchParams.get('id') ?? String(userId)
   return (
     <Flex
       direction="column"
@@ -16,8 +20,8 @@ const EPCSView = ({ staffId }: EPCSViewProps) => {
       gap="1"
       className="bg-white h-full !overflow-hidden"
     >
-      <EPCSHeader userId={userId} staffId={staffId} />
-      <EPCSTable userId={userId} />
+      <EPCSHeader userId={staffUserId} staffId={staffId} />
+      <EPCSTable userId={staffUserId} />
       <EPCSPagination />
     </Flex>
   )

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Button, Flex, Text } from '@radix-ui/themes'
+import { RefreshCcw } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useStore as useGlobalStore } from '@/store'
 import { cn } from '@/utils'
@@ -24,10 +25,13 @@ const EPCSHeader = ({ userId, staffId }: EPCSHeaderProps) => {
     staff: state.staffResource,
     loginUserId: state.user.id,
   }))
-  const { epcsIframeLoaded, setEpcsIframeLoaded } = useStore((state) => ({
-    epcsIframeLoaded: state.epcsIframeLoaded,
-    setEpcsIframeLoaded: state.setEpcsIframeLoaded,
-  }))
+  const { epcsIframeLoaded, setEpcsIframeLoaded, refetch } = useStore(
+    (state) => ({
+      epcsIframeLoaded: state.epcsIframeLoaded,
+      setEpcsIframeLoaded: state.setEpcsIframeLoaded,
+      refetch: state.refetch,
+    }),
+  )
 
   const {
     start: startProofing,
@@ -51,15 +55,19 @@ const EPCSHeader = ({ userId, staffId }: EPCSHeaderProps) => {
 
   const fetchVerificationStatus = async () => {
     if (!userId) return
-    
-    const proofingTypeResponse = await getSelfProofing(userId, String(loginUserId))
-    
+
+    const proofingTypeResponse = await getSelfProofing(
+      userId,
+      String(loginUserId),
+    )
+
     if (proofingTypeResponse.state === 'error') {
-      setVerificationStatus(prev => ({ ...prev, isInProgress: false }))
+      setVerificationStatus((prev) => ({ ...prev, isInProgress: false }))
       return
     }
 
-    const { proofingTransaction, pendingProofing, subStatus } = proofingTypeResponse.data
+    const { proofingTransaction, pendingProofing, subStatus } =
+      proofingTypeResponse.data
     setVerificationStatus({
       isInProgress: proofingTransaction.pendingUserAction,
       isVerified: proofingTransaction.successfulProofing,
@@ -112,7 +120,7 @@ const EPCSHeader = ({ userId, staffId }: EPCSHeaderProps) => {
     fetchVerificationStatus()
   }, [userId, loginUserId])
 
-  const getButtonClassName = (isVerified: boolean) => 
+  const getButtonClassName = (isVerified: boolean) =>
     cn(`${isVerified ? 'text-pp-success-text' : 'text-black'}`)
 
   return (
@@ -122,6 +130,10 @@ const EPCSHeader = ({ userId, staffId }: EPCSHeaderProps) => {
           EPCS Manager
         </Text>
         <Flex gap="2" justify="end">
+          <Button className="text-black bg-white gap-1 h-6 rounded-2 border border-solid" type="button" onClick={refetch}>
+            <RefreshCcw className="text-pp-gray-3" width="16px" height="16px" />
+            <Text className="text-pp-black-3 text-1">Refresh</Text>
+          </Button>
           <Button
             color="gray"
             className={getButtonClassName(verificationStatus.isVerified)}
@@ -130,8 +142,8 @@ const EPCSHeader = ({ userId, staffId }: EPCSHeaderProps) => {
             type="button"
             onClick={handleStartProofing}
             disabled={
-              proofingLoading || 
-              verificationStatus.isInProgress === null || 
+              proofingLoading ||
+              verificationStatus.isInProgress === null ||
               verificationStatus.isVerified
             }
             loading={proofingLoading}
@@ -152,7 +164,7 @@ const EPCSHeader = ({ userId, staffId }: EPCSHeaderProps) => {
           </Button>
         </Flex>
       </Flex>
-      
+
       <CredentialingDialog
         open={!!proofingIframeSrc}
         title="ID Proofing"

@@ -23,6 +23,7 @@ interface Store {
     page?: number,
     reset?: boolean,
   ) => void
+  refetch: () => void
   sortData: (column: string, sortDirection?: SortDirection) => void
   next: () => void
   prev: () => void
@@ -62,6 +63,11 @@ const useStore = create<Store>((set, get) => ({
           : { ...get().pageCache, [page]: result.data },
       })
     }
+  },
+  refetch: () => {
+    const { payload, page } = get()
+    if (!payload) return
+    get().fetch(payload, page, true)
   },
 
   next: () => {
