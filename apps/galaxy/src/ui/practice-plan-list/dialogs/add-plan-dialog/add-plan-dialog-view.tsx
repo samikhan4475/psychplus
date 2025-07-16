@@ -11,9 +11,7 @@ interface AddPlanDialogProps {
 const AddPlanDialog = ({ children, plan }: AddPlanDialogProps) => {
   const [open, setOpen] = useState(false)
 
-  const onOpenChange = (open: boolean) => {
-    setOpen(open)
-  }
+  const onOpenChange = (open: boolean) => setOpen(open)
 
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>

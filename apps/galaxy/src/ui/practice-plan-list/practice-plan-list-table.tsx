@@ -231,6 +231,7 @@ const PracticePlanListTable = () => {
             })
             router.push(href)
           }}
+          tdClass="[&:has(.dialog-trigger-cell)]:!p-0"
           tableClass="bg-white"
         />
       </ScrollArea>

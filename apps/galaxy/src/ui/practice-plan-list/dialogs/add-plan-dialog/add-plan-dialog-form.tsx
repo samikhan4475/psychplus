@@ -103,9 +103,12 @@ const AddPlanDialogForm = ({ onCloseModal, plan }: AddPlanDialogFormProps) => {
     const payerPlanAction = data.id ? updatePayerPlanAction : addPayerPlanAction
 
     const result = await payerPlanAction(finalizedModel)
-    if (result.state === 'error') return toast.error(result.error ?? `Failed to ${data.id ? 'add': 'update'} payer plan.`)
+    if (result.state === 'error')
+      return toast.error(
+        result.error ?? `Failed to ${data.id ? 'add' : 'update'} payer plan.`,
+      )
 
-    toast.success('Plan created successfully')
+    toast.success(`Plan ${data.id ? 'updated' : 'added'} successfully.`)
     onCloseModal(false)
     search({ practiceId }, 1, true)
   }
