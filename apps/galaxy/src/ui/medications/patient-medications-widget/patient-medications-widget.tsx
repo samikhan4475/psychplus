@@ -76,7 +76,7 @@ const PatientMedicationsWidget = () => {
       ),
       fetchExternalScriptsurePatientId(patientId),
     ])
-    fetchPMPMSearch()
+    if(ehr14021PmpIntegration) fetchPMPMSearch()
   }, [patientId])
 
   const fetchPMPMSearch = async () => {
