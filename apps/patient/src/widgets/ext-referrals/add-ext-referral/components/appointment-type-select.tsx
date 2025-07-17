@@ -16,7 +16,7 @@ const AppointmentTypeSelect = () => {
       <SelectInput
         field="requestedMedium"
         placeholder="Select"
-        buttonClassName="font-[400] h-[38px] text-gray-12  text-2 w-full [&_span]:bg-red-500 bg-[white] outline outline-1 outline-gray-7"
+        buttonClassName="font-regular h-[38px] text-gray-12 text-2 w-full [&_span]:bg-red-500 bg-[white] border-pp-gray-2 border border-solid !outline-none [box-shadow:none]"
         variant="soft"
         size="1"
         options={[

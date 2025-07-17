@@ -90,7 +90,9 @@ const MultiSelectDropdown = ({
   const isInputDisabled = disabled ?? isFormDisabled
 
   return (
-    <FormFieldContainer className={cn('min-w-96 w-auto', className)}>
+    <FormFieldContainer
+      className={cn('min-w-96 w-auto max-xs:min-w-full', className)}
+    >
       <Box ref={ref} className="relative">
         <Flex
           align="center"

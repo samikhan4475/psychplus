@@ -44,10 +44,10 @@ const FilterPanel = ({
     <Flex
       pt="1"
       pb="6"
-      className="bg-white sticky top-0 z-10 w-full flex-1 flex-wrap px-4 sm:px-7"
+      className="bg-white sticky top-0 z-10 w-full flex-1 flex-wrap px-4 max-lg:items-start sm:px-7"
       gap="4"
     >
-      <Flex className="flex-row gap-3 max-sm:w-full max-xs:flex-row xs:flex-row sm:flex-col sm:gap-2.5 md:flex-row">
+      <Flex className="flex-row gap-3 max-sm:w-full max-xs:flex-row xs:flex-row sm:flex-col sm:gap-2.5 md:flex-col lg:flex-row">
         <Flex align="center" gap="2">
           <Text className="text-[12px] font-medium text-[#000000] md:text-[14px]">
             Appointment
@@ -134,7 +134,7 @@ const FilterPanel = ({
             type="number"
             placeholder="ZIP Code"
             value={filtersState?.zipCode}
-            className="flex-1 rounded-[4px] border border-[#b9bbc6] px-[5px] py-1 font-regular text-[#1c2024] focus:border-blue-12 focus:outline-none max-sm:h-7 max-xs:h-6 sm:h-8 md:h-8 md:px-[10px] md:py-2 lg:h-10"
+            className="w-full max-w-full flex-1 rounded-[4px] border border-[#b9bbc6] px-[5px] py-1 font-regular text-[#1c2024] focus:border-blue-12 focus:outline-none max-lg:w-[200px] max-md:w-[200px] max-sm:h-7 max-xs:h-6 sm:h-8 md:h-8 md:px-[10px] md:py-2 lg:h-10"
             style={{ color: psychPlusBlueColor }}
             onChange={(e) => handleZipCodeChange(e.target.value)}
           />

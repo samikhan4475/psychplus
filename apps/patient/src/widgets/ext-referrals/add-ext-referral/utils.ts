@@ -101,6 +101,7 @@ const addExtReferralInitialValues = (shortName?: string) => ({
   source: '',
   additionalComments: '',
   payerName: '',
+  time: '',
 })
 
 function transformOut(data: SchemaType): PatientExtReferralParams {

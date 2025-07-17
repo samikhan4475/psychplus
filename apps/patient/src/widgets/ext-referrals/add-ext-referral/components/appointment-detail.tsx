@@ -55,7 +55,7 @@ const AppointmentDetail = ({
         : [],
     [codes],
   )
-  
+
   const sharedUploadProps = {
     resetTrigger: fileResetCounter,
     disableControls: form.formState.isSubmitting,
@@ -130,5 +130,5 @@ const AppointmentDetail = ({
   )
 }
 const buttonClassName =
-  'font-[400] h-[38px] text-gray-12  text-2 w-full [&_span]:bg-red-500 bg-[white] outline outline-1 outline-gray-7'
+  'font-regular h-[38px] text-gray-12 text-2 w-full [&_span]:bg-red-500 bg-[white] border-pp-gray-2  border border-solid !outline-none [box-shadow:none]'
 export { AppointmentDetail }

@@ -3,6 +3,7 @@ import { clearAuthCookiesResponse, setAuthCookiesResponse } from '@/utils/auth'
 import { createHeaders } from './api'
 import { apiGetSession } from './api/session'
 import { API_URL } from './constants'
+import { retryOnTimeoutFetch } from './utils'
 
 const LOGIN_PATH = '/login'
 const PUBLIC_ROUTES = [
@@ -27,29 +28,32 @@ export const middleware = async (request: NextRequest) => {
 
   if (request.nextUrl.pathname.startsWith('/api')) {
     const headers = createHeaders(request.headers)
-
-    return fetch(
-      new URL(`${request.nextUrl.pathname}${request.nextUrl.search}`, API_URL),
-      {
-        body: request.body,
-        method: request.method,
-        headers: {
-          Authorization: headers.get('Authorization') ?? '',
-          'Content-Type': headers.get('Content-Type') ?? 'application/json',
-          'Psychplus-Application':
-            headers.get('Psychplus-Application') ?? 'react-ui',
-          'Psychplus-AppVersion':
-            headers.get('Psychplus-AppVersion') ?? '1.0.0',
-          'Psychplus-RunEnvironment':
-            headers.get('Psychplus-RunEnvironment') ?? 'development',
-          'PsychPlus-SessionPracticeId':
-            headers.get('PsychPlus-SessionPracticeId') ?? '',
-          'PsychPlus-SessionId': headers.get('PsychPlus-SessionId') ?? '',
+    const buffer = await request.arrayBuffer()
+    return retryOnTimeoutFetch(() =>
+      fetch(
+        new URL(
+          `${request.nextUrl.pathname}${request.nextUrl.search}`,
+          API_URL,
+        ),
+        {
+          body: ['GET', 'HEAD'].includes(request.method) ? undefined : buffer,
+          method: request.method,
+          headers: {
+            Authorization: headers.get('Authorization') ?? '',
+            'Content-Type': headers.get('Content-Type') ?? 'application/json',
+            'Psychplus-Application':
+              headers.get('Psychplus-Application') ?? 'react-ui',
+            'Psychplus-AppVersion':
+              headers.get('Psychplus-AppVersion') ?? '1.0.0',
+            'Psychplus-RunEnvironment':
+              headers.get('Psychplus-RunEnvironment') ?? 'development',
+            'PsychPlus-SessionPracticeId':
+              headers.get('PsychPlus-SessionPracticeId') ?? '',
+            'PsychPlus-SessionId': headers.get('PsychPlus-SessionId') ?? '',
+          },
         },
-      },
-    ).catch((e) => {
-      console.log(`${request.nextUrl.pathname} ==> ${JSON.stringify(e)}`)
-    })
+      ),
+    )
   }
 
   const [ok, refresh] = await apiGetSession()

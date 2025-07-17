@@ -5,7 +5,7 @@ import {
   GetOptions,
   NetworkResult,
 } from '@/types'
-import { getErrorMessage } from '@/utils'
+import { getErrorMessage, retryOnTimeoutFetch } from '@/utils'
 import { createHeaders, createJsonHeader } from './headers'
 
 const GET = async <T>(
@@ -17,11 +17,13 @@ const GET = async <T>(
   // @ts-ignore Next extends the native fetch options
   const next = rest.next as NextFetchRequestConfig | undefined
 
-  const response = await fetch(url, {
-    headers: !rest.ignoreHeaders ? createHeaders({ ...headers }) : undefined,
-    cache: next?.revalidate ? undefined : 'no-store',
-    ...rest,
-  })
+  const response = await retryOnTimeoutFetch(() =>
+    fetch(url, {
+      headers: !rest.ignoreHeaders ? createHeaders({ ...headers }) : undefined,
+      cache: next?.revalidate ? undefined : 'no-store',
+      ...rest,
+    }),
+  )
   const data = getResponseData(await response.text())
 
   if (!response.ok) {
@@ -59,12 +61,14 @@ const POST = async <T>(
         ...headers,
       })
 
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: reqHeaders,
-    body: isBodyFormData ? body : JSON.stringify(body),
-    ...rest,
-  })
+  const response = await retryOnTimeoutFetch(() =>
+    fetch(url, {
+      method: 'POST',
+      headers: reqHeaders,
+      body: isBodyFormData ? body : JSON.stringify(body),
+      ...rest,
+    }),
+  )
 
   const data = getResponseData(await response.text())
 

@@ -19,7 +19,7 @@ const TimeSelect = () => {
     if (!selectedDate) return allOptions
 
     const selectedDateObj = selectedDate.toDate(getLocalTimeZone())
-    
+
     if (!isToday(selectedDateObj)) return allOptions
 
     const nowPlus2 = addHours(new Date(), 2)
@@ -38,8 +38,10 @@ const TimeSelect = () => {
         field="time"
         placeholder="--Please Select--"
         options={options}
-        buttonClassName="border-pp-gray-2 custom-time-select !text-2  h-[38px] border border-solid !outline-none [box-shadow:none] w-full"
-        className="text-2 font-regular"
+        buttonClassName="font-regular h-[38px] border-pp-gray-2  text-gray-12 text-2 w-full 
+        border border-solid !outline-none [box-shadow:none] 
+        bg-white  [&_span]:bg-red-500 disabled:bg-gray-3"
+        variant="soft"
         disabled={!selectedDate}
         size="1"
       />

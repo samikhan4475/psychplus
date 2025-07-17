@@ -112,8 +112,3 @@
     scrollbar-width: none; /* Firefox */
   }
 }
-.custom-time-select .rt-SelectTriggerInner {
-  font-size: 14px !important;
-  font-weight: 400 !important;
-  color: #b9bbc6;
-}

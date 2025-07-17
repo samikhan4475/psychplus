@@ -49,15 +49,12 @@ const POST = async <T>(
   const { ...rest } = options
 
   const isBodyFormData = body instanceof FormData
-  const response = await fetch(
-    '/ehr' + sanitizeUrl('https://api.psychplus.io' + url),
-    {
-      method: 'POST',
-      body: isBodyFormData ? body : JSON.stringify(body),
-      ...rest,
-      headers: { 'Content-Type': 'application/json' },
-    },
-  )
+  const response = await fetch('/ehr' + sanitizeUrl(url), {
+    method: 'POST',
+    body: isBodyFormData ? body : JSON.stringify(body),
+    ...rest,
+    headers: { 'Content-Type': 'application/json' },
+  })
 
   const data = getResponseData(await response.text())
 

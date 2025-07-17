@@ -1,14 +1,7 @@
 'use client'
 
 import React from 'react'
-import {
-  Box,
-  Flex,
-  Grid,
-  Separator,
-  Text,
-  TextFieldInput,
-} from '@radix-ui/themes'
+import { Box, Flex, Grid, Text, TextFieldInput } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { AutoResizeInput, FormField, PhoneNumberInput } from '@/components-v2'
 import { SchemaType } from './schema'
@@ -20,7 +13,7 @@ const ReferrerInformation = () => {
       <Text size="5" weight="medium" className="mt-5">
         Referring Organization
       </Text>
-      <Separator className="bg-pp-gray-2 w-full" />
+      <Box className="border-pp-gray-2 w-full border-b border-solid" />
       <Grid columns="3" className="max-xs:grid-cols-1" gap="3">
         <FormField
           containerClassName="flex-1"
@@ -83,5 +76,4 @@ const ReferrerInformation = () => {
     </Flex>
   )
 }
-
 export { ReferrerInformation }
