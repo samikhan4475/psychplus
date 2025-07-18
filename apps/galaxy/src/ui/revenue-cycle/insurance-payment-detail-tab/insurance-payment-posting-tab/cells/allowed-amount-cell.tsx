@@ -100,11 +100,11 @@ const AllowedAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
               claimPayment: row.original,
             })
 
-      const otherAdjustments = getOtherWriteOff(serviceLinePaymentAdjustments)
+      const otherAdjustments = getOtherWriteOff(updatedAdjustments)
 
       form.setValue(
         `claimServiceLinePayments.${row.index}.writeOffAmount`,
-        `${+finalAdjustmentAmount + +otherAdjustments}`,
+        `${+otherAdjustments}`,
       )
       form.setValue(
         `claimServiceLinePayments.${row.index}.serviceLinePaymentAdjustments`,

@@ -235,7 +235,9 @@ const InsurancePaymentPostingTable = ({
   }, [processedAsCode])
   if (loading)
     return <LoadingPlaceholder className="min-h-[30vh] min-w-[300px]" />
-  const serviceLines = form.watch('claimServiceLinePayments')
+  const serviceLines = form
+    .watch('claimServiceLinePayments')
+    ?.toSorted((a, b) => a.chargeId.localeCompare(b.chargeId))
 
   return (
     <Flex direction="column">

@@ -23,6 +23,7 @@ import { RectifyPaymentButton } from './rectify-payment-button'
 import { RemarkCodeField } from './remark-code-field'
 import {
   getAdjustmentStatus,
+  getOtherWriteOff,
   updateOrAddAdjustment,
 } from './utils'
 
@@ -114,6 +115,11 @@ const AdjustmentReasonRemarkCell = ({
         serviceLinePaymentAdjustments,
       })
 
+      const otherAdjustments = getOtherWriteOff(updatedServiceLineAdjustments)
+      form.setValue(
+        `claimServiceLinePayments.${row.index}.writeOffAmount`,
+        `${otherAdjustments}`,
+      )
       form.setValue(
         `claimServiceLinePayments.${row.index}.serviceLinePaymentAdjustments`,
         updatedServiceLineAdjustments,
