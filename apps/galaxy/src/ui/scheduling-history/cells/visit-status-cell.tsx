@@ -1,6 +1,6 @@
 'use client'
 
-import React, { MouseEventHandler } from 'react'
+import React from 'react'
 import { CounterClockwiseClockIcon } from '@radix-ui/react-icons'
 import { Flex, Heading, Popover } from '@radix-ui/themes'
 import { X } from 'lucide-react'

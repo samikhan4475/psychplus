@@ -28,7 +28,7 @@ const columns: ColumnDef<PatientScheduleStatusHistory>[] = [
     ),
     cell: ({ row }) => (
       <TextCell>
-        {formatDateTime(row.original.scheduleStatusEntryTime)}
+        {formatDateTime(row.original.scheduleStatusEntryTime, false)}
       </TextCell>
     ),
   },
