@@ -1,5 +1,6 @@
 'use client'
 
+import { useProfileStore } from '@/features/account/profile/store'
 import { PaymentType } from '@psychplus-v2/constants'
 import { cn } from '@psychplus-v2/utils'
 import * as ToggleGroup from '@radix-ui/react-toggle-group'
@@ -13,8 +14,14 @@ const PaymentMethodToggleButtons = ({
   value: PaymentType
   onChange: (value: PaymentType) => void
   disableInsurance: boolean
-}) => (
-  <ToggleGroup.Root
+}) => {
+  const { profile } = useProfileStore((state) => ({
+    profile: state.profile,
+  }))
+  const isPreferredPartnerAllowed = profile?.preferredPartnerUserWorklist && profile.preferredPartnerUserWorklist.length > 0
+  const paymentTypeButtons = [PaymentType.Insurance, PaymentType.SelfPay, ...(!isPreferredPartnerAllowed ? [] : [PaymentType.PreferredPartner])]
+
+  return <ToggleGroup.Root
     type="single"
     value={value}
     onValueChange={(value) => {
@@ -22,16 +29,16 @@ const PaymentMethodToggleButtons = ({
     }}
   >
     <Flex className="flex-wrap" gap="4">
-      {[PaymentType.Insurance, PaymentType.SelfPay].map((option) => (
+      {paymentTypeButtons.map((option) => (
         <ToggleGroup.Item
           key={option}
           value={option}
           className={cn(
             toggleGroupItemClasses,
             option === PaymentType.Insurance &&
-              disableInsurance &&
-              disabledClasses,
-              "w-[70px] h-[30px] sm:w-[120px] sm:h-[48px]"
+            disableInsurance &&
+            disabledClasses,
+            "min-w-[70px] w-fit h-[30px] sm:min-w-[120px] sm:h-[48px] px-3"
           )}
           disabled={option === PaymentType.Insurance && disableInsurance}
         >
@@ -40,7 +47,7 @@ const PaymentMethodToggleButtons = ({
       ))}
     </Flex>
   </ToggleGroup.Root>
-)
+}
 
 const toggleGroupItemClasses =
   'w-[120px] h-[48px] rounded-6 border border-[#24366B] text-3 data-[state=on]:bg-[#24366B] data-[state=on]:text-[white]'

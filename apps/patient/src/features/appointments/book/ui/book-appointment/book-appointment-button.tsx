@@ -1,15 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { FormContainer } from '@psychplus-v2/components'
-import { AppointmentType, PaymentType } from '@psychplus-v2/constants'
-import { getNewProviderTypeLabel } from '@psychplus-v2/utils'
-import { Button, Flex, Text } from '@radix-ui/themes'
-import { useForm } from 'react-hook-form'
-import z from 'zod'
-import { clickTrack } from '@psychplus/utils/tracking'
 import { FormError, FormSubmitButton } from '@/components-v2'
 import { useProfileStore } from '@/features/account/profile/store'
 import {
@@ -21,6 +11,16 @@ import { isProviderMemberOfCareTeam } from '@/features/appointments/book/utils'
 import { useStore } from '@/features/appointments/search/store'
 import { checkCareTeamExists } from '@/features/appointments/search/utils'
 import { rescheduleAppointment } from '@/features/appointments/upcoming/actions'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { FormContainer } from '@psychplus-v2/components'
+import { AppointmentType, PaymentResponsibilityTypeCode, PaymentType } from '@psychplus-v2/constants'
+import { getNewProviderTypeLabel } from '@psychplus-v2/utils'
+import { clickTrack } from '@psychplus/utils/tracking'
+import { Button, Flex, Text } from '@radix-ui/themes'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import z from 'zod'
 import { NewProviderSelectedDialog } from '../new-provider-selected-dialog'
 import { PrimaryProviderAppointedDialog } from '../primary-provider-appointed-dialog'
 
@@ -107,6 +107,8 @@ const BookAppointmentButton = ({
     }
 
     setLoading(true)
+    const paymentResponsibilityTypeCode =
+      paymentMethod.split(' ').join('') as PaymentResponsibilityTypeCode
     if (appointmentId) {
       const result = await rescheduleAppointment({
         appointmentId: Number(appointmentId),
@@ -125,6 +127,7 @@ const BookAppointmentButton = ({
             (address) => address.type === 'Home',
           )?.[0]?.state || '',
         appointmentSource: 'PatientPortal',
+        paymentResponsibilityTypeCode,
       })
 
       if (result.state === 'error') {
@@ -150,6 +153,7 @@ const BookAppointmentButton = ({
             (address) => address.type === 'Home',
           )?.[0]?.state || '',
         appointmentSource: 'PatientPortal',
+        paymentResponsibilityTypeCode
       }
 
       if (mid) {

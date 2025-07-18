@@ -41,9 +41,8 @@ const ChangePaymentMethodDialog = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState<PaymentType>(
-    appointment.isSelfPay ? PaymentType.SelfPay : PaymentType.Insurance,
+    PaymentType[appointment.paymentResponsibilityTypeCode]
   )
-
   const [error, setError] = useState<string>()
   const [warning, setWarning] = useState<string>()
   const [loading, setLoading] = useState(false)
@@ -76,11 +75,9 @@ const ChangePaymentMethodDialog = ({
       setLoading(false)
       return
     }
-
     const result = await changeAppointmentPaymentMethod({
       appointmentId: appointment.id,
-      paymentMethod:
-        paymentMethod === PaymentType.SelfPay ? 'SelfPay' : 'Insurance',
+      paymentMethod: paymentMethod.split(' ').join('')
     })
 
     if (result.state === 'error') {
@@ -131,7 +128,7 @@ const ChangePaymentMethodDialog = ({
         >
           <Flex direction="column" px="3" py="2" gap="3">
             <Text size={{ initial: "3", sm: "4" }} weight="medium">
-              Do you want to use your insurance for this visit?
+              Select the payment method you want to use for this visit
             </Text>
             <PaymentMethodToggleButtons
               value={paymentMethod}

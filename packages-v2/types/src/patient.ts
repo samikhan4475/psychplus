@@ -9,6 +9,25 @@ import type { Metadata } from './metadata'
 import type { LegalName } from './name'
 import { PhoneNumber } from './phone'
 
+interface PreferredPartnerUserWorklist {
+  id: string
+  addDate: string
+  contactDetails: ContactDetails
+  dob: string
+  familyUserNumber: string
+  gender: string
+  isPrimaryPartner: boolean
+  matchStatus: string
+  userType: string
+  userStatus: string
+  dateTerm: string
+  recordActive: string
+  patientId: number
+  partnerId: number
+  metadata: Metadata
+  name: LegalName
+}
+
 interface PatientProfile {
   id: number
   userId: number
@@ -40,6 +59,7 @@ interface PatientProfile {
   language?: string
   languageAbility?: string
   languageProficiency?: string
+  preferredPartnerUserWorklist?: PreferredPartnerUserWorklist[]
 }
 interface Address {
   type: 'Home' | 'Work';
@@ -96,4 +116,5 @@ type RelationshipTableHeader =
   | 'Guardian'
   | 'Action';
 
-export type { PatientProfile, RelationshipData, RelationshipTableHeader, RelationshipDefaultValuesProps}
+export type { PatientProfile, RelationshipData, RelationshipDefaultValuesProps, RelationshipTableHeader }
+

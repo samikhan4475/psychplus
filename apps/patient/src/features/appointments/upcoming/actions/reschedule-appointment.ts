@@ -1,6 +1,7 @@
 'use server'
 
 import * as api from '@psychplus-v2/api'
+import { PaymentResponsibilityTypeCode } from '@psychplus-v2/constants'
 import { API_URL } from '@psychplus-v2/env'
 import { Appointment } from '@psychplus-v2/types'
 
@@ -17,7 +18,8 @@ interface RescheduleAppointmentParams {
   stateCode?: string
   providerType?: string
   patientResidingStateCode: string
-  appointmentSource:string
+  appointmentSource: string
+  paymentResponsibilityTypeCode: PaymentResponsibilityTypeCode
 }
 
 interface RescheduleAppointmentApiResponse {
@@ -38,6 +40,7 @@ const rescheduleAppointment = async ({
   providerType,
   patientResidingStateCode,
   appointmentSource,
+  paymentResponsibilityTypeCode,
 }: RescheduleAppointmentParams) => {
   const result = await api.PATCH<RescheduleAppointmentApiResponse>(
     `${API_URL}/api/appointments/${appointmentId}`,
@@ -54,6 +57,7 @@ const rescheduleAppointment = async ({
       providerType,
       appointmentSource,
       patientResidingStateCode,
+      paymentResponsibilityTypeCode,
     },
   )
 

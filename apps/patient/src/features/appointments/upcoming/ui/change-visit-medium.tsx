@@ -1,15 +1,15 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { CloseDialogIcon, FormError } from '@/components-v2'
+import { useProfileStore } from '@/features/account/profile/store'
+import { useToast } from '@/providers'
 import { AppointmentType } from '@psychplus-v2/constants'
 import { Appointment } from '@psychplus-v2/types'
-import { Button, Dialog, Flex, Text } from '@radix-ui/themes'
-import { CloseDialogIcon, FormError } from '@/components-v2'
-import { useToast } from '@/providers'
-import { rescheduleAppointment } from '../actions'
 import { getNewProviderTypeLabel, getProviderTypeLabel } from '@psychplus-v2/utils'
-import { useProfileStore } from '@/features/account/profile/store'
+import { Button, Dialog, Flex, Text } from '@radix-ui/themes'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { rescheduleAppointment } from '../actions'
 
 interface ChangeVisitMediumProp {
   appointment: Appointment
@@ -45,6 +45,7 @@ const ChangeVisitMedium = ({ appointment }: ChangeVisitMediumProp) => {
       stateCode:appointment.clinic.contact.addresses?.[0]?.state,
       appointmentSource: 'PatientPortal',
       patientResidingStateCode: profile?.contactDetails?.addresses?.filter(address => address.type === 'Home')?.[0]?.state || '',
+      paymentResponsibilityTypeCode: appointment.paymentResponsibilityTypeCode,
     })
 
     if (result.state === 'error') {

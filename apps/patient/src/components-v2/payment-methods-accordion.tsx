@@ -1,16 +1,10 @@
 'use client'
 
-import React, { useEffect, useMemo, useState } from 'react'
-import { PaymentType } from '@psychplus-v2/constants'
-import * as Accordion from '@radix-ui/react-accordion'
-import { Box, Flex } from '@radix-ui/themes'
-import { Elements } from '@stripe/react-stripe-js'
-import { loadStripe } from '@stripe/stripe-js'
 import {
   EmptyFileIcon,
   FeatureEmpty,
-  TriggerButton,
   PaymentMethodsAccordionItem,
+  TriggerButton,
 } from '@/components-v2'
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { CreditCardForm } from '@/features/billing/credit-debit-cards/ui/credit-debit-cards-card/credit-debit-card-form'
@@ -20,6 +14,13 @@ import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
 import { InsuranceForm } from '@/features/billing/payments/ui/insurance-card/insurance-form'
 import { InsuranceFormTrigger } from '@/features/billing/payments/ui/insurance-card/Insurance-form-trigger'
 import { VerificationStatus } from '@/types'
+import { PaymentType } from '@psychplus-v2/constants'
+import * as Accordion from '@radix-ui/react-accordion'
+import { Box, Flex, Text } from '@radix-ui/themes'
+import { Elements } from '@stripe/react-stripe-js'
+import { loadStripe } from '@stripe/stripe-js'
+import { Check } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
 
 interface PaymentMethodAccordionProps {
   paymentMethod: PaymentType
@@ -91,11 +92,11 @@ const PaymentMethodAccordion = ({
             content={
               <Box>
                 {patientInsurances?.policies ? (
-                  <Flex width="100%" gap={{initial:'2', md:'3'}} direction="column">
+                  <Flex width="100%" gap={{ initial: '2', md: '3' }} direction="column">
                     {patientInsurances.policies.map((insurance) => (
                       <Flex
                         key={insurance.id}
-                        p={{initial:'2', md:'3'}}
+                        p={{ initial: '2', md: '3' }}
                         className="w-full rounded-2 border border-[#DDDDE3]"
                       >
                         <Box className="w-full">
@@ -223,6 +224,26 @@ const PaymentMethodAccordion = ({
           />
         </Accordion.Root>
       )}
+
+      {
+        paymentMethod === PaymentType.PreferredPartner && (
+          <Flex gap="2" align="start" className='bg-[#E9F9EE] border border-[#92CEAC] rounded-3 p-3'>
+            <Flex align={"center"} justify={"center"} className='border border-[#92CEAC] rounded-full size-[22px] shrink-0'>
+              <Flex align={"center"} justify={"center"} className='rounded-full bg-[#18794E] size-[16px]'>
+                <Check className='text-white size-[14px]' />
+              </Flex>
+            </Flex>
+            <Flex direction={"column"} gap={"1"}>
+              <Text size={{ initial: "1", sm: "2" }} weight={"bold"} className='text-[#1C2024]'>
+                Preferred partner program applied
+              </Text>
+              <Text size={{ initial: "2", sm: "3" }} className='text-[#60646C]'>
+                You are enrolled in preferred partner program by your employer.
+              </Text>
+            </Flex>
+          </Flex>
+        )
+      }
     </Elements>
   )
 }

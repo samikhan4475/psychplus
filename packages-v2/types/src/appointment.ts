@@ -1,6 +1,7 @@
 import {
   AppointmentType,
   NewProviderType,
+  PaymentResponsibilityTypeCode,
   ProviderType,
 } from '@psychplus-v2/constants'
 import { Address } from './address'
@@ -32,6 +33,7 @@ interface Appointment {
   serviceId: string
   isQuickNoteSigned: boolean
   cptAddonCodes: CptCode[]
+  paymentResponsibilityTypeCode: PaymentResponsibilityTypeCode
 }
 
 interface CptCode {

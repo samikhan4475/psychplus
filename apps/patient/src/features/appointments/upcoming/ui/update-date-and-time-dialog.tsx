@@ -66,6 +66,7 @@ const UpdateDateAndTimeDialog = ({
           profile?.contactDetails?.addresses?.filter(
             (address) => address.type === 'Home',
           )?.[0]?.state || '',
+        paymentResponsibilityTypeCode: appointment.paymentResponsibilityTypeCode,
       })
 
       if (result.state === 'error') {

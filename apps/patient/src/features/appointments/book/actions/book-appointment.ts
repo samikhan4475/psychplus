@@ -1,7 +1,7 @@
 'use server'
 
 import * as api from '@psychplus-v2/api'
-import { AppointmentType } from '@psychplus-v2/constants'
+import { AppointmentType, PaymentResponsibilityTypeCode } from '@psychplus-v2/constants'
 import { API_URL } from '@psychplus-v2/env'
 
 export interface BookAppointmentParams {
@@ -18,7 +18,8 @@ export interface BookAppointmentParams {
   providerType?: string
   marketingCampaignId?: string
   patientResidingStateCode: string
-  appointmentSource:string
+  appointmentSource: string
+  paymentResponsibilityTypeCode: PaymentResponsibilityTypeCode
 }
 
 const bookAppointmentAction = async ({
@@ -35,6 +36,7 @@ const bookAppointmentAction = async ({
   marketingCampaignId,
   patientResidingStateCode,
   appointmentSource,
+  paymentResponsibilityTypeCode,
 }: BookAppointmentParams) => {
   const result = await api.POST(`${API_URL}/api/appointments/book`, {
     locationId,
@@ -50,6 +52,7 @@ const bookAppointmentAction = async ({
     marketingCampaignId,
     patientResidingStateCode,
     appointmentSource,
+    paymentResponsibilityTypeCode,
   })
 
   if (result.state === 'error') {

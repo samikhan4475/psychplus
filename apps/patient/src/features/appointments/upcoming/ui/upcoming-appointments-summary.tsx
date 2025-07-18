@@ -30,9 +30,9 @@ import { CodesetStoreProvider, GooglePlacesContextProvider } from '@/providers'
 import {
   AppointmentType,
   CODESETS,
-  PaymentType,
+  PaymentResponsibilityTypeCode,
   ProviderType,
-  UserSettingName,
+  UserSettingName
 } from '@psychplus-v2/constants'
 import { GOOGLE_MAPS_API_KEY, STRIPE_PUBLISHABLE_KEY } from '@psychplus-v2/env'
 import { Appointment } from '@psychplus-v2/types'
@@ -194,15 +194,31 @@ const UpcomingAppointmentsSummaryComponent = async () => {
     )
   }
 
-  const getPaymentType = (row: Appointment) => {
-    if (row.isSelfPay) {
-      return PaymentType.SelfPay
+  const getPaymentType = (row: Appointment): string => {
+    function splitCamelCase(str: string) {
+      return str?.replace(/([a-z])([A-Z])/g, '$1 $2');
     }
-    if (patientVerification.primaryInsuranceName) {
-      return patientVerification.primaryInsuranceName
+
+    const isInsurance = row.paymentResponsibilityTypeCode === PaymentResponsibilityTypeCode.Insurance;
+
+    if (isInsurance) {
+      return splitCamelCase(patientVerification.primaryInsuranceName) || "Select Insurance";
     }
-    return 'Select Insurance'
-  }
+
+    return splitCamelCase(row?.paymentResponsibilityTypeCode || '');
+  };
+
+  const getPaymentIcon = (row: Appointment) => {
+    if (row.paymentResponsibilityTypeCode === PaymentResponsibilityTypeCode.SelfPay) {
+      return <CreditDebitCardIcon />;
+    }
+
+    if (patientVerification.hasInsurance) {
+      return <ShieldFlashLineIcon />;
+    }
+
+    return null;
+  };
 
   const preCheckInProgress = extractUserSetting(
     userSettingsResponse.data,
@@ -325,16 +341,12 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                         ml={{ initial: '0', xs: '3' }}
                       >
                         <Flex align="center" gap="1">
-                          {row.isSelfPay && <CreditDebitCardIcon />}
-                          {!row.isSelfPay && <ShieldFlashLineIcon />}
-                          {!row.isSelfPay &&
-                            !patientVerification.hasInsurance &&
-                            ''}
+                          {getPaymentIcon(row)}
 
                           <Text className="text-[12px] xs:text-[15px]">
                             {getPaymentType(row)}
                           </Text>
-                          {!row.isSelfPay &&
+                          {row.paymentResponsibilityTypeCode === PaymentResponsibilityTypeCode.Insurance &&
                             patientVerification.primaryInsuranceName && (
                               <Badge
                                 label={
