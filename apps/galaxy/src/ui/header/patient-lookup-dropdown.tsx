@@ -72,6 +72,46 @@ const PatientLookupDropdown = ({ isActive }: { isActive: boolean }) => {
             External Referrals
           </NextLink>
         </DropdownMenu.Item>
+        <DropdownMenu.Separator className="m-1" />
+         <DropdownMenu.Sub>
+          <DropdownMenu.SubTrigger className="hover:text-black hover:bg-pp-bg-accent whitespace-nowrap text-[13px] flex items-center justify-between">
+            <Text>Transfer Patient</Text>
+          </DropdownMenu.SubTrigger>
+          <DropdownMenu.SubContent
+            className="rounded-1 px-1 pb-1 pt-1 shadow-3"
+            sideOffset={5}
+          >
+            <DropdownMenu.Item asChild>
+              <NextLink
+                href="/transfer-patient"
+                className="hover:text-black hover:bg-pp-bg-accent whitespace-nowrap text-[13px]"
+                onClick={() => {
+                  addTab({
+                    href: '/transfer-patient',
+                    label: 'Transfer Patient',
+                  })
+                }}
+              >
+                Internal Practice
+              </NextLink>
+            </DropdownMenu.Item>
+            <DropdownMenu.Separator className="m-1" />
+            <DropdownMenu.Item asChild>
+              <NextLink
+                href="/transfer-patient"
+                className="hover:text-black hover:bg-pp-bg-accent whitespace-nowrap text-[13px]"
+                onClick={() => {
+                  addTab({
+                    href: '/transfer-patient',
+                    label: 'Transfer Patient',
+                  })
+                }}
+              >
+                External Practice
+              </NextLink>
+            </DropdownMenu.Item>
+          </DropdownMenu.SubContent>
+        </DropdownMenu.Sub>
       </DropdownMenu.Content>
     </DropdownMenu.Root>
   )
