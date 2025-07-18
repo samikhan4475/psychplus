@@ -4,6 +4,7 @@ import { DetailsType, GroupSelectSection } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { mapCodesetToOptions } from '@/utils'
+import { DelusionType } from '@/enum'
 import { HpiWidgetSchemaType } from '../hpi-widget-schema'
 
 const BLOCK_ID = 'schizophrenia'
@@ -81,11 +82,11 @@ const SchizophreniaBlock = () => {
     formState: { errors },
   } = useFormContext<HpiWidgetSchemaType>()
 
-  const hasError = errors?.hpiOther || errors?.chiefComplaint
+  const hasError = errors?.hpiOther ?? errors?.chiefComplaint
   const schizophreniaValues = watch('schizophrenia')
 
   const DELUSION_OPTIONS = mapCodesetToOptions(
-    useCodesetCodes(CODESETS.DelusionType),
+    useCodesetCodes(CODESETS.DelusionType).filter((item) => item.value !== DelusionType.PARANOID),
   )
 
   const HALLUCINATIONS_OPTIONS = mapCodesetToOptions(
