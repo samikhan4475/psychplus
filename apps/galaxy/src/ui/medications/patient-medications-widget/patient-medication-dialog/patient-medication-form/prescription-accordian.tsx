@@ -31,7 +31,6 @@ const PrescriptionAccordian = ({
     }
   }, [errorIndex, drugs])
 
-
   const [prevLength, setPrevLength] = useState(drugs.length)
 
   useEffect(() => {
@@ -70,13 +69,15 @@ const PrescriptionAccordian = ({
       prescribableDrugDesc: newDrug.prescribableDrugDesc,
       startDateTime: todayDate,
       startTime: currentTime,
+      effectiveTime: currentTime,
+      effectiveDate: '',
       doseRouteCode: '',
       refills: '0',
       doseUnitCode: newDrug.medStrengthUnit,
       doseFormCode: '',
       duration: '',
       durationUnitCode: '',
-      rxNormCode: newDrug.rxCui,
+      rxNormCode: Number(newDrug.rxCui),
       doseFrequencyCode: '',
       prescribingStaffId: '',
       quantityValue: '',
@@ -92,7 +93,6 @@ const PrescriptionAccordian = ({
     form.setValue('drugs', updated)
     setEditIndex(null)
   }
-
   return (
     <Accordion.Root
       type="single"
@@ -132,7 +132,12 @@ const PrescriptionAccordian = ({
                     <DeleteIcon />
                   </Box>
                   <Box onClick={(e) => e.stopPropagation()} className="ml-2">
-                    <FavoriteIcon name={item?.prescribableDrugDesc ?? ''} />
+                    <FavoriteIcon
+                      itemData={{
+                        ...item,
+                        medicationName: item.prescribableDrugDesc ?? '',
+                      }}
+                    />
                   </Box>
                 </Flex>
               </Accordion.Trigger>

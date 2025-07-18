@@ -14,7 +14,7 @@ import { PatientMedicationSchemaType } from './schema'
 
 const StartDateTimeInput = ({ index }: DrugBlockProps) => {
   const form = useFormContext<PatientMedicationSchemaType>()
-  const startTimeField = getFieldName(index, 'startTime')
+  const effectiveTimeField = getFieldName(index, 'effectiveTime')
 
   return (
     <FormFieldContainer className="flex-1 gap-1">
@@ -22,10 +22,10 @@ const StartDateTimeInput = ({ index }: DrugBlockProps) => {
       <TextField.Root
         type="time"
         size="1"
-        {...form.register(startTimeField)}
+        {...form.register(effectiveTimeField)}
         className="border-pp-gray-2 h-7 border border-solid !outline-none [box-shadow:none] [&__.rt-TextFieldInput]:!inline-block"
       />
-      <FormFieldError name={startTimeField} />
+      <FormFieldError name={effectiveTimeField} />
     </FormFieldContainer>
   )
 }

@@ -46,6 +46,7 @@ const DrugsList = ({
       prescribableDrugDesc: option.prescribableDrugDesc,
       startDateTime: todayDate,
       startTime: currentTime,
+      effectiveTime: currentTime,
       doseRouteCode: '',
       refills: '0',
       doseUnitCode: option.medStrengthUnit,
@@ -58,6 +59,7 @@ const DrugsList = ({
       quantityValue: '',
       endDateTime: '',
       endTime: '',
+      effectiveDate:'',
       sigDescription: '',
       drugCode: option?.representativeErxPackagedDrug?.packagedDrugId ?? '',
       DeaSchedule:

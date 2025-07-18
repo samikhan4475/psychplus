@@ -1,10 +1,13 @@
 'use client'
 
-import React, { useCallback, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Flex, ScrollArea, Table, Text } from '@radix-ui/themes'
 import { LoadingPlaceholder } from '@/components'
 import { useStore } from '../../store'
 import { FavoriteIcon } from './favorite-icon'
+import { PatientMedicationSchemaType } from '../patient-medication-form'
+import { useFormContext } from 'react-hook-form'
+import { FavoriteMedicationPayload } from '../../types'
 
 const FavoriteList = () => {
   const {
@@ -23,7 +26,49 @@ const FavoriteList = () => {
     if (!favoritesLoaded) {
       fetchFavoriteMedications()
     }
-  }, [favoritesLoaded])
+  }, [favoritesLoaded, fetchFavoriteMedications])
+
+  const form = useFormContext<PatientMedicationSchemaType>()
+  const drugs = form.watch('drugs')
+  const todayDate = new Date().toISOString().split('T')[0]
+  const currentTime = new Date().toLocaleTimeString('en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+
+  const handleRowClick = (medication: FavoriteMedicationPayload) => {
+    const defaultValues: PatientMedicationSchemaType['drugs'][number] = {
+      doseStrength: medication?.drugStrength || medication?.doseStrength || '',
+      prescribableDrugDesc: medication.prescribableDrugDesc || medication.medicationName || '',
+      startDateTime: todayDate,
+      startTime: currentTime,
+      effectiveDate:'',
+      effectiveTime:currentTime,
+      doseRouteCode: '',
+      refills: '0',
+      doseUnitCode: medication.doseUnitCode || '',
+      doseFormCode: medication.doseFormCode || '',
+      duration: '',
+      durationUnitCode: '',
+      rxNormCode: Number(medication.rxNormCode),
+      doseFrequencyCode: '',
+      prescribingStaffId: '',
+      quantityValue: '',
+      endDateTime: '',
+      endTime: '',
+      sigDescription: '',
+      drugCode: medication.drugCode || '',
+      medicationStatus: 'Active',
+    }
+
+    const existingMedication = drugs.some(
+      (item) => item.prescribableDrugDesc === medication.medicationName
+    )
+
+    if (!existingMedication) {
+      form.setValue('drugs', [...drugs, defaultValues])
+    }
+  }
 
   if (loadingFavorites) {
     return (
@@ -49,13 +94,18 @@ const FavoriteList = () => {
         <Table.Body className="align-middle">
           {favoritesData.map((item) => (
             <Table.Row key={item.id}>
-              <Table.Cell className="border-pp-table-border h-5 w-full cursor-pointer truncate border-b px-2 py-1">
+              <Table.Cell onClick={() => handleRowClick(item)} className="border-pp-table-border h-5 w-full cursor-pointer truncate border-b px-2 py-1">
                 <Text className="truncate text-[12px] font-medium">
-                  {item.medicationName}
+                  {item.medicationName ?? 'No Name Provided'}
                 </Text>
               </Table.Cell>
               <Table.Cell className="border-pp-table-border h-5 border-b px-2 py-1 text-right">
-                <FavoriteIcon name={item.medicationName ?? ''} />
+                <FavoriteIcon
+                  itemData={{
+                    ...item,
+                    medicationName: item.medicationName ?? '',
+                  }}
+                />
               </Table.Cell>
             </Table.Row>
           ))}

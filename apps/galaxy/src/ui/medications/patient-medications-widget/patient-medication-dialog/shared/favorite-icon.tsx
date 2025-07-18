@@ -5,12 +5,13 @@ import { Box } from '@radix-ui/themes'
 import { Loader2Icon, StarIcon } from 'lucide-react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useStore } from '../../store'
+import { FavoriteMedicationPayload } from '../../types'
 
 interface FavoriteIconProps {
-  name: string
+  itemData?: FavoriteMedicationPayload
 }
 
-const FavoriteIcon = ({ name }: FavoriteIconProps) => {
+const FavoriteIcon = ({ itemData }: FavoriteIconProps) => {
   const form = useFormContext()
   const { favoritesData, markMedicationFavorites } = useStore((state) => ({
     favoritesData: state.favoritesData,
@@ -20,7 +21,9 @@ const FavoriteIcon = ({ name }: FavoriteIconProps) => {
   const [isLoading, setIsLoading] = useState(false)
 
   const favoriteItem = favoritesData?.find(
-    (item) => item.medicationName === name,
+    (item) =>
+      item.medicationName === itemData?.prescribableDrugDesc ||
+      item.medicationName === itemData?.medicationName,
   )
 
   const isFavorite = !!favoriteItem
@@ -30,14 +33,30 @@ const FavoriteIcon = ({ name }: FavoriteIconProps) => {
     currentValue: boolean,
   ) => {
     setIsLoading(true)
-    markMedicationFavorites(name, favoriteItem?.id)
+
+    const medicationData: FavoriteMedicationPayload = {
+      doseFormCode:itemData?.doseFormCode ?? '',
+      doseStrength: itemData?.drugStrength || itemData?.doseStrength || '',
+      doseUnitCode: itemData?.doseUnitCode ?? '',
+      drugCode: itemData?.drugCode ?? '',
+      drugCodeQualifier: itemData?.drugCodeQualifier ?? '',
+      doseRouteCode: itemData?.doseRouteCode ?? '',
+      rxNormCode: String(itemData?.rxNormCode),
+      medicationName:
+        itemData?.prescribableDrugDesc ?? itemData?.medicationName ?? '',
+    }
+    if (favoriteItem?.id) {
+      medicationData.id = favoriteItem.id
+    }
+
+    markMedicationFavorites(medicationData)
     onChange(!currentValue)
     setIsLoading(false)
   }
 
   return (
     <Controller
-      name={name}
+      name={itemData?.prescribableDrugDesc ?? 'test'}
       control={form.control}
       defaultValue={false}
       render={({ field: { value, onChange } }) => (

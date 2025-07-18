@@ -40,6 +40,8 @@ const schema = z
         prescriptionStatusType: z.ostring(),
         dataSourceType: z.ostring(),
         startDateTime: z.ostring(),
+        effectiveDate: z.string().min(1, 'Required'),
+        effectiveTime: z.string(),
         endDateTime: z.ostring(),
         isMedicationAsNeeded: z.oboolean(),
         drugCode: z.ostring(),

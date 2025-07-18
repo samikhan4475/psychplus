@@ -73,10 +73,10 @@ const ReviewDrugDetail = ({ drug }: ReviewDrugDetailProps) => {
 
       <Flex gap="4" align="center" wrap="wrap">
         <ReviewLabel
-          title="Start Date/Time"
+          title="Effective Date/Time"
           value={
-            prescriptionDrug?.startDateTime
-              ? formatDateTime(prescriptionDrug?.startDateTime)
+            prescriptionDrug?.effectiveDate
+              ? formatDateTime(prescriptionDrug?.effectiveDate)
               : ''
           }
         />
@@ -97,11 +97,12 @@ const ReviewDrugDetail = ({ drug }: ReviewDrugDetailProps) => {
           title="Prescriber"
           value={
             drug?.providerName &&
-            `${getPatientFullName(drug.providerName, true)} ${
-              drug.providerName.title ?? ''
-            }`
+            `${getPatientFullName(drug.providerName, true)}${
+              drug.providerName.title ? ',' : ''
+            } ${drug.providerName.title ?? ''}`
           }
         />
+
         <ReviewLabel title="NPI" value={drug?.providerNpi} />
         <ReviewLabel title="DEA" value={drug?.providerDea} />
       </Flex>

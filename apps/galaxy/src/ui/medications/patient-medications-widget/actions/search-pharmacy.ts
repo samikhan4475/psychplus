@@ -28,8 +28,20 @@ const searchPharmaciesAction = async (
   const transformedData = response?.data?.reduce(
     (acc: SelectOptionType[], item) => {
       if (item?.externalPharmacyId) {
-        acc.push({ value: item?.pharmacyId, label: item?.pharmacyName,externalPharmacyId: item?.externalPharmacyId,
- })
+        const contact = item.pharmacyContactDetails
+        const phone = contact?.phoneNumbers?.[0]?.number || ''
+        const address = contact?.addresses?.[0]
+        const formattedAddress = address
+          ? `${address.street1}, ${address.city}, ${address.state},${address.postalCode}, ${address.country}`
+          : ''
+        const label = `${
+          item.pharmacyName || 'Unknown'
+        } | ${phone} | ${formattedAddress}`
+        acc.push({
+          value: item?.pharmacyId,
+          label: label,
+          externalPharmacyId: item?.externalPharmacyId,
+        })
       }
       return acc
     },

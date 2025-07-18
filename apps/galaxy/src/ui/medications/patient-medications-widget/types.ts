@@ -197,6 +197,7 @@ interface PrescriptionDrug {
   reasonForPrn: string
   startDateTime: string
   endDateTime: string
+  effectiveDate: string
   externalMessageId: string
   externalPrescriptionId: number
   prescriptionStatusTypeId: number
@@ -375,6 +376,21 @@ interface EncounterData {
 interface EditOptions {
   rePrescribe?: boolean
 }
+
+interface FavoriteMedicationPayload {
+  drugStrength?: string;
+  doseStrength?: string;
+  doseUnitCode?: string;
+  doseFormCode?: string;
+  drugCode?: string;
+  drugCodeQualifier?: string;
+  doseRouteCode?: string;
+  rxNormCode?: string | number;
+  medicationName?:string;
+  prescribableDrugDesc?:string;
+  id?:string
+}
+
 export {
   PrescribedStatus,
   MedicationType,
@@ -401,5 +417,7 @@ export {
   type PmpReportRequest,
   type PmpReportResponse,
   type EncounterData,
-  type EditOptions
+  type EditOptions,
+  type FavoriteMedicationPayload,
+  type PrescriptionDrug
 }

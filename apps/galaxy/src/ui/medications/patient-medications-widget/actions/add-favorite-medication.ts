@@ -2,16 +2,16 @@
 
 import * as api from '@/api'
 import { getAuthCookies } from '@/utils/auth'
-import { FavoriteMedication } from '../types'
+import { FavoriteMedication, FavoriteMedicationPayload } from '../types'
 
 const addFavoriteMedication = async (
-  value?: string,
+  payload: FavoriteMedicationPayload,
 ): Promise<api.ActionResult<FavoriteMedication>> => {
   const auth = getAuthCookies()
   const response = await api.POST<FavoriteMedication>(
     api.ADD_STAFF_FAVORITES_MEDICATION(Number(auth?.user.staffId)),
     {
-      medicationName: value,
+      ...payload,
       staffId: Number(auth?.user.staffId),
     },
   )

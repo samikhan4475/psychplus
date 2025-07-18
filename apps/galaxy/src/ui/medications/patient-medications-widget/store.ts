@@ -1,6 +1,7 @@
 import toast from 'react-hot-toast'
 import { create } from 'zustand'
 import {
+  getProvidersOptionsAction,
   getScriptSureExternalPatient,
   getScriptSureSessionToken,
 } from '@/actions'
@@ -26,12 +27,12 @@ import {
 } from './actions'
 import {
   FavoriteMedication,
+  FavoriteMedicationPayload,
   PatientMedication,
   PatientMedicationFilterValues,
   PatientPrescriptionStatus,
   RecordStatus,
 } from './types'
-import { getProvidersOptionsAction } from '@/actions'
 
 interface StoreState {
   patientId?: number
@@ -81,7 +82,7 @@ interface StoreState {
   loadingFavorites: boolean
   fetchFavoriteMedications: (value?: string) => void
   favoritesData?: FavoriteMedication[]
-  markMedicationFavorites: (medicationName: string, id?: string) => void
+  markMedicationFavorites: (paylaod: FavoriteMedicationPayload) => void
   favoritesLoaded: boolean
   providerOptions: SelectOptionType[]
   loadingProviderOptions: boolean
@@ -114,18 +115,18 @@ const useStore = create<StoreState>((set, get) => ({
   providerOptions: [],
   loadingProviderOptions: false,
   fetchProviderOptions: async () => {
-  const { providerOptions } = get()
-  if (providerOptions.length > 0) return
+    const { providerOptions } = get()
+    if (providerOptions.length > 0) return
 
-  set({ loadingProviderOptions: true })
-  const res = await getProvidersOptionsAction()
-  if (res?.state === 'success') {
-    set({ providerOptions: res.data, loadingProviderOptions: false })
-  } else {
-    toast.error(res?.error || 'Failed to fetch provider options')
-    set({ loadingProviderOptions: false })
-  }
-},
+    set({ loadingProviderOptions: true })
+    const res = await getProvidersOptionsAction()
+    if (res?.state === 'success') {
+      set({ providerOptions: res.data, loadingProviderOptions: false })
+    } else {
+      toast.error(res?.error || 'Failed to fetch provider options')
+      set({ loadingProviderOptions: false })
+    }
+  },
   setPmpReviewed: (value: boolean) => set({ isPmpReviewed: value }),
   updateStatus: (updatedMedication: PatientMedication[]) => {
     set({
@@ -365,47 +366,56 @@ const useStore = create<StoreState>((set, get) => ({
     })
   },
 
-  markMedicationFavorites: async (medicationName, id) => {
+  markMedicationFavorites: async (payload: FavoriteMedicationPayload) => {
     const favouriteMedicationsData = get().favoritesData ?? []
 
     const alreadyExists = favouriteMedicationsData.find(
-      (item) => item.medicationName === medicationName,
+      (item) => item.medicationName === payload.medicationName,
     )
 
+    let updatedFavorites = [...favouriteMedicationsData]
+    let actionStatus = ''
+
     if (alreadyExists) {
-      if (!id) {
-        throw new Error('Invalid ID for removing favorite')
+      if (!payload.id) {
+        toast.error('Invalid ID for removing favorite')
+        return { action: 'error', message: 'Invalid ID for removing favorite' }
       }
 
-      const response = await removeFavoriteMedication(id)
-      if (!response || response.state === 'error') {
-        throw new Error(response?.error || 'Failed to remove favorite')
+      const response = await removeFavoriteMedication(payload.id)
+      if (response.state === 'error') {
+        toast.error(response.error || 'Failed to remove favorite')
+        return { action: 'error', message: 'Failed to remove favorite' }
       }
 
-      const updatedFavorites = favouriteMedicationsData.filter(
-        (item) => item.medicationName !== medicationName,
+      updatedFavorites = favouriteMedicationsData.filter(
+        (item) => item.medicationName !== payload.medicationName,
       )
       set({ favoritesData: updatedFavorites })
 
-      return { action: 'removed' }
+      actionStatus = 'removed'
+      toast.success('Favorite removed successfully')
+    } else {
+      const response = await addFavoriteMedication(payload)
+      if (response.state === 'error') {
+        toast.error(response.error || 'Failed to add favorite')
+        return { action: 'error', message: 'Failed to add favorite' }
+      }
+
+      updatedFavorites = [
+        ...favouriteMedicationsData,
+        {
+          id: response.data?.id,
+          ...payload,
+        },
+      ]
+      set({ favoritesData: updatedFavorites })
+
+      actionStatus = 'added'
+      toast.success('Favorite added successfully')
     }
 
-    const response = await addFavoriteMedication(medicationName)
-    if (!response || response.state === 'error') {
-      throw new Error(response?.error || 'Failed to add favorite')
-    }
-
-    const updatedFavorites = [
-      ...favouriteMedicationsData,
-      {
-        id: response.data?.id,
-        medicationName,
-      },
-    ]
-
-    set({ favoritesData: updatedFavorites })
-
-    return { action: 'added' }
+    return { action: actionStatus }
   },
 }))
 

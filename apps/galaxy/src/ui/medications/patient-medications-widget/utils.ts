@@ -76,8 +76,9 @@ const getIsoStringtoUtcDateTime = (medication?: Prescription) => {
 
   const startDateTime = getDateTime(prescriptionDrug?.startDateTime)
   const endDateTime = getDateTime(prescriptionDrug?.endDateTime)
+  const effectiveDate = getDateTime(prescriptionDrug?.effectiveDate)
 
-  return { startDateTime, endDateTime }
+  return { startDateTime, endDateTime, effectiveDate }
 }
 
 const getInitialValuesPatientMedication = (
@@ -137,6 +138,8 @@ const getInitialValuesPatientMedication = (
         startTime: dateValues?.startDateTime?.time ?? '',
         endDateTime: dateValues?.endDateTime?.date?.toString() ?? '',
         endTime: dateValues?.endDateTime?.time ?? '',
+        effectiveDate: dateValues?.effectiveDate?.date?.toString() ?? '',
+        effectiveTime: dateValues?.effectiveDate?.time ?? '',
         instructionOrNotes: medication?.notes ?? '',
         isMedicationAsNeeded: prescriptionDrug?.isMedicationAsNeeded ?? true,
         isSubstitutionsAllowed:
