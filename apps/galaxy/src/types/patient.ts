@@ -90,6 +90,7 @@ interface PatientProfile {
   referralName?: string
   referralSource?: string
   isSelfPay?: boolean
+  isAutoReschedulingEnabled?: boolean
 }
 
 interface PatientHistoryParams {

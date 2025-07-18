@@ -1108,6 +1108,11 @@ const PMP_REPORT = (patientId: string, prescriptionId: string) =>
 const LAUNCH_SELF_CREDENTIALING_ENDPOINT = `${API_URL}/api/users/self/idproofings/actions/launchManagementUrl`
 const LAUNCH_USER_CREDENTIALING_ENDPOINT = (userId: string) =>
   `${API_URL}/api/users/${userId}/idproofings/actions/launchManagementUrl`
+const TOGGLE_PATIENT_AUTO_RESCHEDULING = (
+  patientId: string,
+  autoRescheduleEnabled: boolean,
+) =>
+  `${API_URL}/api/patients/${patientId}/autorescheduling/actions/${autoRescheduleEnabled}`
 const CANCEL_PRESCRIPTIONS_ENDPOINT = `${API_URL}/api/prescribing/prescriptions`
 const GET_MATCHING_REFERRAL_PATIENTS_ENDPOINT = `${API_URL}/api/matching/patients/actions/search`
 const ASSOCIATE_MATCHING_REFERRAL_PATIENTS_ENDPOINT = (
@@ -1611,6 +1616,7 @@ export {
   MARK_CLAIM_POSTED,
   LAUNCH_SELF_CREDENTIALING_ENDPOINT,
   LAUNCH_USER_CREDENTIALING_ENDPOINT,
+  TOGGLE_PATIENT_AUTO_RESCHEDULING,
   CANCEL_PRESCRIPTIONS_ENDPOINT,
   GET_MATCHING_REFERRAL_PATIENTS_ENDPOINT,
   ASSOCIATE_MATCHING_REFERRAL_PATIENTS_ENDPOINT,

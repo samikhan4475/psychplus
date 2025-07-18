@@ -4,10 +4,15 @@ import { useState } from 'react'
 import { Box, Flex, Heading } from '@radix-ui/themes'
 import { TreatmentBillingAlert } from '@/components'
 import { StaffComment } from '@/types'
+import { AutomaticBookingToggle } from './automatic-booking-toggle'
 import { SchedulingHistoryTable } from './scheduling-history-table'
 import { SchedulingHistoryTablePagination } from './scheduling-history-table-pagination'
 
-const SchedulingHistoryView = () => {
+interface SchedulingHistoryViewProps {
+  patientId: string
+}
+
+const SchedulingHistoryView = ({ patientId }: SchedulingHistoryViewProps) => {
   const [isOpen, setIsOpen] = useState(false)
 
   const closeDialog = () => {
@@ -16,15 +21,17 @@ const SchedulingHistoryView = () => {
 
   return (
     <Flex className="w-full p-[1px]" direction="column" gap="1">
-      <Box
+      <Flex
         className="bg-white z-[1] rounded-1 shadow-2"
         py="1"
         px="2"
         position="sticky"
         top="0"
+        justify="between"
       >
         <Heading size="4">Scheduling History</Heading>
-      </Box>
+        <AutomaticBookingToggle patientId={patientId} />
+      </Flex>
       <Flex direction="column" className="bg-white w-full">
         <SchedulingHistoryTable />
         <SchedulingHistoryTablePagination />

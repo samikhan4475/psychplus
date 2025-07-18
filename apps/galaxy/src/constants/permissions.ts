@@ -250,6 +250,8 @@ const USER_PERMISSIONS = {
     'clickEditStatusButtonStaffTreatmentTeam',
   clickResetStaffProfilePage: 'clickResetStaffProfilePage',
   addPaidAmountCoInsCopayCustomCharge: 'addPaidAmountCoInsCopayCustomCharge',
+  changeAutoRebookingToggleScheduleHxTab:
+    'changeAutoRebookingToggleScheduleHxTab',
 }
 
 export { USER_PERMISSIONS }

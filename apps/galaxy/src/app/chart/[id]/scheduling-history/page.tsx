@@ -1,7 +1,13 @@
 import { SchedulingHistoryView } from '@/ui/scheduling-history'
 
-const SchedulingHistoryPage = () => {
-  return <SchedulingHistoryView />
+interface SchedulingHistoryPageProps {
+  params: {
+    id: string
+  }
+}
+
+const SchedulingHistoryPage = ({ params }: SchedulingHistoryPageProps) => {
+  return <SchedulingHistoryView patientId={params.id} />
 }
 
 export default SchedulingHistoryPage
