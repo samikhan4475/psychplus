@@ -1,12 +1,13 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { GET_STAFF_LICENSE } from '@/api/endpoints'
 import { License, State } from '../types'
 
 const getStaffActiveStates = async (
   providerStaffId: number,
 ): Promise<api.ActionResult<State[]>> => {
-  const response = await api.POST<License[]>(api.GET_STAFF_LICENSE, {
+  const response = await api.POST<License[]>(GET_STAFF_LICENSE, {
     providerStaffId,
     statuses: ['Active'],
   })

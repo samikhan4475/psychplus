@@ -14,8 +14,8 @@ import {
   EndDateInput,
   EndTimeInput,
   GroupType,
+  PrimaryLocationCosigner,
   PrimaryLocationSelect,
-  PrimaryStateCosigner,
   PrimaryStateSelect,
   PublicViewSelect,
   RecurrenceSelect,
@@ -88,7 +88,7 @@ const ClinicScheduleForm = ({
       <Flex gap="3" align="start">
         <PrimaryStateSelect />
         <PrimaryLocationSelect />
-        <ServiceSelect />
+        <PrimaryLocationCosigner />
       </Flex>
       <Flex gap="3" align="start">
         <DaySelect />
@@ -104,7 +104,7 @@ const ClinicScheduleForm = ({
         <PublicViewSelect />
       </Flex>
       <Flex gap="3" align="start">
-        <PrimaryStateCosigner />
+        <ServiceSelect />
         <GroupType />
         <BookingFrequencySelect />
       </Flex>

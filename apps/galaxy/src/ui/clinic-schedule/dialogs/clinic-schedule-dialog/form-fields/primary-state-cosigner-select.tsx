@@ -7,10 +7,10 @@ import { getServiceCosigners } from '@/ui/clinic-schedule/clinic-time-tab/action
 import { useStore } from '@/ui/clinic-schedule/clinic-time-tab/store'
 import { SchemaType } from '../schema'
 
-const PrimaryStateCosigner = () => {
+const PrimaryLocationCosigner = () => {
   const { watch, setValue } = useFormContext<SchemaType>()
   const serviceId = watch('serviceId')
-  const primaryStateCosigner = watch('cosignerStaffId')
+  const primaryLocationCosigner = watch('cosignerStaffId')
   const cosignerName = watch('cosignerName')
   const [options, setOptions] = useState<SelectOptionType[]>([])
   const [loading, setLoading] = useState(false)
@@ -25,7 +25,7 @@ const PrimaryStateCosigner = () => {
 
   useEffect(() => {
     if (!serviceId) {
-      primaryStateCosigner && setValue('cosignerStaffId', '')
+      primaryLocationCosigner && setValue('cosignerStaffId', '')
       cosignerName && setValue('cosignerName', '')
       return
     }
@@ -58,7 +58,7 @@ const PrimaryStateCosigner = () => {
   return (
     <FormFieldContainer className="flex-1">
       <FormFieldLabel className="text-[12px]">
-        Primary State Cosigner
+        Primary Location Cosigner
       </FormFieldLabel>
       <SelectInput
         key={JSON.stringify(options)}
@@ -73,4 +73,4 @@ const PrimaryStateCosigner = () => {
   )
 }
 
-export { PrimaryStateCosigner }
+export { PrimaryLocationCosigner }

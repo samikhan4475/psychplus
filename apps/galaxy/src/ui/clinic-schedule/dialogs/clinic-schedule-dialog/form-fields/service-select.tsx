@@ -130,7 +130,7 @@ const ServiceSelect = () => {
   return (
     <FormFieldContainer className="flex-1">
       <FormFieldLabel required className="text-[12px]">
-        Service
+        Add Service
       </FormFieldLabel>
       <SelectInput
         buttonClassName="w-full h-6"
