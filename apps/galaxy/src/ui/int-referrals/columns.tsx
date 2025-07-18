@@ -3,27 +3,19 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, TextCell } from '@/components'
 import { PatientReferral, Sort } from '@/types'
-import {
-  formatDateOfBirth,
-  formatUTCDate,
-  getPatientFullName,
-  getSlashedPaddedDateString,
-  getSortDir,
-} from '@/utils'
-import {
-  GenderLabelCell,
-  ServiceNameCell,
-} from '../referrals/patient-referrals-widget/cells'
+import { formatUTCDate, getSlashedPaddedDateString, getSortDir } from '@/utils'
+import { ServiceNameCell } from '../referrals/patient-referrals-widget/cells'
 import {
   ActionCell,
-  AppointmentIdCell,
   CollapseCell,
   ContactMadeSelectCell,
   DiagnosisCell,
   LocationCell,
   OrderDetailLocationCell,
   OrderDetailProviderCell,
+  PatientChartCell,
   PatientEducationCell,
+  PatientInfoCell,
   PriorAuthStatusCell,
   ProcurementCell,
   ProviderCell,
@@ -46,102 +38,9 @@ const columns = (
       size: 20,
     },
     {
-      id: 'patientName',
-      header: ({ column }) => (
-        <ColumnHeader column={column} label="Patient Details" />
-      ),
-      columns: [
-        {
-          id: 'patientName.firstName',
-          header: ({ column }) => <ColumnHeader label="Name" column={column} />,
-          cell: ({ row }) => (
-            <TextCell>{getPatientFullName(row.original.patientName)}</TextCell>
-          ),
-        },
-        {
-          id: 'patientStatus',
-          header: ({ column }) => (
-            <ColumnHeader label="Status" column={column} />
-          ),
-          cell: GenderLabelCell,
-        },
-        {
-          id: 'patientAge',
-          header: ({ column }) => <ColumnHeader label="Age" column={column} />,
-          cell: ({ row }) => <TextCell>{row.original.patientAge}</TextCell>,
-        },
-        {
-          id: 'patientGender',
-          header: ({ column }) => <ColumnHeader label="Gen." column={column} />,
-          cell: ({ row }) => <TextCell>{row.original.patientGender}</TextCell>,
-        },
-        {
-          id: 'patientMrn',
-          header: ({ column }) => <ColumnHeader label="MRN" column={column} />,
-          cell: ({ row }) => <TextCell>{row.original.patientMrn}</TextCell>,
-        },
-        {
-          id: 'patientDateOfBirth',
-          header: ({ column }) => <ColumnHeader label="DOB" column={column} />,
-          cell: ({ row }) => (
-            <TextCell className="truncate">
-              {row.original?.patientDateOfBirth &&
-                formatDateOfBirth(row.original?.patientDateOfBirth)}
-            </TextCell>
-          ),
-        },
-        {
-          id: 'contactDetails.phoneNumbers[0].number',
-          header: ({ column }) => (
-            <ColumnHeader label="Phone" column={column} />
-          ),
-          cell: ({ row }) => (
-            <TextCell className="w-[100px]">
-              {row.original.contactDetails?.phoneNumbers?.length
-                ? row.original.contactDetails.phoneNumbers[0].number
-                : ''}
-            </TextCell>
-          ),
-        },
-        {
-          id: 'contactDetails?.email',
-          header: ({ column }) => (
-            <ColumnHeader label="Email" column={column} />
-          ),
-          cell: ({ row }) => (
-            <TextCell>{row.original.contactDetails?.email}</TextCell>
-          ),
-        },
-        {
-          id: 'contactDetails.addresses[0].state',
-          header: ({ column }) => (
-            <ColumnHeader label="Residence(State)" column={column} />
-          ),
-          cell: ({ row }) => <TextCell>{row.original.stateCode}</TextCell>,
-        },
-        {
-          id: 'contactDetails.addresses[0].city',
-          header: ({ column }) => <ColumnHeader label="City" column={column} />,
-          cell: ({ row }) => (
-            <TextCell>
-              {row.original.contactDetails?.addresses?.length
-                ? row.original.contactDetails.addresses[0].city
-                : ''}
-            </TextCell>
-          ),
-        },
-        {
-          id: 'contactDetails.addresses[0].postalCode',
-          header: ({ column }) => <ColumnHeader label="Zip" column={column} />,
-          cell: ({ row }) => (
-            <TextCell>
-              {row.original.contactDetails?.addresses?.length
-                ? row.original.contactDetails.addresses[0].postalCode
-                : ''}
-            </TextCell>
-          ),
-        },
-      ],
+      id: 'patientName.firstName',
+      header: () => <ColumnHeader label="Patient Name" />,
+      cell: PatientInfoCell,
     },
     {
       id: 'referral-order-details',
@@ -181,7 +80,12 @@ const columns = (
           header: ({ column }) => (
             <ColumnHeader label="Visit ID" column={column} />
           ),
-          cell: AppointmentIdCell,
+          cell: ({ row }) => (
+            <PatientChartCell
+              labelText={row.original.appointmentId}
+              referral={row.original}
+            />
+          ),
         },
         {
           id: 'servicesStatus',

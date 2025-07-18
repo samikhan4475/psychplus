@@ -2,7 +2,6 @@
 
 import { useRouter } from 'next/navigation'
 import { Text } from '@radix-ui/themes'
-import { PropsWithRow } from '@/components'
 import { useStore as useRootStore } from '@/store'
 import { PatientReferral } from '@/types'
 import {
@@ -12,11 +11,12 @@ import {
   getPatientMRN,
 } from '@/utils'
 
-interface Props extends PropsWithRow<PatientReferral> {
-  disabled?: boolean
+interface Props {
+  referral: PatientReferral
+  labelText?: string
 }
 
-const AppointmentIdCell = ({ row: { original: referral } }: Props) => {
+const PatientChartCell = ({ referral, labelText }: Props) => {
   const router = useRouter()
   const addTab = useRootStore((state) => state.addTab)
 
@@ -30,7 +30,7 @@ const AppointmentIdCell = ({ row: { original: referral } }: Props) => {
       const href = constructQuickNotesUrl(
         referral.appointment.patientId,
         parseInt(referral.appointmentId),
-        referral.appointment.visitTypeCode,
+        referral.visitTypeCode,
         referral.appointment.visitSequence,
       )
 
@@ -45,10 +45,10 @@ const AppointmentIdCell = ({ row: { original: referral } }: Props) => {
   }
 
   return (
-    <Text onClick={navigateToChart} className="cursor-pointer">
-      {referral.appointmentId}
+    <Text onClick={navigateToChart} className="w-[100px] cursor-pointer">
+      {labelText}
     </Text>
   )
 }
 
-export { AppointmentIdCell }
+export { PatientChartCell }
