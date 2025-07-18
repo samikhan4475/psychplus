@@ -47,6 +47,7 @@ const NavigationLink = ({
 
   return (
     <NextLink
+      prefetch={false}
       href={link}
       className={cn(
         'px-2 py-1 text-[11.5px] first:rounded-t-1 hover:bg-accent-2',

@@ -1,7 +1,7 @@
+import { ActionSuccessState } from '@psychplus-v2/api'
 import z from 'zod'
 import { validate } from '@psychplus/form'
 import { SchemaType } from './components/schema'
-import { ActionSuccessState } from '@psychplus-v2/api'
 
 enum ExternalReferralDocument {
   RequisitionPdf = 'RequisitionPdf',
@@ -14,6 +14,7 @@ enum ReferralType {
   Generic = 'generic',
   Clinic = 'clinic',
   Facility = 'facility',
+  Payer = 'payer',
 }
 
 type PhoneNumberType = z.infer<typeof validate.phoneNumberTypeEnum>

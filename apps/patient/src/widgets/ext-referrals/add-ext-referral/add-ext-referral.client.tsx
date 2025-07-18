@@ -8,7 +8,10 @@ import { usePublishLoaded, usePublishSize } from '@psychplus/widgets/hooks'
 import { AddExtReferralForm } from './components'
 import { ReferralType } from './types'
 
-const AddExtReferralClient = () => {
+interface Props{
+  googleAPIkey:string
+} 
+const AddExtReferralClient = ({googleAPIkey}:Props) => {
   const ref = useRef<HTMLDivElement>(null)
 
   usePublishLoaded(ADD_EXT_REFERRALS_FORM)
@@ -25,7 +28,7 @@ const AddExtReferralClient = () => {
     <Flex direction="column" align="center" className=" w-full" ref={ref}>
       <Flex className="bg-white  w-full max-w-[688px] !overflow-visible rounded-6  max-xs:max-w-[400px]">
         {isValidType ? (
-          <AddExtReferralForm scrollToTop={scrollToTop} />
+          <AddExtReferralForm scrollToTop={scrollToTop} googleAPIkey={googleAPIkey} />
         ) : (
           <Text color="red" size="4" weight="bold">
             Invalid referral type

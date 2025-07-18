@@ -79,7 +79,7 @@ const NavigationLink = ({ href, label }: NavigationLinkProps) => {
 
   if (label === 'Schedule') {
     return (
-      <NextLink href="/" className={navLinkClass}>
+      <NextLink prefetch={false} href="/" className={navLinkClass}>
         Schedule
       </NextLink>
     )
@@ -89,6 +89,7 @@ const NavigationLink = ({ href, label }: NavigationLinkProps) => {
   }
   return (
     <NextLink
+      prefetch={false}
       href={href}
       className={navLinkClass}
       onClick={() => {

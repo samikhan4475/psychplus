@@ -39,7 +39,10 @@ function cleanContactDetails(contactDetails: ContactDetails): ContactDetails {
   return cleaned
 }
 
-const addExtReferralInitialValues = (shortName?: string) => ({
+const addExtReferralInitialValues = (
+  shortName?: string,
+  stateCode?: string,
+) => ({
   patientName: {
     firstName: '',
     lastName: '',
@@ -58,7 +61,7 @@ const addExtReferralInitialValues = (shortName?: string) => ({
         street1: '',
         street2: '',
         city: '',
-        state: '',
+        state: stateCode ?? '',
         country: '',
         postalCode: '',
       },
@@ -116,12 +119,15 @@ function transformOut(data: SchemaType): PatientExtReferralParams {
     referrerContactDetails: cleanContactDetails(data.referrerContactDetails),
   }
 
-  if (
-    patientAddress &&
-    !isEmptyAddress(patientAddress) &&
-    patientAddress.postalCode
-  ) {
-    cleanedData.requestedPostalCode = patientAddress.postalCode
+  if (patientAddress && !isEmptyAddress(patientAddress)) {
+    const { postalCode, state } = patientAddress
+
+    if (postalCode && !isTeleVisit) {
+      cleanedData.requestedPostalCode = postalCode
+    }
+    if (state) {
+      cleanedData.requestedStateCode = state
+    }
   }
   const timeZone = getLocalTimeZone()
   if (requestedTime) {

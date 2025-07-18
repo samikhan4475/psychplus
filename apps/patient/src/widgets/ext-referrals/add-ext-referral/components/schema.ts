@@ -1,9 +1,9 @@
 'use client'
 
 import { AppointmentType } from '@psychplus-v2/constants'
+import { DateValue } from 'react-aria-components'
 import { z } from 'zod'
 import { validate } from '@psychplus/form'
-import { DateValue } from 'react-aria-components'
 
 const addressSchema = z.object({
   type: validate.optionalString.default('Home'),
@@ -55,6 +55,17 @@ const schema = z
     payerName: validate.optionalString,
   })
   .superRefine((data, ctx) => {
+    if (
+      !data?.patientContactDetails?.email?.trim() &&
+      !data?.patientContactDetails?.phoneNumbers?.some((p) => p.number.trim())
+    ) {
+      ctx.addIssue({
+        path: ['patientContactDetails', 'email'],
+        code: z.ZodIssueCode.custom,
+        message: 'Email or phone required',
+      })
+    }
+
     if (data.requestedMedium === AppointmentType.InPerson) {
       data.patientContactDetails?.addresses?.forEach((address, index) => {
         if (address.type && address.state && !address.postalCode?.trim()) {

@@ -24,8 +24,12 @@ import { SubmitButtonBlock } from './submit-button-block'
 
 interface AddExtReferralFormProps {
   scrollToTop?: () => void
+  googleAPIkey: string
 }
-const AddExtReferralForm = ({ scrollToTop }: AddExtReferralFormProps) => {
+const AddExtReferralForm = ({
+  scrollToTop,
+  googleAPIkey,
+}: AddExtReferralFormProps) => {
   const { toast } = useToast()
   const [fileResetCounter, setFileResetCounter] = useState(0)
   const [facesheetFile, setFacesheetFile] = useState<File | undefined>(
@@ -38,7 +42,7 @@ const AddExtReferralForm = ({ scrollToTop }: AddExtReferralFormProps) => {
   console.log(shortName, 'short')
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
-    mode: 'onSubmit',
+    mode: 'onChange',
     defaultValues: addExtReferralInitialValues(shortName),
   })
 
@@ -169,7 +173,7 @@ const AddExtReferralForm = ({ scrollToTop }: AddExtReferralFormProps) => {
       setSummaryFile(undefined)
       setFileResetCounter((c) => c + 1)
     }
-    form.reset(addExtReferralInitialValues(shortName))
+    form.reset(addExtReferralInitialValues(shortName, base?.requestedStateCode))
   }
   return (
     <FormContainer form={form} onSubmit={onSubmit}>
@@ -179,6 +183,7 @@ const AddExtReferralForm = ({ scrollToTop }: AddExtReferralFormProps) => {
           onFaceSheetFileChange={setFacesheetFile}
           onFileChange={setSummaryFile}
           fileResetCounter={fileResetCounter}
+          googleAPIkey={googleAPIkey}
         />
         <ReferrerInformation />
         <SubmitButtonBlock />

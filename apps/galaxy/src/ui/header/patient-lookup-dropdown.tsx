@@ -29,6 +29,7 @@ const PatientLookupDropdown = ({ isActive }: { isActive: boolean }) => {
       >
         <DropdownMenu.Item asChild>
           <NextLink
+            prefetch={false}
             onClick={() => {
               addTab({
                 href: '/patient-lookup',
@@ -45,6 +46,7 @@ const PatientLookupDropdown = ({ isActive }: { isActive: boolean }) => {
         <DropdownMenu.Separator className="m-1" />
         <DropdownMenu.Item asChild>
           <NextLink
+            prefetch={false}
             href="/int-referrals"
             className="hover:text-black hover:bg-pp-bg-accent whitespace-nowrap text-[13px]"
             onClick={() => {
@@ -60,6 +62,7 @@ const PatientLookupDropdown = ({ isActive }: { isActive: boolean }) => {
         <DropdownMenu.Separator className="m-1" />
         <DropdownMenu.Item asChild>
           <NextLink
+            prefetch={false}
             href="/external-referral"
             className="hover:text-black hover:bg-pp-bg-accent whitespace-nowrap text-[13px]"
             onClick={() => {
@@ -73,8 +76,8 @@ const PatientLookupDropdown = ({ isActive }: { isActive: boolean }) => {
           </NextLink>
         </DropdownMenu.Item>
         <DropdownMenu.Separator className="m-1" />
-         <DropdownMenu.Sub>
-          <DropdownMenu.SubTrigger className="hover:text-black hover:bg-pp-bg-accent whitespace-nowrap text-[13px] flex items-center justify-between">
+        <DropdownMenu.Sub>
+          <DropdownMenu.SubTrigger className="hover:text-black hover:bg-pp-bg-accent flex items-center justify-between whitespace-nowrap text-[13px]">
             <Text>Transfer Patient</Text>
           </DropdownMenu.SubTrigger>
           <DropdownMenu.SubContent
@@ -83,6 +86,7 @@ const PatientLookupDropdown = ({ isActive }: { isActive: boolean }) => {
           >
             <DropdownMenu.Item asChild>
               <NextLink
+                prefetch={false}
                 href="/transfer-patient"
                 className="hover:text-black hover:bg-pp-bg-accent whitespace-nowrap text-[13px]"
                 onClick={() => {
@@ -98,6 +102,7 @@ const PatientLookupDropdown = ({ isActive }: { isActive: boolean }) => {
             <DropdownMenu.Separator className="m-1" />
             <DropdownMenu.Item asChild>
               <NextLink
+                prefetch={false}
                 href="/transfer-patient"
                 className="hover:text-black hover:bg-pp-bg-accent whitespace-nowrap text-[13px]"
                 onClick={() => {

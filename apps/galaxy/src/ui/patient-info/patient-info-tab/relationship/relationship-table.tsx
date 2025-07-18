@@ -4,6 +4,7 @@ import {
   ColumnHeader,
   DataTable,
   LoadingPlaceholder,
+  LongTextCell,
   TextCell,
 } from '@/components'
 import { Relationship } from '@/types'
@@ -26,14 +27,16 @@ const columns: ColumnDef<Relationship>[] = [
   {
     id: 'relation-first-name',
     header: () => <ColumnHeader label="First Name" />,
-    cell: ({ row }) => <TextCell>{row.original?.name?.firstName}</TextCell>,
-    size: 50,
+    cell: ({ row }) => (
+      <TextCell className="whitespace-nowrap">
+        {row.original?.name?.firstName}
+      </TextCell>
+    ),
   },
   {
     id: 'relation-middle-name',
     header: () => <ColumnHeader label="Middle Name" />,
     cell: ({ row }) => <TextCell>{row.original?.name?.middleName}</TextCell>,
-    size: 100,
   },
   {
     id: 'relation-last-name',
@@ -49,9 +52,9 @@ const columns: ColumnDef<Relationship>[] = [
     id: 'address',
     header: () => <ColumnHeader label="Address" />,
     cell: ({ row }) => (
-      <TextCell className="truncate">
+      <LongTextCell className="min-w-24 max-w-32 truncate">
         {getAddressLabel('Home', row.original?.contactDetails?.addresses)}
-      </TextCell>
+      </LongTextCell>
     ),
   },
   {
@@ -113,7 +116,10 @@ const RelationshipTable = ({
     return <LoadingPlaceholder className="min-h-40" />
   }
   return (
-    <ScrollArea scrollbars="vertical" className="max-h-52 p-2">
+    <ScrollArea
+      scrollbars="both"
+      className="mt-1.5 h-full max-h-52 max-w-[calc(100vw-280px)] flex-1 pr-1"
+    >
       <DataTable
         data={patientRelationships ?? []}
         columns={columns}

@@ -32,6 +32,7 @@ const InboxLink = ({ href, label, inboxCountTotal }: InboxLinkProps) => {
 
   return (
     <NextLink
+      prefetch={false}
       href={href}
       onClick={() => {
         addTab({

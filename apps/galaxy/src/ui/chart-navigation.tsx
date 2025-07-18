@@ -89,6 +89,7 @@ const NavigationLink = ({
 
   return (
     <NextLink
+      prefetch={false}
       href={
         appointmentId
           ? `${fullHref}?id=${appointmentId}&visitType=${visitType}&visitSequence=${visitSequence}`

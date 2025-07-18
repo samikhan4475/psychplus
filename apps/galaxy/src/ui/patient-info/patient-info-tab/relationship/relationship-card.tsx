@@ -17,7 +17,7 @@ interface RelationshipCardProps {
 const RelationshipCard = ({
   patientRelationships,
   patientId,
-  title= "Relationship"
+  title = 'Relationship',
 }: RelationshipCardProps) => {
   const [relationships, setRelationships] = useState<Relationship[]>(
     patientRelationships ?? [],
@@ -42,7 +42,7 @@ const RelationshipCard = ({
             <AddRelationshipDialog patientId={patientId} />
           </Flex>
         </CardHeading>
-        <Flex direction="column" p="2" gap="2">
+        <Flex direction="column">
           <RelationshipTable
             patientRelationships={relationships}
             loading={loading}

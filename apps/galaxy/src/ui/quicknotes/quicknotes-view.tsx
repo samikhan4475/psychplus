@@ -1,3 +1,4 @@
+import { unstable_noStore as noStore } from 'next/cache'
 import { notFound } from 'next/navigation'
 import { Text } from '@radix-ui/themes'
 import { getPatientStaffCommentsAction } from '@/actions'
@@ -22,13 +23,14 @@ const QuickNotesView = async ({
   visitType,
   visitSequence,
 }: QuickNotesViewProps) => {
+  noStore()
   const [appointmentResult] = await Promise.all([
     getAppointment({
       id: appointmentId,
       isIncludeCodes: true,
       isIncludeCosigners: true,
       isIncludeLocation: true,
-      isIncludeSignedNotes:true
+      isIncludeSignedNotes: true,
     }),
   ])
 

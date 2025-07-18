@@ -6,7 +6,6 @@ import { CODESETS } from '@psychplus-v2/constants'
 import { Box, Flex, Grid, Separator, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import {
-  CodesetFormSelect,
   FormField,
   MultiSelectDropdown,
 } from '@/components-v2'
@@ -19,17 +18,20 @@ import { SchemaType } from './schema'
 import { TimeSelect } from './time-select'
 import { UploadDocumentButton } from './upload-document-button'
 import { ZipInput } from './zip-input'
+import { StateSelect } from './state-select'
 
 interface AppointmentDetailProps {
   onFaceSheetFileChange: (file: File | undefined) => void
   onFileChange: (file: File | undefined) => void
   fileResetCounter?: number
+  googleAPIkey:string
 }
 
 const AppointmentDetail = ({
   onFaceSheetFileChange,
   onFileChange,
   fileResetCounter,
+  googleAPIkey
 }: AppointmentDetailProps) => {
   const codes = useCodesetCodes(CODESETS.ServicesOffered)
   const form = useFormContext<SchemaType>()
@@ -90,20 +92,8 @@ const AppointmentDetail = ({
         <AppointmentTypeSelect />
         <Box className="max-xs:col-span-full xs:col-span-3">
           <Grid columns="2" className="max-xs:grid-cols-1" gap="3">
-            <FormField
-              containerClassName="flex-1"
-              name="patientContactDetails.addresses.0.state"
-              label="State"
-            >
-              <CodesetFormSelect
-                name="patientContactDetails.addresses.0.state"
-                placeholder="Select"
-                className={buttonClassName}
-                codeset={CODESETS.UsStates}
-                size="1"
-              />
-            </FormField>
-
+           
+           <StateSelect googleAPIkey={googleAPIkey}/>
             <ZipInput />
             {formType === ReferralType.Facility && <DischargeDate />}
           </Grid>
@@ -129,6 +119,5 @@ const AppointmentDetail = ({
     </Flex>
   )
 }
-const buttonClassName =
-  'font-regular h-[38px] text-gray-12 text-2 w-full [&_span]:bg-red-500 bg-[white] border-pp-gray-2  border border-solid !outline-none [box-shadow:none]'
+
 export { AppointmentDetail }

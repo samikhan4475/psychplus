@@ -3,6 +3,7 @@ import { CODESETS } from '@psychplus-v2/constants'
 import { getCodesets } from '@/api'
 import { CodesetStoreProvider, ToastProvider } from '@/providers'
 import { AddExtReferralClient } from './add-ext-referral.client'
+import { GOOGLE_MAPS_API_KEY } from '@psychplus-v2/env'
 
 const AddExtReferralServer = async () => {
   noStore()
@@ -18,7 +19,7 @@ const AddExtReferralServer = async () => {
   return (
     <ToastProvider>
       <CodesetStoreProvider codesets={codesets}>
-        <AddExtReferralClient />
+        <AddExtReferralClient googleAPIkey={GOOGLE_MAPS_API_KEY} />
       </CodesetStoreProvider>
     </ToastProvider>
   )
