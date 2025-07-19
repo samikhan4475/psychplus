@@ -46,7 +46,6 @@ const ClinicTimeFilterForm = ({ staffId }: PropsWithStaffId) => {
 
   const handleClear = () => {
     form.reset()
-    form.setValue('scheduleStatus', '')
     fetchClinicSchedules(staffId)
   }
 
