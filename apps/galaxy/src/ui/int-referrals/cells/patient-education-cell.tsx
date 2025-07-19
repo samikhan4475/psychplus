@@ -1,12 +1,14 @@
 'use client'
 
 import { useState } from 'react'
+import { Flex } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
 import { useStore as zustandUseStore } from 'zustand'
 import { PropsWithRow } from '@/components'
 import { PatientReferral } from '@/types'
 import { updatePatientReferralAction } from '@/ui/referrals/actions'
 import { StatusSelect } from '@/ui/referrals/patient-referrals-widget/status-select'
+import { HxCellButton } from '../hx-cell-button'
 import { useStore } from '../store'
 
 interface Props extends PropsWithRow<PatientReferral> {
@@ -58,11 +60,15 @@ const PatientEducationCell = ({ row: { original: referral } }: Props) => {
   }
 
   return (
-    <StatusSelect
-      value={selectedValue}
-      onValueChange={updatePatientEducationStatus}
-      options={options}
-    />
+    <Flex gap="2" align="center" direction="row">
+      <HxCellButton referral={referral} cellName="education" />
+      <StatusSelect
+        value={selectedValue}
+        onValueChange={updatePatientEducationStatus}
+        options={options}
+        className="w-[150px]"
+      />
+    </Flex>
   )
 }
 

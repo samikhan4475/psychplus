@@ -8,6 +8,7 @@ import { PatientReferral } from '@/types'
 import { updatePatientReferralAction } from '@/ui/referrals/actions'
 import { StatusSelect } from '@/ui/referrals/patient-referrals-widget/status-select'
 import { useStore } from '../store'
+import { VisitTypes } from '../types'
 
 interface Props extends PropsWithRow<PatientReferral> {
   disabled?: boolean
@@ -62,6 +63,7 @@ const RemsEnrolledCell = ({ row: { original: referral } }: Props) => {
       value={selectedValue}
       onValueChange={updateREMSStatus}
       options={options}
+      disabled={referral.service !== VisitTypes.SPRAVATO}
     />
   )
 }

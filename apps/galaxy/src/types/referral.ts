@@ -106,6 +106,7 @@ interface PatientReferral {
   procurementType?: string
   isPatientEducation?: boolean
   isRemsEnrolled?: boolean
+  visitTypeLabel?: string
 }
 
 interface GetPatientReferralsParams {

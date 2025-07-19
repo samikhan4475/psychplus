@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { Flex } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
 import { useStore as zustandUseStore } from 'zustand'
 import { PropsWithRow } from '@/components'
@@ -8,6 +9,7 @@ import { PatientReferral, SelectOptionType } from '@/types'
 import { getVisitTypesAction } from '@/ui/location/service/actions'
 import { updatePatientReferralAction } from '@/ui/referrals/actions'
 import { StatusSelect } from '@/ui/referrals/patient-referrals-widget/status-select'
+import { HxCellButton } from '../hx-cell-button'
 import { useStore } from '../store'
 
 const VisitTypeCell = ({
@@ -68,12 +70,20 @@ const VisitTypeCell = ({
   }
 
   return (
-    <StatusSelect
-      value={selectedValue}
-      onValueChange={updateReferralVisitType}
-      options={visitTypes}
-      disabled={loading}
-    />
+    <Flex gap="2" align="center" direction="row">
+      <HxCellButton
+        referral={referral}
+        cellName="visitType"
+        visitTypes={visitTypes}
+      />
+      <StatusSelect
+        value={selectedValue}
+        onValueChange={updateReferralVisitType}
+        options={visitTypes}
+        disabled={loading}
+        className="w-[200px]"
+      />
+    </Flex>
   )
 }
 

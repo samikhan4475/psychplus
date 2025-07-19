@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Flex } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
 import { PropsWithRow } from '@/components'
 import { CODESETS } from '@/constants'
@@ -14,6 +15,7 @@ import {
   isReferralDeleted,
 } from '@/ui/referrals/patient-referrals-widget/utils'
 import { AUTH_IO_PROCESS } from '../constants'
+import { HxCellButton } from '../hx-cell-button'
 
 interface Props extends PropsWithRow<PatientReferral> {
   disabled?: boolean
@@ -39,18 +41,22 @@ const ContactMadeSelectCell = ({
   }
 
   return (
-    <StatusSelect
-      options={sortCodesetBySortAttribute(codes, {
-        includeDisabled: true,
-      }).filter((option) => option.value !== AUTH_IO_PROCESS)}
-      value={selectedValue}
-      onValueChange={updateContactMadeStatus}
-      disabled={
-        disabled ||
-        isReferralDeleted(referral?.resourceStatus) ||
-        isContactMadeScheduledOrCancelled(referral?.contactStatus)
-      }
-    />
+    <Flex gap="2" align="center" direction="row">
+      <HxCellButton referral={referral} cellName="contactStatus" />
+      <StatusSelect
+        options={sortCodesetBySortAttribute(codes, {
+          includeDisabled: true,
+        }).filter((option) => option.value !== AUTH_IO_PROCESS)}
+        value={selectedValue}
+        onValueChange={updateContactMadeStatus}
+        disabled={
+          disabled ||
+          isReferralDeleted(referral?.resourceStatus) ||
+          isContactMadeScheduledOrCancelled(referral?.contactStatus)
+        }
+        className="w-[200px]"
+      />
+    </Flex>
   )
 }
 

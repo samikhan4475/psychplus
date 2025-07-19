@@ -8,6 +8,7 @@ import { ServiceNameCell } from '../referrals/patient-referrals-widget/cells'
 import {
   ActionCell,
   CollapseCell,
+  CommentCell,
   ContactMadeSelectCell,
   DiagnosisCell,
   LocationCell,
@@ -129,7 +130,7 @@ const columns = (
           header: ({ column }) => (
             <ColumnHeader label="Comments" column={column} />
           ),
-          cell: ({ row }) => <TextCell>{row.original.comments}</TextCell>,
+          cell: CommentCell,
         },
       ],
     },
