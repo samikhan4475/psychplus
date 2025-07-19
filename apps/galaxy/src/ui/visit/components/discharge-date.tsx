@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { getLocalTimeZone, today } from '@internationalized/date'
 import { Flex } from '@radix-ui/themes'
-import { FieldValues, useFormContext, useWatch } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { DatePickerInput } from '@/components'
 import { FormFieldLabel } from '@/components/form'
 
@@ -48,6 +48,12 @@ const DischargeDate = <T extends object>() => {
         maxValue={
           visitSequence === 'InitialDischarge' ? dateOfAdmission : maxValue
         }
+        onChange={(value) => {
+          form.setValue('dischargeDate', value, {
+            shouldDirty: true,
+            shouldValidate: true,
+          })
+        }}
       />
     </Flex>
   )

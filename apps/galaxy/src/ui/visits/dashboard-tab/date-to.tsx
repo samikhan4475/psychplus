@@ -19,7 +19,7 @@ const DateTo = ({
   setActiveFilter: (activeFilter: string) => void
   dateFrom: DateValue | undefined
 }) => {
-  const onChange = (date: CalendarDate) => {
+  const onChange = (date?: CalendarDate) => {
     if (date) {
       setActiveFilter('')
     }

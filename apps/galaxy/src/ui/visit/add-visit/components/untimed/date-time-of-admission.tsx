@@ -31,7 +31,7 @@ const DateTimeOfAdmission = () => {
           isDisabled={isDisabled}
           dateInputClass="h-6 flex-1"
           handleChange={(date) => {
-            if (dischargeDate && date > dischargeDate) {
+            if (date && dischargeDate && date > dischargeDate) {
               form.setValue('dischargeDate', undefined)
             }
           }}

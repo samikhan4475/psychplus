@@ -46,6 +46,7 @@ const DateTimeOfAdmission = ({
                   if (canEditAdmissionDateTime) {
                     form.setValue('dateOfAdmission', value, {
                       shouldDirty: true,
+                      shouldValidate: true,
                     })
                   } else {
                     setIsOpen(true)
@@ -53,7 +54,6 @@ const DateTimeOfAdmission = ({
                 }}
                 maxValue={today(getLocalTimeZone())}
               />
-              <FormFieldError name="dateOfAdmission" />
             </Box>
             <Box className="col-span-6">
               <SelectInput

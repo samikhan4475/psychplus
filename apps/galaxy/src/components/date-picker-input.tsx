@@ -37,7 +37,7 @@ interface DatePickerInputProps<T extends DateValue> extends DatePickerProps<T> {
   className?: string
   datePickerClass?: string
   dateInputClass?: string
-  handleChange?: (date: CalendarDate) => void
+  handleChange?: (date?: CalendarDate) => void
   showError?: boolean
   yearFormat?: 'YY' | 'YYYY'
 }
@@ -64,16 +64,16 @@ const DatePickerInput = <T extends DateValue>({
   return (
     <I18nProvider locale="en-US">
       <FormFieldContainer className={cn('w-full gap-0.5', className)}>
-        <Flex>
-          {label && (
+        {label && (
+          <Flex align="center">
             <Text as="label" size="1" weight="medium">
               {label}
             </Text>
-          )}
-          {isRequired && (
-            <Text className="ml-[2px] text-[11px] text-red-9">*</Text>
-          )}
-        </Flex>
+            {isRequired && (
+              <Text className="ml-[2px] text-[11px] text-red-9">*</Text>
+            )}
+          </Flex>
+        )}
         <Controller
           control={form.control}
           name={field}
