@@ -2,6 +2,7 @@
 
 import { Flex } from '@radix-ui/themes'
 import { Insurance } from '@/types'
+import { CheckEligibilityButton } from './check-eligibility-button'
 import HistoryButton from './history-button'
 import { SaveButton } from './save-button'
 import StatusDropdown from './status-dropdown'
@@ -15,6 +16,7 @@ interface FormHeaderProps {
 const FormHeader = ({ insurance, patientId, disabled }: FormHeaderProps) => {
   return (
     <Flex className="w-full justify-end" gap="2">
+      <CheckEligibilityButton />
       <StatusDropdown />
       <HistoryButton
         insurance={insurance}

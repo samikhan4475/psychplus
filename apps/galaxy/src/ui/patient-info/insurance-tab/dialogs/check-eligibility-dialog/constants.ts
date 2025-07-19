@@ -1,0 +1,1 @@
+export const ELIGIBILITY_TABLE_PAGE_SIZE = 20

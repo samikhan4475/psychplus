@@ -281,6 +281,8 @@ const UPDATE_LOCATION_ENDPOINT = (locationId: string) =>
   `${API_URL}/api/locations/${locationId}`
 const DELETE_PATIENT_POLICY_ENDPOINT = (patientId: string, policyId: string) =>
   `${API_URL}/api/patients/${patientId}/policies/${policyId}`
+const ELIGIBILITY_CHECK_ENDPOINT = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/actions/eligibility/verify`
 const UPDATE_INSURANCE_PAYMENT_ENDPOINT = (id: string) =>
   `${API_URL}/api/payments/${id}`
 const INSURANCE_PAYMENT_ATTACHMENTS_ENDPOINT = (paymentId: string) =>
@@ -1222,6 +1224,7 @@ export {
   GET_STATES_LOCATIONS_ENDPOINT,
   SEARCH_INSURANCE_PLANS_ENDPOINT,
   GET_PATIENT_STAFF_COMMENTS_ENDPOINT,
+  ELIGIBILITY_CHECK_ENDPOINT,
   GET_INSURANCE_PAYMENT_DETAIL_ENDPOINT,
   DELETE_STAFF_COMMENT_ENDPOINT,
   CREATE_STAFF_COMMENT_ENDPOINT,

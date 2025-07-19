@@ -72,6 +72,7 @@ const CODESETS = {
   // PsychPlusPublic Codesets
   PracticePlanRule:'PsychPlusPublic.PracticePlanRule',
   TMSCoilType: 'PsychPlusPublic.TMSCoilType',
+  BillingMedicalServiceType:'PsychPlusPublic.BillingMedicalServiceType',
   TMSStimulationSite: 'PsychPlusPublic.TMSStimulationSite',
   ProviderAttributions: 'PsychPlusPublic.ProviderAttributions',
   ProcessedAsCode: 'ProcessedAsCode',
