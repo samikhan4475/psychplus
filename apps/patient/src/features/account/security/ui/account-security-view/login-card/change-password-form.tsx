@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { ConfigurationResponse } from '@psychplus-v2/types'
 import { Flex, Text } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -28,7 +29,11 @@ const schema = z.object({
 
 type SchemaType = z.infer<typeof schema>
 
-const ChangePasswordForm = () => {
+const ChangePasswordForm = ({
+  configuration,
+}: {
+  configuration: ConfigurationResponse
+}) => {
   const [error, setError] = useState<string>()
 
   const form = useForm<SchemaType>({
@@ -108,6 +113,7 @@ const ChangePasswordForm = () => {
         <PasswordRequirements
           newPassword={form.watch('newPassword')}
           confirmPassword={form.watch('confirmPassword')}
+          configuration={configuration}
         />
       </ToggleableForm>
     </LabelAndValue>
