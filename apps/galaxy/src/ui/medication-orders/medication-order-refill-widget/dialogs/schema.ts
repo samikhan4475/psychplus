@@ -87,7 +87,8 @@ const drugSchema = z.object({
   priorAuthorizationCode: z.string().optional(),
   priorAuthorizationStatus: z.string().optional(),
   deaSchedule: z.string().optional(),
-  isControlledSubstance: z.boolean().optional()
+  isControlledSubstance: z.boolean().optional(),
+  effectiveDate: z.string().optional(),
 })
 
 const schema = z.object({

@@ -11,8 +11,8 @@ const EffectiveDateCell = ({ row }: EffectiveDateCellProps) => {
   const drug = row.original?.drugList?.[0]
   return (
     <DateTimeCell>
-      {drug?.startDateTime
-        ? formatDate(`${drug?.startDateTime}`, 'MM/dd/yyyy')
+      {drug?.effectiveDate
+        ? formatDate(`${drug?.effectiveDate}`, 'MM/dd/yyyy')
         : ''}
     </DateTimeCell>
   )

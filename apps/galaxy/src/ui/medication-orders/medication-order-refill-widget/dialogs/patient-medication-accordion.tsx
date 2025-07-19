@@ -41,7 +41,6 @@ const PatientPrescriptionAccordian = () => {
       deaSchedule: deaCode,
       isControlledSubstance,
     }
-
     form.setValue('drugList', updated)
     setEditIndex(null)
   }

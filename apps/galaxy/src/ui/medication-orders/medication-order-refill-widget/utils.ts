@@ -1,4 +1,5 @@
 import toast from 'react-hot-toast'
+import { getDateString } from '@/ui/schedule/utils'
 import { sanitizeFormData } from '@/utils'
 import { rxChangeRequestAction, rxRenewalAction } from './actions'
 import { UpdateMedicationSchema } from './dialogs/schema'
@@ -25,6 +26,7 @@ export const handleRxApproval = async (
         drugNote: row.notes,
         priorAuthorizationCode: row?.priorAuthorizationCode,
         priorAuthorizationStatus: row?.priorAuthorizationStatus,
+        effectiveDate: row?.effectiveDate,
         ...('deaSchedule' in row && { deaSchedule: row.deaSchedule }),
       },
     }
@@ -91,6 +93,7 @@ export const handleChangeRequestApproval = async (
         priorAuthorizationCode: row?.priorAuthorizationCode,
         priorAuthorizationStatus: row?.priorAuthorizationStatus,
         drugNote: row.notes,
+        effectiveDate: row?.effectiveDate,
         ...('deaSchedule' in row && { deaSchedule: row.deaSchedule }),
         diagnoses: diagnoses,
       },

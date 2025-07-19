@@ -26,6 +26,7 @@ interface PharmacyNotificationDrugModel {
   medicationType?: string
   isSubstitutionsAllowed?: boolean
   startDateTime?: string
+  effectiveDate?: string
   drugCode?: string
   drugCodeQualifier?: string
   rxNormCode?: string
@@ -437,6 +438,16 @@ interface StepComponentProps {
   isRefillAndChangeRequest?: boolean
 }
 
+const DeaScheduleOptions = [
+  { label: 'NoCode', value: 0 },
+  { label: 'Ci', value: 1 },
+  { label: 'Cii', value: 2 },
+  { label: 'Ciii', value: 3 },
+  { label: 'Civ', value: 4 },
+  { label: 'Cv', value: 5 },
+  { label: 'MultipleClassCodes', value: 6 },
+]
+
 export {
   RefillMedicationType,
   type MedicationRefill,
@@ -459,6 +470,7 @@ export {
   CHANGERESPONSEDENIEDOPTIONS,
   MEDICATIONSSTATUS,
   PASTATUS,
+  DeaScheduleOptions,
   ConfirmationMethod,
   Step,
   type StepComponentProps,
