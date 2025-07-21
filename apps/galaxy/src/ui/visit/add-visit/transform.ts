@@ -1,5 +1,5 @@
 import { parseZonedDateTime } from '@internationalized/date'
-import { SelectOptionType, VisitType } from '@/types'
+import { VisitType } from '@/types'
 import { BookVisitPayload } from '../types'
 import { SchemaType } from './schema'
 
@@ -35,49 +35,66 @@ function transformRequestPayload(
     visitFrequency: '',
   }
   if (data.isServiceTimeDependent) {
-    payload = {
-      ...payload,
-      startDate: mapToUTCString(
-        `${data.visitDate}T${data.visitTime}:00[${data.timeZoneId}]`,
-      ),
-      durationMinutes: data.duration ? parseInt(data.duration) : 0,
-      visitFrequency: data.frequency ?? '',
-    }
-    if (data.showGroupTypeField) {
-      payload.groupTherapyTypeCode = data.groupType
-    }
-    if (data.showDCFields) {
-      payload.dischargeDate = data.dcDate?.toString()
-      payload.dischargeLocation = data.dcLocation
-      payload.isEdVisit = data.edDischarge === 'Yes'
-    }
+    payload = transformTimedRequestPayload(data, payload)
   } else {
-    const dateTimeOfAdmission = mapToUTCString(
-      `${data.dateOfAdmission}T${data.timeOfAdmission}:00[${data.timeZoneId}]`,
-    )
-    payload = {
-      ...payload,
-      startDate: dateTimeOfAdmission,
-      admissionDate: dateTimeOfAdmission,
-      dischargeDate: data.dischargeDate
-        ? data.dischargeDate?.toString()
-        : undefined,
-      visitFrequency: data.visitFrequency ?? '',
-      appointmentStatus: data.visitStatus,
-      admissionLegalStatus: data.legal,
-      authorizationNumber: data.insuranceAuthorizationNumber,
-      authorizationDate: data.authDate ? data.authDate.toString() : undefined,
-      unitId: data.unit,
-      roomId: data.room,
-      groupId: data.group,
-    }
-    if (data.facilityAdmissionId !== 'createNew') {
-      payload.admissionId = data.facilityAdmissionId
-    } else {
-      payload.isNewAdmissionIdRequired = true
-    }
+    payload = transformNonTimedRequestPayload(data, payload)
   }
   return payload
+}
+
+function transformTimedRequestPayload(
+  data: SchemaType,
+  payload: BookVisitPayload,
+) {
+  payload = {
+    ...payload,
+    startDate: mapToUTCString(
+      `${data.visitDate}T${data.visitTime}:00[${data.timeZoneId}]`,
+    ),
+    durationMinutes: data.duration ? parseInt(data.duration) : 0,
+    visitFrequency: data.frequency ?? '',
+  }
+  if (data.showGroupTypeField) {
+    payload.groupTherapyTypeCode = data.groupType
+  }
+  if (data.showDCFields) {
+    payload.dischargeDate = data.dcDate?.toString()
+    payload.dischargeLocation = data.dcLocation
+    payload.isEdVisit = data.edDischarge === 'Yes'
+  }
+  return { ...payload }
+}
+
+function transformNonTimedRequestPayload(
+  data: SchemaType,
+  payload: BookVisitPayload,
+) {
+  const startDate = `${data.dateOfAdmission?.toString()}T00:00:00.000Z`
+  const dateTimeOfAdmission = mapToUTCString(
+    `${data.dateOfAdmission}T${data.timeOfAdmission}:00[${data.timeZoneId}]`,
+  )
+  payload = {
+    ...payload,
+    startDate,
+    admissionDate: dateTimeOfAdmission,
+    dischargeDate: data.dischargeDate
+      ? data.dischargeDate?.toString()
+      : undefined,
+    visitFrequency: data.visitFrequency ?? '',
+    appointmentStatus: data.visitStatus,
+    admissionLegalStatus: data.legal,
+    authorizationNumber: data.insuranceAuthorizationNumber,
+    authorizationDate: data.authDate ? data.authDate.toString() : undefined,
+    unitId: data.unit,
+    roomId: data.room,
+    groupId: data.group,
+  }
+  if (data.facilityAdmissionId !== 'createNew') {
+    payload.admissionId = data.facilityAdmissionId
+  } else {
+    payload.isNewAdmissionIdRequired = true
+  }
+  return { ...payload }
 }
 
 function mapToUTCString(date: string): string {
@@ -127,7 +144,7 @@ const transformTimedVisitTypes = (data: VisitType[]) => {
 }
 
 export {
-  transformRequestPayload,
   transformNonTimedVisitTypes,
+  transformRequestPayload,
   transformTimedVisitTypes,
 }

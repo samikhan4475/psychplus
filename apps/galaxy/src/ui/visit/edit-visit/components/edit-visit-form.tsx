@@ -165,6 +165,7 @@ const EditVisitForm = ({
     const payload: BookVisitPayload = transformRequestPayload(
       data,
       selectedVisitType,
+      visitDetails,
     )
     if (
       visitDetails.visitSequence === VisitSequenceTypes.Discharge &&

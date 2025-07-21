@@ -1,10 +1,11 @@
 import { parseZonedDateTime } from '@internationalized/date'
-import { BookVisitPayload, VisitType } from '@/types'
+import { Appointment, BookVisitPayload, VisitType } from '@/types'
 import { SchemaType } from './schema'
 
 function transformRequestPayload(
   data: SchemaType,
   selectedVisitType: VisitType | undefined,
+  visitDetails: Appointment,
 ) {
   let payload: BookVisitPayload = {
     appointmentId: data.appointmentId,
@@ -23,54 +24,72 @@ function transformRequestPayload(
     isProceedPermissionProvided: data.isProceedPermissionProvided,
     isOverridePrimaryProvider: data.isOverridePrimaryProvider,
     specialistStaffId: 0,
-    startDate: mapToUTCString(
-      `${data.visitDate}T${data.visitTime}:00[${data.timeZoneId}]`,
-    ),
+    startDate: '',
     durationMinutes: 0,
     visitFrequency: 0,
   }
   if (data.isServiceTimeDependent) {
-    payload = {
-      ...payload,
-      specialistStaffId: data.provider ? parseInt(data.provider) : 0,
-      durationMinutes: data.duration ? parseInt(data.duration) : 0,
-      visitFrequency: data.frequency ? parseInt(data.frequency) : 0,
-    }
-    if (data.showGroupTypeField) {
-      payload.groupTherapyTypeCode = data.groupType
-    }
-    if (data.showDCFields) {
-      payload.dischargeDate = data.dcDate?.toString()
-      payload.dischargeLocation = data.dcLocation
-      payload.isEdVisit = data.edDischarge === 'Yes'
-    }
+    payload = transformTimedRequestPayload(data, payload)
   } else {
-    payload = {
-      ...payload,
-      specialistStaffId: data.admittingProvider
-        ? parseInt(data.admittingProvider)
-        : 0,
-      admissionId: data.facilityAdmissionDetailId,
-      admissionDate: mapToUTCString(
-        `${data.dateOfAdmission}T${data.timeOfAdmission}:00[${data.timeZoneId}]`,
-      ),
-      dischargeDate: data.dischargeDate
-        ? data.dischargeDate.toString()
-        : undefined,
-      visitFrequency: data.visitFrequency ? parseInt(data.visitFrequency) : 0,
-      appointmentStatus: data.visitStatus,
-      admissionLegalStatus: data.legal,
-      authorizationNumber: data.insuranceAuthorizationNumber,
-      authorizationDate: data.authDate ? data.authDate.toString() : undefined,
-      lastAuthorizationCoveredDate: data.lastCoverageDate
-        ? data.lastCoverageDate.toString()
-        : undefined,
-      unitId: data.unit,
-      roomId: data.room,
-      groupId: data.group,
-    }
+    payload = transformNonTimedRequestPayload(data, payload, visitDetails)
   }
   return payload
+}
+
+function transformTimedRequestPayload(
+  data: SchemaType,
+  payload: BookVisitPayload,
+) {
+  payload = {
+    ...payload,
+    startDate: mapToUTCString(
+      `${data.visitDate}T${data.visitTime}:00[${data.timeZoneId}]`,
+    ),
+    specialistStaffId: data.provider ? parseInt(data.provider) : 0,
+    durationMinutes: data.duration ? parseInt(data.duration) : 0,
+    visitFrequency: data.frequency ? parseInt(data.frequency) : 0,
+  }
+  if (data.showGroupTypeField) {
+    payload.groupTherapyTypeCode = data.groupType
+  }
+  if (data.showDCFields) {
+    payload.dischargeDate = data.dcDate?.toString()
+    payload.dischargeLocation = data.dcLocation
+    payload.isEdVisit = data.edDischarge === 'Yes'
+  }
+  return { ...payload }
+}
+
+function transformNonTimedRequestPayload(
+  data: SchemaType,
+  payload: BookVisitPayload,
+  visitDetails: Appointment,
+) {
+  return {
+    ...payload,
+    startDate: visitDetails?.appointmentDate,
+    specialistStaffId: data.admittingProvider
+      ? parseInt(data.admittingProvider)
+      : 0,
+    admissionId: data.facilityAdmissionDetailId,
+    admissionDate: mapToUTCString(
+      `${data.dateOfAdmission}T${data.timeOfAdmission}:00[${data.timeZoneId}]`,
+    ),
+    dischargeDate: data.dischargeDate
+      ? data.dischargeDate.toString()
+      : undefined,
+    visitFrequency: data.visitFrequency ? parseInt(data.visitFrequency) : 0,
+    appointmentStatus: data.visitStatus,
+    admissionLegalStatus: data.legal,
+    authorizationNumber: data.insuranceAuthorizationNumber,
+    authorizationDate: data.authDate ? data.authDate.toString() : undefined,
+    lastAuthorizationCoveredDate: data.lastCoverageDate
+      ? data.lastCoverageDate.toString()
+      : undefined,
+    unitId: data.unit,
+    roomId: data.room,
+    groupId: data.group,
+  }
 }
 
 function mapToUTCString(date: string): string {
