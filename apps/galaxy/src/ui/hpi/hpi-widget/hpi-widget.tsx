@@ -1,29 +1,16 @@
 'use client'
 
-import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer, WidgetSaveButton } from '@/components'
-import { QuickNoteSectionItem } from '@/types'
+import { Appointment, QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import {
-  AdhdHyperactiveBlock,
-  AdhdInattentiveBlock,
-  AnxietyBlock,
-  AutismBlock,
-  BipolarManiaBlock,
-  BpdBlock,
-  ChiefComplaintBlock,
-  ConductDisorderBlock,
-  DementiaBlock,
-  DepressionBlock,
-  MedicationSeBlock,
-  ObsessionBlock,
-  OtherBlock,
-  PtsdBlock,
-  SchizophreniaBlock,
-  SubstanceBlock,
-} from './blocks'
+import { useStore } from '@/ui/quicknotes/store'
+import { useLayoutEffect } from 'react'
+import { FormProvider } from 'react-hook-form'
+import { useShallow } from 'zustand/react/shallow'
+import AllBlocks from './blocks/all-blocks'
 import { ClearButton } from './clear-button'
 import { transformOut } from './data'
+import { HistoryButton } from './history-button'
 import { useHpiWidgetForm } from './hpi-widget-form'
 import { HpiWidgetHeader } from './hpi-widget-header'
 import { type HpiWidgetSchemaType } from './hpi-widget-schema'
@@ -34,6 +21,9 @@ interface HpiWidgetProps {
   initialValue?: HpiWidgetSchemaType
   isHpiHeader?: boolean
   otherData?: QuickNoteSectionItem[]
+  appointment: Appointment
+  readonly widgetsData?: QuickNoteSectionItem[]
+  readonly appointmentId: string
 }
 
 const HpiWidget = ({
@@ -41,8 +31,23 @@ const HpiWidget = ({
   initialValue,
   isHpiHeader,
   otherData,
+  appointment,
+  appointmentId,
+  widgetsData
 }: HpiWidgetProps) => {
+  const { setWidgetsData, setActualNoteData } = useStore(
+    useShallow((state) => ({
+      setWidgetsData: state.setWidgetsData,
+      setActualNoteData: state.setActualNoteWidgetsData,
+    })),
+  )
   const form = useHpiWidgetForm(initialValue ?? getInitialValues())
+
+  useLayoutEffect(() => {
+    setWidgetsData(widgetsData || [], true)
+    setActualNoteData(widgetsData || [], true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [appointmentId])
 
   return (
     <FormProvider {...form}>
@@ -53,35 +58,20 @@ const HpiWidget = ({
         getData={transformOut(patientId)}
         title={!isHpiHeader ? 'HPI/Presenting Symptoms' : undefined}
         sticky
-        className="p-2 pt-0"
+        className="p-2"
         headerRight={
           !isHpiHeader && (
             <>
+              <HistoryButton patientId={patientId} appointment={appointment} />
               <ClearButton shouldCheckPermission />
               <WidgetSaveButton shouldCheckPermission />
             </>
           )
         }
-        topHeader={isHpiHeader && <HpiWidgetHeader />}
+        topHeader={isHpiHeader && <HpiWidgetHeader patientId={patientId} appointment={appointment} />}
         formResetValues={getInitialValues()}
       >
-        <ChiefComplaintBlock />
-        <DepressionBlock />
-        <AnxietyBlock />
-        <BipolarManiaBlock />
-        <PtsdBlock />
-        <ObsessionBlock />
-        {/* <OcdBlock /> */}
-        <BpdBlock />
-        <SubstanceBlock />
-        <AdhdInattentiveBlock />
-        <AdhdHyperactiveBlock />
-        <AutismBlock />
-        <ConductDisorderBlock />
-        <DementiaBlock />
-        <SchizophreniaBlock />
-        <MedicationSeBlock />
-        <OtherBlock data={otherData} />
+        <AllBlocks data={otherData} />
       </WidgetFormContainer>
     </FormProvider>
   )

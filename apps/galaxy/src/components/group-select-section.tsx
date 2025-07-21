@@ -1,8 +1,8 @@
 'use client'
 
+import { cn } from '@/utils'
 import { Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { cn } from '@/utils'
 import { BlockLabel } from './block-label'
 import { SelectableChip } from './selectable-chip'
 import {
@@ -22,7 +22,7 @@ interface GroupSelectSectionProps<T extends string> {
   chipClassName?: string
   errorField?: string
   blockLabelProps?: React.ComponentProps<typeof BlockLabel>
-
+  disabled?: boolean
 }
 
 interface GroupSelectOption<T extends string> {
@@ -30,6 +30,7 @@ interface GroupSelectOption<T extends string> {
   value: T
   fieldName?: string
   details?: SelectableChipDetailsProps
+
 }
 
 const GroupSelectSection = <T extends string>({
@@ -43,7 +44,8 @@ const GroupSelectSection = <T extends string>({
   editable = true,
   chipClassName,
   errorField,
-  blockLabelProps
+  blockLabelProps,
+  disabled = false,
 }: GroupSelectSectionProps<T>) => {
   const form = useFormContext()
 
@@ -102,8 +104,8 @@ const GroupSelectSection = <T extends string>({
           newValues.length > 0
             ? [...new Set([...currentParentValues, valueInParent])]
             : currentParentValues.filter(
-                (item: string) => item !== valueInParent,
-              )
+              (item: string) => item !== valueInParent,
+            )
 
         form.setValue(parentField, updatedParentValues, { shouldDirty: true })
       }
@@ -122,7 +124,7 @@ const GroupSelectSection = <T extends string>({
           className={cn(chipClassName, error && 'border border-tomato-11')}
         >
           {isSelected(option.value) && option.details && (
-            <SelectableChipDetails {...option.details} editable={editable} />
+            <SelectableChipDetails {...option.details} editable={!disabled} />
           )}
         </SelectableChip>
       ))}
@@ -131,4 +133,5 @@ const GroupSelectSection = <T extends string>({
 }
 
 export { GroupSelectSection }
-export type { GroupSelectSectionProps, GroupSelectOption }
+export type { GroupSelectOption, GroupSelectSectionProps }
+

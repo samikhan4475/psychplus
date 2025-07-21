@@ -1,20 +1,21 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { dequal } from 'dequal'
-import { useFormContext } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import { useDebouncedCallback } from 'use-debounce'
 import { saveWidgetClientAction } from '@/actions'
 import { revalidateAction } from '@/actions/revalidate'
 import { saveWidgetAction } from '@/actions/save-widget'
 import { useDeepCompareMemo } from '@/hooks/use-deep-compare-memo'
 import type { Appointment, QuickNoteSectionItem, UpdateCptCodes } from '@/types'
+import { useHpiHistoryStore } from '@/ui/hpi/hpi-history-dialog/store'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
 import { useStore } from '@/ui/quicknotes/store'
 import { getWidgetContainerCheckboxStateByWidgetId, postEvent } from '@/utils'
+import { dequal } from 'dequal'
+import { useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useFormContext } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { useDebouncedCallback } from 'use-debounce'
 import { WidgetContainer, type WidgetContainerProps } from './widget-container'
 import { WidgetLoadingOverlay } from './widget-loading-overlay'
 
@@ -48,6 +49,7 @@ const WidgetFormContainer = ({
   ...props
 }: WidgetFormContainerProps) => {
   const form = useFormContext()
+  const { fetchHistory } = useHpiHistoryStore()
   const formValues = form.watch()
   const [loading, setLoading] = useState(false)
   const [shouldValidate, setShouldValidate] = useState(false)
@@ -82,47 +84,48 @@ const WidgetFormContainer = ({
 
   const onSubmit =
     (shouldToast = true) =>
-    async (event: React.FormEvent) => {
-      event.preventDefault()
-      setLoading(true)
-      form.clearErrors()
-      const values = await getData(form.getValues(), true, updateCptCodes)
-      const payload = { patientId, data: values, tags }
-      const result = await (isQuickNoteView
-        ? saveWidgetClientAction
-        : saveWidgetAction)(payload)
+      async (event: React.FormEvent) => {
+        event.preventDefault()
+        setLoading(true)
+        form.clearErrors()
+        const values = await getData(form.getValues(), true, updateCptCodes)
+        const payload = { patientId, data: values, tags }
+        const result = await (isQuickNoteView
+          ? saveWidgetClientAction
+          : saveWidgetAction)(payload)
 
-      if (result.state === 'error') {
+        if (result.state === 'error') {
+          postEvent({
+            type: 'widget:save',
+            widgetId: widgetId,
+            success: false,
+          })
+
+          if (shouldToast) {
+            toast.error('Failed to save!')
+          }
+          setLoading(false)
+          return
+        }
+
         postEvent({
           type: 'widget:save',
           widgetId: widgetId,
-          success: false,
+          success: true,
         })
-
-        if (shouldToast) {
-          toast.error('Failed to save!')
-        }
+        updateWidgetsData?.(values)
+        revalidateAction(isQuickNoteView)
         setLoading(false)
-        return
-      }
+        setShouldValidate(false)
+        fetchHistory({ patientId })
+        if (shouldToast) {
+          toast.success('Saved!')
+        }
 
-      postEvent({
-        type: 'widget:save',
-        widgetId: widgetId,
-        success: true,
-      })
-      updateWidgetsData?.(values)
-      revalidateAction(isQuickNoteView)
-      setLoading(false)
-      setShouldValidate(false)
-      if (shouldToast) {
-        toast.success('Saved!')
+        if (props.onSuccess) {
+          props.onSuccess()
+        }
       }
-
-      if (props.onSuccess) {
-        props.onSuccess()
-      }
-    }
 
   const saveWidget = async (
     event: MessageEvent,
@@ -213,7 +216,7 @@ const WidgetFormContainer = ({
     (state) => ({
       hpiData:
         state.actualNotewidgetsData?.[
-          QuickNoteSectionName.QuicknoteSectionHPI
+        QuickNoteSectionName.QuicknoteSectionHPI
         ] ?? [],
       mseData:
         state.actualNotewidgetsData?.[QuickNoteSectionName.QuicknoteSectionMse],

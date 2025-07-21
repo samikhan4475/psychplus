@@ -74,7 +74,7 @@ const SCHIZOPHRENIA_BLOCK_OPTIONS = (
   },
 ]
 
-const SchizophreniaBlock = () => {
+const SchizophreniaBlock = ({ disabled = false }: { disabled?: boolean }) => {
   const {
     watch,
     setValue,
@@ -110,6 +110,7 @@ const SchizophreniaBlock = () => {
       // parentField="chiefComplaint"
       // valueInParent="ccSchizophrenia"
       chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
+      disabled={disabled}
     />
   )
 }

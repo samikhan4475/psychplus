@@ -1,14 +1,15 @@
 'use client'
 
+import { cn } from '@/utils'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { cn } from '@/utils'
 import { AutoResizeInput } from './auto-resize-input'
 import { MultiSelectField } from './checkbox-multiselect'
 import { ChipList } from './chip-list'
 import { DatePickerInput } from './date-picker-input'
 import { NumberInput } from './number-input'
 import { SelectInput } from './select-input'
+import { TextInput } from './text-input'
 
 type DetailsType = 'text' | 'number' | 'select' | 'date' | 'multi-select'
 
@@ -72,47 +73,58 @@ const SelectableChipDetails = ({
               {label}
             </Text>
           )}
-          {type === 'text' && (
-            <AutoResizeInput
-              field={field}
-              disabled={disabled}
-              maxLength={maxLength}
-              autoFocus={!form.watch(field)}
-              placeholder={placeHolder}
-            />
+          {disabled && type === 'text' ? (
+            <TextInput field={field} disabled />
+          ) : (
+            <>
+              {type === 'text' && (
+                <AutoResizeInput
+                  field={field}
+                  disabled={disabled}
+                  maxLength={maxLength}
+                  autoFocus={!form.watch(field)}
+                  placeholder={placeHolder}
+                />
+              )}
+              {type === 'number' && (
+                <NumberInput
+                  format={format}
+                  field={field}
+                  className="w-[45px]"
+                  placeholder={placeHolder}
+                  disabled={disabled}
+                />
+              )}
+              {type === 'select' && (
+                <SelectInput
+                  field={field}
+                  options={options}
+                  disabled={disabled}
+                />
+              )}
+              {type === 'date' && (
+                <Box className="w-[100px]">
+                  <DatePickerInput
+                    field={field}
+                    isDisabled={disabled}
+                    isRequired={isRequired}
+                  />
+                </Box>
+              )}
+              {type === 'multi-select' && (
+                <MultiSelectField
+                  onChange={(vals) =>
+                    form.setValue(field, vals, { shouldDirty: true })
+                  }
+                  options={options || []}
+                  defaultValues={form.watch(field)}
+                  hideSelectedCount={hideSelectedCount}
+                  disabled={disabled}
+                />
+              )}
+            </>
           )}
-          {type === 'number' && (
-            <NumberInput
-              format={format}
-              field={field}
-              className="w-[45px]"
-              placeholder={placeHolder}
-              disabled={disabled}
-            />
-          )}
-          {type === 'select' && (
-            <SelectInput field={field} options={options} disabled={disabled} />
-          )}
-          {type === 'date' && (
-            <Box className="w-[100px]">
-              <DatePickerInput
-                field={field}
-                isDisabled={disabled}
-                isRequired={isRequired}
-              />
-            </Box>
-          )}
-          {type === 'multi-select' && (
-            <MultiSelectField
-              onChange={(vals) =>
-                form.setValue(field, vals, { shouldDirty: true })
-              }
-              options={options || []}
-              defaultValues={form.watch(field)}
-              hideSelectedCount={hideSelectedCount}
-              disabled={disabled}
-            />
-          )}
+
         </Flex>
         {rightLabel && <Text className="ml-1 text-[11px]">{rightLabel}</Text>}
         {error ? (
@@ -140,7 +152,6 @@ const SelectedIndicator = () => {
 }
 
 export {
-  SelectableChipDetails,
-  type SelectableChipDetailsProps,
-  type DetailsType,
+  SelectableChipDetails, type DetailsType, type SelectableChipDetailsProps
 }
+

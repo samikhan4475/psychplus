@@ -19,7 +19,7 @@ const BLOCK_OPTIONS = [
   { label: 'Picking', value: 'obsPicking' },
 ]
 
-const ObsessionBlock = () => {
+const ObsessionBlock = ({ disabled = false }: { disabled?: boolean }) => {
   const form = useFormContext<HpiWidgetSchemaType>()
   const error = form.formState?.errors
   const hasError = error?.hpiOther || error?.chiefComplaint
@@ -32,6 +32,7 @@ const ObsessionBlock = () => {
       // parentField="chiefComplaint"
       // valueInParent="ccObsession"
       chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
+      disabled={disabled}
     />
   )
 }

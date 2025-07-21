@@ -20,7 +20,7 @@ const BLOCK_OPTIONS = [
   { label: 'Parkinson Symptoms', value: 'demParkinsonSymptoms' },
 ]
 
-const DementiaBlock = () => {
+const DementiaBlock = ({ disabled = false }: { disabled?: boolean }) => {
   const form = useFormContext<HpiWidgetSchemaType>()
   const error = form.formState?.errors
   const hasError = error?.hpiOther || error?.chiefComplaint
@@ -33,6 +33,7 @@ const DementiaBlock = () => {
       // parentField="chiefComplaint"
       // valueInParent="ccDementia"
       chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
+      disabled={disabled}
     />
   )
 }

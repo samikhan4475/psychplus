@@ -19,7 +19,7 @@ const BLOCK_OPTIONS = [
   { label: 'Sudden Outbursts', value: 'cdSuddenOutbursts' },
 ]
 
-const ConductDisorderBlock = () => {
+const ConductDisorderBlock = ({ disabled = false }: { disabled?: boolean }) => {
   const form = useFormContext<HpiWidgetSchemaType>()
   const error = form.formState?.errors
 
@@ -33,6 +33,7 @@ const ConductDisorderBlock = () => {
       // parentField="chiefComplaint"
       // valueInParent="ccConductDisorder"
       chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
+      disabled={disabled}
     />
   )
 }

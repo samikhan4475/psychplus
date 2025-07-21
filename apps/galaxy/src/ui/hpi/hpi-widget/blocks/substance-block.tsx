@@ -31,7 +31,7 @@ const BLOCK_OPTIONS: GroupSelectOption<string>[] = [
   },
 ]
 
-const SubstanceBlock = () => {
+const SubstanceBlock = ({ disabled = false }: { disabled?: boolean }) => {
   const form = useFormContext<HpiWidgetSchemaType>()
   const error = form.formState?.errors
   const hasError = error?.hpiOther || error?.chiefComplaint
@@ -44,6 +44,7 @@ const SubstanceBlock = () => {
       // parentField="chiefComplaint"
       // valueInParent="ccSubstance"
       chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
+      disabled={disabled}
     />
   )
 }

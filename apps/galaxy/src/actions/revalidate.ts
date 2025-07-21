@@ -1,14 +1,26 @@
 'use server'
 
-import { revalidatePath, revalidateTag } from 'next/cache'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { revalidatePath, revalidateTag } from 'next/cache'
 
-const revalidateAction = async (isTag = true) => {
+const revalidateHpiTag = async () => {
+  revalidateTag(QuickNoteSectionName.QuicknoteSectionHPI)
+}
+
+const revalidateQuickNotePage = async () => {
+  revalidatePath('/ehr/p-chart/[id]/[apptId]/quicknotes', 'page')
+}
+
+const revalidateHpiPage = async () => {
+  revalidatePath('/ehr/p-chart/[id]/[apptId]/hpi', 'page')
+}
+
+const revalidateAction = async (isTag = true, isHpiPage = false) => {
   if (isTag) {
-    revalidateTag(QuickNoteSectionName.QuicknoteSectionHPI)
-  } else {
-    revalidatePath('/ehr/p-chart/[id]/[apptId]/quicknotes', 'page')
+    return revalidateHpiTag()
   }
+
+  return isHpiPage ? revalidateHpiPage() : revalidateQuickNotePage()
 }
 
 export { revalidateAction }

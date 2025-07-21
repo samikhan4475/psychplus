@@ -39,6 +39,7 @@ interface DataTableProps<TData, TValue> {
   isRowDisabled?: (row: Row<TData>) => boolean
   isTestResource?: (row: Row<TData>) => boolean
   isRowHighlightedRed?: (row: Row<TData>) => boolean
+  isRowSelected?: (row: Row<TData>) => boolean
   thClass?: string
   tdClass?: string
   tableClass?: string
@@ -73,6 +74,7 @@ const DataTable = <TData, TValue>({
   isRowDisabled,
   isTestResource,
   isRowHighlightedRed,
+  isRowSelected,
   defaultSorting = [],
   tRowClass,
 }: DataTableProps<TData, TValue>) => {
@@ -214,6 +216,7 @@ const DataTable = <TData, TValue>({
                       row.depth > 0,
                     'bg-pp-red/30 hover:bg-pp-red/30':
                       isRowHighlightedRed?.(row),
+                      'bg-pp-focus-bg' :  isRowSelected?.(row),
                     'bg-pp-yellow-1/30 hover:bg-pp-yellow-1/30':
                       isTestResource?.(row),
                     'bg-white': tRowClass && row.depth > 0,

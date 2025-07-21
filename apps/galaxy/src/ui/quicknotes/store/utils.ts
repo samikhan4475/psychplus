@@ -62,7 +62,7 @@ const saveWidgets = async (
     }
   }
   const payload = {
-    patientId: String(sections?.[0]?.pid),
+    patientId: String(appointment.patientId),
     data: sections,
   }
   try {

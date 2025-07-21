@@ -16,7 +16,7 @@ const BLOCK_OPTIONS = [
   { label: 'Emotional Dysregulations', value: 'autEmotionalDysregulation' },
 ]
 
-const AutismBlock = () => {
+const AutismBlock = ({ disabled = false }: { disabled?: boolean }) => {
   const form = useFormContext<HpiWidgetSchemaType>()
   const error = form.formState?.errors
   const hasError = error?.hpiOther || error?.chiefComplaint
@@ -29,6 +29,7 @@ const AutismBlock = () => {
       // parentField="chiefComplaint"
       // valueInParent="ccAutism"
       chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
+      disabled={disabled}
     />
   )
 }

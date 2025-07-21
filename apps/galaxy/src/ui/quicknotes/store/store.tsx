@@ -1,30 +1,35 @@
 'use client'
 
-import { createContext, useContext, useRef } from 'react'
-import { format } from 'date-fns'
-import toast from 'react-hot-toast'
-import { type StoreApi } from 'zustand'
-import { shallow } from 'zustand/shallow'
-import { useStoreWithEqualityFn } from 'zustand/traditional'
-import { createStore as zustandCreateStore } from 'zustand/vanilla'
 import {
   Appointment,
   PatientProfile,
   QuickNoteSectionItem,
   UpdateCptCodes,
 } from '@/types'
+import { SectionItem } from '@/ui/hpi/hooks/useHpiWidget'
 import { manageCodes, sendEvent } from '@/utils'
+import { format } from 'date-fns'
+import { createContext, useContext, useRef } from 'react'
+import toast from 'react-hot-toast'
+import { type StoreApi } from 'zustand'
+import { shallow } from 'zustand/shallow'
+import { useStoreWithEqualityFn } from 'zustand/traditional'
+import { createStore as zustandCreateStore } from 'zustand/vanilla'
 import { signNoteClientAction } from '../client-actions'
 import { QuickNoteSectionName } from '../constants'
 import { SignPayloadProps } from '../types'
 import { modifyWidgetResponse } from '../utils'
 import { saveWidgets } from './utils'
 
+type ActionErrorResult = { state: 'error'; error: string }
+type ActionSuccessResult<T> = { state: 'success'; data: T }
+type ActionResult<T> = ActionSuccessResult<T> | ActionErrorResult
+
 interface Store {
   loading: boolean
   patient: PatientProfile
-  save: (appointment: Appointment) => void
-  sign: (payload: SignPayloadProps) => Promise<any>
+  save: (appointment: Appointment, isAddToNotes?: boolean, formattedValues?: () => SectionItem[]) => void
+  sign: (payload: SignPayloadProps) => Promise<ActionResult<QuickNoteSectionItem[]>>
   markAsError: (
     payload: SignPayloadProps,
     onSuccess?: () => void,
@@ -127,10 +132,36 @@ const createStore = (initialState: StoreInitialState) =>
       set({ signOptions: { ...get().signOptions, ...option } }),
     toggleActualNoteView: () =>
       set({ showActualNoteView: !get().showActualNoteView }),
-    save: async (appointment) => {
+    save: async (appointment, isAddToNotes = false, formattedValues = () => []) => {
       set({ loading: true })
-      const data = get().actualNotewidgetsData
-      const widgetsData = Object.entries(data)
+      const currentWidgetsData = get().actualNotewidgetsData || {};
+      const formattedSectionItems = formattedValues();
+      const sectionKey = QuickNoteSectionName.QuicknoteSectionHPI;
+      const singleBaseItem = {
+        sectionName: sectionKey,
+        sectionItem: "1",
+        sectionItemValue: "1",
+        pid: appointment?.patientId,
+      }
+      const hasSectionInCurrentData = !!currentWidgetsData[sectionKey]?.length;
+      const baseItem = hasSectionInCurrentData
+        ? currentWidgetsData[sectionKey][0]
+        : singleBaseItem;
+      const updatedWidgetsData = {
+        ...currentWidgetsData,
+        [sectionKey]: formattedSectionItems.length > 0
+          ? formattedSectionItems.map(item => ({
+            ...baseItem,
+            sectionItem: item.sectionItem,
+            ...(item.sectionItemValue !== undefined
+              ? { sectionItemValue: item.sectionItemValue }
+              : {})
+          }))
+          : [singleBaseItem]
+      };
+      const shouldUseUpdatedData = isAddToNotes || formattedSectionItems.length > 0;
+      const finalWidgetsData = shouldUseUpdatedData ? updatedWidgetsData : currentWidgetsData;
+      const widgetsData = Object.entries(finalWidgetsData)
         .map(([, sections]) => sections)
         .flat()
       const response = await saveWidgets(appointment, widgetsData, false)
@@ -139,7 +170,7 @@ const createStore = (initialState: StoreInitialState) =>
           eventType: 'quicknotes:clearErrors',
           widgetId: QuickNoteSectionName.QuicknoteSectionHPI,
         })
-        toast.success('Quicknote saved!')
+        toast.success(isAddToNotes ? "Added to Notes" : 'Quicknote saved!')
         set({ unsavedChanges: {} })
         get().setWidgetsData(response.data)
       }
@@ -189,29 +220,29 @@ const createStore = (initialState: StoreInitialState) =>
     },
     markAsError: async (payload, onSuccess) => {
       try {
-    set({ loading: true })
-    const body = {
-      ...payload,
-      isError: true,
-    }
-    const signResults = await signNoteClientAction(body)
+        set({ loading: true })
+        const body = {
+          ...payload,
+          isError: true,
+        }
+        const signResults = await signNoteClientAction(body)
 
-    set({ loading: false })
-    if (signResults.state === 'success') {
-      const toastMessage = payload.signedDate
-        ? 'Quicknote signed!'
-        : 'Quicknote send to signed!'
-      toast.success(toastMessage)
-      onSuccess?.()
-      return { state: 'success' } 
-    }
-    set({ isMarkedAsError: true })
-    return { state: 'error', error: signResults.error }
-  } catch (e) {
-    set({ loading: false, isMarkedAsError: true })
-    toast.error(`${e}`)
-    return { state: 'error', error: `${e}` }
-  }
+        set({ loading: false })
+        if (signResults.state === 'success') {
+          const toastMessage = payload.signedDate
+            ? 'Quicknote signed!'
+            : 'Quicknote send to signed!'
+          toast.success(toastMessage)
+          onSuccess?.()
+          return { state: 'success' }
+        }
+        set({ isMarkedAsError: true })
+        return { state: 'error', error: signResults.error }
+      } catch (e) {
+        set({ loading: false, isMarkedAsError: true })
+        toast.error(`${e}`)
+        return { state: 'error', error: `${e}` }
+      }
     },
 
     unsavedChanges: {},
@@ -258,4 +289,5 @@ const useStore = <T,>(
   return useStoreWithEqualityFn(context, selector, equalityFn ?? shallow)
 }
 
-export { StoreProvider, useStore, createStore }
+export { createStore, StoreProvider, useStore }
+

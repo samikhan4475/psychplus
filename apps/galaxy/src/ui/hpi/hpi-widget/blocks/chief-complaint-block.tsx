@@ -1,11 +1,11 @@
-import { useEffect } from 'react'
-import { useFormContext } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import {
   DetailsType,
   GroupSelectOption,
   GroupSelectSection,
 } from '@/components'
+import { useEffect } from 'react'
+import { useFormContext } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { HPIVALIDATIONMESSAGE, requiredFields } from '../utils'
 
 const BLOCK_ID = 'chiefComplaint'
@@ -95,7 +95,7 @@ const BLOCK_OPTIONS: GroupSelectOption<string>[] = [
   },
 ]
 
-const ChiefComplaintBlock = () => {
+const ChiefComplaintBlock = ({ disabled = false }: { disabled?: boolean }) => {
   const form = useFormContext()
   const { errors, isSubmitting } = form.formState
   const watchedFields = form.watch(['hpiOther', ...requiredFields])
@@ -139,6 +139,7 @@ const ChiefComplaintBlock = () => {
       options={BLOCK_OPTIONS}
       // hasChild
       chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
+      disabled={disabled}
     />
   )
 }
