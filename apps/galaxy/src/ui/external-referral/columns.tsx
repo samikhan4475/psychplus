@@ -146,6 +146,13 @@ const columns: ColumnDef<Patient>[] = [
     ),
     columns: [
       {
+        id: 'referrerFacility',
+        header: () => <ColumnHeader label="Referrer Facility" />,
+        cell: ({ row: { original } }) => (
+          <TextCell className="truncate">{original?.referrerFacility}</TextCell>
+        ),
+      },
+      {
         id: 'name',
         header: () => <ColumnHeader label="Name" />,
         cell: ({ row: { original: patient } }) => (
@@ -313,10 +320,10 @@ const columns: ColumnDef<Patient>[] = [
     ),
   },
   {
-    id: 'referrerFacility',
+    id: 'referralReason',
     header: () => <ColumnHeader label="Referral Reason" />,
     cell: ({ row: { original } }) => (
-      <TextCell className="truncate">{original?.referrerFacility}</TextCell>
+      <TextCell className="truncate">{original?.referralReason}</TextCell>
     ),
   },
   {

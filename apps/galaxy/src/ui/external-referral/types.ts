@@ -70,6 +70,7 @@ interface Patient extends PatientProfile {
   pAndC?: string
   cc?: string
   attachments?: Attachment[]
+  referralReason?: string
 }
 
 interface SearchPatientsData {
