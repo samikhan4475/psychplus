@@ -21,7 +21,7 @@ const QuickNotesCosignerDropdown = ({
   const { canChangeCosignerQuickNotePage } = useQuickNotesPermissions()
   const uniqueCosigners = Array.from(
     new Map(cosigners.map((item) => [item.userId, item])).values(),
-  )
+  ).sort((a, b) => a.legalName.firstName.localeCompare(b.legalName.firstName))
   const { signOptions, setSignOptions, setCosignerLabel } = useStore(
     (state) => ({
       signOptions: state.signOptions,
