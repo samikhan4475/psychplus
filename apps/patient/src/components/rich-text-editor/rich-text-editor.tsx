@@ -12,6 +12,7 @@ type Props = {
   readOnly?: boolean
   style?: React.CSSProperties
   maxLength?: number
+  baseStyes?: React.CSSProperties
 }
 
 interface QuillInstance {
@@ -34,6 +35,7 @@ const RichTextEditor: React.FC<Props> = ({
   placeholder = 'Enter text here',
   readOnly = false,
   style = {},
+  baseStyes = {},
   maxLength
 }) => {
   const editorRef = useRef<HTMLDivElement | null>(null)
@@ -186,8 +188,8 @@ const RichTextEditor: React.FC<Props> = ({
   const isOverLimit = remainingCharacters <= 0
 
   return (
-    <Box style={{ position: 'relative' }}>
-      <Box ref={editorRef} style={{ minHeight: '200px', height, ...style }} />
+    <Box style={{ position: 'relative', ...baseStyes }}>
+      <Box ref={editorRef} style={{ height, ...style }} />
       {maxLength && (
         <Box 
           style={{

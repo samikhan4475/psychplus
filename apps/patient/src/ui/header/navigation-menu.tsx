@@ -37,11 +37,6 @@ const NAV_LINKS = [
   //   href: '/messages',
   //   label: 'Messages',
   // },
-  //  "TODO: This feature is pending implementation and will be added once development is complete."
-  // {
-  //   href: '/waitlist',
-  //   label: 'Waitlist',
-  // },
 ]
 
 const NavigationMenu = () => {
