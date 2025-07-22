@@ -55,17 +55,6 @@ const schema = z
     payerName: validate.optionalString,
   })
   .superRefine((data, ctx) => {
-    if (
-      !data?.patientContactDetails?.email?.trim() &&
-      !data?.patientContactDetails?.phoneNumbers?.some((p) => p.number.trim())
-    ) {
-      ctx.addIssue({
-        path: ['patientContactDetails', 'email'],
-        code: z.ZodIssueCode.custom,
-        message: 'Email or phone required',
-      })
-    }
-
     if (data.requestedMedium === AppointmentType.InPerson) {
       data.patientContactDetails?.addresses?.forEach((address, index) => {
         if (address.type && address.state && !address.postalCode?.trim()) {
