@@ -3,6 +3,7 @@
 import { Select } from '@radix-ui/themes'
 import { useCodesetCodes } from '@/hooks'
 import { cn } from '@/utils'
+import { CODESETS } from '@/constants'
 
 interface CodesetSelectCellProps {
   value?: string
@@ -23,7 +24,16 @@ const CodesetSelectCell = ({
 }: CodesetSelectCellProps) => {
   const codes = useCodesetCodes(codeset)
 
-  const items = codes
+   const processedCodes =
+    codeset === CODESETS.VisitSequence
+      ? [...codes].sort((a, b) => {
+          if (a.display === 'Initial') return -1
+          if (b.display === 'Initial') return 1
+          return a.display.localeCompare(b.display)
+        })
+      : codes
+
+  const items = processedCodes
     .filter((code) => !exclude?.includes(code.value))
     .map((code) => (
       <Select.Item key={code.value} value={code.value}>
