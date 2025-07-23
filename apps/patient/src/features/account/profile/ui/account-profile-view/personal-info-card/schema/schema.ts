@@ -1,12 +1,13 @@
 'use client'
 
+import { requiredName } from '@/features/utils'
 import { getAgeFromDate } from '@psychplus-v2/utils'
 import { z } from 'zod'
 
 const schema = z
   .object({
-    firstName: z.string().trim().min(1, 'Required'),
-    lastName: z.string().trim().min(1, 'Required'),
+    firstName: requiredName,
+    lastName: requiredName,
     middleName: z.string().optional(),
     birthdate: z.string().trim().min(1, 'Required'),
     phoneNumber: z

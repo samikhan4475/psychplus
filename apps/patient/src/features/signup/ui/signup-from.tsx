@@ -40,11 +40,13 @@ import { getPlaceholder } from '@/features/account/profile/utils'
 import { useValidateNewPassword } from '@/hooks'
 import { preverifySignupAction, sendSignupOtpAction } from '../actions'
 import { VerifyOtpForm } from './verify-otp-form'
+import { requiredName } from '@/features/utils'
+
 
 const schema = z
   .object({
-    firstName: z.string().trim().min(1, 'Required'),
-    lastName: z.string().trim().min(1, 'Required'),
+    firstName: requiredName,
+    lastName: requiredName,
     dateOfBirth: z.string().trim().min(1, 'Required'),
     phoneNumber: z.string().trim().length(10, 'Invalid phone number'),
     email: z.string().email().trim(),
