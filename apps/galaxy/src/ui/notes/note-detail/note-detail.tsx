@@ -107,17 +107,18 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
       {selectedRow?.signedDate && (
         <Heading size="3" my="1" weight="medium">
           E-Signed by: {selectedRow?.signedByUserName} {supervisedByText} at{' '}
-          {getSlashedPaddedDateString(selectedRow.signedDate)}
+          {convertToTimeZoneDate(
+            selectedRow.signedDate,
+            selectedRow.locationTimeZone ?? '',
+          )}
         </Heading>
       )}
       {selectedRow?.cosignedDate && (
         <Heading size="3" my="1" weight="medium">
           E-Signed by Co-Signer: {selectedRow?.cosignedByUserName}, at{' '}
-          {getSlashedPaddedDateString(
-            convertToTimeZoneDate(
-              selectedRow.cosignedDate,
-              selectedRow.locationTimeZone ?? '',
-            ),
+          {convertToTimeZoneDate(
+            selectedRow.cosignedDate,
+            selectedRow.locationTimeZone ?? '',
           )}
         </Heading>
       )}
