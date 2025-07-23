@@ -94,26 +94,25 @@ autoscaling:
   targetCPUUtilizationPercentage: 60
   targetMemoryUtilizationPercentage: 80
 
-startupProbeEnabled: false
+startupProbeEnabled: true
 startupProbe:
   httpGet:
-    path: /health/liveness_CF796DFC-2BE3-415f-9F86-63C29517DF8B
+    path: /healthz/liveness_CF796DFC-2BE3-415f-9F86-63C29517DF8B
     port: http
   periodSeconds: 30
   timeoutSeconds: 30
 
-livenessProbeEnabled: false
+livenessProbeEnabled: true
 livenessProbe:
   httpGet:
-    path: /health/liveness_CF796DFC-2BE3-415f-9F86-63C29517DF8B
+    path: /healthz/liveness_CF796DFC-2BE3-415f-9F86-63C29517DF8B
     port: http
   periodSeconds: 10
   timeoutSeconds: 5
-
-readinessProbeEnabled: false
+readinessProbeEnabled: true
 readinessProbe:
   httpGet:
-    path: /health/readiness_CF796DFC-2BE3-415f-9F86-63C29517DF8B
+    path: /healthz/readiness_CF796DFC-2BE3-415f-9F86-63C29517DF8B
     port: http
   periodSeconds: 10
   timeoutSeconds: 5

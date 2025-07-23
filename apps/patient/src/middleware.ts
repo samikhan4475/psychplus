@@ -24,7 +24,10 @@ export const middleware = async (request: NextRequest) => {
   if (SKIP_MIDDLEWARE.includes(request.nextUrl.pathname)) {
     return NextResponse.next()
   }
-
+  // Handling health Probes Endpoints
+  if (request.nextUrl.pathname.startsWith('/healthz')) {
+    return NextResponse.next()
+  }
   if (request.nextUrl.pathname.startsWith('/pre-checkin-assessment')) {
     const url = request.nextUrl.clone()
     url.pathname = '/404'

@@ -25,6 +25,10 @@ export const middleware = async (request: NextRequest) => {
     // Skip middleware if request is part of a Next server action.
     return NextResponse.next()
   }
+  //Handling health Probes Endpoints
+  if (request.nextUrl.pathname.startsWith('/healthz')) {
+    return NextResponse.next()
+  }
 
   if (request.nextUrl.pathname.startsWith('/api')) {
     const headers = createHeaders(request.headers)
