@@ -232,7 +232,6 @@ const useStore = create<StoreState>((set, get) => ({
     if (value.length < 3) return
     set({ loadingDrugs: true })
     const response = await fetchDrugs(value)
-
     if (response.state === 'error') {
       toast.error('Failed to fetch drugs ')
       set({ loadingDrugs: false })

@@ -1,11 +1,9 @@
 'use client'
 
-import { useState } from 'react'
 import { Flex, Grid, ScrollArea } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { FavoriteView, SearchDrugs } from '../shared'
 import { StepComponentProps } from '../types'
-import { DrugInteractionAccordian } from './drug-interaction-accordian'
 import { PrescriptionAccordian } from './prescription-accordian'
 import { PatientMedicationSchemaType } from './schema'
 import { TogglePrescribed } from './toggle-prescribed'
@@ -26,7 +24,6 @@ const FormFields = ({ onJump }: StepComponentProps) => {
             scrollbars="vertical"
             className="max-h-[52dvh] overflow-visible pr-2"
           >
-            <DrugInteractionAccordian />
             <PrescriptionAccordian
               errorIndex={firstErrorIndex !== -1 ? firstErrorIndex : null}
             />

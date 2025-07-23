@@ -5,8 +5,7 @@ import { Flex } from '@radix-ui/themes'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import {
-  formatDate,
-  formatDateTime,
+  formatDateManually,
   getCodesetDisplayName,
   getPatientFullName,
 } from '@/utils'
@@ -73,10 +72,10 @@ const ReviewDrugDetail = ({ drug }: ReviewDrugDetailProps) => {
 
       <Flex gap="4" align="center" wrap="wrap">
         <ReviewLabel
-          title="Effective Date/Time"
+          title="Effective Date"
           value={
             prescriptionDrug?.effectiveDate
-              ? formatDateTime(prescriptionDrug?.effectiveDate)
+              ? formatDateManually(prescriptionDrug?.effectiveDate)
               : ''
           }
         />

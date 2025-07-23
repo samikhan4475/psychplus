@@ -70,7 +70,7 @@ const transformOutPatientMedication = (
           isMedicationAsNeeded: drug?.isMedicationAsNeeded,
           reasonForPrn: drug.reasonForPrn,
           startDateTime: `${drug.startDateTime}T${drug.startTime}:00Z`,
-          effectiveDate: `${drug.effectiveDate}T${drug.effectiveTime}:00Z`,
+          effectiveDate: `${drug.effectiveDate}`,
           endDateTime: drug.endDateTime && drug.endTime ?  `${drug.endDateTime}T${drug.endTime}:00Z` : '',
           isControlledSubstance: drug?.isControlledSubstance,
           DrugCodeQualifier: drug?.DrugCodeQualifier ?? 'ND',

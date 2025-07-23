@@ -9,9 +9,7 @@ import toast from 'react-hot-toast'
 import { getAppointment } from '@/actions'
 import {
   CheckboxCell,
-  WidgetClearButton,
-  WidgetContainer,
-  WidgetSaveButton,
+  WidgetContainer
 } from '@/components'
 import { InformationLineIcon } from '@/components/icons'
 import { ACCESS_UNAVAILABLE_MESSAGE, FEATURE_FLAGS } from '@/constants'
@@ -21,7 +19,6 @@ import { AddMedicationButton } from './add-medication-button'
 import { PatientMedicationsDataTable } from './patient-medications-data-table'
 import { PatientMedicationsTabView } from './patient-medications-tab-view'
 import { PMPHistoryDialog } from './pmp-history'
-import { SearchMedications } from './search-medications'
 import { useStore } from './store'
 import { EncounterData, PmpScoreResponse, StartPmpResponse } from './types'
 
@@ -191,18 +188,7 @@ const PatientMedicationsWidget = () => {
     <Box position="relative" width="100%">
       <WidgetContainer
         title="Medications"
-        headerRight={
-          <>
-            <WidgetClearButton />
-            <WidgetSaveButton />
-          </>
-        }
-        headerLeft={
-          <Fragment>
-            <SearchMedications />
-            <AddMedicationButton onRefresh={refetch} />
-          </Fragment>
-        }
+        headerLeft={<AddMedicationButton onRefresh={refetch} />}
       >
         {' '}
         <Flex className="align-center">

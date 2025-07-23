@@ -41,12 +41,13 @@ const DrugsList = ({
         item.display.toLocaleLowerCase() ===
         option.doseFormDesc.toLocaleLowerCase(),
     )
+    const deaCode = option?.representativeErxPackagedDrug?.federalDeaClassCode
+    const isControlledSubstance = ['2', '3', '4', '5'].includes(deaCode)
     const defaultValues: PatientMedicationSchemaType['drugs'][number] = {
       doseStrength: option.medStrength,
       prescribableDrugDesc: option.prescribableDrugDesc,
       startDateTime: todayDate,
       startTime: currentTime,
-      effectiveTime: currentTime,
       doseRouteCode: '',
       refills: '0',
       doseUnitCode: option.medStrengthUnit,
@@ -65,6 +66,7 @@ const DrugsList = ({
       DeaSchedule:
         option?.representativeErxPackagedDrug?.federalDeaClassCode ?? '',
       medicationStatus: 'Active',
+      isControlledSubstance: isControlledSubstance,
     }
     if (replaceIndex !== null && replaceIndex !== undefined) {
       const updated = [...drugs]
@@ -111,7 +113,18 @@ const DrugsList = ({
               }`,
             )}
           >
-            <Text className="w-[85%] text-[11px]">{`${option.prescribableDrugDesc} `}</Text>
+            <Text className="w-[85%] text-[11px]">
+              {option.prescribableDrugDesc}{' '}
+              {(() => {
+                const deaDesc =
+                  option.representativeErxPackagedDrug
+                    ?.federalDeaClassCodeDesc ?? ''
+                return !deaDesc.toLowerCase().includes('no dea class code') ? (
+                  <span className="text-pp-red">{deaDesc.toUpperCase()}</span>
+                ) : null
+              })()}
+            </Text>
+
             <PlusCircleIcon
               stroke="#194595"
               strokeWidth="2"

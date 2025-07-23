@@ -85,19 +85,26 @@ const usePatientMedicationColumns = ({
         </DateCell>
       ),
     },
-    {
-      id: 'medication-end-date',
-      accessorKey: 'medicationEndDate',
-      size: 10,
-      minSize: 10,
-      maxSize: 100,
-      header: () => <ColumnHeader label="End Date" />,
-      cell: ({ row }) => (
-        <DateCell>
-          {formatDateManually(row.original.endDateTime) ?? 'N/A'}
-        </DateCell>
-      ),
-    },
+    ...(!isFeatureFlagEnabled
+      ? [
+          {
+            id: 'effecive-date',
+            accessorKey: 'effectiveDate',
+            size: 5,
+            minSize: 5,
+            maxSize: 100,
+            header: () => <ColumnHeader label="Effective Date" />,
+            cell: ({ row }: { row: Row<PatientMedication> }) => (
+              <DateCell>
+                {row.original.effectiveDate
+                  ? formatDateManually(row.original.effectiveDate)
+                  : ''}
+              </DateCell>
+            ),
+          },
+        ]
+      : []),
+
     {
       id: 'medication-prescriber',
       accessorKey: 'medicationPrescriber',

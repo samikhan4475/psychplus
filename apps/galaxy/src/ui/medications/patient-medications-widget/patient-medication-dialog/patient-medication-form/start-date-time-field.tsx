@@ -10,14 +10,13 @@ import {
 import { DrugBlockProps } from '../../types'
 import { getFieldName } from '../../utils'
 import { PatientMedicationSchemaType } from './schema'
-import { StartDateTimeInput } from './start-date-time-input'
 
 const StartDateTime = ({ index }: DrugBlockProps) => {
   const form = useFormContext<PatientMedicationSchemaType>()
   const effectiveDateField = getFieldName(index, 'effectiveDate')
 
   return (
-    <FormFieldContainer className="flex-1 flex-row gap-2">
+    <FormFieldContainer className="flex-1  gap-2" >
       <Flex direction="column" gap="1">
         <FormFieldLabel required>Effective Date</FormFieldLabel>
         <TextField.Root
@@ -28,7 +27,6 @@ const StartDateTime = ({ index }: DrugBlockProps) => {
         />
         <FormFieldError name={effectiveDateField} />
       </Flex>
-      <StartDateTimeInput index={index} />
     </FormFieldContainer>
   )
 }

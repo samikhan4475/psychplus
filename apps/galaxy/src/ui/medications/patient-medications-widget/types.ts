@@ -97,6 +97,7 @@ interface PatientMedication {
   isControlledSubstance: boolean
   transactionStatus: string
   userTransactionStatus:string
+  effectiveDate:string
 }
 
 interface GetPatientMedicationsResponse {

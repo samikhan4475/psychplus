@@ -22,7 +22,7 @@ type LabOrderPayload = {
   location?: string
   labTestCode?: string
   idList?: string[]
-  IsOrderSendStatus?: boolean
+  IsOrderSendStatus?: boolean | null
   resourceStatusList?:string[]
 }
 

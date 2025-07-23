@@ -139,7 +139,6 @@ const getInitialValuesPatientMedication = (
         endDateTime: dateValues?.endDateTime?.date?.toString() ?? '',
         endTime: dateValues?.endDateTime?.time ?? '',
         effectiveDate: dateValues?.effectiveDate?.date?.toString() ?? '',
-        effectiveTime: dateValues?.effectiveDate?.time ?? '',
         instructionOrNotes: medication?.notes ?? '',
         isMedicationAsNeeded: prescriptionDrug?.isMedicationAsNeeded ?? true,
         isSubstitutionsAllowed:

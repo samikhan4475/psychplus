@@ -43,7 +43,6 @@ const FavoriteList = () => {
       startDateTime: todayDate,
       startTime: currentTime,
       effectiveDate:'',
-      effectiveTime:currentTime,
       doseRouteCode: '',
       refills: '0',
       doseUnitCode: medication.doseUnitCode || '',
