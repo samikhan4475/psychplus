@@ -40,6 +40,8 @@ const LabelAndValue = ({
           'whitespace-pre-wrap break-words text-1',
           {
             'italic text-gray-9': !value,
+            'whitespace-normal':
+              !detailsClassName?.includes('whitespace-normal'),
           },
           detailsClassName,
         )}

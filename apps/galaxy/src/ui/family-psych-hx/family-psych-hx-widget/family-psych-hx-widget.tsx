@@ -58,7 +58,9 @@ const FamilyPsychHxWidget = ({
               defaultInitialValues={defaultInitialValues}
               shouldCheckPermission
             />
-            {!isHistoryHeader && <WidgetSaveButton shouldCheckPermission />}
+            {!isHistoryHeader && (
+              <WidgetSaveButton shouldCheckPermission variant="filled" />
+            )}
           </>
         }
         formResetValues={defaultInitialValues}

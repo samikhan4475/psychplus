@@ -12,7 +12,7 @@ const MseHeader = () => {
         Mental Status Exam
       </Text>
       <Flex className="gap-x-2 text-[20px]" align="center">
-        <WidgetSaveButton shouldCheckPermission />
+        <WidgetSaveButton variant="filled" shouldCheckPermission />
       </Flex>
     </Flex>
   )

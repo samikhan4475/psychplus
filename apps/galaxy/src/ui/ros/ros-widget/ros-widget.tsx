@@ -51,7 +51,7 @@ const RosWidget = ({ patientId, initialValue }: HpiWidgetProps) => {
               defaultInitialValues={getInitialValues}
               shouldCheckPermission
             />
-            <WidgetSaveButton shouldCheckPermission />
+            <WidgetSaveButton variant="filled" shouldCheckPermission />
           </>
         }
         headerLeft={<CheckAllNoConcernCell form={form} />}

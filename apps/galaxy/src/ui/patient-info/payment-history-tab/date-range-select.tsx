@@ -7,12 +7,17 @@ import { useCodesetCodes } from '@/hooks'
 import { getDatesForDateRange } from '@/utils'
 import { SchemaType } from './filter-form'
 
+const YearlyOptionDisplay = '360 Days'
 const DateRangeSelect = () => {
   const form = useFormContext<SchemaType>()
   const codes = useCodesetCodes(CODESETS.QueryByNextDays)
 
   const options = codes
-    .filter((item) => item.attributes?.some((attr) => attr.name === 'Group'))
+    .filter(
+      (item) =>
+        item.attributes?.some((attr) => attr.name === 'Group') &&
+        item.display !== YearlyOptionDisplay,
+    )
     .map((item) => ({
       label: item.display,
       value:

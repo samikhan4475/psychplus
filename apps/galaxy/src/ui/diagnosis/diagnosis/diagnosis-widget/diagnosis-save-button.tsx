@@ -2,6 +2,7 @@
 
 import { useParams } from 'next/navigation'
 import { Button } from '@radix-ui/themes'
+import { SaveIcon } from 'lucide-react'
 import { useStore } from '@/ui/diagnosis/store'
 import { useStore as quicknoteStore } from '@/ui/quicknotes/store'
 
@@ -16,11 +17,11 @@ const DiagnosisSaveButton = () => {
     <Button
       onClick={handleSaveDiagnosis}
       type="submit"
-      variant="outline"
       size="1"
       color="gray"
-      className="text-black"
+      highContrast
     >
+      <SaveIcon width={15} height={15} strokeWidth={1.75} />
       Save
     </Button>
   )

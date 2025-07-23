@@ -27,11 +27,7 @@ const EctWidget = ({ patientId, procedureEctData }: EctTabProps) => {
         tags={[QuickNoteSectionName.QuicknoteSectionProcedureEtcTab]}
         title={ProcedureTabs.ECT}
         getData={transformOut(patientId)}
-        headerRight={
-          <>
-            <WidgetSaveButton />
-          </>
-        }
+        headerRight={<WidgetSaveButton variant="filled" />}
       >
         <Flex
           direction="column"

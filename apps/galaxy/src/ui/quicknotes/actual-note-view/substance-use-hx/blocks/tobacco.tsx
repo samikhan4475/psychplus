@@ -52,7 +52,11 @@ const Tobacco = ({
   return (
     <>
       {tobaccoChewSmoke === 'smoke' && smokePacks && (
-        <LabelAndValue label="Smoke:" value={`Packs a day: ${smokePacks}`} />
+        <LabelAndValue
+          label="Smoke:"
+          detailsClassName="whitespace-normal"
+          value={`Packs a day: ${smokePacks}`}
+        />
       )}
       {tobaccoChewSmoke === 'chew' && (
         <LabelAndValue label="Chew:" value={`Yes`} />
@@ -61,6 +65,7 @@ const Tobacco = ({
       {smokingCessationDiscussionDuration && (
         <LabelAndValue
           label="Discussed smoking cessation for:"
+          detailsClassName="whitespace-normal"
           value={smokingCessationDiscussionDuration}
         />
       )}

@@ -52,7 +52,7 @@ const TmsTab = ({
         tags={[QuickNoteSectionName.ProcedureTMS]}
         title={ProcedureTabs.TMS}
         getData={transformOut(patientId)}
-        headerRight={<WidgetSaveButton />}
+        headerRight={<WidgetSaveButton variant="filled" />}
       >
         <TreatmentSessionView questionnaireHistories={questionnaireHistories} />
         <MonitoringView />

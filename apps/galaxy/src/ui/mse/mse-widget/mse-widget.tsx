@@ -88,7 +88,9 @@ const MseWidget = ({
               defaultInitialValues={defaultInitialValues}
               shouldCheckPermission
             />
-            {!isMseTab && <WidgetSaveButton shouldCheckPermission />}
+            {!isMseTab && (
+              <WidgetSaveButton variant="filled" shouldCheckPermission />
+            )}
           </>
         }
         formResetValues={defaultInitialValues}

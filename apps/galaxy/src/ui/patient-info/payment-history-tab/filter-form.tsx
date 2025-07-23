@@ -33,7 +33,7 @@ const FilterForm = ({ patientId }: FilterFormProps) => {
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      dateRange: 'All',
+      dateRange: '',
       startDate: undefined,
       endDate: undefined,
       chargeType: '',
@@ -55,7 +55,7 @@ const FilterForm = ({ patientId }: FilterFormProps) => {
       true,
     )
     form.reset({
-      dateRange: 'All',
+      dateRange: '',
       startDate: undefined,
       endDate: undefined,
       chargeType: '',

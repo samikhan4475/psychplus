@@ -115,7 +115,10 @@ const EditClinicScheduleDialog = ({
   return (
     <Dialog.Root open={open} onOpenChange={handleResetStates}>
       <Dialog.Trigger>{children}</Dialog.Trigger>
-      <Dialog.Content className="min-w-[50%]">
+      <Dialog.Content
+        className="min-w-[50%]"
+        onInteractOutside={(e) => e.preventDefault()}
+      >
         <Flex justify="between">
           <Dialog.Title>Edit Clinic Schedule</Dialog.Title>
           <CloseDialogTrigger />

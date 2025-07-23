@@ -5,7 +5,7 @@ const PastFamilyHeader = () => {
   return (
     <TabContentHeading title="Family Psych History">
       <Flex align="center" justify="end" gap="2" className="flex-1">
-        <WidgetSaveButton shouldCheckPermission />
+        <WidgetSaveButton variant="filled" shouldCheckPermission />
       </Flex>
     </TabContentHeading>
   )
