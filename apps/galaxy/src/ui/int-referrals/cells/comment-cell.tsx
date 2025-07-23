@@ -22,6 +22,10 @@ const CommentCell = ({
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const updateCommentStatus = async () => {
+    if (value.length >= 1024) {
+      toast.error('Comment should be less than 1024 characters')
+      return
+    }
     setLoading(true)
     const result = await updatePatientReferralAction({
       ...referral,
@@ -61,7 +65,7 @@ const CommentCell = ({
             </Button>
           </Popover.Trigger>
           <Popover.Content
-            className="min-h-28 -mb-2 -mt-2 flex min-w-[300px] items-center rounded-1 !p-0"
+            className="min-h-28 -mb-2 -mt-2 flex min-w-[500px] items-center rounded-1 !p-0"
             align="start"
           >
             <Flex direction="column" gap="2" className="p-2">
@@ -69,7 +73,7 @@ const CommentCell = ({
                 autoFocus
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
-                className="w-[300px] !outline-none"
+                className="min-h-48 w-[485px] !outline-none"
                 placeholder="Comments..."
               />
               <Button
