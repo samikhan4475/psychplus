@@ -116,4 +116,4 @@ const config = {
   presets: [radixThemePreset],
 }
 
-module.exports = config
+export default config

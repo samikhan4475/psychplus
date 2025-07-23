@@ -1,26 +1,26 @@
 'use server'
 
 import * as api from '@/api'
-import { PreferredPartnerUser } from '@/types'
-
-interface UpdatePreferredPartnerUserParams {
-  partnerId: string
-  workListId: string
-  data: PreferredPartnerUser
-}
+import { UpdatePreferredPartnerUserParams, UpdatePreferredPartnerUserResponse } from '@/types'
 
 const updatePreferredPartnerUserAction = async ({
   partnerId,
   workListId,
   data,
+  newFamilyMembers = [],
+  isNewFamilyMember = false,
+  requestedChangedEntityId,
 }: UpdatePreferredPartnerUserParams): Promise<
-  api.ActionResult<PreferredPartnerUser>
+  api.ActionResult<UpdatePreferredPartnerUserResponse>
 > => {
   const payload = {
-    WorkListUser: data,
+    workListUser: data,
+    newFamilyMembers,
+    isNewFamilyMember,
+    requestedChangedEntityId,
   }
 
-  const response = await api.PUT<PreferredPartnerUser>(
+  const response = await api.PUT<UpdatePreferredPartnerUserResponse>(
     api.UPDATE_PREFERRED_PARTNER_USER(partnerId, workListId),
     payload,
   )
@@ -38,5 +38,4 @@ const updatePreferredPartnerUserAction = async ({
   }
 }
 
-export type { UpdatePreferredPartnerUserParams }
 export { updatePreferredPartnerUserAction }

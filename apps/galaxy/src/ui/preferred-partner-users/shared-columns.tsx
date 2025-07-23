@@ -86,7 +86,6 @@ export const createSharedColumns = () => ({
   }),
 
   ppUserStatus: (
-    editMode: string | null,
     userStatusOptions: SelectOptionType[],
   ): ColumnDef<PreferredPartnerUser> => ({
     accessorKey: 'ppUserStatus',
@@ -94,20 +93,27 @@ export const createSharedColumns = () => ({
     cell: ({ row: { original } }) => (
       <PPUserStatusCell
         original={original}
-        editMode={editMode}
         userStatusOptions={userStatusOptions}
       />
     ),
   }),
 
-  startDate: (editMode: string | null): ColumnDef<PreferredPartnerUser> => ({
+  startDate: (): ColumnDef<PreferredPartnerUser> => ({
     accessorKey: 'startDate',
     header: () => <ColumnHeader label="Start Date" />,
     cell: ({ row: { original } }) => (
-      <DateCell original={original} editMode={editMode} dateField="addDate" />
+      <DateCell original={original} dateField="addDate" />
     ),
   }),
 
+  termDate: (): ColumnDef<PreferredPartnerUser> => ({
+    accessorKey: 'termDate',
+    header: () => <ColumnHeader label="Term Date" />,
+    cell: ({ row: { original } }) => (
+      <DateCell original={original} dateField="termDate" />
+    ),
+  }),
+  
   uploadStatus: (): ColumnDef<PreferredPartnerUser> => ({
     accessorKey: 'uploadStatus',
     header: () => <ColumnHeader label="Upload Status" />,
@@ -116,17 +122,13 @@ export const createSharedColumns = () => ({
   }),
 
   action: (
-    editMode: string | null,
-    setEditMode: (id: string | null) => void,
+    context?: 'active' | 'worklist',
+    googleApiKey?: string,
   ): ColumnDef<PreferredPartnerUser> => ({
     id: 'action',
     header: () => <ColumnHeader label="Action" />,
     cell: ({ row: { original } }) => (
-      <ActionCell
-        original={original}
-        editMode={editMode}
-        setEditMode={setEditMode}
-      />
+      <ActionCell original={original} context={context} googleApiKey={googleApiKey} />
     ),
   }),
 })
@@ -209,13 +211,5 @@ export const createActiveUsersColumns = () => ({
     header: () => <ColumnHeader label="PP User Number" />,
     cell: ({ row: { original } }) =>
       getStyledTextCell(original.familyUserNumber, original),
-  }),
-
-  termDate: (editMode: string | null): ColumnDef<PreferredPartnerUser> => ({
-    accessorKey: 'termDate',
-    header: () => <ColumnHeader label="Term Date" />,
-    cell: ({ row: { original } }) => (
-      <DateCell original={original} editMode={editMode} dateField="termDate" />
-    ),
   }),
 })

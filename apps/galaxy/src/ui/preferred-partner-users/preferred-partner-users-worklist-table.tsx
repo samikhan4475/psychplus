@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect } from 'react'
-import { Box, Flex } from '@radix-ui/themes'
+import { Flex, ScrollArea } from '@radix-ui/themes'
 import { type Row } from '@tanstack/react-table'
 import { DataTable, LoadingPlaceholder } from '@/components'
 import { DataTablePagination } from '@/components/data-table/data-table-pagination'
@@ -13,17 +13,17 @@ import { getWorklistInitialValues } from './utils'
 
 interface PreferredPartnerUsersWorklistTableProps {
   ppid: string
+  googleApiKey: string
 }
 
 const PreferredPartnerUsersWorklistTable = ({
   ppid,
+  googleApiKey,
 }: PreferredPartnerUsersWorklistTableProps) => {
   const {
     worklistData,
     worklistLoading,
     searchWorklist,
-    editMode,
-    setEditMode,
     worklistPage,
     worklistFormValues,
     worklistTotal,
@@ -31,8 +31,6 @@ const PreferredPartnerUsersWorklistTable = ({
     worklistData: state.worklistData,
     worklistLoading: state.worklistLoading,
     searchWorklist: state.searchWorklist,
-    editMode: state.editMode,
-    setEditMode: state.setEditMode,
     worklistPage: state.worklistPage,
     worklistFormValues: state.worklistFormValues,
     worklistTotal: state.worklistTotal,
@@ -78,23 +76,19 @@ const PreferredPartnerUsersWorklistTable = ({
 
   return (
     <Flex className="bg-white w-full" direction="column">
-      <Box
-        className="w-full overflow-hidden hover:overflow-hidden [&::-webkit-scrollbar]:hidden hover:[&::-webkit-scrollbar]:hidden"
-        style={{
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
-        }}
+      <ScrollArea
+        className="bg-white max-w-[calc(100vw-188px)]"
+        scrollbars="both"
       >
         <DataTable
           data={worklistData}
           columns={worklistColumns(
-            editMode,
-            setEditMode,
             userTypeOptions,
             userStatusOptions,
             statusOptions,
+            googleApiKey,
           )}
-          tableClass="min-w-full [&::-webkit-scrollbar]:hidden [&_*::-webkit-scrollbar]:hidden overflow-hidden hover:overflow-hidden"
+          tableClass="[&_.rt-ScrollAreaScrollbar]:!hidden"
           tableRowClass="relative"
           theadClass="z-[1]"
           disablePagination
@@ -103,7 +97,7 @@ const PreferredPartnerUsersWorklistTable = ({
           isRowDisabled={isRowDisabled}
           isRowHighlightedRed={isRowHighlightedRed}
         />
-      </Box>
+      </ScrollArea>
 
       <DataTablePagination
         className="border-t border-gray-6"

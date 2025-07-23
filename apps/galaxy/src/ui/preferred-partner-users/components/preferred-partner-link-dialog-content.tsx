@@ -9,11 +9,13 @@ import { PreferredPartnerLinkTable } from './preferred-partner-link-table'
 interface PreferredPartnerLinkDialogContentProps {
   preferredPartnerUser: PreferredPartnerUser
   onClose?: () => void
+  context?: 'active' | 'worklist'
 }
 
 export const PreferredPartnerLinkDialogContent = ({ 
   preferredPartnerUser,
-  onClose
+  onClose,
+  context = 'active'
 }: PreferredPartnerLinkDialogContentProps) => {
   return (
     <Dialog.Content className="relative w-[1600px] max-w-full !overflow-visible rounded-3 p-6">
@@ -27,6 +29,7 @@ export const PreferredPartnerLinkDialogContent = ({
       <PreferredPartnerLinkTable 
         preferredPartnerUser={preferredPartnerUser} 
         onCloseModal={onClose}
+        context={context}
       />
     </Dialog.Content>
   )

@@ -5,10 +5,9 @@ import { PreferredPartnerUser, SelectOptionType } from '@/types'
 import { createSharedColumns, createActiveUsersColumns } from './shared-columns'
 
 const columns = (
-  editMode: string | null,
-  setEditMode: (id: string | null) => void,
   userTypeOptions: SelectOptionType[],
   userStatusOptions: SelectOptionType[],
+  googleApiKey: string,
 ): ColumnDef<PreferredPartnerUser>[] => {
   const sharedCols = createSharedColumns()
   const activeUsersCols = createActiveUsersColumns()
@@ -24,12 +23,12 @@ const columns = (
     sharedCols.ppUserId(),
     sharedCols.ppUserType(),
     sharedCols.userInId('User In ID'),
-    sharedCols.ppUserStatus(editMode, userStatusOptions),
+    sharedCols.ppUserStatus(userStatusOptions),
     activeUsersCols.ppUserNumber(),
-    sharedCols.startDate(editMode),
-    activeUsersCols.termDate(editMode),
+    sharedCols.startDate(),
+    sharedCols.termDate(),
     sharedCols.uploadStatus(),
-    sharedCols.action(editMode, setEditMode),
+    sharedCols.action('active', googleApiKey),
   ]
 }
 

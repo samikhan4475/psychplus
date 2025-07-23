@@ -55,8 +55,57 @@ interface PreferredPartnerFiltersPayload {
   dateTo?: string
 }
 
+interface FamilyMemberPayload {
+  name: {
+    firstName: string
+    middleName?: string
+    lastName: string
+    preferredName?: string
+    title?: string
+    suffix?: string
+    honors?: string
+  }
+  dateOfBirth: string
+  gender: 'NotSpecified' | 'Male' | 'Female'
+  email: string
+  phoneNumber: string
+  socialSecurityNumber: string
+  locationDetails: {
+    type: 'Home'
+    street1: string
+    street2?: string
+    city: string
+    stateCode: string
+    countryCode: string
+    postalCode: string
+    postalPlus4Code?: string
+    longitude?: number
+    latitude?: number
+    altitude?: number
+    timeZoneId?: string
+  }
+}
+
+interface UpdatePreferredPartnerUserParams {
+  partnerId: string
+  workListId: string
+  data: PreferredPartnerUser
+  newFamilyMembers?: FamilyMemberPayload[]
+  isNewFamilyMember?: boolean
+  requestedChangedEntityId?: string
+}
+
+interface UpdatePreferredPartnerUserResponse {
+  workListUser: PreferredPartnerUser
+  couple?: PreferredPartnerUser
+  addedMembers?: PreferredPartnerUser[]
+}
+
 export type {
   PatientPreferredPartner,
   PreferredPartnerUser,
   PreferredPartnerFiltersPayload,
+  FamilyMemberPayload,
+  UpdatePreferredPartnerUserParams,
+  UpdatePreferredPartnerUserResponse,
 }

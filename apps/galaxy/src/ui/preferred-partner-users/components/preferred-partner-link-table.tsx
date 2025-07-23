@@ -22,16 +22,19 @@ import { useLinkAccountStore } from './link-account-dialog/store'
 interface PreferredPartnerLinkTableProps {
   preferredPartnerUser: PreferredPartnerUser
   onCloseModal?: () => void
+  context?: 'active' | 'worklist'
 }
 
 const InlineActionCell = ({
   row,
   preferredPartnerUser,
   onCloseModal,
+  context = 'active',
 }: {
   row: { original: Patient }
   preferredPartnerUser: PreferredPartnerUser
   onCloseModal?: () => void
+  context?: 'active' | 'worklist'
 }) => {
   const [loading, setLoading] = useState(false)
   const { linkUser } = usePreferredPartnerStore((state) => ({
@@ -45,6 +48,7 @@ const InlineActionCell = ({
         preferredPartnerUser.partnerId,
         preferredPartnerUser.id,
         row.original.id.toString(),
+        context,
       )
 
       toast.success('Preferred partner user linked successfully')
@@ -73,6 +77,7 @@ const InlineActionCell = ({
 const columns = (
   preferredPartnerUser: PreferredPartnerUser,
   onCloseModal?: () => void,
+  context?: 'active' | 'worklist',
 ): ColumnDef<Patient>[] => {
   return [
     {
@@ -186,6 +191,7 @@ const columns = (
           row={row}
           preferredPartnerUser={preferredPartnerUser}
           onCloseModal={onCloseModal}
+          context={context}
         />
       ),
       size: 150,
@@ -197,6 +203,7 @@ const columns = (
 const PreferredPartnerLinkTable = ({
   preferredPartnerUser,
   onCloseModal,
+  context = 'active',
 }: PreferredPartnerLinkTableProps) => {
   const { data, loading, search } = useLinkAccountStore((state) => ({
     data: state.data,
@@ -220,7 +227,7 @@ const PreferredPartnerLinkTable = ({
     <ScrollArea scrollbars="vertical" className="max-h-96 p-2">
       <DataTable
         data={data?.patients ?? []}
-        columns={columns(preferredPartnerUser, onCloseModal)}
+        columns={columns(preferredPartnerUser, onCloseModal, context)}
         disablePagination
         sticky
       />

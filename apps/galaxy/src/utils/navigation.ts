@@ -207,28 +207,8 @@ const getPreferredPartnerNavLinks = ({ ppId }: { ppId?: string | null }) => {
       href: `${baseHref}/profile`,
     },
     {
-      label: 'Financial Info',
-      href: `${baseHref}/financial-info`,
-    },
-    {
-      label: 'Fee Schedule',
-      href: `${baseHref}/fee-schedule`,
-    },
-    {
       label: 'Users',
       href: `${baseHref}/users`,
-    },
-    {
-      label: 'Credentialing',
-      href: `${baseHref}/credentialing`,
-    },
-    {
-      label: 'Preferences',
-      href: `${baseHref}/preferences`,
-    },
-    {
-      label: 'Clinic Schedule',
-      href: `${baseHref}/clinic-schedule`,
     },
   ]
 }

@@ -5,11 +5,10 @@ import { PreferredPartnerUser, SelectOptionType } from '@/types'
 import { createSharedColumns, createWorklistColumns } from './shared-columns'
 
 const worklistColumns = (
-  editMode: string | null,
-  setEditMode: (id: string | null) => void,
   userTypeOptions: SelectOptionType[],
   userStatusOptions: SelectOptionType[],
   statusOptions: SelectOptionType[],
+  googleApiKey: string,
 ): ColumnDef<PreferredPartnerUser>[] => {
   const sharedCols = createSharedColumns()
   const worklistCols = createWorklistColumns()
@@ -27,10 +26,11 @@ const worklistColumns = (
     sharedCols.ppUserId(),
     sharedCols.ppUserType(),
     sharedCols.userInId('Users in ID'),
-    sharedCols.ppUserStatus(editMode, userStatusOptions),
-    sharedCols.startDate(editMode),
+    sharedCols.ppUserStatus(userStatusOptions),
+    sharedCols.startDate(),
+    sharedCols.termDate(),
     sharedCols.uploadStatus(),
-    sharedCols.action(editMode, setEditMode),
+    sharedCols.action('worklist', googleApiKey),
   ]
 }
 

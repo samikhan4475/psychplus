@@ -8,7 +8,11 @@ import { XIcon } from 'lucide-react'
 import { PreferredPartnerActiveUsersTab } from './preferred-partner-active-users-tab'
 import { PreferredPartnerWorklistTab } from './preferred-partner-worklist-tab'
 
-const PreferredPartnerUsersView = () => {
+interface PreferredPartnerUsersViewProps {
+  googleApiKey: string
+}
+
+const PreferredPartnerUsersView = ({ googleApiKey }: PreferredPartnerUsersViewProps) => {
   const { id } = useParams()
   const [activeTab, setActiveTab] = useState('active-users')
 
@@ -37,11 +41,11 @@ const PreferredPartnerUsersView = () => {
         </Flex>
 
         <TabsContent value="active-users">
-          <PreferredPartnerActiveUsersTab ppid={ppid} />
+          <PreferredPartnerActiveUsersTab ppid={ppid} googleApiKey={googleApiKey} />
         </TabsContent>
 
         <TabsContent value="worklist">
-          <PreferredPartnerWorklistTab ppid={ppid} />
+          <PreferredPartnerWorklistTab ppid={ppid} googleApiKey={googleApiKey} />
         </TabsContent>
       </Tabs.Root>
     </Flex>

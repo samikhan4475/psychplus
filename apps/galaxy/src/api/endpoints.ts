@@ -507,7 +507,7 @@ const LINK_PREFERRED_PARTNER_USER_PATIENT = (
 ) =>
   `${API_URL}/api/preferredpartners/${partnerId}/userworklists/${worklistId}/patients/${patientId}/actions/link`
 const UPLOAD_PREFERRED_PARTNER_USERS = (ppId: string, fileFormat: FileFormat) =>
-  `${API_URL}/api/preferredpartners/${ppId}/userworklists/actions/upload/${fileFormat}`
+  `${API_URL}/api/preferredpartners/${ppId}/userworklists/actions/upload/${fileFormat}?importTagName=preferredpartners&pauseBetweenSavesMs=5`
 const UPDATE_PATIENT_REFERRAL_ENDPOINT = (
   patientId: number,
   referralId: number,

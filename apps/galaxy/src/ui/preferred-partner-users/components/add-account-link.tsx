@@ -2,16 +2,17 @@
 
 import { useState } from 'react'
 import { Button, Dialog } from '@radix-ui/themes'
+import { ShuffelIcon } from '@/components/icons/shuffel-icon'
 import { PreferredPartnerUser } from '@/types'
 import { LinkAccountDialogContent } from './link-account-dialog/link-account-dialog-content'
 import { PreferredPartnerLinkDialogContent } from './preferred-partner-link-dialog-content'
-import { ShuffelIcon } from '@/components/icons/shuffel-icon'
 
 interface AddAccountLinkDialogProps {
   onCloseModal?: (open: boolean) => void
   open?: boolean
   onOpenChange?: (open: boolean) => void
   preferredPartnerUser?: PreferredPartnerUser
+  context?: 'active' | 'worklist'
 }
 
 const AddAccountLink = ({
@@ -19,12 +20,12 @@ const AddAccountLink = ({
   open,
   onOpenChange,
   preferredPartnerUser,
+  context = 'active',
 }: AddAccountLinkDialogProps) => {
   const [internalOpen, setInternalOpen] = useState(false)
 
-  const isOpen = open !== undefined ? open : internalOpen
-  const handleOpenChange =
-    onOpenChange !== undefined ? onOpenChange : setInternalOpen
+  const isOpen = open ?? internalOpen
+  const handleOpenChange = onOpenChange ?? setInternalOpen
 
   const handleCloseModal = (openDialog: boolean) => {
     handleOpenChange(openDialog)
@@ -46,6 +47,7 @@ const AddAccountLink = ({
     <PreferredPartnerLinkDialogContent
       preferredPartnerUser={preferredPartnerUser}
       onClose={() => handleOpenChange(false)}
+      context={context}
     />
   ) : (
     <LinkAccountDialogContent />
