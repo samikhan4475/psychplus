@@ -7,6 +7,7 @@ import { Box, Flex, Grid, ScrollArea, Text } from '@radix-ui/themes'
 import { Pencil, TriangleAlert } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 import { DrugInfo } from '@/types'
+import { DeaScheduleOptions } from '../types'
 import { PatientMedicationForm } from './patient-medicaiton-form'
 import { PatientSelect } from './patient-select'
 import { UpdateMedicationSchema } from './schema'
@@ -26,6 +27,8 @@ const PatientPrescriptionAccordian = () => {
       minute: '2-digit',
     })
     const deaCode = newDrug?.representativeErxPackagedDrug?.federalDeaClassCode
+    
+
     const isControlledSubstance = ['2', '3', '4', '5'].includes(deaCode)
     const updated = [...drugs]
 

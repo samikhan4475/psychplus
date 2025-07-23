@@ -31,7 +31,9 @@ const PatientMedicationsWidget = () => {
   const ehr14021PmpIntegration = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr14021PmpIntegration,
   )
-
+  const autoPMPCheckInMedicationWidget = useFeatureFlagEnabled(
+    FEATURE_FLAGS.ehr15606AutoPMPCheckInMedicationWidget,
+  )
   const { id: patientId, apptId = '' } = useParams<{
     id: string
     apptId: string
@@ -73,8 +75,8 @@ const PatientMedicationsWidget = () => {
       ),
       fetchExternalScriptsurePatientId(patientId),
     ])
-    if(ehr14021PmpIntegration) fetchPMPMSearch()
-  }, [patientId])
+    if (ehr14021PmpIntegration) fetchPMPMSearch()
+  }, [patientId, autoPMPCheckInMedicationWidget, ehr14021PmpIntegration])
 
   const fetchPMPMSearch = async () => {
     let encounterData: EncounterData | undefined
@@ -103,7 +105,9 @@ const PatientMedicationsWidget = () => {
       setPmpScoresResponse(response.data)
       if (response.data.length > 0) {
         setPmpReviewed(true)
-      } else {
+      }
+
+      if (response.data.length === 0 && autoPMPCheckInMedicationWidget) {
         await handlePMPCheck(encounterData)
       }
     }
