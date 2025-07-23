@@ -15,6 +15,10 @@ const formatList = (
     .filter(Boolean)
     .join(', ')
 
+const DEFAULT_PSYCHOANALYSIS_TEXT = `Patient displayed transference possibly resulting from unconscious conflicts.
+Provider encouraged reflection on past experiences impacting the patient's life and explored repressed thoughts to identify root causes of psychological distress.
+Continued support and discussion are recommended.`
+
 const PsychoanalysisBlock = ({ data }: { data: AddOnWidgetSchemaType }) => {
   if (!data.therapy || data.therapyPsychoanalysis !== 'psychoanalysis')
     return null
@@ -23,15 +27,12 @@ const PsychoanalysisBlock = ({ data }: { data: AddOnWidgetSchemaType }) => {
       label="Psychoanalysis"
       value={`Conducted psychoanalysis in this session interacting with the patient.
         Descriptions of transference include: ${formatList(
-          data.transferenceDescription || [],
-        )}.
+        data.transferenceDescription || [],
+      )}.
         Psychoanalytic techniques used include: ${formatList(
-          data.psychoanalyticTechnique || [],
-        )}.
-        ${data.additionalPsychoAnalysisDetail}
-        Patient displayed transference possibly resulting from unconscious conflicts.
-        Provider encouraged reflection on past experiences impacting the patient's life and explored repressed thoughts to identify root causes of psychological distress.
-        Continued support and discussion are recommended.`}
+        data.psychoanalyticTechnique || [],
+      )}.
+        ${data.additionalPsychoAnalysisDetail ? data.additionalPsychoAnalysisDetail : DEFAULT_PSYCHOANALYSIS_TEXT}`}
     />
   )
 }
