@@ -12,7 +12,10 @@ const EPCSView = ({ staffId }: EPCSViewProps) => {
       userId: state.user.id,
     }))
   const searchParams = useSearchParams()
-  const staffUserId = searchParams.get('id') ?? String(userId)
+  const idFromSearch = searchParams.get('id');
+  const staffUserId = idFromSearch ?? String(userId);
+  const isFromSearchParam = !!idFromSearch;
+  console.log('isFromSearchParam',isFromSearchParam)
   return (
     <Flex
       direction="column"
@@ -20,7 +23,7 @@ const EPCSView = ({ staffId }: EPCSViewProps) => {
       gap="1"
       className="bg-white h-full !overflow-hidden"
     >
-      <EPCSHeader userId={staffUserId} staffId={staffId} />
+      <EPCSHeader userId={staffUserId} staffId={staffId} isFromSearchParam={isFromSearchParam} />
       <EPCSTable userId={staffUserId} />
       <EPCSPagination />
     </Flex>

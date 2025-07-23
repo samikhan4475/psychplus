@@ -15,23 +15,39 @@ import { useStore } from './store'
 interface EPCSHeaderProps {
   userId: string | null
   staffId: string | null
+  isFromSearchParam: boolean
 }
 
-const getEspcButtonLabel = (isVerified: boolean) =>
-  isVerified ? 'ESPC Verified' : 'Start EPCS Verification'
+const getEspcButtonLabel = (
+  isVerified: boolean,
+  latestProofingIsPending: boolean,
+): string => {
+  if (isVerified) return 'ESPC Verified'
+  return latestProofingIsPending
+    ? 'Resume EPCS Verification'
+    : 'Start EPCS Verification'
+}
 
-const EPCSHeader = ({ userId, staffId }: EPCSHeaderProps) => {
+const EPCSHeader = ({
+  userId,
+  staffId,
+  isFromSearchParam,
+}: EPCSHeaderProps) => {
   const { staff, loginUserId } = useGlobalStore((state) => ({
     staff: state.staffResource,
     loginUserId: state.user.id,
   }))
-  const { epcsIframeLoaded, setEpcsIframeLoaded, refetch } = useStore(
-    (state) => ({
-      epcsIframeLoaded: state.epcsIframeLoaded,
-      setEpcsIframeLoaded: state.setEpcsIframeLoaded,
-      refetch: state.refetch,
-    }),
-  )
+  const {
+    epcsIframeLoaded,
+    setEpcsIframeLoaded,
+    refetch,
+    latestProofingIsPending,
+  } = useStore((state) => ({
+    epcsIframeLoaded: state.epcsIframeLoaded,
+    setEpcsIframeLoaded: state.setEpcsIframeLoaded,
+    refetch: state.refetch,
+    latestProofingIsPending: state.latestProofingIsPending,
+  }))
 
   const {
     start: startProofing,
@@ -81,8 +97,18 @@ const EPCSHeader = ({ userId, staffId }: EPCSHeaderProps) => {
       return
     }
     if (userId && typeof verificationStatus.isInProgress === 'boolean') {
-      const callbackUrl = `${window.location.origin}/ehr/staff/${staffId}/credentialing?id=${userId}`
-      startProofing(userId, callbackUrl, verificationStatus.isInProgress)
+      let callbackUrl = ''
+      if (isFromSearchParam) {
+        callbackUrl = `${window.location.origin}/ehr/staff/${staffId}/credentialing?id=${userId}`
+      } else {
+        callbackUrl = `${window.location.origin}/ehr/user/credentialing`
+      }
+      startProofing(
+        userId,
+        callbackUrl,
+        verificationStatus.isInProgress,
+        latestProofingIsPending,
+      )
     } else {
       toast.error('User ID is required to start the proofing process')
     }
@@ -90,7 +116,12 @@ const EPCSHeader = ({ userId, staffId }: EPCSHeaderProps) => {
 
   const handleStartCredentialing = () => {
     if (userId && staffId) {
-      const callbackUrl = `${window.location.origin}/ehr/staff/${staffId}/credentialing?id=${userId}`
+      let callbackUrl = ''
+      if (isFromSearchParam) {
+        callbackUrl = `${window.location.origin}/ehr/staff/${staffId}/credentialing?id=${userId}`
+      } else {
+        callbackUrl = `${window.location.origin}/ehr/user/credentialing`
+      }
       startCredentialing(userId, callbackUrl)
     } else {
       toast.error('User ID and Staff ID are required to start credentialing')
@@ -130,7 +161,11 @@ const EPCSHeader = ({ userId, staffId }: EPCSHeaderProps) => {
           EPCS Manager
         </Text>
         <Flex gap="2" justify="end">
-          <Button className="text-black bg-white gap-1 h-6 rounded-2 border border-solid" type="button" onClick={refetch}>
+          <Button
+            className="text-black bg-white h-6 gap-1 rounded-2 border border-solid"
+            type="button"
+            onClick={refetch}
+          >
             <RefreshCcw className="text-pp-gray-3" width="16px" height="16px" />
             <Text className="text-pp-black-3 text-1">Refresh</Text>
           </Button>
@@ -148,7 +183,10 @@ const EPCSHeader = ({ userId, staffId }: EPCSHeaderProps) => {
             }
             loading={proofingLoading}
           >
-            {getEspcButtonLabel(verificationStatus.isVerified)}
+            {getEspcButtonLabel(
+              verificationStatus.isVerified,
+              latestProofingIsPending,
+            )}
           </Button>
           <Button
             color="gray"
@@ -160,7 +198,7 @@ const EPCSHeader = ({ userId, staffId }: EPCSHeaderProps) => {
             disabled={credentialingLoading || !userId || !staffId}
             loading={credentialingLoading}
           >
-            Start Self Credentialing
+            Manage Credential
           </Button>
         </Flex>
       </Flex>

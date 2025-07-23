@@ -10,53 +10,84 @@ export const useSelfProofing = () => {
   const [loading, setLoading] = useState(false)
   const [iframeSrc, setIframeSrc] = useState('')
   const loginUserId = useGlobalStore((state) => state.user.id)
+
+  const handleSelfStart = async (userId: string): Promise<boolean> => {
+    let proofingType: ProofingType
+    const proofingTypeResponse = await getProofingTypes(userId)
+
+    if (proofingTypeResponse.state === 'error') {
+      proofingType = ProofingType.mobile
+    } else if (proofingTypeResponse.data.length) {
+      const type = proofingTypeResponse.data[0]
+      proofingType =
+        type.proofType === 'ial2xo' && type.abandonCount < 2
+          ? ProofingType.mobile
+          : ProofingType.web
+    } else {
+      proofingType = ProofingType.mobile
+    }
+
+    const result = await selfStartProofing(userId, String(loginUserId), proofingType)
+
+    if (result.state === 'error') {
+      toast.error(result.error)
+      return false
+    }
+
+    toast.success('Self-proofing started successfully')
+    return true
+  }
+
   const start = async (
     userId: string,
     callbackUrl: string,
     isVerificationInProgress: boolean,
+    skipSelfStart?: boolean,
   ) => {
     setLoading(true)
-    if (!isVerificationInProgress) {
-      let proofingType: ProofingType
-      const proofingTypeResponse = await getProofingTypes(userId)
 
-      if (proofingTypeResponse.state === 'error') {
-        proofingType = ProofingType.mobile
-      } else if (proofingTypeResponse.data.length) {
-        const type = proofingTypeResponse.data[0]
+    if (skipSelfStart) {
+      const launchResult = await launchProofing(callbackUrl, userId, String(loginUserId))
 
-        if (type.proofType === 'ial2xo' && type.abandonCount < 2) {
-          proofingType = ProofingType.mobile
-        } else {
-          proofingType = ProofingType.web
+      if (launchResult.state === 'error') {
+        const selfStarted = await handleSelfStart(userId)
+        if (!selfStarted) {
+          setLoading(false)
+          return
         }
-      } else {
-        proofingType = ProofingType.mobile
-      }
 
-      const result = await selfStartProofing(
-        userId,
-        String(loginUserId),
-        proofingType,
-      )
+        const retryLaunch = await launchProofing(callbackUrl, userId, String(loginUserId))
+        if (retryLaunch.state === 'error') {
+          toast.error(retryLaunch.error || 'Failed to launch proofing')
+          setLoading(false)
+          return
+        }
 
-      if (result.state === 'error') {
-        toast.error(result.error)
+        setIframeSrc(retryLaunch.data)
         setLoading(false)
         return
       }
-      toast.success('Self-proofing started successfully')
-    }
 
-    const launchResult = await launchProofing(
-      callbackUrl,
-      userId,
-      String(loginUserId),
-    )
-    if (launchResult.state === 'error') {
-      toast.error(launchResult.error || 'Failed to launch proofing')
+      setIframeSrc(launchResult.data)
+      setLoading(false)
       return
     }
+
+    if (!isVerificationInProgress) {
+      const selfStarted = await handleSelfStart(userId)
+      if (!selfStarted) {
+        setLoading(false)
+        return
+      }
+    }
+
+    const launchResult = await launchProofing(callbackUrl, userId, String(loginUserId))
+    if (launchResult.state === 'error') {
+      toast.error(launchResult.error || 'Failed to launch proofing')
+      setLoading(false)
+      return
+    }
+
     setIframeSrc(launchResult.data)
     setLoading(false)
   }

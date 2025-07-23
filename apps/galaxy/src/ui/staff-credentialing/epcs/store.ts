@@ -28,6 +28,7 @@ interface Store {
   next: () => void
   prev: () => void
   jumpToPage: (page: number) => void
+  latestProofingIsPending: boolean
 }
 
 const useStore = create<Store>((set, get) => ({
@@ -45,6 +46,7 @@ const useStore = create<Store>((set, get) => ({
   page: 1,
   pageCache: {},
   payload: undefined,
+  latestProofingIsPending: false,
 
   fetch: async (payload, page = 1, reset = false) => {
     set({ loading: true, error: undefined, payload })
@@ -53,14 +55,18 @@ const useStore = create<Store>((set, get) => ({
       set({
         error: result.error,
         loading: false,
+        latestProofingIsPending: false,
       })
     } else {
+      const userProofings = result.data?.userProofings || [];      
+      const latestIsPending = userProofings.length > 0 && userProofings[0].proofingStatus === 'UserPending';
       set({
         data: result.data || [],
         loading: false,
         pageCache: reset
           ? { [page]: result.data }
           : { ...get().pageCache, [page]: result.data },
+        latestProofingIsPending: latestIsPending,
       })
     }
   },
