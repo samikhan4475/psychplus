@@ -23,12 +23,10 @@ const RowRightButtons = ({
 
   return (
     <Flex gap="4" align="center" justify="between" mr="1">
-      {historiesData.length === 0 && (
-        <FillOutButton
-          sectionName={questionnaire as QuickNoteSectionName}
-          data={[]}
-        />
-      )}
+      <FillOutButton
+        sectionName={questionnaire as QuickNoteSectionName}
+        data={[]}
+      />
       {showButton && (
         <ViewButton
           justIcon={true}
