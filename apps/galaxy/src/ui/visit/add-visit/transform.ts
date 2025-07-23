@@ -69,13 +69,12 @@ function transformNonTimedRequestPayload(
   data: SchemaType,
   payload: BookVisitPayload,
 ) {
-  const startDate = `${data.dateOfAdmission?.toString()}T00:00:00.000Z`
   const dateTimeOfAdmission = mapToUTCString(
     `${data.dateOfAdmission}T${data.timeOfAdmission}:00[${data.timeZoneId}]`,
   )
   payload = {
     ...payload,
-    startDate,
+    startDate: dateTimeOfAdmission,
     admissionDate: dateTimeOfAdmission,
     dischargeDate: data.dischargeDate
       ? data.dischargeDate?.toString()

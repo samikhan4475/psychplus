@@ -186,8 +186,24 @@ const QuickNotesSignButton = ({
     [visitType, visitSequence],
   )
   const isAppointmentProvider = appointment.providerStaffId === staffId
-  const isFutureAppointment =
-    appointment?.startDate && new Date(appointment.startDate) > new Date()
+
+  const isFutureAppointment = useMemo(() => {
+    if (!appointment?.startDate) return false
+    const now = new Date()
+    const visitDateTime = new Date(appointment.startDate)
+    if (appointment.isServiceTimeDependent) {
+      return visitDateTime > now
+    } else {
+      // For non-time-dependent, check only the date part
+      const appointmentDate = new Date(
+        visitDateTime.getFullYear(),
+        visitDateTime.getMonth(),
+        visitDateTime.getDate(),
+      )
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+      return appointmentDate > today
+    }
+  }, [appointment.startDate, appointment.isServiceTimeDependent])
 
   const signPayload: SignPayloadProps = {
     patientId,
