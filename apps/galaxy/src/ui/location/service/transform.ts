@@ -7,6 +7,7 @@ import { ServiceFiltersPayload, ServicePaylod } from './types'
 import {
   getAttributeValue,
   getCosigner,
+  getCosignerId,
   getFilteredOptionValue,
   getVisitTypesByIds,
 } from './utils'
@@ -74,7 +75,7 @@ const transformOutService = (
     maxBookingFrequencyInSlot: Number(maxBookingFrequencyInSlot),
     isServiceTimeDependent: isServiceTimeDependent === 'yes',
     coSignerType,
-    coSignerId: coSignerId ? Number(coSignerId) : undefined,
+    coSignerId: getCosignerId(Number(coSignerId), coSignerType),
     cosigner: getCosigner(cosigners, coSignerId, coSignerType),
     serviceVisitTypes: getVisitTypesByIds(visitTypes, serviceVisitTypes),
     address: {

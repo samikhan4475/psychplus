@@ -97,6 +97,9 @@ const getCosigner = (
   return cosigners.find(({ id }) => String(id) === cosignerId)
 }
 
+const getCosignerId = (cosignerId?: number, cosignerType?: string) =>
+  cosignerId && cosignerType && cosignerType !== 'None' ? cosignerId : undefined
+
 const getVisitTypesByIds = (visitTypes: Encounter[], visitIds: string[]) =>
   (visitTypes?.reduce((result, visit) => {
     if (visitIds.includes(constructVisitId(visit))) {
@@ -253,4 +256,5 @@ export {
   generateMaxBookingFrequencyOptions,
   getFilteredOptionValue,
   getLocationTypeOptions,
+  getCosignerId,
 }
