@@ -23,6 +23,7 @@ interface AfterVisitSummaryViewProps {
   appointments: Appointment[]
   appointmentId: string
   referrals: PatientReferral[]
+  pastAppointments: Appointment[]
 }
 
 const AfterVisitSummaryView = ({
@@ -30,6 +31,7 @@ const AfterVisitSummaryView = ({
   appointments,
   appointmentId,
   referrals,
+  pastAppointments,
 }: AfterVisitSummaryViewProps) => {
   const { fetchPatientMedication } = useMedicationsStore((state) => ({
     fetchPatientMedication: state.fetchPatientMedication,
@@ -45,13 +47,11 @@ const AfterVisitSummaryView = ({
     const now = new Date()
     return isUpcomingStatus && appointmentDate >= now
   })
-
-  const pastAppointments = appointments.filter(
-    (appointment) => appointment.visitStatus === 'CheckedOut',
+  const pastFilteredAppointments = pastAppointments.filter(
+    (appointment) => appointment.status === 'CheckedOut',
   )
-
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment>(
-    pastAppointments[0] || ({} as Appointment),
+    pastFilteredAppointments[0] || ({} as Appointment),
   )
 
   const fetchData = async () => {
@@ -68,10 +68,10 @@ const AfterVisitSummaryView = ({
   }, [patientId, fetchPatientMedication])
 
   useEffect(() => {
-    if (patientId && selectedAppointment.appointmentId) {
+    if (patientId && selectedAppointment.id) {
       fetchWorkingDiagnosis(
         patientId,
-        String(selectedAppointment.appointmentId),
+        String(selectedAppointment.id),
       )
     }
   }, [selectedAppointment, patientId, fetchWorkingDiagnosis])
@@ -86,12 +86,12 @@ const AfterVisitSummaryView = ({
     },
     {
       title: 'Date',
-      value: selectedAppointment.appointmentDate,
+      value: selectedAppointment.startDate,
       type: 'date' as const,
     },
     {
       title: 'Time',
-      value: selectedAppointment.appointmentDate,
+      value: selectedAppointment.startDate,
       type: 'time' as const,
     },
   ]
@@ -101,7 +101,7 @@ const AfterVisitSummaryView = ({
   return (
     <Flex direction="column" width="100%">
       <AfterSummaryHeaderWidgetHeader
-        appointments={pastAppointments}
+        appointments={pastFilteredAppointments}
         selectedAppointment={selectedAppointment}
         onAppointmentChange={setSelectedAppointment}
         onPrint={() => handlePrint(printId, 'After Visit Summary')}
@@ -116,7 +116,7 @@ const AfterVisitSummaryView = ({
               appointment={selectedAppointment}
             />
             <ProvidersRecommendationsBlock
-              appointmentId={String(selectedAppointment.appointmentId)}
+              appointmentId={String(selectedAppointment.id)}
             />
           </>
         )}

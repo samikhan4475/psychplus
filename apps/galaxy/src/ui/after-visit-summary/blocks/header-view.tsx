@@ -2,7 +2,6 @@
 
 import { Flex, Select, Text, Tooltip } from '@radix-ui/themes'
 import { Appointment } from '@/types'
-import { formatDateCell, formatTimeCell } from '@/ui/schedule/utils'
 
 interface AfterVisitVHeaderViewProps {
   appointment: Appointment
@@ -15,16 +14,22 @@ const formatValue = (
   appointment: Appointment,
   type?: 'date' | 'time',
 ): string => {
+  if (!appointment.startDate) return ''
+  
+  const date = new Date(appointment.startDate)
+  
   if (type === 'date') {
-    return formatDateCell(
-      appointment.appointmentDate,
-      appointment.locationTimezoneId,
-    )
+    return date.toLocaleDateString('en-US', {
+      month: '2-digit',
+      day: '2-digit',
+      year: '2-digit'
+    })
   } else if (type === 'time') {
-    return formatTimeCell(
-      appointment.appointmentDate,
-      appointment.locationTimezoneId,
-    )
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    })
   }
   return ''
 }

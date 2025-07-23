@@ -2,7 +2,6 @@ import React, { useMemo } from 'react'
 import { Flex } from '@radix-ui/themes'
 import { SelectCell, TabContentHeading } from '@/components'
 import { Appointment } from '@/types'
-import { formatDateCell, formatTimeCell } from '@/ui/schedule/utils'
 import { PrintButton } from './print-button'
 
 interface AfterSummaryHeaderWidgetHeaderProps {
@@ -21,21 +20,29 @@ const AfterSummaryHeaderWidgetHeader = ({
   const options = useMemo(
     () =>
       appointments.map((appointment) => {
-        const hasDate = !!appointment.appointmentDate
-        const hasTimezone = !!appointment.locationTimezoneId
-        const label = hasDate && hasTimezone
-          ? `${formatDateCell(
-              appointment.appointmentDate,
-              appointment.locationTimezoneId,
-              false,
-            )} ${formatTimeCell(
-              appointment.appointmentDate,
-              appointment.locationTimezoneId,
-            )}, ${appointment.visitMedium}, ${appointment.visitType ?? ''}`
-          : `${appointment.visitMedium}, ${appointment.visitType ?? ''}`
+        const hasStartDate = !!appointment?.startDate
+        let label = ''
+        
+        if (hasStartDate) {
+          const date = new Date(appointment.startDate!)
+          const formattedDate = date.toLocaleDateString('en-US', {
+            month: '2-digit',
+            day: '2-digit',
+            year: '2-digit'
+          })
+          const formattedTime = date.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+          })
+          label = `${formattedDate} ${formattedTime}, ${appointment.type}, ${appointment.visitType ?? ''}`
+        } else {
+          label = `${appointment.type}, ${appointment.visitType ?? ''}`
+        }
+        
         return {
           label,
-          value: String(appointment.appointmentId),
+          value: String(appointment.id),
         }
       }),
     [appointments],
@@ -49,10 +56,10 @@ const AfterSummaryHeaderWidgetHeader = ({
       {selectedAppointment && Object.keys(selectedAppointment).length > 0 && (
         <Flex ml={'2'}>
           <SelectCell
-            value={String(selectedAppointment.appointmentId)}
+            value={String(selectedAppointment.id)}
             onValueChange={(value: string) => {
               const appointment = appointments.find(
-                (app) => String(app.appointmentId) === value,
+                (app) => String(app.id) === value,
               )
               if (appointment) {
                 onAppointmentChange(appointment)

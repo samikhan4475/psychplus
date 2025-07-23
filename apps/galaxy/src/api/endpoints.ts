@@ -950,6 +950,8 @@ const GET_SHARED_POLICY_FILE = (fileName: string) =>
   `${API_URL}/SharedContent/documents/${fileName}.html`
 const SEARCH_PATIENT_APPOINTMENTS = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/appointments/actions/search`
+const GET_PATIENT_APPOINTMENTS_HISTORY = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/appointments/history`
 const LINK_CLAIM = (claimId: string, appointmentId: string) =>
   `${API_URL}/api/claims/${claimId}/appointments/${appointmentId}/actions/link`
 const GET_PATIENT_DEMOGRAPHICS = (patientId: string, appointmentId?: string) =>
@@ -1529,6 +1531,7 @@ export {
   POST_SEARCH_ALLERGIES,
   GET_PROVIDER_PRESCRIBING_DATA,
   SEARCH_PATIENT_APPOINTMENTS,
+  GET_PATIENT_APPOINTMENTS_HISTORY,
   LINK_CLAIM,
   GET_PATIENT_DEMOGRAPHICS,
   GET_REFILL_REQUESTS,

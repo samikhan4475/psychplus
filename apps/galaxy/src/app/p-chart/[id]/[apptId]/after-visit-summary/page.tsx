@@ -1,5 +1,5 @@
 import { Text } from '@radix-ui/themes'
-import { getAppointments } from '@/api'
+import { getAppointments, getPastAppointments } from '@/api'
 import { ReferralStatuses } from '@/types'
 import { AfterVisitSummaryView } from '@/ui/after-visit-summary'
 import { searchPatientReferralsAction } from '@/ui/referrals/patient-referrals-widget/actions'
@@ -25,7 +25,7 @@ const AfterVisitSummary = async ({
   params,
   searchParams,
 }: AfterVisitSummaryProps) => {
-  const [appointments, referrals] = await Promise.all([
+  const [appointments, referrals, pastAppointments] = await Promise.all([
     getAppointments({ patientIds: [params.id], ...defaultPayload }),
     searchPatientReferralsAction({
       patientIds: [params.id],
@@ -37,6 +37,7 @@ const AfterVisitSummary = async ({
         ],
       },
     }),
+    getPastAppointments(params.id),
   ])
 
   if (appointments.state === 'error') {
@@ -45,12 +46,16 @@ const AfterVisitSummary = async ({
   if (referrals.state === 'error') {
     return <Text>Referrals with {params.id} not found</Text>
   }
+  if (pastAppointments.state === 'error') {
+    return <Text>Past appointments with {params.id} not found</Text>
+  }
   return (
     <AfterVisitSummaryView
       patientId={params.id}
       appointments={appointments.data}
       referrals={referrals.data.referrals}
       appointmentId={searchParams.id}
+      pastAppointments={pastAppointments.data}
     />
   )
 }
