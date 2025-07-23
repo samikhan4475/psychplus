@@ -237,18 +237,6 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
       .map((key) => `${key[0]}=${key[1]}`)
       .join('&')
 
-    parent.postMessage(
-      {
-        event: enums.SCHEDULE_START,
-        user_data: {
-          date_of_birth: form.getValues().dateOfBirth,
-          city: form.getValues().primaryCity,
-          state: form.getValues().primaryState,
-          zip_code: form.getValues().zipCode,
-        },
-      },
-      PSYCHPLUS_LIVE_URL,
-    )
     if (prefetchPromise) {
       await prefetchPromise
     } else {

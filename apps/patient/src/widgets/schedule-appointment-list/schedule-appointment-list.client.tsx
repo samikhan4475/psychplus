@@ -27,6 +27,7 @@ import {
   getNormalizedProviderType,
   getValidStartDate,
 } from './utils'
+import { enums, PSYCHPLUS_LIVE_URL } from '@/constants'
 
 interface ScheduleAppointmentListClientProps {
   mapKey: string
@@ -90,6 +91,21 @@ const ScheduleAppointmentListClient = ({
   useEffect(() => {
     setZipCodeState(filters.zipCode)
   }, [filters.zipCode])
+
+  useEffect(()=>{
+    parent.postMessage(
+      {
+        event: enums.SCHEDULE_START,
+        user_data: {
+          date_of_birth: searchParams.get('dateOfBirth') ?? '',
+          city: searchParams.get('primaryCity') ?? '',
+          state: searchParams.get('state') ?? '',
+          zip_code: searchParams.get('zipCode') ?? '',
+        },
+      },
+      PSYCHPLUS_LIVE_URL,
+    )
+  },[])
 
   useEffect(() => {
     handleFiltersChange({
