@@ -39,7 +39,8 @@ const columns: ColumnDef<ClaimAuditHistory>[] = [
     cell: ({ row }) => (
       <TextCell className="w-[120px]">
         {row.original.metadata.updatedByFullName ??
-          row.original.metadata.createdByFullName ?? ''}
+          row.original.metadata.createdByFullName ??
+          ''}
       </TextCell>
     ),
   },
@@ -66,7 +67,13 @@ const columns: ColumnDef<ClaimAuditHistory>[] = [
     header: ({ column }) => (
       <ColumnHeader label="Previous Value" column={column} clientSideSort />
     ),
-    cell: ({ row }) => <TextCell>{row.original.oldValue}</TextCell>,
+    cell: ({ row }) => {
+      const hasPayment = row.original.fieldName.toLowerCase().includes('amount')
+
+      return (
+        <TextCell hasPayment={hasPayment}>{row.original.oldValue}</TextCell>
+      )
+    },
   },
   {
     id: 'newValue',
@@ -74,7 +81,13 @@ const columns: ColumnDef<ClaimAuditHistory>[] = [
     header: ({ column }) => (
       <ColumnHeader label="Current Value" column={column} clientSideSort />
     ),
-    cell: ({ row }) => <TextCell>{row.original.newValue}</TextCell>,
+    cell: ({ row }) => {
+      const hasPayment = row.original.fieldName.toLowerCase().includes('amount')
+
+      return (
+        <TextCell hasPayment={hasPayment}>{row.original.newValue}</TextCell>
+      )
+    },
   },
 ]
 
