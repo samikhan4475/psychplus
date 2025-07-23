@@ -72,10 +72,9 @@ const EditVisitForm = ({
     visitDetails?.dateOfAdmission,
     visitDetails?.locationTimezoneId,
   )
-  const { date: dischargeDate } = convertToTimezone(
-    visitDetails?.dischargeDate,
-    visitDetails?.locationTimezoneId,
-  )
+  const dischargeDate = visitDetails?.dischargeDate
+    ? getCalendarDate(visitDetails?.dischargeDate)
+    : undefined
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     disabled: isFormDisabled,
@@ -104,9 +103,7 @@ const EditVisitForm = ({
       service: visitDetails?.serviceId,
       visitType: visitDetails?.visitTypeCode,
       providerType: visitDetails?.providerType,
-      dcDate: visitDetails?.dischargeDate
-        ? getCalendarDate(visitDetails?.dischargeDate)
-        : undefined,
+      dcDate: dischargeDate,
       dischargeDate: dischargeDate,
       dcLocation: visitDetails?.dischargeLocationName,
       edDischarge: visitDetails?.isEdDischarge ? 'Yes' : 'No',

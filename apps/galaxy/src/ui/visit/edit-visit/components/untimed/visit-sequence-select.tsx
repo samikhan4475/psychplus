@@ -10,10 +10,11 @@ import {
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { Appointment, SelectOptionType, Service } from '@/types'
+import { sortCodesetBySortAttribute } from '@/ui/patient-lookup/utils'
 import { getLocationServices } from '@/ui/visit/client-actions'
+import { getCalendarDate } from '@/utils'
 import { SchemaType } from '../../schema'
 import { useEditVisitStore } from '../../store'
-import { sortCodesetBySortAttribute } from '@/ui/patient-lookup/utils'
 
 const VisitSequenceSelect = ({
   visitDetails,
@@ -97,19 +98,19 @@ const VisitSequenceSelect = ({
         }
       })
       setOptions(
-        sortCodesetBySortAttribute(filteredOptions
-          .filter(
+        sortCodesetBySortAttribute(
+          filteredOptions.filter(
             (code) =>
               code.attributes?.some(
                 (attr) =>
                   attr.name === 'Group' && attr.value === 'NonTimedServices',
               ) || visitDetails.visitSequence === code.value,
-          ))
-          .map((option) => ({
-            value: option.value,
-            label: option.label,
-            disabled: option.value === visitDetails.visitSequence,
-          })),
+          ),
+        ).map((option) => ({
+          value: option.value,
+          label: option.label,
+          disabled: option.value === visitDetails.visitSequence,
+        })),
       )
     }
   }, [service, providerType, providerCodes, facilityAdmissionId])
@@ -123,6 +124,19 @@ const VisitSequenceSelect = ({
         buttonClassName="h-6 w-full"
         options={options}
         loading={loading}
+        onValueChange={(value) => {
+          form.setValue('visitSequence', value, {
+            shouldDirty: true,
+          })
+          if (value === visitDetails.visitSequence) return
+          if (value === 'InitialDischarge') {
+            form.setValue('dischargeDate', getCalendarDate(), {
+              shouldDirty: true,
+            })
+          } else if (value === 'Initial') {
+            form.setValue('dischargeDate', undefined, { shouldDirty: true })
+          }
+        }}
       />
       <FormFieldError name={'visitSequence'} />
     </FormFieldContainer>

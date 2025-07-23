@@ -23,12 +23,6 @@ const DischargeDate = <T extends object>() => {
       ],
     })
 
-  useEffect(() => {
-    const dischargeDate = form.getValues('dischargeDate')
-    if (visitSequence === 'InitialDischarge' && dischargeDate) {
-      form.setValue('dischargeDate', dateOfAdmission)
-    }
-  }, [visitSequence])
 
   const dateToday = today(getLocalTimeZone())
   const minValue =
