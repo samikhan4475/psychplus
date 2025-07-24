@@ -134,7 +134,7 @@ const VisitSequenceSelect = ({
               shouldDirty: true,
             })
           } else if (value === 'Initial') {
-            form.setValue('dischargeDate', undefined, { shouldDirty: true })
+            form.setValue('dischargeDate', null, { shouldDirty: true })
           }
         }}
       />

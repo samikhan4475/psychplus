@@ -54,7 +54,7 @@ const schema = z
     dateOfAdmission: z.custom<DateValue>().optional(),
     timeOfAdmission: z.string().optional(),
     admittingProvider: z.string().optional(),
-    dischargeDate: z.custom<DateValue>().optional(),
+    dischargeDate: z.custom<DateValue>().nullable().optional(),
     visitFrequency: z.string().optional(),
     insuranceVerificationStatus: z.string().optional(),
     legal: z.string().optional(),
