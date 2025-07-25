@@ -117,7 +117,7 @@ enum ServiceType {
   IntermediateCareFacility = 'IntermediateCareFacility',
   PartialHospital = 'PartialHospital',
   SkilledNursingFacility = 'SkilledNursingFacility',
-  UDS = 'UDS',
+  UDS = 'Uds',
 }
 
 enum ProviderType {
