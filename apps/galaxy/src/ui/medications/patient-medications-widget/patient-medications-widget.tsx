@@ -1,19 +1,16 @@
 'use client'
 
-import { Fragment, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams, usePathname } from 'next/navigation'
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
 import { Box, Button, Flex, Text, Tooltip } from '@radix-ui/themes'
 import { EyeIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
-import { getAppointment } from '@/actions'
-import {
-  CheckboxCell,
-  WidgetContainer
-} from '@/components'
+import { CheckboxCell, WidgetContainer } from '@/components'
 import { InformationLineIcon } from '@/components/icons'
 import { ACCESS_UNAVAILABLE_MESSAGE, FEATURE_FLAGS } from '@/constants'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
+import { Appointment } from '@/types'
 import { pmpReportAction, searchPMPAction, startPMPAction } from './actions'
 import { AddMedicationButton } from './add-medication-button'
 import { PatientMedicationsDataTable } from './patient-medications-data-table'
@@ -26,8 +23,12 @@ const getUUIDWithSplit = (url: string): string => {
   const parts = url.split('/')
   return parts[parts.length - 1]
 }
-
-const PatientMedicationsWidget = () => {
+interface PatientMedicationsWidgetProps {
+  appointment?: Appointment
+}
+const PatientMedicationsWidget = ({
+  appointment,
+}: PatientMedicationsWidgetProps) => {
   const ehr14021PmpIntegration = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr14021PmpIntegration,
   )
@@ -38,13 +39,8 @@ const PatientMedicationsWidget = () => {
     id: string
     apptId: string
   }>()
-
   const pathname = usePathname()
   const isQuickNoteSection = pathname.includes('quicknotes')
-  const [encounterInfo, setEncounterInfo] = useState<EncounterData>({
-    locationId: '',
-    providerStaffId: 0,
-  })
   const [pmpScoresResponse, setPmpScoresResponse] = useState<
     PmpScoreResponse[]
   >([])
@@ -76,24 +72,14 @@ const PatientMedicationsWidget = () => {
       fetchExternalScriptsurePatientId(patientId),
     ])
     if (ehr14021PmpIntegration) fetchPMPMSearch()
-  }, [patientId, autoPMPCheckInMedicationWidget, ehr14021PmpIntegration])
+  }, [
+    patientId,
+    appointment,
+    autoPMPCheckInMedicationWidget,
+    ehr14021PmpIntegration,
+  ])
 
   const fetchPMPMSearch = async () => {
-    let encounterData: EncounterData | undefined
-
-    const appointmentResult = await getAppointment({
-      id: apptId,
-      shouldHaveLocation: true,
-    })
-
-    if (appointmentResult.state === 'success') {
-      encounterData = {
-        locationId: appointmentResult.data.locationId,
-        providerStaffId: appointmentResult.data.providerStaffId,
-      }
-
-      setEncounterInfo(encounterData)
-    }
     setCheckPMPLoading(false)
     const payload = {
       patientId: Number(patientId),
@@ -106,23 +92,19 @@ const PatientMedicationsWidget = () => {
       if (response.data.length > 0) {
         setPmpReviewed(true)
       }
-
       if (response.data.length === 0 && autoPMPCheckInMedicationWidget) {
-        await handlePMPCheck(encounterData)
+        await handlePMPCheck()
       }
     }
   }
-  const handlePMPCheck = async (encounterDataOverride?: EncounterData) => {
+  const handlePMPCheck = async () => {
     setCheckPMPLoading(true)
     setStartPMP(true)
-
-    const encounter = encounterDataOverride || encounterInfo
-
     const payload = {
       patientId: Number(patientId),
       appointmentId: Number(apptId),
-      locationId: encounter.locationId,
-      staffId: encounter.providerStaffId,
+      locationId: appointment?.locationId,
+      staffId: appointment?.providerStaffId,
     }
     const response = await startPMPAction({ payload })
     if (response.state === 'success') {
@@ -148,8 +130,8 @@ const PatientMedicationsWidget = () => {
     const payload = {
       patientId: String(patientId),
       appointmentId: Number(apptId),
-      locationId: encounterInfo.locationId?.toString(),
-      staffId: encounterInfo.providerStaffId,
+      locationId: appointment?.locationId?.toString(),
+      staffId: appointment?.providerStaffId,
       pmpPrescriptionId: pmpResponse.pmpScores[0]?.pmpPrescriptionId,
       reportId: uuid,
     }
