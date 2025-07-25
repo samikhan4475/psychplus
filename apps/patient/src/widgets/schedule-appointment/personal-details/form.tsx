@@ -106,7 +106,10 @@ const schema = z
 
 type SchemaType = z.infer<typeof schema>
 
-const PersonalDetailsForm = () => {
+interface Props {
+  patientAppUrl:string
+}
+const PersonalDetailsForm = ({patientAppUrl}:Props) => {
   const router = useRouter()
   const { setPatient } = useStore()
 
@@ -564,7 +567,7 @@ const PersonalDetailsForm = () => {
               href={'#'}
               onClick={() => {
                 publish(`${SCHEDULE_APPOINTMENT_LIST}:existing-login`, {
-                  url: getLoginRedirectUrl(),
+                  url: getLoginRedirectUrl(patientAppUrl),
                 })
               }}
             >

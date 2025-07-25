@@ -5,14 +5,17 @@ import { clickTrack } from '@psychplus/utils/tracking'
 import { SCHEDULE_APPOINTMENT_DIALOG } from '@psychplus/widgets'
 import { getLoginRedirectUrl } from '@/widgets/schedule-appointment-list/utils'
 
+interface Props {
+  patientAppUrl:string
+}
 const displayLoginForm = false
 
-const ExistingPatient = () => {
+const ExistingPatient = ({patientAppUrl}:Props) => {
   const { publish } = usePubsub()
 
   const onLoginClick = () => {
     const mid = localStorage.getItem('mid');
-    const url = mid ? `${getLoginRedirectUrl()}?mid=${mid}` : getLoginRedirectUrl();
+    const url = mid ? `${getLoginRedirectUrl(patientAppUrl)}?mid=${mid}` : getLoginRedirectUrl(patientAppUrl);
     
     publish(`${SCHEDULE_APPOINTMENT_DIALOG}:existing-login`, {
       url: url,

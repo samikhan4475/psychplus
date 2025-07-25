@@ -12,10 +12,12 @@ import { ScheduleTabs } from './tabs'
 
 interface ScheduleAppointmentDialogClientProps {
   mapKey: string
+  patientAppUrl:string
 }
 
 const ScheduleAppointmentDialogClient = ({
   mapKey,
+  patientAppUrl
 }: ScheduleAppointmentDialogClientProps) => {
   const { publish } = usePubsub()
   const { open } = useDialog(SCHEDULE_APPOINTMENT_DIALOG)
@@ -50,7 +52,7 @@ const ScheduleAppointmentDialogClient = ({
         <Dialog.Title className="text-left text-4 lg:text-7">
           Schedule an appointment
         </Dialog.Title>
-        {open && <ScheduleTabs onClose={onClose} mapKey={mapKey} />}
+        {open && <ScheduleTabs onClose={onClose} mapKey={mapKey} patientAppUrl={patientAppUrl} />}
       </Dialog.Content>
     </Dialog.Root>
   )

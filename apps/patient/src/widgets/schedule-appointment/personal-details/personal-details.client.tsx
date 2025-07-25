@@ -11,8 +11,9 @@ import { PersonalDetailsForm } from './form'
 
 interface PersonalDetailsClientProps {
   mapKey: string
+  patientAppUrl:string
 }
-const PersonalDetailsClient = ({ mapKey }: PersonalDetailsClientProps) => {
+const PersonalDetailsClient = ({ mapKey,patientAppUrl }: PersonalDetailsClientProps) => {
   const ref = useRef<HTMLDivElement>(null)
   usePublishSize(SCHEDULE_APPOINTMENT_LIST, ref)
 
@@ -35,7 +36,7 @@ const PersonalDetailsClient = ({ mapKey }: PersonalDetailsClientProps) => {
             </Text>
           </Flex>
 
-          <PersonalDetailsForm />
+          <PersonalDetailsForm patientAppUrl={patientAppUrl}/>
         </Flex>
       </Flex>
     </GooglePlacesContextProvider>

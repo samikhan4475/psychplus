@@ -27,7 +27,7 @@ import {
 import { type Clinic } from '@psychplus/clinics'
 import { type Staff } from '@psychplus/staff'
 import { isMobile } from '@psychplus/utils/client'
-import { APP_ENV, PATIENT_APP_URL } from '@psychplus/utils/constants'
+import { APP_ENV } from '@psychplus/utils/constants'
 import { convertToLocalISOString } from '@psychplus/utils/time'
 import {
   ClinicWithSlots,
@@ -327,14 +327,14 @@ const getCodsetValue = (codes: SharedCode[], display: string) => {
   return codes.find((_code) => _code.display === display)?.value
 }
 
-function getLoginRedirectUrl(): string {
+function getLoginRedirectUrl(patientAppUrl?:string): string {
   const fallbackBaseUrl =
     String(APP_ENV).toLowerCase() === 'production'
       ? 'https://ui.psychplus.io'
       : 'https://ui.staging.psychplus.dev'
 
-  const base = PATIENT_APP_URL || fallbackBaseUrl
-  console.log(PATIENT_APP_URL)
+  const base = patientAppUrl || fallbackBaseUrl
+  console.log(patientAppUrl,'patientAppUrl')
   return `${base.replace(/\/$/, '')}/login`
 }
 
