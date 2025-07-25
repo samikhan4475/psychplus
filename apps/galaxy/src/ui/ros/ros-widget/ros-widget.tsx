@@ -9,6 +9,7 @@ import {
   WidgetSaveButton,
 } from '@/components'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
 import {
   CardiovascularBlock,
   ConstitutionalBlock,
@@ -37,6 +38,7 @@ const RosWidget = ({ patientId, initialValue }: HpiWidgetProps) => {
   const searchParams = useSearchParams()
   const visitType = searchParams.get('visitType') || ''
   const form = useRosWidgetForm(initialValue, visitType)
+  const { isQuickNoteView } = useQuickNoteUpdate()
   return (
     <FormProvider {...form}>
       <WidgetFormContainer
@@ -51,7 +53,10 @@ const RosWidget = ({ patientId, initialValue }: HpiWidgetProps) => {
               defaultInitialValues={getInitialValues}
               shouldCheckPermission
             />
-            <WidgetSaveButton variant="filled" shouldCheckPermission />
+            <WidgetSaveButton
+              variant={isQuickNoteView ? 'outline' : 'filled'}
+              shouldCheckPermission
+            />
           </>
         }
         headerLeft={<CheckAllNoConcernCell form={form} />}

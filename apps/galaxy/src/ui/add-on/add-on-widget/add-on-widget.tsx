@@ -6,6 +6,7 @@ import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer, WidgetSaveButton } from '@/components'
 import { Appointment, QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
 import {
   getCachedBlocksByVisitType,
   mapAppointmentDurationToData,
@@ -41,6 +42,7 @@ const AddOnWidget = ({
   const visitType = searchParams.get('visitType') || ''
   const visitSequence = searchParams.get('visitSequence') || ''
   const appointmentId = searchParams.get('id') as string
+  const { isQuickNoteView } = useQuickNoteUpdate()
 
   const blocks: Block[] = (
     getCachedBlocksByVisitType(visitType, visitSequence) || []
@@ -65,7 +67,9 @@ const AddOnWidget = ({
         tags={[QuickNoteSectionName.Addon]}
         title="Add On"
         getData={transformOut(patientId, appointmentId, visitType)}
-        headerRight={<WidgetSaveButton variant="filled" />}
+        headerRight={
+          <WidgetSaveButton variant={isQuickNoteView ? 'outline' : 'filled'} />
+        }
       >
         <Flex direction="column" gap="2">
           {blocks.map(({ component: BlockComponent, id, isChecked }) => (

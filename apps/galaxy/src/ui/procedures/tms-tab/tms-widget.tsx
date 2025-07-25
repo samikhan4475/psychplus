@@ -6,6 +6,7 @@ import { WidgetFormContainer, WidgetSaveButton } from '@/components'
 import { Appointment, QuickNoteHistory, QuickNoteSectionItem } from '@/types'
 import { useStore } from '@/ui/questionnaires/store'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
 import { ProcedureTabs } from '../constants'
 import { transformIn, transformOut } from './data'
 import { DischargePlanView } from './discharge-plan'
@@ -39,6 +40,7 @@ const TmsTab = ({
   const { initializeQuestionnaires } = useStore((state) => ({
     initializeQuestionnaires: state.initializeQuestionnaires,
   }))
+  const { isQuickNoteView } = useQuickNoteUpdate()
 
   useEffect(() => {
     initializeQuestionnaires(patientId)
@@ -52,7 +54,9 @@ const TmsTab = ({
         tags={[QuickNoteSectionName.ProcedureTMS]}
         title={ProcedureTabs.TMS}
         getData={transformOut(patientId)}
-        headerRight={<WidgetSaveButton variant="filled" />}
+        headerRight={
+          <WidgetSaveButton variant={isQuickNoteView ? 'outline' : 'filled'} />
+        }
       >
         <TreatmentSessionView questionnaireHistories={questionnaireHistories} />
         <MonitoringView />

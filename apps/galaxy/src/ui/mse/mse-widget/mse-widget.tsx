@@ -12,6 +12,7 @@ import {
 import { Appointment } from '@/types'
 import { ProviderType } from '@/ui/assessment-plan'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
 import {
   AffectBlock,
   AppearanceBlock,
@@ -50,6 +51,7 @@ const MseWidget = ({
   const form = useMseWidgetForm(initialValue)
   const visitSequence = useSearchParams().get('visitSequence') || ''
   const showHowTested = ['New', 'Initial'].includes(visitSequence)
+  const { isQuickNoteView } = useQuickNoteUpdate()
 
   const mseShouldValidate =
     appointment &&
@@ -89,7 +91,10 @@ const MseWidget = ({
               shouldCheckPermission
             />
             {!isMseTab && (
-              <WidgetSaveButton variant="filled" shouldCheckPermission />
+              <WidgetSaveButton
+                variant={isQuickNoteView ? 'outline' : 'filled'}
+                shouldCheckPermission
+              />
             )}
           </>
         }

@@ -5,6 +5,7 @@ import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer, WidgetSaveButton } from '@/components'
 import { Appointment, QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
 import { ProcedureTabs } from '../constants'
 import { AdverseEventQuestionView } from './adverse-event-question'
 import { AdverseReactionView } from './adverse-reaction'
@@ -36,6 +37,7 @@ const SpravatoWidget = ({
   ])
   const form = useSpravatoWidgetForm(initialValues)
   const appointmentId = useSearchParams().get('id') as string
+  const { isQuickNoteView } = useQuickNoteUpdate()
 
   return (
     <FormProvider {...form}>
@@ -45,7 +47,9 @@ const SpravatoWidget = ({
         tags={[QuickNoteSectionName.QuicknoteSectionProcedureSpravato]}
         title={ProcedureTabs.SPRAVATO}
         getData={transformOut(id, appointmentId, appointmentData)}
-        headerRight={<WidgetSaveButton variant="filled" />}
+        headerRight={
+          <WidgetSaveButton variant={isQuickNoteView ? 'outline' : 'filled'} />
+        }
       >
         <DosingSection />
         <PrecautionsAndWarningSection />

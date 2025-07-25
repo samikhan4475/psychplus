@@ -7,6 +7,7 @@ import {
   WidgetSaveButton,
 } from '@/components'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
 import { ConditionsBlock, OtherBlock } from './blocks'
 import { transformOut } from './data'
 import { PastFamilyHeader } from './family-psych-header'
@@ -27,6 +28,7 @@ const FamilyPsychHxWidget = ({
 }: FamilyPsychHxWidgetProps) => {
   const form = useFamilyPsychHxWidgetForm(initialValue)
   const { watch } = form
+  const { isQuickNoteView } = useQuickNoteUpdate()
 
   const defaultInitialValues = {
     ...getInitialValues(),
@@ -59,7 +61,10 @@ const FamilyPsychHxWidget = ({
               shouldCheckPermission
             />
             {!isHistoryHeader && (
-              <WidgetSaveButton shouldCheckPermission variant="filled" />
+              <WidgetSaveButton
+                shouldCheckPermission
+                variant={isQuickNoteView ? 'outline' : 'filled'}
+              />
             )}
           </>
         }

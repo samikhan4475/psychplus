@@ -1,7 +1,10 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { WidgetSaveButton } from '@/components'
+import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
 
 const MseHeader = () => {
+  const { isQuickNoteView } = useQuickNoteUpdate()
+
   return (
     <Flex
       justify="between"
@@ -12,7 +15,10 @@ const MseHeader = () => {
         Mental Status Exam
       </Text>
       <Flex className="gap-x-2 text-[20px]" align="center">
-        <WidgetSaveButton variant="filled" shouldCheckPermission />
+        <WidgetSaveButton
+          variant={isQuickNoteView ? 'outline' : 'filled'}
+          shouldCheckPermission
+        />
       </Flex>
     </Flex>
   )
