@@ -162,6 +162,11 @@ const AddPatientForm = ({
     }
     if (!resData?.accessToken) return setIsLoading(false)
 
+    const homeAddress = form
+      .getValues()
+      ?.contactInfo?.addresses?.find((address) => address.type === 'Home')
+    const state = homeAddress?.state
+
     const sendPolicySMS = async (policy: Policy) => {
       const result = await sendPolicySmsAction(
         resData.accessToken,
@@ -189,7 +194,7 @@ const AddPatientForm = ({
       }
     }
     setIsLoading(false)
-    onPatientAddSuccess(resData)
+    onPatientAddSuccess(resData, state)
     newPatientRef.current = undefined
     toast.success('Text sent!')
     form.reset()
@@ -207,6 +212,11 @@ const AddPatientForm = ({
       resData = await createPatient(form.getValues())
     }
     if (!resData?.accessToken) return setIsLoading(false)
+
+    const homeAddress = form
+      .getValues()
+      ?.contactInfo?.addresses?.find((address) => address.type === 'Home')
+    const state = homeAddress?.state
 
     const sendPolicyEmail = async (policy: Policy) => {
       const result = await sendPolicyEmailAction(
@@ -235,7 +245,7 @@ const AddPatientForm = ({
       }
     }
     setIsLoading(false)
-    onPatientAddSuccess(resData)
+    onPatientAddSuccess(resData, state)
     newPatientRef.current = undefined
     toast.success('Email sent!')
     form.reset()
