@@ -58,7 +58,7 @@ const CopayAppoinmentSelect = ({
       <MultiSelectField
         options={options ?? []}
         menuClassName="w-[156px]"
-        defaultValues={form.watch('coPayApp')}
+        defaultValues={twoDecimal(amount ?? 0)=== '0.00' ? [] : form.watch('coPayApp')}
         onChange={handleChange}
         disabled={disabled}
       />

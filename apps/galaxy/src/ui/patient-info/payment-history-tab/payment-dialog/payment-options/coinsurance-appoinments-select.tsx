@@ -60,7 +60,7 @@ const CoinsuranceAppoinmentSelect = ({
       <MultiSelectField
         options={options ?? []}
         menuClassName="w-[156px]"
-        defaultValues={form.watch('coInsApp') as string[]}
+        defaultValues={twoDecimal(amount ?? 0)=== '0.00' ? [] : form.watch('coInsApp') as string[]}
         onChange={handleChange}
         disabled={disabled}
       />
