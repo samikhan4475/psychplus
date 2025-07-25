@@ -62,6 +62,7 @@ const useStore = create<Store>((set, get) => ({
       return set({
         error: result.error,
         loading: false,
+        formValues,
       })
     }
     set({
@@ -71,6 +72,7 @@ const useStore = create<Store>((set, get) => ({
         ? { [page]: result.data }
         : { ...get().pageCache, [page]: result.data },
       page,
+      formValues,
     })
   },
   jumpToPage: (page: number) => {

@@ -247,11 +247,7 @@ const columns = (
     },
   ]
 }
-const defaultPayload = {
-  isIncludeClaimValidation: true,
-  isIncludePatientInsurancePlan: false,
-  isIncludePatientInsurancePolicy: true,
-}
+
 const SubmissionTable = () => {
   const { data, loading, sort, sortData, search, setSelectedRows } = useStore(
     (state) => ({
@@ -269,11 +265,11 @@ const SubmissionTable = () => {
   useEffect(() => {
     if (currentTab !== RevenueCycleTab.Submission) return
     setSelectedRows([])
-    search(defaultPayload)
+    search({}, 1, true)
   }, [currentTab])
   if (loading) {
     return (
-      <Flex className='flex-1' align="center" justify="center">
+      <Flex className="flex-1" align="center" justify="center">
         <LoadingPlaceholder />
       </Flex>
     )

@@ -15,6 +15,7 @@ const defaultPayLoad = {
   isIncludePatientInsurancePolicy: true,
   isIncludeClaimValidation: true,
   insurancePolicyPriority: InsurancePolicyPriority.Primary,
+  isIncludePatientInsurancePlan: false,
 }
 
 const getSubmissionListAction = async ({

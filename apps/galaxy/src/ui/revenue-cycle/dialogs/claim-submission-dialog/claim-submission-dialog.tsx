@@ -33,12 +33,14 @@ const ClaimSubmissionDialog = ({
     filteredInsurancePolicyPriority,
     search,
     setSelectedRows,
+    formValues,
   ] = useStore((state) => [
     state.selectedTab,
     state.selectedRows,
     state.filteredInsurancePolicyPriority,
     state.search,
     state.setSelectedRows,
+    state.formValues,
   ])
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -117,7 +119,7 @@ const ClaimSubmissionDialog = ({
 
   const handleOpenDialog = (modalState: boolean) => {
     if (!modalState) {
-      search({}, 1, true)
+      search(formValues, 1, true)
       setSelectedRows([])
       setIsOpenDialog(modalState)
       return
