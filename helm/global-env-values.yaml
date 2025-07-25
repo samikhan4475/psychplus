@@ -46,6 +46,12 @@
         name: app-config
         key: reactAppPatientUrl
 
+  - name: NEXT_PUBLIC_PATIENT_URL
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: reactAppPatientUrl
+
   # CONFIG: AUTH
 
   - name: AUTH_API_URL
