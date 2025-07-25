@@ -1,18 +1,13 @@
 import './base.css'
 import { type Metadata } from 'next'
-import dynamic from 'next/dynamic'
 import { Josefin_Sans } from 'next/font/google'
 import { Flex, Text, Theme } from '@radix-ui/themes'
 import { Toaster } from 'react-hot-toast'
-import {
-  getCodesets,
-  getLoggedInUser,
-  getStaffResource,
-  getUserPermissions,
-} from '@/api'
+import { getCodesets, getStaffResource, getUserPermissions } from '@/api'
 import { getFeatureFlags } from '@/api/get-feature-flags'
-import { getUserType } from '@/api/get-user-type'
 import { UserSessionRefresher } from '@/components'
+import { MiniPlayer } from '@/components/mini-player-client'
+import { WebSocketConnector } from '@/components/websocket-connector-client'
 import {
   CODESETS,
   GOOGLE_MAPS_API_KEY,
@@ -25,7 +20,6 @@ import { Header } from '@/ui/header'
 import { LockScreenProvider } from '@/ui/lock-screen-context'
 import { cn } from '@/utils'
 import { getAuthCookies } from '@/utils/auth'
-
 export const metadata: Metadata = {
   title: 'PsychPlus',
   description: 'PsychPlus',
@@ -37,23 +31,6 @@ const josefin = Josefin_Sans({
   display: 'swap',
   variable: '--font-josefin',
 })
-
-const DynamicMiniPlayer = dynamic(
-  () =>
-    import('@/ui/call/blocks/mini-player.tsx').then((mod) => mod.MiniPlayer),
-  {
-    ssr: false,
-  },
-)
-const WebSocketConnector = dynamic(
-  () =>
-    import('@/providers/websocket-provider.tsx').then(
-      (mod) => mod.WebSocketConnector,
-    ),
-  {
-    ssr: false,
-  },
-)
 
 const RootLayout = async ({ children }: React.PropsWithChildren) => {
   const auth = getAuthCookies()
@@ -83,7 +60,7 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
               <>
                 <WebSocketConnector />
                 <LockScreenProvider>{children}</LockScreenProvider>
-                <DynamicMiniPlayer />
+                <MiniPlayer />
               </>
             ) : (
               children
@@ -97,16 +74,14 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
   if (auth) {
     try {
       const CODESETLIST = Object.entries(CODESETS).map(([, value]) => value)
-      const [codesets, permissions, user, staffResource, featureFlags] =
+      const [codesets, permissions, staffResource, featureFlags] =
         await Promise.all([
           getCodesets(CODESETLIST),
           getUserPermissions(),
-          getLoggedInUser(),
           getStaffResource(),
           getFeatureFlags(),
         ])
 
-      const userType = await getUserType(`${user.id}`)
       const constants = {
         googleApiKey: GOOGLE_MAPS_API_KEY,
         stripeApiKey: STRIPE_PUBLISHABLE_KEY,
@@ -117,7 +92,14 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
       return (
         <StoreProvider
           staffResource={staffResource}
-          user={{ ...user, staffId: userType.resourceId }}
+          user={{
+            id: Number(staffResource?.userId),
+            username: staffResource?.contactInfo?.email,
+            legalName: staffResource?.legalName,
+            userRoleCode: `${staffResource?.userRoleCode}`,
+            contactInfo: staffResource?.contactInfo,
+            staffId: Number(staffResource?.id),
+          }}
           permissions={permissions}
           codesets={codesets}
           constants={constants}

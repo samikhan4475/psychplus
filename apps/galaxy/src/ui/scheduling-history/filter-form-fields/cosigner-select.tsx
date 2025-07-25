@@ -9,11 +9,12 @@ const CosignerSelect = () => {
   const [options, setOptions] = useState<Option[]>([])
   const [loading, setLoading] = useState(false)
   const fetchProvidersOptions = async () => {
+    setLoading(true)
     const result = await getProvidersOptionsAction({}, true)
-    setLoading(false)
     if (result.state === 'success') {
       setOptions(result.data)
     }
+    setLoading(false)
   }
   useEffect(() => {
     fetchProvidersOptions()

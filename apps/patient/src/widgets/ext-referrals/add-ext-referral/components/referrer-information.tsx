@@ -4,10 +4,25 @@ import React from 'react'
 import { Box, Flex, Grid, Text, TextFieldInput } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { AutoResizeInput, FormField, PhoneNumberInput } from '@/components-v2'
+import { ReferralType } from '../types'
+import { shouldShowFacilitySelect } from '../utils'
+import { FacilityInput } from './facility-input'
+import { FacilitySelect } from './facility-select'
 import { SchemaType } from './schema'
 
-const ReferrerInformation = () => {
+interface ReferrerInformationProps {
+  formType: ReferralType
+  referrerShortName?: string
+}
+
+const ReferrerInformation = ({
+  formType,
+  referrerShortName,
+}: ReferrerInformationProps) => {
   const form = useFormContext<SchemaType>()
+
+  const showFacility  = shouldShowFacilitySelect(formType, referrerShortName)
+
   return (
     <Flex direction="column" gap="4">
       <Text size="5" weight="medium" className="mt-5">
@@ -15,17 +30,8 @@ const ReferrerInformation = () => {
       </Text>
       <Box className="border-pp-gray-2 w-full border-b border-solid" />
       <Grid columns="3" className="max-xs:grid-cols-1" gap="3">
-        <FormField
-          containerClassName="flex-1"
-          name="referrerFacility"
-          label="Facility Name"
-        >
-          <TextFieldInput
-            {...form.register('referrerFacility')}
-            placeholder="Facility Name"
-            className="h-[38px]"
-          />
-        </FormField>
+        {showFacility  ? <FacilitySelect referrerShortName={referrerShortName} /> : <FacilityInput />}
+
         <FormField
           containerClassName="flex-1"
           name="referrerName"

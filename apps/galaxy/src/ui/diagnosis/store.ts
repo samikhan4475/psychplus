@@ -35,6 +35,7 @@ interface Store {
     patientId: string,
     setWidgetsData: (data: QuickNoteSectionItem[]) => void,
     showToast?: boolean,
+    appointmentId?:string
   ) => Promise<void>
   updateFavoritesDiagnosis: (data: FavouriteDiagnosisData[]) => void
 }
@@ -91,12 +92,13 @@ const useStore = create<Store>((set, get) => ({
     set({ workingDiagnosisData: data })
   },
 
-  saveWorkingDiagnosis: async (patientId, setWidgetsData, showToast = true) => {
+  saveWorkingDiagnosis: async (patientId, setWidgetsData, showToast = true,appointmentId) => {
     const codes = get()
       .workingDiagnosisData.map((item) => item.code)
       .filter((code) => code !== 'empty')
     const response = await saveWidgetAction({
       patientId,
+      ...(appointmentId && {appointmentId}),
       data: [
         {
           pid: Number(patientId),

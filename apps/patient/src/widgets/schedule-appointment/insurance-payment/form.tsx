@@ -867,4 +867,4 @@ const InsurancePaymentForm = ({
   )
 }
 
-export default InsurancePaymentForm
+export  {InsurancePaymentForm}

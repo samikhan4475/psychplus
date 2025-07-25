@@ -68,11 +68,11 @@ const CODESETS = {
   MembershipType: 'MembershipType',
   FixedPaymentType: 'FixedPaymentType',
   PaymentStatus: 'PaymentStatus',
-  
+
   // PsychPlusPublic Codesets
-  PracticePlanRule:'PsychPlusPublic.PracticePlanRule',
+  PracticePlanRule: 'PsychPlusPublic.PracticePlanRule',
   TMSCoilType: 'PsychPlusPublic.TMSCoilType',
-  BillingMedicalServiceType:'PsychPlusPublic.BillingMedicalServiceType',
+  BillingMedicalServiceType: 'PsychPlusPublic.BillingMedicalServiceType',
   TMSStimulationSite: 'PsychPlusPublic.TMSStimulationSite',
   ProviderAttributions: 'PsychPlusPublic.ProviderAttributions',
   ProcessedAsCode: 'ProcessedAsCode',
@@ -80,7 +80,7 @@ const CODESETS = {
   PaymentPostingStatus: 'PaymentPostingStatus',
   ServicesStatus: 'ServicesStatus',
   VisitType: 'PsychPlusPublic.VisitType',
-  FirstResponder: 'psychpluspublic.FirstResponderOccupation',
+  FirstResponder: 'PsychPlusPublic.FirstResponderOccupation',
   UsStates: 'PsychPlusPublic.UsStates',
   PlaceOfSerivce: 'PsychPlusPublic.PlaceOfService',
   GroupTherapyType: 'PsychPlusPublic.GroupTherapyType',

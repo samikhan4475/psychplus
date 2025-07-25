@@ -14,14 +14,14 @@ interface User {
 
 interface UserResponse {
   id: number
-  metadata: Metadata
+  metadata?: Metadata
   username: string
   legalName: LegalName
   userRoleCode: string
   contactInfo: ContactDetails
   staffId: number
-  patientId: number
-  userRoles: Role[]
+  patientId?: number
+  userRoles?: Role[]
 }
 
 interface UserType {

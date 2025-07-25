@@ -1,5 +1,6 @@
-import { RxView } from "@/ui/rx"
+import { RxView } from '@/ui/rx'
 
+export const dynamic = 'force-dynamic'
 
 const RxPage = () => <RxView />
 

@@ -28,6 +28,7 @@ const CODESETS = {
   ServicesOffered: 'ServicesOffered',
   SpecialistType: 'SpecialistType',
   AppointmentType: 'AppointmentType',
+  ReferrerFacility:'ReferrerFacility'
 }
 
 export {

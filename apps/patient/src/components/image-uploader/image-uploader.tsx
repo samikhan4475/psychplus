@@ -2,18 +2,21 @@
 
 import React, { ChangeEvent, useRef, useState } from 'react'
 import Image from 'next/image'
+import { cn } from '@psychplus-v2/utils'
 import { Flex, Text } from '@radix-ui/themes'
 
 interface ImageUploaderProps {
   onFileChange?: (file: File | undefined) => void
   displayText?: string
   defaultImage?: string | null
+  maxHeightClassName?: string
 }
 
 const ImageUploader = ({
   onFileChange,
   displayText = 'Upload Image',
   defaultImage = null,
+  maxHeightClassName,
 }: ImageUploaderProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [previewImage, setPreviewImage] = useState<string | null>(defaultImage)
@@ -35,7 +38,10 @@ const ImageUploader = ({
   return (
     <button
       type="button"
-      className="flex h-auto w-full md:w-2/4 max-w-[312px] cursor-pointer justify-center rounded-[20px] border border-dashed border-[#bebebe]"
+      className={cn(
+        'flex aspect-square h-auto w-full max-w-[312px] cursor-pointer justify-center rounded-[20px] border border-dashed border-[#bebebe] md:w-2/4',
+        maxHeightClassName ?? 'max-h-[156px]',
+      )}
       onClick={handleFileInputClick}
       onKeyDown={(e) => e.stopPropagation()}
     >

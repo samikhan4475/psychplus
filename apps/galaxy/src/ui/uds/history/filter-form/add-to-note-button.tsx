@@ -57,6 +57,7 @@ const AddButton = () => {
 
     const result = await saveWidgetAction({
       patientId: patientId.toString(),
+      appointmentId:appointmentId?.toString(),
       data: payload,
     })
 

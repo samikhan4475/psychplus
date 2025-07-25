@@ -2,6 +2,7 @@
 
 import * as api from '@/api/api.client'
 import { GET_STAFF_ENDPOINT } from '@/api/endpoints'
+import { DEFAULT_STAFF_PAYLOAD_PARAMS } from '@/constants'
 import { SelectOptionType, StaffResource } from '@/types'
 import { transformInStaffOptions } from '../transform'
 
@@ -10,7 +11,7 @@ const getStaffOptionsAction = async (
 ): Promise<api.ActionResult<SelectOptionType[]>> => {
   const result = await api.POST<StaffResource[]>(GET_STAFF_ENDPOINT, {
     roleCodes,
-    isResultsForNameList: true,
+    ...DEFAULT_STAFF_PAYLOAD_PARAMS,
   })
 
   if (result.state === 'error') {

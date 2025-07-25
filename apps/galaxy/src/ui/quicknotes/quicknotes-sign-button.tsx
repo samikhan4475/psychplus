@@ -250,15 +250,14 @@ const QuickNotesSignButton = ({
     return false
   }
 
-  const saveFollowupDeniedStatus = () => {
-    updateFollowupDenialStatus({
+  const saveFollowupDeniedStatus = async (): Promise<void> => {
+    await updateFollowupDenialStatus({
       appointmentId: Number(appointmentId),
       shouldShowToast: false,
     })
   }
-
-  const handleAutoFollowupGeneration = () => {
-    saveFollowupDeniedStatus()
+  const handleAutoFollowupGeneration = async (): Promise<void> => {
+    await saveFollowupDeniedStatus()
   }
 
   const signNoteHandler = async () => {
@@ -279,13 +278,14 @@ const QuickNotesSignButton = ({
       })
       return
     }
-    handleAutoFollowupGeneration()
+
+    await handleAutoFollowupGeneration()
 
     if (checkIfPmpReviewRequired(medicationData ?? [])) {
       toast.error(SIGN_PMP_WARNING)
       return
     }
-    saveIsPmpReviewedForMedication(patientId)
+    saveIsPmpReviewedForMedication(patientId, appointmentId)
 
     const diagnosisError = validateDiagnosis({
       workingDiagnosisData: isHospitalDischargeView

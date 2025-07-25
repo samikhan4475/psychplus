@@ -1,72 +1,74 @@
-import { Codeset, CodesetCache, MetadataCodeset } from '@/types'
+import {
+  AuthorityCodesetResponse,
+  Codeset,
+  CodesetCache,
+  MetadataCodeset,
+} from '@/types'
 import * as api from './api'
 import {
   METADATA_CODESET_ALL_ENDPOINT,
   STANDARD_CODESET_ENDPOINT,
+  STANDARD_CODESET_ENDPOINT_NEW,
 } from './endpoints'
 
 const CODESET_CACHE_SECONDS = 60 * 60
 
-const getCodesets = async (names: string[]): Promise<CodesetCache> => {
-  const standardCodesetNames: string[] = []
-  names.forEach((name) => {
-    if (name.includes('.')) {
-      standardCodesetNames.push(name)
-    }
-  })
+export async function getCodesets(names: string[]): Promise<CodesetCache> {
+  const codesetCache: CodesetCache = {}
+  // ② Build all your standard‑codeset calls
+  const standardCodesetPromises: Array<
+    Promise<api.NetworkResult<Codeset | AuthorityCodesetResponse>>
+  > = []
 
-  const standardCodesetPromises = Promise.all(
-    standardCodesetNames.map((name) => {
-      const [assigningAuthority, codeSystemName, groupingCodeStartsWith] =
-        name.split('.')
+  const batchMap: Record<string, Set<string>> = {}
 
-      return api.GET<Codeset>(
-        STANDARD_CODESET_ENDPOINT(
-          assigningAuthority,
-          codeSystemName,
-          groupingCodeStartsWith,
+  for (const name of names) {
+    if (!name.includes('.')) continue
+    const [authority, system, grouping] = name.split('.')
+
+    if (grouping) {
+      standardCodesetPromises.push(
+        api.GET<Codeset>(
+          STANDARD_CODESET_ENDPOINT(authority, system, grouping),
+          { next: { revalidate: CODESET_CACHE_SECONDS } },
         ),
-        {
-          next: { revalidate: CODESET_CACHE_SECONDS },
-        },
       )
-    }),
-  )
+    } else {
+      if (!batchMap[authority]) batchMap[authority] = new Set()
+      batchMap[authority].add(system)
+    }
+  }
+
+  for (const [authority, systems] of Object.entries(batchMap)) {
+    const params = new URLSearchParams({ isIncludeAttributes: 'true' })
+    systems.forEach((cs) => params.append('codeSystems', cs))
+    standardCodesetPromises.push(
+      api.GET<AuthorityCodesetResponse>(
+        STANDARD_CODESET_ENDPOINT_NEW(authority, params.toString()),
+        { next: { revalidate: CODESET_CACHE_SECONDS } },
+      ),
+    )
+  }
 
   const [standardCodesetResults, metadataCodesetResults] = await Promise.all([
-    standardCodesetPromises,
+    Promise.all(standardCodesetPromises),
     api.GET<MetadataCodeset[]>(METADATA_CODESET_ALL_ENDPOINT, {
       next: { revalidate: CODESET_CACHE_SECONDS },
     }),
   ])
 
-  const codesetCache: CodesetCache = {}
+  for (const res of standardCodesetResults) {
+    if (res.state === 'error') throw new Error(res.error)
+    const payload = res.data ?? {}
 
-  standardCodesetResults.forEach((result) => {
-    if (result.state === 'error') throw new Error(result.error)
-
-    const {
-      data: { codeSystemName, displayName, codes },
-    } = result
-
-    const transformed = codes.map(
-      ({ code, displayName, groupingCode, codeAttributes }) => ({
-        value: code,
-        display: displayName,
-        groupingCode,
-        attributes: codeAttributes?.map(({ name, content }) => ({
-          name,
-          value: content,
-        })),
-      }),
-    )
-
-    const existing = codesetCache[codeSystemName]
-
-    codesetCache[codeSystemName] = existing
-      ? { ...existing, codes: [...existing.codes, ...transformed] }
-      : { name: codeSystemName, display: displayName, codes: transformed }
-  })
+    if ('codesets' in payload) {
+      for (const cs of payload.codesets) {
+        mergeCodeset(codesetCache, cs)
+      }
+    } else {
+      mergeCodeset(codesetCache, payload)
+    }
+  }
 
   if (metadataCodesetResults.state === 'error') {
     throw new Error(metadataCodesetResults.error)
@@ -90,4 +92,33 @@ const getCodesets = async (names: string[]): Promise<CodesetCache> => {
   return codesetCache
 }
 
-export { getCodesets }
+// — helper to merge one Codeset into the cache
+function mergeCodeset(cache: CodesetCache, cs: Codeset) {
+  const { codeSystemName, displayName, codes } = cs
+  const transformed = codes?.map(
+    ({
+      code,
+      displayName,
+      groupingCode,
+      codeAttributes,
+      attributes: rawAttributes,
+    }) => {
+      const sourceAttrs = codeAttributes ?? rawAttributes ?? []
+      return {
+        value: code,
+        display: displayName,
+        groupingCode,
+        attributes: sourceAttrs?.map(({ name, content }) => ({
+          name,
+          value: content,
+        })),
+      }
+    },
+  )
+
+  const existing = cache[codeSystemName]
+
+  cache[codeSystemName] = existing
+    ? { ...existing, codes: [...existing.codes, ...transformed] }
+    : { name: codeSystemName, display: displayName, codes: transformed }
+}

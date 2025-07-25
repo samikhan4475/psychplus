@@ -64,7 +64,7 @@ const WidgetFormContainer = ({
   const params = useSearchParams()
   const visitSequence = params.get('visitSequence')
   const visitType = params.get('visitType')
-
+  const appointmentId = params.get('id') ?? undefined
   const { isDirty } = form.formState
 
   const handleActualNoteUpdate = useDebouncedCallback(async (values) => {
@@ -89,7 +89,7 @@ const WidgetFormContainer = ({
         setLoading(true)
         form.clearErrors()
         const values = await getData(form.getValues(), true, updateCptCodes)
-        const payload = { patientId, data: values, tags }
+        const payload = { patientId, data: values, tags,...(appointmentId && {appointmentId}) }
         const result = await (isQuickNoteView
           ? saveWidgetClientAction
           : saveWidgetAction)(payload)

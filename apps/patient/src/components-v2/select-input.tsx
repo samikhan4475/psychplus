@@ -14,6 +14,7 @@ interface SelectInputProps<T> extends React.ComponentProps<typeof Select.Root> {
   className?: string
   tooltip?: boolean
   variant?: 'classic' | 'surface' | 'soft' | 'ghost'
+  loading?: boolean
 }
 
 const SelectInput = <T extends string>({
@@ -26,6 +27,7 @@ const SelectInput = <T extends string>({
   onValueChange,
   tooltip,
   variant,
+  loading,
   ...selectProps
 }: SelectInputProps<T>) => {
   const form = useFormContext()
@@ -67,10 +69,23 @@ const SelectInput = <T extends string>({
                 //@ts-ignore
                 placeholder={placeholder}
                 title={tooltip && selectedLabel ? selectedLabel : ''}
-                className={cn('h-[var(--chip-height)]', buttonClassName)}
+                className={cn('h-[var(--chip-height)]', buttonClassName, {
+                  'loading hide-default-select-icon relative overflow-x-hidden':
+                    loading,
+                })}
               />
               <Select.Content position="popper" align="center" highContrast>
-                {items}
+                {options?.length > 0 ? (
+                  items
+                ) : (
+                  <Select.Item
+                    value="no-data"
+                    disabled
+                    className="bg-white h-6 justify-center p-0 text-center text-1"
+                  >
+                    No data
+                  </Select.Item>
+                )}
               </Select.Content>
             </Select.Root>
           )

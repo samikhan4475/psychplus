@@ -542,11 +542,14 @@ const PersonalDetailsForm = () => {
           />
         </Flex>
 
-        <Flex align="center" className="flex-col gap-5 sm:gap-6 md:flex-row">
+        <Flex
+          align="center"
+          className="gap-5 first-letter:flex-col sm:gap-6 md:flex-row"
+        >
           <FormSubmitButton
             data-testid="signup-submit-button"
             radius="full"
-            className="h-16 w-40 bg-[#151B4A] text-[#FFFFFF] md:h-8 md:w-16"
+            className="md:min-w-20 min-w-40  h-12 bg-[#151B4A] text-[#FFFFFF] md:h-9"
           >
             <Text className="text-5 font-bold md:text-2">
               {isLoading ? 'Loading...' : 'Next'}

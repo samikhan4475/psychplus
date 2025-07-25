@@ -23,6 +23,7 @@ interface StaffResource {
   practiceIds?: string[]
   userRoles?: Role[]
   npi?: string
+  userRoleCode?:string
 }
 
 enum STAFF_COMMENT_STATUS {

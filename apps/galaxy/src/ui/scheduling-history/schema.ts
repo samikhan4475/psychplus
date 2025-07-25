@@ -21,6 +21,7 @@ export const schema = z.object({
   serviceId: z.string().optional(),
   providerType: z.string().optional(),
   providerStaffId: z.string().optional(),
+  providerUserId: z.string().optional(),
   cosignerUserId: z.string().optional(),
   dischargeHospitalName: z.string().trim().optional(),
   dischargeHospitalDate: dateValidation.optional(),

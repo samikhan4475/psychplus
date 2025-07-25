@@ -9,7 +9,11 @@ import type {
   PhoneNumber,
   SchemaType,
 } from '../add-ext-referral/components/schema'
-import { PatientExtReferralParams, PhoneNumberType } from './types'
+import {
+  PatientExtReferralParams,
+  PhoneNumberType,
+  ReferralType,
+} from './types'
 
 const isEmptyPhoneNumber = (phone: PhoneNumber): boolean =>
   Object.entries(phone).every(([key, value]) => key === 'type' || value === '')
@@ -172,5 +176,15 @@ function withRetry<T>(
 
   return attempt(retries)
 }
-
-export { addExtReferralInitialValues, transformOut, withRetry }
+function shouldShowFacilitySelect(
+  formType: ReferralType,
+  referrerShortName?: string,
+): boolean {
+  return formType === ReferralType.Facility && Boolean(referrerShortName)
+}
+export {
+  addExtReferralInitialValues,
+  transformOut,
+  withRetry,
+  shouldShowFacilitySelect,
+}

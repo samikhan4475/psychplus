@@ -39,7 +39,7 @@ const getStaffListAction = async ({
   if (sort) {
     url.searchParams.append('orderBy', `${sort.column} ${sort.direction}`)
   }
-
+    url.searchParams.append('includeInactive', 'true')
   const response = await api.POST<Staff[]>(`${url}`, {
     ...defaultPayload,
     ...payload,

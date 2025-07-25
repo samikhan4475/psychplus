@@ -99,6 +99,7 @@ const useStore = create<Store>((set, get) => ({
       .filter((code) => code !== 'empty')
     const response = await saveWidgetAction({
       patientId,
+      appointmentId:appId,
       data: [
         {
           pid: Number(patientId),

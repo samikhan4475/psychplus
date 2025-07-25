@@ -9,21 +9,30 @@ interface SaveWidgetActionParams {
   patientId: string
   data: QuickNoteSectionItem[]
   tags?: string[]
+  appointmentId?: string
 }
 
 const saveWidgetAction = async ({
   patientId,
   data,
   tags,
+  appointmentId,
 }: SaveWidgetActionParams): Promise<api.ActionResult<void>> => {
   const cookieStore = await cookies()
 
   if (cookieStore.get('staff-id')) cookieStore.delete('staff-id')
 
-  const response = await api.PUT(
-    api.NOTE_DETAILS_SAVE_ENDPOINT(patientId),
-    data,
-  )
+  const url = appointmentId
+    ? api.NOTE_DETAILS_SAVE_WITH_APPOINTMENT_ID_ENDPOINT(
+        patientId,
+        appointmentId,
+      )
+    : api.NOTE_DETAILS_SAVE_ENDPOINT(patientId)
+
+ const response =
+    appointmentId
+      ? await api.POST<void>(url, data)
+      : await api.PUT<void>(url, data)
 
   if (response.state === 'error') {
     return {

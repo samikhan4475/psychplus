@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Box, Flex, Heading } from '@radix-ui/themes'
+import { Flex, Heading } from '@radix-ui/themes'
 import { TreatmentBillingAlert } from '@/components'
 import { StaffComment } from '@/types'
 import { AutomaticBookingToggle } from './automatic-booking-toggle'

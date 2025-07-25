@@ -64,6 +64,7 @@ const saveWidgets = async (
   const payload = {
     patientId: String(appointment.patientId),
     data: sections,
+    appointmentId: String(appointment.id),
   }
   try {
     const [widgetsResult, _] = await Promise.all([

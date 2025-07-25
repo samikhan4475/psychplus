@@ -1,0 +1,67 @@
+'use client'
+
+import * as React from 'react'
+import { useEffect, useState } from 'react'
+import { Container, Flex } from '@radix-ui/themes'
+import { Elements } from '@stripe/react-stripe-js'
+import { loadStripe } from '@stripe/stripe-js'
+import { InsurancePayers } from '@psychplus/appointments'
+import { fetchInsurancePayers } from '@psychplus/appointments/api.client'
+import { SCHEDULE_APPOINTMENT_LIST } from '@psychplus/widgets'
+import { usePublishSize } from '@psychplus/widgets/hooks'
+import { psychPlusBlueColor } from '@/components/colors'
+import { InsurancePaymentForm } from './form'
+
+interface Props {
+  stripeApiKey: string
+}
+const InsurancePaymentClient = ({ stripeApiKey }: Props) => {
+  const stripePromise = React.useMemo(
+    () => loadStripe(stripeApiKey),
+    [stripeApiKey],
+  )
+
+  const ref = React.useRef<HTMLDivElement>(null)
+  usePublishSize(SCHEDULE_APPOINTMENT_LIST, ref)
+
+  const [insurancePayers, setInsurancePayers] = useState<InsurancePayers>([])
+
+  useEffect(() => {
+    fetchInsurancePayers().then((insurancePayers) =>
+      setInsurancePayers(insurancePayers),
+    )
+  }, [])
+
+  return (
+    <Flex direction="column" className="w-full" ref={ref}>
+      <Container
+        className="px-5 sm:px-[25%]"
+        style={{
+          color: psychPlusBlueColor,
+        }}
+      >
+        <Elements stripe={stripePromise}>
+          <InsurancePaymentForm
+            insuranceOptions={insuranceOptions}
+            insurancePayers={insurancePayers}
+          />
+        </Elements>
+      </Container>
+    </Flex>
+  )
+}
+
+const insuranceOptions = [
+  {
+    key: 'yes',
+    label: 'Yes',
+    value: true,
+  },
+  {
+    key: 'no',
+    label: 'Self Pay',
+    value: false,
+  },
+]
+
+export { InsurancePaymentClient }

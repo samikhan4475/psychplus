@@ -8,4 +8,14 @@ enum StaffCredentials {
   RN = 'RN',
 }
 
-export { STAFF_ROLE_CODE_PRESCRIBER, StaffCredentials }
+const DEFAULT_STAFF_PAYLOAD_PARAMS = {
+  isResultsForNameList: true,
+  isIncludeTestProviders: false,
+  isIncludePreferredTimezone: false,
+  isIncludeBiography: false,
+  isIncludeAttributions: false,
+  isIncludeOrganizations: false,
+  isIncludePractices: false,
+  isIncludeMetadataResourceChangeControl: false,
+}
+export { STAFF_ROLE_CODE_PRESCRIBER, StaffCredentials,DEFAULT_STAFF_PAYLOAD_PARAMS }

@@ -9,6 +9,7 @@ interface Code {
   displayName: string
   codeAttributes?: CodeAttribute[]
   groupingCode?: string
+  attributes?:CodeAttribute[]
 }
 
 interface CodeAttribute {
@@ -60,6 +61,12 @@ interface POSCodeSets {
 
 type CodesetCache = Record<string, SharedCodeset>
 
+interface AuthorityCodesetResponse {
+  namespace: string             
+  displayName: string           
+  codesets: Codeset[]           
+}
+
 export type {
   Codeset,
   Code,
@@ -69,4 +76,5 @@ export type {
   CodesetCache,
   POSCodeSets,
   SharedCodeAttribute,
+  AuthorityCodesetResponse
 }

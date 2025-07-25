@@ -1,6 +1,6 @@
 'use client'
 
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { Button } from '@radix-ui/themes'
 import { SaveIcon } from 'lucide-react'
 import { useStore } from '@/ui/diagnosis/store'
@@ -9,10 +9,12 @@ import { useStore as quicknoteStore } from '@/ui/quicknotes/store'
 
 const DiagnosisSaveButton = () => {
   const patientId = useParams().id as string
+    const searchParams = useSearchParams()
+   const appointmentId = searchParams.get('id') ?? undefined
   const { saveWorkingDiagnosis } = useStore()
   const setWidgetsData = quicknoteStore((state) => state.setWidgetsData)
   const handleSaveDiagnosis = () => {
-    saveWorkingDiagnosis(patientId, setWidgetsData)
+    saveWorkingDiagnosis(patientId, setWidgetsData,true,appointmentId)
   }
   const { isQuickNoteView } = useQuickNoteUpdate()
 

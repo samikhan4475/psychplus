@@ -14,7 +14,7 @@ import {
   AddPatientExternalReferralClient,
   LinkExternalReferralsAttachmentsClientAction,
 } from '../client-actions'
-import { ExternalReferralDocument, ReferralSuccess } from '../types'
+import { ExternalReferralDocument, ReferralSuccess, ReferralType } from '../types'
 import { addExtReferralInitialValues, transformOut, withRetry } from '../utils'
 import { AppointmentDetail } from './appointment-detail'
 import { PatientInformation } from './patient-information'
@@ -25,10 +25,12 @@ import { SubmitButtonBlock } from './submit-button-block'
 interface AddExtReferralFormProps {
   scrollToTop?: () => void
   googleAPIkey: string
+  formType:ReferralType
 }
 const AddExtReferralForm = ({
   scrollToTop,
   googleAPIkey,
+  formType
 }: AddExtReferralFormProps) => {
   const { toast } = useToast()
   const [fileResetCounter, setFileResetCounter] = useState(0)
@@ -185,7 +187,7 @@ const AddExtReferralForm = ({
           fileResetCounter={fileResetCounter}
           googleAPIkey={googleAPIkey}
         />
-        <ReferrerInformation />
+        <ReferrerInformation referrerShortName={shortName} formType={formType} />
         <SubmitButtonBlock />
       </Flex>
     </FormContainer>

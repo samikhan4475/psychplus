@@ -23,7 +23,7 @@ interface ServerSearchSelectProps<T> {
   fieldName: string
 }
 
-const ServerSearchSelect = <T extends ServerSearchSelectID>({
+const ServerSearchSelect  = <T extends ServerSearchSelectID>({
   initialValue,
   placeholder = 'Search',
   disabled = false,

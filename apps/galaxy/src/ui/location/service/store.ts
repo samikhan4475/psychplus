@@ -91,7 +91,7 @@ const useStore = create<Store>()((set, get) => ({
 
   fetchCosigners: async () => {
     set({ cosignersLoading: true })
-    const response = await getCosignersAction()
+    const response = await getCosignersAction({includeInactive:true})
     if (response.state === 'error') {
       set({ cosignersLoading: false })
 

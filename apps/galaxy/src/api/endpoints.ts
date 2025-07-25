@@ -90,7 +90,7 @@ const METADATA_CODESET_ENDPOINT = (name: string) =>
   `${API_URL}/api/metadata/codesets/${name}`
 const METADATA_CODESET_ALL_ENDPOINT = `${API_URL}/api/metadata/codesets`
 const GET_PROVIDER_SETTINGS_ENDPOINT = `${API_URL}/api/settings/actions/search`
-const GET_STAFF_ENDPOINT = `${API_URL}/api/staff/search?includeInactive=true`
+const GET_STAFF_ENDPOINT = `${API_URL}/api/staff/search`
 const GET_PREFERRED_PARTNER_LIST_ENDPOINT = `${API_URL}/api/preferredpartners/actions/search`
 const GET_STAFF_HISTORY_ENDPOINT = (staffId: string) =>
   `${API_URL}/api/staff/${staffId}/history/actions/search`
@@ -1129,6 +1129,20 @@ const GET_EXTERNAL_REFERRAL_ATTACHMENT = (
   externalReferralAttachmenttId: string,
 ) =>
   `${API_URL}/api/externalreferrals/${externalReferralId}/attachments/${externalReferralAttachmenttId}/actions/download`
+
+const NOTE_DETAILS_SAVE_WITH_APPOINTMENT_ID_ENDPOINT = (
+  id: string,
+  appId: string,
+) => `${API_URL}/api/patients/${id}/appointments/${appId}/notedetails`
+
+const STANDARD_CODESET_ENDPOINT_NEW = (
+  assigningAuthority: string,
+  queryString?: string,
+): string => {
+  const base = `${API_URL}/api/codeset/authorities/${assigningAuthority}/codesets`
+  return queryString ? `${base}?${queryString}` : base
+}
+
 export {
   PATIENT_MEDICATION_SIGN_IN,
   GET_PATIENT_MEDICATION_ENDPOINT,
@@ -1627,4 +1641,6 @@ export {
   GET_MATCHING_REFERRAL_PATIENTS_ENDPOINT,
   ASSOCIATE_MATCHING_REFERRAL_PATIENTS_ENDPOINT,
   GET_EXTERNAL_REFERRAL_ATTACHMENT,
+  NOTE_DETAILS_SAVE_WITH_APPOINTMENT_ID_ENDPOINT,
+  STANDARD_CODESET_ENDPOINT_NEW,
 }

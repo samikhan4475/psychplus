@@ -1,6 +1,7 @@
 'use server'
 
 import * as api from '@/api'
+import { DEFAULT_STAFF_PAYLOAD_PARAMS } from '@/constants'
 import { SelectOptionType, StaffResource } from '@/types'
 import { getPatientFullName } from '@/utils'
 
@@ -8,7 +9,7 @@ const getProviderOptionsAction = async (): Promise<
   api.ActionResult<SelectOptionType[]>
 > => {
   const result = await api.POST<StaffResource[]>(api.GET_STAFF_ENDPOINT, {
-    isResultsForNameList: true,
+   ...DEFAULT_STAFF_PAYLOAD_PARAMS,
   })
 
   if (result.state === 'error') {

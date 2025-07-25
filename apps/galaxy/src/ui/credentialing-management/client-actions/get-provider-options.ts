@@ -2,7 +2,7 @@
 
 import * as api from '@/api/api.client'
 import { GET_STAFF_ENDPOINT } from '@/api/endpoints'
-import { STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
+import { DEFAULT_STAFF_PAYLOAD_PARAMS, STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
 import { StaffResource } from '@/types'
 import { sanitizeFormData } from '@/utils'
 
@@ -11,6 +11,7 @@ const getProvidersOptionsAction = async (): Promise<
 > => {
   const body = {
     roleCodes: [STAFF_ROLE_CODE_PRESCRIBER],
+     ...DEFAULT_STAFF_PAYLOAD_PARAMS
   }
   const response = await api.POST<StaffResource[]>(
     GET_STAFF_ENDPOINT,

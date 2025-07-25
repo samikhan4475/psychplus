@@ -35,7 +35,7 @@ const QuickNotesView = async ({
   ])
 
   if (appointmentResult.state === 'error') {
-    return notFound()
+       return <Text>{appointmentResult.error}</Text>
   }
 
   const widgets =
