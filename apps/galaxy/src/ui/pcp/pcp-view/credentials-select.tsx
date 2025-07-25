@@ -30,6 +30,7 @@ const CredentialSelect = () => {
           field="credentials"
           options={PsychiatryServicesOffered || []}
           placeholder="Select"
+          menuClassName="w-[145px]"
         />
         <FormFieldError name="credentials" />
       </FormFieldContainer>
