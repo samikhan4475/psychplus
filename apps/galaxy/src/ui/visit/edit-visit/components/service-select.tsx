@@ -10,7 +10,8 @@ import {
   SelectInput,
 } from '@/components'
 import { CODESETS } from '@/constants'
-import { useCodesetCodes } from '@/hooks'
+import { getCodeAttributeBoolean, useCodesetCodes } from '@/hooks'
+import { SharedCode } from '@/types'
 import { getLocationServices } from '../../client-actions'
 import { SchemaType } from '../schema'
 import { useEditVisitStore } from '../store'
@@ -26,10 +27,8 @@ const ServiceSelect = () => {
     name: ['location', 'isServiceTimeDependent'],
   })
 
-  const mappedServices: Record<string, string> = useMemo(() => {
-    return Object.fromEntries(
-      serviceCodes.map(({ value, display }) => [value, display]),
-    )
+  const mappedServices: Record<string, SharedCode> = useMemo(() => {
+    return Object.fromEntries(serviceCodes.map((code) => [code.value, code]))
   }, [serviceCodes])
 
   useEffect(() => {
@@ -41,19 +40,25 @@ const ServiceSelect = () => {
         toast.error(res.error || 'Failed to fetch services')
         return setServices([])
       }
-      setServices(res.data)
+      const activeServices = res.data.filter((service) => {
+        const code = mappedServices[service.serviceOffered]
+        return getCodeAttributeBoolean(code, 'IsActive')
+      })
+      setServices(activeServices)
     })
   }, [locationId])
+
+  const serviceOptions = services.map((v) => ({
+    value: v.id,
+    label: mappedServices[v.serviceOffered]?.display,
+  }))
 
   return (
     <FormFieldContainer className="flex-1">
       <FormFieldLabel required>Service</FormFieldLabel>
       <SelectInput
         field="service"
-        options={services.map((v) => ({
-          label: mappedServices[v.serviceOffered],
-          value: v.id,
-        }))}
+        options={serviceOptions}
         buttonClassName="h-6 w-full"
         onValueChange={(value) => {
           const selectedService = services.find((option) => option.id === value)
