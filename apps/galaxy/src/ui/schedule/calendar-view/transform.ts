@@ -13,7 +13,15 @@ import {
 
 const dateFields = ['startingDate', 'endingDate']
 
-const multiselectFields = ['stateIds', 'locationIds', 'serviceIds']
+const multiselectFields = [
+  'stateIds',
+  'locationIds',
+  'serviceIds',
+  'groupIds',
+  'unitIds',
+  'visitTypes',
+  'servicesOffered',
+]
 
 const transformSettingToFilterValues = (
   settingMap: Map<string, UserSetting>,

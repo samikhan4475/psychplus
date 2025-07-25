@@ -22,7 +22,7 @@ const getLocationServicesAction = async (
   }
 
   const transformedData = response.data.map((data) => ({
-    value: data.serviceOffered,
+    value: data.id,
     label: data.serviceOffered,
   }))
 
