@@ -16,7 +16,7 @@ enum QueryByNextDays {
 }
 
 enum VisitTypes {
-  ExposureResponseTherapy = 'Exposure Response Therapy',
+  ExposureResponseTherapy = 'ExposureResponseTherapy',
   SPRAVATO = 'Spravato',
 }
 

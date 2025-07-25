@@ -46,7 +46,7 @@ const SubmitExternalReferralButton = ({ referral }: BookButtonProps) => {
       highContrast
       onClick={onBook}
       disabled={
-        referral.visitType !== VisitTypes.ExposureResponseTherapy ||
+        referral.visitTypeCode !== VisitTypes.ExposureResponseTherapy ||
         !!referral.sentToNocdDate
       }
       loading={loading}
