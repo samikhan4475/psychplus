@@ -27,16 +27,14 @@ import {
 import { type Clinic } from '@psychplus/clinics'
 import { type Staff } from '@psychplus/staff'
 import { isMobile } from '@psychplus/utils/client'
-import {
-  convertToLocalISOString,
-} from '@psychplus/utils/time'
+import { APP_ENV, PATIENT_APP_URL } from '@psychplus/utils/constants'
+import { convertToLocalISOString } from '@psychplus/utils/time'
 import {
   ClinicWithSlots,
   SortFilterOptions,
   type Location,
   type StaffWithClinicsAndSlots,
 } from '../types'
-import { APP_ENV } from '@psychplus/utils/constants'
 
 function groupStaffWithClinicsAndSlots(
   appointmentAvailabilities: StaffAppointmentAvailabilities | [],
@@ -246,7 +244,7 @@ function organizeSlotsByDate(
   startingDate: string,
 ) {
   if (!slots?.length) return {}
-  
+
   const slotsByDate: Record<string, AppointmentSlot[] | undefined> = {}
   let hasSlots = false
 
@@ -329,10 +327,15 @@ const getCodsetValue = (codes: SharedCode[], display: string) => {
   return codes.find((_code) => _code.display === display)?.value
 }
 
-function getLoginRedirectUrl() {
-  return String(APP_ENV).toLocaleLowerCase() === 'production'
-    ? 'https://ui.psychplus.io/login'
-    : 'https://ui.staging.psychplus.dev/login'
+function getLoginRedirectUrl(): string {
+  const fallbackBaseUrl =
+    String(APP_ENV).toLowerCase() === 'production'
+      ? 'https://ui.psychplus.io'
+      : 'https://ui.staging.psychplus.dev'
+
+  const base = PATIENT_APP_URL || fallbackBaseUrl
+  console.log(PATIENT_APP_URL)
+  return `${base.replace(/\/$/, '')}/login`
 }
 
 const transformStaffWithClinicsAndSlots = ({
