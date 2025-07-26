@@ -5,16 +5,21 @@ import { Flex } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
 import { useStore as zustandUseStore } from 'zustand'
 import { PropsWithRow } from '@/components'
+import { useHasPermission } from '@/hooks'
 import { PatientReferral, SelectOptionType } from '@/types'
 import { getVisitTypesAction } from '@/ui/location/service/actions'
 import { updatePatientReferralAction } from '@/ui/referrals/actions'
 import { StatusSelect } from '@/ui/referrals/patient-referrals-widget/status-select'
+import { PermissionAlert } from '@/ui/schedule/shared'
+import { EDIT_VISIT_TYPE_STATUS } from '../constants'
 import { HxCellButton } from '../hx-cell-button'
 import { useStore } from '../store'
 
 const VisitTypeCell = ({
   row: { original: referral },
 }: PropsWithRow<PatientReferral>) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const hasPermission = useHasPermission('changeVisitTypeIntReferralTab')
   const store = useStore()
   const { data, setData } = zustandUseStore(store, (state) => ({
     setData: state.setData,
@@ -47,6 +52,10 @@ const VisitTypeCell = ({
   }, [referral.service])
 
   const updateReferralVisitType = async (value: string) => {
+    if (!hasPermission) {
+      setIsOpen(true)
+      return
+    }
     setSelectedValue(value)
     const result = await updatePatientReferralAction({
       ...referral,
@@ -71,6 +80,11 @@ const VisitTypeCell = ({
 
   return (
     <Flex gap="2" align="center" direction="row">
+      <PermissionAlert
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        message={EDIT_VISIT_TYPE_STATUS}
+      />
       <HxCellButton
         referral={referral}
         cellName="visitType"

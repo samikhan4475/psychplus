@@ -4,14 +4,19 @@ import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { useStore as zustandUseStore } from 'zustand'
 import { PropsWithRow } from '@/components'
+import { useHasPermission } from '@/hooks'
 import { PatientReferral } from '@/types'
 import { updatePatientReferralAction } from '@/ui/referrals/actions'
 import { StatusSelect } from '@/ui/referrals/patient-referrals-widget/status-select'
+import { PermissionAlert } from '@/ui/schedule/shared'
+import { EDIT_LOCATION_STATUS } from '../constants'
 import { useStore } from '../store'
 
 const OrderDetailLocationCell = ({
   row: { original: referral },
 }: PropsWithRow<PatientReferral>) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const hasPermission = useHasPermission('changeLocationIntReferralTab')
   const store = useStore()
   const { data, setData, locationsList } = zustandUseStore(store, (state) => ({
     locationsList: state.locationsList,
@@ -23,6 +28,10 @@ const OrderDetailLocationCell = ({
   )
 
   const updateReferralStatus = async (value: string) => {
+    if (!hasPermission) {
+      setIsOpen(true)
+      return
+    }
     setSelectedValue(value)
     const result = await updatePatientReferralAction({
       ...referral,
@@ -46,11 +55,18 @@ const OrderDetailLocationCell = ({
   }
 
   return (
-    <StatusSelect
-      value={selectedValue}
-      onValueChange={updateReferralStatus}
-      options={locationsList}
-    />
+    <>
+      <PermissionAlert
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        message={EDIT_LOCATION_STATUS}
+      />
+      <StatusSelect
+        value={selectedValue}
+        onValueChange={updateReferralStatus}
+        options={locationsList}
+      />
+    </>
   )
 }
 

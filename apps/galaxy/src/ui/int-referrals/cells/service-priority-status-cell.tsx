@@ -5,15 +5,19 @@ import toast from 'react-hot-toast'
 import { useStore as zustandUseStore } from 'zustand'
 import { PropsWithRow } from '@/components'
 import { CODESETS } from '@/constants'
-import { useCodesetOptions } from '@/hooks'
+import { useCodesetOptions, useHasPermission } from '@/hooks'
 import { PatientReferral } from '@/types'
 import { updatePatientReferralAction } from '@/ui/referrals/actions'
 import { StatusSelect } from '@/ui/referrals/patient-referrals-widget/status-select'
+import { PermissionAlert } from '@/ui/schedule/shared'
+import { EDIT_SERVICE_STATUS } from '../constants'
 import { useStore } from '../store'
 
 const ServicePriorityStatusCell = ({
   row: { original: referral },
 }: PropsWithRow<PatientReferral>) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const hasPermission = useHasPermission('changeServiceStatusIntReferralTab')
   const store = useStore()
   const { data, setData } = zustandUseStore(store, (state) => ({
     setData: state.setData,
@@ -26,6 +30,10 @@ const ServicePriorityStatusCell = ({
   const options = useCodesetOptions(CODESETS.ServicesStatus)
 
   const updateReferralServicePriorityStatus = async (value: string) => {
+    if (!hasPermission) {
+      setIsOpen(true)
+      return
+    }
     setSelectedValue(value)
     const result = await updatePatientReferralAction({
       ...referral,
@@ -49,11 +57,18 @@ const ServicePriorityStatusCell = ({
   }
 
   return (
-    <StatusSelect
-      value={selectedValue}
-      onValueChange={updateReferralServicePriorityStatus}
-      options={options}
-    />
+    <>
+      <PermissionAlert
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        message={EDIT_SERVICE_STATUS}
+      />
+      <StatusSelect
+        value={selectedValue}
+        onValueChange={updateReferralServicePriorityStatus}
+        options={options}
+      />
+    </>
   )
 }
 

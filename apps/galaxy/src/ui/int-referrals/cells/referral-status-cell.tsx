@@ -5,12 +5,14 @@ import toast from 'react-hot-toast'
 import { useStore as zustandUseStore } from 'zustand'
 import { PropsWithRow } from '@/components'
 import { CODESETS } from '@/constants'
-import { useCodesetOptions } from '@/hooks'
+import { useCodesetOptions, useHasPermission } from '@/hooks'
 import { PatientReferral } from '@/types'
-import { useStore } from '../store'
 import { updatePatientReferralAction } from '@/ui/referrals/actions'
 import { StatusSelect } from '@/ui/referrals/patient-referrals-widget/status-select'
 import { isReferralDeleted } from '@/ui/referrals/patient-referrals-widget/utils'
+import { PermissionAlert } from '@/ui/schedule/shared'
+import { EDIT_REFERRAL_STATUS } from '../constants'
+import { useStore } from '../store'
 
 interface Props extends PropsWithRow<PatientReferral> {
   disabled?: boolean
@@ -20,6 +22,8 @@ const ReferralStatusCell = ({
   disabled,
 }: Props) => {
   const store = useStore()
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const hasPermission = useHasPermission('changeReferralStatusIntReferralTab')
   const { data, setData } = zustandUseStore(store, (state) => ({
     setData: state.setData,
     data: state.data,
@@ -30,6 +34,10 @@ const ReferralStatusCell = ({
   const options = useCodesetOptions(CODESETS.ResourceStatus)
 
   const updateReferralStatus = async (value: string) => {
+    if (!hasPermission) {
+      setIsOpen(true)
+      return
+    }
     setSelectedValue(value)
     const result = await updatePatientReferralAction({
       ...referral,
@@ -53,17 +61,23 @@ const ReferralStatusCell = ({
   }
 
   return (
-    <StatusSelect
-      value={
-        isReferralDeleted(referral?.resourceStatus)
-          ? referral.resourceStatus
-          : selectedValue
-      }
-      onValueChange={updateReferralStatus}
-      options={options}
-      disabled={disabled || isReferralDeleted(referral?.resourceStatus)}
-      isOptionsDisabled
-    />
+    <>
+      <PermissionAlert
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        message={EDIT_REFERRAL_STATUS}
+      />
+      <StatusSelect
+        value={
+          isReferralDeleted(referral?.resourceStatus)
+            ? referral.resourceStatus
+            : selectedValue
+        }
+        onValueChange={updateReferralStatus}
+        options={options}
+        disabled={disabled || isReferralDeleted(referral?.resourceStatus)}
+      />
+    </>
   )
 }
 

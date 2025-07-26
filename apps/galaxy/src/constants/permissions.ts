@@ -252,6 +252,12 @@ const USER_PERMISSIONS = {
   addPaidAmountCoInsCopayCustomCharge: 'addPaidAmountCoInsCopayCustomCharge',
   changeAutoRebookingToggleScheduleHxTab:
     'changeAutoRebookingToggleScheduleHxTab',
+  changeVisitTypeIntReferralTab: 'changeVisitTypeIntReferralTab',
+  changeLocationIntReferralTab: 'changeLocationIntReferralTab',
+  changeReferralStatusIntReferralTab: 'changeReferralStatusIntReferralTab',
+  changeServiceStatusIntReferralTab: 'changeServiceStatusIntReferralTab',
+  clickBookButtonIntReferralTab: 'clickBookButtonIntReferralTab',
+  applySmartFilterIntReferral: 'applySmartFilterIntReferral',
 }
 
 export { USER_PERMISSIONS }
