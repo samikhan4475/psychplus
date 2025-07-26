@@ -481,6 +481,10 @@ const getManagementNavLinks = (
       label: 'Engagement',
       href: `${baseHref}/engagement`,
     },
+    {
+      label: 'Schedule',
+      href: `${baseHref}/schedule`,
+    },
   ]
 }
 

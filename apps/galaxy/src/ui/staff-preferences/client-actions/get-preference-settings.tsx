@@ -6,9 +6,10 @@ import { CategoryValue, LevelCode, SettingStatusCode } from '@/constants'
 import { UserSetting } from '@/types'
 
 const getPreferenceSettings = async (payload: {
-  userId: number
+  userId?: number
   name?: string
   names?: string[]
+  categoryValue?: string
   categoryValues?: string[]
   levelCodes?: LevelCode[]
   settingStatusCode?: SettingStatusCode
