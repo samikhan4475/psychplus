@@ -109,17 +109,13 @@ const ProviderWithClinicAndWeeklyAvailability = ({
 }
 
 const StarRating = ({ rating }: { rating?: number }) => {
-  const numericRating = rating ?? 0
-
-  if (!rating || rating <= 0) {
-    return <Text>No reviews yet</Text>
-  }
+  const numericRating = rating ?? 0;
 
   return (
     <Flex align="center" gap="1">
       {Array.from({ length: 5 }, (_, index) => (
         <Box key={index}>
-          {index + 1 <= numericRating ? (
+          {(numericRating === 0 || index + 1 <= numericRating) ? (
             <StarFilledIcon height={16} width={16} color="#FFC700" />
           ) : (
             <StarIcon height={16} width={16} color="#FFC700" />
@@ -130,8 +126,9 @@ const StarRating = ({ rating }: { rating?: number }) => {
         {numericRating}
       </Text>
     </Flex>
-  )
-}
+  );
+};
+
 
 const renderLanguageAndLocation = (
   appointmentType: string,

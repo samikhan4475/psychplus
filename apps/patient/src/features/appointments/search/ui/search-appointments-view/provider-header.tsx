@@ -64,9 +64,13 @@ const ProviderHeader = ({
                 </Text>
                 <Flex align="center">
                   {Array.from({ length: 5 }, (_, index) => index + 1).map(
-                    (value) => (
+                  (value) => {
+                    const rating = providerDetail.specialist.rating
+                    const isFilled = rating === 0 || value <= (rating ?? 0)
+
+                    return (
                       <Box key={value}>
-                        {value <= (providerDetail.specialist.rating ?? 0) ? (
+                        {isFilled ? (
                           <StarFilledIcon
                             height={16}
                             width={16}
@@ -76,8 +80,9 @@ const ProviderHeader = ({
                           <StarIcon height={16} width={16} color="#FFC700" />
                         )}
                       </Box>
-                    ),
-                  )}
+                    )
+                  },
+                )}
                 </Flex>
               </Flex>
             </Flex>

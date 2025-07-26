@@ -263,19 +263,24 @@ const LegacyProviderAvailabilityCard = ({
               </Text>
               <Flex align="center">
                 {Array.from({ length: 5 }, (_, index) => index + 1).map(
-                  (value) => (
-                    <Box key={value}>
-                      {value <= (data.specialist.rating ?? 0) ? (
-                        <StarFilledIcon
-                          height={16}
-                          width={16}
-                          color="#FFC700"
-                        />
-                      ) : (
-                        <StarIcon height={16} width={16} color="#FFC700" />
-                      )}
-                    </Box>
-                  ),
+                  (value) => {
+                    const rating = data.specialist.rating
+                    const isFilled = rating === 0 || value <= (rating ?? 0)
+
+                    return (
+                      <Box key={value}>
+                        {isFilled ? (
+                          <StarFilledIcon
+                            height={16}
+                            width={16}
+                            color="#FFC700"
+                          />
+                        ) : (
+                          <StarIcon height={16} width={16} color="#FFC700" />
+                        )}
+                      </Box>
+                    )
+                  },
                 )}
               </Flex>
             </Flex>
