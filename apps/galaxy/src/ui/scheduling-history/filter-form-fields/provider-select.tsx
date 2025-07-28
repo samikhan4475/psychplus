@@ -1,22 +1,32 @@
 'use client'
 
-import { useShallow } from 'zustand/react/shallow'
+import { useEffect, useState } from 'react'
 import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
-import { useStore } from '../store'
+import { getProvidersOptionsAction } from '@/ui/schedule/client-actions'
+import { Option } from '@/ui/schedule/types'
 
 const ProviderSelect = () => {
-  const { providers } = useStore(
-    useShallow((state) => ({
-      providers: state.providers,
-    })),
-  )
+  const [options, setOptions] = useState<Option[]>([])
+  const [loading, setLoading] = useState(false)
+  const fetchProvidersOptions = async () => {
+    setLoading(true)
+    const result = await getProvidersOptionsAction({}, true)
+
+    if (result.state === 'success') {
+      setOptions(result.data)
+    }
+    setLoading(false)
+  }
+  useEffect(() => {
+    fetchProvidersOptions()
+  }, [])
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel>Provider</FormFieldLabel>
       <SelectInput
-        field="providerStaffId"
-        loading={providers?.loading}
-        options={providers?.data ?? []}
+        field="providerUserId"
+        loading={loading}
+        options={options ?? []}
         placeholder="Select"
         buttonClassName="w-[150px] h-6"
         className="h-full flex-1"

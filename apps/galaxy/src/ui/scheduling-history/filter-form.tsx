@@ -73,7 +73,7 @@ const FilterForm = () => {
       dateOfService: undefined,
       serviceId: '',
       providerType: '',
-      providerStaffId: '',
+      providerUserId: '',
       cosignerUserId: '',
       dischargeHospitalName: '',
       dischargeHospitalDate: undefined,
