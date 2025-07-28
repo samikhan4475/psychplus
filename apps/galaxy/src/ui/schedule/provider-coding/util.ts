@@ -1,8 +1,8 @@
 import { getDayOfWeek, parseAbsolute } from '@internationalized/date'
-import { TransformedAppointment } from '../types'
-import { MergedRecord, WeekdayData } from './types'
-import { DAY_KEYS } from './constants'
 import { START_OF_WEEK_LOCALE } from '../constants'
+import { TransformedAppointment } from '../types'
+import { DAY_KEYS } from './constants'
+import { MergedRecord, WeekdayData } from './types'
 
 const transformIn = (
   appointment: MergedRecord,
@@ -33,6 +33,11 @@ const transformIn = (
     authorizationDate,
     lastCoverageDate,
     groupTherapyTypeCode,
+    appointmentId: baseAppointmentId,
+    visitTypeCode: baseVisitType,
+    visitStatus: baseVisitStatus,
+    visitMedium: baseVisitMedium,
+    visitSequence: baseVisitSequence,
   } = appointment
 
   const {
@@ -42,18 +47,20 @@ const transformIn = (
     visitMedium,
     isPrimaryProviderType,
     visitStatus,
-  } = day ? appointment.weekDays[day] ?? ({} as WeekdayData) : ({} as WeekdayData)
+  } = day
+    ? appointment.weekDays[day] ?? ({} as WeekdayData)
+    : ({} as WeekdayData)
 
   const transformedData = {
-    appointmentId: appointmentId ?? 0,
+    appointmentId: day ? (appointmentId ?? 0) : (baseAppointmentId ?? 0),
     patientId: patientId ?? 0,
     stateCode: stateCode ?? '',
     locationId: locationId ?? '',
     serviceId,
     providerType: providerType ?? '',
-    encounterType: visitType ?? '',
-    visitSequenceType: visitSequence ?? '',
-    type: visitMedium,
+    encounterType: (day ? visitType : baseVisitType) ?? '',
+    visitSequenceType: (day ? visitSequence : baseVisitSequence) ?? '',
+    type: (day ? visitMedium : baseVisitMedium) ?? '',
     isFollowup: false,
     isPrimaryProviderType,
     specialistStaffId: providerId,
@@ -62,7 +69,7 @@ const transformIn = (
     visitFrequency: appointmentInterval,
     isOverridePermissionProvided: false,
     isProceedPermissionProvided: false,
-    appointmentStatus: visitStatus,
+    appointmentStatus: (day ? visitStatus : baseVisitStatus) ?? '',
     unitId: unitResource?.id ?? '',
     admissionId: facilityAdmissionDetailId,
     groupId: groupResource?.id ?? '',

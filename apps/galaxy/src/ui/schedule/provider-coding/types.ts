@@ -78,11 +78,7 @@ interface MergedRecord
   extends Omit<
     Appointment,
     | 'diagnosis'
-    | 'appointmentId'
-    | 'visitMedium'
-    | 'visitSequence'
     | 'isPrimaryProviderType'
-    | 'visitStatus'
     | 'visitType'
     | 'cptCodes'
     | 'noteSignedStatus'

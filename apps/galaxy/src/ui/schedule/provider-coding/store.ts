@@ -337,6 +337,11 @@ const mergeDataByFacilityAdmissionId = (
       facilityAdmissionId,
       appointmentDate,
       providerType,
+      appointmentId,
+      visitTypeCode:otherFields.visitTypeCode,
+      visitStatus,
+      visitMedium,
+      visitSequence,
       ...otherFields,
       weekDays: {
         [weekdayName]: {
