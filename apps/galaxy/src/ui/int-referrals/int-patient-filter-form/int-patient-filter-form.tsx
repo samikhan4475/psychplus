@@ -76,7 +76,8 @@ const IntReferralsForm = () => {
         | undefined,
       fromReferralDate:
         formatDateToISOString(data?.fromReferralDate) ?? undefined,
-      toReferralDate: formatDateToISOString(data?.toReferralDate) ?? undefined,
+      toReferralDate:
+        formatDateToISOString(data?.toReferralDate, true) ?? undefined,
       providerNames: transformOutProviderNames(data?.providerNames) ?? [],
       stateOfResidenceCode:
         transformOutStateValue(data?.stateOfResidenceCode, usStates) ?? '',

@@ -11,44 +11,50 @@ import {
   LongTextCell,
   TextCell,
 } from '@/components'
-import { PatientReferral } from '@/types'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
+import { PatientReferral, SharedCode } from '@/types'
 import { formatDateTime } from '@/utils'
 import { getPatientReferralsHistoryAction } from '../referrals/patient-referrals-widget/actions'
 
-const columns: ColumnDef<PatientReferral>[] = [
-  {
-    id: 'metadata?.updatedByFullName',
-    header: () => <ColumnHeader label="Name" />,
-    cell: ({ row: { original } }) => {
-      return (
-        <LongTextCell className="min-w-20">
-          {original?.metadata?.createdByFullName}
-        </LongTextCell>
-      )
+const columns = (codes: SharedCode[]): ColumnDef<PatientReferral>[] => {
+  return [
+    {
+      id: 'metadata?.updatedByFullName',
+      header: () => <ColumnHeader label="Name" />,
+      cell: ({ row: { original } }) => {
+        return (
+          <LongTextCell className="min-w-20">
+            {original?.metadata?.createdByFullName}
+          </LongTextCell>
+        )
+      },
     },
-  },
-  {
-    id: 'contactStatus',
-    header: () => <ColumnHeader label="Contact Initiated Status" />,
-    cell: ({ row: { original } }) => (
-      <TextCell className="truncate">{original.contactStatus}</TextCell>
-    ),
-  },
-  {
-    id: 'metadata.createdOn',
-    accessorKey: 'metadata.createdOn',
-    header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Created On" />
-    ),
-    cell: ({ row: { original: referral } }) => (
-      <TextCell className="truncate">
-        {referral?.metadata?.createdOn
-          ? formatDateTime(referral?.metadata?.createdOn)
-          : 'N/A'}
-      </TextCell>
-    ),
-  },
-]
+    {
+      id: 'contactStatus',
+      header: () => <ColumnHeader label="Contact Initiated Status" />,
+      cell: ({ row: { original } }) => (
+        <TextCell className="truncate">
+          {codes.find((c) => c.value === original?.contactStatus)?.display}
+        </TextCell>
+      ),
+    },
+    {
+      id: 'metadata.createdOn',
+      accessorKey: 'metadata.createdOn',
+      header: ({ column }) => (
+        <ColumnHeader column={column} clientSideSort label="Created On" />
+      ),
+      cell: ({ row: { original: referral } }) => (
+        <TextCell className="truncate">
+          {referral?.metadata?.createdOn
+            ? formatDateTime(referral?.metadata?.createdOn, false)
+            : 'N/A'}
+        </TextCell>
+      ),
+    },
+  ]
+}
 
 interface ReferralsHistoryTableProps {
   referralId: string
@@ -59,6 +65,7 @@ const IntReferralsHistoryContactStatusCellTable = ({
 }: ReferralsHistoryTableProps) => {
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState<PatientReferral[]>([])
+  const codes = useCodesetCodes(CODESETS.ContactMadeStatus)
 
   useEffect(() => {
     setLoading(true)
@@ -88,7 +95,7 @@ const IntReferralsHistoryContactStatusCellTable = ({
   return (
     <ScrollArea className="max-h-44 p-2">
       <DataTable
-        columns={columns}
+        columns={columns(codes)}
         data={data}
         sticky
         theadClass="z-[1]"

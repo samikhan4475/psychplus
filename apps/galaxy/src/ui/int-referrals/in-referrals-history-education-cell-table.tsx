@@ -43,7 +43,7 @@ const columns: ColumnDef<PatientReferral>[] = [
     cell: ({ row: { original: referral } }) => (
       <TextCell className="truncate">
         {referral?.metadata?.createdOn
-          ? formatDateTime(referral?.metadata?.createdOn)
+          ? formatDateTime(referral?.metadata?.createdOn, false)
           : 'N/A'}
       </TextCell>
     ),
