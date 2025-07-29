@@ -227,7 +227,9 @@ const transformOut =
         sectionItemValue: 'true',
       })
     }
-    const selectedCodes = getCodes(schema, visitType)
+
+    const therapyDisabled = schema.therapyDisabled || !schema.therapy
+    const selectedCodes = therapyDisabled ? [] : getCodes(schema, visitType)
 
     if (updateCptCodes) {
       const updatedCodes =
