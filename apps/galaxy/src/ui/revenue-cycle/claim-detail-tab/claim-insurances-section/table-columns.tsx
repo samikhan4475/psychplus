@@ -4,6 +4,7 @@ import { InsuranceClaimPolicy, Sort } from '@/types'
 import { InsuranceStatusColumnCell } from './insurance-status-cell'
 import { ActionsCell } from './table-action-cell'
 import { TableCellCoverage } from './table-cell-coverage'
+import { getAddress } from '@/utils/address'
 
 const columns = (
   editRowId: number | null,
@@ -61,22 +62,8 @@ const columns = (
         />
       ),
       cell: ({ row }) => (
-        <TextCell>{row.original?.policyHolderRelationship}</TextCell>
+        <TextCell>{row.original?.policyHolderRelationship ?? 'Self'}</TextCell>
       ),
-
-      enableHiding: true,
-    },
-    {
-      id: 'address',
-      accessorKey: 'address',
-      header: ({ column }) => (
-        <ColumnHeader
-          className="!text-black justfy-center !font-medium"
-          column={column}
-          label="Address"
-        />
-      ),
-      cell: ({ row }) => <TextCell>{''}</TextCell>,
 
       enableHiding: true,
     },
@@ -90,7 +77,7 @@ const columns = (
           label="Payer Address"
         />
       ),
-      cell: ({ row }) => <TextCell>{''}</TextCell>,
+      cell: ({ row }) => <TextCell>{getAddress(row.original?.payerPlanAddress)}</TextCell>,
 
       enableHiding: true,
     },

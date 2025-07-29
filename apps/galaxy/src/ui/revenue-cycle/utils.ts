@@ -66,6 +66,8 @@ const getClaimStatusDisplay = (codes: SharedCode[], claimStatusCode: string) =>
 const getClaimStatuses = (codes: SharedCode[]) =>
   codes.map((code) => code.value)
 
+
+
 export {
   truncateString,
   getClaimStatusDisplay,

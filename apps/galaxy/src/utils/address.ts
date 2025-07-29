@@ -1,8 +1,9 @@
-import { PatientAddress as Address } from '@/types'
+import { PatientAddress  } from '@/types'
+import { Address } from '@/ui/staff-management/types'
 
 type AddressType = 'Home' | 'Mailing' | 'Work' | 'Business'
 
-const getAddressLabel = (addressType: AddressType, addresses?: Address[]) => {
+const getAddressLabel = (addressType: AddressType, addresses?: PatientAddress[]) => {
   const address = addresses?.find((address) => address.type === addressType)
 
   if (!address) {
@@ -25,6 +26,38 @@ const getStateAbbreviation = (name: string) => {
     .toLowerCase()
   return STATE_ABBREVIATIONS[lowerCaseAbbreviationKey] ?? name
 }
+
+const getAddress = (address?: Address | undefined): string => {
+  if (
+    !address ||
+    (!address.street1 && !address.city && !address.state && !address.postalCode && !address.postalPlus4Code)
+  ) {
+    return "";
+  }
+
+  const separator = ", ";
+  let result = "";
+
+  const appendPart = (part?: string, sep = "") => {
+    const trimmed = part?.trim();
+    if (trimmed) {
+      result += result ? sep + trimmed : trimmed;
+    }
+  };
+
+  appendPart(address.street1);
+  appendPart(address.street2, separator);
+  appendPart(address.city, separator);
+  appendPart(address.state, separator);
+
+  const zip = address.postalPlus4Code?.trim()
+    ? `${address.postalCode ?? ""}+${address.postalPlus4Code}`
+    : address.postalCode;
+
+  appendPart(zip, " ");
+
+  return result.trim();
+};
 
 const STATE_ABBREVIATIONS: Record<string, string> = {
   arizona: 'AZ',
@@ -86,4 +119,4 @@ const STATE_ABBREVIATIONS: Record<string, string> = {
   'us minor outlying islands': 'UM',
 }
 
-export { getAddressLabel }
+export { getAddressLabel, getAddress }

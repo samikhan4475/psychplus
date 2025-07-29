@@ -1,6 +1,7 @@
 import { DateValue } from 'react-aria-components'
-import { ContactDetails, LegalName, User } from './'
+import { ContactDetails, LegalName, PayerPlanAddress, User } from './'
 import { Metadata } from './metadata'
+import { Address } from '@/ui/staff-management/types'
 
 interface ClaimServiceLine {
   id?: string
@@ -410,6 +411,7 @@ interface InsuranceClaimPolicy {
   verificationStatus?: string
   viewHcfa?: boolean
   policyHolderRelationship?: string
+  payerPlanAddress?: Address
   claimStatus?: string
 }
 
