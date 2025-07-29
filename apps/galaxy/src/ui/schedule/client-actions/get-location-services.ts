@@ -21,10 +21,18 @@ const getLocationServicesAction = async (
     }
   }
 
-  const transformedData = response.data.map((data) => ({
-    value: data.id,
-    label: data.serviceOffered,
-  }))
+  const serviceMap = new Map<string, { label: string; value: string }>()
+  
+  response.data.forEach((data) => {
+    if (!serviceMap.has(data.serviceOffered)) {
+      serviceMap.set(data.serviceOffered, {
+        value: data.id,
+        label: data.serviceOffered,
+      })
+    }
+  })
+
+  const transformedData = Array.from(serviceMap.values())
 
   return {
     state: 'success',
