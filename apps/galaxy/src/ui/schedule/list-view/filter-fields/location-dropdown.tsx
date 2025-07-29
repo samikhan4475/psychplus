@@ -11,6 +11,7 @@ import { BookedAppointmentsSchemaType } from '../../schema'
 import { FieldLabel, FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'
 
+const MAX_LOCATIONS = 26
 const LocationDropdown = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [clinicLocations, setClinicLocations] = useState<SelectOptionType[]>([])
@@ -32,6 +33,16 @@ const LocationDropdown = () => {
     }
   }, [stateIds])
 
+  const handleLocationChange = (values: string[]) => {
+    if (values.length > MAX_LOCATIONS && values.length > locationIds.length) {
+      toast.error(`Maximum number of locations Selected`)
+      form.setValue('locationIds', locationIds, { shouldDirty: true })
+      return
+    }
+    form.setValue('locationIds', values, { shouldDirty: true })
+    form.setValue('servicesOffered', [])
+  }
+
   if (!filters.includes(SchedulerFilters.Location)) return null
 
   return (
@@ -42,10 +53,7 @@ const LocationDropdown = () => {
         defaultValues={locationIds}
         options={clinicLocations}
         className="flex-1"
-        onChange={(values) => {
-          form.setValue('locationIds', values, { shouldDirty: true })
-          form.setValue('servicesOffered', [])
-        }}
+        onChange={handleLocationChange}
         menuClassName="w-[155px]"
         loading={loading}
       />
