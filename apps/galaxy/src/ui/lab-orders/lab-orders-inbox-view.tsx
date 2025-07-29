@@ -24,10 +24,9 @@ const LabOrdersInboxView = () => {
     staffRoleCode: state.staffResource.staffRoleCode,
   }))
   const isPrescriber = staffRoleCode === STAFF_ROLE_CODE_PRESCRIBER
-  const defaultOrderingStaffId = isPrescriber ? String(staffId) : ''
+  const defaultOrderingStaffId = isPrescriber ? String(staffId) : null
   const labOrderPayload = {
     orderStatus: LabOrderStatusEnum.Unsigned,
-    IsOrderSendStatus: null,
     resourceStatusList: ['Active'],
     orderingStaffId: defaultOrderingStaffId,
   }
@@ -41,21 +40,19 @@ const LabOrdersInboxView = () => {
   }, [])
 
   return (
-    <>
-      <WidgetContainer
-        title={`Lab Orders (${data?.total ?? 0})`}
-        headerRight={
-          <Flex direction="row" gap="3">
-            <AddLabOrdersButton onRefresh={fetchData} />
-            <ReviewAllButton />
-          </Flex>
-        }
-      >
-        <LabOrdersFilterForm isInboxLabOrder defaultPayload={labOrderPayload} />
-        <LabOrderTable isInboxLabOrder />
-        <LabOrderTablePagination />
-      </WidgetContainer>
-    </>
+    <WidgetContainer
+      title={`Lab Orders (${data?.total ?? 0})`}
+      headerRight={
+        <Flex direction="row" gap="3">
+          <AddLabOrdersButton onRefresh={fetchData} />
+          <ReviewAllButton />
+        </Flex>
+      }
+    >
+      <LabOrdersFilterForm isInboxLabOrder defaultPayload={labOrderPayload} />
+      <LabOrderTable isInboxLabOrder />
+      <LabOrderTablePagination />
+    </WidgetContainer>
   )
 }
 

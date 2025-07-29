@@ -17,7 +17,7 @@ type LabOrderPayload = {
   patientId?: string[]
   orderStatus?: string
   orderCreatedDate?: DateValue | null | string
-  orderingStaffId?: string
+  orderingStaffId?: string | null
   labTestName?: string
   location?: string
   labTestCode?: string
