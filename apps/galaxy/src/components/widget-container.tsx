@@ -21,6 +21,7 @@ type WidgetContainerProps = React.PropsWithChildren<{
   topHeader?: React.ReactNode
   sticky?: boolean
   className?: string
+  resetCounter?: number
 }>
 
 const WidgetContainerCheckboxField = 'widgetContainerCheckboxField'
@@ -40,6 +41,7 @@ const WidgetContainer = ({
   sticky = false,
   className,
   titleIcon,
+  resetCounter,
 }: WidgetContainerProps) => {
   const form = useFormContext()
   const widgetContainerCheckbox = form?.watch('widgetContainerCheckboxField')
@@ -60,7 +62,7 @@ const WidgetContainer = ({
         })
       }
     }, 100)
-  }, [toggleableChecked])
+  }, [toggleableChecked, resetCounter])
 
   return (
     <>

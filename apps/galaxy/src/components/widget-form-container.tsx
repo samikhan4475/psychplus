@@ -53,6 +53,7 @@ const WidgetFormContainer = ({
   const formValues = form.watch()
   const [loading, setLoading] = useState(false)
   const [shouldValidate, setShouldValidate] = useState(false)
+    const [resetCounter, setResetCounter] = useState<number>(0)
   const memoizedValues = useDeepCompareMemo(() => formValues, [formValues])
 
   const {
@@ -185,6 +186,7 @@ const WidgetFormContainer = ({
         case 'quicknotes:clear':
           if (!isResetDisabled) {
             formResetValues ? form.reset(formResetValues) : form.reset()
+              setResetCounter((prev) => prev + 1)
           }
           handleOnClear?.()
           setShouldValidate(false)
@@ -243,6 +245,7 @@ const WidgetFormContainer = ({
           {...props}
           toggleableChecked={widgetContainerCheckboxState?.checked}
           toggleableDiabled={widgetContainerCheckboxState?.disabled}
+          resetCounter={resetCounter}
         />
       </fieldset>
     </form>
