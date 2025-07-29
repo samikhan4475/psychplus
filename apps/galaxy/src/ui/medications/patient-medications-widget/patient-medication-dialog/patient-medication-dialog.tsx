@@ -27,19 +27,21 @@ const PatientMedicationDialog = ({
   medication,
   open,
   onOpenChange,
-  editOptions
+  editOptions,
 }: PropsWithChildren<PatientMedicationDialogProps>) => {
   const [loading, setLoading] = useState(false)
   const { id: patientId } = useParams<{ id: string }>()
+  const [formKey, setFormKey] = useState(0)
 
   const [prescriptionData, setPrescriptionData] = useState<
     Prescription | undefined
   >()
   const { step, stepCount, ...stepsProp } = useSteps()
-  const { refetch } = useStore((state) => ({
+  const { refetch, hasControlledMedication } = useStore((state) => ({
     refetch: state.refetch,
+    hasControlledMedication: state.hasControlledMedication,
   }))
-  const totalSteps = 4;
+  const totalSteps = 4
   const fetchData = useCallback(
     async (id: number) => {
       setLoading(true)
@@ -62,7 +64,16 @@ const PatientMedicationDialog = ({
       fetchData(Number(patientId))
     }
   }, [open, fetchData, medication, patientId])
-
+  let dialogTitle: string | undefined
+  if (step === Step.Form) {
+    dialogTitle = title
+  } else if (hasControlledMedication) {
+    dialogTitle = dialogTitles[step]
+  } else if (step === Step.Review) {
+    dialogTitle = 'Review & Transmit'
+  } else {
+    dialogTitle = dialogTitles[step]
+  }
   return (
     <Dialog.Root
       open={open}
@@ -70,6 +81,7 @@ const PatientMedicationDialog = ({
         if (!o) {
           stepsProp.onJump(Step.Form)
           refetch()
+          setFormKey((k) => k + 1)
         }
         onOpenChange(o)
       }}
@@ -87,16 +99,13 @@ const PatientMedicationDialog = ({
           </IconButton>
         </Dialog.Close>
         <Dialog.Title>
-          <Flex className="gap-6">
-         {
-          step !== Step.Form && (
-            <Text size="3" className="bg-pp-bg-accent rounded-full p-1">
-              {stepCount}/{totalSteps}
-            </Text>
-          )
-        }
-            
-            {step === Step.Form ? title : dialogTitles[step]}
+          <Flex className="w-full" gap="1">
+            {step !== Step.Form && hasControlledMedication && (
+              <Text size="3" className="bg-pp-bg-accent rounded-full p-2">
+                {stepCount}/{totalSteps}
+              </Text>
+            )}
+            <Text className="text-center mt-1">{dialogTitle}</Text>{' '}
           </Flex>
         </Dialog.Title>
         {loading ? (
@@ -105,6 +114,7 @@ const PatientMedicationDialog = ({
           </Flex>
         ) : (
           <PatientMedicationForm
+            key={formKey}
             onClose={() => onOpenChange(false)}
             prescription={prescriptionData}
             patientId={Number(patientId)}

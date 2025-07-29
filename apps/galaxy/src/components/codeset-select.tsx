@@ -14,6 +14,7 @@ interface CodesetFormSelectProps
   placeholder?: string
   className?: string
   groupingCodes?: string[]
+  includeEmptyOption?: boolean
 }
 
 const CodesetSelect = ({
@@ -23,6 +24,7 @@ const CodesetSelect = ({
   placeholder,
   className,
   groupingCodes,
+  includeEmptyOption,
   ...selectProps
 }: CodesetFormSelectProps) => {
   const form = useFormContext()
@@ -38,17 +40,26 @@ const CodesetSelect = ({
     [codes, groupingCodes],
   )
 
-  const items = useMemo(
-    () =>
-      groupedCodes
-        .filter((code) => !exclude?.includes(code.value))
-        .map((code) => (
-          <Select.Item key={code.value} value={code.value}>
-            {code.display}
-          </Select.Item>
-        )),
-    [groupedCodes, exclude],
-  )
+  const items = useMemo(() => {
+  const filtered = groupedCodes.filter((code) => !exclude?.includes(code.value))
+  const mapped = filtered.map((code) => (
+    <Select.Item key={code.value} value={code.value}>
+      {code.display}
+    </Select.Item>
+  ))
+
+  if (includeEmptyOption) {
+   return [
+    <Select.Item key="__none__" value="__none__">
+      None
+    </Select.Item>,
+    ...mapped,
+  ]
+  }
+
+  return mapped
+}, [groupedCodes, exclude, includeEmptyOption])
+
 
   return (
     <Controller
@@ -63,7 +74,7 @@ const CodesetSelect = ({
 
         return (
           <Select.Root
-            onValueChange={field.onChange}
+            onValueChange={(val) => field.onChange(val === '__none__' ? '' : val)}
             disabled={form.formState.disabled}
             {...rest}
             {...selectProps}

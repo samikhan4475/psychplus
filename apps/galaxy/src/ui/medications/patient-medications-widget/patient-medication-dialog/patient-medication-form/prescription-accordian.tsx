@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
 import { TriangleDownIcon } from '@radix-ui/react-icons'
 import { Box, Flex, Text } from '@radix-ui/themes'
-import { PencilIcon ,AlertTriangleIcon } from 'lucide-react'
+import { InfoIcon, PencilIcon } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 import { DeleteIcon } from '@/components/icons'
 import { DrugInfo } from '@/types'
@@ -12,6 +12,7 @@ import { SearchDrugs } from '../shared'
 import { FavoriteIcon } from '../shared/favorite-icon'
 import { PrescriptionAccordianContent } from './prescription-accordian-content'
 import { PatientMedicationSchemaType } from './schema'
+
 const PrescriptionAccordian = ({
   errorIndex,
 }: {
@@ -106,19 +107,30 @@ const PrescriptionAccordian = ({
           className="border-pp-table-border mt-1 w-full rounded-2 border p-1"
         >
           <Accordion.Header>
-            <Flex className="relative w-full items-center justify-between px-2 py-1 text-left border-b-pp-table-border">
+            <Flex className="border-b-pp-table-border relative w-full items-center justify-between  py-1 text-left">
               <Accordion.Trigger className="flex w-full cursor-pointer items-center justify-between px-2 py-1 text-left">
-                <Flex gap="2">
+                <Flex gap="1">
                   <TriangleDownIcon />
                   {item.isControlledSubstance && (
                     <Box className="flex items-center gap-2">
-                      <AlertTriangleIcon  className="text-red-9 w-6 h-6" />
+                      <InfoIcon
+                        className={`h-4 w-4 ${
+                          item.isControlledSubstance ? 'text-orange-6' : ''
+                        }`}
+                      />
                     </Box>
                   )}
-                  <Text size="1" weight="bold">
+                  <Text
+                    className={`${
+                      item.isControlledSubstance ? 'text-orange-6' : ''
+                    }`}
+                    size="1"
+                    weight="bold"
+                  >
                     {item.prescribableDrugDesc ?? 'No Description Found'}
                   </Text>
                 </Flex>
+
                 <Flex gap="1">
                   <Box
                     onClick={(e) => {

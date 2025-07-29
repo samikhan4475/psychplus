@@ -10,6 +10,7 @@ import { FEATURE_FLAGS } from '@/constants'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { cancelPatientPrescriptions } from '../actions'
 import { cancelNonFeatureFlagPrescriptions } from '../actions/cancel-non-feature-flag-prescription'
+import { ConfirmationDialog } from '../dialog/confirmation-dialog'
 import { useStore } from '../store'
 import { PatientMedication, PatientPrescriptionStatus } from '../types'
 
@@ -27,6 +28,7 @@ const RowActionCancel = ({ row }: RowActionRefreshProps) => {
   } = row.original
   const pathname = usePathname()
   const isQuickNoteSection = pathname.includes('quicknotes')
+  const [open, setOpen] = useState(false)
 
   const { externalPatientId, refetch } = useStore((state) => ({
     externalPatientId: state.externalPatientId,
@@ -46,7 +48,7 @@ const RowActionCancel = ({ row }: RowActionRefreshProps) => {
 
   const onCancel = async () => {
     setIsLoading(true)
-
+    setOpen(false)
     let result
 
     if (!isFeatureFlagEnabled) {
@@ -77,19 +79,31 @@ const RowActionCancel = ({ row }: RowActionRefreshProps) => {
     setIsLoading(false)
     refetch(isQuickNoteSection)
   }
+  const handleClose = () => {
+    setOpen(false)
+  }
+  const handleClick = isFeatureFlagEnabled ? onCancel : () => setOpen(true)
 
   return (
-    <Tooltip content="Cancel">
-      <IconButton
-        size="1"
-        color="gray"
-        variant="ghost"
-        onClick={onCancel}
-        disabled={isDisabled || isLoading}
-      >
-        <CircleX size={18} color="black" />
-      </IconButton>
-    </Tooltip>
+    <>
+      <Tooltip content="Cancel">
+        <IconButton
+          size="1"
+          color="gray"
+          variant="ghost"
+          onClick={handleClick}
+          disabled={isDisabled || isLoading}
+        >
+          <CircleX size={18} color="black" />
+        </IconButton>
+      </Tooltip>
+      <ConfirmationDialog
+        isOpen={open}
+        closeDialog={handleClose}
+        onConfirmation={onCancel}
+        heading={'Do you want to cancel this prescription?'}
+      />
+    </>
   )
 }
 

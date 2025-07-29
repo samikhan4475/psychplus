@@ -9,7 +9,12 @@ import { PatientMedicationSchemaType } from '../patient-medication-form'
 import { useFormContext } from 'react-hook-form'
 import { FavoriteMedicationPayload } from '../../types'
 
-const FavoriteList = () => {
+interface FavoriteListProps {
+  isSearching: boolean
+  setIsSearching: (isSearching: boolean) => void
+}
+
+const FavoriteList = ({ isSearching, setIsSearching }: FavoriteListProps) => {
   const {
     loadingFavorites,
     favoritesData,
@@ -22,30 +27,31 @@ const FavoriteList = () => {
     fetchFavoriteMedications: state.fetchFavoriteMedications,
   }))
 
-  useEffect(() => {
-    if (!favoritesLoaded) {
-      fetchFavoriteMedications()
-    }
-  }, [favoritesLoaded, fetchFavoriteMedications])
-
   const form = useFormContext<PatientMedicationSchemaType>()
   const drugs = form.watch('drugs')
+
   const todayDate = new Date().toISOString().split('T')[0]
   const currentTime = new Date().toLocaleTimeString('en-GB', {
     hour: '2-digit',
     minute: '2-digit',
   })
 
+  useEffect(() => {
+    if (!favoritesLoaded && !isSearching) {
+      fetchFavoriteMedications()
+    }
+  }, [favoritesLoaded, isSearching, fetchFavoriteMedications])
+
   const handleRowClick = (medication: FavoriteMedicationPayload) => {
     const defaultValues: PatientMedicationSchemaType['drugs'][number] = {
-      doseStrength: medication?.drugStrength || medication?.doseStrength || '',
+      doseStrength: medication.drugStrength || medication.doseStrength || '',
       prescribableDrugDesc: medication.prescribableDrugDesc || medication.medicationName || '',
       startDateTime: todayDate,
       startTime: currentTime,
-      effectiveDate:'',
+      effectiveDate: todayDate,
       doseRouteCode: '',
       refills: '0',
-      doseUnitCode: medication.doseUnitCode || '',
+      doseUnitCode: '',
       doseFormCode: medication.doseFormCode || '',
       duration: '',
       durationUnitCode: '',
@@ -60,11 +66,11 @@ const FavoriteList = () => {
       medicationStatus: 'Active',
     }
 
-    const existingMedication = drugs.some(
-      (item) => item.prescribableDrugDesc === medication.medicationName
+    const exists = drugs.some(
+      (item) => item.prescribableDrugDesc === (medication.prescribableDrugDesc || medication.medicationName)
     )
 
-    if (!existingMedication) {
+    if (!exists) {
       form.setValue('drugs', [...drugs, defaultValues])
     }
   }
@@ -77,40 +83,43 @@ const FavoriteList = () => {
     )
   }
 
-  if (!favoritesData || favoritesData.length === 0) {
-    return (
-      <Flex justify="center" align="center" className="h-full">
-        <Text size="2" color="gray">
-          No favorites found
-        </Text>
-      </Flex>
-    )
-  }
-
   return (
-    <ScrollArea className="max-h-[300px]">
-      <Table.Root>
-        <Table.Body className="align-middle">
-          {favoritesData.map((item) => (
-            <Table.Row key={item.id}>
-              <Table.Cell onClick={() => handleRowClick(item)} className="border-pp-table-border h-5 w-full cursor-pointer truncate border-b px-2 py-1">
-                <Text className="truncate text-[12px] font-medium">
-                  {item.medicationName ?? 'No Name Provided'}
-                </Text>
-              </Table.Cell>
-              <Table.Cell className="border-pp-table-border h-5 border-b px-2 py-1 text-right">
-                <FavoriteIcon
-                  itemData={{
-                    ...item,
-                    medicationName: item.medicationName ?? '',
-                  }}
-                />
-              </Table.Cell>
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table.Root>
-    </ScrollArea>
+    <>
+      {(!favoritesData || favoritesData.length === 0) ? (
+        <Flex justify="center" align="center" className="h-full">
+          <Text size="2" color="gray">
+            No favorites found
+          </Text>
+        </Flex>
+      ) : (
+        <ScrollArea className="max-h-[300px]">
+          <Table.Root>
+            <Table.Body>
+              {favoritesData.map((item) => (
+                <Table.Row key={item.id}>
+                  <Table.Cell
+                    onClick={() => handleRowClick(item)}
+                    className="border-pp-table-border h-5 w-full cursor-pointer truncate border-b px-2 py-1"
+                  >
+                    <Text className="truncate text-[12px] font-medium">
+                      {item.medicationName || 'No Name Provided'}
+                    </Text>
+                  </Table.Cell>
+                  <Table.Cell className="border-pp-table-border h-5 border-b px-2 py-1 text-right">
+                    <FavoriteIcon
+                      itemData={{
+                        ...item,
+                        medicationName: item.medicationName || '',
+                      }}
+                    />
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Root>
+        </ScrollArea>
+      )}
+    </>
   )
 }
 

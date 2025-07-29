@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Dialog, Text } from '@radix-ui/themes'
+import { Button, Dialog, Text, Flex } from '@radix-ui/themes'
 import { PlusIcon, RefreshCcw } from 'lucide-react'
 import { FEATURE_FLAGS } from '@/constants'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
@@ -19,7 +19,7 @@ const AddMedicationButton = ({ onRefresh }: { onRefresh?: () => void }) => {
   const handleClose = () => setOpen(false)
   if (!isFeatureFlagEnabled) {
     return (
-      <>
+      <Flex align="center" gap="1">
         <Button
           className="border-pp-grey bg-white h-6 flex-row gap-1 rounded-2 border border-solid align-middle"
           type="button"
@@ -27,7 +27,6 @@ const AddMedicationButton = ({ onRefresh }: { onRefresh?: () => void }) => {
           onClick={onRefresh}
         >
           <RefreshCcw className="text-pp-gray-3" width="16px" height="16px" />
-          <Text className="text-pp-black-3 text-1">Refresh</Text>
         </Button>
         <Button
           size="1"
@@ -37,7 +36,7 @@ const AddMedicationButton = ({ onRefresh }: { onRefresh?: () => void }) => {
           onClick={handleOpen}
         >
           <PlusIcon height={16} width={16} />
-          Add New
+          Add
         </Button>
         <PatientMedicationDialog
           title="Add Medication"
@@ -47,7 +46,7 @@ const AddMedicationButton = ({ onRefresh }: { onRefresh?: () => void }) => {
             if (!open) handleClose()
           }}
         />
-      </>
+      </Flex>
     )
   }
 

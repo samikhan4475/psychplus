@@ -74,13 +74,13 @@ const MobileConfirmOtp = ({
   const [pollingTimedOut, setPollingTimedOut] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [isOpen, setIsOpen] = useState(false)
-  const [remainingTime, setRemainingTime] = useState(60)
+  const [remainingTime, setRemainingTime] = useState(180)
   const isOtp = confirmationMethod === ConfirmationMethod.Otp
   const isAuthenticator =
     confirmationMethod === ConfirmationMethod.Authenticator
   const timerRef = useRef<NodeJS.Timeout | null>(null)
   const pollingAttemptRef = useRef<number>(0)
-  const MAX_ATTEMPTS = 12
+  const MAX_ATTEMPTS = 36
 
   const handleControlledPrescriptions = async () => {
     if (!controlledPrescriptionIds?.length) return true
@@ -215,7 +215,7 @@ const MobileConfirmOtp = ({
     if (isAuthenticator) {
       setPollingTimedOut(false)
       setShowPollingInfo(true)
-      setRemainingTime(60)
+      setRemainingTime(180)
       pollAuthenticatorStatus(payload)
     } else if (isRefillAndChangeRequest) {
       if (!prescriptions?.length) return
@@ -287,16 +287,18 @@ const MobileConfirmOtp = ({
           >
             Back
           </Button>
-          <Button
-            type="button"
-            size="2"
-            highContrast
-            loading={form.formState.isSubmitting}
-            disabled={showPollingInfo}
-            onClick={form.handleSubmit(onSubmit)}
-          >
-            Verify and Submit
-          </Button>
+          {!(pollingTimedOut && isAuthenticator) && (
+            <Button
+              type="button"
+              size="2"
+              highContrast
+              loading={form.formState.isSubmitting}
+              disabled={showPollingInfo}
+              onClick={form.handleSubmit(onSubmit)}
+            >
+              Verify and Submit
+            </Button>
+          )}
         </Flex>
       </Flex>
       <AlertDialog

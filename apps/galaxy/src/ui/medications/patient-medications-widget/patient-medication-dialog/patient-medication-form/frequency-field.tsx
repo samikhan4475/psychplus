@@ -22,6 +22,7 @@ const FrequencyField = ({ index }: DrugBlockProps) => {
         codeset={CODESETS.PrescriptionFrequencyList}
         size="1"
         className="w-full"
+        includeEmptyOption
       />
       <FormFieldError name={field} />
     </FormFieldContainer>

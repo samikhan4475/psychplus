@@ -36,8 +36,9 @@ const PatientMedicationForm = ({
   editOptions,
   ...stepProps
 }: PatientMedicationFormProps) => {
-  const { refetch } = useStore((state) => ({
+  const { refetch, setHasControlledMedication } = useStore((state) => ({
     refetch: state.refetch,
+    setHasControlledMedication: state.setHasControlledMedication,
   }))
   const Component = useMemo(() => Components[stepProps.step], [stepProps.step])
   const [isOpen, setIsOpen] = useState(false)
@@ -90,7 +91,13 @@ const PatientMedicationForm = ({
       setWasCompleteStep(false)
     }
   }, [stepProps.step, wasCompleteStep])
-
+  useEffect(() => {
+    if (prescription?.prescribedStatus) {
+      setValue('prescribedStatus', prescription.prescribedStatus)
+    } else {
+      setValue('prescribedStatus', 'Pharmacy')
+    }
+  }, [prescription, setValue])
   const addUpdatePrecriptions = (
     payloads: Partial<Prescription>[],
     options?: EditOptions,
@@ -155,6 +162,15 @@ const PatientMedicationForm = ({
     if (errorResult) {
       form.setValue('isReviewing', false)
       return toast.error(errorResult?.error)
+    }
+
+    const hasControlled = payloads.some((prescription) =>
+      prescription.prescriptionDrugs?.some(
+        (drug) => drug.isControlledSubstance,
+      ),
+    )
+    if (hasControlled) {
+      setHasControlledMedication(true)
     }
 
     if (data?.isReviewing) {

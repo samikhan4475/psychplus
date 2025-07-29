@@ -20,6 +20,7 @@ const RouteField = ({ index }: DrugBlockProps) => {
         codeset={CODESETS.PrescriptionRouteList}
         className="h-6 w-[155px]"
         size="1"
+        includeEmptyOption
       />
       <FormFieldError name={field} />
     </FormFieldContainer>

@@ -25,33 +25,15 @@ const ReviewDrugDetail = ({ drug }: ReviewDrugDetailProps) => {
     CODESETS.PrescriptionQuantityUnitOfMeasureList,
   )
   return (
-    <Flex direction="column" gap="3">
+    <Flex direction="column" gap="3" className="mt-2">
       <Flex gap="4" align="center" wrap="wrap">
         <ReviewLabel
-          title={`Duration (${prescriptionSignature?.durationUnitCode ?? '-'})`}
-          value={prescriptionSignature?.duration?.toString() ?? '-'}
-        />
-        <ReviewLabel
-          title="Duration Unit"
-          value={prescriptionSignature?.durationUnitCode ?? '-'}
+          title="Sig"
+          value={String(prescriptionSignature?.description)}
         />
       </Flex>
 
       <Flex gap="4" align="center" wrap="wrap">
-        <ReviewLabel
-          title="Route"
-          value={getCodesetDisplayName(
-            String(prescriptionSignature?.doseRouteCode),
-            routeOptions,
-          )}
-        />
-        <ReviewLabel
-          title="Frequency"
-          value={getCodesetDisplayName(
-            String(prescriptionSignature?.doseFrequencyCode),
-            frequencyOptions,
-          )}
-        />
         <ReviewLabel
           title="Quantity"
           value={`${String(
@@ -63,12 +45,49 @@ const ReviewDrugDetail = ({ drug }: ReviewDrugDetailProps) => {
         />
       </Flex>
 
-      <Flex gap="4" align="center" wrap="wrap">
-        <ReviewLabel
-          title="Sig"
-          value={String(prescriptionSignature?.description)}
-        />
-      </Flex>
+      {(prescriptionSignature?.duration ||
+        prescriptionSignature?.durationUnitCode) && (
+        <Flex gap="4" align="center" wrap="wrap">
+          {prescriptionSignature?.duration && (
+            <ReviewLabel
+              title={`Duration (${
+                prescriptionSignature.durationUnitCode ?? '-'
+              })`}
+              value={prescriptionSignature.duration.toString()}
+            />
+          )}
+          {prescriptionSignature?.durationUnitCode && (
+            <ReviewLabel
+              title="Duration Unit"
+              value={prescriptionSignature.durationUnitCode}
+            />
+          )}
+        </Flex>
+      )}
+
+      {(prescriptionSignature?.doseRouteCode ||
+        prescriptionSignature?.doseFrequencyCode) && (
+        <Flex gap="4" align="center" wrap="wrap">
+          {prescriptionSignature?.doseRouteCode && (
+            <ReviewLabel
+              title="Route"
+              value={getCodesetDisplayName(
+                String(prescriptionSignature.doseRouteCode),
+                routeOptions,
+              )}
+            />
+          )}
+          {prescriptionSignature?.doseFrequencyCode && (
+            <ReviewLabel
+              title="Frequency"
+              value={getCodesetDisplayName(
+                String(prescriptionSignature.doseFrequencyCode),
+                frequencyOptions,
+              )}
+            />
+          )}
+        </Flex>
+      )}
 
       <Flex gap="4" align="center" wrap="wrap">
         <ReviewLabel

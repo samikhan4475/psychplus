@@ -52,6 +52,7 @@ interface StoreState {
   isPmpReviewed: boolean
   errorStatus?: number
   scriptSureSessionToken?: string
+  hasControlledMedication: boolean
   setPmpReviewed: (value: boolean) => void
   setScriptSureSessionToken: (token: string) => void
   fetchExternalScriptsurePatientId: (patientId: string) => void
@@ -87,6 +88,7 @@ interface StoreState {
   providerOptions: SelectOptionType[]
   loadingProviderOptions: boolean
   fetchProviderOptions: () => Promise<void>
+  setHasControlledMedication: (value: boolean) => void
 }
 
 const useStore = create<StoreState>((set, get) => ({
@@ -114,6 +116,7 @@ const useStore = create<StoreState>((set, get) => ({
   scriptSureSessionToken: undefined,
   providerOptions: [],
   loadingProviderOptions: false,
+  hasControlledMedication: false,
   fetchProviderOptions: async () => {
     const { providerOptions } = get()
     if (providerOptions.length > 0) return
@@ -128,6 +131,8 @@ const useStore = create<StoreState>((set, get) => ({
     }
   },
   setPmpReviewed: (value: boolean) => set({ isPmpReviewed: value }),
+  setHasControlledMedication: (value: boolean) =>
+    set({ hasControlledMedication: value }),
   updateStatus: (updatedMedication: PatientMedication[]) => {
     set({
       data: updatedMedication,

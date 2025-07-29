@@ -17,7 +17,7 @@ import { PatientMedicationsDataTable } from './patient-medications-data-table'
 import { PatientMedicationsTabView } from './patient-medications-tab-view'
 import { PMPHistoryDialog } from './pmp-history'
 import { useStore } from './store'
-import { EncounterData, PmpScoreResponse, StartPmpResponse } from './types'
+import { PmpScoreResponse, StartPmpResponse } from './types'
 
 const getUUIDWithSplit = (url: string): string => {
   const parts = url.split('/')
@@ -174,73 +174,84 @@ const PatientMedicationsWidget = ({
     <Box position="relative" width="100%">
       <WidgetContainer
         title="Medications"
-        headerLeft={<AddMedicationButton onRefresh={refetch} />}
-      >
-        {' '}
-        <Flex className="align-center">
-          <Flex>
-            <CheckboxCell
-              label="PMP is reviewed"
-              checked={isPmpReviewed}
-              onCheckedChange={(checked) => setPmpReviewed(!!checked)}
-            />
-          </Flex>
-
-          {ehr14021PmpIntegration && (
-            <Flex className=" border-pp-bg-table-label rounded-[5px] border p-1">
-              <Flex gap="1" className="flex-wrap whitespace-nowrap">
-                {message && (
-                  <Tooltip
-                    content={<Text className="select-text">{message}</Text>}
-                  >
-                    <Text
-                      className="text-pp-black-3 line-clamp-1 select-text overflow-ellipsis pt-1"
-                      size="1"
-                      weight="regular"
-                    >
-                      <InformationLineIcon />
-                    </Text>
-                  </Tooltip>
-                )}
-
-                {pmpScores.map((item, index) => (
-                  <Text key={item.scoreValue} size="1" className="pt-1">
-                    <strong>{item.scoreType}</strong> {item.scoreValue}
-                    {index !== pmpScores.length - 1 && ' | '}
-                  </Text>
-                ))}
-                {pmpScores?.length !== 0 && (
-                  <Button
-                    size="1"
-                    variant="outline"
-                    color="gray"
-                    className="text-black"
-                    onClick={handlePMPReport}
-                    loading={generatePMPReport}
-                  >
-                    <EyeIcon height={14} width={14} strokeWidth={1.5} />
-                    View PMP Report
-                  </Button>
-                )}
-
-                <Button
-                  size="1"
-                  variant="outline"
-                  color="gray"
-                  className="text-black"
-                  onClick={() => handlePMPCheck()}
-                  loading={checkPMPLoading}
+        headerLeft={
+          <Flex align="center" justify="between" gap="4" width="100%">
+            <Flex align="center" style={{ flex: 1, minWidth: 0 }}>
+              <CheckboxCell
+                label="PMP is reviewed"
+                checked={isPmpReviewed}
+                onCheckedChange={(checked) => setPmpReviewed(!!checked)}
+              />
+              {ehr14021PmpIntegration && (
+                <Flex
+                  className="border-pp-bg-table-label rounded-[5px] border p-1"
+                  ml="3"
                 >
-                  Check PMP
-                </Button>
-                <PMPHistoryDialog
-                  patientId={patientId}
-                  appointmentId={String(apptId)}
-                />
-              </Flex>
+                  <Flex gap="1" className="flex-wrap whitespace-nowrap">
+                    {message && (
+                      <Tooltip
+                        content={<Text className="select-text">{message}</Text>}
+                      >
+                        <Text
+                          className="text-pp-black-3 line-clamp-1 select-text overflow-ellipsis pt-1"
+                          size="1"
+                          weight="regular"
+                        >
+                          <InformationLineIcon />
+                        </Text>
+                      </Tooltip>
+                    )}
+
+                    {pmpScores.map((item, index) => (
+                      <Text key={item.scoreValue} size="1" className="pt-1">
+                        <Text as="span" weight="bold">
+                          {item.scoreType}
+                        </Text>{' '}
+                        {item.scoreValue}
+                        {index !== pmpScores.length - 1 && ' | '}
+                      </Text>
+                    ))}
+
+                    {pmpScores?.length !== 0 && (
+                      <Button
+                        size="1"
+                        variant="outline"
+                        color="gray"
+                        className="text-black"
+                        onClick={handlePMPReport}
+                        loading={generatePMPReport}
+                      >
+                        <EyeIcon height={14} width={14} strokeWidth={1.5} />
+                        View PMP Report
+                      </Button>
+                    )}
+
+                    <Button
+                      size="1"
+                      variant="outline"
+                      color="gray"
+                      className="text-black"
+                      onClick={() => handlePMPCheck()}
+                      loading={checkPMPLoading}
+                    >
+                      Check PMP
+                    </Button>
+                    <PMPHistoryDialog
+                      patientId={patientId}
+                      appointmentId={String(apptId)}
+                    />
+                  </Flex>
+                </Flex>
+              )}
             </Flex>
-          )}
-        </Flex>
+          </Flex>
+        }
+        headerRight={
+          <>
+            <AddMedicationButton onRefresh={refetch} />
+          </>
+        }
+      >
         <PatientMedicationsDataTable />
       </WidgetContainer>
     </Box>

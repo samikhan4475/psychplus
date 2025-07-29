@@ -60,7 +60,7 @@ const DrugsList = ({
       quantityValue: '',
       endDateTime: '',
       endTime: '',
-      effectiveDate:'',
+      effectiveDate: todayDate,
       sigDescription: '',
       drugCode: option?.representativeErxPackagedDrug?.packagedDrugId ?? '',
       DeaSchedule:
@@ -120,7 +120,9 @@ const DrugsList = ({
                   option.representativeErxPackagedDrug
                     ?.federalDeaClassCodeDesc ?? ''
                 return !deaDesc.toLowerCase().includes('no dea class code') ? (
-                  <span className="text-pp-red">{deaDesc.toUpperCase()}</span>
+                  <span className="text-pp-red bg-pp-red-100 text-xs font-semibold rounded-full whitespace-nowrap px-2 py-[2px]">
+                    {deaDesc.toUpperCase()}
+                  </span>
                 ) : null
               })()}
             </Text>

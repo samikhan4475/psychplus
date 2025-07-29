@@ -20,6 +20,7 @@ const DrugFormField = ({ index }: DrugBlockProps) => {
         name={field}
         codeset={CODESETS.PrescriptionDosageFormList}
         size="1"
+        includeEmptyOption
       />
       <FormFieldError name={field} />
     </FormFieldContainer>

@@ -1,14 +1,20 @@
 'use client'
 
+import React from 'react'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Box, Flex, TextField } from '@radix-ui/themes'
 import { useDebouncedCallback } from 'use-debounce'
 import { cn } from '@/utils'
 import { useStore } from '../../store'
 
-const SearchFavoriteMedication = () => {
+type SearchFavoriteMedicationProps = {
+  setIsSearching: (isSearching: boolean) => void
+}
+
+const SearchFavoriteMedication: React.FC<SearchFavoriteMedicationProps> = ({ setIsSearching }) => {
   const { fetchFavoriteMedications } = useStore()
   const handleSearchService = useDebouncedCallback((value: string) => {
+    setIsSearching(!!value)
     fetchFavoriteMedications(value)
   }, 500)
 

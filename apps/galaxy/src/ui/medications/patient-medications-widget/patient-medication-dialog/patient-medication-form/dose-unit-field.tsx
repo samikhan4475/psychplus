@@ -41,7 +41,6 @@ const DoseUnitField = ({ index }: DrugBlockProps) => {
         buttonClassName="h-6 w-[155px]"
         size="1"
       />
-      <FormFieldError name={field} />
     </FormFieldContainer>
   )
 }

@@ -8,8 +8,7 @@ const fetchDrugs = async (
 ): Promise<api.ActionResult<DrugInfo[]>> => {
   const payload = {
     searchText,
-    searchType: 'StartsWith',
-    searchTermTypeCodes: [0],
+    searchType: 'StartsWith'
   }
   const response = await api.POST<DrugInfo[]>(api.GET_DRUGS, payload)
   if (response.state === 'error') {

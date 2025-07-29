@@ -23,6 +23,7 @@ const DurationUnitField = ({ index }: DrugBlockProps) => {
         defaultValue="Days"
         size="1"
         className="w-full"
+        includeEmptyOption
       />
       <FormFieldError name={field} />
     </FormFieldContainer>
