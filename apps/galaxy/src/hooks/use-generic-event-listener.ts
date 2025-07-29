@@ -20,7 +20,9 @@ const useGenericEventListener = ({
         event.data?.type === eventType &&
         ids.includes(event.data?.widgetId)
       ) {
-        onEventTrigger()
+        setTimeout(() => {
+          onEventTrigger()
+        }, 3000)
       }
     }
 
