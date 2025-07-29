@@ -37,6 +37,7 @@ const PayerSelect = ({ insurancePayers, selectedInsuranceId }: PayerSelectProps)
         }}
         placeholder="Select payer"
         disabled={!!selectedInsuranceId}
+        itemClassName='max-w-[200px] break-words whitespace-normal !py-1 h-fit'
       />
       <FormFieldError name="payerName" />
     </FormFieldContainer>

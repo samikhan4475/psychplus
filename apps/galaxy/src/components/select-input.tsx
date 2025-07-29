@@ -17,6 +17,7 @@ interface SelectInputProps<T> extends React.ComponentProps<typeof Select.Root> {
   required?: boolean
   loading?: boolean
   showError?: boolean
+  itemClassName?:string
 }
 
 const SelectInput = <T extends string>({
@@ -32,6 +33,7 @@ const SelectInput = <T extends string>({
   loading,
   disabled,
   showError = false,
+  itemClassName='',
   ...selectProps
 }: SelectInputProps<T>) => {
   const form = useFormContext()
@@ -40,6 +42,7 @@ const SelectInput = <T extends string>({
       key={option.value}
       value={option.value}
       disabled={option.disabled}
+      className={itemClassName}
     >
       {option.label}
     </Select.Item>
