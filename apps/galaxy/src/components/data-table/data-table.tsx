@@ -49,6 +49,7 @@ interface DataTableProps<TData, TValue> {
   defaultSorting?: SortingState
   defaultExpanded?: ExpandedState
   tRowClass?: string
+  stickyLastColumn?: boolean
 }
 
 const DataTable = <TData, TValue>({
@@ -77,6 +78,7 @@ const DataTable = <TData, TValue>({
   isRowSelected,
   defaultSorting = [],
   tRowClass,
+  stickyLastColumn = false,
 }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>(defaultSorting)
   const [pagination, setPagination] = useState<PaginationState>({
@@ -142,7 +144,7 @@ const DataTable = <TData, TValue>({
       >
         <Table.Header
           className={cn(
-            'bg-pp-focus-bg-2',
+            'bg-pp-focus-bg-2 z-[30]',
             { 'sticky top-0': sticky },
             theadClass,
           )}
@@ -151,6 +153,8 @@ const DataTable = <TData, TValue>({
             <Table.Row key={headerGroup.id}>
               {headerGroup.headers.map((header, index) => {
                 const columnRelativeDepth = header.depth - header.column.depth
+                const totalHeaders = headerGroup.headers.length
+                const isLastHeader = index === totalHeaders - 1
 
                 if (
                   !header.isPlaceholder &&
@@ -180,6 +184,8 @@ const DataTable = <TData, TValue>({
                         'border-t-pp-table-border': header.depth > 1,
                         'bg-pp-focus-bg-2 sticky left-0 z-10':
                           stickyRow && index === 0,
+                        'bg-pp-focus-bg-2 sticky right-0 z-[20] top-0 ':
+                          stickyLastColumn && isLastHeader,
                       },
                       `w-[${header.getSize()}px]`,
                       thClass,
@@ -224,26 +230,33 @@ const DataTable = <TData, TValue>({
                   },
                 )}
               >
-                {row.getVisibleCells().map((cell, index) => (
-                  <Table.Cell
-                    key={cell.id}
-                    className={cn(
-                      'border-pp-table-border last:border-r-pp-gray-2 first:border-l-pp-gray-2 group-last/row-hover:!border-b-pp-gray-2 h-5 border-b border-l border-r-0 px-1 py-0.5 last:border-r group-last/row-hover:first:rounded-bl-1 group-last/row-hover:last:rounded-br-1',
-                      {
-                        'bg-white sticky left-0 z-10': stickyRow && index === 0,
-                        'bg-gray-3': tRowClass && row.depth === 0,
-                      },
-                      tdClass,
-                    )}
-                  >
-                    <Flex height="100%" align="center" width="100%">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
+                {row.getVisibleCells().map((cell, index) => {
+                  const totalCells = row.getVisibleCells().length
+                  const isLastCell = index === totalCells - 1
+
+                  return (
+                    <Table.Cell
+                      key={cell.id}
+                      className={cn(
+                        'border-pp-table-border last:border-r-pp-gray-2 first:border-l-pp-gray-2 group-last/row-hover:!border-b-pp-gray-2 h-5 border-b border-l border-r-0 px-1 py-0.5 last:border-r group-last/row-hover:first:rounded-bl-1 group-last/row-hover:last:rounded-br-1',
+                        {
+                          'bg-white sticky left-0 z-10': stickyRow && index === 0,
+                          'bg-gray-3': tRowClass && row.depth === 0,
+                          'bg-white sticky right-0 z-[9]':
+                            stickyLastColumn && isLastCell,
+                        },
+                        tdClass,
                       )}
-                    </Flex>
-                  </Table.Cell>
-                ))}
+                    >
+                      <Flex height="100%" align="center" width="100%">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </Flex>
+                    </Table.Cell>
+                  )
+                })}
               </Table.Row>
             ))
           ) : (

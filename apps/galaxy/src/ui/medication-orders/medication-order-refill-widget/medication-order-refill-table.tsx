@@ -4,6 +4,8 @@ import { useEffect, useMemo } from 'react'
 import { CalendarDate } from '@internationalized/date'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { DataTable, LoadingPlaceholder } from '@/components'
+import { STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
+import { useStore as useGlobalStore } from '@/store'
 import { getCurrentLocalDate } from '@/ui/schedule/utils'
 import { formatDateToISOString } from '@/utils'
 import { columns } from './columns'
@@ -33,7 +35,12 @@ const MedicationOrderRefillTable = () => {
     searchMedicationsList: state.searchMedicationsList,
   }))
   const today = new Date()
-
+  const { staffId, staffRoleCode } = useGlobalStore((state) => ({
+    staffId: state.user.staffId,
+    staffRoleCode: state.staffResource.staffRoleCode,
+  }))
+  const isPrescriber = staffRoleCode === STAFF_ROLE_CODE_PRESCRIBER
+  const defaultOrderingStaffId = isPrescriber ? String(staffId) : ''
   const isRefillTab = activeTab.includes('Refill')
   useEffect(() => {
     const todayDate = new CalendarDate(
@@ -41,12 +48,20 @@ const MedicationOrderRefillTable = () => {
       today.getMonth() + 1,
       today.getDate(),
     )
+    const startOfMonthDate = new CalendarDate(
+      today.getFullYear(),
+      today.getMonth() + 1,
+      1,
+    )
     const formattedData: MedicationRefillAPIRequest = {
       notificationType: isRefillTab
         ? PharmacyNotificationType.PharmacyRxRenewalRequest
         : PharmacyNotificationType.PharmacyRxChangeRequest,
-      notificationDateFrom: formatDateToISOString(todayDate) ?? undefined,
+      notificationDateFrom:
+        formatDateToISOString(startOfMonthDate) ?? undefined,
       notificationDateTo: formatDateToISOString(todayDate, true) ?? undefined,
+      isResponsePending: true,
+      staffId: Number(defaultOrderingStaffId),
     }
 
     searchMedicationsList(formattedData)
@@ -82,7 +97,6 @@ const MedicationOrderRefillTable = () => {
       })
       .filter((request) => request.drugList && request.drugList.length > 0)
   }, [data?.refillRequests, changeRequestData?.refillRequests])
-
   const memoizedColumns = useMemo(() => columns(sort, sortData), [])
   if (loading) {
     return (
@@ -98,6 +112,7 @@ const MedicationOrderRefillTable = () => {
         columns={memoizedColumns}
         disablePagination
         sticky
+        stickyLastColumn={true}
       />
     </ScrollArea>
   )
