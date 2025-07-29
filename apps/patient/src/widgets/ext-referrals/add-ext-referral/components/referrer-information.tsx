@@ -9,6 +9,7 @@ import { shouldShowFacilitySelect } from '../utils'
 import { FacilityInput } from './facility-input'
 import { FacilitySelect } from './facility-select'
 import { SchemaType } from './schema'
+import { useSearchParams } from 'next/navigation'
 
 interface ReferrerInformationProps {
   formType: ReferralType
@@ -21,7 +22,16 @@ const ReferrerInformation = ({
 }: ReferrerInformationProps) => {
   const form = useFormContext<SchemaType>()
 
-  const showFacility  = shouldShowFacilitySelect(formType, referrerShortName)
+   const searchParams = useSearchParams()
+  const isIncludeFacilitySelect =
+    searchParams?.get('isIncludeFacilitySelect') === 'true'
+
+  const showFacility = shouldShowFacilitySelect(
+    formType,
+    referrerShortName,
+    isIncludeFacilitySelect,
+  )
+
 
   return (
     <Flex direction="column" gap="4">

@@ -179,8 +179,13 @@ function withRetry<T>(
 function shouldShowFacilitySelect(
   formType: ReferralType,
   referrerShortName?: string,
+  isIncludeFacilitySelect?: boolean,
 ): boolean {
-  return formType === ReferralType.Facility && Boolean(referrerShortName)
+  return (
+    formType === ReferralType.Facility &&
+    Boolean(referrerShortName) &&
+    isIncludeFacilitySelect === true
+  )
 }
 export {
   addExtReferralInitialValues,
