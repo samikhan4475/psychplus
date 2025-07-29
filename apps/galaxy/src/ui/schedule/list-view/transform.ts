@@ -21,7 +21,6 @@ const dateFields = [
 const dateOfBirthField = 'dateOfBirth'
 const timeFields = ['bookedAppointmentTime']
 const numericFields = [
-  'age',
   'lengthOfStayMin',
   'lengthOfStayMax',
   'copayDueMin',
@@ -36,6 +35,7 @@ const numericFields = [
 ]
 
 const multiselectFields = [
+  'age',
   'stateIds',
   'locationIds',
   'servicesOffered',
