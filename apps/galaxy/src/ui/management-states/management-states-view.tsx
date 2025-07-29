@@ -17,12 +17,12 @@ import { Location } from '@/types'
 import { getAllLocations, getAllPrimaryVirtualLocations } from './actions'
 import { updatePrimaryVirtualLocationAction } from './actions/update-primary-virtual-location'
 import { LocationCell } from './location-cell'
-import { PrimaryLocation, TableData } from './types'
+import { PrimaryLocation } from './types'
 
 const columns = (
   locations: Location[],
   handleLocationChange: (stateCode: string, locationId: string) => void,
-): ColumnDef<TableData>[] => [
+): ColumnDef<PrimaryLocation>[] => [
   {
     id: 'stateCode',
     accessorKey: 'stateCode',

@@ -1,9 +1,15 @@
+import { Metadata } from '@/types'
+
 interface PrimaryLocation {
   display: string
   contactMade?: string
-  locationId?: string
+  locationId: string
   stateCode: string
   id?: string
+  dateTime?: string
+  userName?: string
+  locationName?: string
+  metadata?: Metadata
 }
 
 type TableData = {
