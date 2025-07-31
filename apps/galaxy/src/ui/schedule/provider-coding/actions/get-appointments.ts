@@ -1,21 +1,16 @@
-'use server'
+'use client'
 
-import { getLocalTimeZone, today } from '@internationalized/date'
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { SEARCH_BOOKED_APPOINTMENTS_ENDPOINT } from '@/api/endpoints'
 import { Appointment } from '@/types'
 import { AppointmentParams } from '../../types'
 
 const getAppointmentsAction = async (
   params?: AppointmentParams,
 ): Promise<api.ActionResult<Appointment[]>> => {
-  const startDate = today(getLocalTimeZone())
-  const year = startDate.year
-  const month = `${startDate.month}`.padStart(2, '0')
-  const day = `${startDate.day}`.padStart(2, '0')
   const { age, ...rest } = params ?? {}
 
   const body = {
-    startingDate: `${year}-${month}-${day}`,
     includePatientData: true,
     includeFinancialData: true,
     includeLocation: true,
@@ -30,9 +25,8 @@ const getAppointmentsAction = async (
     ageGroups: age ?? undefined,
     ...rest,
   }
-
   const response = await api.POST<Appointment[]>(
-    api.SEARCH_BOOKED_APPOINTMENTS_ENDPOINT,
+    SEARCH_BOOKED_APPOINTMENTS_ENDPOINT,
     body,
   )
   if (response.state === 'error') {

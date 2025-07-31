@@ -1,14 +1,16 @@
 'use client'
 
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ScrollArea } from '@radix-ui/themes'
-import { Table } from '@tanstack/react-table'
+import { Row, Table } from '@tanstack/react-table'
 import { DataTable } from '@/components'
+import { Appointment } from '@/types'
 import { ALWAYS_VISIBLE_COLUMNS, DAY_PATTERN } from '../constants'
 import { useStore as useRootStore } from '../store'
 import { useStore } from './store'
 import { columns as getColumns } from './table-columns'
 import { MergedRecord } from './types'
+import { ChartTablePopup } from './view-chart-popup/view-chart-popup'
 
 const DataTableHeader = (table: Table<MergedRecord>) => {
   const listViewFilters = useStore((state) => state.tableFilters)
@@ -32,6 +34,8 @@ const DataTableHeader = (table: Table<MergedRecord>) => {
   return null
 }
 const ProviderCodingTableView = () => {
+  const [isOpen, setIsOpen] = useState(false)
+  const [selectedAppointment, setSelectedAppointment] = useState<MergedRecord>()
   const {
     data,
     currentWeekDays,
@@ -87,15 +91,26 @@ const ProviderCodingTableView = () => {
     })
   }, [columnsStore, baseColumns])
 
+  const onRowClick = (row: Row<MergedRecord>) => {
+    setSelectedAppointment(row.original)
+    setIsOpen(true)
+  }
+
   return (
     <ScrollArea
       className="bg-white h-full flex-1 px-2.5 py-2"
       scrollbars="both"
     >
+      <ChartTablePopup
+        isOpen={isOpen}
+        closeDialog={() => setIsOpen(false)}
+        selectedAppointment={selectedAppointment}
+      />
       <DataTable
         columns={filteredColumns}
         data={data}
         renderHeader={DataTableHeader}
+        onRowClick={onRowClick}
         tableClass="[&_.rt-ScrollAreaScrollbar]:!hidden"
         theadClass="z-10"
         isRowSpan

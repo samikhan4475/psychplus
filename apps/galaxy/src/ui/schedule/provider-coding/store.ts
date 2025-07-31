@@ -9,7 +9,7 @@ import {
   SettingStatusCode,
 } from '@/constants'
 import { AddSelfUserSettingBody, Appointment, UserSetting } from '@/types'
-import { sanitizeFormData } from '@/utils'
+import { getDateLabel, sanitizeFormData } from '@/utils'
 import {
   addSelfUserSettings,
   getSelfUserSettings,
@@ -114,6 +114,7 @@ const useStore = create<Store>()(
           lastCoverageDateEnd,
           ...rest
         } = formValues ?? {}
+
         const startDate = startingDate ?? startDateUtc
         const lcdStartDateOnly = getUtcDateWithoutTime(
           getCalendarDateFromUtc(lastCoverageDateStart),
@@ -134,7 +135,11 @@ const useStore = create<Store>()(
           formData: formValues,
         })
 
-        const result = await getAppointmentsAction(sanitizeFormData(payload))
+        const sanitizedData = sanitizeFormData(payload)
+        if (!sanitizedData.startingDate) {
+          sanitizedData.startingDate = getDateLabel()
+        }
+        const result = await getAppointmentsAction(sanitizedData)
         if (result.state === 'error') {
           toast.error(
             result.error || 'Error while fetching Provider coding view',
@@ -338,7 +343,7 @@ const mergeDataByFacilityAdmissionId = (
       appointmentDate,
       providerType,
       appointmentId,
-      visitTypeCode:otherFields.visitTypeCode,
+      visitTypeCode: otherFields.visitTypeCode,
       visitStatus,
       visitMedium,
       visitSequence,
