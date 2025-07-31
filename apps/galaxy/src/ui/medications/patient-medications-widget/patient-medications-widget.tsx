@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useParams, usePathname } from 'next/navigation'
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
 import { Box, Button, Flex, Text, Tooltip } from '@radix-ui/themes'
@@ -8,7 +8,12 @@ import { EyeIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { CheckboxCell, WidgetContainer } from '@/components'
 import { InformationLineIcon } from '@/components/icons'
-import { ACCESS_UNAVAILABLE_MESSAGE, FEATURE_FLAGS } from '@/constants'
+import {
+  ACCESS_UNAVAILABLE_MESSAGE,
+  CODESETS,
+  FEATURE_FLAGS,
+} from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { Appointment } from '@/types'
 import { pmpReportAction, searchPMPAction, startPMPAction } from './actions'
@@ -35,6 +40,16 @@ const PatientMedicationsWidget = ({
   const autoPMPCheckInMedicationWidget = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr15606AutoPMPCheckInMedicationWidget,
   )
+  const codes = useCodesetCodes(CODESETS.UsStates)
+  const stateCodeItem = useMemo(() => {
+    return codes.find((item) => item.value === appointment?.stateCode)
+  }, [codes, appointment?.stateCode])
+  const isPMPEnabledFromState = stateCodeItem?.attributes?.some(
+    (attr) =>
+      attr.name === 'IsPmpEnabled' && attr.value.toLowerCase() === 'true',
+  )
+
+  const shouldRunPMP = Boolean(isPMPEnabledFromState && ehr14021PmpIntegration)
   const { id: patientId, apptId = '' } = useParams<{
     id: string
     apptId: string
@@ -71,12 +86,13 @@ const PatientMedicationsWidget = ({
       ),
       fetchExternalScriptsurePatientId(patientId),
     ])
-    if (ehr14021PmpIntegration) fetchPMPMSearch()
+    if (shouldRunPMP) fetchPMPMSearch()
   }, [
     patientId,
     appointment,
     autoPMPCheckInMedicationWidget,
     ehr14021PmpIntegration,
+    shouldRunPMP,
   ])
 
   const fetchPMPMSearch = async () => {
@@ -141,7 +157,7 @@ const PatientMedicationsWidget = ({
       const reportLink = response.data.reportLink
       if (reportLink) {
         window.open(reportLink, '_blank')
-      }
+      } else toast.error('PMP report could not be retrieved for this request')
     } else {
       toast.error(response.error || 'Failed to fetch report')
     }
@@ -182,7 +198,7 @@ const PatientMedicationsWidget = ({
                 checked={isPmpReviewed}
                 onCheckedChange={(checked) => setPmpReviewed(!!checked)}
               />
-              {ehr14021PmpIntegration && (
+              {shouldRunPMP && (
                 <Flex
                   className="border-pp-bg-table-label rounded-[5px] border p-1"
                   ml="3"
@@ -246,11 +262,7 @@ const PatientMedicationsWidget = ({
             </Flex>
           </Flex>
         }
-        headerRight={
-          <>
-            <AddMedicationButton onRefresh={refetch} />
-          </>
-        }
+        headerRight={<AddMedicationButton onRefresh={refetch} />}
       >
         <PatientMedicationsDataTable />
       </WidgetContainer>
