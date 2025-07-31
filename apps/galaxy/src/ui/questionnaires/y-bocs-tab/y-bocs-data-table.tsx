@@ -21,7 +21,7 @@ const QuestionnairesFormYBocsDataTable = ({
       <Table.Header className="bg-pp-bg-table-label">
         <Table.Row className="align-middle">
           <Table.Cell className="w-[30%]">
-            <Text weight="medium" size="1">
+            <Text weight="bold" size="2" color="red">
               {labels[0]}
             </Text>
           </Table.Cell>

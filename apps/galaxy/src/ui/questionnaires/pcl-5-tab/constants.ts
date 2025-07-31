@@ -17,6 +17,7 @@ const SCORE_INTERPRETATION_RANGES = [
 
 const QUESTIONS = [
   'Repeated, disturbing, and unwanted memories of the stressful experience?',
+  'Repeated, disturbing dreams of the stressful experience?',
   'Suddenly feeling or acting as if the stressful experience were actually happening again (as if you were actually back there reliving it)?',
   'Feeling very upset when something reminded you of the stressful experience?',
   'Having strong physical reactions when something reminded you of the stressful experience (for example, heart pounding, sweating)?',
@@ -29,7 +30,7 @@ const QUESTIONS = [
   'Loss of interest in activities that you used to enjoy?',
   'Feeling distant or cut off from other people?',
   'Trouble experiencing positive feelings (for example, being unable to feel happiness or have loving feelings for people close to you)?',
-  'Irritable behaviour, angry outbursts, or acting aggressively?',
+  'Irritable behavior, angry outbursts, or acting aggressively?',
   'Taking too many risks or doing things that could cause you harm?',
   'Being “superalert” or watchful or on guard?',
   'Feeling jumpy or easily startled?',

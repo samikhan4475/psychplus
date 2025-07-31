@@ -7,7 +7,7 @@ interface ScoreInterpretationRange {
 
 interface QuestionnairesSnapIvData {
   question: string
-  value: number
+  value: number | string
   id: string
 }
 

@@ -32,7 +32,8 @@ const SCORE_INTERPRETATION_RANGES = [
   { label: 'No Depression', color: 'white', min: 0, max: 4 },
   { label: 'Mild Depression', color: 'green', min: 5, max: 9 },
   { label: 'Moderate Depression', color: 'yellow', min: 10, max: 14 },
-  { label: 'Severe Depression', color: 'red', min: 15, max: 27 },
+  { label: 'Moderate Severe Depression', color: 'red', min: 15, max: 19 },
+  { label: 'Severe Depression', color: 'dark red', min: 20, max: 27 },
 ]
 
 export { QUESTIONS, SCORE_INTERPRETATION_RANGES, LABELS }

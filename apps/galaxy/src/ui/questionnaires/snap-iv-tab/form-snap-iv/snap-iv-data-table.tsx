@@ -25,7 +25,7 @@ const QuestionnairesFormSnapIvDataTable = ({
         <Table.Header className="bg-pp-bg-table-label">
           <Table.Row>
             <Table.Cell colSpan={5} className="h-fit py-1">
-              <Text weight="medium" size="1">
+              <Text weight="bold" size="3" color="red">
                 {label}
               </Text>
             </Table.Cell>
