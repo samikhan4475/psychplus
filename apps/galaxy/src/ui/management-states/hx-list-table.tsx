@@ -37,12 +37,12 @@ const columns: ColumnDef<PrimaryLocation>[] = [
   },
   {
     id: 'user',
-    accessorKey: 'metadata.createdByFullName',
+    accessorKey: 'metadata.updatedByFullName',
     header: ({ column }) => (
       <ColumnHeader label="User Name" sortable clientSideSort column={column} />
     ),
     cell: ({ row }) => (
-      <TextCell>{row.original?.metadata?.createdByFullName}</TextCell>
+      <TextCell>{row.original?.metadata?.updatedByFullName ?  row.original?.metadata?.updatedByFullName : row.original?.metadata?.createdByFullName}</TextCell>
     ),
   },
   {
