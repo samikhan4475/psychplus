@@ -13,7 +13,6 @@ const RequestedDateInput = () => {
       containerClassName="flex-1"
       name="requestedTime"
       label="Select Date"
-      showError={false}
     >
       <DatePickerInput
         field="requestedTime"
@@ -21,6 +20,7 @@ const RequestedDateInput = () => {
         dateInputClass="h-[38px]"
         minValue={generateCalendarDateToday()}
         maxValue={getCalendarDateOffsetFromToday(90)}
+        showError={false}
       />
     </FormField>
   )

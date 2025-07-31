@@ -48,6 +48,10 @@ const Details = ({ data, appointmentId, patientId }: UploadedDocumentProps) => {
     };
   }, []);
 
+  useEffect(() => {
+  setDocuments(data);
+}, [data]);
+
   if (!documents.length) return null;
 
   const fileNames = documents?.map(item => item.fileName).join(", ");

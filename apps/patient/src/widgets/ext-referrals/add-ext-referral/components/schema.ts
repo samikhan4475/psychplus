@@ -4,6 +4,7 @@ import { AppointmentType } from '@psychplus-v2/constants'
 import { DateValue } from 'react-aria-components'
 import { z } from 'zod'
 import { validate } from '@psychplus/form'
+import { generateCalendarDateToday } from '@/utils'
 
 const addressSchema = z.object({
   type: validate.optionalString.default('Home'),
@@ -65,6 +66,33 @@ const schema = z
           })
         }
       })
+    }
+
+    if (
+      data?.patientDateOfBirth &&
+      data.patientDateOfBirth?.compare(generateCalendarDateToday()) > 0
+    ) {
+      ctx.addIssue({
+        path: ['patientDateOfBirth'],
+        code: z.ZodIssueCode.custom,
+        message: 'Date of Birth cannot be in the future',
+      })
+    }
+
+    if (data?.requestedTime) {
+      const today = generateCalendarDateToday()
+      const ninetyDaysLater = today.add({ days: 90 })
+
+      const isBeforeToday = data.requestedTime.compare(today) < 0
+      const isAfter90Days = data.requestedTime.compare(ninetyDaysLater) > 0
+
+      if (isBeforeToday || isAfter90Days) {
+        ctx.addIssue({
+          path: ['requestedTime'],
+          code: z.ZodIssueCode.custom,
+          message: 'Date must be today or within 90 days from today',
+        })
+      }
     }
   })
 

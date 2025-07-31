@@ -17,6 +17,7 @@ const DobInput = () => {
         className="text-pp-gray-1 h-[38px] text-[14px] font-regular uppercase"
         dateInputClass="h-[38px]"
         maxValue={generateCalendarDateToday()}
+        showError={false}
       />
     </FormField>
   )

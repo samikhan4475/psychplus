@@ -111,7 +111,10 @@ const AddExtReferralForm = ({
     if (summaryFile) {
       uploadedFiles.push({
         file: summaryFile,
-        documentType: ExternalReferralDocument.ResultsPdf,
+        documentType:
+          formType === ReferralType.Facility
+            ? ExternalReferralDocument.DischargeSummary
+            : ExternalReferralDocument.MedicalRecord,
       })
     }
 

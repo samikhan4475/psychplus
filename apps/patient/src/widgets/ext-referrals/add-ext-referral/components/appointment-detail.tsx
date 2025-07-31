@@ -19,6 +19,7 @@ import { TimeSelect } from './time-select'
 import { UploadDocumentButton } from './upload-document-button'
 import { ZipInput } from './zip-input'
 import { StateSelect } from './state-select'
+import { ACCEPTED_FILE_TYPES } from '@/constants'
 
 interface AppointmentDetailProps {
   onFaceSheetFileChange: (file: File | undefined) => void
@@ -92,22 +93,25 @@ const AppointmentDetail = ({
         <AppointmentTypeSelect />
         <Box className="max-xs:col-span-full xs:col-span-3">
           <Grid columns="2" className="max-xs:grid-cols-1" gap="3">
-           
-           <StateSelect googleAPIkey={googleAPIkey}/>
+            <StateSelect googleAPIkey={googleAPIkey} />
             <ZipInput />
-            {formType === ReferralType.Facility && <DischargeDate />}
+            {[ReferralType.Facility, ReferralType.Payer].includes(
+              formType as ReferralType,
+            ) && <DischargeDate />}
           </Grid>
         </Box>
         {formType !== ReferralType.Generic && (
           <Box className="max-xs:col-span-full xs:col-span-3">
             <Grid columns="2" className="px-2.5 max-xs:grid-cols-1" gap="6">
               <UploadDocumentButton
+                accept={ACCEPTED_FILE_TYPES}
                 label="Facesheet/Demographics"
                 onFileChange={onFaceSheetFileChange}
                 {...sharedUploadProps}
               />
 
               <UploadDocumentButton
+                accept={ACCEPTED_FILE_TYPES}
                 label={secondLabel}
                 onFileChange={onFileChange}
                 {...sharedUploadProps}

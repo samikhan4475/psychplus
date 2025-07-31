@@ -64,7 +64,9 @@ const UploadedDocumentTab = ({
       window.removeEventListener('message', handleDocumentUpload);
     };
   }, []);
-
+useEffect(() => {
+  setDocuments(uploadedDocumentsData);
+}, [uploadedDocumentsData]);
   if (error) return <Box>{error}</Box>;
   if (!documents.length) return null;
 

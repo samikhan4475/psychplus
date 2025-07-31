@@ -6,7 +6,7 @@ import { Button, Flex, Text } from '@radix-ui/themes'
 interface UploadDocumentButtonsProps {
   onFileChange: (file: File | undefined) => void
   disableControls?: boolean
-  accept?: string
+  accept?: string | string[]
   label?: string
   resetTrigger?: number
 }
@@ -20,15 +20,14 @@ const UploadDocumentButton = ({
 }: UploadDocumentButtonsProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [file, setFile] = useState<File | undefined>(undefined)
-  
-  
-    useEffect(() => {
+
+  useEffect(() => {
     setFile(undefined)
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
   }, [resetTrigger])
-  
+
   const handleFileInputClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click()
@@ -41,7 +40,6 @@ const UploadDocumentButton = ({
     onFileChange(selectedFile)
   }
 
-
   return (
     <Flex direction="column" gap="2">
       <Text size="2" weight="medium">
@@ -49,7 +47,7 @@ const UploadDocumentButton = ({
       </Text>
       <input
         type="file"
-        accept={accept}
+        accept={Array.isArray(accept) ? accept?.join(',') : accept}
         ref={fileInputRef}
         className="hidden"
         onChange={handleFileChange}

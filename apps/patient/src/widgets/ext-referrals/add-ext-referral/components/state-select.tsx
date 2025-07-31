@@ -20,7 +20,7 @@ const StateSelect = ({ googleAPIkey }: Props) => {
 
   const searchParams = useSearchParams()
   const stateNameFromQuery = searchParams?.get('stateName')?.toLowerCase()
-  
+
   const resolvedStateCode = useMemo(() => {
     if (!stateNameFromQuery || !stateCodes) return null
 
@@ -35,8 +35,9 @@ const StateSelect = ({ googleAPIkey }: Props) => {
     const effectiveState = resolvedStateCode || detectedState
 
     if (!effectiveState) return
-
-    setValue('patientContactDetails.addresses.0.state', effectiveState)
+    setTimeout(() => {
+      setValue('patientContactDetails.addresses.0.state', effectiveState)
+    }, 400)
 
     if (zip) {
       setValue('patientContactDetails.addresses.0.postalCode', zip)

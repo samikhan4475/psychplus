@@ -9,6 +9,9 @@ enum ExternalReferralDocument {
   EncounterCcd = 'EncounterCcd',
   EncounterPdf = 'EncounterPdf',
   Facesheet = 'Facesheet',
+  DischargeSummary= 'DischargeSummary',
+  MedicalRecord='MedicalRecord'
+  
 }
 enum ReferralType {
   Generic = 'generic',
