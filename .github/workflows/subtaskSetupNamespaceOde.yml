@@ -61,6 +61,7 @@ jobs:
           awk '!/uid: /' | \
           sed 's/namespace: env-integration/namespace: ${{ inputs.env_namespace }}/g' | \
           kubectl apply --namespace=${{ inputs.env_namespace }} -f -
+          sed -i 's/ODE_PR_NUMBER/${{ vars.ODE_PR_NUMBER }}/g' k8s/app-config.integration.yml
           kubectl apply --namespace=${{ inputs.env_namespace }} -f k8s/app-config.integration.yml
           kubectl get secret wildcard-ode-psychplus-tls --namespace=env-integration -o yaml | \
           awk '!/creationTimestamp: /' | \
