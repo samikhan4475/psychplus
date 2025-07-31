@@ -469,7 +469,8 @@ const usePreferredPartnerStore = create<Store>()(
             throw new Error(result.error || 'Failed to update user')
           }
 
-          const { workListUser, couple, addedMembers } = result.data
+          const { workListUser, couple, addedMembers, familyMembers } =
+            result.data
 
           const usersToUpdate = [workListUser]
           if (couple) {
@@ -477,6 +478,9 @@ const usePreferredPartnerStore = create<Store>()(
           }
           if (addedMembers && addedMembers.length > 0) {
             usersToUpdate.push(...addedMembers)
+          }
+          if (familyMembers && familyMembers.length > 0) {
+            usersToUpdate.push(...familyMembers)
           }
 
           if (context === 'active') {

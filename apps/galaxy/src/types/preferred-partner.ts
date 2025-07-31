@@ -99,6 +99,7 @@ interface UpdatePreferredPartnerUserResponse {
   workListUser: PreferredPartnerUser
   couple?: PreferredPartnerUser
   addedMembers?: PreferredPartnerUser[]
+  familyMembers?: PreferredPartnerUser[]
 }
 
 export type {

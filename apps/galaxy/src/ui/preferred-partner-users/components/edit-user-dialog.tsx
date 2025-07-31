@@ -108,7 +108,10 @@ const EditUserDialog = ({
       familyMembers.length > 0
     ) {
       setFamilyMembers([])
-      form.setValue('familyMembers', [])
+      form.setValue('familyMembers', [], {
+        shouldValidate: false,
+        shouldDirty: true,
+      })
     }
   }, [selectedPPUserType, familyMembers.length, form])
 
@@ -326,17 +329,24 @@ const EditUserDialog = ({
 
             {familyMembers.length > 0 && (
               <Box>
-                {familyMembers.map((_, index) => (
+                {familyMembers.map((member, index) => (
                   <FamilyMemberForm
-                    key={index}
+                    key={`family-member-${index}`}
                     index={index}
                     googleApiKey={googleApiKey}
                     onRemove={(removeIndex) => {
-                      const updatedFamilyMembers = familyMembers.filter(
+                      const currentFamilyMembers =
+                        (form.getValues(
+                          'familyMembers',
+                        ) as FamilyMemberSchemaType[]) || []
+                      const updatedFamilyMembers = currentFamilyMembers.filter(
                         (_, i) => i !== removeIndex,
                       )
                       setFamilyMembers(updatedFamilyMembers)
-                      form.setValue('familyMembers', updatedFamilyMembers)
+                      form.setValue('familyMembers', updatedFamilyMembers, {
+                        shouldValidate: false,
+                        shouldDirty: true,
+                      })
                     }}
                   />
                 ))}
@@ -352,6 +362,11 @@ const EditUserDialog = ({
                     variant="outline"
                     color="gray"
                     onClick={() => {
+                      const currentFamilyMembers =
+                        (form.getValues(
+                          'familyMembers',
+                        ) as FamilyMemberSchemaType[]) || []
+
                       const newFamilyMember: FamilyMemberSchemaType = {
                         firstName: '',
                         middleName: '',
@@ -369,12 +384,17 @@ const EditUserDialog = ({
                         postalPlus4Code: '',
                         country: 'US',
                       }
+
                       const updatedFamilyMembers = [
-                        ...familyMembers,
+                        ...currentFamilyMembers,
                         newFamilyMember,
                       ]
+
                       setFamilyMembers(updatedFamilyMembers)
-                      form.setValue('familyMembers', updatedFamilyMembers)
+                      form.setValue('familyMembers', updatedFamilyMembers, {
+                        shouldValidate: false,
+                        shouldDirty: true,
+                      })
                     }}
                     className="flex items-center gap-2"
                   >

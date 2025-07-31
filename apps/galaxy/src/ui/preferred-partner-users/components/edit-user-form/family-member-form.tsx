@@ -13,8 +13,8 @@ import {
   FormFieldLabel,
   PhoneNumberInput,
 } from '@/components'
-import { EditUserSchemaType } from '../edit-user-schema'
 import { GooglePlacesContextProvider } from '@/providers/google-places-provider'
+import { EditUserSchemaType } from '../edit-user-schema'
 
 interface FamilyMemberFormProps {
   googleApiKey: string
@@ -22,7 +22,11 @@ interface FamilyMemberFormProps {
   onRemove: (index: number) => void
 }
 
-const FamilyMemberForm = ({ googleApiKey,index, onRemove }: FamilyMemberFormProps) => {
+const FamilyMemberForm = ({
+  googleApiKey,
+  index,
+  onRemove,
+}: FamilyMemberFormProps) => {
   const form = useFormContext<EditUserSchemaType>()
 
   return (
@@ -112,7 +116,6 @@ const FamilyMemberForm = ({ googleApiKey,index, onRemove }: FamilyMemberFormProp
                 field={`familyMembers.${index}.dob`}
                 maxValue={today(getLocalTimeZone())}
               />
-              <FormFieldError name={`familyMembers.${index}.dob`} />
             </FormFieldContainer>
           </Box>
           <Box className="col-span-4">
