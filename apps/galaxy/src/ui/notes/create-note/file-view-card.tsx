@@ -47,9 +47,11 @@ const FileViewCard = ({ document }: FileUploadCardProps) => {
         >
           {document.sectionItemValue}
         </Text>
-        <Text className="text-gray-500 text-[10px]">{`${bytesToMegaBytes(
-          Number(size),
-        )} MB`}</Text>
+        {size && (
+          <Text className="text-gray-500 text-[10px]">{`${bytesToMegaBytes(
+            Number(size),
+          )} MB`}</Text>
+        )}
       </Flex>
     </Flex>
   )
