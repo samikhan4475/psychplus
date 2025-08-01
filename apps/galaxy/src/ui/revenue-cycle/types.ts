@@ -269,6 +269,21 @@ interface ClaimListSearchParams {
   receiverName?: string
   isForcePaper?: boolean
   claimStatusCodes?: string[]
+  claimNumber?: string
+  fromDate?: string
+  toDate?: string
+  claimState?: string
+  primaryStatusCodes?: string[]
+  isSystemRejected?: boolean
+  isIncludeClaimSubmission?: boolean
+  isIncludeLocation?: boolean
+  isIncludeEdiSetup?: boolean
+  recordStatuses?: string[]
+  insurancePolicyPriority?: string
+  isHold?: boolean
+  isSelfPay?: boolean
+  isMarkAsSubmitted?: boolean
+  isClaimScrubbed?: boolean
 }
 
 interface InsurancePaymentSearchParams {

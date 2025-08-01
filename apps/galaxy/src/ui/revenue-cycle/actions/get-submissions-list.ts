@@ -16,6 +16,11 @@ const defaultPayLoad = {
   isIncludeClaimValidation: true,
   insurancePolicyPriority: InsurancePolicyPriority.Primary,
   isIncludePatientInsurancePlan: false,
+  IsHold: false,
+  IsSelfPay: false,
+  IsMarkAsSubmitted: false,
+  IsClaimScrubbed: true,
+  RecordStatuses: ['Active'],
 }
 
 const getSubmissionListAction = async ({
@@ -25,7 +30,7 @@ const getSubmissionListAction = async ({
 }: GetClaimsListParams): Promise<api.ActionResult<GetSubmissionResponse>> => {
   const offset = (page - 1) * SUBMISSION_LIST_TABLE_PAGE_SIZE
 
-  const url = new URL(api.GET_CLAIM_SUBMISSION_LIST)
+  const url = new URL(api.GET_CLAIMS_LIST_ENDPOINT)
   url.searchParams.append('limit', String(SUBMISSION_LIST_TABLE_PAGE_SIZE))
   url.searchParams.append('offset', String(offset))
 

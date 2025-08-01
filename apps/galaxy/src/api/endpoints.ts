@@ -345,7 +345,7 @@ const EXPORT_DENIAL_LIST_ENDPOINT = (fileFormat: string) =>
 const CLAIM_SUBMIT_ENDPOINT = `${API_URL}/api/claimsubmissions/actions/srcubandsubmit`
 const GET_CLAIM_SUBMISSION_LIST = `${API_URL}/api/claimsubmissions/actions/search`
 const CLAIM_SUBMISSION_REJECTION_DETAIL_ENDPOINT = (claimId: string) =>
-  `${API_URL}/api/claims/${claimId}/claimvalidations/actions/search`
+  `${API_URL}/api/claims/${claimId}/validations/actions/search`
 const GET_CLAIM_SUBMISSION_HISTORY = `${API_URL}/api/claimsubmissions/batches/actions/search`
 const GET_CLAIM_SUBMISSION_HISTORY_DETAIL = (batchId: string) =>
   `${API_URL}/api/claimbatches/${batchId}/details/actions/search?isIncludeMetadataResourceChangeControl=true`

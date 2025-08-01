@@ -19,7 +19,6 @@ const defaultPayLoad = {
   isIncludePatientInsurancePolicy: true,
   isIncludeClaimValidation: true,
   insurancePolicyPriority: InsurancePolicyPriority.Primary,
-  isSystemRejected: true,
   isIncludeLocation: true,
   isIncludePatientAppointments: true,
   isForcePaper: true,
@@ -44,7 +43,15 @@ const ExportExcelButton = () => {
       fromDate: formatDateToISOString(data.fromDate as DateValue),
       toDate: formatDateToISOString(data.toDate as DateValue),
     }
-    const payload = sanitizeFormData(formattedData)
+
+    const payload = {
+      ...sanitizeFormData(formattedData),
+      IsHold: false,
+      IsSelfPay: false,
+      IsMarkAsSubmitted: false,
+      IsClaimScrubbed: true,
+      RecordStatuses: ['Active'],
+    }
     const endpoint = EXPORT_SUBMISSIONS_LIST_ENDPOINT(FileFormats.EXCEL)
     const fileName =
       selectedTab === TabValue.PaperSubmission

@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 import { Sort } from '@/types'
-import { getNewSortDir } from '@/utils'
+import { getNewSortDir, sanitizeFormData } from '@/utils'
 import { getSubmissionListAction } from '../actions/get-submissions-list'
-import { GetSubmissionResponse } from '../types'
+import { ClaimListSearchParams, GetSubmissionResponse } from '../types'
 import { SchemaType } from './submission-filter-form'
 import { TabValue } from './types'
 
@@ -52,7 +52,7 @@ const useStore = create<Store>((set, get) => ({
     })
     const result = await getSubmissionListAction({
       payload: {
-        ...formValues,
+        ...(sanitizeFormData(formValues) as ClaimListSearchParams),
         isForcePaper: get().selectedTab === TabValue.PaperSubmission,
       },
       page,
