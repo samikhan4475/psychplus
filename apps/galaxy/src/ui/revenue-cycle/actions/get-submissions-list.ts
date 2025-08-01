@@ -16,6 +16,7 @@ const defaultPayLoad = {
   isIncludeClaimValidation: true,
   insurancePolicyPriority: InsurancePolicyPriority.Primary,
   isIncludePatientInsurancePlan: false,
+  isIncludePatient: true,
   IsHold: false,
   IsSelfPay: false,
   IsMarkAsSubmitted: false,

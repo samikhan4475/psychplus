@@ -25,6 +25,7 @@ const defaultPayLoad = {
   isIncludeMetadataResourceChangeControl: true,
   isIncludeMetadataResourceIds: true,
   isIncludeMetadataResourceStatus: true,
+  isIncludePatient: true,
 }
 
 const ExportExcelButton = () => {
