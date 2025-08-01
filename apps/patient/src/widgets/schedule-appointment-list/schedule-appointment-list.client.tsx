@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { CODESETS } from '@psychplus-v2/constants'
+import { CODESETS, DEFAULT_RADIUS_DISTANCE } from '@psychplus-v2/constants'
 import { Flex } from '@radix-ui/themes'
 import { useDebounce } from 'use-debounce'
 import { useShallow } from 'zustand/react/shallow'
@@ -115,7 +115,7 @@ const ScheduleAppointmentListClient = ({
       state: searchParams.get('state') ?? '',
       sortBy: '',
       language: '',
-      maxDistanceInMiles: undefined,
+      maxDistanceInMiles: DEFAULT_RADIUS_DISTANCE,
       startingDate: isMobile()
         ? formatDateYmd(new Date())
         : getStartOfWeek(new Date()),

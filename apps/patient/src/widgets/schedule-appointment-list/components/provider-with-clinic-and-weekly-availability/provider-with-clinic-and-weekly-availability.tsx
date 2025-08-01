@@ -157,11 +157,10 @@ const renderLanguageAndLocation = (
         <Flex align="end" className="gap-[17px] text-2 md:text-3">
           Distance:
           <Text className="text-2 text-[#575759] md:text-3">
-            {
+            {`${
               staffWithClinicsAndSlots?.clinicWithSlots[selectedClinicIndex]
-                ?.clinic?.distanceInMiles
-            }
-            mi
+                ?.clinic?.distanceInMiles ?? ''
+            } mi`}
           </Text>
         </Flex>
       </Flex>
