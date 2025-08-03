@@ -390,6 +390,9 @@ importers:
       react-hook-form:
         specifier: ^7.47.0
         version: 7.52.1(react@18.3.1)
+      react-input-mask:
+        specifier: ^2.0.4
+        version: 2.0.4(react-dom@18.3.1)(react@18.3.1)
       react-number-format:
         specifier: ^5.3.1
         version: 5.3.1(react-dom@18.3.1)(react@18.3.1)
@@ -445,6 +448,9 @@ importers:
       '@types/react-dom':
         specifier: ^18.2.10
         version: 18.3.0
+      '@types/react-input-mask':
+        specifier: ^3.0.6
+        version: 3.0.6
       '@types/react-timeago':
         specifier: ^4.1.7
         version: 4.1.7
@@ -9392,6 +9398,12 @@ packages:
       '@types/react': 18.3.4
     dev: false
 
+  /@types/react-input-mask@3.0.6:
+    resolution: {integrity: sha512-+5I18WKyG3eWIj7TVPWfK1VitI9mPpS9y6jE/BfmTCe+iL27NfBw/yzKRvCFp1DRBvlvvcsiZf05bub0YC1k8A==}
+    dependencies:
+      '@types/react': 18.3.4
+    dev: true
+
   /@types/react-timeago@4.1.7:
     resolution: {integrity: sha512-ogD4Ror/hDG+pQggCX+TgPgJ8W2jeeUxsgNU485Qpm0Ma+E2TND2EJuKwK5+sxlkDXDEgsHradO0zWBkTgLzNg==}
     dependencies:
@@ -14416,6 +14428,18 @@ packages:
       react-dom: 18.3.1(react@18.3.1)
     transitivePeerDependencies:
       - csstype
+    dev: false
+
+  /react-input-mask@2.0.4(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-1hwzMr/aO9tXfiroiVCx5EtKohKwLk/NT8QlJXHQ4N+yJJFyUuMT+zfTpLBwX/lK3PkuMlievIffncpMZ3HGRQ==}
+    peerDependencies:
+      react: '>=0.14.0'
+      react-dom: '>=0.14.0'
+    dependencies:
+      invariant: 2.2.4
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      warning: 4.0.3
     dev: false
 
   /react-is@16.13.1:
