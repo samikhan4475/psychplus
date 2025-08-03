@@ -217,12 +217,12 @@ const DataTable = <TData, TValue>({
                   'group/row-hover hover:bg-gray-2',
                   {
                     'cursor-pointer': onRowClick !== undefined,
-                    '!bg-pp-table-subRows': row.getIsSelected(),
+                    '!bg-pp-focus-bg': row.getIsSelected(),
                     'bg-pp-table-subRows hover:bg-pp-table-subRows':
                       row.depth > 0,
                     'bg-pp-red/30 hover:bg-pp-red/30':
                       isRowHighlightedRed?.(row),
-                      'bg-pp-focus-bg' :  isRowSelected?.(row),
+                    'bg-pp-focus-bg': isRowSelected?.(row),
                     'bg-pp-yellow-1/30 hover:bg-pp-yellow-1/30':
                       isTestResource?.(row),
                     'bg-white': tRowClass && row.depth > 0,

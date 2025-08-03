@@ -18,6 +18,7 @@ const LabsAndOrderTab = ({ patientId, data }: LabsOrderProps) => {
     resolver: zodResolver(HospitalWidgetSchema),
     reValidateMode: 'onChange',
     defaultValues: initialValue,
+    values: initialValue,
   })
 
   return (
