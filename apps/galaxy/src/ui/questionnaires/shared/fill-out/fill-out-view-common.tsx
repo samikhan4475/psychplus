@@ -24,7 +24,7 @@ const FilloutCommon = ({ data, sectionName }: FilloutCommonProps) => {
   const patientId = useParams().id as string
   const appointmentId = useSearchParams().get('id') as string
 
-  const { questions, labels, scoreInterpretationRanges } =
+  const { questions, labels, scoreInterpretationRanges, pagination } =
     META_INFO[sectionName as keyof typeof META_INFO] || {}
 
   const totalQuestions = questions.length
@@ -55,9 +55,10 @@ const FilloutCommon = ({ data, sectionName }: FilloutCommonProps) => {
               data={questions}
               labels={labels}
               totalScore={totalScore}
-              scoreInterpretationRanges={scoreInterpretationRanges}
+              scoreInterpretationRanges={pagination ? []: scoreInterpretationRanges}
               classNameHeaderCell={CLASSNAME_HEADER_CELL}
               classNameCell={CLASSNAME_CELL}
+              pagination={pagination}
             />
           </FilloutCurrentTab>
         </WidgetFormContainer>

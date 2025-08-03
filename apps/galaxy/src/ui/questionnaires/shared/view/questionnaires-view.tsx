@@ -4,7 +4,7 @@ import { FormProvider } from 'react-hook-form'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { transformIn } from '../data'
-import { QuestionnairesForm } from '../questionnaires-form'
+import { PaginationConfig, QuestionnairesForm } from '../questionnaires-form'
 import { useQuestionnaireForm } from '../use-questionnaire-form'
 import { questionnaireViewConstants } from './constant'
 
@@ -26,8 +26,10 @@ const QuestionnaireViewCommon = ({
   )
 
   const otherQuestionnaire =
-    questionnaire.questions && questionnaire.labels && questionnaire.scoreRange
-
+    questionnaire.questions &&
+    questionnaire.labels &&
+    (questionnaire.scoreRange || questionnaire?.pagination)
+    
   return (
     <FormProvider {...form}>
       <Flex direction="column" gap=".5rem">
@@ -36,8 +38,11 @@ const QuestionnaireViewCommon = ({
             data={questionnaire.questions}
             labels={questionnaire.labels}
             totalScore={totalScore}
-            scoreInterpretationRanges={questionnaire.scoreRange}
+            scoreInterpretationRanges={
+              questionnaire?.pagination ? [] : questionnaire.scoreRange
+            }
             disabled
+            pagination={questionnaire?.pagination as PaginationConfig}
           />
         )}
       </Flex>

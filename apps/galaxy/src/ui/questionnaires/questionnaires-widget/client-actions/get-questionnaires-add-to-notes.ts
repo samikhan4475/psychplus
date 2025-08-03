@@ -27,6 +27,7 @@ const getQuestionnairesHistories = async ({
     QuickNoteSectionName.QuickNoteSectionPcl5,
     QuickNoteSectionName.QuickNoteSectionCssrs,
     QuickNoteSectionName.QuickNoteSectionPsc17,
+    QuickNoteSectionName.QuickNoteSectionCopsR,
   ]
 
   const response = await api.POST<QuickNoteHistory[]>(

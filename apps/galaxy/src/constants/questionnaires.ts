@@ -11,6 +11,7 @@ enum QuestionnaireType {
   QuicknoteSectionQuestionnaireMoca = 'Moca',
   QuicknoteSectionQuestionnaireCssrs = 'Cssrs',
   QuicknoteSectionQuestionnairePsc17 = 'Psc',
+  QuicknoteSectionQuestionnaireCopR = 'CopsR',
 }
 
 export { QuestionnaireType }

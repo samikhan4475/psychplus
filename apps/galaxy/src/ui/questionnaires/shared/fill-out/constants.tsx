@@ -4,6 +4,11 @@ import {
   SCORE_INTERPRETATION_RANGES as AUDIT_SCORE_INTERPRETATION_RANGES,
 } from '@/ui/questionnaires/audit-tab/constants'
 import {
+  LABELS as COPSR_LABELS,
+  QUESTIONS as COPSR_QUESTIONS,
+  SUBSCALES as COPS_SUBSCALES
+} from '@/ui/questionnaires/cops-r-tab/constants'
+import {
   LABELS as DAST_LABELS,
   QUESTIONS as DAST_QUESTIONS,
   SCORE_INTERPRETATION_RANGES as DAST_SCORE_INTERPRETATION_RANGES,
@@ -29,14 +34,16 @@ import {
   SCORE_INTERPRETATION_RANGES as PHQ9_SCORE_INTERPRETATION_RANGES,
 } from '@/ui/questionnaires/phq-9-tab/constants'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { QuestionnairesData } from '../questionnaires-form'
+import { PaginationConfig, QuestionnairesData } from '../questionnaires-form'
 import { ScoreInterpretationRange } from '../score-interpretation'
+import { SubscalesConfig } from '../score-interpretation-desired'
 
 export const META_INFO: {
   [key: string]: {
     questions: QuestionnairesData[]
     labels: string[]
     scoreInterpretationRanges: ScoreInterpretationRange[]
+    pagination?: PaginationConfig
   }
 } = {
   //AUDIT
@@ -74,5 +81,16 @@ export const META_INFO: {
     questions: GAD7_QUESTIONS,
     labels: GAD7_LABELS,
     scoreInterpretationRanges: GAD7_SCORE_INTERPRETATION_RANGES,
+  },
+  // COPS-R
+  [QuickNoteSectionName.QuickNoteSectionCopsR]: {
+    questions: COPSR_QUESTIONS,
+    labels: COPSR_LABELS,
+    scoreInterpretationRanges:[],
+    pagination:{
+      enabled:true,
+      itemsPerPage:50,
+      interpretation: COPS_SUBSCALES as SubscalesConfig
+    }
   },
 }

@@ -1,6 +1,9 @@
-import React from 'react'
+import { useMemo, useState } from 'react'
 import { Box, Flex, Table, Text } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import { cn } from '@/utils'
+import { ScoreInterpretationDesired, SubscalesConfig } from './score-interpretation-desired'
+import { Pagination } from './questionnaires-pagination'
 import { RadioButton } from './radio-button'
 import {
   ScoreInterpretation,
@@ -19,6 +22,12 @@ interface QuestionnairesData {
   options: Option[]
 }
 
+interface PaginationConfig {
+  enabled: boolean
+  itemsPerPage?: number
+  interpretation: SubscalesConfig
+}
+
 interface QuestionnairesFormProps {
   data: QuestionnairesData[]
   labels: string[]
@@ -27,6 +36,7 @@ interface QuestionnairesFormProps {
   classNameHeaderCell?: string
   classNameCell?: string
   disabled?: boolean
+  pagination?: PaginationConfig
 }
 
 const QuestionnairesForm = ({
@@ -37,43 +47,89 @@ const QuestionnairesForm = ({
   classNameHeaderCell,
   classNameCell,
   disabled = false,
+  pagination,
 }: QuestionnairesFormProps) => {
+  const { watch } = useFormContext()
+
+  const [currentPage, setCurrentPage] = useState(1)
+
+  const itemsPerPage = pagination?.itemsPerPage || 50
+  const totalPages = pagination?.enabled
+    ? Math.ceil(data.length / itemsPerPage)
+    : 1
+
+  const paginatedData = useMemo(() => {
+    if (!pagination?.enabled) return data
+
+    const startIndex = (currentPage - 1) * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    return data.slice(startIndex, endIndex)
+  }, [data, currentPage, itemsPerPage, pagination?.enabled])
+
+  const getQuestionNumber = (index: number) => {
+    if (!pagination?.enabled) return index + 1
+    return (currentPage - 1) * itemsPerPage + index + 1
+  }
+
+  const handlePrevious = () => {
+    setCurrentPage((prev) => Math.max(1, prev - 1))
+  }
+
+  const handleNext = () => {
+    setCurrentPage((prev) => Math.min(totalPages + 1, prev + 1))
+  }
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
+  const result = Object.fromEntries(
+    data.map((item) => {
+      const value = watch(item.id)
+      return [item.id, Number(item.value) === Number(value)]
+    }),
+  )
+
   return (
     <Box className="w-full">
       <Table.Root variant="ghost" size="1">
-        <Table.Header className={classNameHeaderCell && 'bg-pp-bg-table-label'}>
-          <Table.Row>
-            <Table.ColumnHeaderCell width="50%" pl="0">
-              <Text weight="medium" size="2">
-                {labels?.[0]}
-              </Text>
-            </Table.ColumnHeaderCell>
-
-            {labels?.slice(1).map((label) => (
-              <Table.ColumnHeaderCell
-                key={label}
-                width={`${50 / (labels.length - 1)}%`}
-                className={classNameHeaderCell}
-              >
+        {paginatedData.length > 0 && (
+          <Table.Header
+            className={cn(classNameHeaderCell, 'bg-pp-bg-table-label')}
+          >
+            <Table.Row>
+              <Table.ColumnHeaderCell width="50%">
                 <Text weight="medium" size="2">
-                  {label}
+                  {labels?.[0]}
                 </Text>
               </Table.ColumnHeaderCell>
-            ))}
-          </Table.Row>
-        </Table.Header>
+
+              {labels?.slice(1).map((label) => (
+                <Table.ColumnHeaderCell
+                  key={label}
+                  width={`${50 / (labels.length - 1)}%`}
+                  className={classNameHeaderCell}
+                >
+                  <Text weight="medium" size="2">
+                    {label}
+                  </Text>
+                </Table.ColumnHeaderCell>
+              ))}
+            </Table.Row>
+          </Table.Header>
+        )}
 
         <Table.Body>
-          {data.map((item, index) => (
+          {paginatedData.map((item, index) => (
             <Table.Row
               key={item.id}
               className={cn(index % 2 === 1 && 'bg-pp-bg-table-cell')}
               align="center"
             >
-              <Table.Cell width="50%" pl="0">
+              <Table.Cell width="50%">
                 <Flex gap="1">
                   <Text weight="medium" size="1">
-                    {index + 1}.
+                    {getQuestionNumber(index)}.
                   </Text>
                   <Text weight="medium" size="1">
                     {item.question}
@@ -103,16 +159,33 @@ const QuestionnairesForm = ({
         </Table.Body>
       </Table.Root>
 
-      {scoreInterpretationRanges && (
+      {scoreInterpretationRanges && !!scoreInterpretationRanges.length ? (
         <Box mt="2">
           <ScoreInterpretation
             ranges={scoreInterpretationRanges}
             totalScore={totalScore}
           />
         </Box>
+      ) : (
+        currentPage === totalPages + 1 && (
+          <ScoreInterpretationDesired
+            answers={result}
+            interpretationData={pagination?.interpretation as SubscalesConfig}
+          />
+        )
+      )}
+
+      {pagination?.enabled && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+          onPrevious={handlePrevious}
+          onNext={handleNext}
+        />
       )}
     </Box>
   )
 }
 
-export { QuestionnairesForm, type QuestionnairesData }
+export { QuestionnairesForm, type PaginationConfig, type QuestionnairesData }

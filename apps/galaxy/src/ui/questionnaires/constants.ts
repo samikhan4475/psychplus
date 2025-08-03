@@ -14,6 +14,7 @@ enum QuestionnaireTabs {
   HAM_D_TAB = 'HAM-D',
   C_SSRS_TAB = 'C-SSRS',
   PSC_17_TAB = 'PSC-17',
+  COPS_R_TAB = 'COPS-R',
 }
 
 enum QuestionnairesStatus {
@@ -39,6 +40,7 @@ enum QuestionnairesTitles {
   'HAM-D' = 'Hamilton Depression Rating Scale (HAM-D)',
   'C-SSRS' = 'Columbia-Suicide Severity Rating Scale (C-SSRS)',
   'PSC-17' = 'Pediatric Symptom Checklist-17 (PSC-17)',
+  'COPS-R'= 'Candidate & Officer Personnel Survey (COPS-R)'
 }
 
 const quickNotesSectionsTitles = {
@@ -66,6 +68,8 @@ const quickNotesSectionsTitles = {
     'Columbia-Suicide Severity Rating Scale (C-SSRS)',
   [QuickNoteSectionName.QuickNoteSectionPsc17]:
     'Pediatric Symptom Checklist-17 (PSC-17)',
+    [QuickNoteSectionName.QuickNoteSectionCopsR]:
+    'Candidate & Officer Personnel Survey (COPS-R)'
 }
 
 export {

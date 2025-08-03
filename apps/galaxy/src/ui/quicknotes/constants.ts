@@ -65,6 +65,7 @@ enum QuickNoteSectionName {
   QuicknoteSectionLabResults = 'QuicknoteSectionLabResults',
   QuicknoteSectionAutoReferrals = 'QuicknoteSectionAutoReferrals',
   QuicknoteSectionUds = 'QuicknoteSectionUDS',
+  QuickNoteSectionCopsR = 'QuicknoteSectionQuestionnaireCopsR',
 }
 
 const questionnairesAddToNotesSection = [
@@ -81,6 +82,7 @@ const questionnairesAddToNotesSection = [
   `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionPcl5}`,
   `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionCssrs}`,
   `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionPsc17}`,
+  `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionCopsR}`,
 ]
 
 const COPY_PREVIOUS_BUTTON =

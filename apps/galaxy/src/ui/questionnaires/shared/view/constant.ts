@@ -6,6 +6,11 @@ import {
 } from '../../audit-tab/constants'
 import { QuestionnaireTabs } from '../../constants'
 import {
+  LABELS as COPSRLabels,
+  QUESTIONS as COPSRQuestions,
+  SUBSCALES as COPSRSubscales,
+} from '../../cops-r-tab/constants'
+import {
   LABELS as DAST10Labels,
   QUESTIONS as DAST10Questions,
   SCORE_INTERPRETATION_RANGES as DAST10ScoreRanges,
@@ -53,6 +58,17 @@ const questionnaireViewDta = [
   {
     sectionName: QuickNoteSectionName.QuickNoteSectionPsc17,
     questionnaireTab: QuestionnaireTabs.PSC_17_TAB,
+  },
+  {
+    sectionName: QuickNoteSectionName.QuickNoteSectionCopsR,
+    labels: COPSRLabels,
+    questions: COPSRQuestions,
+    questionnaireTab: QuestionnaireTabs.COPS_R_TAB,
+    pagination: {
+      enabled: true,
+      itemsPerPage: 50,
+      interpretation: COPSRSubscales,
+    },
   },
   {
     sectionName: QuickNoteSectionName.QuickNoteSectionPcl5,

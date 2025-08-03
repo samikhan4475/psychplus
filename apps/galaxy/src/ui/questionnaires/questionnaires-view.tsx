@@ -20,6 +20,7 @@ import { Psc17Tab } from './psc-17-tab'
 import { SnapIvTab } from './snap-iv-tab'
 import { useStore } from './store'
 import { YBocsTab } from './y-bocs-tab'
+import { CopsRTab } from './cops-r-tab'
 
 interface QuestionnairesViewProps {
   data: QuickNoteSectionItem[]
@@ -89,6 +90,9 @@ const QuestionnairesView = ({ data, patientId }: QuestionnairesViewProps) => {
           <TabsTrigger value={QuestionnaireTabs.PSC_17_TAB}>
             {QuestionnaireTabs.PSC_17_TAB}
           </TabsTrigger>
+          <TabsTrigger value={QuestionnaireTabs.COPS_R_TAB}>
+            {QuestionnaireTabs.COPS_R_TAB}
+          </TabsTrigger>
         </Tabs.List>
         <Flex className="flex-1 border-b border-gray-5" />
       </Flex>
@@ -130,6 +134,9 @@ const QuestionnairesView = ({ data, patientId }: QuestionnairesViewProps) => {
       </TabsContent>
       <TabsContent value={QuestionnaireTabs.PSC_17_TAB}>
         <Psc17Tab patientId={patientId} data={data} />
+      </TabsContent>
+      <TabsContent value={QuestionnaireTabs.COPS_R_TAB}>
+        <CopsRTab patientId={patientId} data={data} />
       </TabsContent>
     </Tabs.Root>
   )

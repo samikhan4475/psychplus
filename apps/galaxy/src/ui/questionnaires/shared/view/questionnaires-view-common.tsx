@@ -24,7 +24,7 @@ const QuestionnaireDetailView = ({
   const hasOtherQuestionnaire = Boolean(
     currentQuestionnaire.questions &&
       currentQuestionnaire.labels &&
-      currentQuestionnaire.scoreRange,
+      (currentQuestionnaire.scoreRange || currentQuestionnaire?.pagination ),
   )
 
   const renderView = () => {
