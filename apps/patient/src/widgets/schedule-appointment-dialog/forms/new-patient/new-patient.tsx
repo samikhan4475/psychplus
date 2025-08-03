@@ -19,7 +19,6 @@ import {
 import { usePubsub } from '@psychplus/utils/event'
 import { clickTrack } from '@psychplus/utils/tracking'
 import { SCHEDULE_APPOINTMENT_DIALOG } from '@psychplus/widgets'
-import { enums, PSYCHPLUS_LIVE_URL } from '@/constants'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useRouter } from 'next/navigation'
 import { StorageType } from '@psychplus-v2/constants'
@@ -40,6 +39,7 @@ import {
   getNormalizedProviderType,
   transformStaffWithClinicsAndSlots,
 } from '@/widgets/schedule-appointment-list/utils'
+import CustomDateInput from './custom-date-input'
 
 interface NewPatientProps {
   onclose?: () => void
@@ -295,20 +295,9 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
     { length: 200 },
     (_, i) => new Date().getFullYear() - i,
   )
-  const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ]
+  const months = [...Array(12)].map((_, i) =>
+    new Date(0, i).toLocaleString('default', { month: 'long' }),
+  )
 
   return (
     <>
@@ -403,6 +392,16 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
               >
                 <Flex className="h-[45px] w-full rounded-6 text-4 sm:w-[190px]">
                   <DatePicker
+                    customInput={<CustomDateInput />}
+                    dateFormat="dd/MM/yyyy"
+                    placeholderText="dd/mm/yyyy"
+                    selected={selectedDate}
+                    onChange={(date) => {
+                      if (date) {
+                        form.setValue('dateOfBirth', date)
+                        setSelectedDate(date)
+                      }
+                    }}
                     renderCustomHeader={({
                       date,
                       changeYear,
@@ -453,17 +452,6 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
                         </button>
                       </Flex>
                     )}
-                    selected={selectedDate}
-                    className={cn(
-                      'border-pp-gray-2 h-[35px] w-[195px] rounded-6 border-2 px-2 text-start text-4 lg:h-[45px]',
-                    )}
-                    onChange={(date) => {
-                      if (date) {
-                        form.setValue('dateOfBirth', date)
-                        setSelectedDate(date)
-                      }
-                    }}
-                    placeholderText="dd/mm/yyyy"
                   />
                 </Flex>
               </FormField>
