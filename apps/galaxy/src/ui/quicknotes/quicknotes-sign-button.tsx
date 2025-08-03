@@ -17,7 +17,7 @@ import { useStore as useDiagnosisStore } from '@/ui/diagnosis/store'
 import { useStore as useDischargeDiagnosisStore } from '@/ui/discharge-diagnosis/store'
 import { useStore as useFollowupStore } from '@/ui/follow-up/follow-up-widget/store'
 import { useStore as useMedicationStore } from '@/ui/medications/patient-medications-widget/store'
-import { filterDefaultCosigner, sendEvent } from '@/utils'
+import { filterDefaultCosigner } from '@/utils'
 import { AlertDialog } from '../alerts'
 import { shouldDisableDiagnosisActions } from '../diagnosis/diagnosis/utils'
 import {
@@ -38,6 +38,7 @@ import { useQuickNotesPermissions } from './hooks'
 import { PolicyConsentDialog } from './policy-consent-dialog'
 import { useStore, validateDiagnosis } from './store'
 import { SignPayloadProps } from './types'
+import { refetchReferrals } from './utils'
 
 interface QuickNotesSignButtonProps {
   appointment: Appointment
@@ -358,12 +359,6 @@ const QuickNotesSignButton = ({
     })
   }
 
-  const refetchReferrals = () => {
-    sendEvent({
-      widgetId: QuickNoteSectionName.QuicknoteSectionAutoReferrals,
-      eventType: 'widget:save',
-    })
-  }
   const signNote = async () => {
     const signResults = await sign(signPayload)
 

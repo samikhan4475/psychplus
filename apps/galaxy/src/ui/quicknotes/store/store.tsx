@@ -1,5 +1,12 @@
 'use client'
 
+import { createContext, useContext, useRef } from 'react'
+import { format } from 'date-fns'
+import toast from 'react-hot-toast'
+import { type StoreApi } from 'zustand'
+import { shallow } from 'zustand/shallow'
+import { useStoreWithEqualityFn } from 'zustand/traditional'
+import { createStore as zustandCreateStore } from 'zustand/vanilla'
 import {
   Appointment,
   PatientProfile,
@@ -8,17 +15,10 @@ import {
 } from '@/types'
 import { SectionItem } from '@/ui/hpi/hooks/useHpiWidget'
 import { manageCodes, sendEvent } from '@/utils'
-import { format } from 'date-fns'
-import { createContext, useContext, useRef } from 'react'
-import toast from 'react-hot-toast'
-import { type StoreApi } from 'zustand'
-import { shallow } from 'zustand/shallow'
-import { useStoreWithEqualityFn } from 'zustand/traditional'
-import { createStore as zustandCreateStore } from 'zustand/vanilla'
 import { signNoteClientAction } from '../client-actions'
 import { QuickNoteSectionName } from '../constants'
 import { SignPayloadProps } from '../types'
-import { modifyWidgetResponse } from '../utils'
+import { modifyWidgetResponse, refetchReferrals } from '../utils'
 import { saveWidgets } from './utils'
 
 type ActionErrorResult = { state: 'error'; error: string }
@@ -28,8 +28,14 @@ type ActionResult<T> = ActionSuccessResult<T> | ActionErrorResult
 interface Store {
   loading: boolean
   patient: PatientProfile
-  save: (appointment: Appointment, isAddToNotes?: boolean, formattedValues?: () => SectionItem[]) => void
-  sign: (payload: SignPayloadProps) => Promise<ActionResult<QuickNoteSectionItem[]>>
+  save: (
+    appointment: Appointment,
+    isAddToNotes?: boolean,
+    formattedValues?: () => SectionItem[],
+  ) => void
+  sign: (
+    payload: SignPayloadProps,
+  ) => Promise<ActionResult<QuickNoteSectionItem[]>>
   markAsError: (
     payload: SignPayloadProps,
     onSuccess?: () => void,
@@ -132,35 +138,43 @@ const createStore = (initialState: StoreInitialState) =>
       set({ signOptions: { ...get().signOptions, ...option } }),
     toggleActualNoteView: () =>
       set({ showActualNoteView: !get().showActualNoteView }),
-    save: async (appointment, isAddToNotes = false, formattedValues = () => []) => {
+    save: async (
+      appointment,
+      isAddToNotes = false,
+      formattedValues = () => [],
+    ) => {
       set({ loading: true })
-      const currentWidgetsData = get().actualNotewidgetsData || {};
-      const formattedSectionItems = formattedValues();
-      const sectionKey = QuickNoteSectionName.QuicknoteSectionHPI;
+      const currentWidgetsData = get().actualNotewidgetsData || {}
+      const formattedSectionItems = formattedValues()
+      const sectionKey = QuickNoteSectionName.QuicknoteSectionHPI
       const singleBaseItem = {
         sectionName: sectionKey,
-        sectionItem: "1",
-        sectionItemValue: "1",
+        sectionItem: '1',
+        sectionItemValue: '1',
         pid: appointment?.patientId,
       }
-      const hasSectionInCurrentData = !!currentWidgetsData[sectionKey]?.length;
+      const hasSectionInCurrentData = !!currentWidgetsData[sectionKey]?.length
       const baseItem = hasSectionInCurrentData
         ? currentWidgetsData[sectionKey][0]
-        : singleBaseItem;
+        : singleBaseItem
       const updatedWidgetsData = {
         ...currentWidgetsData,
-        [sectionKey]: formattedSectionItems.length > 0
-          ? formattedSectionItems.map(item => ({
-            ...baseItem,
-            sectionItem: item.sectionItem,
-            ...(item.sectionItemValue !== undefined
-              ? { sectionItemValue: item.sectionItemValue }
-              : {})
-          }))
-          : [singleBaseItem]
-      };
-      const shouldUseUpdatedData = isAddToNotes || formattedSectionItems.length > 0;
-      const finalWidgetsData = shouldUseUpdatedData ? updatedWidgetsData : currentWidgetsData;
+        [sectionKey]:
+          formattedSectionItems.length > 0
+            ? formattedSectionItems.map((item) => ({
+                ...baseItem,
+                sectionItem: item.sectionItem,
+                ...(item.sectionItemValue !== undefined
+                  ? { sectionItemValue: item.sectionItemValue }
+                  : {}),
+              }))
+            : [singleBaseItem],
+      }
+      const shouldUseUpdatedData =
+        isAddToNotes || formattedSectionItems.length > 0
+      const finalWidgetsData = shouldUseUpdatedData
+        ? updatedWidgetsData
+        : currentWidgetsData
       const widgetsData = Object.entries(finalWidgetsData)
         .map(([, sections]) => sections)
         .flat()
@@ -170,11 +184,12 @@ const createStore = (initialState: StoreInitialState) =>
           eventType: 'quicknotes:clearErrors',
           widgetId: QuickNoteSectionName.QuicknoteSectionHPI,
         })
-        toast.success(isAddToNotes ? "Added to Notes" : 'Quicknote saved!')
+        toast.success(isAddToNotes ? 'Added to Notes' : 'Quicknote saved!')
         set({ unsavedChanges: {} })
         get().setWidgetsData(response.data)
       }
       set({ loading: false })
+      refetchReferrals()
     },
     sign: async (payload) => {
       try {
@@ -290,4 +305,3 @@ const useStore = <T,>(
 }
 
 export { createStore, StoreProvider, useStore }
-

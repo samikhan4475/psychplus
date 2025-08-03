@@ -2,7 +2,7 @@ import { cache } from 'react'
 import { VisitTypeEnum } from '@/enum'
 import { QuickNoteSectionItem } from '@/types'
 import { HpiWidgetClientLoader } from '@/ui/hpi/hpi-widget/hpi-widget-client-loader'
-import { isHospitalCareVisit, visitTypeToWidgets } from '@/utils'
+import { isHospitalCareVisit, sendEvent, visitTypeToWidgets } from '@/utils'
 import { AddOnClientLoader } from '../add-on/add-on-widget/add-on-client-loader'
 import { PatientAllergiesClientView } from '../allergy/patient-allergies-client-view'
 import { FamilyInternalMedicineAssessmentPlanClientLoader } from '../assessment-plan/family-internal-medicine-assessment-plan-tab/family-internal-medicine-assessment-plan-client-loader'
@@ -392,6 +392,13 @@ const getWidgetErrorDetails = (
   ].filter(Boolean)
 }
 
+const refetchReferrals = () => {
+  sendEvent({
+    widgetId: QuickNoteSectionName.QuicknoteSectionAutoReferrals,
+    eventType: 'widget:save',
+  })
+}
+
 export {
   getCachedWidgetsByVisitType,
   getWidgetIds,
@@ -399,4 +406,5 @@ export {
   getWidgetsByVisitType,
   getWidgetErrorDetails,
   TherapyVisitTypeNames,
+  refetchReferrals,
 }

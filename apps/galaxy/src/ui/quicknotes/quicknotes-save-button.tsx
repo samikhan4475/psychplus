@@ -1,13 +1,13 @@
 'use client'
 
+import { useState } from 'react'
+import { Button } from '@radix-ui/themes'
+import { ClipboardIcon, SaveIcon } from 'lucide-react'
+import toast from 'react-hot-toast'
 import { revalidateAction } from '@/actions/revalidate'
 import { VisitTypeEnum } from '@/enum'
 import { genericEventBus } from '@/lib/generic-event-bus'
 import { Appointment } from '@/types'
-import { Button } from '@radix-ui/themes'
-import { ClipboardIcon, SaveIcon } from 'lucide-react'
-import { useState } from 'react'
-import toast from 'react-hot-toast'
 import { useHpiWidget } from '../hpi/hooks'
 import { useHpiHistoryStore } from '../hpi/hpi-history-dialog/store'
 import { SAVE_BUTTON } from './constants'
@@ -19,7 +19,7 @@ const QuickNotesSaveButton = ({
   appointment,
   isAddToNotes = false,
   patientId = '',
-  disabled = false
+  disabled = false,
 }: {
   appointment: Appointment
   isAddToNotes?: boolean
@@ -44,7 +44,11 @@ const QuickNotesSaveButton = ({
       return
     }
     try {
-      await save(appointment, isAddToNotes, isAddToNotes ? getFormattedValues : () => [])
+      save(
+        appointment,
+        isAddToNotes,
+        isAddToNotes ? getFormattedValues : () => [],
+      )
       if (appointment.visitTypeCode === VisitTypeEnum.UDS) {
         genericEventBus.emit(`${appointment.id}`, {
           type: 'lab-order',
@@ -55,6 +59,7 @@ const QuickNotesSaveButton = ({
       fetchHistory({ patientId })
       revalidateAction(false, isAddToNotes)
     } catch (error) {
+      console.error(error)
       toast.error('Failed to save quick notes')
     }
   }
@@ -69,20 +74,23 @@ const QuickNotesSaveButton = ({
           setAlertMessage('')
         }}
       />
-      <Button size="1" onClick={saveWidgets} disabled={loading || disabled} highContrast>
-        {
-          isAddToNotes ?
-            <>
-              <ClipboardIcon height={14} width={14} strokeWidth={2} />
-              Add to Notes
-            </>
-            :
-            <>
-              <SaveIcon height={14} width={14} strokeWidth={2} />
-              Save
-            </>
-        }
-
+      <Button
+        size="1"
+        onClick={saveWidgets}
+        disabled={loading || disabled}
+        highContrast
+      >
+        {isAddToNotes ? (
+          <>
+            <ClipboardIcon height={14} width={14} strokeWidth={2} />
+            Add to Notes
+          </>
+        ) : (
+          <>
+            <SaveIcon height={14} width={14} strokeWidth={2} />
+            Save
+          </>
+        )}
       </Button>
     </>
   )
