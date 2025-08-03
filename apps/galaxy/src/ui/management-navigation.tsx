@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 import NextLink from 'next/link'
 import { useParams, usePathname, useSearchParams } from 'next/navigation'
 import { Box, Flex, ScrollArea } from '@radix-ui/themes'
+import { useStore } from '@/store'
 import { cn, getManagementNavLinks } from '@/utils'
 
 const ManagementNavigation = () => {
@@ -14,9 +15,20 @@ const ManagementNavigation = () => {
   }>()
   const searchParams = useSearchParams()
   const practiceId = searchParams.get('practice')
+  const { organizationIds, staffTypes } = useStore(
+    (state) => state.staffResource,
+  )
+  const orgPracticeId = id || `${organizationIds?.[0]}`
   const navLinks = useMemo(
-    () => getManagementNavLinks(type, id, roleId, practiceId),
-    [type, id, roleId, practiceId],
+    () =>
+      getManagementNavLinks(
+        type,
+        orgPracticeId,
+        roleId,
+        practiceId,
+        staffTypes,
+      ),
+    [type, orgPracticeId, roleId, practiceId],
   )
   return (
     <Box className="bg-white w-[160px] rounded-1 shadow-2">

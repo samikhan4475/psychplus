@@ -9,7 +9,7 @@ import { toast } from 'react-hot-toast'
 import z from 'zod'
 import { FormContainer, LoadingPlaceholder } from '@/components'
 import { CODESETS } from '@/constants'
-import { useCodesetCodes } from '@/hooks'
+import { useCodesetCodes, useOrganizationMember } from '@/hooks'
 import {
   associatePermissionAction,
   disAssociatePermissionAction,
@@ -47,6 +47,7 @@ const ProfileForm = () => {
   }))
   const [loading, setLoading] = useState(true)
   const { id, roleId } = useParams<{ id: string; roleId: string }>()
+  const isMember = useOrganizationMember(id ?? '')
   const codes = useCodesetCodes(CODESETS.PermissionSection)
   const options = useMemo(() => {
     return codes.map((code) => ({
@@ -68,6 +69,7 @@ const ProfileForm = () => {
 
   useEffect(() => {
     ;(async () => {
+      if (!isMember) return
       setLoading(true)
       const response = await getRoleProfileAction({
         payload: {
@@ -157,6 +159,14 @@ const ProfileForm = () => {
     if (response.state === 'success') {
       setRoleProfile(response.data[0])
     }
+  }
+
+  if (!isMember) {
+    return (
+      <Flex height="100%" width="100%" align="center" justify="center">
+        <h1>You are unauthorized to view this page</h1>
+      </Flex>
+    )
   }
 
   if (loading) {

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { LoadingPlaceholder } from '@/components'
+import { useOrganizationMember } from '@/hooks'
 import { Role } from '@/types'
 import { getRoleProfileAction } from './actions'
 import { ProfileForm } from './profile-form'
@@ -11,10 +12,12 @@ import { ProfileForm } from './profile-form'
 const OrganizationProfileView = () => {
   const [roleData, setRoleData] = useState<Role | null>()
   const [loading, setLoading] = useState(false)
-  const { roleId } = useParams<{ roleId: string }>()
+  const { roleId, id } = useParams<{ roleId: string; id: string }>()
+  const isMember = useOrganizationMember(id ?? '')
 
   useEffect(() => {
     ;(async () => {
+      if (!isMember) return
       setLoading(true)
       if (!roleId) return
 
@@ -30,6 +33,15 @@ const OrganizationProfileView = () => {
       }
     })()
   }, [roleId])
+
+  if (!isMember) {
+    return (
+      <Flex height="100%" width="100%" align="center" justify="center">
+        <h1>You are unauthorized to view this page</h1>
+      </Flex>
+    )
+  }
+
   if (loading) {
     return (
       <Flex height="100%" width="100%" align="center" justify="center">

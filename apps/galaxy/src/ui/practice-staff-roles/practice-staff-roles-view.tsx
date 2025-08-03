@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { Box, Text } from '@radix-ui/themes'
 import { LoadingPlaceholder } from '@/components'
+import { useOrganizationMember } from '@/hooks'
 import { Practice } from '@/types'
 import { getAllPracticesAction } from './actions'
 import { OrganizationPracticesListTable } from './practice-staff-roles-table'
@@ -13,6 +14,7 @@ const PracticeStaffRolesView = () => {
   const [practiceData, setPracticeData] = useState<Practice>()
   const [loading, setLoading] = useState(true)
   const { id } = useParams<{ id: string }>()
+  const isMember = useOrganizationMember(practiceData?.organizationId ?? '')
 
   useEffect(() => {
     init()
@@ -41,6 +43,13 @@ const PracticeStaffRolesView = () => {
     return (
       <Box className="flex h-screen w-full">
         <Text>No practice found</Text>
+      </Box>
+    )
+  }
+  if (!isMember) {
+    return (
+      <Box className="flex h-screen w-full items-center justify-center">
+        <Text>You are unauthorized to view this page</Text>
       </Box>
     )
   }

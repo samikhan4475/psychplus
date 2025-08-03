@@ -4,6 +4,7 @@ import React from 'react'
 import { useParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { TabContentHeading } from '@/components'
+import { useOrganizationMember } from '@/hooks'
 import { GooglePlacesContextProvider } from '@/providers/google-places-provider'
 import { AddStaffButton } from './add-staff-button'
 import { FEATURE_TYPES } from './constants'
@@ -16,7 +17,19 @@ interface StaffManagementViewProps {
 }
 
 const StaffManagementView = ({ googleApiKey }: StaffManagementViewProps) => {
-  const { type } = useParams<{ type: string }>()
+  const { type, id } = useParams<{ type: string; id: string }>()
+  const isMember = useOrganizationMember(
+    type === FEATURE_TYPES.ORGANIZATION ? id : '',
+  )
+
+  if (!isMember) {
+    return (
+      <Flex height="100%" width="100%" align="center" justify="center">
+        <h1>You are unauthorized to view this page</h1>
+      </Flex>
+    )
+  }
+
   return (
     <Flex
       gap="1"

@@ -7,11 +7,14 @@ import { FEATURE_FLAGS, MAIN_PAGE_FEATURE_FLAGS } from '@/constants'
 import { useHasPermission } from '@/hooks'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { useStore } from '@/store'
-import { cn } from '@/utils'
+import { cn, getManagementLink } from '@/utils'
 import { InboxLink } from './inbox-link'
 import { PatientLookupDropdown } from './patient-lookup-dropdown'
 
 const NavigationLinks = ({ count }: { count: number }) => {
+  const { staffPractice, organizationIds, staffTypes } = useStore(
+    (state) => state.staffResource,
+  )
   const hasPermission = useHasPermission('mainTabManagementPermission')
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr11786EnableGalaxySecondPhaseFeatures,
@@ -24,6 +27,9 @@ const NavigationLinks = ({ count }: { count: number }) => {
   const isRCMFlagEnabled = useFeatureFlagEnabled(
     MAIN_PAGE_FEATURE_FLAGS.ehr7246EnableClaimManagementTab,
   )
+  const managementLink =
+    hasPermission &&
+    getManagementLink(organizationIds, staffPractice, staffTypes)
 
   return (
     <Flex
@@ -38,7 +44,7 @@ const NavigationLinks = ({ count }: { count: number }) => {
         <NavigationLink href="/patient-lookup" label="Patient Lookup" />
         <NavigationLink href="/rx" label="Rx" />
         {hasPermission && (
-          <NavigationLink href="/management" label="Management" />
+          <NavigationLink href={managementLink} label="Management" />
         )}
         {isRCMFlagEnabled && (
           <NavigationLink href="/revenue-cycle" label="Revenue Cycle" />

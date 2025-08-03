@@ -5,6 +5,7 @@ import { TriangleDownIcon } from '@radix-ui/react-icons'
 import { Avatar, DropdownMenu, Flex, Text } from '@radix-ui/themes'
 import { CircleUser, LogOutIcon, type LucideIcon } from 'lucide-react'
 import { logoutAction } from '@/actions'
+import { GALAXY_APP_LOCAL_STORAGE_KEY } from '@/constants'
 import { useStore } from '@/store'
 import { getUserFullName, getUserInitials } from '@/utils'
 import { ResetButton } from './reset-button'
@@ -78,6 +79,7 @@ const UserDropdownMenu = () => {
           Icon={LogOutIcon}
           onClick={() => {
             localStorage.removeItem('p+-provider-app')
+            localStorage.removeItem(GALAXY_APP_LOCAL_STORAGE_KEY)
             logoutAction()
           }}
         >

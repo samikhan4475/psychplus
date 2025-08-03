@@ -1,3 +1,4 @@
+import { AdminType } from '@/enum'
 import { ChartNavLink, VisitTypes } from '@/types'
 import { Tabs } from '@/ui/messages/types'
 
@@ -332,8 +333,12 @@ const getManagementNavLinks = (
   id: string | null,
   roleId: string | null,
   practiceId: string | null,
+  staffTypes?: string[],
 ) => {
   const baseHref = `/management`
+  const isSuperAdmin = !!staffTypes?.includes(AdminType.SUPER_ADMIN)
+  const isOrgAdmin = !!staffTypes?.includes(AdminType.ORG_ADMIN)
+  const isPracticeAdmin = !!staffTypes?.includes(AdminType.PRACTICE_ADMIN)
 
   if (roleId && type && id) {
     const roleBase = `${baseHref}/organization-practice/${type}/${id}/organization-roles-permissions/${roleId}`
@@ -350,7 +355,8 @@ const getManagementNavLinks = (
     ]
   }
 
-  if (type === 'organizations') {
+  if (type === 'organizations' && (isSuperAdmin || isOrgAdmin)) {
+    // if the user is not super admin and trying to navigate into management then only show organization tabs
     const orgBase = `${baseHref}/organization-practice/organizations/${id}`
     return [
       {
@@ -384,7 +390,10 @@ const getManagementNavLinks = (
     ]
   }
 
-  if (type === 'practices' || practiceId) {
+  if (
+    (type === 'practices' || practiceId) &&
+    (isPracticeAdmin || isSuperAdmin || isOrgAdmin)
+  ) {
     const practiceBase = `${baseHref}/organization-practice/practices/${
       id ?? practiceId
     }`

@@ -48,7 +48,7 @@ const loginAction = async ({
     }
   }
 
-  const decoded = jwtDecode<{ role: string | string[] }>(
+  const decoded = jwtDecode<{ role: string | string[]; 'p+org': string }>(
     loginResponse.data.accessToken,
   )
 
