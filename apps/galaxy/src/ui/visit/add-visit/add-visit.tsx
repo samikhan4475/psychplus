@@ -5,12 +5,12 @@ import { Dialog } from '@radix-ui/themes'
 import { CloseDialogTrigger } from '@/components/close-dialog-trigger'
 import { NewPatient } from '@/types'
 import { AddVisitForm } from './components'
-import { SlotDetails } from './types'
+import { AppointmentData, SlotDetails } from './types'
 
 interface AddVisitProps {
   patient?: NewPatient
   showAddUser?: boolean
-  onAdd?: () => void
+  onAdd?: (responseData?: AppointmentData) => void
   dateTime?: string
   timezone?: string
   isTimed?: boolean

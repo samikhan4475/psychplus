@@ -8,10 +8,13 @@ import { PropsWithRow } from '@/components'
 import { NewPatient } from '@/types'
 import { AddPatient } from '@/ui/patient/add-patient'
 import { AddVisit } from '@/ui/visit/add-visit'
-import { associateMatchingReferralAction } from '../actions'
+import {
+  associateAppointmentAction,
+  associateMatchingReferralAction,
+} from '../actions'
 import { useStore } from '../store'
 import { transformOutPatientRow } from '../transform'
-import { Patient } from '../types'
+import { AppointmentData, Patient } from '../types'
 import { LinkReferral } from './link-referral'
 
 const ActionCell = ({ row }: PropsWithRow<Patient>) => {
@@ -45,6 +48,28 @@ const ActionCell = ({ row }: PropsWithRow<Patient>) => {
     setLoading(false)
   }
 
+  const handleAddVisitResponse = async (responseData?: AppointmentData) => {
+    setLoading(true)
+    if (!responseData?.appointments || responseData.appointments.length === 0) {
+      toast.error('No appointment data received!')
+      setLoading(false)
+      return
+    }
+    const appointmentId = responseData?.appointments?.[0].id
+    const response = await associateAppointmentAction(
+      appointmentId,
+      row.original.id.toString(),
+    )
+
+    if (response.state === 'success') {
+      toast.success('Appointment associated successfully!')
+      search(formValues, 1, true)
+    } else {
+      toast.error(response.error ?? 'Failed to associate appointment!')
+    }
+    setLoading(false)
+  }
+
   return (
     <Flex
       onClick={(e) => e.stopPropagation()}
@@ -57,13 +82,16 @@ const ActionCell = ({ row }: PropsWithRow<Patient>) => {
         <AddVisit
           showAddUser={false}
           patient={transformOutPatientRow(row.original)}
+          onAdd={handleAddVisitResponse}
         >
           <Button
             size="1"
             variant="outline"
             disabled={isReconcile}
             className={actionButtonClasses}
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation()
+            }}
           >
             Book
           </Button>

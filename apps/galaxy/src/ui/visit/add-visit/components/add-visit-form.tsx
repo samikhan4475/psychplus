@@ -9,7 +9,7 @@ import { AddPatient } from '@/ui/patient/add-patient'
 import { AddVacation } from '@/ui/vacation/add-vacation'
 import { cn } from '@/utils'
 import { bookVisitAction } from '../../client-actions'
-import { BookVisitPayload } from '../../types'
+import { BookVisitPayload, BookVisitResponse } from '../../types'
 import { schema, SchemaType } from '../schema'
 import { useAddVisitStore } from '../store'
 import { AddVisitAlert } from './add-visit-alerts'
@@ -33,7 +33,7 @@ import {
 } from '../../constants'
 import { convertToTimezone, sanitizeFormData } from '../../utils'
 import { transformRequestPayload } from '../transform'
-import { SlotDetails } from '../types'
+import { AppointmentData, SlotDetails } from '../types'
 import { isDatePriorTo30Days } from '../util'
 import { StateAndLocationFilters } from './state-and-location-filters'
 import TimedVisitForm from './timed/timed-visit-form'
@@ -43,7 +43,7 @@ interface AddVisitFormProps {
   isTimed?: boolean
   dateTime?: string
   timezone?: string
-  onAdd?: () => void
+  onAdd?: (responseData?: AppointmentData) => void
   onClose: () => void
   showAddUser?: boolean
   patient?: NewPatient
@@ -252,7 +252,7 @@ const AddVisitForm = ({
           ? 'Visit status is set as scheduled'
           : 'Visit created successfully',
       )
-      onAdd?.()
+      onAdd?.(res?.data)
       onClose()
       if (activeTab === TabValue.ProviderCoding) refetchProviderCoding()
       else refetch()

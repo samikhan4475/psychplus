@@ -76,29 +76,17 @@ const transformResponseData = (data: Patient[]): Patient[] =>
     }),
   )
 
-const transformOutPatientRow = ({
-  id,
-  patientName: { firstName = '', lastName = '', middleName = '' },
-  birthdate,
-  patientExternalMrn = '',
-  status = '',
-  gender = '',
-  state = '',
-}: Patient): NewPatient => ({
+const transformOutPatientRow = (patient: Patient): NewPatient => ({
   user: {
-    id,
-    legalName: {
-      firstName,
-      lastName,
-      middleName,
-    },
+    id: Number(patient.patientId),
+    legalName: patient.patientName,
   },
-  accessToken: String(id),
-  patientMrn: patientExternalMrn,
-  gender,
-  dob: birthdate ? formatDateOfBirth(birthdate) : '',
-  patientStatus: status,
-  state,
+  accessToken: String(patient.patientId),
+  patientMrn: patient.patientExternalMrn,
+  gender: patient.gender,
+  dob: patient.patientDateOfBirth
+    ? formatDateOfBirth(patient.patientDateOfBirth)
+    : '',
 })
 
 export { transformResponseData, transformOut, transformOutPatientRow }

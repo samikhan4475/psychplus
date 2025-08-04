@@ -6,6 +6,7 @@ import type {
   PatientProfile,
 } from '@/types'
 import { InsurancePolicyPriority } from '../patient-info/insurance-tab/constants'
+import { BookVisitResponse } from '../visit/types'
 import { ExternalReferralSchemaType } from './external-referral-filter-form'
 
 enum QueryByNextDays {
@@ -71,6 +72,7 @@ interface Patient extends PatientProfile {
   cc?: string
   attachments?: Attachment[]
   referralReason?: string
+  patientId: number
 }
 
 interface SearchPatientsData {
@@ -187,6 +189,9 @@ interface Attachment {
   documentType: string
   isHasDocumentDownload: boolean
 }
+interface AppointmentData {
+  appointments: BookVisitResponse[]
+}
 export {
   QueryByNextDays,
   type Patient,
@@ -195,4 +200,5 @@ export {
   type SortCodesetOptions,
   type MatchingPatient,
   type Match,
+  type AppointmentData,
 }

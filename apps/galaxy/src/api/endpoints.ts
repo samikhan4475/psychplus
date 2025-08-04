@@ -1146,6 +1146,11 @@ const STANDARD_CODESET_ENDPOINT_NEW = (
 
 const GET_PRIMARY_VIRTUAL_LOCATION_HX_ENDPOINT = (stateCode: string) =>
   `${API_URL}/api/states/${stateCode}/locations/actions/primaryhistory/search`
+const ASSOCIATE_APPOINTMENT_ENDPOINT = (
+  initialAppointmentId: number,
+  externalreferralId: string,
+) =>
+  `${API_URL}/api/appointments/${initialAppointmentId}/externalreferrals/${externalreferralId}/actions/associate`
 export {
   PATIENT_MEDICATION_SIGN_IN,
   GET_PATIENT_MEDICATION_ENDPOINT,
@@ -1648,4 +1653,5 @@ export {
   GET_EXTERNAL_REFERRAL_ATTACHMENT,
   NOTE_DETAILS_SAVE_WITH_APPOINTMENT_ID_ENDPOINT,
   STANDARD_CODESET_ENDPOINT_NEW,
+  ASSOCIATE_APPOINTMENT_ENDPOINT,
 }

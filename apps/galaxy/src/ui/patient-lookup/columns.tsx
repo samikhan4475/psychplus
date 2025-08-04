@@ -2,14 +2,15 @@
 
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
-import { getMaskedPhoneNumber } from '@/utils'
 import {
   ActionCell,
   CollapseCell,
   ContactMadeSelectCell,
   CreditCardCell,
+  DOBCell,
   GuardianCell,
   InsuranceCell,
+  PhoneCell,
   UserStatusCell,
   VisitHistoryCell,
 } from './cells'
@@ -105,18 +106,12 @@ const columns: ColumnDef<Patient>[] = [
   {
     id: 'dob',
     header: () => <ColumnHeader label="DOB" />,
-    cell: ({ row: { original } }) => (
-      <TextCell className="truncate">{original?.dob}</TextCell>
-    ),
+    cell: DOBCell,
   },
   {
     id: 'phone',
     header: () => <ColumnHeader label="Phone" />,
-    cell: ({ row: { original } }) => (
-      <TextCell className="truncate">
-        {getMaskedPhoneNumber(original?.phoneNumber ?? '')}
-      </TextCell>
-    ),
+    cell: PhoneCell,
   },
   {
     id: 'email',
