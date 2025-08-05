@@ -23,7 +23,7 @@ const ActionsCell = ({ row, refetchList }: ActionsCellProps) => {
     if (result.state === 'error') {
       toast.error(result.error ?? 'Failed to delete linked account')
     } else {
-      toast.success('Link Account deleted successfully')
+      toast.success('Linked account deleted successfully.')
       refetchList()
     }
     setIsLoading(false)

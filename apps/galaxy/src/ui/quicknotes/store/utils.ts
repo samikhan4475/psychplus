@@ -1,4 +1,3 @@
-import toast from 'react-hot-toast'
 import { saveWidgetClientAction, updateVisitAction } from '@/actions'
 import { CustomToaster as customContentToaster } from '@/components/custom-content-toast'
 import { VisitTypeEnum } from '@/enum'
@@ -7,6 +6,7 @@ import { ALLERGIES_ERROR_MESSAGE } from '@/ui/allergy/patient-allergies-widget/c
 import { AllergyDataResponse } from '@/ui/allergy/patient-allergies-widget/types'
 import { transformVisitUpdatePayload } from '@/ui/assessment-plan/tcm-widget/data'
 import { postEvent, sanitizeFormData, saveAbleWdgets } from '@/utils'
+import toast from 'react-hot-toast'
 import { QuickNoteSectionName } from '../constants'
 import { ValidateDiagnosisParams } from '../types'
 import { getWidgetErrorDetails, getWidgetsByVisitType } from '../utils'
@@ -231,4 +231,5 @@ const validateAllergies = ({
   return ''
 }
 
-export { getWidgetData, saveWidgets, validateDiagnosis, validateAllergies }
+export { getWidgetData, saveWidgets, validateAllergies, validateDiagnosis }
+

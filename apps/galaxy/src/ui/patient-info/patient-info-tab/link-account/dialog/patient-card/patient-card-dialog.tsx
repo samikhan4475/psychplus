@@ -1,19 +1,21 @@
 'use client'
 
-import { useState } from 'react'
-import { Box, Button, Dialog, Flex, Text } from '@radix-ui/themes'
-import { X } from 'lucide-react'
-import toast from 'react-hot-toast'
 import { ShuffelIcon } from '@/components/icons'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { cn, formatDateTime } from '@/utils'
+import { Box, Button, Dialog, Flex, Text } from '@radix-ui/themes'
+import { X } from 'lucide-react'
+import { useState } from 'react'
+import { useFormContext } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import {
   getPatientLinksAction,
   getPatientProfileAction,
   LinkPatientAccountAction,
 } from '../../actions'
 import { useStore } from '../../store'
+import { LinkAccountSchemaType } from '../filters'
 import { PatientCard } from './patient-card'
 
 interface AddAccountLinkDialogProps {
@@ -27,6 +29,8 @@ const PatientCardDialog = ({
   const { search } = useStore((state) => ({
     search: state.search,
   }))
+  const form = useFormContext<LinkAccountSchemaType>()
+  const [loading, setLoading] = useState(false)
   const codes = useCodesetCodes(CODESETS.PatientLinkSection)
 
   const [openDialog, setOpenDialog] = useState(false)
@@ -41,6 +45,9 @@ const PatientCardDialog = ({
   }
 
   const handleCheckPatientLink = async () => {
+     if(survivorPatientId === nonSurvivorPatientId)
+      return toast.error('A patient cannot be linked to itself')
+      
     const result = await getPatientLinksAction(nonSurvivorPatientId, true)
     if (result.state === 'success') {
       if (result.data.length > 0) {
@@ -52,6 +59,7 @@ const PatientCardDialog = ({
     }
   }
   const handleLinkPatient = async () => {
+    setLoading(true)
     const transformedArray = codes.map((item) => ({
       sectionName: item.value,
       selectedPatientId: survivorPatientId,
@@ -61,13 +69,14 @@ const PatientCardDialog = ({
       nonSurvivorPatientId: nonSurvivorPatientId,
       payload: transformedArray,
     })
+    setLoading(false)
     if (result.state === 'error') {
       toast.error(result?.error || 'Failed to link patients')
       return
     }
-
-    toast.success('Patients are linked successfully')
+    toast.success('Patients linked successfully')
     handleCloseModal(false)
+    form.reset()
     search({})
   }
 
@@ -128,6 +137,7 @@ const PatientCardDialog = ({
             size="1"
             highContrast
             onClick={handleLinkPatient}
+            disabled={loading}
           >
             Link User
           </Button>
