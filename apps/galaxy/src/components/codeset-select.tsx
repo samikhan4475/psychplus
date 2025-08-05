@@ -41,25 +41,26 @@ const CodesetSelect = ({
   )
 
   const items = useMemo(() => {
-  const filtered = groupedCodes.filter((code) => !exclude?.includes(code.value))
-  const mapped = filtered.map((code) => (
-    <Select.Item key={code.value} value={code.value}>
-      {code.display}
-    </Select.Item>
-  ))
+    const filtered = groupedCodes.filter(
+      (code) => !exclude?.includes(code.value),
+    )
+    const mapped = filtered.map((code) => (
+      <Select.Item key={code.value} value={code.value}>
+        {code.value}
+      </Select.Item>
+    ))
 
-  if (includeEmptyOption) {
-   return [
-    <Select.Item key="__none__" value="__none__">
-      None
-    </Select.Item>,
-    ...mapped,
-  ]
-  }
+    if (includeEmptyOption) {
+      return [
+        <Select.Item key="__none__" value="__none__">
+          None
+        </Select.Item>,
+        ...mapped,
+      ]
+    }
 
-  return mapped
-}, [groupedCodes, exclude, includeEmptyOption])
-
+    return mapped
+  }, [groupedCodes, exclude, includeEmptyOption])
 
   return (
     <Controller
@@ -74,7 +75,9 @@ const CodesetSelect = ({
 
         return (
           <Select.Root
-            onValueChange={(val) => field.onChange(val === '__none__' ? '' : val)}
+            onValueChange={(val) =>
+              field.onChange(val === '__none__' ? '' : val)
+            }
             disabled={form.formState.disabled}
             {...rest}
             {...selectProps}

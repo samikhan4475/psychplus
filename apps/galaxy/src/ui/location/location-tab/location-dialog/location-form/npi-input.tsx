@@ -12,7 +12,7 @@ const NpiInput = () => {
   return (
     <FormFieldContainer className="flex flex-col gap-0.5">
       <FormFieldLabel required>NPI</FormFieldLabel>
-      <TextField.Root size="1" {...form.register('npi')} />
+      <TextField.Root size="1" {...form.register('npi')} maxLength={10}/>
       <FormFieldError name="npi" />
     </FormFieldContainer>
   )

@@ -8,10 +8,7 @@ const locationSchema = z.object({
   locationNameGenerated: z.string().optional(),
   locationType: z.string().min(1, 'required'),
   name: z.string().min(1, 'Required'),
-  npi: z
-    .string()
-    .min(10, '10 characters Required')
-    .max(10, '10 characters Required'),
+  npi: z.string().regex(/^\d{10}$/, '10 digits required'),
   phone: z.object({
     number: z.string().optional(),
     type: z.string(),
