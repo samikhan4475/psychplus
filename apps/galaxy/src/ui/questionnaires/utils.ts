@@ -28,6 +28,7 @@ const QuestionnaireQuestionToSectionName: Record<string, QuickNoteSectionName> =
     Q11: QuickNoteSectionName.QuickNoteSectionCssrs,
     Q12: QuickNoteSectionName.QuickNoteSectionPsc17,
     Q13: QuickNoteSectionName.QuickNoteSectionCopsR,
+    Q14: QuickNoteSectionName.QuickNoteSectionAdultAsrs,
   }
 
 const sendToPatient = async (

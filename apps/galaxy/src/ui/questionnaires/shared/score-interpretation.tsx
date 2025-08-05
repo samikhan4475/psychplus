@@ -16,6 +16,7 @@ interface ScoreInterpretationProps {
   isRanges?: boolean
   showScoreLabel?: boolean
   heading?: string
+  subHeading?: string
 }
 
 const ScoreInterpretation = ({
@@ -24,62 +25,66 @@ const ScoreInterpretation = ({
   isRanges = true,
   showScoreLabel = true,
   heading = 'Score Interpretation',
+  subHeading,
 }: ScoreInterpretationProps) => {
   const currentRange = getRange(ranges, totalScore)
 
   return (
-    <Flex
-      align="center"
-      justify="between"
-      className="h-9 border-y border-gray-3"
-      px="2"
-    >
-      <Flex className="" gap="4">
-        <Text weight="bold" size="2">
-          {heading}
-        </Text>
-        {isRanges &&
-          ranges.map((range) => {
-            const badgeBackgroundClass = getBadgeBackgroundClass(range.color)
+    <Flex className="border-y border-gray-3" direction="column">
+      <Flex
+        align="center"
+        justify="between"
+        className='h-9'
+        px="2"
+      >
+        <Flex className="" gap="4">
+          <Text weight="bold" size="2">
+            {heading}
+          </Text>
+          {isRanges &&
+            ranges.map((range) => {
+              const badgeBackgroundClass = getBadgeBackgroundClass(range.color)
 
-            let title = range.rangeTitle
+              let title = range.rangeTitle
 
-            if (!title) {
-              const maxPart = range.max !== undefined ? `-${range.max}` : ''
-              title = `${range.min}${maxPart}`
-            }
-            return (
-              <Flex gap="2" align="center" key={range.label}>
-                <Box
-                  className={cn(
-                    'h-[14.24px] w-[22px] rounded-1',
-                    range.color === 'white' && 'border border-gray-6',
-                    badgeBackgroundClass,
-                  )}
-                />
-                <Text className="text-black" size="1">
-                  {title} - {range.label}
-                </Text>
-              </Flex>
-            )
-          })}
+              if (!title) {
+                const maxPart = range.max !== undefined ? `-${range.max}` : ''
+                title = `${range.min}${maxPart}`
+              }
+              return (
+                <Flex gap="2" align="center" key={range.label}>
+                  <Box
+                    className={cn(
+                      'h-[14.24px] w-[22px] rounded-1',
+                      range.color === 'white' && 'border border-gray-6',
+                      badgeBackgroundClass,
+                    )}
+                  />
+                  <Text className="text-black" size="1">
+                    {title} - {range.label}
+                  </Text>
+                </Flex>
+              )
+            })}
+        </Flex>
+
+        <Flex align="center" gap="1">
+          <Badge
+            size="1"
+            variant="soft"
+            mx="1"
+            color={getBadgeColor(getRange(ranges, totalScore))}
+            className={cn(
+              getBadgeColor(getRange(ranges, totalScore)),
+              '1px solid border',
+            )}
+          >
+            Score {totalScore}
+          </Badge>
+          {showScoreLabel && <Text size="1">{currentRange?.label}</Text>}
+        </Flex>
       </Flex>
-
-      <Flex align="center" gap="1">
-        <Badge
-          size="1"
-          variant="soft"
-          mx="1"
-          color={getBadgeColor(getRange(ranges, totalScore))}
-          className={cn(
-            getBadgeColor(getRange(ranges, totalScore)),
-            '1px solid border',
-          )}
-        >
-          Score {totalScore}
-        </Badge>
-        {showScoreLabel && <Text size="1">{currentRange?.label}</Text>}
-      </Flex>
+      {subHeading && <Text className='pl-2 pb-1' size="1">{subHeading}</Text>}
     </Flex>
   )
 }

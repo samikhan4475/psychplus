@@ -36,6 +36,7 @@ import { SCORE_INTERPRETATION_RANGES as YBOCS_SCORE_INTERPRETATION_RANGES } from
 import { ChartView, ListView, TabsContent, TabsTrigger } from '../tabs'
 import { DeleteButton } from './delete-button'
 import { RowRightButtons } from './row-right-button'
+import { ADULT_ASRS_SECTIONS, SCORE_INTERPRETATION_RANGES_PART_A, SCORE_INTERPRETATION_RANGES_PART_B } from '../../adult-asrs-tab/constants'
 
 interface QuestionnairesDetailsProps {
   questionnaire: string
@@ -237,6 +238,17 @@ const scoreInterpretationRanges = (
         return SCORE_INTERPRETATION_RANGES_INTERNALIZING
       case PSC_17_SECTIONS.Externalizing:
         return SCORE_INTERPRETATION_RANGES_EXTERNALIZING
+      default:
+        return []
+    }
+  }
+
+  if (label === QuestionnaireTabs.ADULT_ASRS_TAB) {
+    switch (sectionName) {
+      case ADULT_ASRS_SECTIONS.PartA:
+        return SCORE_INTERPRETATION_RANGES_PART_A
+      case ADULT_ASRS_SECTIONS.PartB:
+        return SCORE_INTERPRETATION_RANGES_PART_B
       default:
         return []
     }

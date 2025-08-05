@@ -5,10 +5,12 @@ import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
 import { XIcon } from 'lucide-react'
 import { QuickNoteSectionItem } from '@/types'
+import { AdultAsrsTab } from './adult-asrs-tab'
 import { AimsTab } from './aims-tab'
 import { AuditTab } from './audit-tab'
 import { CssrsTab } from './c-ssrs-tab'
 import { QuestionnaireTabs } from './constants'
+import { CopsRTab } from './cops-r-tab'
 import { DashboardTab } from './dashboard-tab'
 import { Dast10Tab } from './dast-10-tab'
 import { Gad7Tab } from './gad-7-tab'
@@ -20,7 +22,6 @@ import { Psc17Tab } from './psc-17-tab'
 import { SnapIvTab } from './snap-iv-tab'
 import { useStore } from './store'
 import { YBocsTab } from './y-bocs-tab'
-import { CopsRTab } from './cops-r-tab'
 
 interface QuestionnairesViewProps {
   data: QuickNoteSectionItem[]
@@ -93,6 +94,9 @@ const QuestionnairesView = ({ data, patientId }: QuestionnairesViewProps) => {
           <TabsTrigger value={QuestionnaireTabs.COPS_R_TAB}>
             {QuestionnaireTabs.COPS_R_TAB}
           </TabsTrigger>
+          <TabsTrigger value={QuestionnaireTabs.ADULT_ASRS_TAB}>
+            {QuestionnaireTabs.ADULT_ASRS_TAB}
+          </TabsTrigger>
         </Tabs.List>
         <Flex className="flex-1 border-b border-gray-5" />
       </Flex>
@@ -137,6 +141,9 @@ const QuestionnairesView = ({ data, patientId }: QuestionnairesViewProps) => {
       </TabsContent>
       <TabsContent value={QuestionnaireTabs.COPS_R_TAB}>
         <CopsRTab patientId={patientId} data={data} />
+      </TabsContent>
+      <TabsContent value={QuestionnaireTabs.ADULT_ASRS_TAB}>
+        <AdultAsrsTab patientId={patientId} data={data} />
       </TabsContent>
     </Tabs.Root>
   )

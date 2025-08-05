@@ -15,6 +15,10 @@ interface Questionnaire {
 const ActionsCell = ({ row }: PropsWithRow<Questionnaire>) => {
   const { id } = useParams<{ id: string }>()
 
+  if (row.original.id === 'Q14') {
+    return
+  }
+
   return (
     <Flex
       direction="row"

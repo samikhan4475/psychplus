@@ -114,6 +114,10 @@ const questionnaireViewDta = [
     scoreRange: HAMDScoreRanges,
     questionnaireTab: QuestionnaireTabs.HAM_D_TAB,
   },
+  {
+    sectionName: QuickNoteSectionName.QuickNoteSectionAdultAsrs,
+    questionnaireTab: QuestionnaireTabs.ADULT_ASRS_TAB,
+  },
 ]
 
 export const questionnaireViewConstants = (

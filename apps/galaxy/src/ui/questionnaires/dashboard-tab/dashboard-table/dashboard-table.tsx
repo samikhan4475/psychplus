@@ -40,15 +40,20 @@ const createColumns = (
         className="px-[9px]"
       />
     ),
-    cell: ({ row }) => (
-      <AddToPreVisitAssessmentCell
-        checked={checkedTests[row.original.id] === 'Yes'}
-        className="px-[5px]"
-        onCheckedChange={(checked) =>
-          handleCheckOneTest(row.original.id, checked ? 'Yes' : 'No')
-        }
-      />
-    ),
+    cell: ({ row }) => {
+      if (row.original.id === 'Q14') {
+        return
+      }
+      return (
+        <AddToPreVisitAssessmentCell
+          checked={checkedTests[row.original.id] === 'Yes'}
+          className="px-[5px]"
+          onCheckedChange={(checked) =>
+            handleCheckOneTest(row.original.id, checked ? 'Yes' : 'No')
+          }
+        />
+      )
+    },
   },
   {
     id: 'send-to-patient',

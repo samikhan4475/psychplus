@@ -24,6 +24,7 @@ const sections = [
   QuickNoteSectionName.QuickNoteSectionCssrs,
   QuickNoteSectionName.QuickNoteSectionPsc17,
   QuickNoteSectionName.QuickNoteSectionCopsR,
+  QuickNoteSectionName.QuickNoteSectionAdultAsrs,
 ]
 
 const QuestionnairesLoader = async ({
