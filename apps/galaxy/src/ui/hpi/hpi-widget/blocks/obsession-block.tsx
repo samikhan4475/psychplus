@@ -1,5 +1,5 @@
 import { useFormContext } from 'react-hook-form'
-import { GroupSelectSection } from '@/components'
+import { DetailsType, GroupSelectSection } from '@/components'
 import { HpiWidgetSchemaType } from '../hpi-widget-schema'
 
 const BLOCK_ID = 'obsession'
@@ -17,6 +17,15 @@ const BLOCK_OPTIONS = [
   { label: 'Counting', value: 'obsCounting' },
   { label: 'Hoarding', value: 'obsHoarding' },
   { label: 'Picking', value: 'obsPicking' },
+  {
+    label: 'Other',
+    value: 'obsOther',
+    details: {
+      type: 'text' as DetailsType,
+      field: 'obsOtherDetails',
+      maxLength: 500,
+    },
+  },
 ]
 
 const ObsessionBlock = ({ disabled = false }: { disabled?: boolean }) => {

@@ -20,6 +20,7 @@ const hpiWidgetSchema = z
     conductDisorder: z.array(z.string()),
     dementia: z.array(z.string()),
     schizophreniaDelusionValues: z.array(z.string()).optional(),
+    autismIntellectualImpairmentValue: z.string().optional(),
     schizophreniaHallucinationsValues: z.array(z.string()).optional(),
     schizophrenia: z.array(z.string()),
     medicationSe: z.array(z.string()),
@@ -42,6 +43,66 @@ const hpiWidgetSchema = z
       .string()
       .trim()
       .max(4000, 'Max 4000 characters are allowed')
+      .optional(),
+    depOtherDetails: z
+      .string()
+      .trim()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    anxOtherDetails: z
+      .string()
+      .trim()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    manOtherDetails: z
+      .string()
+      .trim()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    ptsOtherDetails: z
+      .string()
+      .trim()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    obsOtherDetails: z
+      .string()
+      .trim()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    bpdOtherDetails: z
+      .string()
+      .trim()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    adiOtherDetails: z
+      .string()
+      .trim()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    adhdhOtherDetails: z
+      .string()
+      .trim()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    autOtherDetails: z
+      .string()
+      .trim()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    cdOtherDetails: z
+      .string()
+      .trim()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    demOtherDetails: z
+      .string()
+      .trim()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    schOtherDetails: z
+      .string()
+      .trim()
+      .max(500, 'Max 500 characters are allowed')
       .optional(),
   })
   .superRefine((data, ctx) => {
@@ -92,6 +153,71 @@ const hpiWidgetSchema = z
         condition: 'schHallucination',
         field: 'schizophrenia',
         requiredField: 'schizophreniaHallucinationsValues',
+      },
+      {
+        condition: 'depOther',
+        field: 'depression',
+        requiredField: 'depOtherDetails',
+      },
+      {
+        condition: 'anxOther',
+        field: 'anxiety',
+        requiredField: 'anxOtherDetails',
+      },
+      {
+        condition: 'manOther',
+        field: 'bipolarMania',
+        requiredField: 'manOtherDetails',
+      },
+      {
+        condition: 'ptsOther',
+        field: 'ptsd',
+        requiredField: 'ptsOtherDetails',
+      },
+      {
+        condition: 'obsOther',
+        field: 'obsession',
+        requiredField: 'obsOtherDetails',
+      },
+      {
+        condition: 'bpdOther',
+        field: 'bpd',
+        requiredField: 'bpdOtherDetails',
+      },
+      {
+        condition: 'adiOther',
+        field: 'adhdInattentive',
+        requiredField: 'adiOtherDetails',
+      },
+      {
+        condition: 'adhdhOther',
+        field: 'adhdHyperactive',
+        requiredField: 'adhdhOtherDetails',
+      },
+      {
+        condition: 'autOther',
+        field: 'autism',
+        requiredField: 'autOtherDetails',
+      },
+      {
+        condition: 'cdOther',
+        field: 'conductDisorder',
+        requiredField: 'cdOtherDetails',
+      },
+      {
+        condition: 'demOther',
+        field: 'dementia',
+        requiredField: 'demOtherDetails',
+      },
+      {
+        condition: 'schOther',
+        field: 'schizophrenia',
+        requiredField: 'schOtherDetails',
+      },
+      {
+        condition: 'autIntellectualImpairment',
+        field: 'autism',
+        requiredField: 'autismIntellectualImpairmentValue',
       },
     ]
 

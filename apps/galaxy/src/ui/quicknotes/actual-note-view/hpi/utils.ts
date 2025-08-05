@@ -61,6 +61,18 @@ const otherDetailsMap: Record<string, { key: string; detailsKey: string }> = {
   substance: { key: 'subOther', detailsKey: 'subOtherDetails' },
   medicationSe: { key: 'medOther', detailsKey: 'medOtherDetails' },
   chiefComplaint: { key: 'ccOther', detailsKey: 'ccOtherDetails' },
+  depression: { key: 'depOther', detailsKey: 'depOtherDetails' },
+  anxiety: { key: 'anxOther', detailsKey: 'anxOtherDetails' },
+  bipolarMania: { key: 'manOther', detailsKey: 'manOtherDetails' },
+  ptsd: { key: 'ptsOther', detailsKey: 'ptsOtherDetails' },
+  obsession: { key: 'obsOther', detailsKey: 'obsOtherDetails' },
+  bpd: { key: 'bpdOther', detailsKey: 'bpdOtherDetails' },
+  adhdInattentive: { key: 'adiOther', detailsKey: 'adiOtherDetails' },
+  adhdHyperactive: { key: 'adhdhOther', detailsKey: 'adhdhOtherDetails' },
+  autism: { key: 'autOther', detailsKey: 'autOtherDetails' },
+  conductDisorder: { key: 'cdOther', detailsKey: 'cdOtherDetails' },
+  dementia: { key: 'demOther', detailsKey: 'demOtherDetails' },
+  schizophrenia: { key: 'schOther', detailsKey: 'schOtherDetails' },
 }
 
 const appendMuliSelectOptions = (

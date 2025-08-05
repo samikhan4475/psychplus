@@ -1,5 +1,7 @@
+import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { GroupSelectSection } from '@/components'
+import { DetailsType, GroupSelectSection } from '@/components'
+import { INTELLECTUAL_IMPAIRMENT_OPTIONS } from '../constants'
 import { HpiWidgetSchemaType } from '../hpi-widget-schema'
 
 const BLOCK_ID = 'autism'
@@ -14,12 +16,44 @@ const BLOCK_OPTIONS = [
   { label: 'Aversions/Special Interests', value: 'autAversions' },
   { label: 'Masking', value: 'autMasking' },
   { label: 'Emotional Dysregulations', value: 'autEmotionalDysregulation' },
+  {
+    label: 'Intellectual Impairment',
+    value: 'autIntellectualImpairment',
+    details: {
+      type: 'select' as DetailsType,
+      hideSelectedCount: true,
+      label: 'Severity',
+      options: INTELLECTUAL_IMPAIRMENT_OPTIONS,
+      isOptionsChip: true,
+      field: 'autismIntellectualImpairmentValue',
+    },
+  },
+  {
+    label: 'Other',
+    value: 'autOther',
+    details: {
+      type: 'text' as DetailsType,
+      field: 'autOtherDetails',
+      maxLength: 500,
+    },
+  },
 ]
 
 const AutismBlock = ({ disabled = false }: { disabled?: boolean }) => {
-  const form = useFormContext<HpiWidgetSchemaType>()
-  const error = form.formState?.errors
-  const hasError = error?.hpiOther || error?.chiefComplaint
+  const {
+    watch,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useFormContext<HpiWidgetSchemaType>()
+
+  const hasError = errors?.hpiOther || errors?.chiefComplaint
+  const autismValues = watch('autism')
+  useEffect(() => {
+    if (!autismValues.length) {
+      setValue('autismIntellectualImpairmentValue', '')
+    }
+  }, [autismValues, getValues, setValue])
 
   return (
     <GroupSelectSection

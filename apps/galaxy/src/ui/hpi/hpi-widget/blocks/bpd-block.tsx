@@ -1,41 +1,30 @@
 import { useFormContext } from 'react-hook-form'
-import { GroupSelectSection } from '@/components'
+import { DetailsType, GroupSelectSection } from '@/components'
 import { HpiWidgetSchemaType } from '../hpi-widget-schema'
+import { createBlockOptions } from '../utils'
 
 const BLOCK_ID = 'bpd'
 
 const BLOCK_TITLE = 'BPD (Borderline Personality Disorder)'
 
-const BLOCK_OPTIONS = [
-  {
-    label: 'Fear of Abandonment',
-    value: 'bpdFearOfAbandonment',
-  },
-  {
-    label: 'Unstable Self-Image',
-    value: 'bpdUnstableSelfImage',
-  },
-  {
-    label: 'Unstable Relationships',
-    value: 'bpdUnstableRelationships',
-  },
-  {
-    label: 'Mood Swings',
-    value: 'bpdMoodSwings',
-  },
-  {
-    label: 'Black/White Thinking',
-    value: 'bpdBlackWhiteThinking',
-  },
-  {
-    label: 'Impulsiveness',
-    value: 'bpdImpulsiveness',
-  },
-  {
-    label: 'Self-Harm',
-    value: 'bpdSelfHarm',
-  },
-]
+const BPD_OPTIONS = createBlockOptions([
+  ['Fear of Abandonment', 'bpdFearOfAbandonment'],
+  ['Unstable Self-Image', 'bpdUnstableSelfImage'],
+  ['Unstable Relationships', 'bpdUnstableRelationships'],
+  ['Mood Swings', 'bpdMoodSwings'],
+  ['Black/White Thinking', 'bpdBlackWhiteThinking'],
+  ['Impulsiveness', 'bpdImpulsiveness'],
+  ['Self-Harm', 'bpdSelfHarm'],
+  [
+    'Other',
+    'bpdOther',
+    {
+      type: 'text' as DetailsType,
+      field: 'bpdOtherDetails',
+      maxLength: 500,
+    },
+  ],
+])
 
 const BpdBlock = ({ disabled = false }: { disabled?: boolean }) => {
   const form = useFormContext<HpiWidgetSchemaType>()
@@ -45,7 +34,7 @@ const BpdBlock = ({ disabled = false }: { disabled?: boolean }) => {
     <GroupSelectSection
       label={BLOCK_TITLE}
       field={BLOCK_ID}
-      options={BLOCK_OPTIONS}
+      options={BPD_OPTIONS}
       // parentField="chiefComplaint"
       // valueInParent="ccBpd"
       chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}

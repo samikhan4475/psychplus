@@ -1,5 +1,5 @@
 import { useFormContext } from 'react-hook-form'
-import { GroupSelectSection } from '@/components'
+import { DetailsType, GroupSelectSection } from '@/components'
 import { HpiWidgetSchemaType } from '../hpi-widget-schema'
 
 const BLOCK_ID = 'bipolarMania'
@@ -17,6 +17,15 @@ const BLOCK_OPTIONS = [
   {
     label: 'Impulsive/Reckless Behavior',
     value: 'manImpulsiveRecklessBehavior',
+  },
+  {
+    label: 'Other',
+    value: 'manOther',
+    details: {
+      type: 'text' as DetailsType,
+      field: 'manOtherDetails',
+      maxLength: 500,
+    },
   },
 ]
 

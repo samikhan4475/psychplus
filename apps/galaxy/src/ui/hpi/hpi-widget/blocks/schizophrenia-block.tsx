@@ -72,6 +72,15 @@ const SCHIZOPHRENIA_BLOCK_OPTIONS = (
     label: 'Homicidal Ideation',
     value: 'schHomicidalThoughts',
   },
+  {
+    label: 'Other',
+    value: 'schOther',
+    details: {
+      type: 'text' as DetailsType,
+      field: 'schOtherDetails',
+      maxLength: 500,
+    },
+  },
 ]
 
 const SchizophreniaBlock = ({ disabled = false }: { disabled?: boolean }) => {

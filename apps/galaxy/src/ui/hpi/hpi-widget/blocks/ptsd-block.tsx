@@ -1,5 +1,5 @@
 import { useFormContext } from 'react-hook-form'
-import { GroupSelectSection } from '@/components'
+import { DetailsType, GroupSelectSection } from '@/components'
 import { HpiWidgetSchemaType } from '../hpi-widget-schema'
 
 const BLOCK_ID = 'ptsd'
@@ -17,6 +17,15 @@ const BLOCK_OPTIONS = [
   { label: 'Avoidance', value: 'ptsAvoidance' },
   { label: 'Startled', value: 'ptsStartled' },
   { label: 'Detachment', value: 'ptsDetachment' },
+  {
+    label: 'Other',
+    value: 'ptsOther',
+    details: {
+      type: 'text' as DetailsType,
+      field: 'ptsOtherDetails',
+      maxLength: 500,
+    },
+  },
 ]
 
 const PtsdBlock = ({ disabled = false }: { disabled?: boolean }) => {

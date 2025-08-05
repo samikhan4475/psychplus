@@ -1,4 +1,5 @@
 import { HpiWidgetSchemaType } from './hpi-widget-schema'
+import { Details, LabelValueOption } from './types'
 
 const HPIVALIDATIONMESSAGE =
   'Must have 30 characters in this OR 3 symptoms selected from above (other than chief complaint).'
@@ -23,6 +24,45 @@ const assignSpecificFields = (
   },
   schizophreniaHallucinationsValues: (value) => {
     result.schizophreniaHallucinationsValues = value.split(',')
+  },
+  depOtherDetails: (value) => {
+    result.depOtherDetails = value
+  },
+  anxOtherDetails: (value) => {
+    result.anxOtherDetails = value
+  },
+  manOtherDetails: (value) => {
+    result.manOtherDetails = value
+  },
+  ptsOtherDetails: (value) => {
+    result.ptsOtherDetails = value
+  },
+  obsOtherDetails: (value) => {
+    result.obsOtherDetails = value
+  },
+  bpdOtherDetails: (value) => {
+    result.bpdOtherDetails = value
+  },
+  adiOtherDetails: (value) => {
+    result.adiOtherDetails = value
+  },
+  adhdhOtherDetails: (value) => {
+    result.adhdhOtherDetails = value
+  },
+  autOtherDetails: (value) => {
+    result.autOtherDetails = value
+  },
+  cdOtherDetails: (value) => {
+    result.cdOtherDetails = value
+  },
+  demOtherDetails: (value) => {
+    result.demOtherDetails = value
+  },
+  schOtherDetails: (value) => {
+    result.schOtherDetails = value
+  },
+  autismIntellectualImpairmentValue: (value) => {
+    result.autismIntellectualImpairmentValue = value
   },
 })
 
@@ -59,6 +99,7 @@ const labels = {
     agitation: 'Agitation',
     suicidalThoughts: 'Suicidal Ideation',
     anger: 'Anger',
+    other: 'depOther',
   },
 
   anxiety: {
@@ -72,6 +113,7 @@ const labels = {
     panicAttacks: 'Panic Attacks',
     phobia: 'Phobia',
     abnormalFear: 'Abnormal Fear',
+    other: 'anxOther',
   },
   bipolarMania: {
     elevatedMood: 'Elevated Mood',
@@ -82,6 +124,7 @@ const labels = {
     lackOfSleep: 'Lack Of Sleep',
     pressuredSpeech: 'Pressured Speech',
     impulsiveRecklessBehavior: 'Impulsive Reckless Behavior',
+    other: 'manOther',
   },
   ptsd: {
     traumaticEvent: 'Traumatic Event',
@@ -94,6 +137,7 @@ const labels = {
     avoidance: 'Avoidance',
     startled: 'Startled',
     detachment: 'Detachment',
+    other: 'ptsOther',
   },
   obsession: {
     contamination: 'Contamination',
@@ -106,6 +150,7 @@ const labels = {
     counting: 'Counting',
     hoarding: 'Hoarding',
     picking: 'Picking',
+    other: 'obsOther',
   },
   ocd: {
     checking: 'Checking',
@@ -122,6 +167,7 @@ const labels = {
     selfHarm: 'Self-Harm',
     unstableRelationships: 'Unstable Relationships',
     unstableSelfImage: 'Unstable Self-Image',
+    other: 'bpdOther',
   },
   substance: {
     tobacco: 'Tobacco',
@@ -145,6 +191,7 @@ const labels = {
     losesThings: 'Loses Things',
     easilyDistracted: 'Easily Distracted',
     forgetful: 'Forgetful',
+    other: 'adiOther',
   },
   adhdH: {
     fidgeting: 'Fidgeting',
@@ -157,6 +204,7 @@ const labels = {
     impatient: 'Impatient',
     interrupts: 'Interrupts',
     behaviorOutbursts: 'Behavior Outbursts',
+    other: 'adhdhOther',
   },
   autism: {
     fidgeting: 'Delayed Milestones',
@@ -166,6 +214,8 @@ const labels = {
     aversions: 'Aversions/Special Interests',
     masking: 'Masking',
     emotionalDysregulation: 'Emotional Dysregulation',
+    intellectualImpairment: 'Intellectual Impairment',
+    other: 'autOther',
   },
   conductDisorder: {
     disciplineIssues: 'Discipline Issues',
@@ -178,6 +228,7 @@ const labels = {
     animalCruelty: 'Animal Cruelty',
     manipulative: 'Manipulative',
     suddenOutbursts: 'Sudden Outbursts',
+    other: 'cdOther',
   },
   dementia: {
     memoryLoss: 'Memory Loss',
@@ -188,6 +239,7 @@ const labels = {
     ah: 'Auditory Hallucinations',
     vh: 'Visual Hallucinations',
     parkinsonSymptoms: 'Parkinson Symptoms',
+    other: 'demOther',
   },
   schizophrenia: {
     hallucination: 'Hallucination',
@@ -198,6 +250,7 @@ const labels = {
     catatonia: 'Catatonia',
     suicidalThoughts: 'Suicidal Ideation',
     homicidalThoughts: 'Homicidal Ideation',
+    other: 'schOther',
   },
   medicationSe: {
     giUpset: 'GI Upset',
@@ -239,6 +292,19 @@ const getInitialValues = (): HpiWidgetSchemaType => ({
   ccOtherDetails: '',
   subOtherDetails: '',
   medOtherDetails: '',
+  depOtherDetails: '',
+  anxOtherDetails: '',
+  manOtherDetails: '',
+  ptsOtherDetails: '',
+  obsOtherDetails: '',
+  bpdOtherDetails: '',
+  adiOtherDetails: '',
+  adhdhOtherDetails: '',
+  autOtherDetails: '',
+  cdOtherDetails: '',
+  demOtherDetails: '',
+  schOtherDetails: '',
+  autismIntellectualImpairmentValue: '',
 })
 
 const valueToLabel: { [key: string]: string } = {
@@ -274,6 +340,7 @@ const valueToLabel: { [key: string]: string } = {
   DEP_Agitation: labels.depression.agitation,
   DEP_SuicidalThoughts: labels.depression.suicidalThoughts,
   DEP_Anger: labels.depression.anger,
+  DEP_Other: labels.depression.other,
 
   // Anxiety block
   ANX_FeelingAnxious: labels.anxiety.feelingAnxious,
@@ -286,6 +353,7 @@ const valueToLabel: { [key: string]: string } = {
   ANX_PanicAttacks: labels.anxiety.panicAttacks,
   ANX_Phobia: labels.anxiety.phobia,
   ANX_AbnormalFear: labels.anxiety.abnormalFear,
+  ANX_Other: labels.anxiety.other,
 
   // Bipolar/Mania block
   MAN_ElevatedMood: labels.bipolarMania.elevatedMood,
@@ -296,6 +364,7 @@ const valueToLabel: { [key: string]: string } = {
   MAN_LackOfSleep: labels.bipolarMania.lackOfSleep,
   MAN_PressuredSpeech: labels.bipolarMania.pressuredSpeech,
   MAN_ImpulsiveRecklessBehavior: labels.bipolarMania.impulsiveRecklessBehavior,
+  MAN_Other: labels.bipolarMania.other,
 
   // PTSD block
   PTS_TraumaticEvent: labels.ptsd.traumaticEvent,
@@ -308,6 +377,7 @@ const valueToLabel: { [key: string]: string } = {
   PTS_Avoidance: labels.ptsd.avoidance,
   PTS_Startled: labels.ptsd.startled,
   PTS_Detachment: labels.ptsd.detachment,
+  PTS_Other: labels.ptsd.other,
 
   // Obsession block
   OBS_Contamination: labels.obsession.contamination,
@@ -320,6 +390,7 @@ const valueToLabel: { [key: string]: string } = {
   OBS_Counting: labels.obsession.counting,
   OBS_Hoarding: labels.obsession.hoarding,
   OBS_Picking: labels.obsession.picking,
+  OBS_Other: labels.obsession.other,
 
   // OCD block
   OCD_Checking: labels.ocd.checking,
@@ -336,6 +407,7 @@ const valueToLabel: { [key: string]: string } = {
   BPD_SelfHarm: labels.bpd.selfHarm,
   BPD_UnstableRelationships: labels.bpd.unstableRelationships,
   BPD_UnstableSelfImage: labels.bpd.unstableSelfImage,
+  BPD_Other: labels.bpd.other,
 
   // Substance block
   SUB_Tobacco: labels.substance.tobacco,
@@ -360,6 +432,7 @@ const valueToLabel: { [key: string]: string } = {
   ADI_LosesThings: labels.adhdI.losesThings,
   ADI_EasilyDistracted: labels.adhdI.easilyDistracted,
   ADI_Forgetful: labels.adhdI.forgetful,
+  ADI_Other: labels.adhdI.other,
 
   // ADHD Hyperactive block
   ADH_Fidgeting: labels.adhdH.fidgeting,
@@ -372,6 +445,7 @@ const valueToLabel: { [key: string]: string } = {
   ADH_Impatient: labels.adhdH.impatient,
   ADH_Interrupts: labels.adhdH.interrupts,
   ADH_BehaviorOutbursts: labels.adhdH.behaviorOutbursts,
+  ADH_Other: labels.adhdH.other,
 
   // Autism Block
   AUT_Fidgeting: labels.autism.fidgeting,
@@ -381,6 +455,8 @@ const valueToLabel: { [key: string]: string } = {
   AUT_Aversions: labels.autism.aversions,
   AUT_Masking: labels.autism.masking,
   AUT_EmotionalDysregulation: labels.autism.emotionalDysregulation,
+  AUT_IntellectualImpairment: labels.autism.intellectualImpairment,
+  AUT_Other: labels.autism.other,
 
   // Conduct Disorder Block
   CD_DisciplineIssues: labels.conductDisorder.disciplineIssues,
@@ -393,6 +469,7 @@ const valueToLabel: { [key: string]: string } = {
   CD_AnimalCruelty: labels.conductDisorder.animalCruelty,
   CD_Manipulative: labels.conductDisorder.manipulative,
   CD_SuddenOutbursts: labels.conductDisorder.suddenOutbursts,
+  CD_Other: labels.conductDisorder.other,
   // Dementia Block
   DEM_MemoryLoss: labels.dementia.memoryLoss,
   DEM_Confusion: labels.dementia.confusion,
@@ -402,6 +479,7 @@ const valueToLabel: { [key: string]: string } = {
   DEM_Ah: labels.dementia.ah,
   DEM_Vh: labels.dementia.vh,
   DEM_ParkinsonSymptoms: labels.dementia.parkinsonSymptoms,
+  DEM_Other: labels.dementia.other,
 
   // Schizophrenia Block
   SCH_Hallucination: labels.schizophrenia.hallucination,
@@ -412,6 +490,7 @@ const valueToLabel: { [key: string]: string } = {
   SCH_Catatonia: labels.schizophrenia.catatonia,
   SCH_SuicidalThoughts: labels.schizophrenia.suicidalThoughts,
   SCH_HomicidalThoughts: labels.schizophrenia.homicidalThoughts,
+  SCH_Other: labels.schizophrenia.other,
 
   // Medication SE Block
   MED_GiUpset: labels.medicationSe.giUpset,
@@ -434,6 +513,19 @@ const valueToLabel: { [key: string]: string } = {
   medOtherDetails: 'medOtherDetails',
   schizophreniaHallucinationsValues: 'schizophreniaHallucinationsValues',
   schizophreniaDelusionValues: 'schizophreniaDelusionValues',
+  depOtherDetails: 'depOtherDetails',
+  anxOtherDetails: 'anxOtherDetails',
+  manOtherDetails: 'manOtherDetails',
+  ptsOtherDetails: 'ptsOtherDetails',
+  obsOtherDetails: 'obsOtherDetails',
+  bpdOtherDetails: 'bpdOtherDetails',
+  adiOtherDetails: 'adiOtherDetails',
+  adhdhOtherDetails: 'adhdhOtherDetails',
+  autOtherDetails: 'autOtherDetails',
+  cdOtherDetails: 'cdOtherDetails',
+  demOtherDetails: 'demOtherDetails',
+  schOtherDetails: 'schOtherDetails',
+  autismIntellectualImpairmentValue: 'autismIntellectualImpairmentValue',
 }
 
 const optionsValueToLabel: { [key: string]: string } = {
@@ -493,6 +585,15 @@ const requiredFields = [
   'schizophrenia',
   'medicationSe',
 ] as const
+
+const createBlockOptions = (
+  options: Array<[string, string, Details?]>,
+): LabelValueOption[] => {
+  return options.map(([label, value, details]) =>
+    details ? { label, value, details } : { label, value },
+  )
+}
+
 export {
   assignSpecificFields,
   getInitialValues,
@@ -501,4 +602,5 @@ export {
   labels,
   requiredFields,
   HPIVALIDATIONMESSAGE,
+  createBlockOptions,
 }

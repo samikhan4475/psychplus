@@ -54,6 +54,7 @@ const valueToSchema: { [key: string]: string } = {
   DEP_Agitation: 'depAgitation',
   DEP_SuicidalThoughts: 'depSuicidalThoughts',
   DEP_Anger: 'depAnger',
+  DEP_Other: 'depOther',
 
   // Anxiety block
   ANX_AbnormalFear: 'anxAbnormalFear',
@@ -66,6 +67,7 @@ const valueToSchema: { [key: string]: string } = {
   ANX_Restless: 'anxRestless',
   ANX_SocialAnxiety: 'anxSocialAnxiety',
   ANX_Worrying: 'anxWorrying',
+  ANX_Other: 'anxOther',
 
   // Bipolar/Mania  block
   MAN_ElevatedMood: 'manElevatedMood',
@@ -76,6 +78,7 @@ const valueToSchema: { [key: string]: string } = {
   MAN_LackOfSleep: 'manLackOfSleep',
   MAN_PressuredSpeech: 'manPressuredSpeech',
   MAN_ImpulsiveRecklessBehavior: 'manImpulsiveRecklessBehavior',
+  MAN_Other: 'manOther',
 
   // PTSD  block
   PTS_TraumaticEvent: 'ptsTraumaticEvent',
@@ -88,6 +91,7 @@ const valueToSchema: { [key: string]: string } = {
   PTS_Avoidance: 'ptsAvoidance',
   PTS_Startled: 'ptsStartled',
   PTS_Detachment: 'ptsDetachment',
+  PTS_Other: 'ptsOther',
 
   // Obesession  block
   OBS_Contamination: 'obsContamination',
@@ -100,6 +104,7 @@ const valueToSchema: { [key: string]: string } = {
   OBS_Counting: 'obsCounting',
   OBS_Hoarding: 'obsHoarding',
   OBS_Picking: 'obsPicking',
+  OBS_Other: 'obsOther',
 
   // OCD  block
   OCD_Checking: 'ocdChecking',
@@ -116,6 +121,7 @@ const valueToSchema: { [key: string]: string } = {
   BPD_SelfHarm: 'bpdSelfHarm',
   BPD_UnstableRelationships: 'bpdUnstableRelationships',
   BPD_UnstableSelfImage: 'bpdUnstableSelfImage',
+  BPD_Other: 'bpdOther',
 
   // Substance block
   SUB_Tobacco: 'subTobacco',
@@ -139,6 +145,7 @@ const valueToSchema: { [key: string]: string } = {
   ADI_LosesThings: 'adiLosesThings',
   ADI_EasilyDistracted: 'adiEasilyDistracted',
   ADI_Forgetful: 'adiForgetful',
+  ADI_Other: 'adiOther',
 
   // ADHDH Block
   ADH_Fidgeting: 'adhFidgeting',
@@ -151,6 +158,7 @@ const valueToSchema: { [key: string]: string } = {
   ADH_Impatient: 'adhImpatient',
   ADH_Interrupts: 'adhInterrupts',
   ADH_BehaviorOutbursts: 'adhBehaviorOutbursts',
+  ADH_Other: 'adhdhOther',
 
   // Autism Block
   AUT_Fidgeting: 'autDelayedMilestones',
@@ -160,6 +168,8 @@ const valueToSchema: { [key: string]: string } = {
   AUT_Aversions: 'autAversions',
   AUT_Masking: 'autMasking',
   AUT_EmotionalDysregulation: 'autEmotionalDysregulation',
+  AUT_IntellectualImpairment: 'autIntellectualImpairment',
+  AUT_Other: 'autOther',
 
   // Conduct Disorder Block
   CD_DisciplineIssues: 'cdDisciplineIssues',
@@ -172,6 +182,7 @@ const valueToSchema: { [key: string]: string } = {
   CD_AnimalCruelty: 'cdAnimalCruelty',
   CD_Manipulative: 'cdManipulative',
   CD_SuddenOutbursts: 'cdSuddenOutbursts',
+  CD_Other: 'cdOther',
 
   // Dementia Block
   DEM_MemoryLoss: 'demMemoryLoss',
@@ -182,6 +193,7 @@ const valueToSchema: { [key: string]: string } = {
   DEM_Ah: 'demAh',
   DEM_Vh: 'demVh',
   DEM_ParkinsonSymptoms: 'demParkinsonSymptoms',
+  DEM_Other: 'demOther',
 
   // Schizophrenia Block
   SCH_Hallucination: 'schHallucination',
@@ -192,6 +204,7 @@ const valueToSchema: { [key: string]: string } = {
   SCH_Catatonia: 'schCatatonia',
   SCH_SuicidalThoughts: 'schSuicidalThoughts',
   SCH_HomicidalThoughts: 'schHomicidalThoughts',
+  SCH_Other: 'schOther',
 
   // Medication SE Block
   MED_GiUpset: 'medGiUpset',
@@ -310,6 +323,7 @@ const transformOut =
         [
           'schizophreniaHallucinationsValues',
           'schizophreniaDelusionValues',
+          'autismIntellectualImpairmentValue',
         ].includes(key)
       ) {
         result.push({
