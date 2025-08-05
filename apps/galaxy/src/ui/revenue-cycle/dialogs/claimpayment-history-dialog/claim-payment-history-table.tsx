@@ -68,7 +68,8 @@ const columns: ColumnDef<ClaimAuditHistory>[] = [
       <ColumnHeader label="Previous Value" column={column} clientSideSort />
     ),
     cell: ({ row }) => {
-      const hasPayment = row.original.fieldName.toLowerCase().includes('amount')
+      const { oldValue, fieldName } = row.original
+      const hasPayment = !isNaN(Number(oldValue)) && !fieldName.includes('Id')
 
       return (
         <TextCell hasPayment={hasPayment}>{row.original.oldValue}</TextCell>
@@ -82,11 +83,10 @@ const columns: ColumnDef<ClaimAuditHistory>[] = [
       <ColumnHeader label="Current Value" column={column} clientSideSort />
     ),
     cell: ({ row }) => {
-      const hasPayment = row.original.fieldName.toLowerCase().includes('amount')
+      const { newValue, fieldName } = row.original
+      const hasPayment = !isNaN(Number(newValue)) && !fieldName.includes('Id')
 
-      return (
-        <TextCell hasPayment={hasPayment}>{row.original.newValue}</TextCell>
-      )
+      return <TextCell hasPayment={hasPayment}>{newValue}</TextCell>
     },
   },
 ]

@@ -23,7 +23,9 @@ const columns: ColumnDef<ClaimAuditHistory>[] = [
     ),
     cell: ({ row }) => (
       <TextCell className="w-[120px]">
-        {formatDateTime(row.original.metadata.updatedOn ?? row.original.metadata.createdOn)}
+        {formatDateTime(
+          row.original.metadata.updatedOn ?? row.original.metadata.createdOn,
+        )}
       </TextCell>
     ),
   },
@@ -62,7 +64,11 @@ const columns: ColumnDef<ClaimAuditHistory>[] = [
     header: ({ column }) => (
       <ColumnHeader label="Previous Value" column={column} clientSideSort />
     ),
-    cell: ({ row }) => <TextCell>{row.original.oldValue}</TextCell>,
+    cell: ({ row }) => {
+      const { oldValue, fieldName } = row.original
+      const hasPayment = !isNaN(Number(oldValue)) && !fieldName.includes('Id')
+      return <TextCell hasPayment={hasPayment}>{oldValue}</TextCell>
+    },
   },
   {
     id: 'newValue',
@@ -70,7 +76,11 @@ const columns: ColumnDef<ClaimAuditHistory>[] = [
     header: ({ column }) => (
       <ColumnHeader label="Current Value" column={column} clientSideSort />
     ),
-    cell: ({ row }) => <TextCell>{row.original.newValue}</TextCell>,
+    cell: ({ row }) => {
+      const { newValue, fieldName } = row.original
+      const hasPayment = !isNaN(Number(newValue)) && !fieldName.includes('Id')
+      return <TextCell hasPayment={hasPayment}>{newValue}</TextCell>
+    },
   },
 ]
 
