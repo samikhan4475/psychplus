@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { MultiSelectField } from '@/components'
+import { getLocationServicesAction } from '../../client-actions'
 import { useServiceCodesMap } from '../../hooks'
 import { FieldLabel, FormFieldContainer } from '../../shared'
 import { Option } from '../../types'
 import { getServiceFilterOptions } from '../../utils'
-import { getLocationServicesAction } from '../../client-actions'
 import { ProviderCodingSchema } from '../provider-coding-view-schema'
 
 const ServiceMultiSelect = () => {
@@ -24,7 +24,14 @@ const ServiceMultiSelect = () => {
       getLocationServicesAction([selectedLocation]).then((response) => {
         setLoading(false)
         if (response.state === 'error') setServicesOptions([])
-        else setServicesOptions(response.data)
+        else {
+          const { data = [] } = response
+          const mappedServiceOptions = data.map((service) => ({
+            ...service,
+            value: service.label,
+          }))
+          setServicesOptions(mappedServiceOptions)
+        }
       })
     }
   }, [selectedLocation])

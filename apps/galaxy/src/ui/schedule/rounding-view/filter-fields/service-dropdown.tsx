@@ -24,7 +24,14 @@ const ServiceDropdown = () => {
       getLocationServicesAction(selectedLocations).then((response) => {
         setLoading(false)
         if (response.state === 'error') setServicesOptions([])
-        else setServicesOptions(response.data)
+        else {
+          const { data = [] } = response
+          const mappedServiceOptions = data.map((service) => ({
+            ...service,
+            value: service.label,
+          }))
+          setServicesOptions(mappedServiceOptions)
+        }
       })
     }
   }, [selectedLocations])
