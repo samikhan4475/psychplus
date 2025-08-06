@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Flex, IconButton } from '@radix-ui/themes'
 import { PropsWithRow } from '@/components'
 import { EyeIcon } from '@/components/icons'
-import { Patient } from '../types'
+import { ExternalReferralDocument, Patient } from '../types'
 import { handleExternalReferralAttachmentExport } from '../utils'
 
 const MedicalRecordAttachmentCell = ({
@@ -14,7 +14,9 @@ const MedicalRecordAttachmentCell = ({
   const attachments = patient?.attachments || []
 
   const medicalRecord = attachments.find(
-    (att) => att.documentType === 'ResultsPdf',
+    (att) =>
+      att.documentType === ExternalReferralDocument.DischargeSummary ||
+      att.documentType === ExternalReferralDocument.MedicalRecord,
   )
 
   const handleExport = async (

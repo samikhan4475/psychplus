@@ -1,0 +1,26 @@
+'use client'
+
+import {
+  AutoResizeInput,
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+} from '@/components'
+import { BlockProps } from '../../types'
+
+const InjuryLocationInput = ({ disabled = false }: BlockProps) => {
+  return (
+    <FormFieldContainer className="flex flex-row gap-2">
+      <FormFieldLabel required>Injury location</FormFieldLabel>
+      <AutoResizeInput
+        field="injuryLocation"
+        className="!min-w-32"
+        maxLength={50}
+        disabled={disabled}
+      />
+      <FormFieldError name="injuryLocation" />
+    </FormFieldContainer>
+  )
+}
+
+export { InjuryLocationInput }

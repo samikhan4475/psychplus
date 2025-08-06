@@ -7,6 +7,7 @@ import { WidgetAddButton } from '@/components'
 import { DiagnosisIcd10Code, FavouriteDiagnosisData } from '@/types'
 import { WorkingDiagnosisView } from '@/ui/diagnosis/diagnosis/diagnosis-widget'
 import { SearchDiagnosis } from '@/ui/diagnosis/diagnosis/diagnosis-widget/search-diagnosis'
+import { isNeuroPsychVisit } from '@/ui/fit-for-duty-psych-eval/widget/utils'
 import { Diagnosis } from '../diagnosis'
 import { DiagnosisSaveButton } from '../diagnosis/diagnosis-widget/diagnosis-save-button'
 import { shouldDisableDiagnosisActions } from '../diagnosis/utils'
@@ -26,7 +27,9 @@ const DiagnosisWidget = ({
   const visitType = searchParams.get('visitType') ?? ''
   const visitSequence = searchParams.get('visitSequence') ?? ''
   const isDisabled = useMemo(
-    () => shouldDisableDiagnosisActions(visitType, visitSequence),
+    () =>
+      shouldDisableDiagnosisActions(visitType, visitSequence) ||
+      isNeuroPsychVisit(visitType),
     [visitType, visitSequence],
   )
   const { updateFavoritesDiagnosis, updateWorkingDiagnosisData } = useStore(
@@ -49,7 +52,9 @@ const DiagnosisWidget = ({
     <Flex className="bg-white" direction="column">
       <Flex justify="between" p="2" className="bg-white border border-gray-5">
         <Text className="flex-none text-[16px] font-[600]">
-          {isDisabled ? 'Admitting' : 'Working'} Diagnosis
+          {isDisabled && !isNeuroPsychVisit(visitType)
+            ? 'Admitting'
+            : 'Working'} Diagnosis
         </Text>
         {!isDisabled && (
           <Flex justify="between" align="center" width="100%">

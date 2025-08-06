@@ -1,6 +1,7 @@
 import { cache } from 'react'
 import { VisitTypeEnum } from '@/enum'
 import { QuickNoteSectionItem } from '@/types'
+import { FitForDutyPsychEvalClientLoader } from '@/ui/fit-for-duty-psych-eval/widget/client-loader'
 import { HpiWidgetClientLoader } from '@/ui/hpi/hpi-widget/hpi-widget-client-loader'
 import { isHospitalCareVisit, sendEvent, visitTypeToWidgets } from '@/utils'
 import { AddOnClientLoader } from '../add-on/add-on-widget/add-on-client-loader'
@@ -74,6 +75,7 @@ import { WorkingDiagnosisClientView } from './actual-note-view/working-diagnosis
 import { WorkingDischargeDiagnosisClientView } from './actual-note-view/working-discharge-diagnosis'
 import { QuickNoteSectionName } from './constants'
 import { WidgetType } from './types'
+import { FitForDutyActualNoteView } from './actual-note-view/fit-for-duty-psych-eval'
 
 enum ProviderType {
   Psychiatry = 'Psychiatrist',
@@ -277,6 +279,11 @@ const widgets: Array<WidgetType> = [
     id: QuickNoteSectionName.QuickNoteSectionHospitalOrders,
     actualNoteComponent: HospitalOrderClientView,
   },
+  {
+    component: FitForDutyPsychEvalClientLoader,
+    id: QuickNoteSectionName.QuicknoteSectionFitForDutyPsychEval,
+    actualNoteComponent: FitForDutyActualNoteView,
+  },
 ]
 
 const getWidgetsByVisitType = (
@@ -369,6 +376,7 @@ const widgetErrorsMap = {
   AdmittingDiagnosis: 'Admitting Diagnosis.',
   WorkingDischargeDiagnosis: 'Working Discharge Diagnosis.',
   SafetyPlanningIntervention: 'Safety Planning Intervention.',
+  FitnessForDuty: 'Fit-For- Duty Psych Evaluation',
 }
 
 const TherapyVisitTypeNames: Partial<Record<VisitTypeEnum, string>> = {

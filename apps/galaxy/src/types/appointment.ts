@@ -26,6 +26,7 @@ enum VisitTypes {
   GroupTherapy = 'GroupTherapy',
   KetamineFourVisit = 'KetamineIV',
   UDS = 'UDS',
+  FitnessForDuty = 'FitnessForDuty',
 }
 
 enum VisitSequenceTypes {

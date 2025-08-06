@@ -23,7 +23,7 @@ const TcmView = async ({ patientId, appointmentId }: TcmProps) => {
   return (
     <ActualNoteDetailsWrapper
       sectionName={QuickNoteSectionName.QuicknoteSectionTcm}
-    >
+  >
       <Details keys={tmsKeys} data={transformIn(response.data)} />
     </ActualNoteDetailsWrapper>
   )

@@ -1,5 +1,4 @@
 import { unstable_noStore as noStore } from 'next/cache'
-import { notFound } from 'next/navigation'
 import { Text } from '@radix-ui/themes'
 import { getPatientStaffCommentsAction } from '@/actions'
 import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'

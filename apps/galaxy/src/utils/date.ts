@@ -8,8 +8,8 @@ import {
   type DateValue,
 } from '@internationalized/date'
 import { differenceInCalendarDays, format } from 'date-fns'
-import { Period, SelectOptionType } from '@/types'
 import { TimeValue } from 'react-aria-components'
+import { Period, SelectOptionType } from '@/types'
 
 const MONTH_LABELS = [
   'January',
@@ -229,8 +229,8 @@ const isISODate = (dateString: string): boolean => {
 }
 
 const formatDateOfBirth = (dob: string) => {
-  if(!dob) return ''
-  
+  if (!dob) return ''
+
   const isoDateOnly = dob.split('T')[0]
   const date = parseDate(isoDateOnly)
   const month = String(date.month).padStart(2, '0')
@@ -395,14 +395,18 @@ const isLaterTime = (a: TimeValue, b: TimeValue): boolean => {
   return aTotal > bTotal
 }
 
-const isWithinNextDays = (date: DateValue | null | undefined, days: number): boolean => {
+const isWithinNextDays = (
+  date: DateValue | null | undefined,
+  days: number,
+): boolean => {
   if (!date) return false
 
   const max = today('UTC').add({ days })
 
   if (date.year > max.year) return false
   if (date.year === max.year && date.month > max.month) return false
-  if (date.year === max.year && date.month === max.month && date.day > max.day) return false
+  if (date.year === max.year && date.month === max.month && date.day > max.day)
+    return false
 
   return true
 }
@@ -435,6 +439,19 @@ const formatStartOfDay = (date: DateValue): string => {
   const d = new Date(Date.UTC(date.year, date.month - 1, date.day))
   d.setUTCHours(0, 0, 0, 0)
   return d.toISOString()
+}
+
+const generateMonthOptions = (labels: string[]) => {
+  return labels?.map((label) => ({
+    label,
+    value: label,
+  }))
+}
+const generateYearOptions = (start: number, end: number) => {
+  return Array.from({ length: end - start + 1 }, (_, i) => {
+    const year = String(start + i)
+    return { label: year, value: year }
+  })
 }
 export {
   getCalendarDate,
@@ -474,4 +491,7 @@ export {
   formatStartOfDay,
   formatEndOfDay,
   isWithinNextDays,
+  MONTH_LABELS,
+  generateMonthOptions,
+  generateYearOptions,
 }

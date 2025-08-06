@@ -10,6 +10,7 @@ enum VisitTypeEnum {
   Spravato = 'Spravato',
   HospitalCareInitial = 'HospitalCare/Initial',
   HospitalCareSubsequent = 'HospitalCare/Subsequent',
+  FitnessForDuty = 'FitnessForDuty',
   HospitalCareDischarge = 'HospitalCare/Discharge',
   HospitalCareInitialDischarge = 'HospitalCare/InitialDischarge',
   NursingHomeCareInitial = 'NursingHomeCare/Initial',

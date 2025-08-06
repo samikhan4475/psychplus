@@ -1,4 +1,5 @@
 import { Appointment, PatientProfile, QuickNoteSectionItem } from '@/types'
+
 interface Allergy {
   allergyName: string
   allergyType: string
@@ -9,7 +10,7 @@ interface Allergy {
 }
 
 interface NoteDetailProps {
-  isNoteView: boolean
+  isNoteView?: boolean
   allergies?: Allergy[]
   data: QuickNoteSectionItem[]
   appointments?: Appointment[]

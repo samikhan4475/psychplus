@@ -66,6 +66,7 @@ enum QuickNoteSectionName {
   QuicknoteSectionAutoReferrals = 'QuicknoteSectionAutoReferrals',
   QuicknoteSectionUds = 'QuicknoteSectionUDS',
   QuickNoteSectionCopsR = 'QuicknoteSectionQuestionnaireCopsR',
+  QuicknoteSectionFitForDutyPsychEval = 'QuicknoteSectionFitForDutyPsychEval',
   QuickNoteSectionAdultAsrs = 'QuicknoteSectionQuestionnaireAdultAsrs',
 }
 

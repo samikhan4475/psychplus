@@ -9,6 +9,8 @@ const NON_INSURANCE_DIAGNOSIS_CODE_SET = ['F72', 'F73', 'F79']
 
 const QUESTIONNAIRE_DIAGNOSIS_CODE_SET = ['F01', 'F02', 'F03']
 
+const FITNESS_FOR_DUTY_ICD_CODE = 'Z02.79'
+
 const shouldDisableDiagnosisActions = (
   visitType: string,
   visitSequence: string,
@@ -112,4 +114,5 @@ export {
   getFirstSectionValue,
   isMOCAQuestionnaireRequired,
   buildDiagnosisQuickNoteItems,
+  FITNESS_FOR_DUTY_ICD_CODE
 }

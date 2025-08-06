@@ -14,6 +14,7 @@ import {
   UpdateCptCodes,
 } from '@/types'
 import { SectionItem } from '@/ui/hpi/hooks/useHpiWidget'
+import { PatientVital } from '@/ui/vitals'
 import { manageCodes, sendEvent } from '@/utils'
 import { signNoteClientAction } from '../client-actions'
 import { QuickNoteSectionName } from '../constants'
@@ -65,6 +66,8 @@ interface Store {
   updateCptCodes: UpdateCptCodes
   setMarkedStatus: (payload: boolean) => void
   isMarkedAsError?: boolean
+  patientVitals?: PatientVital
+  setPatientVitals: (vitals: PatientVital) => void
 }
 
 interface StoreInitialState {
@@ -130,6 +133,7 @@ const createStore = (initialState: StoreInitialState) =>
     errorMessage: '',
     isErrorAlertOpen: false,
     cosignerLabel: '',
+    patientVitals: undefined,
     setCosignerLabel: (cosignerLabel) => set({ cosignerLabel }),
     setErrorMessage: (errorMessage) => set({ errorMessage }),
     setIsErrorAlertOpen: (isErrorAlertOpen) => set({ isErrorAlertOpen }),
@@ -271,6 +275,7 @@ const createStore = (initialState: StoreInitialState) =>
         }
       })
     },
+    setPatientVitals: (patientVitals) => set({ patientVitals }),
   }))
 
 const StoreContext = createContext<StoreApi<Store> | undefined>(undefined)

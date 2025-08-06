@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { Flex, TextField } from '@radix-ui/themes'
+import { Flex, Text, TextField } from '@radix-ui/themes'
 import { Controller, useFormContext } from 'react-hook-form'
 import { PatternFormat } from 'react-number-format'
 import { cn } from '@/utils'
@@ -22,6 +22,8 @@ interface NumberInputProps {
   max?: number
   isAllowed?: (values: any) => boolean
   onValueChange?: (value: string) => void
+  suffixText?: string
+  suffixClassName?: string
 }
 
 const NumberInput = ({
@@ -38,6 +40,8 @@ const NumberInput = ({
   max,
   isAllowed,
   onValueChange,
+  suffixText,
+  suffixClassName,
 }: NumberInputProps) => {
   const form = useFormContext()
 
@@ -70,6 +74,7 @@ const NumberInput = ({
       onChange(min?.toString() || '')
     }
   }
+
   return (
     <Flex align="center" gap="2">
       {label && (
@@ -77,11 +82,11 @@ const NumberInput = ({
           {label}
         </BlockLabel>
       )}
-      <Controller
-        control={form.control}
-        name={fieldName}
-        render={({ field }) => {
-          return (
+      <div className="relative">
+        <Controller
+          control={form.control}
+          name={fieldName}
+          render={({ field }) => (
             <PatternFormat
               autoFocus={autoFocus}
               size="1"
@@ -106,9 +111,21 @@ const NumberInput = ({
               className={cn('h-[var(--chip-height)]', className)}
               {...(isAllowed && { isAllowed })}
             />
-          )
-        }}
-      />
+          )}
+        />
+
+        {suffixText && (
+          <Text
+            className={cn(
+              'pointer-events-none absolute right-0 top-0  flex h-full min-w-[18px]  items-center justify-center overflow-hidden rounded-r-1  rounded-br-1 rounded-tr-1 border-[1px]  border-solid border-gray-8 bg-gray-2 px-1 text-center text-[10px]',
+              suffixClassName,
+            )}
+          >
+            {suffixText}
+          </Text>
+        )}
+      </div>
+
       {showError && <FormFieldError name={fieldName} />}
     </Flex>
   )

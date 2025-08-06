@@ -226,6 +226,12 @@ const formatPatientVitalHeightWeight = (
   return `${height ?? 'N/A'}/${weight ?? 'N/A'}`
 }
 
+const convertInchesToFeetAndInches = (totalInches: number) => {
+  const feet = Math.floor(totalInches / 12)
+  const inches = totalInches % 12
+  return { feet, inches }
+}
+
 export {
   getPatientFirstName,
   getPatientLastName,
@@ -250,4 +256,5 @@ export {
   getTruncatedName,
   formatPatientVitalHeightWeight,
   getPatientZipLast4,
+  convertInchesToFeetAndInches
 }

@@ -24,13 +24,12 @@ interface RadioSelectSectionProps {
   resetOnSameValue?: boolean
   optionEnableTag?: string
   errorField?: string
+  shouldTriggerOnChange?: boolean
 }
-
 interface RadioSelectOption {
   label: string
   value: string
 }
-
 const RadioSelectSection = ({
   label,
   description,
@@ -46,34 +45,34 @@ const RadioSelectSection = ({
   lastOptionIndicator = false,
   resetOnSameValue = false,
   errorField,
+  shouldTriggerOnChange = false,
 }: RadioSelectSectionProps) => {
   const form = useFormContext()
   const watchedValue = form.watch(field)
   const [value, setValue] = useState<string | undefined>(defaultValue || '')
-
   let error = undefined
   if (errorField) {
     error = form?.formState?.errors?.[errorField]?.message
   }
-
   useEffect(() => {
     if (disabled) {
       setValue(defaultValue)
     }
     setValue(watchedValue || '')
   }, [watchedValue, defaultValue, disabled])
-
-  const handleOptionClick = (clickedValue: string) => {
+  const handleOptionClick = async (clickedValue: string) => {
     if (resetOnSameValue && value === clickedValue && value !== '') {
       form.setValue(field, '', { shouldDirty: true })
     } else if (!disabled) {
       form.setValue(field, clickedValue, { shouldDirty: true })
     }
+    if (shouldTriggerOnChange) {
+      await form.trigger(field)
+    }
     if (onChange) onChange(clickedValue)
   }
 
   const isLastOptionSelected = value === options[options.length - 1]?.value
-
   return (
     <Flex align="start" justify="start" gap="2">
       {label && <BlockLabel required={required}>{label}</BlockLabel>}

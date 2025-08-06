@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { genericEventBus } from '@/lib/generic-event-bus'
 import { GenericPayload } from '@/types'
 import { formatPatientVitalHeightWeight } from '@/utils'
+import { useStore } from '../quicknotes/store'
 import { PatientVital } from '../vitals'
 import { BmiValue } from './bmi-value'
 import { LabelAndValue } from './label-and-value'
@@ -22,12 +23,21 @@ const VitalsInfoSection = ({
   patientId,
 }: VitalsInfoSectionProps) => {
   const [eventVitals, setEventVitals] = useState<PatientVital | undefined>()
+  const setPatientVitals = useStore((state) => state.setPatientVitals)
+
+  useEffect(() => {
+    if (initialVitals) {
+      setPatientVitals(initialVitals)
+    }
+  }, [initialVitals, setPatientVitals])
+
   useEffect(() => {
     const handleUpdateVitals = (
       message?: GenericPayload<VitalsEventPayload>,
     ) => {
       if (message?.type === 'vitals' && message?.vitals) {
         setEventVitals(message.vitals)
+        setPatientVitals(message.vitals)
       }
     }
     const eventType = `${patientId}`
@@ -42,7 +52,6 @@ const VitalsInfoSection = ({
     () => eventVitals ?? initialVitals,
     [eventVitals, initialVitals],
   )
-
   return (
     <>
       <LabelAndValue

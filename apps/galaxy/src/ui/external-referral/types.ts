@@ -14,6 +14,16 @@ enum QueryByNextDays {
   Disregard = 'Disregard',
 }
 
+enum ExternalReferralDocument {
+  RequisitionPdf = 'RequisitionPdf',
+  ResultsPdf = 'ResultsPdf',
+  EncounterCcd = 'EncounterCcd',
+  EncounterPdf = 'EncounterPdf',
+  Facesheet = 'Facesheet',
+  DischargeSummary = 'DischargeSummary',
+  MedicalRecord = 'MedicalRecord',
+}
+
 interface Patient extends PatientProfile {
   name: string
   age: number
@@ -201,4 +211,5 @@ export {
   type MatchingPatient,
   type Match,
   type AppointmentData,
+  ExternalReferralDocument,
 }

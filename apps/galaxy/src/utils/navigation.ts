@@ -49,6 +49,11 @@ const getNavLinks = (
   const navLinks = [
     { label: 'Quick Notes', href: '/quicknotes' },
     { label: 'Notes', href: '/notes' },
+    {
+      label: 'Fit For Duty Evaluation',
+      href: '/fit-for-duty',
+      conditions: [visitType === VisitTypes.FitnessForDuty],
+    },
     { label: 'HPI/Presenting Symptoms', href: '/hpi' },
     { label: 'History', href: '/histories' },
     { label: 'Questionnaires', href: '/questionnaires' },
