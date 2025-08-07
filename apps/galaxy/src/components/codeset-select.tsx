@@ -46,7 +46,7 @@ const CodesetSelect = ({
     )
     const mapped = filtered.map((code) => (
       <Select.Item key={code.value} value={code.value}>
-        {code.value}
+        {code.display}
       </Select.Item>
     ))
 
