@@ -35,7 +35,7 @@ const SCHIZOPHRENIA_BLOCK_OPTIONS = (
   },
 
   {
-    label: 'Hallucination',
+    label: 'Hallucinations',
     value: 'schHallucination',
     details: {
       type: 'multi-select' as DetailsType,
