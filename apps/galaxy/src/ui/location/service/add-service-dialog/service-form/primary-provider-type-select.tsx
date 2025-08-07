@@ -1,7 +1,13 @@
 'use client'
 
+import { Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
+import {
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+  SelectInput,
+} from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetOptions } from '@/hooks'
 import { getPrimaryProviderTypeOptions } from '../../utils'
@@ -19,13 +25,16 @@ const PrimaryProviderTypeSelect = () => {
       <FormFieldLabel className="!text-1 font-medium">
         If Primary Provider Required Select Provider Type?
       </FormFieldLabel>
-      <SelectInput
-        options={getPrimaryProviderTypeOptions(providerTypes)}
-        field="primaryProviderType"
-        className="w-full"
-        size="1"
-        buttonClassName="w-full h-7"
-      />
+      <Flex direction="column" className="w-full">
+        <SelectInput
+          options={getPrimaryProviderTypeOptions(providerTypes)}
+          field="primaryProviderType"
+          className="w-full"
+          size="1"
+          buttonClassName="w-full h-7"
+        />
+        <FormFieldError name="primaryProviderType" />
+      </Flex>
     </FormFieldContainer>
   )
 }
