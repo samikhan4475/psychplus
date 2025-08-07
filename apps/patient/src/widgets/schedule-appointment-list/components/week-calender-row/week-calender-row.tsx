@@ -1,16 +1,13 @@
-'use client'
+'use client';
 
-import React, { useState } from 'react'
-import { Flex, Text } from '@radix-ui/themes'
-import { addDays, format } from 'date-fns'
-import { isMobile } from '@psychplus/utils/client'
-import {
-  formatDateYmd,
-  getFirstDayOfWeek,
-  parseDateString,
-} from '@psychplus/utils/time'
-import { LeftArrowIcon, RightArrowIcon } from '@/components'
-import { useStore } from '../../store'
+import React, { useEffect, useState } from 'react';
+import { Flex, Text } from '@radix-ui/themes';
+import { addDays, format } from 'date-fns';
+import { isMobile } from '@psychplus/utils/client';
+import { formatDateYmd, getFirstDayOfWeek, parseDateString } from '@psychplus/utils/time';
+import { LeftArrowIcon, RightArrowIcon } from '@/components';
+import { useStore } from '../../store';
+
 
 const WeekCalendarRow = () => {
   const daysToAdd = isMobile() ? 1 : 7
@@ -23,6 +20,12 @@ const WeekCalendarRow = () => {
       ? parseDateString(filters.startingDate)
       : getFirstDayOfWeek(),
   )
+
+  useEffect(() => {
+    if (isMobile() && filters.startingDate) {
+      handleWeekChange(0, true, filters.startingDate)
+    }
+  }, [filters.startingDate])
 
   const renderDays = () => {
     if (isMobile()) {
@@ -46,11 +49,26 @@ const WeekCalendarRow = () => {
     )
   }
 
-  const handleWeekChange = (offset: number) => {
+  const handleWeekChange = (
+    offset: number,
+    isDateInFuture?: boolean,
+    futureDateFromFilters?: string,
+  ) => {
     const changeBy = isMobile() ? 1 : 7
-    const newWeekReel = offset < 0 ? currentWeekReel - 1 : currentWeekReel + 1
+    let newStartDate: Date
+    let newWeekReel: number
 
-    const newStartDate = addDays(startDate, offset < 0 ? -changeBy : changeBy)
+    if (isMobile() && isDateInFuture && futureDateFromFilters) {
+      newStartDate = new Date(futureDateFromFilters)
+
+      const daysDiff = Math.floor(
+        (newStartDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
+      )
+      newWeekReel = currentWeekReel + Math.ceil(daysDiff / changeBy)
+    } else {
+      newStartDate = addDays(startDate, offset < 0 ? -changeBy : changeBy)
+      newWeekReel = offset < 0 ? currentWeekReel - 1 : currentWeekReel + 1
+    }
 
     setCurrentWeekReel(newWeekReel)
     handleFiltersChange({
@@ -58,6 +76,7 @@ const WeekCalendarRow = () => {
     })
     setStartDate(newStartDate)
   }
+
 
   return (
     <Flex align="center" className="w-full">
@@ -75,7 +94,7 @@ const WeekCalendarRow = () => {
       >
         <LeftArrowIcon />
       </Flex>
-      <Flex className="w-full md:mx-0 lg:mx-6">
+      <Flex className="mx-3 w-full whitespace-nowrap md:mx-0 lg:mx-6">
         {renderDays()}
       </Flex>
       <Flex

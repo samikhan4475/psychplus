@@ -21,8 +21,12 @@ import {
   SlotsByDay,
   UpdateStorageParams,
 } from '../types'
+import { isMobile } from '@psychplus/utils/client'
 
-const generateDateRange = (start: CalendarDate) => {
+const generateDateRange = (start: CalendarDate, isMobile?:boolean) => {
+  if (isMobile) {
+    return [start]
+  }
   const jsDate = new Date(start.toString())
 
   const dayOfWeek = jsDate.getUTCDay()
@@ -43,7 +47,7 @@ const isDateInNextRange = (
   startingDate: CalendarDate,
   slotDate: CalendarDate,
 ) => {
-  return startingDate.add({ days: 6 }).compare(slotDate) < 0
+  return startingDate.add({ days: isMobile() ? 1 : 6 }).compare(slotDate) < 0
 }
 
 const getEarliestSlot = (slots: SlotsByDay, dateRange: CalendarDate[]) => {

@@ -13,6 +13,7 @@ import {
   getNextAvailableDateLabel,
   getStartOfWeekForCalandarDate,
 } from '@/features/appointments/search/utils'
+import { isMobile } from '@psychplus/utils/client'
 
 interface SlotStateRendererProps {
   slotsLoading?: boolean
@@ -102,9 +103,11 @@ export const SlotStateRenderer = ({
               onClick={() =>
                 handleGoToAppointment(
                   getCalendarDateLabel(
-                    getStartOfWeekForCalandarDate(
-                      getCalendarDate(nextAvailableSlotDate),
-                    ),
+                    isMobile()
+                      ? getCalendarDate(nextAvailableSlotDate)
+                      : getStartOfWeekForCalandarDate(
+                          getCalendarDate(nextAvailableSlotDate),
+                        ),
                   ),
                 )
               }

@@ -19,6 +19,7 @@ import {
   isDateInNextRange,
 } from '@/features/appointments/search/utils'
 import { useSlotCache } from '@/hooks'
+import { isMobile } from '@psychplus/utils/client'
 
 interface UseSlotsParams {
   providerId: number
@@ -65,7 +66,7 @@ const useSlots = ({
   const nextAvailableSlotDate = Object.keys(slotState.current)[0]
 
   const dateRange = useMemo(() => {
-    return generateDateRange(getCalendarDate(startingDate))
+    return generateDateRange(getCalendarDate(startingDate),isMobile())
   }, [startingDate, rawStartingDate])
 
   const dateIsInFuture = useMemo(() => {
@@ -99,7 +100,6 @@ const useSlots = ({
       controller.signal,
     )
       .then((result) => {
-        // if (controller?.signal) return
         if (result.state === 'error') {
           setErrorMessage(result?.error)
           setHasFetchedOnce(true)

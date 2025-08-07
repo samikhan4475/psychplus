@@ -25,11 +25,11 @@ const ProvidersAvailabilityListing = ({
       >
         <Flex align="center" className="justify-between md:justify-center">
           <Flex className="text-[#151B4A] sm:min-w-[61px] md:min-w-[275px] lg:min-w-[380px]">
-            <Text className="sm-text-2 text-3 md:text-5">
+            <Text className="sm-text-2 text-3 md:text-5 whitespace-nowrap">
               {sortedProviders?.length} Providers
             </Text>
           </Flex>
-          <Flex>
+          <Flex className='ml-10 md:ml-0'>
             <WeekCalendarRow />
           </Flex>
         </Flex>

@@ -47,7 +47,7 @@ const FilterPanel = ({
       className="bg-white sticky top-0 z-10 w-full flex-1 flex-wrap px-4 max-lg:items-start sm:px-7"
       gap="4"
     >
-      <Flex className="flex-row gap-3 max-sm:w-full max-xs:flex-row xs:flex-row sm:flex-col sm:gap-2.5 md:flex-col lg:flex-row">
+      <Flex className="flex-col gap-3 lg:flex-row">
         <Flex align="center" gap="2">
           <Text className="text-[12px] font-medium text-[#000000] md:text-[14px]">
             Appointment

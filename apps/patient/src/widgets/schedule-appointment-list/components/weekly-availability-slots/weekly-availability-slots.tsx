@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { AppointmentSlot } from '@psychplus-v2/types'
-import { getCalendarDateLabel } from '@psychplus-v2/utils'
+import { cn, getCalendarDateLabel } from '@psychplus-v2/utils'
 import { Button, Flex, Text } from '@radix-ui/themes'
 import { Staff } from '@psychplus/staff'
 import { isMobile } from '@psychplus/utils/client'
@@ -78,7 +78,10 @@ const WeeklyAvailabilitySlots = ({
   return (
     <Flex
       gap="4"
-      className="w-full max-sm:ml-0 sm:ml-[100px] md:ml-0 lg:ml-[53px]"
+      className={cn(
+        'w-full max-sm:ml-0 sm:ml-[100px] md:ml-0 lg:ml-[53px]',
+        isMobile() && 'overflow-x-auto',
+      )}
       justify="center"
       ref={ref}
     >
@@ -175,17 +178,13 @@ const MobileSlotComponent = ({
 
   return (
     <Flex className="flex-row overflow-x-auto whitespace-nowrap pb-4" gap="4">
-      {slots && slots?.length > 0 ? (
-        slots?.map((slot, i) => (
+      {slots && slots?.map((slot, i) => (
           <SlotItem
             key={`${slot.startDate}-${i}`}
             slot={slot}
             onBookedSlot={setMobileBookedSlotDetails}
           />
-        ))
-      ) : (
-        <Text>No slots available</Text>
-      )}
+        ))}
     </Flex>
   )
 }
