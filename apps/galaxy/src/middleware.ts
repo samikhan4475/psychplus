@@ -40,7 +40,7 @@ export const middleware = async (request: NextRequest) => {
           API_URL,
         ),
         {
-          body: ['GET', 'HEAD'].includes(request.method) ? undefined : buffer,
+          body: ['GET', 'HEAD', 'DELETE'].includes(request.method) ? undefined : buffer,
           method: request.method,
           headers: {
             Authorization: headers.get('Authorization') ?? '',
