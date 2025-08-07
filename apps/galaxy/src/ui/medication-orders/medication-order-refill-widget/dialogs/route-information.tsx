@@ -51,7 +51,7 @@ const RouteInformation = ({ index }: RouteInformationProps) => {
         />
       </FormFieldContainer>
       <FormFieldContainer className="flex-1">
-        <FormFieldLabel>Substitution</FormFieldLabel>
+        <FormFieldLabel required>Substitution</FormFieldLabel>
         <SelectInput
           options={options}
           value={isSubstitutionsAllowed ? 'yes' : 'no'}

@@ -2,7 +2,7 @@ import z from 'zod'
 
 const drugSignatureSchema = z.object({
   id: z.string().uuid(),
-  signatureText: z.string(),
+  signatureText: z.string().min(1, 'Signature text is required'),
 })
 
 const drugDiagnosisSchema = z.object({
@@ -54,9 +54,7 @@ const drugSchema = z.object({
   notificationId: z.string().uuid().optional(),
   metadata: z.any().optional(),
   drugDescription: z.string().optional(),
-  quantityValue: z.coerce.string().optional(),
   quantityCodeListQualifier: z.string().optional(),
-  quantityUnitOfMeasureCode: z.string().optional(),
   medicationType: z.string(),
   isSubstitutionsAllowed: z.boolean().optional(),
   startDateTime: z.string().optional(),
@@ -69,7 +67,6 @@ const drugSchema = z.object({
   daysSupply: z.number().optional(),
   writtenDate: z.string().datetime().optional(),
   lastFillDate: z.string().datetime().optional(),
-  refills: z.coerce.string().optional(),
   isMedicationAsNeeded: z.boolean().optional(),
   reasonForMedicationAsNeeded: z.string().optional(),
   endDateTime: z.string().optional(),
@@ -89,6 +86,11 @@ const drugSchema = z.object({
   deaSchedule: z.string().optional(),
   isControlledSubstance: z.boolean().optional(),
   effectiveDate: z.string().optional(),
+  quantityValue: z.coerce.string().min(1, 'Quantity value is required'),
+  quantityUnitOfMeasureCode: z
+    .string()
+    .min(1, 'Quantity unit of measure code is required'),
+  refills: z.coerce.string().min(1, 'Refills is required'),
 })
 
 const schema = z.object({

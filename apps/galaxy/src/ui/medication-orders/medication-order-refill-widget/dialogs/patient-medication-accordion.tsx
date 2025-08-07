@@ -4,7 +4,7 @@ import { useState } from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
 import { TriangleDownIcon } from '@radix-ui/react-icons'
 import { Box, Flex, Grid, ScrollArea, Text } from '@radix-ui/themes'
-import { Pencil, TriangleAlert } from 'lucide-react'
+import { InfoIcon, Pencil, TriangleAlert } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 import { DrugInfo } from '@/types'
 import { DeaScheduleOptions } from '../types'
@@ -27,7 +27,6 @@ const PatientPrescriptionAccordian = () => {
       minute: '2-digit',
     })
     const deaCode = newDrug?.representativeErxPackagedDrug?.federalDeaClassCode
-    
 
     const isControlledSubstance = ['2', '3', '4', '5'].includes(deaCode)
     const updated = [...drugs]
@@ -70,9 +69,24 @@ const PatientPrescriptionAccordian = () => {
               >
                 <Accordion.Header>
                   <Accordion.Trigger className="flex w-full cursor-pointer items-center justify-between px-2 py-1 text-left">
-                    <Flex gap="2">
+                    <Flex gap="1">
                       <TriangleDownIcon />
-                      <Text size="1">
+                      {item.isControlledSubstance && (
+                        <Box className="flex items-center gap-2">
+                          <InfoIcon
+                            className={`h-4 w-4 ${
+                              item.isControlledSubstance ? 'text-orange-6' : ''
+                            }`}
+                          />
+                        </Box>
+                      )}
+                      <Text
+                        className={`${
+                          item.isControlledSubstance ? 'text-orange-6' : ''
+                        }`}
+                        size="1"
+                        weight="bold"
+                      >
                         {item.drugDescription ?? 'No Description Found'}
                       </Text>
                     </Flex>

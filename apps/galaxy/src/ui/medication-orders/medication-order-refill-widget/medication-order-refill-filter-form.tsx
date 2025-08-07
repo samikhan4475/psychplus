@@ -9,6 +9,8 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { z } from 'zod'
 import { FormContainer } from '@/components'
+import { STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
+import { useStore as useGlobalStore } from '@/store'
 import { formatDateToISOString, sanitizeFormData } from '@/utils'
 import { FromField } from './from-field'
 import { MedicationField } from './medication-filed'
@@ -37,7 +39,7 @@ const schema = z.object({
   notificationDateFrom: z.custom<DateValue>().nullable(),
   notificationDateTo: z.custom<DateValue>().nullable(),
   patientFirstNameContains: z.string().trim().optional(),
-  prescriptionId: z.string().optional(),
+  staffId: z.string().optional(),
   pharmacyNcpdpId: z.string().optional(),
   drugDescriptionStartsWith: z.string().trim().optional(),
   notificationResponseType: z.string().optional(),
@@ -48,8 +50,13 @@ export type MedicationFormFilterSchemaType = z.infer<typeof schema>
 const MedicationOrderRefillFilterForm = () => {
   const { searchMedicationsList, activeTab } = useStore()
   const isRefillTab = activeTab.includes('Refill')
+  const { staffId, staffRoleCode } = useGlobalStore((state) => ({
+    staffId: state.user.staffId,
+    staffRoleCode: state.staffResource.staffRoleCode,
+  }))
+  const isPrescriber = staffRoleCode === STAFF_ROLE_CODE_PRESCRIBER
+  const defaultOrderingStaffId = isPrescriber ? String(staffId) : ''
   const today = new Date()
-
   const form = useForm<MedicationFormFilterSchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
@@ -57,7 +64,7 @@ const MedicationOrderRefillFilterForm = () => {
       notificationDateFrom: new CalendarDate(
         today.getFullYear(),
         today.getMonth() + 1,
-        today.getDate(),
+        1,
       ),
       notificationDateTo: new CalendarDate(
         today.getFullYear(),
@@ -65,10 +72,10 @@ const MedicationOrderRefillFilterForm = () => {
         today.getDate(),
       ),
       patientFirstNameContains: '',
-      prescriptionId: '',
+      staffId: defaultOrderingStaffId,
       pharmacyNcpdpId: '',
       drugDescriptionStartsWith: '',
-      notificationResponseType: '',
+      notificationResponseType: 'Pending',
     },
   })
 
@@ -78,7 +85,7 @@ const MedicationOrderRefillFilterForm = () => {
       notificationDateFrom: null,
       notificationDateTo: null,
       patientFirstNameContains: '',
-      prescriptionId: '',
+      staffId: '',
       pharmacyNcpdpId: '',
       drugDescriptionStartsWith: '',
       notificationResponseType: '',
@@ -133,7 +140,7 @@ const MedicationOrderRefillFilterForm = () => {
       <FromField />
       <ToField />
       <PatientField />
-      {/* <PrescriberSelect /> */}
+      <PrescriberSelect />
       <PharmacySelect />
       <MedicationField />
       <StatusSelect />

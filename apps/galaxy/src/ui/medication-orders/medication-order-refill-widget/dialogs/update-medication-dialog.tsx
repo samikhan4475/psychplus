@@ -99,7 +99,7 @@ const UpdateMedicationDialog = ({ row }: UpdateMedicationDialogProps) => {
           shouldShowDrugTable
             ? 'min-h-[10dvh] max-w-[1000px]'
             : 'min-h-[50dvh] max-w-[600px]'
-        } ${step === Step.Form ? 'max-w-[1070px]' : ''}`}
+        } ${step === Step.Form ? 'max-w-[1070px]' : ''} overflow-y-hidden`}
       >
         <Dialog.Close className="absolute right-4 top-5 cursor-pointer">
           <IconButton size="1" highContrast variant="ghost" color="gray">

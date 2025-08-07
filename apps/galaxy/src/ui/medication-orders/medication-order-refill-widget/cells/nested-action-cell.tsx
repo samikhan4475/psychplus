@@ -21,7 +21,11 @@ const NestedActionsCell = ({ row }: ActionsCellProps) => {
     notificationType,
     userResponseType,
   } = row.original
-  const { searchMedicationsList, activeTab } = useStore()
+  const { searchMedicationsList, activeTab, payload } = useStore((state) => ({
+    searchMedicationsList: state.searchMedicationsList,
+    activeTab: state.activeTab,
+    payload: state.payload,
+  }))
   const isRefillTab = activeTab.includes('Refill')
   const [isConfirmationDialog, setIsConfirmationDialog] =
     useState<boolean>(false)
@@ -50,6 +54,7 @@ const NestedActionsCell = ({ row }: ActionsCellProps) => {
       notificationType: isRefillTab
         ? PharmacyNotificationType.PharmacyRxRenewalRequest
         : PharmacyNotificationType.PharmacyRxChangeRequest,
+      ...payload,
     }
     searchMedicationsList(formattedData)
   }
@@ -63,7 +68,7 @@ const NestedActionsCell = ({ row }: ActionsCellProps) => {
     }
     return true
   }
-  if (!shouldShowButton()) return null 
+  if (!shouldShowButton()) return null
   return (
     <>
       <ConfirmationDialog

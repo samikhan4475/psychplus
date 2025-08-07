@@ -3,9 +3,10 @@
 import { Flex, TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import {
-  CodesetSelect,
   FormFieldContainer,
+  FormFieldError,
   FormFieldLabel,
+  NumericInput,
   SelectInput,
 } from '@/components'
 import { CODESETS } from '@/constants'
@@ -45,7 +46,7 @@ const DoseInformation = ({ index }: DoseInformationProps) => {
       </FormFieldContainer>
 
       <FormFieldContainer className="flex-1">
-        <FormFieldLabel>Quantity Unit</FormFieldLabel>
+        <FormFieldLabel required>Quantity Unit</FormFieldLabel>
         <SelectInput
           field={`drugList.${index}.quantityUnitOfMeasureCode`}
           options={qualityUnitsCodesets}
@@ -55,16 +56,19 @@ const DoseInformation = ({ index }: DoseInformationProps) => {
           size="1"
           value={form.getValues(`drugList.${index}.quantityUnitOfMeasureCode`)}
         />
+        <FormFieldError name={`drugList.${index}.quantityUnitOfMeasureCode`} />
       </FormFieldContainer>
-
       <FormFieldContainer className="flex-1">
-        <FormFieldLabel>Drug Form</FormFieldLabel>
-        <CodesetSelect
+        <FormFieldLabel required>Quantity</FormFieldLabel>
+        <NumericInput
+          placeholder="Quantity"
+          field={`drugList.${index}.quantityValue`}
           className="h-6 w-full"
-          name={`drugList.${index}.doseFormCode`}
-          codeset={CODESETS.PrescriptionDosageFormList}
-          size="1"
+          prefix=""
+          decimalScale={1}
+          allowNegative={false}
         />
+        <FormFieldError name={`drugList.${index}.quantityValue`} />
       </FormFieldContainer>
     </Flex>
   )

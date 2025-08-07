@@ -8,7 +8,7 @@ const PrescriberSelect = () => {
     <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel>Prescriber</FormFieldLabel>
       <AsyncSelect
-        field="prescriptionId"
+        field="staffId"
         placeholder="Select"
         fetchOptions={getProvidersOptionsAction}
         buttonClassName="w-full h-6"

@@ -92,7 +92,12 @@ const UpdateMedicationForm = ({
                 variant="outline"
                 color="gray"
                 className="text-black"
-                onClick={() => stepProps.onJump(Step.CredentialVerification)}
+                onClick={async () => {
+                  const isValid = await form.trigger()
+                  if (isValid) {
+                    stepProps.onJump(Step.CredentialVerification)
+                  }
+                }}
               >
                 Next
               </Button>

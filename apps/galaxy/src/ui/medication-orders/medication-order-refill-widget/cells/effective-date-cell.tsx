@@ -1,14 +1,11 @@
-import { Row } from '@tanstack/react-table'
-import { DateTimeCell } from '@/components'
+import { DateTimeCell, PropsWithRow } from '@/components'
 import { formatDate } from '@/utils'
-import { MedicationRefill } from '../types'
+import { PrescriberRxRenewalResponse } from '../types'
 
-interface EffectiveDateCellProps {
-  row: Row<MedicationRefill>
-}
-
-const EffectiveDateCell = ({ row }: EffectiveDateCellProps) => {
-  const drug = row.original?.drugList?.[0]
+const EffectiveDateCell = ({
+  row,
+}: PropsWithRow<PrescriberRxRenewalResponse>) => {
+  const drug = row.original?.pharmacyNotificationResponseDrug?.[0]
   return (
     <DateTimeCell>
       {drug?.effectiveDate

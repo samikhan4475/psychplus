@@ -1,15 +1,14 @@
 import React, { useMemo, useState } from 'react'
-import { Box, Button, Dialog, Flex } from '@radix-ui/themes'
+import { Button, Dialog, Flex } from '@radix-ui/themes'
 import { Row } from '@tanstack/react-table'
-import { PlusIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { CloseDialogTrigger } from '@/components/close-dialog-trigger'
 import { MapPatientAction } from '../actions'
-import { PatientInfoTable } from '../dialogs/patient-info-table'
 import { useStore } from '../store'
 import {
   MedicationRefill,
-  PatientPersonInfo,
+  MedicationRefillAPIRequest,
+  PharmacyNotificationType,
   RefillMedicationType,
 } from '../types'
 import { PatientMapForm } from './patient-map-form'
@@ -25,11 +24,13 @@ const PatientMapDialog = ({ row }: PatientMapDialogProps) => {
     searchMedicationsList,
     setSelectedPatient,
     activeTab,
+    payload,
   } = useStore((state) => ({
     selectedPatient: state.selectedPatient,
     setSelectedPatient: state.setSelectedPatient,
     searchMedicationsList: state.searchMedicationsList,
     activeTab: state.activeTab,
+    payload: state.payload,
   }))
 
   const isRefillTab = activeTab.includes('Refill')
@@ -69,7 +70,13 @@ const PatientMapDialog = ({ row }: PatientMapDialogProps) => {
       toast.error(result?.error ?? 'Failed to map patient')
     } else {
       toast.success('Patients are linked successfully')
-      searchMedicationsList({})
+      const formattedData: MedicationRefillAPIRequest = {
+        notificationType: isRefillTab
+          ? PharmacyNotificationType.PharmacyRxRenewalRequest
+          : PharmacyNotificationType.PharmacyRxChangeRequest,
+        ...payload,
+      }
+      searchMedicationsList(formattedData)
       onOpenChange(false)
     }
     setSelectedPatient(null)

@@ -24,12 +24,6 @@ const MedicationOrderView = () => {
           <TabsTrigger value={MedicationOrdersTabs.CHANGE_REQUESTS}>
             {`${MedicationOrdersTabs.CHANGE_REQUESTS} (${changeRequestData.total})`}
           </TabsTrigger>
-          <TabsTrigger value={MedicationOrdersTabs.NEW_PRESCRIPTIONS}>
-            {MedicationOrdersTabs.NEW_PRESCRIPTIONS}
-          </TabsTrigger>
-          <TabsTrigger value={MedicationOrdersTabs.ERRORS}>
-            {MedicationOrdersTabs.ERRORS}
-          </TabsTrigger>
            <TabsTrigger value={MedicationOrdersTabs.NOTIFICATIONS}>
             {MedicationOrdersTabs.NOTIFICATIONS}
           </TabsTrigger>

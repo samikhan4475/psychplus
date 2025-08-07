@@ -91,6 +91,7 @@ interface PrescriberRxRenewalResponse {
   transactionId?: string
   notificationTypeDisplayName?: string
   userTransactionStatus?: string
+    transactionErrorDescription?: string
   note?: string
   pharmacyNotificationResponseDrug?: PharmacyNotificationDrugModel[]
 }
@@ -391,6 +392,7 @@ const MEDICATIONSSTATUS = [
   { value: 'Pending', label: 'Pending' },
   { value: 'Approved', label: 'Approved' },
   { value: 'Denied', label: 'Denied' },
+  { value: 'Cancelled', label: 'Cancelled' },
 ]
 
 const PASTATUS = [

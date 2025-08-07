@@ -6,7 +6,6 @@ import {
   FormFieldContainer,
   FormFieldLabel,
   NumberInput,
-  NumericInput,
 } from '@/components'
 import { CODESETS } from '@/constants'
 
@@ -36,16 +35,13 @@ const DurationInformation = ({ index }: DurationInformationProps) => {
           className="h-6 w-full"
         />
       </FormFieldContainer>
-
       <FormFieldContainer className="flex-1">
-        <FormFieldLabel>Quantity</FormFieldLabel>
-        <NumericInput
-          placeholder="Quantity"
-          field={`drugList.${index}.quantityValue`}
+        <FormFieldLabel>Drug Form</FormFieldLabel>
+        <CodesetSelect
           className="h-6 w-full"
-          prefix=""
-          decimalScale={1}
-          allowNegative={false}
+          name={`drugList.${index}.doseFormCode`}
+          codeset={CODESETS.PrescriptionDosageFormList}
+          size="1"
         />
       </FormFieldContainer>
     </Flex>

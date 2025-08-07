@@ -2,7 +2,7 @@
 
 import { Flex, TextField } from '@radix-ui/themes'
 import { useFormContext, useWatch } from 'react-hook-form'
-import { FormFieldContainer, FormFieldLabel } from '@/components'
+import { FormFieldContainer, FormFieldError, FormFieldLabel } from '@/components'
 import { UpdateMedicationSchema } from './schema'
 
 interface SigInformationProps {
@@ -24,17 +24,18 @@ const SigInformation = ({ index }: SigInformationProps) => {
   return (
     <Flex gap="2">
       <FormFieldContainer className="w-[33%]">
-        <FormFieldLabel>Refills</FormFieldLabel>
+        <FormFieldLabel required>Refills</FormFieldLabel>
         <TextField.Root
           {...form.register(`drugList.${index}.refills`)}
           className="h-6 w-full"
           size="1"
           maxLength={2}
         />
+        <FormFieldError name={`drugList.${index}.refills`} />
       </FormFieldContainer>
 
       <FormFieldContainer className="w-[67%]">
-        <FormFieldLabel>Sig</FormFieldLabel>
+        <FormFieldLabel required>Sig</FormFieldLabel>
         <TextField.Root
           size="1"
           placeholder="Sig here"
@@ -42,8 +43,9 @@ const SigInformation = ({ index }: SigInformationProps) => {
           maxLength={300}
           value={signatureText}
           onChange={handleValueChange}
-           title={signatureText}
+          title={signatureText}
         />
+         <FormFieldError name={`drugList.${index}.drugSignatureList.0.signatureText`} />
       </FormFieldContainer>
     </Flex>
   )

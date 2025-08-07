@@ -27,15 +27,22 @@ import {
   PrescriberRxRenewalResponse,
   RenewalResponseTypeEnum,
 } from '../types'
+import EffectiveDateCell from './effective-date-cell'
 import { NestedActionsCell } from './nested-action-cell'
+import TranscationStatusCell from './transcation-status-cell'
 
 interface ActionsCellProps {
   row: Row<MedicationRefill>
 }
-const badgeColorMap: Record<string, BadgeProps['color']> = {
+export const badgeColorMap: Record<string, BadgeProps['color']> = {
   Approved: 'green',
   Denied: 'red',
+  Success: 'green',
+  Error: 'red',
 }
+
+export const getBadgeColor = (status: string): BadgeProps['color'] =>
+  badgeColorMap[status] ?? 'green'
 
 const columns: ColumnDef<PrescriberRxRenewalResponse>[] = [
   {
@@ -77,8 +84,23 @@ const columns: ColumnDef<PrescriberRxRenewalResponse>[] = [
       <ColumnHeader label="Response" column={column} clientSideSort />
     ),
     cell: ({ row }) => (
-      <LongTextCell>{row.original.userResponseType}</LongTextCell>
+      <LongTextCell>
+        <Badge
+          className="!rounded-none"
+          color={getBadgeColor(row.original.userResponseType ?? '')}
+        >
+          {row.original.userResponseType}
+        </Badge>
+      </LongTextCell>
     ),
+  },
+  {
+    id: 'startDateTime',
+    accessorKey: 'startDateTime',
+    header: ({ column }) => (
+      <ColumnHeader label="Effective Date" column={column} clientSideSort />
+    ),
+    cell: EffectiveDateCell,
   },
   {
     id: 'note',
@@ -96,9 +118,7 @@ const columns: ColumnDef<PrescriberRxRenewalResponse>[] = [
     header: ({ column }) => (
       <ColumnHeader label="Transaction Status" column={column} clientSideSort />
     ),
-    cell: ({ row }) => (
-      <LongTextCell>{row.original.userTransactionStatus}</LongTextCell>
-    ),
+    cell: TranscationStatusCell,
   },
   {
     id: 'actions',
@@ -114,7 +134,11 @@ const ActionsCell = ({ row }: ActionsCellProps) => {
     pharmacyNotificationResponseList,
   } = row.original
   const { toggleSelected, getIsSelected } = row
-  const { searchMedicationsList, activeTab } = useStore()
+  const { searchMedicationsList, activeTab, payload } = useStore((state) => ({
+    searchMedicationsList: state.searchMedicationsList,
+    activeTab: state.activeTab,
+    payload: state.payload,
+  }))
   const isRefillTab = activeTab.includes('Refill')
   const [isConfirmationDialog, setIsConfirmationDialog] =
     useState<boolean>(false)
@@ -144,6 +168,7 @@ const ActionsCell = ({ row }: ActionsCellProps) => {
       notificationType: isRefillTab
         ? PharmacyNotificationType.PharmacyRxRenewalRequest
         : PharmacyNotificationType.PharmacyRxChangeRequest,
+      ...payload,
     }
 
     searchMedicationsList(formattedData)
@@ -152,7 +177,8 @@ const ActionsCell = ({ row }: ActionsCellProps) => {
   if (!patientId) {
     content = (
       <>
-        <DeclineMedicationDialog row={row} /> <PatientMapDialog row={row} />
+        <DeclineMedicationDialog row={row} />
+        <PatientMapDialog row={row} />
       </>
     )
   } else if (isResponsePending) {
@@ -163,9 +189,6 @@ const ActionsCell = ({ row }: ActionsCellProps) => {
       </>
     )
   } else {
-    const getBadgeColor = (status: string): BadgeProps['color'] =>
-      badgeColorMap[status] ?? 'green'
-
     content = (
       <Flex align="center" justify="between">
         <Badge

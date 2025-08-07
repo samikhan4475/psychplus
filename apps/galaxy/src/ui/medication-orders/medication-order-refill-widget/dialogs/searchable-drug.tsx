@@ -30,8 +30,6 @@ const SearchableDrug = ({
     if (value.length < 3) return
     setIsLoading(true)
     const response = await fetchDrugs(value)
-
-    console.log('response', response)
     if (response.state === 'error') {
       toast.error('Failed to fetch drugs ')
       return
@@ -43,7 +41,6 @@ const SearchableDrug = ({
   const handleSelectItem = (item: DrugInfo) => {
     onSelectItem(item)
   }
-
   return (
     <Flex align="center" gap="2" className="w-full">
       <Box ref={ref} className="relative w-full">
@@ -90,6 +87,14 @@ const SearchableDrug = ({
                     (item) =>
                       item.prescribableDrugDesc === option.prescribableDrugDesc,
                   )
+                  const deaDesc =
+                    option.representativeErxPackagedDrug
+                      ?.federalDeaClassCodeDesc ?? ''
+
+                  const showDeaDesc =
+                    deaDesc &&
+                    !deaDesc.toLowerCase().includes('no dea class code')
+
                   return (
                     <Flex
                       key={option.prescribableDrugDesc + index}
@@ -108,7 +113,14 @@ const SearchableDrug = ({
                         }`,
                       )}
                     >
-                      <Text className="w-[85%] text-[11px]">{`${option.prescribableDrugDesc} `}</Text>
+                      <Text className="w-[85%] text-[11px]">
+                        {option.prescribableDrugDesc}
+                        {showDeaDesc && (
+                          <span className="ml-1 text-pp-red">
+                            {deaDesc.toUpperCase()}
+                          </span>
+                        )}
+                      </Text>
                       <PlusCircleIcon
                         stroke="#194595"
                         strokeWidth="2"
