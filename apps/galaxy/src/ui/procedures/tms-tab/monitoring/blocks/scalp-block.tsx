@@ -11,7 +11,7 @@ const ScalpBlock = () => {
   const scalpDiscomfort = form.watch(BLOCK_ID)
   return (
     <Flex direction={'column'} gap={'1'}>
-      <YesNoSelect label={BLOCK_TITLE} field={BLOCK_ID} isNoFirst/>
+      <YesNoSelect label={BLOCK_TITLE} field={BLOCK_ID} isNoFirst required/>
       {scalpDiscomfort === 'yes' && (
         <Flex gap={'1'} direction={'column'}>
           <FormFieldLabel required>

@@ -10,7 +10,7 @@ const OtherBlock = () => {
   const other = form.watch(BLOCK_ID)
   return (
     <>
-      <YesNoSelect label={BLOCK_TITLE} field={BLOCK_ID} isNoFirst/>
+      <YesNoSelect label={BLOCK_TITLE} field={BLOCK_ID} isNoFirst required/>
       {other === 'yes' && (
         <TextAreaInput field="tmsOtherBlockDetail" className="h-full w-full" />
       )}
