@@ -98,7 +98,7 @@ const PatientStatementTable = ({ patientId }: { patientId: number }) => {
 
   useEffect(() => {
     search(patientId, {
-      patientId: [patientId],
+      patientIds: [patientId],
     })
   }, [])
 

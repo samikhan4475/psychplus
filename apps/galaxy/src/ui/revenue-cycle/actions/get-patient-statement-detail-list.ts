@@ -13,7 +13,6 @@ import type {
 } from '../types'
 
 interface PatientStatementsListParams {
-  patientId: number
   payload?: PatientStatementPayload
   sort?: Sort
 }
@@ -22,14 +21,16 @@ const defaultPayLoad = {
   isIncludeMetadataResourceChangeControl: true,
   isIncludeMetadataResourceIds: true,
   isIncludeMetadataResourceStatus: true,
-  claimStatusCodes: [patientStatementSlaimStatusCodes.BILLED_TO_PATIENT],
+  claimStatusCodes: [
+    patientStatementSlaimStatusCodes.BILLED_TO_PATIENT,
+    patientStatementSlaimStatusCodes.PATIENT_RESPONSIBILITY,
+  ],
   recordStatuses: [patientStatementRecordStatuses.ACTIVE],
   includeServiceLinePayment: true,
   isGroupedByPatient: false,
 }
 
 const getPatientStatementDetailListAction = async ({
-  patientId,
   payload,
   sort,
 }: PatientStatementsListParams): Promise<

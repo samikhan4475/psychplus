@@ -47,7 +47,6 @@ const useStore = create<Store>((set, get) => ({
       patientId,
     })
     const result = await getPatientStatementDetailListAction({
-      patientId,
       payload,
       sort: get().sort,
     })
