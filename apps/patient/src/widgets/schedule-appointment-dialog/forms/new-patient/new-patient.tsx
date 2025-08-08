@@ -393,8 +393,8 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
                 <Flex className="h-[45px] w-full rounded-6 text-4 sm:w-[190px]">
                   <DatePicker
                     customInput={<CustomDateInput />}
-                    dateFormat="dd/MM/yyyy"
-                    placeholderText="dd/mm/yyyy"
+                    dateFormat="MM/dd/yyyy"
+                    placeholderText="mm/dd/yyyy"
                     selected={selectedDate}
                     onChange={(date) => {
                       if (date) {

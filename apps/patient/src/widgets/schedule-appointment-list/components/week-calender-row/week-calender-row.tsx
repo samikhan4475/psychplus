@@ -27,27 +27,22 @@ const WeekCalendarRow = () => {
     }
   }, [filters.startingDate])
 
-  const renderDays = () => {
+  const getVisibleDates = () => {
     if (isMobile()) {
       const today = new Date()
-      const weekStart = getFirstDayOfWeek() // default week start
+      const weekStart = getFirstDayOfWeek()
       const weekEnd = addDays(weekStart, 6)
 
       const isTodayInDefaultWeek = today >= weekStart && today <= weekEnd
-
-      return [
-        renderDay(
-          currentWeekReel === 0 && isTodayInDefaultWeek ? today : startDate,
-        ),
-      ]
+      return [currentWeekReel === 0 && isTodayInDefaultWeek ? today : startDate]
     }
 
     const monday = getFirstDayOfWeek(startDate)
-
-    return Array.from({ length: 7 }, (_, i) => addDays(monday, i)).map(
-      renderDay,
-    )
+    return Array.from({ length: 7 }, (_, i) => addDays(monday, i))
   }
+
+  const renderDays = () => getVisibleDates().map(renderDay)
+
 
   const handleWeekChange = (
     offset: number,
@@ -77,17 +72,22 @@ const WeekCalendarRow = () => {
     setStartDate(newStartDate)
   }
 
+  const todayStr = format(new Date(), 'yyyy-MM-dd')
+  const isTodayInView = getVisibleDates().some(
+    (date) => format(date, 'yyyy-MM-dd') === todayStr,
+  )
+
 
   return (
     <Flex align="center" className="w-full">
       <Flex
         onClick={() => {
-          if (currentWeekReel > 0) {
+          if (!isTodayInView) {
             handleWeekChange(-daysToAdd)
           }
         }}
         className={
-          currentWeekReel > 0
+          !isTodayInView
             ? 'cursor-pointer'
             : 'cursor-not-allowed opacity-50'
         }
