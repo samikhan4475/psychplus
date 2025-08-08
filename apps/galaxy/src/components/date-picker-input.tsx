@@ -131,6 +131,8 @@ const DatePickerInput = <T extends DateValue>({
                 className={
                   'relative w-full data-[disabled]:pointer-events-none data-[disabled]:bg-gray-3 data-[disabled]:text-gray-11'
                 }
+                onFocus={props.onFocus}
+                onBlur={props.onBlur}
               >
                 <DateInput
                   className={cn(

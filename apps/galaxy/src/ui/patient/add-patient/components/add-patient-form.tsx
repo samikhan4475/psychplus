@@ -32,6 +32,7 @@ const AddPatientForm = ({
   onPatientAdd: (data: NewPatient) => void
 }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [dobFocused, setDobFocused] = useState<boolean>(false)
   const newPatientRef = useRef<NewPatient | undefined>(undefined)
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -100,13 +101,13 @@ const AddPatientForm = ({
           addresses:
             data.contactInfo.isMailingAddressSameAsPrimary === 'yes'
               ? data.contactInfo.addresses
-                  .filter((address) => address.type !== 'Mailing')
-                  .map((address) =>
-                    address.type === 'Home'
-                      ? [{ ...address, type: 'Mailing' }, address]
-                      : address,
-                  )
-                  .flat()
+                .filter((address) => address.type !== 'Mailing')
+                .map((address) =>
+                  address.type === 'Home'
+                    ? [{ ...address, type: 'Mailing' }, address]
+                    : address,
+                )
+                .flat()
               : data.contactInfo.addresses,
           isMailingAddressSameAsPrimary:
             data.contactInfo.isMailingAddressSameAsPrimary === 'yes',
@@ -302,7 +303,9 @@ const AddPatientForm = ({
             <GenderSelect />
           </Box>
           <Box className="col-span-4">
-            <DobInput />
+            <DobInput
+              setDobFocused={setDobFocused}
+            />
           </Box>
           <Box className="col-span-4">
             <PhoneNumberInput />
@@ -321,7 +324,9 @@ const AddPatientForm = ({
         </Box>
         <Grid columns="12" className="mb-2 mt-2 gap-3 pl-2 pr-2">
           <Box className="col-span-12">
-            <GuardianRadio />
+            <GuardianRadio
+              dobFocused={dobFocused}
+            />
           </Box>
           {hasGuardian === 'yes' && (
             <>

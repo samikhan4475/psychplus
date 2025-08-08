@@ -1,27 +1,30 @@
 import { useEffect } from 'react'
 import * as RadixRadioGroup from '@radix-ui/react-radio-group'
 import { Flex, Text } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { getAgeFromDate } from '@/utils'
 import { SchemaType } from '../schema'
-
-const GuardianRadio = () => {
-  const form = useFormContext<SchemaType>()
-  const value = form.watch('hasGuardian')
-  const dob = form.watch('dateOfBirth')
+interface GuardianRadioProps {
+  dobFocused: boolean
+}
+const GuardianRadio = ({ dobFocused }: GuardianRadioProps) => {
+  const { control, setValue } = useFormContext<SchemaType>()
+  const dob = useWatch({ control, name: 'dateOfBirth' })
+  const value = useWatch({ control, name: 'hasGuardian' })
   const age = dob ? getAgeFromDate(dob) : 18
 
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (age < 18) {
-        form.setValue('hasGuardian', 'yes')
-      } else {
-        form.setValue('hasGuardian', 'no')
+    if (
+      dobFocused === false &&
+      dob !== null &&
+      age !== undefined
+    ) {
+      const nextValue = age < 18 ? 'yes' : 'no'
+      if (value !== nextValue) {
+        setValue('hasGuardian', nextValue)
       }
-    }, 500)
-
-    return () => clearTimeout(timeoutId)
-  }, [age])
+    }
+  }, [dobFocused, age, value])
 
   return (
     <Flex
@@ -36,7 +39,7 @@ const GuardianRadio = () => {
 
       <RadixRadioGroup.Root
         onValueChange={(value) => {
-          form.setValue('hasGuardian', value)
+          setValue('hasGuardian', value)
         }}
         value={value}
         className="flex items-center gap-1.5"
