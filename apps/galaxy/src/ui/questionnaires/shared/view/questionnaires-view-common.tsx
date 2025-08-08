@@ -6,6 +6,7 @@ import { AdultAsrsView } from './adult-asrs-view'
 import { AimsView } from './aims-view'
 import { questionnaireViewConstants } from './constant'
 import { CssrsView } from './cssrs-view'
+import { GqAscView } from './gq-asc-view'
 import { MocaView } from './moca-view'
 import { Psc17View } from './psc-17-view'
 import { QuestionnaireViewCommon } from './questionnaires-view'
@@ -44,6 +45,8 @@ const QuestionnaireDetailView = ({
         return <CssrsView data={data} />
       case 'QuicknoteSectionQuestionnaireAdultAsrs':
         return <AdultAsrsView data={data} />
+      case QuickNoteSectionName.QuickNoteSectionGqasc:
+        return <GqAscView data={data} />
       default:
         return null
     }

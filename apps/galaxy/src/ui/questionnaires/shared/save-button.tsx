@@ -34,6 +34,7 @@ const SaveButton = ({ icon = true }: SaveButtonProps) => {
     QuickNoteSectionName.QuickNoteSectionPsc17,
     QuickNoteSectionName.QuickNoteSectionCopsR,
     QuickNoteSectionName.QuickNoteSectionAdultAsrs,
+    QuickNoteSectionName.QuickNoteSectionGqasc,
   ]
 
   const handleEvent = (event: MessageEvent) => {

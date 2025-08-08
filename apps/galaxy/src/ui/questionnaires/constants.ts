@@ -16,6 +16,7 @@ enum QuestionnaireTabs {
   PSC_17_TAB = 'PSC-17',
   COPS_R_TAB = 'COPS-R',
   ADULT_ASRS_TAB = 'ADULT ASRS',
+  GQ_ASC_TAB = 'GQ-ASC',
 }
 
 enum QuestionnairesStatus {
@@ -43,6 +44,7 @@ enum QuestionnairesTitles {
   'PSC-17' = 'Pediatric Symptom Checklist-17 (PSC-17)',
   'COPS-R' = 'Candidate & Officer Personnel Survey (COPS-R)',
   'Adult ASRS' = 'Adult Self Report Scale (Adult ASRS)',
+  'GQ-ASC' = 'GQ-ASC Scale for Adult Women (GQ-ASC)'
 }
 
 const quickNotesSectionsTitles = {
@@ -74,6 +76,8 @@ const quickNotesSectionsTitles = {
     'Candidate & Officer Personnel Survey (COPS-R)',
   [QuickNoteSectionName.QuickNoteSectionAdultAsrs]:
     'Adult Self Report Scale (Adult ASRS)',
+  [QuickNoteSectionName.QuickNoteSectionGqasc]:
+    'GQ-ASC Scale for Adult Women (GQ-ASC)',
 }
 
 export {

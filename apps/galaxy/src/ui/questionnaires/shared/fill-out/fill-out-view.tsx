@@ -2,6 +2,7 @@ import { PropsWithChildren } from 'react'
 import { QuickNoteSectionItem } from '@/types'
 import { FillOutTabsView } from '@/ui/questionnaires/shared'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { FilloutGqAsc } from './fill-out-gq-asc'
 import { FilloutPsc17 } from './fill-out-psc-17'
 import { FilloutSnap4 } from './fill-out-snap4'
 import { FilloutAims } from './fill-out-view-aims'
@@ -33,6 +34,8 @@ const FillOutView = ({ data, sectionName }: FillOutProps) => {
         return <FilloutCssrs data={data} sectionName={sectionName} />
       case 'QuicknoteSectionQuestionnaireAdultAsrs':
         return <FilloutAdultAsrs data={data} sectionName={sectionName} />
+      case QuickNoteSectionName.QuickNoteSectionGqasc:
+        return <FilloutGqAsc data={data} sectionName={sectionName} />
       default:
         return <FilloutCommon data={data} sectionName={sectionName} />
     }

@@ -14,6 +14,7 @@ import { CopsRTab } from './cops-r-tab'
 import { DashboardTab } from './dashboard-tab'
 import { Dast10Tab } from './dast-10-tab'
 import { Gad7Tab } from './gad-7-tab'
+import { GqAscTab } from './gq-asc-tab'
 import { HamDTab } from './ham-d-tab'
 import { MocaTab } from './moca-tab'
 import { Pcl5Tab } from './pcl-5-tab'
@@ -97,6 +98,9 @@ const QuestionnairesView = ({ data, patientId }: QuestionnairesViewProps) => {
           <TabsTrigger value={QuestionnaireTabs.ADULT_ASRS_TAB}>
             {QuestionnaireTabs.ADULT_ASRS_TAB}
           </TabsTrigger>
+          <TabsTrigger value={QuestionnaireTabs.GQ_ASC_TAB}>
+            {QuestionnaireTabs.GQ_ASC_TAB}
+          </TabsTrigger>
         </Tabs.List>
         <Flex className="flex-1 border-b border-gray-5" />
       </Flex>
@@ -144,6 +148,9 @@ const QuestionnairesView = ({ data, patientId }: QuestionnairesViewProps) => {
       </TabsContent>
       <TabsContent value={QuestionnaireTabs.ADULT_ASRS_TAB}>
         <AdultAsrsTab patientId={patientId} data={data} />
+      </TabsContent>
+        <TabsContent value={QuestionnaireTabs.GQ_ASC_TAB}>
+        <GqAscTab patientId={patientId} data={data} />
       </TabsContent>
     </Tabs.Root>
   )

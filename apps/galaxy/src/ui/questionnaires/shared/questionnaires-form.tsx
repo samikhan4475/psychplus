@@ -2,13 +2,16 @@ import { useMemo, useState } from 'react'
 import { Box, Flex, Table, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { cn } from '@/utils'
-import { ScoreInterpretationDesired, SubscalesConfig } from './score-interpretation-desired'
 import { Pagination } from './questionnaires-pagination'
 import { RadioButton } from './radio-button'
 import {
   ScoreInterpretation,
   ScoreInterpretationRange,
 } from './score-interpretation'
+import {
+  ScoreInterpretationDesired,
+  SubscalesConfig,
+} from './score-interpretation-desired'
 
 interface Option {
   value: string
@@ -36,6 +39,9 @@ interface QuestionnairesFormProps {
   classNameHeaderCell?: string
   classNameCell?: string
   disabled?: boolean
+  showCounter?: boolean
+  showHeader?: boolean
+  headingLabel?: string
   pagination?: PaginationConfig
 }
 
@@ -47,6 +53,9 @@ const QuestionnairesForm = ({
   classNameHeaderCell,
   classNameCell,
   disabled = false,
+  showCounter = true,
+  showHeader = true,
+  headingLabel,
   pagination,
 }: QuestionnairesFormProps) => {
   const { watch } = useFormContext()
@@ -95,27 +104,39 @@ const QuestionnairesForm = ({
       <Table.Root variant="ghost" size="1">
         {paginatedData.length > 0 && (
           <Table.Header
-            className={cn(classNameHeaderCell, 'bg-pp-bg-table-label')}
+            className={classNameHeaderCell && 'bg-pp-bg-table-label'}
           >
-            <Table.Row>
-              <Table.ColumnHeaderCell width="50%">
-                <Text weight="medium" size="2">
-                  {labels?.[0]}
-                </Text>
-              </Table.ColumnHeaderCell>
-
-              {labels?.slice(1).map((label) => (
-                <Table.ColumnHeaderCell
-                  key={label}
-                  width={`${50 / (labels.length - 1)}%`}
-                  className={classNameHeaderCell}
-                >
+            {showHeader && (
+              <Table.Row>
+                <Table.ColumnHeaderCell width="50%">
                   <Text weight="medium" size="2">
-                    {label}
+                    {labels?.[0]}
                   </Text>
                 </Table.ColumnHeaderCell>
-              ))}
-            </Table.Row>
+
+                {labels?.slice(1).map((label) => (
+                  <Table.ColumnHeaderCell
+                    key={label}
+                    width={`${50 / (labels.length - 1)}%`}
+                    className={classNameHeaderCell}
+                  >
+                    <Text weight="medium" size="2">
+                      {label}
+                    </Text>
+                  </Table.ColumnHeaderCell>
+                ))}
+              </Table.Row>
+            )}
+
+            {headingLabel && (
+              <Table.Row className="bg-pp-bg-table-label">
+                <Table.Cell colSpan={5} className="h-fit py-1">
+                  <Text weight="medium" size="1">
+                    {headingLabel}
+                  </Text>
+                </Table.Cell>
+              </Table.Row>
+            )}
           </Table.Header>
         )}
 
@@ -128,9 +149,11 @@ const QuestionnairesForm = ({
             >
               <Table.Cell width="50%">
                 <Flex gap="1">
-                  <Text weight="medium" size="1">
-                    {getQuestionNumber(index)}.
-                  </Text>
+                  {showCounter && (
+                    <Text weight="medium" size="1">
+                      {getQuestionNumber(index)}.
+                    </Text>
+                  )}
                   <Text weight="medium" size="1">
                     {item.question}
                   </Text>
@@ -188,4 +211,9 @@ const QuestionnairesForm = ({
   )
 }
 
-export { QuestionnairesForm, type PaginationConfig, type QuestionnairesData }
+export {
+  QuestionnairesForm,
+  type PaginationConfig,
+  type QuestionnairesData,
+  type Option,
+}

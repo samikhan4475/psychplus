@@ -118,6 +118,10 @@ const questionnaireViewDta = [
     sectionName: QuickNoteSectionName.QuickNoteSectionAdultAsrs,
     questionnaireTab: QuestionnaireTabs.ADULT_ASRS_TAB,
   },
+  {
+    sectionName: QuickNoteSectionName.QuickNoteSectionGqasc,
+    questionnaireTab: QuestionnaireTabs.GQ_ASC_TAB,
+  }
 ]
 
 export const questionnaireViewConstants = (
