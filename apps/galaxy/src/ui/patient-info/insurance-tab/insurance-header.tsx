@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Button, Flex } from '@radix-ui/themes'
+import { Button, Flex, Text } from '@radix-ui/themes'
 import { Plus } from 'lucide-react'
 import { PatientInsuranceInfo } from '@/types'
 import { PermissionAlert } from '@/ui/schedule/shared'
@@ -36,7 +36,10 @@ const InsuranceHeader = ({
   return (
     <Flex direction="column" className="bg-white sticky -top-[1px] z-[1]">
       <TabContentHeading title="Patient Insurance Information">
-        <Flex justify="between" flexGrow="1" align="center" ml="4" gap="2">
+        <Flex justify="between" flexGrow="1" align="center" ml="4" gap="1">
+          <Text size="1" weight="medium">
+            Show
+          </Text>
           <Flex align="center" flexGrow="1" gap="4">
             <ShowCheckbox />
             <PatientBillingRadio insuranceInfo={insuranceInfo} />
