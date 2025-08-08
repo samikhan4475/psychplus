@@ -19,12 +19,12 @@ interface PracticeList {
   displayName: string
 }
 
-const getPracticeIdsAction = async (): Promise<
-  api.ActionResult<SelectOptionType[]>
-> => {
+const getPracticeIdsAction = async (
+  locationId?: string,
+): Promise<api.ActionResult<SelectOptionType[]>> => {
   const response = await api.POST<PracticeList[]>(
     api.GET_PRACTICE_IDS_LIST_ENDPOINT,
-    defaultPayloadPracticeList,
+    { ...defaultPayloadPracticeList, ...(locationId && { locationId }) },
   )
 
   if (response.state === 'error') {

@@ -1,7 +1,7 @@
 'use server'
 
 import * as api from '@/api'
-import { QuickNoteSectionItem } from '@/types'
+import { Claim, QuickNoteSectionItem } from '@/types'
 
 interface signNoteActionParams {
   patientId: string
@@ -12,6 +12,9 @@ interface signNoteActionParams {
   coSignedByUserId?: string
   noteTitleCode?: string
   noteTypeCode?: string
+  isCustomAppointment?: boolean
+  claimModel?: Claim
+  billingProviderType?: string
 }
 
 interface signNoteActionPayload {
@@ -22,6 +25,9 @@ interface signNoteActionPayload {
   signedDate?: string
   coSignedByUserId?: string
   noteTypeCode?: string
+  isCustomAppointment?: boolean
+  billingProviderType?: string
+  claimModel?: Claim
 }
 
 const signNoteAction = async (
@@ -36,6 +42,9 @@ const signNoteAction = async (
     signedByUserId,
     noteTitleCode,
     noteTypeCode,
+    billingProviderType,
+    claimModel,
+    isCustomAppointment = false,
   } = signPayload
 
   const url = new URL(api.NOTE_SIGN_ENDPOINT(patientId, appointmentId))
@@ -47,6 +56,9 @@ const signNoteAction = async (
     noteTitleCode,
     signedDate,
     noteTypeCode,
+    isCustomAppointment,
+    billingProviderType,
+    claimModel,
   }
 
   if (coSignedByUserId) {

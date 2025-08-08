@@ -3,9 +3,11 @@
 import { PropsWithChildren, useEffect, useState } from 'react'
 import { Dialog } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
+import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import { LoadingPlaceholder } from '@/components'
 import { CloseDialogTrigger } from '@/components/close-dialog-trigger'
 import { Appointment } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { getBookedAppointmentsAction } from '@/ui/schedule/actions'
 import { EditVisitForm } from './components'
 
@@ -29,15 +31,71 @@ const EditVisit = ({
     if (isOpen) fetchVisitDetails()
   }, [isOpen])
 
+  const handleCustomAppointment = async (appointment: Appointment) => {
+    const { patientId, appointmentId } = appointment
+    const result = await getQuickNoteDetailAction(
+      String(patientId),
+      [
+        QuickNoteSectionName.QuicknoteSectionCodes,
+        QuickNoteSectionName.QuickNoteSectionDiagnosis,
+      ],
+      undefined,
+      String(appointmentId),
+    )
+
+    if (result.state === 'error')
+      return toast.error(result.error ?? 'Failed to fetch custom visit details')
+
+    const customDiagnosis =
+      result.data.find(
+        (code) =>
+          code.sectionName === QuickNoteSectionName.QuickNoteSectionDiagnosis &&
+          code.sectionItem === 'diagnosis',
+      )?.sectionItemValue ?? ''
+
+    const { customAddons, customCptCodes } = result.data.reduce(
+      (acc, quickNoteItem) => {
+        const { sectionItem, sectionItemValue } = quickNoteItem
+
+        switch (sectionItem) {
+          case 'cptAddonCodes':
+            acc.customAddons += acc.customAddons
+              ? `,${sectionItemValue}`
+              : sectionItemValue
+            break
+          case 'cptPrimaryCodes':
+            acc.customCptCodes += acc.customCptCodes
+              ? `,${sectionItemValue}`
+              : sectionItemValue
+            break
+        }
+
+        return acc
+      },
+      { customAddons: '', customCptCodes: '' },
+    )
+    setVisitDetails({
+      ...appointment,
+      customDiagnosis,
+      customAddons,
+      customCptCodes,
+    })
+  }
+
   const fetchVisitDetails = async () => {
     getBookedAppointmentsAction({
       appointmentIds: [appointmentId],
-    }).then((response) => {
+    }).then(async (response) => {
       if (response.state === 'error') {
         toast.error(response.error || "Failed to retrieve appointment's data")
       } else {
+        const { isCustomAppointment } = response.data[0]
         const visit = response.data[0]
-        setVisitDetails(visit)
+        if (isCustomAppointment) {
+          await handleCustomAppointment(visit)
+        } else {
+          setVisitDetails(visit)
+        }
       }
       setIsLoading(false)
     })

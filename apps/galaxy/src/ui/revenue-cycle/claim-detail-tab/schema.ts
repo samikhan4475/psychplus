@@ -159,6 +159,7 @@ const claimUpdateSchema = z
     claimType: z.string().optional(),
     authorizationNumber: z.string().optional(),
     referralNumber: z.string().optional(),
+    isCustomAppointment: z.boolean().optional(),
     clinicalLaboratoryImprovementAmendmentsNumber: z
       .union([
         z

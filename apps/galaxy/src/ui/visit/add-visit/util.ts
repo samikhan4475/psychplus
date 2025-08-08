@@ -1,5 +1,11 @@
 import { DateValue, today } from '@internationalized/date'
-import { Service, SharedCode } from '@/types'
+import {
+  ClaimDiagnosis,
+  CodeItem,
+  QuickNoteSectionItem,
+  Service,
+  SharedCode,
+} from '@/types'
 import { ProviderType, ServiceType } from '../types'
 
 const calculateAge = (date?: string | Date) => {
@@ -47,6 +53,27 @@ function generateTimeIntervals(): TimeInterval[] {
 
   return intervals
 }
+
+const transformInCodes = (allCodes: string): Array<{ code: string }> => {
+  return (
+    allCodes
+      .split(',')
+      .filter(Boolean)
+      ?.map((code) => ({
+        code,
+      })) ?? []
+  )
+}
+
+const removeCodeFromCommaString = (
+  input: string,
+  codeToRemove: string,
+): string =>
+  input
+    .split(',')
+    .map((code) => code.trim())
+    .filter((code) => code !== codeToRemove)
+    .join(',')
 
 const isDatePriorTo30Days = (date: DateValue) => {
   const currentDate = today('UTC')
@@ -133,9 +160,30 @@ const transformProviderTypes = (codes: SharedCode[], service: Service) => {
     }))
 }
 
+const sectionCodesMapping = (
+  codes: string,
+  sectionName: string,
+  sectionItem: string,
+  appId: number,
+  pid: number,
+): QuickNoteSectionItem[] =>
+  codes
+    .split(',')
+    .filter(Boolean)
+    .map((code) => ({
+      sectionItemValue: code,
+      sectionName,
+      sectionItem,
+      appId,
+      pid,
+    }))
+
 export {
   calculateAge,
+  sectionCodesMapping,
   generateTimeIntervals,
   isDatePriorTo30Days,
   transformProviderTypes,
+  transformInCodes,
+  removeCodeFromCommaString,
 }

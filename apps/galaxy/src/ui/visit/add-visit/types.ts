@@ -12,4 +12,10 @@ interface AppointmentData {
   appointments: BookVisitResponse[]
 }
 
-export type { SlotDetails, AppointmentData }
+enum BillingProviderInfo {
+  PROVIDER = 'Provider',
+  COSIGNER = 'Cosigner',
+  PRACTICE = 'Practice',
+}
+
+export { type SlotDetails, BillingProviderInfo, type AppointmentData }

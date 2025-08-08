@@ -1,15 +1,16 @@
 'use server'
 
 import * as api from '@/api'
-import { BookVisitPayload, BookVisitResponse } from '@/types'
+import { BookVisitPayload } from '@/types'
+import { AppointmentData } from '@/ui/visit/add-visit/types'
 
 const updateVisitAction = async ({
   ...rest
-}: BookVisitPayload): Promise<api.ActionResult<BookVisitResponse[]>> => {
+}: BookVisitPayload): Promise<api.ActionResult<AppointmentData>> => {
   const payload = {
     ...rest,
   }
-  const response = await api.PUT<BookVisitResponse[]>(
+  const response = await api.PUT<AppointmentData>(
     api.UPDATE_APPOINTMENT(rest.patientId, rest.appointmentId),
     payload,
   )

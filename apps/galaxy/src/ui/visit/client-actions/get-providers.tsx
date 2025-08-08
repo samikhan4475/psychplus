@@ -13,6 +13,7 @@ interface GetProviderResponse {
     lastName: string
     honors: string
   }
+  phoneContact: string
 }
 
 const getProviders = async (payload: {
@@ -22,10 +23,13 @@ const getProviders = async (payload: {
   honors?: string[]
   isIncludeProvidersForServicePrimaryProviderType?: boolean
   servicesOffered?: string
+  staffIds?: string[]
 }): Promise<api.ActionResult<Provider[]>> => {
   const {
     isIncludeProvidersForServicePrimaryProviderType,
     servicesOffered,
+    staffIds,
+    providerType,
     ...rest
   } = payload
 
@@ -37,9 +41,13 @@ const getProviders = async (payload: {
     roleCodes: ['1'],
     IsIncludeProviderForFacility: true,
     isIncludeProviderWithLicenseOnly: true,
+    ...(providerType && { providerType }),
     ...(shouldIncludeServiceProviders && {
       isIncludeProvidersForServicePrimaryProviderType,
       servicesOffered,
+    }),
+    ...(staffIds && {
+      staffIds,
     }),
   })
   if (response.state === 'error') {
@@ -58,6 +66,7 @@ const getProviders = async (payload: {
       firstName: provider.legalName.firstName,
       lastName: provider.legalName.lastName,
       honors: provider.legalName.honors,
+      phoneContact: provider.phoneContact,
     })),
   }
 }

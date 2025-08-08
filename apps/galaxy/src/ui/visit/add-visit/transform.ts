@@ -1,5 +1,6 @@
 import { parseZonedDateTime } from '@internationalized/date'
 import { VisitType } from '@/types'
+import { getPaddedDateString } from '@/utils'
 import { BookVisitPayload } from '../types'
 import { SchemaType } from './schema'
 
@@ -33,6 +34,11 @@ function transformRequestPayload(
     startDate: '',
     durationMinutes: 0,
     visitFrequency: '',
+    isCustomAppointment: data.isCustomAppointment,
+    authorizationNumber: data.authorizationNumber,
+    authorizationDate: data.authorizationDate
+      ? getPaddedDateString(data.authorizationDate)
+      : undefined,
   }
   if (data.isServiceTimeDependent) {
     payload = transformTimedRequestPayload(data, payload)

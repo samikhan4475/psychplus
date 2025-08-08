@@ -35,6 +35,7 @@ interface QuickNoteDetailsPayload {
   isWithAppointmentNull?: boolean
   historyCreatedByUserId?: number
   isCopyMyPrevious?: boolean
+  sectionItem?:string
 }
 
 export type { QuickNoteSectionItem, QuickNoteHistory, QuickNoteDetailsPayload }

@@ -3,6 +3,7 @@ const defaultClaimUpdateValues = {
   recordStatus: '',
   practiceId: '',
   appointmentId: undefined,
+  isCustomAppointment: false,
   claimNumber: '',
   locationId: '',
   renderingProviderId: '',

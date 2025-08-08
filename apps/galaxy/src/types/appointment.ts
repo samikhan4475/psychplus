@@ -1,4 +1,5 @@
 import {
+  Claim,
   Clinic,
   Cosigner,
   LegalName,
@@ -68,7 +69,12 @@ interface CptCode {
   isDefault?: boolean
   isDisabled?: boolean
 }
-interface Appointment {
+interface CustomVisit {
+  customDiagnosis: string
+  customCptCodes: string
+  customAddons: string
+}
+interface Appointment extends Partial<CustomVisit> {
   id: number
   appointmentId: number
   appointmentEncounterNo: string
@@ -78,6 +84,7 @@ interface Appointment {
   appointmentDuration: number
   coPayAmount?: string
   coInsuranceAmount?: string
+  claimData?: Claim
   appointmentInterval: number
   appointmentDateTime?: string
   name: string
@@ -174,6 +181,7 @@ interface Appointment {
   lastSeenByProvider?: string
   lastSeenByProviderName?: LegalName
   staffTimezonePreference?: string
+  isCustomAppointment?: boolean
   admittingProviderName?: LegalName
   admittingProviderId?: number
   noteSignedByUserName?: LegalName
@@ -186,8 +194,10 @@ interface BookVisitPayload {
   appointmentId: number
   admissionDate?: string
   appointmentStatus?: string
-  authorizationDate?: string
+  authorizationDate?: string | null
   authorizationNumber?: string
+  claimData?: Claim
+  isCustomAppointment?: boolean
   dischargeDate?: string
   dischargeLocation?: string
   durationMinutes: number

@@ -83,6 +83,7 @@ interface Provider {
   firstName: string
   lastName: string
   honors?: string
+  phoneContact?: string
 }
 
 enum TCMVisitTypes {
@@ -163,8 +164,10 @@ interface BookVisitPayload {
   admissionLegalStatus?: string
   appointmentId: number
   appointmentStatus?: string
-  authorizationDate?: string
-  authorizationNumber?: string
+  authorizationDate?: string | null
+  insuranceAuthorizationNumber?: string
+  insuranceAuthorizationDate?: string | null
+  authorizationNumber?: string | null
   dischargeDate?: string
   dischargeLocation?: string
   durationMinutes: number
@@ -201,6 +204,10 @@ interface BookVisitPayload {
   unitId?: string
   visitSequenceType?: string
   visitTypeId?: string
+  isCustomAppointment?: boolean
+  cptCodes?: string
+  diagnosisCodes?: string
+  addOnCodes?: string
 }
 
 interface BookVisitResponse {
@@ -224,6 +231,9 @@ interface BookVisitResponse {
   virtualRoomLink: string
   isCopayPaid: boolean
   isSelfPay: boolean
+  patientId: string
+  visitNoteTitle?: string
+  providerUserId: number
 }
 
 type VisitAlertType =

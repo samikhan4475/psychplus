@@ -154,6 +154,7 @@ interface Claim {
   appointmentId: number
   claimNumber: string
   locationId: string
+  billingProviderType?:string
   renderingProviderId: number
   attendingProviderId: number
   supervisingProviderId: number
@@ -252,6 +253,7 @@ interface Claim {
   visitMediumTypeCode?: string
   providerType?: string
   cosignerName?: string
+  cosignerStaffId?:string
   diagnosisCode?: string
   diagnosisCodes?: string
   providerName?: string
@@ -421,6 +423,7 @@ interface ClaimUpdateApiResponse {
   recordStatus?: string
   practiceId?: string
   appointmentId?: number
+  isCustomAppointment?:boolean
   claimNumber?: string
   locationId?: string
   renderingProviderId?: number | null

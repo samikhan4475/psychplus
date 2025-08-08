@@ -3,7 +3,8 @@
 import * as api from '@/api/api.client'
 import { BOOK_APPOINTMENT } from '@/api/endpoints'
 import { AppointmentData } from '../add-visit/types'
-import { BookVisitPayload, BookVisitResponse } from '../types'
+import { BookVisitPayload } from '../types'
+
 
 const bookVisitAction = async ({
   ...rest

@@ -64,6 +64,16 @@ const schema = z
     unit: z.string().optional(),
     room: z.string().optional(),
     group: z.string().optional(),
+    //Custom Visit
+    customCptCodes: z.string().optional(),
+    customDiagnosis: z.string().optional(),
+    customAddons: z.string().optional(),
+    cosignerId: z.string().optional(),
+    practiceId: z.string().min(1, 'Required'),
+    isCustomAppointment: z.boolean(),
+    authorizationDate: z.custom<DateValue | null>().optional(),
+    authorizationNumber: z.string().optional(),
+    billingProviderType: z.string().min(1, 'Required'),
   })
   .superRefine((data, ctx) => {
     const validateTimedService = (
@@ -97,6 +107,37 @@ const schema = z
         }
       })
     }
+
+    const validateCustomAppointment = () => {
+      const { customCptCodes, customDiagnosis = '' } = data
+      const hasCpt = customCptCodes?.trim() !== ''
+      const hasDiagnosis = customDiagnosis?.trim() !== ''
+      const maxDiagnosisExceeded =
+        customDiagnosis?.trim().split(',').filter(Boolean).length >= 13
+      if (!hasCpt) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['customCptCodes'],
+          message: 'At least one CPT code is required',
+        })
+      }
+
+      if (!hasDiagnosis) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['customDiagnosis'],
+          message: 'At least one diagnosis code is required',
+        })
+      } else if (maxDiagnosisExceeded) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['customDiagnosis'],
+          message: 'Maximum of 12 diagnosis codes allowed',
+        })
+      }
+    }
+
+    if (data.isCustomAppointment) validateCustomAppointment()
 
     const validateUntimedService = (
       _data: Partial<SchemaType>,

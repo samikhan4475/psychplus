@@ -6,13 +6,22 @@ import { Box, Flex, ScrollArea } from '@radix-ui/themes'
 import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { saveWidgetClientAction } from '@/actions'
+import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import { FormContainer } from '@/components'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import {
+  Claim,
+  ClaimDiagnosisApiResponse,
   ClaimServiceLine,
   ClaimServiceLineApiResponse,
   ClaimUpdate,
   ClaimUpdateApiResponse,
 } from '@/types'
+import { signNoteAction } from '@/ui/quicknotes/actions'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { sectionCodesMapping } from '@/ui/visit/add-visit/util'
 import {
   getCalendarDateLabel,
   getLocalCalendarDate,
@@ -95,6 +104,116 @@ const ClaimDetailView = () => {
   const getDateString = (date?: DateValue): string | undefined =>
     date ? getCalendarDateLabel(date) : undefined
 
+  const noteTypeCodes = useCodesetCodes(CODESETS.NoteType).find(
+    (code) => code.groupingCode === 'Primary',
+  )
+  const noteTitleCode = useCodesetCodes(CODESETS.NoteTitle).find(
+    (code) => code.groupingCode === 'Primary' && code.value === 'Evaluation',
+  )
+
+  const handleCustomAppointment = async (visit: ClaimUpdateApiResponse) => {
+    const { patientId, appointmentId } = visit
+    if (!patientId || !appointmentId) return
+
+    const result = await getQuickNoteDetailAction(
+      String(patientId),
+      [QuickNoteSectionName.QuicknoteSectionCodes],
+      undefined,
+      String(appointmentId),
+    )
+
+    if (result.state === 'error') {
+      toast.error(result.error ?? 'Failed to quicknote details')
+      return
+    }
+
+    const rawAddonCodes = result.data
+      .filter((item) => item.sectionItem === 'cptAddonCodes')
+      .map((item) => item.sectionItemValue.trim())
+
+    const allCptCodes = form
+      .getValues('claimServiceLines')
+      ?.map((line: ClaimServiceLine) => line.cptCode?.trim())
+      .filter((code): code is string => Boolean(code))
+
+    const serviceLineCptCodeSet = new Set(allCptCodes)
+    const validAddonCodes = rawAddonCodes.filter((code) =>
+      serviceLineCptCodeSet.has(code),
+    )
+    const filteredCptCodes = [...serviceLineCptCodeSet].filter(
+      (code) => !validAddonCodes.includes(code),
+    )
+
+    const customAddons = validAddonCodes.join(',')
+    const serviceLineCptCodes = filteredCptCodes.join(',')
+    const serviceLineDiagnosis = form
+      .getValues('claimDiagnosis')
+      .reduce((acc: string[], line: ClaimDiagnosisApiResponse) => {
+        if (line.diagnosisCode && !acc.includes(line.diagnosisCode)) {
+          acc.push(line.diagnosisCode)
+        }
+        return acc
+      }, [])
+      .join(',')
+
+    const addonCodesSections = sectionCodesMapping(
+      customAddons,
+      QuickNoteSectionName.QuicknoteSectionCodes,
+      'cptAddonCodes',
+      appointmentId,
+      patientId,
+    )
+
+    const cptCodesSections = sectionCodesMapping(
+      serviceLineCptCodes,
+      QuickNoteSectionName.QuicknoteSectionCodes,
+      'cptPrimaryCodes',
+      appointmentId,
+      patientId,
+    )
+
+    const diagnosisCodesSections = {
+      sectionName: QuickNoteSectionName.QuickNoteSectionDiagnosis,
+      sectionItem: 'diagnosis',
+      sectionItemValue: serviceLineDiagnosis,
+      appId: appointmentId,
+      pid: +patientId,
+    }
+
+    const data = [
+      diagnosisCodesSections,
+      ...addonCodesSections,
+      ...cptCodesSections,
+    ].filter((section) => section.sectionItemValue)
+
+    const resultWidgets = await saveWidgetClientAction({
+      patientId: String(patientId),
+      data,
+    })
+
+    if (resultWidgets.state === 'error') {
+      toast.error(
+        resultWidgets.error ?? 'Failed to save widgets for custom visit',
+      )
+      return
+    }
+
+    const resultSignNote = await signNoteAction({
+      patientId: String(patientId),
+      appointmentId: String(appointmentId),
+      isCustomAppointment: true,
+      noteTypeCode: noteTypeCodes?.value ?? '',
+      noteTitleCode: noteTitleCode?.value ?? '',
+      signedByUserId: visit.renderingProviderId!,
+      isError: true,
+    })
+
+    if (resultSignNote.state === 'error')
+      return toast.error(
+        resultSignNote.error ?? 'Failed to sign note for custom visit',
+      )
+  }
+
   const onSubmit: SubmitHandler<ClaimUpdateSchemaType> = async (data) => {
     const formattedClaimData = {
       ...data,
@@ -154,6 +273,11 @@ const ClaimDetailView = () => {
         toast.error(result.error)
       }
     } else {
+      const isCustomAppointment = form.getValues('isCustomAppointment')
+      if (isCustomAppointment) {
+        await handleCustomAppointment(sanitizeClaimData)
+      }
+
       toast.success('Record has been saved successfully')
       fetchClaimData(claimId)
     }

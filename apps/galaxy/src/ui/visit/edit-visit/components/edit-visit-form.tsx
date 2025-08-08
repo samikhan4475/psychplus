@@ -1,18 +1,33 @@
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { CalendarDate, getLocalTimeZone, today } from '@internationalized/date'
 import { Box, Flex, Grid, Separator, Text } from '@radix-ui/themes'
 import { SubmitHandler, useForm, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { saveWidgetClientAction } from '@/actions'
 import { updateVisitAction } from '@/actions/update-visit'
 import {
   FormContainer,
   FormSubmitButton,
   LoadingPlaceholder,
 } from '@/components'
-import { useHasPermission } from '@/hooks'
-import { Appointment, BookVisitPayload, VisitSequenceTypes } from '@/types'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes, useHasPermission } from '@/hooks'
+import {
+  Appointment,
+  BookVisitPayload,
+  ClaimServiceLine,
+  VisitSequenceTypes,
+} from '@/types'
+import { signNoteAction } from '@/ui/quicknotes/actions'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { isDirty } from '@/ui/schedule/utils'
 import { cn, getCalendarDate } from '@/utils'
+import { AuthorizationDateField } from '../../add-visit/components/authorization-date-field'
+import { CosignerSelect } from '../../add-visit/components/cosigner-select'
+import { InsuranceAuthNumberField } from '../../add-visit/components/insurance-authorization-number-field'
+import { PracticeSelect } from '../../add-visit/components/practice-select'
+import { sectionCodesMapping } from '../../add-visit/util'
 import { SAVE_APPOINTMENT } from '../../constants'
 import { useUpdateVisitInsuranceVerificationStatus } from '../../hooks/use-update-visit-insurance-verfication-status'
 import {
@@ -23,7 +38,14 @@ import {
 import { StaffComments } from '../components/staff-comments'
 import { schema, SchemaType } from '../schema'
 import { useEditVisitStore } from '../store'
-import { transformRequestPayload } from '../transform'
+import {
+  transformClaimServiceLines,
+  transformRequestPayload,
+} from '../transform'
+import { AddonsSelect } from './addons-select'
+import { BillingProviderInfoPhoneNum } from './billing-provider-info-select'
+import { CptCodeSelect } from './cpt-code-select'
+import { DiagnosisSelect } from './diagnosis-select'
 import { EditVisitAlert } from './edit-visit-alert'
 import { PatientPhoneText } from './patient-phone-text'
 import { PatientText } from './patient-text'
@@ -72,6 +94,9 @@ const EditVisitForm = ({
     visitDetails?.dateOfAdmission,
     visitDetails?.locationTimezoneId,
   )
+
+  const { billingProviderType, practiceId, cosignerStaffId } =
+    visitDetails?.claimData ?? {}
   const dischargeDate = visitDetails?.dischargeDate
     ? getCalendarDate(visitDetails?.dischargeDate)
     : undefined
@@ -117,6 +142,7 @@ const EditVisitForm = ({
       timeOfAdmission: timeOfAdmission,
       groupType: visitDetails?.groupTherapyTypeCode ?? '',
       visitStatus: visitDetails?.visitStatus,
+      billingProviderType,
       insuranceVerificationStatus: visitDetails?.insuranceVerification,
       legal: visitDetails?.legalStatus,
       insuranceAuthorizationNumber: visitDetails?.authorizationNumber,
@@ -136,6 +162,16 @@ const EditVisitForm = ({
       isPrimaryProviderType: visitDetails?.isPrimaryProviderType,
       isOverridePermissionProvided: false,
       isProceedPermissionProvided: false,
+      isCustomAppointment: visitDetails.isCustomAppointment ?? false,
+      customAddons: visitDetails.customAddons ?? '',
+      customDiagnosis: visitDetails.customDiagnosis ?? '',
+      authorizationDate: visitDetails?.authorizationDate
+        ? getCalendarDate(visitDetails?.authorizationDate)
+        : null,
+      authorizationNumber: visitDetails?.authorizationNumber,
+      customCptCodes: visitDetails.customCptCodes ?? '',
+      practiceId,
+      cosignerId: cosignerStaffId ? String(cosignerStaffId) : undefined,
       isOverridePrimaryProvider: undefined,
     },
   })
@@ -144,6 +180,104 @@ const EditVisitForm = ({
     control: form.control,
     name: 'isServiceTimeDependent',
   })
+
+  const noteTypeCodes = useCodesetCodes(CODESETS.NoteType).find(
+    (code) => code.groupingCode === 'Primary',
+  )
+  const noteTitleCode = useCodesetCodes(CODESETS.NoteTitle).find(
+    (code) => code.groupingCode === 'Primary' && code.value === 'Evaluation',
+  )
+
+  const handleCustomAppointment = async (newAppointmentId: number) => {
+    const {
+      customAddons = '',
+      customCptCodes = '',
+      customDiagnosis = '',
+      patient: { id: patientId },
+      provider,
+      appointmentId: oldAppointmentId,
+    } = form.getValues()
+    const appointmentId = newAppointmentId || oldAppointmentId
+    const addonCodesSections = sectionCodesMapping(
+      customAddons,
+      QuickNoteSectionName.QuicknoteSectionCodes,
+      'cptAddonCodes',
+      appointmentId,
+      +patientId,
+    )
+
+    const cptCodesSections = sectionCodesMapping(
+      customCptCodes,
+      QuickNoteSectionName.QuicknoteSectionCodes,
+      'cptPrimaryCodes',
+      appointmentId,
+      +patientId,
+    )
+
+    const diagnosisCodesSections = {
+      sectionName: QuickNoteSectionName.QuickNoteSectionDiagnosis,
+      sectionItem: 'diagnosis',
+      sectionItemValue: customDiagnosis,
+      appId: appointmentId,
+      pid: +patientId,
+    }
+    const data = [
+      diagnosisCodesSections,
+      ...addonCodesSections,
+      ...cptCodesSections,
+    ].filter((section) => section.sectionItemValue)
+    const resultWidgets = await saveWidgetClientAction({
+      patientId: String(patientId),
+      data,
+    })
+
+    if (resultWidgets.state === 'error')
+      return toast.error(
+        resultWidgets.error ?? 'Failed to save widgets for custom visit',
+      )
+    const billingProviderType = form.getValues('billingProviderType')
+    const cosignerId = form.getValues('cosignerId')
+    if (visitDetails.claimData) {
+      const { updatedDiagnoses, updatedServiceLines } =
+        transformClaimServiceLines({
+          timeZone: getLocalTimeZone(),
+          rawCptCodes: form.getValues('customCptCodes') ?? '',
+          rawDiagnosisCodes: form.getValues('customDiagnosis') ?? '',
+          existingLines: visitDetails.claimData?.claimServiceLines ?? [],
+          existingDiagnoses: visitDetails.claimData?.claimDiagnosis ?? [],
+          claimId: visitDetails.claimData?.id ?? '',
+        })
+
+      visitDetails.claimData.claimServiceLines = updatedServiceLines
+      visitDetails.claimData.claimDiagnosis = updatedDiagnoses
+    }
+
+    const resultSignNote = await signNoteAction({
+      patientId: String(patientId),
+      appointmentId: String(appointmentId),
+      isCustomAppointment: true,
+      noteTypeCode: noteTypeCodes?.value ?? '',
+      noteTitleCode: noteTitleCode?.value ?? '',
+      signedByUserId: +provider!,
+      billingProviderType,
+      coSignedByUserId: cosignerId,
+      ...(appointmentId === oldAppointmentId && {
+        claimModel: JSON.parse(
+          JSON.stringify({
+            ...visitDetails.claimData,
+            cosignerStaffId: cosignerId,
+            billingProviderType,
+          }),
+        ),
+      }),
+      isError: appointmentId === oldAppointmentId,
+    })
+
+    if (resultSignNote.state === 'error')
+      return toast.error(
+        resultSignNote.error ?? 'Failed to sign note for custom visit',
+      )
+  }
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
     const { dirtyFields } = form.formState
     if (!isDirty(dirtyFields)) return
@@ -159,6 +293,7 @@ const EditVisitForm = ({
     const selectedVisitType = visitTypes.find((type) =>
       [type.visitTypeCode, type.encouterType].includes(data.visitType),
     )
+
     const payload: BookVisitPayload = transformRequestPayload(
       data,
       selectedVisitType,
@@ -171,6 +306,7 @@ const EditVisitForm = ({
       delete payload.dischargeDate
     }
     const sanitizedData = sanitizeFormData(payload)
+
     const isRescheduled =
       isServiceTimeDependent &&
       isVisitRescheduled(
@@ -192,15 +328,23 @@ const EditVisitForm = ({
         toast.error(res.error || 'Failed to update visit')
         return
       }
+
+      const newAppointmentId = res.data?.appointments[0]?.id
       const handleSuccess = () => {
         setIsSubmitting(false)
         if (onEdit) onEdit()
         onClose()
-        toast.success(
+
+        const toastMessage = `${isCustomAppointment ? 'Custom ' : ''}Visit ${
           isRescheduled
-            ? 'Visit status is set as Rescheduled'
-            : 'Visit updated successfully',
-        )
+            ? 'status is set as Rescheduled'
+            : 'updated successfully'
+        }`
+        toast.success(toastMessage)
+      }
+
+      if (isCustomAppointment) {
+        await handleCustomAppointment(newAppointmentId)
       }
 
       if (data.insuranceVerificationStatus) {
@@ -218,7 +362,7 @@ const EditVisitForm = ({
   }
 
   if (isLoading) return <LoadingPlaceholder className="bg-white min-h-[46vh]" />
-
+  const isCustomAppointment = form.watch('isCustomAppointment')
   return (
     <>
       <FormContainer form={form} onSubmit={onSubmit}>
@@ -246,6 +390,13 @@ const EditVisitForm = ({
           <Box className="col-span-4">
             <ServiceSelect />
           </Box>
+          {isCustomAppointment && (
+            <Grid columns="3" className="col-span-12" gap="3">
+              <CosignerSelect />
+              <PracticeSelect />
+              <BillingProviderInfoPhoneNum />
+            </Grid>
+          )}
 
           {isServiceTimeDependent ? (
             <TimedVisitForm
@@ -258,6 +409,28 @@ const EditVisitForm = ({
             />
           )}
         </Grid>
+        {isCustomAppointment && (
+          <Grid
+            columns="1"
+            mt="3"
+            py="2"
+            gapY="3"
+            className="border-t border-t-gray-4"
+          >
+            <Text size="2" weight="medium">
+              Additional Information
+            </Text>
+            <Grid columns="3" gap="2">
+              <InsuranceAuthNumberField />
+              <AuthorizationDateField />
+            </Grid>
+            <Grid columns="3" gapX="2">
+              <DiagnosisSelect />
+              <CptCodeSelect />
+              <AddonsSelect />
+            </Grid>
+          </Grid>
+        )}
         <Flex justify="between" mt="3">
           <FormSubmitButton
             className={cn(
