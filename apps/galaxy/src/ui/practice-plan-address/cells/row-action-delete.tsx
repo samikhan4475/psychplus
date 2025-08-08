@@ -23,13 +23,14 @@ const RowActionDelete = ({ row }: PropsWithRow<PracticePlanAddress>) => {
       row.original,
       practicePlanId,
     )
+    setLoading(false)
     if (result.state === 'error')
       return toast.error(
         result.error ?? 'Failed to delete practice plan address',
       )
     toast.success('Practice plan address deleted successfully')
     setIsOpen(false)
-    setLoading(false)
+
     search({ practicePlanId }, 1, PRACTICE_PLAN_ADDRESS_TABLE_PAGE_SIZE, true)
   }
   const onOpen = () => setIsOpen(!isOpen)
