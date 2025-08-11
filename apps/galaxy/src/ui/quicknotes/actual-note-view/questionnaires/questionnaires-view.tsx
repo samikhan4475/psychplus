@@ -2,9 +2,9 @@
 
 import { Strong } from '@radix-ui/themes'
 import { format } from 'date-fns'
-import { QuickNoteHistory, QuickNoteSectionItem } from '@/types'
+import { QuickNoteHistory } from '@/types'
 import { BLOCK_OPTIONS } from '@/ui/questionnaires/questionnaires-widget/constants'
-import { parseSectionItemValue } from '@/ui/questionnaires/utils'
+import { calculateTotalScore } from '@/ui/questionnaires/shared/utils/score-calculator'
 import { QuickNoteSectionName } from '../../constants'
 import { BlockContainer, LabelAndValue } from '../shared'
 
@@ -61,16 +61,10 @@ const getLabelBySectionName = (sectionName: string): string | null => {
 }
 
 const HistoryDetail = ({ entry }: { entry: QuickNoteHistory }) => {
-  const totalScore =
-    entry.sectionName === QuickNoteSectionName.QuickNoteSectionCssrs
-      ? Math.max(
-          ...entry.data.map((item: QuickNoteSectionItem) =>
-            Number(item.sectionItemValue),
-          ),
-        )
-      : entry.data.reduce((acc, item) => {
-          return acc + parseSectionItemValue(item.sectionItemValue)
-        }, 0)
+  const totalScore = calculateTotalScore(
+    entry.data,
+    entry.sectionName as QuickNoteSectionName,
+  )
 
   return (
     <LabelAndValue

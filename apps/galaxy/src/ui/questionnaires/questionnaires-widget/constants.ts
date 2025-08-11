@@ -61,6 +61,10 @@ const BLOCK_OPTIONS = [
     value: QuickNoteSectionName.QuickNoteSectionAdultAsrs,
   },
   {
+    label: QuestionnaireTabs.VADPRS_TAB,
+    value: QuickNoteSectionName.QuickNoteSectionVadprs,
+  },
+  {
     label: QuestionnaireTabs.GQ_ASC_TAB,
     value: QuickNoteSectionName.QuickNoteSectionGqasc,
   }

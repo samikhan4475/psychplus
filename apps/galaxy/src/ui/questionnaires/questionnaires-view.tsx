@@ -22,6 +22,7 @@ import { Phq9Tab } from './phq-9-tab'
 import { Psc17Tab } from './psc-17-tab'
 import { SnapIvTab } from './snap-iv-tab'
 import { useStore } from './store'
+import { VadprsTab } from './vadprs-tab'
 import { YBocsTab } from './y-bocs-tab'
 
 interface QuestionnairesViewProps {
@@ -40,6 +41,46 @@ const QuestionnairesView = ({ data, patientId }: QuestionnairesViewProps) => {
     initializeQuestionnaires: state.initializeQuestionnaires,
   }))
 
+  const tabConfigs = [
+    QuestionnaireTabs.DASHBOARD_TAB,
+    QuestionnaireTabs.PHQ_9_TAB,
+    QuestionnaireTabs.GAD_7_TAB,
+    QuestionnaireTabs.SNAP_IV_TAB,
+    QuestionnaireTabs.PCL_5_TAB,
+    QuestionnaireTabs.Y_BOCS_TAB,
+    QuestionnaireTabs.AIMS_TAB,
+    QuestionnaireTabs.AUDIT_TAB,
+    QuestionnaireTabs.DAST_10_TAB,
+    QuestionnaireTabs.MOCA_TAB,
+    QuestionnaireTabs.HAM_D_TAB,
+    QuestionnaireTabs.C_SSRS_TAB,
+    QuestionnaireTabs.PSC_17_TAB,
+    QuestionnaireTabs.COPS_R_TAB,
+    QuestionnaireTabs.VADPRS_TAB,
+    QuestionnaireTabs.ADULT_ASRS_TAB,
+    QuestionnaireTabs.GQ_ASC_TAB,
+  ].map(q => ({ label: q, value: q }))
+
+  const tabComponents = {
+    [QuestionnaireTabs.DASHBOARD_TAB]: DashboardTab,
+    [QuestionnaireTabs.PHQ_9_TAB]: Phq9Tab,
+    [QuestionnaireTabs.GAD_7_TAB]: Gad7Tab,
+    [QuestionnaireTabs.SNAP_IV_TAB]: SnapIvTab,
+    [QuestionnaireTabs.PCL_5_TAB]: Pcl5Tab,
+    [QuestionnaireTabs.Y_BOCS_TAB]: YBocsTab,
+    [QuestionnaireTabs.AIMS_TAB]: AimsTab,
+    [QuestionnaireTabs.AUDIT_TAB]: AuditTab,
+    [QuestionnaireTabs.DAST_10_TAB]: Dast10Tab,
+    [QuestionnaireTabs.MOCA_TAB]: MocaTab,
+    [QuestionnaireTabs.HAM_D_TAB]: HamDTab,
+    [QuestionnaireTabs.C_SSRS_TAB]: CssrsTab,
+    [QuestionnaireTabs.PSC_17_TAB]: Psc17Tab,
+    [QuestionnaireTabs.COPS_R_TAB]: CopsRTab,
+    [QuestionnaireTabs.VADPRS_TAB]: VadprsTab,
+    [QuestionnaireTabs.ADULT_ASRS_TAB]: AdultAsrsTab,
+    [QuestionnaireTabs.GQ_ASC_TAB]: GqAscTab,
+  }
+
   useEffect(() => {
     initializeQuestionnaires(patientId)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -53,105 +94,22 @@ const QuestionnairesView = ({ data, patientId }: QuestionnairesViewProps) => {
     >
       <Flex>
         <Tabs.List>
-          <TabsTrigger value={QuestionnaireTabs.DASHBOARD_TAB}>
-            {QuestionnaireTabs.DASHBOARD_TAB}
-          </TabsTrigger>
-          <TabsTrigger value={QuestionnaireTabs.PHQ_9_TAB}>
-            {QuestionnaireTabs.PHQ_9_TAB}
-          </TabsTrigger>
-          <TabsTrigger value={QuestionnaireTabs.GAD_7_TAB}>
-            {QuestionnaireTabs.GAD_7_TAB}
-          </TabsTrigger>
-          <TabsTrigger value={QuestionnaireTabs.SNAP_IV_TAB}>
-            {QuestionnaireTabs.SNAP_IV_TAB}
-          </TabsTrigger>
-          <TabsTrigger value={QuestionnaireTabs.PCL_5_TAB}>
-            {QuestionnaireTabs.PCL_5_TAB}
-          </TabsTrigger>
-          <TabsTrigger value={QuestionnaireTabs.Y_BOCS_TAB}>
-            {QuestionnaireTabs.Y_BOCS_TAB}
-          </TabsTrigger>
-          <TabsTrigger value={QuestionnaireTabs.AIMS_TAB}>
-            {QuestionnaireTabs.AIMS_TAB}
-          </TabsTrigger>
-          <TabsTrigger value={QuestionnaireTabs.AUDIT_TAB}>
-            {QuestionnaireTabs.AUDIT_TAB}
-          </TabsTrigger>
-          <TabsTrigger value={QuestionnaireTabs.DAST_10_TAB}>
-            {QuestionnaireTabs.DAST_10_TAB}
-          </TabsTrigger>
-          <TabsTrigger value={QuestionnaireTabs.MOCA_TAB}>
-            {QuestionnaireTabs.MOCA_TAB}
-          </TabsTrigger>
-          <TabsTrigger value={QuestionnaireTabs.HAM_D_TAB}>
-            {QuestionnaireTabs.HAM_D_TAB}
-          </TabsTrigger>
-          <TabsTrigger value={QuestionnaireTabs.C_SSRS_TAB}>
-            {QuestionnaireTabs.C_SSRS_TAB}
-          </TabsTrigger>
-          <TabsTrigger value={QuestionnaireTabs.PSC_17_TAB}>
-            {QuestionnaireTabs.PSC_17_TAB}
-          </TabsTrigger>
-          <TabsTrigger value={QuestionnaireTabs.COPS_R_TAB}>
-            {QuestionnaireTabs.COPS_R_TAB}
-          </TabsTrigger>
-          <TabsTrigger value={QuestionnaireTabs.ADULT_ASRS_TAB}>
-            {QuestionnaireTabs.ADULT_ASRS_TAB}
-          </TabsTrigger>
-          <TabsTrigger value={QuestionnaireTabs.GQ_ASC_TAB}>
-            {QuestionnaireTabs.GQ_ASC_TAB}
-          </TabsTrigger>
+          {tabConfigs.map((tab) => (
+            <TabsTrigger key={tab.value} value={tab.value}>
+              {tab.label}
+            </TabsTrigger>
+          ))}
         </Tabs.List>
         <Flex className="flex-1 border-b border-gray-5" />
       </Flex>
-      <TabsContent value={QuestionnaireTabs.DASHBOARD_TAB}>
-        <DashboardTab patientId={patientId} data={data} />
-      </TabsContent>
-      <TabsContent value={QuestionnaireTabs.PHQ_9_TAB}>
-        <Phq9Tab patientId={patientId} data={data} />
-      </TabsContent>
-      <TabsContent value={QuestionnaireTabs.GAD_7_TAB}>
-        <Gad7Tab patientId={patientId} data={data} />
-      </TabsContent>
-      <TabsContent value={QuestionnaireTabs.SNAP_IV_TAB}>
-        <SnapIvTab patientId={patientId} data={data} />
-      </TabsContent>
-      <TabsContent value={QuestionnaireTabs.PCL_5_TAB}>
-        <Pcl5Tab patientId={patientId} data={data} />
-      </TabsContent>
-      <TabsContent value={QuestionnaireTabs.Y_BOCS_TAB}>
-        <YBocsTab patientId={patientId} data={data} />
-      </TabsContent>
-      <TabsContent value={QuestionnaireTabs.AIMS_TAB}>
-        <AimsTab patientId={patientId} data={data} />
-      </TabsContent>
-      <TabsContent value={QuestionnaireTabs.AUDIT_TAB}>
-        <AuditTab patientId={patientId} data={data} />
-      </TabsContent>
-      <TabsContent value={QuestionnaireTabs.DAST_10_TAB}>
-        <Dast10Tab patientId={patientId} data={data} />
-      </TabsContent>
-      <TabsContent value={QuestionnaireTabs.MOCA_TAB}>
-        <MocaTab patientId={patientId} data={data} />
-      </TabsContent>
-      <TabsContent value={QuestionnaireTabs.HAM_D_TAB}>
-        <HamDTab patientId={patientId} data={data} />
-      </TabsContent>
-      <TabsContent value={QuestionnaireTabs.C_SSRS_TAB}>
-        <CssrsTab patientId={patientId} data={data} />
-      </TabsContent>
-      <TabsContent value={QuestionnaireTabs.PSC_17_TAB}>
-        <Psc17Tab patientId={patientId} data={data} />
-      </TabsContent>
-      <TabsContent value={QuestionnaireTabs.COPS_R_TAB}>
-        <CopsRTab patientId={patientId} data={data} />
-      </TabsContent>
-      <TabsContent value={QuestionnaireTabs.ADULT_ASRS_TAB}>
-        <AdultAsrsTab patientId={patientId} data={data} />
-      </TabsContent>
-        <TabsContent value={QuestionnaireTabs.GQ_ASC_TAB}>
-        <GqAscTab patientId={patientId} data={data} />
-      </TabsContent>
+      {tabConfigs.map((tab) => {
+        const TabComponent = tabComponents[tab.value]
+        return (
+          <TabsContent key={tab.value} value={tab.value}>
+            <TabComponent patientId={patientId} data={data} />
+          </TabsContent>
+        )
+      })}
     </Tabs.Root>
   )
 }

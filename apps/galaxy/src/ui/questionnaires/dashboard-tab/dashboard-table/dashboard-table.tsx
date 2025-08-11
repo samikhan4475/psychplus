@@ -7,7 +7,7 @@ import { CheckboxCell, ColumnHeader, DataTable } from '@/components'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { transformOut } from '../../shared/data'
 import { QuestionnaireSchemaType } from '../../shared/questionnaires-schema'
-import { QUESTIONS } from '../constants'
+import { HIDDENQUESTIONNAIREIDS, QUESTIONS } from '../constants'
 import { ActionsCell, AddToPreVisitAssessmentCell, TestNameCell } from './cells'
 
 interface DashboardTableProps {
@@ -41,7 +41,7 @@ const createColumns = (
       />
     ),
     cell: ({ row }) => {
-      if (row.original.id === 'Q14') {
+      if (HIDDENQUESTIONNAIREIDS.includes(row.original.id)) {
         return
       }
       return (

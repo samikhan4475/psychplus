@@ -11,12 +11,12 @@ import { useStore } from '../store'
 
 interface SaveButtonProps {
   icon?: boolean
-  isGhost?: boolean
+  disabled?: boolean
 }
 
-const SaveButton = ({ icon = true }: SaveButtonProps) => {
+const SaveButton = ({ icon = true, disabled = false }: SaveButtonProps) => {
   const patientId = useParams().id as string
-  const [isOpen, setOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   const { initializeQuestionnaires } = useStore()
 
   const questionnaireWedgetIds: QuickNoteSectionName[] = [
@@ -34,6 +34,7 @@ const SaveButton = ({ icon = true }: SaveButtonProps) => {
     QuickNoteSectionName.QuickNoteSectionPsc17,
     QuickNoteSectionName.QuickNoteSectionCopsR,
     QuickNoteSectionName.QuickNoteSectionAdultAsrs,
+    QuickNoteSectionName.QuickNoteSectionVadprs,
     QuickNoteSectionName.QuickNoteSectionGqasc,
   ]
 
@@ -69,10 +70,11 @@ const SaveButton = ({ icon = true }: SaveButtonProps) => {
         highContrast
         onClick={() => {
           if (!hasPermission) {
-            setOpen(true)
+            setIsOpen(true)
           }
         }}
         className={className}
+        disabled={disabled}
       >
         {icon && <SaveIcon width={15} height={15} strokeWidth={1.75} />}
         Save
@@ -80,7 +82,7 @@ const SaveButton = ({ icon = true }: SaveButtonProps) => {
       <PermissionAlert
         message="You do not have permission to save. Please contact your supervisor if you need any further assistance"
         isOpen={isOpen}
-        onClose={() => setOpen(false)}
+        onClose={() => setIsOpen(false)}
       />
     </>
   )

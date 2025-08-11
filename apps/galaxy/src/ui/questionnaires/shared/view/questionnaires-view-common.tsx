@@ -12,6 +12,7 @@ import { Psc17View } from './psc-17-view'
 import { QuestionnaireViewCommon } from './questionnaires-view'
 import { SnapIvView } from './snap-iv-view'
 import { YBocView } from './y-boc-view'
+import { VadprsView } from './vadprs-view'
 
 interface QuestionnaireDetailViewProps {
   data: QuickNoteSectionItem[]
@@ -45,6 +46,8 @@ const QuestionnaireDetailView = ({
         return <CssrsView data={data} />
       case 'QuicknoteSectionQuestionnaireAdultAsrs':
         return <AdultAsrsView data={data} />
+        case 'QuicknoteSectionQuestionnaireVadprs':
+        return <VadprsView data={data} />
       case QuickNoteSectionName.QuickNoteSectionGqasc:
         return <GqAscView data={data} />
       default:

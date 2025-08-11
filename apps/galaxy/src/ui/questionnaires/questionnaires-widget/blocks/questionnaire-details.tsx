@@ -3,7 +3,7 @@ import { Badge, Flex, Text } from '@radix-ui/themes'
 import { format } from 'date-fns'
 import { ListIcon, SignalIcon } from 'lucide-react'
 import { BlockLabel } from '@/components'
-import { QuickNoteHistory, QuickNoteSectionItem } from '@/types'
+import { QuickNoteHistory } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { SCORE_INTERPRETATION_RANGES as AUDIT_SCORE_INTERPRETATION_RANGES } from '../../audit-tab/constants'
 import { QuestionnaireTabs } from '../../constants'
@@ -24,6 +24,7 @@ import {
   SCORE_INTERPRETATION_RANGES_INTERNALIZING,
 } from '../../psc-17-tab/constants'
 import { getBadgeColor, getRange, ScoreInterpretationRange } from '../../shared'
+import { calculateTotalScore } from '../../shared/utils/score-calculator'
 import { ViewButton } from '../../shared/view/view-button'
 import {
   SCORE_INTERPRETATION_RANGES_HYPERACTIVITY,
@@ -32,7 +33,6 @@ import {
   SNAP_IV_SECTIONS,
 } from '../../snap-iv-tab/constants'
 import { useStore } from '../../store'
-import { parseSectionItemValue } from '../../utils'
 import { SCORE_INTERPRETATION_RANGES as YBOCS_SCORE_INTERPRETATION_RANGES } from '../../y-bocs-tab/constants'
 import { ChartView, ListView, TabsContent, TabsTrigger } from '../tabs'
 import { DeleteButton } from './delete-button'
@@ -151,16 +151,10 @@ const QuestionnaireRowDetail = ({
   historiesData?: number
   questionnaire: string
 }) => {
-  const totalScore =
-    option.sectionName === QuickNoteSectionName.QuickNoteSectionCssrs
-      ? Math.max(
-          ...option.data.map((item: QuickNoteSectionItem) =>
-            Number(item.sectionItemValue),
-          ),
-        )
-      : option.data.reduce((acc, item) => {
-          return acc + parseSectionItemValue(item.sectionItemValue)
-        }, 0)
+  const totalScore = calculateTotalScore(
+    option.data,
+    option.sectionName as QuickNoteSectionName,
+  )
 
   return (
     <Flex key={option.createdOn} gap="2" align="center" className="w-full">
@@ -273,7 +267,7 @@ const scoreInterpretationRanges = (
 }
 
 export {
+  QuestionnaireRowDetail,
   QuestionnairesDetails,
   type QuestionnairesDetailsProps,
-  QuestionnaireRowDetail,
 }

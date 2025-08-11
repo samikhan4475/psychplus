@@ -25,6 +25,7 @@ const sections = [
   QuickNoteSectionName.QuickNoteSectionPsc17,
   QuickNoteSectionName.QuickNoteSectionCopsR,
   QuickNoteSectionName.QuickNoteSectionAdultAsrs,
+  QuickNoteSectionName.QuickNoteSectionVadprs,
   QuickNoteSectionName.QuickNoteSectionGqasc,
 ]
 

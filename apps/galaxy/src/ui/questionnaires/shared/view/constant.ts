@@ -119,6 +119,10 @@ const questionnaireViewDta = [
     questionnaireTab: QuestionnaireTabs.ADULT_ASRS_TAB,
   },
   {
+    sectionName: QuickNoteSectionName.QuickNoteSectionVadprs,
+    questionnaireTab: QuestionnaireTabs.VADPRS_TAB,
+  },
+  {
     sectionName: QuickNoteSectionName.QuickNoteSectionGqasc,
     questionnaireTab: QuestionnaireTabs.GQ_ASC_TAB,
   }

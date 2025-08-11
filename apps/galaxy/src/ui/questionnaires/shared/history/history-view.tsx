@@ -3,10 +3,10 @@ import { useParams } from 'next/navigation'
 import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
 import { ListIcon, SignalIcon, XIcon } from 'lucide-react'
-import { QuickNoteHistory, QuickNoteSectionItem } from '@/types'
+import { QuickNoteHistory } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { useStore } from '../../store'
-import { parseSectionItemValue } from '../../utils'
+import { calculateTotalScore } from '../utils/score-calculator'
 import { AddToNotesSaveButton } from './add-to-notes-save-button'
 import { ChartView } from './chart-view'
 import { SheetView } from './sheet-view'
@@ -25,24 +25,16 @@ const HistoryView = ({ questionnaire }: HistoryViewProps) => {
     handleAddToNotes: state.handleAddToNotes,
   }))
 
+  const calculateTotalScoreForHistory = (history: QuickNoteHistory): string => {
+    return calculateTotalScore(history.data, questionnaire).toString()
+  }
+
   useEffect(() => {
-    // get the added to notes dates for the current questionnaire
     const selectedDates = addedToNotes[questionnaire] || []
     const historiesData = histories[questionnaire] || []
 
     const modifiedData = historiesData.map((history) => {
-      const totalScore =
-        questionnaire === QuickNoteSectionName.QuickNoteSectionCssrs
-          ? Math.max(
-              ...history.data.map((item: QuickNoteSectionItem) =>
-                Number(item.sectionItemValue),
-              ),
-            ).toString()
-          : history.data
-              .reduce((acc: number, curr: QuickNoteSectionItem) => {
-                return acc + parseSectionItemValue(curr.sectionItemValue)
-              }, 0)
-              .toString()
+      const totalScore = calculateTotalScoreForHistory(history)
       if (selectedDates?.includes(history.createdOn)) {
         return { ...history, addToNote: true, totalScore }
       } else {

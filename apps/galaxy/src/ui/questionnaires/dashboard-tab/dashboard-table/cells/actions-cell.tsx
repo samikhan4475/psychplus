@@ -6,6 +6,7 @@ import {
   QuestionnaireQuestionToSectionName,
   sendToPatient,
 } from '@/ui/questionnaires/utils'
+import { HIDDENQUESTIONNAIREIDS } from '../../constants'
 
 interface Questionnaire {
   id: string
@@ -15,7 +16,7 @@ interface Questionnaire {
 const ActionsCell = ({ row }: PropsWithRow<Questionnaire>) => {
   const { id } = useParams<{ id: string }>()
 
-  if (row.original.id === 'Q14') {
+  if (HIDDENQUESTIONNAIREIDS.includes(row.original.id)) {
     return
   }
 

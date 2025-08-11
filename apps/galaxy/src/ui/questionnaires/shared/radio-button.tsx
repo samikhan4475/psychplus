@@ -8,6 +8,7 @@ interface RadioGroupProps {
   options: RadioGroupOption[]
   className?: string
   disabled?: boolean
+  labelClassName?:string
 }
 
 interface RadioGroupOption {
@@ -20,6 +21,7 @@ const RadioButton = ({
   options,
   className,
   disabled = false,
+  labelClassName = ''
 }: RadioGroupProps) => {
   const { watch, setValue } = useFormContext()
   const value = watch(field)
@@ -52,7 +54,7 @@ const RadioButton = ({
               </RadixRadioGroup.Item>
               <Text
                 size="1"
-                className={cn(isSelected && 'font-bold', 'flex-1')}
+                className={cn(isSelected && 'font-bold', 'flex-1', labelClassName)}
               >
                 {label}
               </Text>

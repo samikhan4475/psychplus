@@ -16,6 +16,7 @@ enum QuestionnaireTabs {
   PSC_17_TAB = 'PSC-17',
   COPS_R_TAB = 'COPS-R',
   ADULT_ASRS_TAB = 'ADULT ASRS',
+  VADPRS_TAB = 'VADPRS',
   GQ_ASC_TAB = 'GQ-ASC',
 }
 
@@ -42,8 +43,9 @@ enum QuestionnairesTitles {
   'HAM-D' = 'Hamilton Depression Rating Scale (HAM-D)',
   'C-SSRS' = 'Columbia-Suicide Severity Rating Scale (C-SSRS)',
   'PSC-17' = 'Pediatric Symptom Checklist-17 (PSC-17)',
-  'COPS-R' = 'Candidate & Officer Personnel Survey (COPS-R)',
+  'COPS-R'  = 'Candidate & Officer Personnel Survey (COPS-R)',
   'Adult ASRS' = 'Adult Self Report Scale (Adult ASRS)',
+  'VADPRS' = 'Vanderbilt ADHD Diagnostic Parent Rating Scale',
   'GQ-ASC' = 'GQ-ASC Scale for Adult Women (GQ-ASC)'
 }
 
@@ -76,14 +78,13 @@ const quickNotesSectionsTitles = {
     'Candidate & Officer Personnel Survey (COPS-R)',
   [QuickNoteSectionName.QuickNoteSectionAdultAsrs]:
     'Adult Self Report Scale (Adult ASRS)',
+  [QuickNoteSectionName.QuickNoteSectionVadprs]:
+    'Vanderbilt ADHD Diagnostic Parent Rating Scale',
   [QuickNoteSectionName.QuickNoteSectionGqasc]:
     'GQ-ASC Scale for Adult Women (GQ-ASC)',
 }
 
 export {
-  QuestionnaireTabs,
-  QuestionnairesStatus,
-  QuestionnairesFilledBy,
-  QuestionnairesTitles,
-  quickNotesSectionsTitles,
+  QuestionnairesFilledBy, QuestionnairesStatus, QuestionnairesTitles, QuestionnaireTabs, quickNotesSectionsTitles
 }
+
