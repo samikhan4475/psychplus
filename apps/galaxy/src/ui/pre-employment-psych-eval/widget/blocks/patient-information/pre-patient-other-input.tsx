@@ -16,7 +16,10 @@ const PrePatientOtherInput = ({ disabled = false }: BlockProps) => {
         maxLength={50}
         disabled={disabled}
       />
-      <FormFieldError name="livingArrangementOtherDetails" />
+      <FormFieldError
+        className="absolute right-[-58px] top-0.5"
+        name="livingArrangementOtherDetails"
+      />
     </FormFieldContainer>
   )
 }

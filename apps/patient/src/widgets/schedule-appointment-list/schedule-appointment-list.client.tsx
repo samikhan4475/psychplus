@@ -113,8 +113,8 @@ const ScheduleAppointmentListClient = ({
       appointmentType: searchParams.get('appointmentType') ?? '',
       zipCode: searchParams.get('zipCode') ?? '',
       state: searchParams.get('state') ?? '',
-      sortBy: '',
-      language: '',
+      sortBy: 'Rating',
+      language: 'English',
       maxDistanceInMiles: DEFAULT_RADIUS_DISTANCE,
       startingDate: isMobile()
         ? formatDateYmd(new Date())

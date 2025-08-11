@@ -1,15 +1,15 @@
 'use client'
 
 import React from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Box, Flex, Grid, Text, TextFieldInput } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { AutoResizeInput, FormField, PhoneNumberInput } from '@/components-v2'
+import { FormField, PhoneNumberInput } from '@/components-v2'
 import { ReferralType } from '../types'
 import { shouldShowFacilitySelect } from '../utils'
 import { FacilityInput } from './facility-input'
 import { FacilitySelect } from './facility-select'
 import { SchemaType } from './schema'
-import { useSearchParams } from 'next/navigation'
 
 interface ReferrerInformationProps {
   formType: ReferralType
@@ -22,7 +22,7 @@ const ReferrerInformation = ({
 }: ReferrerInformationProps) => {
   const form = useFormContext<SchemaType>()
 
-   const searchParams = useSearchParams()
+  const searchParams = useSearchParams()
   const isIncludeFacilitySelect =
     searchParams?.get('isIncludeFacilitySelect') === 'true'
 
@@ -32,7 +32,6 @@ const ReferrerInformation = ({
     isIncludeFacilitySelect,
   )
 
-
   return (
     <Flex direction="column" gap="4">
       <Text size="5" weight="medium" className="mt-5">
@@ -40,7 +39,11 @@ const ReferrerInformation = ({
       </Text>
       <Box className="border-pp-gray-2 w-full border-b border-solid" />
       <Grid columns="3" className="max-xs:grid-cols-1" gap="3">
-        {showFacility  ? <FacilitySelect referrerShortName={referrerShortName} /> : <FacilityInput />}
+        {showFacility ? (
+          <FacilitySelect referrerShortName={referrerShortName} />
+        ) : (
+          <FacilityInput />
+        )}
 
         <FormField
           containerClassName="flex-1"
@@ -56,7 +59,7 @@ const ReferrerInformation = ({
         <FormField
           containerClassName="flex-1"
           name="referrerContactDetails.phoneNumbers.0.number"
-          label="Phone Number"
+          label="Phone"
         >
           <PhoneNumberInput
             name="referrerContactDetails.phoneNumbers.0.number"
@@ -67,7 +70,7 @@ const ReferrerInformation = ({
         <FormField
           containerClassName="flex-1"
           name="referrerContactDetails.email"
-          label="Email Address"
+          label="Email"
         >
           <TextFieldInput
             {...form.register('referrerContactDetails.email')}
@@ -75,6 +78,9 @@ const ReferrerInformation = ({
             className="h-[38px]"
           />
         </FormField>
+
+        {/* 
+         Need confirmation for this
         <Box className="col-span-full">
           <FormField
             containerClassName="flex-1"
@@ -87,7 +93,7 @@ const ReferrerInformation = ({
               className="min-h-16 rounded-none w-full px-3 py-2"
             />
           </FormField>
-        </Box>
+        </Box> */}
       </Grid>
     </Flex>
   )

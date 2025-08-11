@@ -12,10 +12,16 @@ const patientDescriptionSchema = z.object({
 
 const fitForDutySchema = z.object({
   referringOrganization: z.string().min(1, 'Required'),
-  referringOrganizationOtherDetails: z.string().optional(),
+  referringOrganizationOtherDetails: z
+    .string()
+    .max(50, 'Max 50 characters are allowed')
+    .optional(),
 
   intervieweeRole: z.string().min(1, 'Required'),
-  intervieweeRoleOtherDetails: z.string().optional(),
+  intervieweeRoleOtherDetails: z
+    .string()
+    .max(50, 'Max 50 characters are allowed')
+    .optional(),
 })
 
 const patientAppointmentSchema = z.object({
@@ -75,7 +81,7 @@ const employmentSchema = z.object({
   priorPosition: z.string().min(1, 'Required').max(20, 'Max 20 characters'),
   positionDuration: z.string().min(1, 'Required').max(20, 'Max 20 characters'),
   hadDisciplinary: z.string().min(1, 'Required'), // 'has' / 'hasNot'
-  disciplinaryIncident: z.string().max(1200, 'Max 1200 characters'),
+  disciplinaryIncident: z.string().max(1200, 'Max 1200 characters').optional(),
   handgunDescription: z
     .string()
     .min(1, 'Required')
@@ -84,7 +90,7 @@ const employmentSchema = z.object({
 
 const militarySchema = z.object({
   hasMilitaryExperience: z.string().min(1, 'Required'), // 'has' / 'hasNot'
-  militaryBranch: z.string().max(100, 'Max 100 characters'),
+  militaryBranch: z.string().max(100, 'Max 100 characters').optional(),
 })
 
 const medicalSchema = z.object({

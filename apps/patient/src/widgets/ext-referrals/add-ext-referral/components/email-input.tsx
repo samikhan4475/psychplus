@@ -12,7 +12,7 @@ const EmailInput = () => {
     <FormField
       containerClassName="flex-1"
       name="patientContactDetails.email"
-      label="Email Address"
+      label="Email"
     >
       <TextFieldInput
         {...register('patientContactDetails.email')}

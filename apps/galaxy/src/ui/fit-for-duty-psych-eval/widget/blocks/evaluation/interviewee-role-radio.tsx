@@ -32,7 +32,7 @@ const IntervieweeRoleRadio = ({ heading, disabled = false }: BlockProps) => {
       {intervieweeRole === 'other' && (
         <IntervieweeRoleInput disabled={disabled} />
       )}
-      <FormFieldError name="referringOrganization" />
+      <FormFieldError name="intervieweeRole" />
     </Flex>
   )
 }

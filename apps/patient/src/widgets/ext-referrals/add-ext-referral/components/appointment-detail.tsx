@@ -5,34 +5,31 @@ import { useParams } from 'next/navigation'
 import { CODESETS } from '@psychplus-v2/constants'
 import { Box, Flex, Grid, Separator, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import {
-  FormField,
-  MultiSelectDropdown,
-} from '@/components-v2'
+import { FormField, MultiSelectDropdown } from '@/components-v2'
+import { ACCEPTED_FILE_TYPES } from '@/constants'
 import { useCodesetCodes } from '@/providers'
 import { ReferralType } from '../types'
 import { AppointmentTypeSelect } from './appointment-type-select'
 import { DischargeDate } from './discharge-date'
 import { RequestedDateInput } from './requested-date-input'
 import { SchemaType } from './schema'
+import { StateSelect } from './state-select'
 import { TimeSelect } from './time-select'
 import { UploadDocumentButton } from './upload-document-button'
 import { ZipInput } from './zip-input'
-import { StateSelect } from './state-select'
-import { ACCEPTED_FILE_TYPES } from '@/constants'
 
 interface AppointmentDetailProps {
   onFaceSheetFileChange: (file: File | undefined) => void
   onFileChange: (file: File | undefined) => void
   fileResetCounter?: number
-  googleAPIkey:string
+  googleAPIkey: string
 }
 
 const AppointmentDetail = ({
   onFaceSheetFileChange,
   onFileChange,
   fileResetCounter,
-  googleAPIkey
+  googleAPIkey,
 }: AppointmentDetailProps) => {
   const codes = useCodesetCodes(CODESETS.ServicesOffered)
   const form = useFormContext<SchemaType>()
@@ -78,7 +75,7 @@ const AppointmentDetail = ({
           <FormField
             containerClassName="flex-1"
             name="requestedServices"
-            label="Reason For Referral"
+            label="Reason"
           >
             <MultiSelectDropdown
               name="requestedServices"

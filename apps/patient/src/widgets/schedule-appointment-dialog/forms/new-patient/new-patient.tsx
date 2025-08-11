@@ -4,7 +4,7 @@ import { ChangeEvent, useRef, useState } from 'react'
 import { cn, zipCodeSchema, zipLast4Schema } from '@psychplus-v2/utils'
 import * as ToggleGroup from '@radix-ui/react-toggle-group'
 import { Button, Flex, Text, TextField } from '@radix-ui/themes'
-import DatePicker from 'react-datepicker'
+import DatePicker, { registerLocale } from 'react-datepicker'
 import { type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 import {
@@ -24,6 +24,7 @@ import { useRouter } from 'next/navigation'
 import { StorageType } from '@psychplus-v2/constants'
 import { CodeWithDisplayName } from '@psychplus-v2/types'
 import { getMonth, getYear } from 'date-fns'
+import enUS from 'date-fns/locale/en-US'
 import { isMobile } from '@psychplus/utils/client'
 import { formatDateYmd } from '@psychplus/utils/time'
 import { getZipcodeInfo } from '@/actions'
@@ -40,6 +41,8 @@ import {
   transformStaffWithClinicsAndSlots,
 } from '@/widgets/schedule-appointment-list/utils'
 import CustomDateInput from './custom-date-input'
+
+registerLocale('en-US', enUS)
 
 interface NewPatientProps {
   onclose?: () => void
@@ -395,6 +398,7 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
                     customInput={<CustomDateInput />}
                     dateFormat="MM/dd/yyyy"
                     placeholderText="mm/dd/yyyy"
+                    locale="en-US"
                     selected={selectedDate}
                     onChange={(date) => {
                       if (date) {

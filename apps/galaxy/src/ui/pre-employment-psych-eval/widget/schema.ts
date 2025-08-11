@@ -31,7 +31,10 @@ const patientInformationSchema = z.object({
   relationshipStatus: z.string().min(1, 'Required'),
   currentCity: z.string().min(1, 'Required').max(20, 'Max 20 characters'),
   livingArrangement: z.string().min(1, 'Required'),
-  livingArrangementOtherDetails: z.string().optional(),
+  livingArrangementOtherDetails: z
+    .string()
+    .max(50, 'Max 50 characters are allowed')
+    .optional(),
   placeOfBirth: z.string().min(1, 'Required').max(50, 'Max 50 characters'),
   placeRaised: z.string().min(1, 'Required').max(50, 'Max 50 characters'),
   headInjuryHistory: z.string().min(1, 'Required'),
@@ -42,10 +45,12 @@ const employmentSchema = z.object({
   durationAtPreviousEmployer: z.string().min(1, 'Required').max(20),
   priorEmployment: z.string().min(1, 'Required').max(50),
   hasDisciplinaryActions: z.string().min(1, 'Required'),
-  disciplinaryIncidentDescription: z.string().optional(),
+  disciplinaryIncidentDescription: z
+    .string()
+    .max(150, 'Max 150 characters are allowed')
+    .optional(),
   useOfForceOrComplaints: z.string().min(1, 'Required').max(1000),
 })
-
 
 const legalSchema = z.object({
   hasLegalHistory: z.string().min(1, 'Required'),

@@ -17,7 +17,7 @@ const ZipInput = () => {
     <FormField
       containerClassName="flex-1"
       name="patientContactDetails.addresses.0.postalCode"
-      label="Zip Code"
+      label="Zip"
     >
       <ZipcodeInput
         className="h-[38px] text-2 font-[400]"

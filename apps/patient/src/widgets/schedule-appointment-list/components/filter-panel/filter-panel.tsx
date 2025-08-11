@@ -101,7 +101,7 @@ const FilterPanel = ({
             Sort by
           </Text>
           <FilterOptionsDropDown
-            prefix="A-Z"
+            prefix="Select"
             filterType="sortBy"
             options={
               filters.appointmentType === 'In-Person'

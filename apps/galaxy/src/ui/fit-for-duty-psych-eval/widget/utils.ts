@@ -316,7 +316,6 @@ const applyPatientVitals = <T extends SupportsVitals>(
     !Number.isNaN(heightInches)
   ) {
     const { feet, inches } = convertInchesToFeetAndInches(Number(heightInches))
-    console.log(feet, inches)
     const feetStr = String(feet)
     if (feetStr.length > 2) return result
     if (!result?.heightFeet) {

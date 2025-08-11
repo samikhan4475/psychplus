@@ -8,11 +8,7 @@ import { SelectInput } from '@/components-v2/select-input'
 
 const AppointmentTypeSelect = () => {
   return (
-    <FormField
-      containerClassName="flex-1"
-      name="requestedMedium"
-      label="Appointment Type"
-    >
+    <FormField containerClassName="flex-1" name="requestedMedium" label="Type">
       <SelectInput
         field="requestedMedium"
         placeholder="Select"

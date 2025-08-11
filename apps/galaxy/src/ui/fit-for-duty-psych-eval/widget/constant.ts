@@ -18,7 +18,7 @@ const WAS_OPTIONS = [
 ]
 const BE_OPTIONS = [
   { label: 'Be', value: 'be' },
-  { label: 'Not be', value: 'notbe' },
+  { label: 'Not be', value: 'notBe' },
 ]
 
 const DID_OPTIONS = [

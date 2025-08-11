@@ -9,11 +9,7 @@ import {
 
 const RequestedDateInput = () => {
   return (
-    <FormField
-      containerClassName="flex-1"
-      name="requestedTime"
-      label="Select Date"
-    >
+    <FormField containerClassName="flex-1" name="requestedTime" label="Date">
       <DatePickerInput
         field="requestedTime"
         className="text-pp-gray-1 h-[38px] text-[14px] font-regular uppercase"

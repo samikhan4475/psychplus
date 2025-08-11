@@ -33,7 +33,7 @@ const TimeSelect = () => {
   }, [selectedDate])
 
   return (
-    <FormField containerClassName="flex-1" name="time" label="Select Time">
+    <FormField containerClassName="flex-1" name="time" label="Time">
       <SelectInput
         field="time"
         placeholder="--Please Select--"
