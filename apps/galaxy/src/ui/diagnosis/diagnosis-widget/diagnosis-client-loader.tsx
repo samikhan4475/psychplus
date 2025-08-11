@@ -52,18 +52,23 @@ const DiagnosisWidgetClientLoader = ({
   }, [staffId])
 
   useEffect(() => {
-    if (!debouncedValue || debouncedValue === 'empty') return
+    const parsedCodes =
+      debouncedValue && debouncedValue !== 'empty'
+        ? debouncedValue?.split(',')
+        : []
 
-    const codes = debouncedValue.split(',')
-
-    if (
-      !codes.includes(FITNESS_FOR_DUTY_ICD_CODE) &&
+    const shouldAddFitnessCode  =
       visitType &&
-      isNeuroPsychVisit(visitType)
-    ) {
-      codes.push(FITNESS_FOR_DUTY_ICD_CODE)
-  }
-    getIcd10DiagnosisAction({ DiagnosisCodes: codes }).then((res) => {
+      isNeuroPsychVisit(visitType) &&
+      !parsedCodes.includes(FITNESS_FOR_DUTY_ICD_CODE)
+
+    if (shouldAddFitnessCode) {
+      parsedCodes.push(FITNESS_FOR_DUTY_ICD_CODE)
+    }
+
+  if (parsedCodes.length === 0) return
+  
+    getIcd10DiagnosisAction({ DiagnosisCodes: parsedCodes }).then((res) => {
       if (res.state === 'success') {
         setWorkingDiagnosisData(res.data)
       }

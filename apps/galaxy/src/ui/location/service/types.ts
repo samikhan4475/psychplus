@@ -23,6 +23,7 @@ enum Services {
   Therapy = 'Therapy',
   CouplesFamilyTherapy = 'CouplesFamilyTherapy',
   GroupTherapy = 'GroupTherapy',
+  NeuropsychologicalEvaluation = 'NeuropsychologicalEvaluation',
 }
 
 enum PrimayProviderType {

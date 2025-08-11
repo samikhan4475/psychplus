@@ -1,5 +1,6 @@
 'use client'
 
+import { Flex } from '@radix-ui/themes'
 import { BlockProps } from '../types'
 import { AlcoholDrugs } from './alcohol-and-drugs/alcohol-and-drugs'
 import { PatientAppointmentDetails } from './appointment-details'
@@ -22,7 +23,7 @@ import { SummaryAndRecommendation } from './summary-and-recommendation'
 
 const Blocks = ({ disabled = false }: BlockProps) => {
   return (
-    <>
+    <Flex direction="column" gap="2" className="pr-2">
       <EvaluationBlock disabled={disabled} />
       <PatientDescription disabled={disabled} />
       <PatientAppointmentDetails disabled={disabled} />
@@ -41,7 +42,7 @@ const Blocks = ({ disabled = false }: BlockProps) => {
       <ResultOfInterview disabled={disabled} />
       <SummaryAndRecommendation disabled={disabled} />
       <Conclusion disabled={disabled} />
-    </>
+    </Flex>
   )
 }
 export { Blocks }

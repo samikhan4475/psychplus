@@ -22,6 +22,7 @@ enum VisitTypeEnum {
   PhpCareDischarge = 'PhpCare/Discharge',
   PhpCareInitialDischarge = 'PhpCare/InitialDischarge',
   UDS = 'UDS',
+  PreEmployment = 'PreEmployment',
 }
 
 enum VisitMediumEnum {

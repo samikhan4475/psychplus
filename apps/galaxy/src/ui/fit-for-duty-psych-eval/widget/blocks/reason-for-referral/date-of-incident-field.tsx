@@ -14,7 +14,7 @@ const DateOfIncidentField = ({ disabled = false }: BlockProps) => {
   const form = useFormContext<SchemaType>()
   return (
     <FormFieldContainer className="flex-row items-baseline gap-2">
-      <FormFieldLabel required>
+      <FormFieldLabel required className="!text-1">
         Date of incident that led to this evaluation
       </FormFieldLabel>
       <DatePickerInput
@@ -29,7 +29,6 @@ const DateOfIncidentField = ({ disabled = false }: BlockProps) => {
             shouldDirty: true,
             shouldValidate: true,
           })
-          form.trigger('dateOfIncident')
         }}
       />
       <FormFieldError name="dateOfIncident" />

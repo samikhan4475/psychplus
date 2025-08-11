@@ -55,15 +55,17 @@ const isMaxBookingFrequencyDisabled = (serviceOffered?: string) => {
     Services.Therapy,
     Services.GroupTherapy,
     Services.CouplesFamilyTherapy,
+    Services.NeuropsychologicalEvaluation
+
   ].includes(serviceOffered as Services)
 }
 
 const getMaxBookingFrequency = (service: string, code: SharedCode) => {
   const maxBookingFrequency =
     getAttributeValue(code, 'MaxBookingFrequency') ?? ''
-  const { CouplesFamilyTherapy, GroupTherapy, Psychiatry, Therapy } = Services
+  const { CouplesFamilyTherapy, GroupTherapy, Psychiatry, Therapy,NeuropsychologicalEvaluation } = Services
   if (
-    [CouplesFamilyTherapy, GroupTherapy, Psychiatry, Therapy].includes(
+    [CouplesFamilyTherapy, GroupTherapy, Psychiatry, Therapy,NeuropsychologicalEvaluation].includes(
       service as Services,
     )
   ) {

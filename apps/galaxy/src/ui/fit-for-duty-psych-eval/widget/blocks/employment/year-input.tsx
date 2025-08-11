@@ -15,12 +15,14 @@ import { BlockProps } from '../../types'
 const YearInput = ({ disabled = false }: BlockProps) => {
   const form = useFormContext<SchemaType>()
   const currentYear = new Date().getFullYear()
+
   const options = useMemo(
-    () => generateYearOptions(1900, currentYear + 30),
+    () => generateYearOptions(1900, currentYear),
     [currentYear],
   )
+
   return (
-    <FormFieldContainer className="flex flex-row items-center gap-2">
+    <FormFieldContainer className="flex-row items-center gap-2">
       <FormFieldLabel>Year</FormFieldLabel>
       <SelectInput
         field="employedSinceYear"
@@ -28,8 +30,9 @@ const YearInput = ({ disabled = false }: BlockProps) => {
         disabled={disabled}
         buttonClassName="w-[95px]"
         onValueChange={(value) => {
-          form.setValue('employedSinceYear', value)
-          form.trigger('employedSinceYear')
+          form.setValue('employedSinceYear', value, {
+            shouldValidate: true,
+          })
         }}
       />
       <FormFieldError name="employedSinceYear" />

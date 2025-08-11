@@ -10,7 +10,7 @@ import { BlockProps } from '../../types'
 
 const InjuryLocationInput = ({ disabled = false }: BlockProps) => {
   return (
-    <FormFieldContainer className="flex flex-row gap-2">
+    <FormFieldContainer className="flex-row gap-2">
       <FormFieldLabel required>Injury location</FormFieldLabel>
       <AutoResizeInput
         field="injuryLocation"

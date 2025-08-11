@@ -5,9 +5,9 @@ import { WidgetFormContainer, WidgetSaveButton } from '@/components'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { Blocks } from './blocks'
 import { ClearButton } from './components/clear-button'
+import { NeuroPsychWidgetHeader } from './components/header'
 import { transformOut } from './data'
 import { useFitForDutyPsychEvalForm } from './form'
-import { FitForDutyPsychEvalWidgetHeader } from './header'
 import { type SchemaType } from './schema'
 import { getInitialValues } from './utils'
 
@@ -29,7 +29,7 @@ const FitForDutyPsychEvalWidget = ({
         patientId={patientId}
         widgetId={QuickNoteSectionName.QuicknoteSectionFitForDutyPsychEval}
         getData={transformOut(patientId)}
-        title={!isHeader ? 'Fit- For- Duty Evaluation' : undefined}
+        title={!isHeader ? 'Fit-For-Duty Evaluation' : undefined}
         sticky
         className="p-2 pt-0"
         headerRight={
@@ -40,8 +40,12 @@ const FitForDutyPsychEvalWidget = ({
             </>
           )
         }
-        topHeader={isHeader && <FitForDutyPsychEvalWidgetHeader />}
-        // formResetValues={getInitialValues()}
+        topHeader={
+          isHeader && (
+            <NeuroPsychWidgetHeader heading="Fit-For-Duty Evaluation" />
+          )
+        }
+        formResetValues={getInitialValues()}
       >
         <Blocks />
       </WidgetFormContainer>

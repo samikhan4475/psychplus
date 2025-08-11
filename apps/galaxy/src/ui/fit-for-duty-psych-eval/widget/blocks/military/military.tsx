@@ -8,22 +8,27 @@ import { SchemaType } from '../../schema'
 import { BlockProps } from '../../types'
 
 const Military = ({ disabled = false }: BlockProps) => {
-  const { watch } = useFormContext<SchemaType>()
+  const { watch, setValue } = useFormContext<SchemaType>()
   const hasMilitaryExperience = watch('hasMilitaryExperience')
   return (
     <BlockHeading title="Military">
       <RadioFieldWithError
         field="hasMilitaryExperience"
-        label="Patient has military experience"
+        label="Patient has military experience."
         options={DOES_OPTIONS}
         disabled={disabled}
+        onChange={(val) => {
+          if (val !== 'does') {
+            setValue('militaryBranch', '')
+          }
+        }}
         required
       />
 
       {hasMilitaryExperience === 'does' && (
         <DetailsField
           field="militaryBranch"
-          label="Patient was enlisted in"
+          label="Patient was enlisted in:"
           disabled={disabled}
           containerClassName="flex-row item-center"
           className="min-h-5 !max-w-96"

@@ -119,6 +119,7 @@ enum ServiceType {
   PartialHospital = 'PartialHospital',
   SkilledNursingFacility = 'SkilledNursingFacility',
   UDS = 'Uds',
+  NeuropsychologicalEvaluation = 'NeuropsychologicalEvaluation',
 }
 
 enum ProviderType {

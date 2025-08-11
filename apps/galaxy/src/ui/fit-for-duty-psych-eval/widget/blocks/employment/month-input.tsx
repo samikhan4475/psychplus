@@ -16,7 +16,7 @@ const MonthInput = ({ disabled = false }: BlockProps) => {
   const form = useFormContext<SchemaType>()
   const options = useMemo(() => generateMonthOptions(MONTH_LABELS), [])
   return (
-    <FormFieldContainer className="flex flex-row items-center gap-2">
+    <FormFieldContainer className="flex-row items-center gap-2">
       <FormFieldLabel>Month</FormFieldLabel>
       <SelectInput
         field="employedSinceMonth"
@@ -24,8 +24,9 @@ const MonthInput = ({ disabled = false }: BlockProps) => {
         disabled={disabled}
         buttonClassName="w-[95px]"
         onValueChange={(value) => {
-          form.setValue('employedSinceMonth', value)
-          form.trigger('employedSinceMonth')
+          form.setValue('employedSinceMonth', value, {
+            shouldValidate: true,
+          })
         }}
       />
       <FormFieldError name="employedSinceMonth" />

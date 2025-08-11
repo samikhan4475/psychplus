@@ -20,11 +20,20 @@ const GenericTemplateRenderer = ({
 
   return (
     <BlockContainer heading={heading}>
-      {paragraphs.map((text, idx) => (
-        <Text key={heading + idx} className="mb-4 text-2">
-          {text?.trim()}
-        </Text>
-      ))}
+      {paragraphs.map((text, idx) => {
+        const trimmed = text.trim()
+        const isBullet = trimmed.startsWith('•')
+
+        return (
+          <Text
+            key={heading + idx}
+            as="p"
+            className={`mb-4 text-2 ${isBullet ? 'pl-3.5 -indent-[11px]' : ''}`}
+          >
+            {trimmed}
+          </Text>
+        )
+      })}
     </BlockContainer>
   )
 }

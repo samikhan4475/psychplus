@@ -26,6 +26,7 @@ import { MseWidgetClientLoader } from '../mse/mse-widget/mse-widget-client-loade
 import { PastMedicalHxClientLoader } from '../past-medical-hx/past-medical-hx-widget/past-medical-hx-client-loader'
 import { PastPsychHxClientLoader } from '../past-psych-hx/past-psych-hx-widget/past-psych-hx-client-loader'
 import { PhysicalExamWidgetClientLoader } from '../physical-exam/physical-exam-widget/physical-exam-widget-client-loader'
+import { PreEmploymentClientLoader } from '../pre-employment-psych-eval/widget/client-loader'
 import { EctWidgetClientLoader } from '../procedures/ect-tab/ect-widget-client-loader'
 import { SpravatoWidgetClientLoader } from '../procedures/spravato-tab/spravato-widget-client-loader'
 import { TmsWidgetClientLoader } from '../procedures/tms-tab/tms-widget-client-loader'
@@ -43,6 +44,7 @@ import { CodesDetailsClientView } from './actual-note-view/codes/codes-details-c
 import { EctDetailClientView } from './actual-note-view/ect/ect-detail-client-view'
 import { FamilyInternalMedicineAssessmentPlanClientView } from './actual-note-view/family-internal-medicine-assessment-plan/family-internal-medicine-assessment-plan-client-view'
 import { FamilyPsychDetailClientView } from './actual-note-view/family-psych-hx/family-psych-detail-client-view'
+import { FitForDutyActualNoteView } from './actual-note-view/fit-for-duty-psych-eval'
 import { FollowUpClient } from './actual-note-view/follow-up/follow-up-client-view'
 import { HospitalDischargeClientView } from './actual-note-view/hospital-discharge/hospital-discharge-client-view'
 import { HospitalInitialClientView } from './actual-note-view/hospital-initial/hospital-initial-client-view'
@@ -75,7 +77,7 @@ import { WorkingDiagnosisClientView } from './actual-note-view/working-diagnosis
 import { WorkingDischargeDiagnosisClientView } from './actual-note-view/working-discharge-diagnosis'
 import { QuickNoteSectionName } from './constants'
 import { WidgetType } from './types'
-import { FitForDutyActualNoteView } from './actual-note-view/fit-for-duty-psych-eval'
+import { PreEmploymentActualNoteView } from './actual-note-view/pre-employment'
 
 enum ProviderType {
   Psychiatry = 'Psychiatrist',
@@ -284,6 +286,11 @@ const widgets: Array<WidgetType> = [
     id: QuickNoteSectionName.QuicknoteSectionFitForDutyPsychEval,
     actualNoteComponent: FitForDutyActualNoteView,
   },
+  {
+    component: PreEmploymentClientLoader,
+    id: QuickNoteSectionName.QuicknoteSectionPreEmployment,
+    actualNoteComponent: PreEmploymentActualNoteView,
+  },
 ]
 
 const getWidgetsByVisitType = (
@@ -377,6 +384,7 @@ const widgetErrorsMap = {
   WorkingDischargeDiagnosis: 'Working Discharge Diagnosis.',
   SafetyPlanningIntervention: 'Safety Planning Intervention.',
   FitnessForDuty: 'Fit-For- Duty Psych Evaluation',
+  PreEmployment: 'Pre-Employment Psych Evaluation',
 }
 
 const TherapyVisitTypeNames: Partial<Record<VisitTypeEnum, string>> = {

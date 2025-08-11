@@ -9,7 +9,7 @@ import { BlockProps } from '../../types'
 import { ReferringOrganizationInput } from './referring-organization-input'
 
 const ReferringOrganizationRadio = ({ disabled = false }: BlockProps) => {
-  const { watch } = useFormContext<SchemaType>()
+  const { watch, setValue } = useFormContext<SchemaType>()
   const referringOrganization = watch('referringOrganization')
   return (
     <Flex align="start" gap="2">
@@ -22,6 +22,11 @@ const ReferringOrganizationRadio = ({ disabled = false }: BlockProps) => {
         lastOptionIndicator
         errorField="referringOrganization"
         shouldTriggerOnChange
+        onChange={(val) => {
+          if (val === 'other') {
+            setValue('referringOrganizationOtherDetails', '')
+          }
+        }}
       />
       {referringOrganization === 'other' && (
         <ReferringOrganizationInput disabled={disabled} />

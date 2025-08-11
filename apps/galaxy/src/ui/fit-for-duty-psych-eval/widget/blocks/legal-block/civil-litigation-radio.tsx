@@ -7,7 +7,7 @@ import { SchemaType } from '../../schema'
 import { BlockProps } from '../../types'
 
 const CivilLitigationRadio = ({ disabled = false }: BlockProps) => {
-  const { watch } = useFormContext<SchemaType>()
+  const { watch, setValue } = useFormContext<SchemaType>()
   const hasCivilLitigation = watch('hasCivilLitigation')
   return (
     <>
@@ -16,12 +16,17 @@ const CivilLitigationRadio = ({ disabled = false }: BlockProps) => {
         label="Patient has been involved in civil litigation."
         options={HAS_OPTIONS}
         disabled={disabled}
+        onChange={(val) => {
+          if (val !== 'has') {
+            setValue('civilLitigationDetails', '')
+          }
+        }}
         required
       />
 
       {hasCivilLitigation === 'has' && (
         <DetailsField
-          label="Describe the situation that led to this litigation"
+          label="Describe the situation that led to this litigation:"
           field="civilLitigationDetails"
           disabled={disabled}
           className="min-h-11"

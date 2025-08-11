@@ -17,7 +17,7 @@ const Education = ({ disabled = false }: BlockProps) => {
       />
 
       <DetailsField
-        label="Describe the next steps patient did following high school in terms of education"
+        label="Describe the next steps patient did following high school in terms of education."
         maxLength={1200}
         className="min-h-11"
         field="postHighSchoolEducation"

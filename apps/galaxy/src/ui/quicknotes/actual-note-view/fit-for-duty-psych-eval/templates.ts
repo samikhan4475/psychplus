@@ -1,12 +1,14 @@
+import { TemplateSection } from '@/ui/fit-for-duty-psych-eval/widget/types'
+
 const INTRODUCTION_AND_IDENTIFICATION_TEMPLATE = `
-((patientName)) was referred by ((referringOrganization|upper)). The subject was tested and interviewed on ((appointmentDate|date)). The principal examiner was ((providerName)) and was unassisted in this examination. The purpose of this examination was to determine the presence, if any, of emotional or intellectual characteristics which would detrimentally affect the subject’s performance as a ((intervieweeRole|upper)).<<BREAK>>
-Factors considered include intelligence, judgment, freedom from emotional disorder incompatible with effective performance in a public safety role, personality traits related to teamwork, impulse control, openness to direction and criticism, persistence in difficult or repetitive tasks, and willingness to provide service. Also assessed were attitudes, toward the use of force, presence of bias, writing ability, and other characteristics deemed critical for the role of ((intervieweeRole|upper)).<<BREAK>>
-((patientName)) is of ((patientHeightCategory|lower)) height and has a ((patientFrameSize|lower)) frame with a ((patientBodyBuild|lower)) build. ((he)) is reportedly ((heightFeet))ft ((heightFeet))in in height and weighs ((patientWeight)) pounds. The subject, ((wasOnTime|lower)) on time for their appointment. ((she)) was dressed ((dressed|lower)) for this visit and was ((looked|lower)). Rapport ((rapportEstablished|lower)) easily established and ((she)) ((eyeContact|lower)) maintain good eye contact and speech ((speechArticulate|lower)) articulate and coherent. ((patientName)) ((politeCooperative|lower)) polite and cooperative throughout the interview and assessment. ((she)) ((relaxedConfident|lower)) appear to be relaxed and confident upon introductions and ((spokeFreely|lower)) speak freely during questing and conversation. The subject, interpersonal and verbal skills were deemed to be ((verbalSkills|lower)). Affect ((affectAppropriate|lower)) normal and appropriate to the situation. The subject’s presentation ((presentationValid|lower)) judged to have been authentic and valid.<<BREAK>>
-The subject’s stream of thought, as manifested by their speech ((thoughtStreamNormal|lower)) free from associational disturbance and they ((articulateThoughts|lower)) able to articulate their thoughts in an appropriate manner. ((she)) ((alertOriented|lower)) alert, and oriented to person, place and time. There ((memoryImpairment|lower)) indication of impairment in recent or remote memory, and immediate recall ((immediateRecall|lower)) appear to be intact. Concentration and attention ((concentrationAttention|lower)) within normal limits. There ((psychDisturbance|lower)) report or indication that the subject suffers from aberrant perceptual phenomena, psychotic thought process, or other forms of serious psychological disturbance. ((she)) ((suicidalIdeation|lower)) the experience of suicidal or homicidal ideation.
+((patientName)) was referred by ((referringOrganization)). The subject was tested and interviewed on ((appointmentDate|date)). The principal examiner was ((providerName)) and was unassisted in this examination. The purpose of this examination was to determine the presence, if any, of emotional or intellectual characteristics which would detrimentally affect the subject’s performance as a ((intervieweeRole)).<<BREAK>>
+Factors considered include intelligence, judgment, freedom from emotional disorder incompatible with effective performance in a public safety role, personality traits related to teamwork, impulse control, openness to direction and criticism, persistence in difficult or repetitive tasks, and willingness to provide service. Also assessed were attitudes, toward the use of force, presence of bias, writing ability, and other characteristics deemed critical for the role of ((intervieweeRole)).<<BREAK>>
+((patientName)) is of ((patientHeightCategory|lower)) height and has a ((patientFrameSize|lower)) frame with a ((patientBodyBuild|lower)) build. ((he)) is reportedly ((heightFeet))ft ((heightInches))in in height and weighs ((patientWeight)) pounds. The subject, ((wasOnTime|lower)) on time for their appointment. ((he)) was dressed ((dressed|lower)) for this visit and was ((looked|lower)). Rapport ((rapportEstablished|lower)) easily established and ((she)) ((eyeContact|lower)) maintain good eye contact and speech ((speechArticulate|lower)) articulate and coherent. ((patientName)) ((politeCooperative|lower)) polite and cooperative throughout the interview and assessment. ((he)) ((relaxedConfident|lower)) appear to be relaxed and confident upon introductions and ((spokeFreely|lower)) speak freely during questing and conversation. The subject's interpersonal and verbal skills were deemed to be ((verbalSkills|lower)). Affect ((affectAppropriate|lower)) normal and appropriate to the situation. The subject’s presentation ((presentationValid|lower)) judged to have been authentic and valid.<<BREAK>>
+The subject’s stream of thought, as manifested by their speech ((thoughtStreamNormal|lower)) free from associational disturbance and they ((articulateThoughts|lower)) able to articulate their thoughts in an appropriate manner. ((he)) ((alertOriented|lower)) alert, and oriented to person, place and time. There ((memoryImpairment|lower)) indication of impairment in recent or remote memory, and immediate recall ((immediateRecall|lower)) appear to be intact. Concentration and attention ((concentrationAttention|lower)) within normal limits. There ((psychDisturbance|lower)) report or indication that the subject suffers from aberrant perceptual phenomena, psychotic thought process, or other forms of serious psychological disturbance. ((he)) ((suicidalIdeation|lower)) the experience of suicidal or homicidal ideation.
 `
 
 const REASON_FOR_REFERRAL_TEMPLATE = `
-The examinee was referred for a psychological opinion regarding their ability to perform the duties required of a ((intervieweeRole|upper)). This occurred because on ((dateOfIncident|date)) ((patientName)) was involved in an office-involved shooting, during which ((she)) discharged ((her)) weapon and ((sustainedInjury|lower)) sustain ((injurySeverity)) injury ((injuryLocation)). ((She)) ((onAdministrativeDuty|lower)) been on administrative duty since that time. Thus, the question is whether the examinee is fit to continue duty without any restrictions or whether there are needed interventions that will enable them to function in an appropriate manner as a ((intervieweeRole|upper)).
+The examinee was referred for a psychological opinion regarding their ability to perform the duties required of a ((intervieweeRole)). This occurred because on ((dateOfIncident|date)) ((patientName)) was involved in an office-involved shooting, during which ((she)) discharged ((his)) weapon and ((sustainedInjury|lower)) sustain ((injurySeverity)) injury((injuryLocation|prefixIfPresent)). ((he)) ((onAdministrativeDuty|lower)) been on administrative duty since that time. Thus, the question is whether the examinee is fit to continue duty without any restrictions or whether there are needed interventions that will enable them to function in an appropriate manner as a ((intervieweeRole)).
 `
 const REVIEW_OF_RECORDS_TEMPLATE = `
 The department forwarded a description of the incident at the time of referral. This stated that, “((incidentDescription))”.`
@@ -23,15 +25,14 @@ KNOWINGLY IMPINGED UPON AREAS PROPOSED FOR LITIGATION.
 `
 
 const HISTORY_TEMPLATE = `
-((patientName)) is a ((patientAge)) year old ((relationshipStatus)) ((gender|lower)) currently living in ((currentCity)). ((She)) ((hasChildren|lower)) have children.`
+((patientName)) is a ((patientAge)) year old ((relationshipStatus|lower)) ((gender|lower)) currently living in ((currentCity)). ((he)) ((hasChildren|lower)) have children.`
 
 const EMPLOYMENT_TEMPLATE = `
-The subject has worked for the state department since ((employedSinceMonth)), ((employedSinceYear)). Prior to that, they worked for ((priorPosition)) for ((positionDuration)). They ((hadDisciplinary)) had disciplinary write-ups/actions while employed((disciplinaryIncident|prependColonIfPresent)).<<BREAK>>
-  
-((handgunDescription))`
+The subject has worked for the state department since ((employedSinceMonth)), ((employedSinceYear)). Prior to that, they worked as a ((priorPosition)) for ((positionDuration)). They ((hadDisciplinary|lower)) had disciplinary write-ups/actions while employed((disciplinaryIncident|prependColonIfPresent)). ((handgunDescription))
+  `
 
 const MILITARY_TEMPLATE = `
-((patientName)) ((hasMilitaryExperience|lower)) report having military experience((militaryBranch|prependEnlistIfPresent)).
+((patientName)) ((hasMilitaryExperience|lower)) report having military experience. ((didEnlistedIn)) ((militaryBranch|withOptionalDot))
 `
 const MEDICAL_TEMPLATE = `
 The subject ((hasAnxietyHistory|lower)) have a history of anxiety. They ((hasDepressionHistory|lower)) have a history of depression and ((hasHeadInjuryHistory|lower)) have any history of a head injury. ((patientName)) ((hasLifeThreateningInjuryHistory|lower)) having a life-threatening injury or illness in the past five years.
@@ -42,26 +43,26 @@ const LEGAL_TEMPLATE = `
 const FAMILY_HISTORY_TEMPLATE = `((familyHistoryDetails))`
 
 const EDUCATION_TEMPLATE = `
-((patientName)) reports that they were ((highSchoolPerformance)) student in high school. ((postHighSchoolEducation))
+((patientName)) reports that they were ((highSchoolPerformance|lower)) student in high school. ((postHighSchoolEducation|lower))
 `
 
 const ALCOHOL_AND_DRUGS_TEMPLATE = `
-((patientName)) reported drinking ((alcoholFrequency)) times per week and consuming ((drinksPerSitting)) beverages at each sitting. In the last year the greatest number of drinks consumed on occasion, according to the subject, is ((maxAlcoholConsumed)). ((he)) reports that there ((concernAboutDrinking|lower)) been expressed concern about their current drinking habits and that there ((historyOfDrinkingProblems|lower)) history of problems related to drinking. ((he)) ((alcoholTreatmentHistory|lower)) been in an alcohol treatment program((alcoholTreatmentProgram)). ((patientName)) ((useOfIllicitDrugs)) involvement with illicit or illegal drugs, and ((marijuanaWhileEmployed|lower)) used marijuana while employed with the state. Furthermore, the subject ((useOfEnhancingDrugs|lower)) used steroids, human growth hormone or other illicit performance enhancing drugs.
+((patientName)) reported drinking ((alcoholFrequency|splitNumberLower)) times per week and consuming ((drinksPerSitting|splitNumberLower)) beverages at each sitting. In the last year the greatest number of drinks consumed on occasion, according to the subject, is ((maxAlcoholConsumed)). ((he)) reports that there ((concernAboutDrinking|lower)) been expressed concern about their current drinking habits and that there ((historyOfDrinkingProblems|lower)) history of problems related to drinking. ((he)) ((alcoholTreatmentHistory|lower)) been in an alcohol treatment program((alcoholTreatmentProgram|prefixColon)). ((patientName)) ((useOfIllicitDrugs)) involvement with illicit or illegal drugs, and ((marijuanaWhileEmployed|lower)) used marijuana while employed with the state. Furthermore, the subject ((useOfEnhancingDrugs|lower)) used steroids, human growth hormone or other illicit performance enhancing drugs.
 `
 const IMPULSE_CONTROL_TEMPLATE = `
-((patientName)) ((historyOfViolenceAsAdult)) any history of fighting or violence as an adult and ((historyOfDomesticViolence)) have a history of domestic violence. ((He)) ((reportsImpulsivity)) impulsivity in spending, speech or reckless behavior. The subject ((hasBankruptcyOrPoorCredit|lower)) been bankrupt and depicted his credit history as good.
+((patientName)) ((historyOfViolenceAsAdult)) history of fighting or violence as an adult and ((historyOfDomesticViolence|lower)) have a history of domestic violence. ((he)) ((reportsImpulsivity)) impulsivity in spending, speech or reckless behavior. The subject ((hasBankruptcyOrPoorCredit|lower)) been bankrupt and depicted his credit history as good.
 `
 const COLLATERAL_INTERVIEWS_TEMPLATE = `((higherUpSummary))
 `
 
 const SUMMARY_AND_RECOMMENDATIONS_TEMPLATE = `
-((patientName)) is a ((age)) year old ((relationshipStatus)) ((gender|lower)), who has worked as a ((intervieweeRole)) for the Department of Safety since ((employedSinceMonth)), ((employedSinceYear)).<<BREAK>>
-((summaryRecommendation))
+((patientName)) is a ((patientAge)) year old ((relationshipStatus)) ((gender|lower)), who has worked as a ((intervieweeRole)) for the Department of Safety since ((employedSinceMonth)), ((employedSinceYear)).<<BREAK>>
+((summaryRecommendation|withOptionalDot))<<BREAK>>
 Based upon these results it is concluded and recommended that:<<BREAK>>
-1: ((patientName)) ((isFitForDuty|lower)) fit for duty as a ((intervieweeRole)). That is ((he)) ((hasPsychologicalDisorderAffectingFunction|lower)) suffering from a clinically significant, diagnosable psychological disorder that would limit their ability to perform the essential functions of the job or pose a direct threat to the health and safety of themself or others.<<BREAK>>
+1: ((patientName)) ((isFitForDuty|lower)) fit for duty as a ((intervieweeRole)). That is ((she)) ((hasPsychologicalDisorderAffectingFunction|lower)) suffering from a clinically significant, diagnosable psychological disorder that would limit their ability to perform the essential functions of the job or pose a direct threat to the health and safety of themself or others.<<BREAK>>
 2: Suicidal Risk ((isSuicidalRiskEvident)) evident.<<BREAK>>
 3: ((he)) ((isWeaponMisuseThreat)) appear to be a threat to misuse their weapon against self and others.<<BREAK>>
-4: There ((hasReasonableAccommodation|lower)) reasonable accommodations necessary that would help the subject perform differently on the job as a ((intervieweeRole)).((recommendedAccommodations))<<BREAK>>
+4: There ((hasReasonableAccommodation|lower)) reasonable accommodations necessary that would help the subject perform differently on the job as a ((intervieweeRole)). ((recommendedAccommodations))<<BREAK>>
 5: I ((providerGaveRecommendationsToSubject|lower)) detail recommendations to the subject.((didNotExplainWhy))
 `
 const IMPORTANT_INFORMATION_TEMPLATE = `
@@ -74,7 +75,7 @@ The findings in this report should not be construed as an opinion by the examine
 
 Final decisions regarding this matter and administrative actions taken must ultimately be made by the appropriate officials of the referring agency, after consideration and review of all relevant factors and background concerning this employee.
 `
-const templateSections = [
+const templateSections: TemplateSection[] = [
   {
     key: 'introduction',
     heading: 'Introduction and Identification',

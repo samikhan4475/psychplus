@@ -2,11 +2,7 @@
 
 import { Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import {
-  FormFieldContainer,
-  FormFieldError,
-  RadioSelectSection,
-} from '@/components'
+import { FormFieldError, RadioSelectSection } from '@/components'
 import { BlockHeading } from '../../block-heading'
 import { RadioFieldWithError } from '../../components'
 import {
@@ -33,6 +29,14 @@ const ReasonForReferral = ({ disabled = false }: BlockProps) => {
           disabled={disabled}
           required
           errorField="sustainedInjury"
+          onChange={(val) => {
+            if (val !== 'did') {
+              form.setValue('injuryLocation', '')
+              form.setValue('injurySeverity', '')
+            } else {
+              form.setValue('injurySeverity', 'minor')
+            }
+          }}
           shouldTriggerOnChange
         />
 
@@ -51,18 +55,13 @@ const ReasonForReferral = ({ disabled = false }: BlockProps) => {
         <FormFieldError name="sustainedInjury" />
       </Flex>
 
-      <FormFieldContainer className="flex-row items-center gap-1">
-        <RadioSelectSection
-          field="onAdministrativeDuty"
-          label="Patient has been on administrative duty?"
-          options={HAS_OPTIONS}
-          disabled={disabled}
-          required
-          errorField="onAdministrativeDuty"
-          shouldTriggerOnChange
-        />
-        <FormFieldError name="onAdministrativeDuty" />
-      </FormFieldContainer>
+      <RadioFieldWithError
+        label="Patient has been on administrative duty?"
+        field="onAdministrativeDuty"
+        options={HAS_OPTIONS}
+        disabled={disabled}
+        required
+      />
     </BlockHeading>
   )
 }

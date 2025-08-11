@@ -9,7 +9,7 @@ import { BlockProps } from '../../types'
 
 const IntervieweeRoleInput = ({ disabled = false }: BlockProps) => {
   return (
-    <FormFieldContainer className="flex flex-row gap-2">
+    <FormFieldContainer className="flex-row gap-2">
       <AutoResizeInput
         field="intervieweeRoleOtherDetails"
         className="!min-w-32"

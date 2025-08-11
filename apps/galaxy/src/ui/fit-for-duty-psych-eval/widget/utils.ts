@@ -1,11 +1,21 @@
 import { DateValue } from 'react-aria-components'
 import { Gender } from '@/types'
-import { formatDateManually, VisitTypeEnum } from '@/utils'
-import { TemplateValues } from './types'
+import { PatientVital } from '@/ui/vitals'
+import {
+  convertInchesToFeetAndInches,
+  formatDateManually,
+  VisitTypeEnum,
+} from '@/utils'
+import {
+  IsAllowedArgs,
+  RangeRule,
+  SupportsVitals,
+  TemplateValues,
+} from './types'
 
 const getInitialValues = () => ({
   // Patient Description
-  patientHeightCategory: '',
+  patientHeightCategory: 'average',
   patientFrameSize: '',
   patientBodyBuild: '',
   heightInches: '',
@@ -17,32 +27,32 @@ const getInitialValues = () => ({
   intervieweeRole: '',
   intervieweeRoleOtherDetails: '',
   // Patient Appointment
-  wasOnTime: '',
-  dressed: '',
-  looked: '',
-  rapportEstablished: '',
+  wasOnTime: 'was',
+  dressed: 'appropriately',
+  looked: 'groomed',
+  rapportEstablished: 'was',
   eyeContact: '',
-  speechArticulate: '',
-  politeCooperative: '',
-  relaxedConfident: '',
-  spokeFreely: '',
-  verbalSkills: '',
-  affectAppropriate: '',
-  presentationValid: '',
-  thoughtStreamNormal: '',
-  articulateThoughts: '',
-  alertOriented: '',
-  memoryImpairment: '',
-  immediateRecall: '',
-  concentrationAttention: '',
-  psychDisturbance: '',
-  suicidalIdeation: '',
+  speechArticulate: 'was',
+  politeCooperative: 'was',
+  relaxedConfident: 'did',
+  spokeFreely: 'did',
+  verbalSkills: 'average',
+  affectAppropriate: 'was',
+  presentationValid: 'was',
+  thoughtStreamNormal: 'was',
+  articulateThoughts: 'were',
+  alertOriented: 'was',
+  memoryImpairment: 'wasNo',
+  immediateRecall: 'did',
+  concentrationAttention: 'is',
+  psychDisturbance: 'is',
+  suicidalIdeation: 'denied',
   // Reason for Referral
   dateOfIncident: null as DateValue | null,
-  sustainedInjury: '',
+  sustainedInjury: 'didNot',
   injurySeverity: '',
   injuryLocation: '',
-  onAdministrativeDuty: '',
+  onAdministrativeDuty: 'has',
   //Review of Records
   incidentDescription: '',
   //History
@@ -54,25 +64,25 @@ const getInitialValues = () => ({
   employedSinceYear: '',
   priorPosition: '',
   positionDuration: '',
-  hadDisciplinary: '',
+  hadDisciplinary: 'haveNot',
   disciplinaryIncident: '',
   handgunDescription: '',
   //Military
-  hasMilitaryExperience: '',
+  hasMilitaryExperience: 'doesNot',
   militaryBranch: '',
   //Medical
-  hasAnxietyHistory: '',
-  hasDepressionHistory: '',
-  hasHeadInjuryHistory: '',
-  hasLifeThreateningInjuryHistory: '',
+  hasAnxietyHistory: 'doesNot',
+  hasDepressionHistory: 'doNot',
+  hasHeadInjuryHistory: 'doesNot',
+  hasLifeThreateningInjuryHistory: 'denies',
   //Legal
-  hasLegalHistory: '',
+  hasLegalHistory: 'doesNot',
   legalHistoryDetails: '',
-  hasRestrainingOrder: '',
+  hasRestrainingOrder: 'haveNot',
   restrainingOrderDetails: '',
-  hasCivilLitigation: '',
+  hasCivilLitigation: 'hasNot',
   civilLitigationDetails: '',
-  motorVehicleRecord: '',
+  motorVehicleRecord: 'unremarkable',
   motorVehicleRecordDetails: '',
   //Family History
   familyHistoryDetails: '',
@@ -83,13 +93,13 @@ const getInitialValues = () => ({
   alcoholFrequency: '',
   drinksPerSitting: '',
   maxAlcoholConsumed: '',
-  concernAboutDrinking: '',
-  historyOfDrinkingProblems: '',
-  alcoholTreatmentHistory: '',
+  concernAboutDrinking: 'hasNot',
+  historyOfDrinkingProblems: 'isNo',
+  alcoholTreatmentHistory: 'hasNot',
   alcoholTreatmentProgram: '',
-  useOfIllicitDrugs: '',
-  marijuanaWhileEmployed: '',
-  useOfEnhancingDrugs: '',
+  useOfIllicitDrugs: 'denies',
+  marijuanaWhileEmployed: 'hasNot',
+  useOfEnhancingDrugs: 'hasNot',
   //Collateral Interviews
   higherUpSummary: '',
   //Results of Interview
@@ -97,18 +107,18 @@ const getInitialValues = () => ({
   //Summary and Recommendation
   summaryRecommendation: '',
   //Impulse Control'
-  historyOfViolenceAsAdult: '',
-  historyOfDomesticViolence: '',
-  reportsImpulsivity: '',
-  hasBankruptcyOrPoorCredit: '',
+  historyOfViolenceAsAdult: 'denied',
+  historyOfDomesticViolence: 'doesNot',
+  reportsImpulsivity: 'denied',
+  hasBankruptcyOrPoorCredit: 'hasNever',
   //Conclusion
-  isFitForDuty: '',
-  hasPsychologicalDisorderAffectingFunction: '',
-  isSuicidalRiskEvident: '',
-  isWeaponMisuseThreat: '',
-  hasReasonableAccommodation: '',
+  isFitForDuty: 'is',
+  hasPsychologicalDisorderAffectingFunction: 'isNot',
+  isSuicidalRiskEvident: 'isNot',
+  isWeaponMisuseThreat: 'doesNot',
+  hasReasonableAccommodation: 'areNo',
   recommendedAccommodations: '',
-  providerGaveRecommendationsToSubject: '',
+  providerGaveRecommendationsToSubject: 'didNot',
 })
 const formatValue = (
   value?: string,
@@ -150,11 +160,32 @@ const getFormattedValue = (
 const getPronoun = (gender: Gender) => {
   const g = gender?.toLowerCase()
   if (g === 'male') {
-    return { he: 'He', his: 'His', she: 'he' }
+    return {
+      he: 'He',
+      his: 'his',
+      His: 'His',
+      she: 'he',
+      him: 'him',
+      Her: 'His',
+    }
   } else if (g === 'female') {
-    return { he: 'She', his: 'Her', she: 'she' }
+    return {
+      he: 'She',
+      his: 'her',
+      His: 'Her',
+      she: 'she',
+      him: 'her',
+      Her: 'Her',
+    }
   } else {
-    return { he: 'Subject', his: 'Subject', she: 'subject' }
+    return {
+      he: 'Subject',
+      His: 'Subject',
+      she: 'subject',
+      him: 'subject',
+      Her: 'Subject',
+      his: 'subject',
+    }
   }
 }
 
@@ -198,15 +229,31 @@ const interpolateTemplate = (
         return str ? ` — they were enlisted in ${str}` : ''
       }
       if (modifier === 'fixHave') {
-        const str = String(val)
+        const str = String(val).toLowerCase()
         if (str === 'does') return 'does have'
         if (str === 'does not') return 'does not have'
         return str
+      }
+      if (modifier === 'prefixIfPresent') {
+        const str = String(val ?? '').trim()
+        return str ? ` ${str}` : ''
+      }
+      if (modifier === 'appendDotIfPresent') {
+        const str = String(val ?? '').trim()
+        return str ? '.' : ''
+      }
+      if (modifier === 'withOptionalDot') {
+        const str = String(val ?? '').trim()
+        if (!str) return ''
+        return str.endsWith('.') ? str : `${str}.`
       }
 
       if (modifier === 'prefixColon') {
         if (!val || String(val).trim() === '') return ''
         return `: ${val}`
+      }
+      if (modifier === 'bullet') {
+        return `• ${val}`
       }
       let opts = undefined
       if (modifier === 'upper') {
@@ -214,6 +261,15 @@ const interpolateTemplate = (
       }
       if (modifier === 'lower') {
         opts = { lowerCase: true }
+      }
+      if (modifier === 'splitNumberLower') {
+        const str = String(val)
+        const match = str.match(/^([a-zA-Z]+)(\d+)$/)
+        if (match) {
+          const [, word, number] = match
+          return `${word.replace(/([A-Z])/g, ' $1').toLowerCase()} ${number}`
+        }
+        return str.toLowerCase()
       }
 
       return formatValue(val as string, opts)
@@ -236,8 +292,109 @@ const generateMonthOption = (labels: string[]) => {
 }
 
 const isNeuroPsychVisit = (visitType: string) => {
-  return visitType === VisitTypeEnum.FitnessForDuty
+  return [VisitTypeEnum.FitnessForDuty, VisitTypeEnum.PreEmployment].includes(
+    visitType as VisitTypeEnum,
+  )
 }
+
+const applyPatientVitals = <T extends SupportsVitals>(
+  result: T,
+  patientVitals?: PatientVital,
+): T => {
+  if (!patientVitals) return result
+
+  const { weightPounds, heightInches } = patientVitals
+
+  if (!result?.patientWeight && weightPounds !== null) {
+    const weightStr = String(weightPounds)
+    result.patientWeight = weightStr.length > 3 ? '' : weightStr
+  }
+
+  if (
+    (!result?.heightFeet || !result?.heightInches) &&
+    heightInches !== null &&
+    !Number.isNaN(heightInches)
+  ) {
+    const { feet, inches } = convertInchesToFeetAndInches(Number(heightInches))
+    console.log(feet, inches)
+    const feetStr = String(feet)
+    if (feetStr.length > 2) return result
+    if (!result?.heightFeet) {
+      result.heightFeet = feetStr
+      result.heightInches =
+        inches !== null && !Number.isNaN(inches)
+          ? `${inches}`.replace(/^(\d{2})\.(\d).*/, '$1.$2')
+          : '00'
+    }
+  }
+
+  return result
+}
+
+const decorateEmptyInitialValues = <T extends object>(obj: T): T =>
+  Object.keys(obj).reduce((acc, key) => {
+    const val = obj[key as keyof T]
+    return {
+      ...acc,
+      [key]:
+        val === null || (typeof val === 'object' && val !== null) ? null : '',
+    }
+  }, {} as T)
+
+const numericLengthConstraint = ({
+  maxDigits,
+  maxDecimalPlaces,
+}: {
+  maxDigits: number
+  maxDecimalPlaces: number
+}) => {
+  return ({ value, floatValue }: { value: string; floatValue?: number }) => {
+    if (value === '') return true
+
+    const [, decPart = ''] = value.split('.')
+
+    const digitCount = value.replace('.', '').length
+    const endsWithDot = value.endsWith('.')
+
+    if (digitCount > maxDigits) return false
+
+    if (endsWithDot && digitCount === maxDigits) return false
+
+    if (decPart.length > maxDecimalPlaces) return false
+
+    return !isNaN(floatValue ?? NaN)
+  }
+}
+const numericRangeConstraint =
+  ({
+    min,
+    max,
+    decimals,
+    allowEmpty = true,
+    allowTrailingDot = true,
+  }: RangeRule) =>
+  ({ value, floatValue }: IsAllowedArgs) => {
+    if (allowEmpty && value === '') return true
+
+    if (!/^\d+(\.\d*)?$/.test(value)) return false
+
+    const [, dec = ''] = value.split('.')
+
+    if (decimals === 0 && value.includes('.')) return false
+    if (dec.length > decimals) return false
+
+    if (allowTrailingDot && value.endsWith('.')) {
+      const intVal = Number(value.slice(0, -1))
+      if (Number.isNaN(intVal)) return false
+      return intVal >= Math.ceil(min) && intVal <= Math.floor(max)
+    }
+
+    const num = floatValue ?? Number(value)
+    if (Number.isNaN(num)) return false
+
+    return num >= min && num <= max
+  }
+
 export {
   getInitialValues,
   formatValue,
@@ -248,4 +405,8 @@ export {
   generateYearOptions,
   generateMonthOption,
   isNeuroPsychVisit,
+  applyPatientVitals,
+  decorateEmptyInitialValues,
+  numericLengthConstraint,
+  numericRangeConstraint,
 }

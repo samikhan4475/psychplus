@@ -38,6 +38,7 @@ import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { isHospitalCareVisit, visitTypeToWidgets } from '@/utils'
 import { WidgetType } from '../types'
 import { FitForDutyActualNoteView } from '@/ui/quicknotes/actual-note-view/fit-for-duty-psych-eval'
+import { PreEmploymentActualNoteView } from '@/ui/quicknotes/actual-note-view/pre-employment'
 
 enum ProviderType {
   Psychiatry = 'Psychiatrist',
@@ -196,6 +197,10 @@ const widgetsArray: Array<WidgetType> = [
   {
     id: QuickNoteSectionName.QuicknoteSectionFitForDutyPsychEval,
     actualNoteDetailComponent: FitForDutyActualNoteView,
+  },
+  {
+    id: QuickNoteSectionName.QuicknoteSectionPreEmployment,
+    actualNoteDetailComponent: PreEmploymentActualNoteView,
   },
 ]
 

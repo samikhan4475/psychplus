@@ -69,8 +69,8 @@ enum QuickNoteSectionName {
   QuickNoteSectionCopsR = 'QuicknoteSectionQuestionnaireCopsR',
   QuicknoteSectionFitForDutyPsychEval = 'QuicknoteSectionFitForDutyPsychEval',
   QuickNoteSectionAdultAsrs = 'QuicknoteSectionQuestionnaireAdultAsrs',
+  QuicknoteSectionPreEmployment = 'QuicknoteSectionPreEmployment',
 }
-
 const questionnairesAddToNotesSection = [
   QuickNoteSectionName.QuestionnaireActualNoteView,
   `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionPhq9}`,

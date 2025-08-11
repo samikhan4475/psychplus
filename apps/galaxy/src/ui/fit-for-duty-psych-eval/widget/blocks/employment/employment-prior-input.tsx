@@ -10,8 +10,8 @@ import { BlockProps } from '../../types'
 
 const EmploymentPriorInput = ({ disabled = false }: BlockProps) => {
   return (
-    <FormFieldContainer className="flex flex-row items-center gap-2">
-      <FormFieldLabel required>
+    <FormFieldContainer className="flex-row items-center gap-2">
+      <FormFieldLabel required className="!text-1">
         Prior to that, patient worked as a
       </FormFieldLabel>
       <AutoResizeInput

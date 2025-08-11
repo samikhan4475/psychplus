@@ -75,10 +75,7 @@ const employmentSchema = z.object({
   priorPosition: z.string().min(1, 'Required').max(20, 'Max 20 characters'),
   positionDuration: z.string().min(1, 'Required').max(20, 'Max 20 characters'),
   hadDisciplinary: z.string().min(1, 'Required'), // 'has' / 'hasNot'
-  disciplinaryIncident: z
-    .string()
-    .min(1, 'Required')
-    .max(1200, 'Max 1200 characters'),
+  disciplinaryIncident: z.string().max(1200, 'Max 1200 characters'),
   handgunDescription: z
     .string()
     .min(1, 'Required')
@@ -87,7 +84,7 @@ const employmentSchema = z.object({
 
 const militarySchema = z.object({
   hasMilitaryExperience: z.string().min(1, 'Required'), // 'has' / 'hasNot'
-  militaryBranch: z.string().min(1, 'Required').max(100, 'Max 100 characters'),
+  militaryBranch: z.string().max(100, 'Max 100 characters'),
 })
 
 const medicalSchema = z.object({
@@ -340,4 +337,10 @@ const fitForDutyEvaluationSchema = z
 
 type SchemaType = z.infer<typeof fitForDutyEvaluationSchema>
 
-export { fitForDutyEvaluationSchema, type SchemaType }
+export {
+  patientDescriptionSchema,
+  fitForDutySchema,
+  fitForDutyEvaluationSchema,
+  alcoholDrugsSchema,
+  type SchemaType,
+}

@@ -2,6 +2,7 @@
 
 import { Flex } from '@radix-ui/themes'
 import { FormFieldError, RadioSelectSection } from '@/components'
+import { cn } from '@/utils'
 
 interface RadioFieldWithErrorProps {
   field: string
@@ -10,6 +11,11 @@ interface RadioFieldWithErrorProps {
   disabled?: boolean
   required?: boolean
   shouldTriggerOnChange?: boolean
+  className?: string
+  maxWidthProps?: string
+  radioGroupClassName?: string
+  errorFieldClassName?: string
+  onChange?: (value: string) => void
 }
 
 const RadioFieldWithError = ({
@@ -19,9 +25,13 @@ const RadioFieldWithError = ({
   disabled = false,
   required = false,
   shouldTriggerOnChange = true,
+  className,
+  radioGroupClassName,
+  errorFieldClassName,
+  onChange,
 }: RadioFieldWithErrorProps) => {
   return (
-    <Flex align="center" gap="2">
+    <Flex gap="2" className={cn('items-center', className)}>
       <RadioSelectSection
         field={field}
         label={label}
@@ -30,8 +40,10 @@ const RadioFieldWithError = ({
         required={required}
         errorField={field}
         shouldTriggerOnChange={shouldTriggerOnChange}
+        radioGroupClassName={radioGroupClassName}
+        onChange={onChange}
       />
-      <FormFieldError name={field} />
+      <FormFieldError name={field} className={errorFieldClassName} />
     </Flex>
   )
 }

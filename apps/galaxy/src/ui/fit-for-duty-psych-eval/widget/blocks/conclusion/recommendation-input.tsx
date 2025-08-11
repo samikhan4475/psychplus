@@ -18,7 +18,7 @@ const RecommendationInput = ({ disabled = false }: BlockProps) => {
 
   return (
     <FormFieldContainer className="flex-1 gap-2">
-      <FormFieldLabel required>
+      <FormFieldLabel className="!text-1" required>
         My recommended accommodations are:
       </FormFieldLabel>
       <AutoResizeInput

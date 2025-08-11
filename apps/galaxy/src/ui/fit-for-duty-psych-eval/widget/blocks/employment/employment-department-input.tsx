@@ -8,8 +8,8 @@ import { YearInput } from './year-input'
 
 const EmploymentDepartmentInput = ({ disabled = false }: BlockProps) => {
   return (
-    <FormFieldContainer className="flex flex-row gap-2">
-      <FormFieldLabel required>
+    <FormFieldContainer className="flex-row gap-2">
+      <FormFieldLabel required className="!text-1">
         Patient has worked for the state department since?
       </FormFieldLabel>
       <Flex gap="2">

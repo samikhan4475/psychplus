@@ -10,8 +10,8 @@ import { BlockProps } from '../../types'
 
 const HistoryInput = ({ disabled = false }: BlockProps) => {
   return (
-    <FormFieldContainer className="flex flex-row items-center gap-2">
-      <FormFieldLabel required>
+    <FormFieldContainer className="flex-row items-center gap-2">
+      <FormFieldLabel required className="!text-1">
         What city are they currently living in?
       </FormFieldLabel>
       <AutoResizeInput

@@ -451,7 +451,7 @@ const generateYearOptions = (start: number, end: number) => {
   return Array.from({ length: end - start + 1 }, (_, i) => {
     const year = String(start + i)
     return { label: year, value: year }
-  })
+  }).reverse()
 }
 export {
   getCalendarDate,

@@ -3,11 +3,10 @@
 import { useFormContext } from 'react-hook-form'
 import { DetailsField, RadioFieldWithError } from '../../components'
 import { DOES_OPTIONS } from '../../constant'
-import { SchemaType } from '../../schema'
 import { BlockProps } from '../../types'
 
 const LegalHistoryRadio = ({ disabled = false }: BlockProps) => {
-  const { watch } = useFormContext<SchemaType>()
+  const { watch, setValue } = useFormContext()
   const hasLegalHistory = watch('hasLegalHistory')
   return (
     <>
@@ -16,12 +15,17 @@ const LegalHistoryRadio = ({ disabled = false }: BlockProps) => {
         label="Patient has a history of legal difficulties."
         options={DOES_OPTIONS}
         disabled={disabled}
+        onChange={(val) => {
+          if (val !== 'does') {
+            setValue('legalHistoryDetails', '')
+          }
+        }}
         required
       />
 
       {hasLegalHistory === 'does' && (
         <DetailsField
-          label="Describe the legal difficulties the patient has faced"
+          label="Describe the legal difficulties the patient has faced:"
           field="legalHistoryDetails"
           disabled={disabled}
           className="min-h-11"

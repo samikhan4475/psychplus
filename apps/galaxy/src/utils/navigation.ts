@@ -54,6 +54,11 @@ const getNavLinks = (
       href: '/fit-for-duty',
       conditions: [visitType === VisitTypes.FitnessForDuty],
     },
+    {
+      label: 'Pre-Employment Evaluation',
+      href: '/pre-employment',
+      conditions: [visitType === VisitTypes.PreEmployment],
+    },
     { label: 'HPI/Presenting Symptoms', href: '/hpi' },
     { label: 'History', href: '/histories' },
     { label: 'Questionnaires', href: '/questionnaires' },

@@ -28,6 +28,7 @@ enum VisitTypes {
   KetamineFourVisit = 'KetamineIV',
   UDS = 'UDS',
   FitnessForDuty = 'FitnessForDuty',
+  PreEmployment = 'PreEmployment',
 }
 
 enum VisitSequenceTypes {

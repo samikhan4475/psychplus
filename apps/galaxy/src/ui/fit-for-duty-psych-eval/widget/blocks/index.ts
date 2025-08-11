@@ -1,4 +1,7 @@
 export * from './evaluation'
 export * from './patient-description'
 export * from './appointment-details'
+export * from  './patient-description'
 export * from  './blocks'
+export * from  '../block-heading'
+export * from './legal-block'

@@ -1,55 +1,53 @@
 import { Appointment, PatientProfile } from '@/types'
-import { SchemaType as FitForDutySchemaType } from '@/ui/fit-for-duty-psych-eval/widget/schema'
-import { getFormattedValue } from '@/ui/fit-for-duty-psych-eval/widget/utils'
-import { NarrativeSection } from './narrative-section'
+import { ReferralFields } from '@/ui/fit-for-duty-psych-eval/widget/types'
+import {
+  formatValue,
+  getFormattedValue,
+} from '@/ui/fit-for-duty-psych-eval/widget/utils'
 import { ReferringOrganizationDetails } from './referring-organization'
-import { templateSections } from './templates'
 
-interface Props<T> {
+interface Props<T extends ReferralFields> {
   data: T
   appointment?: Appointment
   patientId: string
   patient?: PatientProfile
+  renderNarrativeSections: (params: {
+    data: T
+    patient?: PatientProfile
+    appointment?: Appointment
+  }) => React.ReactNode
 }
 
-const Details = ({
+const Details = <T extends ReferralFields>({
   data,
   appointment,
   patient,
-}: Props<FitForDutySchemaType>) => {
+  renderNarrativeSections,
+}: Props<T>) => {
   const referringOrganization =
     getFormattedValue(
-      data?.referringOrganization,
+      formatValue(data?.referringOrganization, { upperCaseFirst: true }),
       data?.referringOrganizationOtherDetails,
       'other',
-      { upperCaseFirst: true },
     ) ?? ''
 
   const intervieweeRole =
     getFormattedValue(
-      data?.intervieweeRole,
+      formatValue(data?.intervieweeRole, { upperCaseFirst: true }),
       data?.intervieweeRoleOtherDetails,
       'other',
-      { upperCaseFirst: true },
     ) ?? ''
+
+  const formattedData = {
+    ...data,
+    referringOrganization,
+    intervieweeRole,
+  }
 
   return (
     <>
-      <ReferringOrganizationDetails
-        data={{ ...data, referringOrganization, intervieweeRole }}
-      />
-      {templateSections.map((el) => {
-        return (
-          <NarrativeSection
-            key={el.key}
-            heading={el.heading}
-            template={el.template}
-            patient={patient as PatientProfile}
-            appointment={appointment}
-            data={{ ...data, referringOrganization, intervieweeRole }}
-          />
-        )
-      })}
+      <ReferringOrganizationDetails data={formattedData} />
+      {renderNarrativeSections({ data: formattedData, patient, appointment })}
     </>
   )
 }

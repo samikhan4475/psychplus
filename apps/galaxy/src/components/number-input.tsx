@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { Flex, Text, TextField } from '@radix-ui/themes'
+import { Box, Flex, Text, TextField } from '@radix-ui/themes'
 import { Controller, useFormContext } from 'react-hook-form'
 import { PatternFormat } from 'react-number-format'
 import { cn } from '@/utils'
@@ -82,7 +82,7 @@ const NumberInput = ({
           {label}
         </BlockLabel>
       )}
-      <div className="relative">
+      <Box className="relative">
         <Controller
           control={form.control}
           name={fieldName}
@@ -124,7 +124,7 @@ const NumberInput = ({
             {suffixText}
           </Text>
         )}
-      </div>
+      </Box>
 
       {showError && <FormFieldError name={fieldName} />}
     </Flex>

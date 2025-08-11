@@ -2,46 +2,60 @@
 
 import { Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { NumberInput } from '@/components'
+import { NumericInput } from '@/components'
 import {
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
 } from '@/components/form'
-import { SchemaType } from '../../schema'
 import { BlockProps } from '../../types'
+import { numericRangeConstraint } from '../../utils'
 
 const PatientHeightInput = ({ disabled = false }: BlockProps) => {
-  const form = useFormContext<SchemaType>()
+  const form = useFormContext()
   return (
     <FormFieldContainer className="flex-1 flex-row items-end !gap-2">
       <FormFieldLabel className="!text-1" required>
-        Patient height, in feet and inche
+        Patient height
       </FormFieldLabel>
       <Flex align="center" gap="2">
-        <NumberInput
+        <NumericInput
           field="heightFeet"
-          format="##"
           placeholder=""
+          prefix=""
           suffixText="ft"
           className="h-5 w-16 rounded-1"
           disabled={disabled}
-          onValueChange={(value) => {
-            form.setValue('heightFeet', value)
-            form.trigger('heightFeet')
+          allowNegative={false}
+          formatOnBlurOnly={true}
+          decimalScale={0}
+          maxLimit={100}
+          onChangeCallback={(value) => {
+            if (value) {
+              form.trigger('heightFeet')
+            }
           }}
         />
         <FormFieldError name="heightFeet" />
-        <NumberInput
+        <NumericInput
           field="heightInches"
-          format="####"
           placeholder=""
+          prefix=""
           suffixText="in"
+          decimalScale={2}
+          allowNegative={false}
+          formatOnBlurOnly={true}
           className="h-5 w-16 rounded-1"
           disabled={disabled}
-          onValueChange={(value) => {
-            form.setValue('heightInches', value)
-            form.trigger('heightInches')
+          isAllowed={numericRangeConstraint({
+            min: 0,
+            max: 11.9,
+            decimals: 2,
+          })}
+          onChangeCallback={(value) => {
+            if (value) {
+              form.trigger('heightInches')
+            }
           }}
         />
         <FormFieldError name="heightInches" />

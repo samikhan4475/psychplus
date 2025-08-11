@@ -24,6 +24,7 @@ interface RadioSelectSectionProps {
   resetOnSameValue?: boolean
   optionEnableTag?: string
   errorField?: string
+  radioGroupClassName?: string
   shouldTriggerOnChange?: boolean
 }
 interface RadioSelectOption {
@@ -46,6 +47,7 @@ const RadioSelectSection = ({
   resetOnSameValue = false,
   errorField,
   shouldTriggerOnChange = false,
+  radioGroupClassName,
 }: RadioSelectSectionProps) => {
   const form = useFormContext()
   const watchedValue = form.watch(field)
@@ -80,8 +82,8 @@ const RadioSelectSection = ({
       <Flex position="relative" align="center">
         <RadioGroup.Root
           onValueChange={handleOptionClick}
+          className={cn('flex gap-1.5', radioGroupClassName)}
           value={value}
-          className="flex gap-1.5"
         >
           {options.map((option) => {
             const isSelected = value === option.value && className

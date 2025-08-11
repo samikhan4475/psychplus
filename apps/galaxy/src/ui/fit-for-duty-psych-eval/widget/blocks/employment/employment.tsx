@@ -3,7 +3,7 @@
 import { useFormContext } from 'react-hook-form'
 import { BlockHeading } from '../../block-heading'
 import { DetailsField, RadioFieldWithError } from '../../components'
-import { EMPLOYMENT_HAND_GUN_DESCRIPTION, HAS_OPTIONS } from '../../constant'
+import { EMPLOYMENT_HAND_GUN_DESCRIPTION, HAVE_OPTIONS } from '../../constant'
 import { SchemaType } from '../../schema'
 import { BlockProps } from '../../types'
 import { EmploymentDepartmentInput } from './employment-department-input'
@@ -11,7 +11,7 @@ import { EmploymentPriorInput } from './employment-prior-input'
 import { PositionInput } from './position-input'
 
 const Employment = ({ disabled = false }: BlockProps) => {
-  const { watch } = useFormContext<SchemaType>()
+  const { watch, setValue } = useFormContext<SchemaType>()
   const hadDisciplinary = watch('hadDisciplinary')
   return (
     <BlockHeading title="Employment">
@@ -20,10 +20,15 @@ const Employment = ({ disabled = false }: BlockProps) => {
       <PositionInput disabled={disabled} />
 
       <RadioFieldWithError
-        label="Patient has had disciplinary write-ups/actions while employed?"
+        label="They have had disciplinary write-ups/actions while employed."
         field="hadDisciplinary"
-        options={HAS_OPTIONS}
+        options={HAVE_OPTIONS}
         disabled={disabled}
+        onChange={(val) => {
+          if (val !== 'has') {
+            setValue('disciplinaryIncident', '')
+          }
+        }}
         required
       />
 

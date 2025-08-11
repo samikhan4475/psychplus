@@ -3,25 +3,29 @@
 import { useFormContext } from 'react-hook-form'
 import { DetailsField, RadioFieldWithError } from '../../components'
 import { HAVE_OPTIONS } from '../../constant'
-import { SchemaType } from '../../schema'
 import { BlockProps } from '../../types'
 
 const RestraintOrderRadio = ({ disabled = false }: BlockProps) => {
-  const { watch } = useFormContext<SchemaType>()
+  const { watch, setValue } = useFormContext()
   const hasRestrainingOrder = watch('hasRestrainingOrder')
   return (
     <>
       <RadioFieldWithError
         field="hasRestrainingOrder"
-        label="Patient has been the subject of a restraining order:"
+        label="Patient has been the subject of a restraining order."
         options={HAVE_OPTIONS}
         disabled={disabled}
+        onChange={(val) => {
+          if (val !== 'have') {
+            setValue('restrainingOrderDetails', '')
+          }
+        }}
         required
       />
 
       {hasRestrainingOrder === 'have' && (
         <DetailsField
-          label="Describe the situation that led to this restraining order"
+          label="Describe the situation that led to this restraining order:"
           field="restrainingOrderDetails"
           disabled={disabled}
           className="min-h-11"
