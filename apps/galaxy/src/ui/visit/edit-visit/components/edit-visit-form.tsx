@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CalendarDate, getLocalTimeZone, today } from '@internationalized/date'
+import { getLocalTimeZone } from '@internationalized/date'
 import { Box, Flex, Grid, Separator, Text } from '@radix-ui/themes'
 import { SubmitHandler, useForm, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -11,14 +11,10 @@ import {
   FormSubmitButton,
   LoadingPlaceholder,
 } from '@/components'
-import { CODESETS } from '@/constants'
+import { CODESETS, FEATURE_FLAGS } from '@/constants'
 import { useCodesetCodes, useHasPermission } from '@/hooks'
-import {
-  Appointment,
-  BookVisitPayload,
-  ClaimServiceLine,
-  VisitSequenceTypes,
-} from '@/types'
+import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
+import { Appointment, BookVisitPayload, VisitSequenceTypes } from '@/types'
 import { signNoteAction } from '@/ui/quicknotes/actions'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { isDirty } from '@/ui/schedule/utils'
@@ -100,8 +96,13 @@ const EditVisitForm = ({
   const dischargeDate = visitDetails?.dischargeDate
     ? getCalendarDate(visitDetails?.dischargeDate)
     : undefined
+
+  const customVisitFeatureEnabled = useFeatureFlagEnabled(
+    FEATURE_FLAGS.ehr16012GalaxyPracticeDropdownAddVisitPopup,
+  )
+  const appointmentSchema = schema(customVisitFeatureEnabled)
   const form = useForm<SchemaType>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(appointmentSchema),
     disabled: isFormDisabled,
     mode: 'onChange',
     defaultValues: {
@@ -390,9 +391,9 @@ const EditVisitForm = ({
           <Box className="col-span-4">
             <ServiceSelect />
           </Box>
-          {isCustomAppointment && (
+          {customVisitFeatureEnabled && (
             <Grid columns="3" className="col-span-12" gap="3">
-              <CosignerSelect />
+              {isCustomAppointment && <CosignerSelect />}
               <PracticeSelect />
               <BillingProviderInfoPhoneNum />
             </Grid>
@@ -409,7 +410,7 @@ const EditVisitForm = ({
             />
           )}
         </Grid>
-        {isCustomAppointment && (
+        {isCustomAppointment && customVisitFeatureEnabled && (
           <Grid
             columns="1"
             mt="3"

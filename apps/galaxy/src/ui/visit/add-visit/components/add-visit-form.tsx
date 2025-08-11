@@ -4,7 +4,7 @@ import { Box, Button, Flex, Grid, Text } from '@radix-ui/themes'
 import { SubmitHandler, useForm, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FormContainer, FormSubmitButton } from '@/components'
-import { Appointment, NewPatient } from '@/types'
+import { NewPatient } from '@/types'
 import { AddPatient } from '@/ui/patient/add-patient'
 import { AddVacation } from '@/ui/vacation/add-vacation'
 import { cn } from '@/utils'
@@ -64,6 +64,7 @@ interface AddVisitFormProps {
   isFollowup: boolean
   consultationDate?: string
   isCustomAppointment?: boolean
+  customVisitFeatureEnabled?: boolean
 }
 
 const AddVisitForm = ({
@@ -78,6 +79,7 @@ const AddVisitForm = ({
   isFollowup,
   consultationDate,
   isCustomAppointment = false,
+  customVisitFeatureEnabled = false,
 }: AddVisitFormProps) => {
   const [newPatient, setNewPatient] = useState<NewPatient>()
   const { staffId } = useGlobalStore((state) => state.user)
@@ -96,6 +98,7 @@ const AddVisitForm = ({
   const overrideOtherProvidersSchedule = useHasPermission(
     'overrideOtherProviderSchedulePreference',
   )
+
   const { activeTab } = useSchedulerStore((state) => ({
     activeTab: state.activeTab,
   }))
@@ -112,8 +115,10 @@ const AddVisitForm = ({
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const refetch = useRefetchAppointments()
   const refetchProviderCoding = useRefetchProviderCodingAppointments()
+
+  const appointmentSchema = schema(customVisitFeatureEnabled)
   const form = useForm<SchemaType>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(appointmentSchema),
     mode: 'onChange',
     defaultValues: {
       patient: patient ?? undefined,
@@ -412,11 +417,13 @@ const AddVisitForm = ({
         ) : (
           <NonTimedVisitForm />
         )}
-        <Grid columns="3" className="col-span-12" gap="3">
-          <PracticeSelect />
-          <BillingProviderInfoPhoneNum />
-          {isCustomAppointment && <CosignerSelect />}
-        </Grid>
+        {customVisitFeatureEnabled && (
+          <Grid columns="3" className="col-span-12" gap="3">
+            <PracticeSelect />
+            <BillingProviderInfoPhoneNum />
+            {isCustomAppointment && <CosignerSelect />}
+          </Grid>
+        )}
       </Grid>
       {isCustomAppointment && (
         <Grid

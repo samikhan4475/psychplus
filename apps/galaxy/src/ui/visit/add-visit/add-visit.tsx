@@ -3,6 +3,8 @@
 import { PropsWithChildren, useState } from 'react'
 import { Dialog, Flex, Switch } from '@radix-ui/themes'
 import { CloseDialogTrigger } from '@/components/close-dialog-trigger'
+import { FEATURE_FLAGS } from '@/constants'
+import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { NewPatient } from '@/types'
 import { AddVisitForm } from './components'
 import { AppointmentData, SlotDetails } from './types'
@@ -31,6 +33,10 @@ const AddVisit = ({
   isFollowup = false,
   consultationDate,
 }: PropsWithChildren<AddVisitProps>) => {
+  const customVisitFeatureEnabled = useFeatureFlagEnabled(
+    FEATURE_FLAGS.ehr16012GalaxyPracticeDropdownAddVisitPopup,
+  )
+
   const [isOpen, setIsOpen] = useState(false)
   const [isCustomAppointment, setIsCustomAppointment] = useState(false)
   return (
@@ -45,15 +51,19 @@ const AddVisit = ({
 
       <Dialog.Content className="relative max-w-[700px]">
         <CloseDialogTrigger />
-        <Flex className="absolute right-14 top-5 gap-1.5 text-[14px]">
-          <Switch
-            size="1"
-            onCheckedChange={() => setIsCustomAppointment(!isCustomAppointment)}
-            checked={isCustomAppointment}
-            color="green"
-          />
-          Custom Visit
-        </Flex>
+        {customVisitFeatureEnabled && (
+          <Flex className="absolute right-14 top-5 gap-1.5 text-[14px]">
+            <Switch
+              size="1"
+              onCheckedChange={() =>
+                setIsCustomAppointment(!isCustomAppointment)
+              }
+              checked={isCustomAppointment}
+              color="green"
+            />
+            Custom Visit
+          </Flex>
+        )}
         <Dialog.Title className="font-sans -tracking-[0.25px]">
           Add {isCustomAppointment && 'Custom'} Visit
         </Dialog.Title>
@@ -70,6 +80,7 @@ const AddVisit = ({
           isFollowup={isFollowup}
           isCustomAppointment={isCustomAppointment}
           consultationDate={consultationDate}
+          customVisitFeatureEnabled={customVisitFeatureEnabled}
         />
       </Dialog.Content>
     </Dialog.Root>
