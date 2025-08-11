@@ -63,7 +63,7 @@ const referralsColumns: ColumnDef<Referral>[] = [
       <ColumnHeader column={column} clientSideSort label="Initiated By" />
     ),
     cell: ({ row: { original: referral } }) => (
-      <LongTextCell>{referral?.intiatedByUserRole}</LongTextCell>
+      <LongTextCell>{referral?.metadata?.createdByFullName}</LongTextCell>
     ),
   },
   {
@@ -97,11 +97,11 @@ const referralsColumns: ColumnDef<Referral>[] = [
       <ColumnHeader column={column} clientSideSort label="Next Visit" />
     ),
     cell: ({ row: { original } }) => (
-      <TextCell className="truncate">
-        {original?.nextVisit
-          ? getSlashedPaddedDateString(original?.nextVisit)
-          : 'N/A'}
-      </TextCell>
+        <TextCell className="truncate">
+          {original?.nextVisit
+            ? getSlashedPaddedDateString(original?.nextVisit)
+            : 'N/A'}
+        </TextCell>
     ),
   },
 ]

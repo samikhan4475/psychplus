@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Box } from '@radix-ui/themes'
+import { ReferralStatuses } from '@psychplus/patient'
 import { getReferralsAction } from '../../api'
 import { TitleSection } from '../../common'
 import { Referral } from '../../types'
@@ -11,7 +12,13 @@ const ReferralsSection = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getReferralsAction()
+      const response = await getReferralsAction({
+        resourceStatus: [
+          ReferralStatuses.Incomplete,
+          ReferralStatuses.Completed,
+          ReferralStatuses.Pending,
+        ],
+      })
       if (response.state === 'success') {
         setReferrals(response?.data ?? [])
       }

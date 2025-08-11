@@ -174,19 +174,28 @@ interface PatientRelationship {
   isAllowedToReleaseInformation: boolean
 }
 
-export type {
-  Patient,
-  PatientParams,
-  CareTeamMember,
-  CareTeam,
-  PatientContactDetails,
-  PreferredPartner,
-  PatientName,
-  GuardianName,
-  EmergencyContactDetails,
-  PatientPhoneNumber,
-  PatientAddress,
-  PatientDriversLicense,
-  PatientMetadata,
-  PatientRelationship,
+enum ReferralStatuses {
+  Deleted = 'Deleted',
+  Incomplete = 'Incomplete',
+  Completed = 'Completed',
+  Pending = 'Pending',
+  Unsigned = 'Unsigned',
+}
+
+export {
+ type Patient,
+ type PatientParams,
+ type CareTeamMember,
+ type CareTeam,
+ type PatientContactDetails,
+ type PreferredPartner,
+ type PatientName,
+ type GuardianName,
+ type EmergencyContactDetails,
+ type PatientPhoneNumber,
+ type PatientAddress,
+ type PatientDriversLicense,
+ type PatientMetadata,
+ type PatientRelationship,
+ReferralStatuses
 }
