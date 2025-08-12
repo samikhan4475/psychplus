@@ -28,47 +28,36 @@ const WorkingDiagnosis = ({ index }: DrugBlockProps) => {
   }
 
   useEffect(() => {
-    const fetchTopDiagnoses = () => {
-      setTopDiagnosisLoading(true);
-    
-      getQuickNotesWorkingDiagnosis({ patientId: String(patientId) })
-        .then((response) => {
-          if (response.state !== 'success') return;
-    
-          const allSectionItemValues = response.data
-            ?.map((item) => item.sectionItemValue)
-            .filter(Boolean);
-    
-          const rawCodes = allSectionItemValues
-            .flatMap((value) => value.split(','))
-            .map((code) => code.trim())
-            .filter((code) => code && code !== 'empty');
-    
-          const diagnosisCodes = [...new Set(rawCodes)];
-    
-          if (diagnosisCodes.length > 0) {
-            return getDiagnosisLimit({ diagnosisCodes }).then((diagnoseResponse) => {
-              if (diagnoseResponse.state === 'success') {
-                const top3 = diagnoseResponse.data
-                  .slice(0, 3)
-                  .map((item) => ({
-                    ...item,
-                    checked: true,
-                    newDignoses: true,
-                  }));
-    
-                form.setValue(`drugs[${index}].diagnosis`, top3);
-              }
-            });
+    const fetchTopDiagnoses = async () => {
+      setTopDiagnosisLoading(true)
+      const response = await getQuickNotesWorkingDiagnosis({
+        patientId: String(patientId),
+      })
+      if (response.state === 'success') {
+        const sectionItemValues =
+          response.data?.map((item) => item.sectionItemValue) ?? []
+        const filteredValues = sectionItemValues.filter(Boolean)
+        const splitValues = filteredValues.flatMap((value) => value.split(','))
+        const rawCodes = splitValues
+          .map((code) => code.trim())
+          .filter((code) => code && code !== 'empty')
+
+        const diagnosisCodes = [...new Set(rawCodes)]
+        if (diagnosisCodes.length > 0) {
+          const diagnoseResponse = await getDiagnosisLimit({ diagnosisCodes })
+          if (diagnoseResponse.state === 'success') {
+            const top3 = diagnoseResponse.data.map((item) => ({
+              ...item,
+              checked: true,
+              newDignoses: true,
+            }))
+
+            form.setValue(`drugs[${index}].diagnosis`, top3)
           }
-        })
-        .catch((err) => {
-          console.error('Failed to fetch top diagnoses', err);
-        })
-        .finally(() => {
-          setTopDiagnosisLoading(false);
-        });
-    };    
+        }
+      }
+      setTopDiagnosisLoading(false)
+    }
 
     if (
       !hasLoadedTopDiagnoses.current &&
