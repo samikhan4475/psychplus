@@ -36,12 +36,7 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) =>
-        isPractices ? (
-          <PracticeNameCell row={row} />
-        ) : (
-          <TextCell>{row.original.displayName}</TextCell>
-        ),
+      cell: ({ row }) => <PracticeNameCell row={row} />,
     },
     {
       id: 'npi',

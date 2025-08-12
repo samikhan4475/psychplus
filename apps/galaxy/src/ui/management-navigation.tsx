@@ -15,6 +15,8 @@ const ManagementNavigation = () => {
   }>()
   const searchParams = useSearchParams()
   const practiceId = searchParams.get('practice')
+  const pathname = usePathname()
+  const segments = pathname.split('/').filter(Boolean)
   const { organizationIds, staffTypes } = useStore(
     (state) => state.staffResource,
   )
@@ -27,6 +29,7 @@ const ManagementNavigation = () => {
         roleId,
         practiceId,
         staffTypes,
+        segments,
       ),
     [type, orgPracticeId, roleId, practiceId],
   )
@@ -35,7 +38,11 @@ const ManagementNavigation = () => {
       <ScrollArea>
         <Flex direction="column">
           {navLinks.map((widget) => (
-            <NavigationLink key={widget.label} href={widget.href}>
+            <NavigationLink
+              key={widget.label}
+              href={widget.href}
+              disabled={widget.disabled}
+            >
               {widget.label}
             </NavigationLink>
           ))}
@@ -47,10 +54,12 @@ const ManagementNavigation = () => {
 
 interface NavigationLinkProps {
   href?: string
+  disabled?: boolean
 }
 
 const NavigationLink = ({
   href,
+  disabled,
   children,
 }: React.PropsWithChildren<NavigationLinkProps>) => {
   const pathname = usePathname()
@@ -73,6 +82,11 @@ const NavigationLink = ({
           'text-white bg-accent-12 font-[600] hover:bg-accent-12': isActive,
         },
       )}
+      onClick={(e) => {
+        if (disabled) {
+          e.preventDefault()
+        }
+      }}
     >
       {children}
     </NextLink>

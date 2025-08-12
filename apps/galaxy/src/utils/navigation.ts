@@ -344,11 +344,13 @@ const getManagementNavLinks = (
   roleId: string | null,
   practiceId: string | null,
   staffTypes?: string[],
+  segments?: string[],
 ) => {
   const baseHref = `/management`
   const isSuperAdmin = !!staffTypes?.includes(AdminType.SUPER_ADMIN)
   const isOrgAdmin = !!staffTypes?.includes(AdminType.ORG_ADMIN)
   const isPracticeAdmin = !!staffTypes?.includes(AdminType.PRACTICE_ADMIN)
+  const secondSegment = (segments && segments[1]) || null
 
   if (roleId && type && id) {
     const roleBase = `${baseHref}/organization-practice/${type}/${id}/organization-roles-permissions/${roleId}`
@@ -439,6 +441,31 @@ const getManagementNavLinks = (
       {
         label: 'Staff Roles',
         href: `${practiceBase}/practice-staff-roles`,
+      },
+    ]
+  }
+
+  if (secondSegment === 'location') {
+    const locationBase = `/management/location/${id}`
+    return [
+      {
+        label: 'Profile',
+        href: `#`,
+        disabled: true,
+      },
+      {
+        label: 'Practice',
+        href: `${locationBase}/practice`,
+      },
+      {
+        label: 'Formulary Medications',
+        href: `#`,
+        disabled: true,
+      },
+      {
+        label: 'Analytics',
+        href: `#`,
+        disabled: true,
       },
     ]
   }
