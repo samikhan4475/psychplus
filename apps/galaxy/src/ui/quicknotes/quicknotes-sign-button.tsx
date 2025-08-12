@@ -3,6 +3,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
+import { getLocalTimeZone } from '@internationalized/date'
 import { Button } from '@radix-ui/themes'
 import { dequal } from 'dequal'
 import { PenLineIcon } from 'lucide-react'
@@ -24,6 +25,7 @@ import {
   PatientMedication,
   PatientPrescriptionStatus,
 } from '../medications/patient-medications-widget/types'
+import { toClinicTime } from '../visit/utils'
 import {
   QuickNoteSectionName,
   SEND_TO_SIGNATURE_BUTTON,
@@ -38,7 +40,7 @@ import { useQuickNotesPermissions } from './hooks'
 import { PolicyConsentDialog } from './policy-consent-dialog'
 import { useStore, validateDiagnosis } from './store'
 import { SignPayloadProps } from './types'
-import { refetchReferrals } from './utils'
+import { isFutureAppointment, refetchReferrals } from './utils'
 
 interface QuickNotesSignButtonProps {
   appointment: Appointment
@@ -188,24 +190,6 @@ const QuickNotesSignButton = ({
   )
   const isAppointmentProvider = appointment.providerStaffId === staffId
 
-  const isFutureAppointment = useMemo(() => {
-    if (!appointment?.startDate) return false
-    const now = new Date()
-    const visitDateTime = new Date(appointment.startDate)
-    if (appointment.isServiceTimeDependent) {
-      return visitDateTime > now
-    } else {
-      // For non-time-dependent, check only the date part
-      const appointmentDate = new Date(
-        visitDateTime.getFullYear(),
-        visitDateTime.getMonth(),
-        visitDateTime.getDate(),
-      )
-      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-      return appointmentDate > today
-    }
-  }, [appointment.startDate, appointment.isServiceTimeDependent])
-
   const signPayload: SignPayloadProps = {
     patientId,
     appointmentId,
@@ -340,7 +324,7 @@ const QuickNotesSignButton = ({
       })
       return
     }
-    if (isFutureAppointment) {
+    if (isFutureAppointment(appointment)) {
       showAlert({
         title: 'Warning',
         message: SIGN_PRIOR_VISIT_TIME_WARNING,

@@ -1,12 +1,16 @@
 'use client'
 
 import { Button } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
-import { SchemaType } from '../schema'
-import { getInitialValues } from '../utils'
+import { FieldValues, useFormContext } from 'react-hook-form'
 
-const ClearButton = () => {
-  const form = useFormContext<SchemaType>()
+interface ClearButtonProps<T extends FieldValues> {
+  getInitialValues?: () => T
+}
+
+const ClearButton = <T extends FieldValues>({
+  getInitialValues,
+}: ClearButtonProps<T>) => {
+  const form = useFormContext<T>()
   return (
     <Button
       variant="outline"
@@ -15,7 +19,11 @@ const ClearButton = () => {
       className="text-black"
       onClick={(e) => {
         e.preventDefault()
-        form?.reset(getInitialValues())
+        if (getInitialValues) {
+          form.reset(getInitialValues())
+        } else {
+          form.reset()
+        }
       }}
     >
       Clear

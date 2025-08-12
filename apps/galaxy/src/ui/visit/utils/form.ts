@@ -1,10 +1,15 @@
 import {
   CalendarDate,
+  fromDate,
   getLocalTimeZone,
   now,
   parseAbsolute,
+  parseTime,
   toCalendarDate,
+  toCalendarDateTime,
   toTimeZone,
+  toZoned,
+  ZonedDateTime,
 } from '@internationalized/date'
 import { getTimeLabel } from '@/utils'
 import { PRIMARY_PROVIDER_ALERT_MESSAGE } from '../constants'
@@ -62,4 +67,22 @@ const mapMessages = (message: string) => {
   return arr
 }
 
-export { sanitizeFormData, convertToTimezone, isVisitRescheduled, mapMessages }
+const toClinicTime = (
+  startISO: string,
+  tz: string,
+  fallback: ZonedDateTime = now(tz),
+): ZonedDateTime => {
+  const r = convertToTimezone(startISO, tz)
+  if (r.date && r.time)
+    return toZoned(toCalendarDateTime(r.date, parseTime(r.time)), tz)
+
+  return fromDate(new Date(startISO), tz) || fallback
+}
+
+export {
+  sanitizeFormData,
+  convertToTimezone,
+  isVisitRescheduled,
+  mapMessages,
+  toClinicTime,
+}

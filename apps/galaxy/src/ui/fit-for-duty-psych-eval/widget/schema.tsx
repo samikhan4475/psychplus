@@ -80,7 +80,7 @@ const employmentSchema = z.object({
   employedSinceYear: z.string().min(1, 'Required'),
   priorPosition: z.string().min(1, 'Required').max(20, 'Max 20 characters'),
   positionDuration: z.string().min(1, 'Required').max(20, 'Max 20 characters'),
-  hadDisciplinary: z.string().min(1, 'Required'), // 'has' / 'hasNot'
+  hadDisciplinary: z.string().min(1, 'Required'), // 'have' / 'haveNot'
   disciplinaryIncident: z.string().max(1200, 'Max 1200 characters').optional(),
   handgunDescription: z
     .string()
@@ -260,7 +260,7 @@ const fitForDutyEvaluationSchema = z
     }
 
     // only require disciplinaryIncident if they *have* had disciplinary action
-    if (data.hadDisciplinary === 'has' && !data.disciplinaryIncident?.trim()) {
+    if (data.hadDisciplinary === 'have' && !data.disciplinaryIncident?.trim()) {
       ctx.addIssue({
         path: ['disciplinaryIncident'],
         code: z.ZodIssueCode.custom,

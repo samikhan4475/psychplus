@@ -35,14 +35,17 @@ const FitForDutyPsychEvalWidget = ({
         headerRight={
           !isHeader && (
             <>
-              <ClearButton />
+              <ClearButton<SchemaType> getInitialValues={getInitialValues} />
               <WidgetSaveButton shouldCheckPermission />
             </>
           )
         }
         topHeader={
           isHeader && (
-            <NeuroPsychWidgetHeader heading="Fit-For-Duty Evaluation" />
+            <NeuroPsychWidgetHeader<SchemaType>
+              heading="Fit-For-Duty Evaluation"
+              getInitialValues={getInitialValues}
+            />
           )
         }
         formResetValues={getInitialValues()}

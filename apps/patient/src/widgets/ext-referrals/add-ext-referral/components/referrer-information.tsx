@@ -4,7 +4,7 @@ import React from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Box, Flex, Grid, Text, TextFieldInput } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { FormField, PhoneNumberInput } from '@/components-v2'
+import { AutoResizeInput, FormField, PhoneNumberInput } from '@/components-v2'
 import { ReferralType } from '../types'
 import { shouldShowFacilitySelect } from '../utils'
 import { FacilityInput } from './facility-input'
@@ -79,8 +79,6 @@ const ReferrerInformation = ({
           />
         </FormField>
 
-        {/* 
-         Need confirmation for this
         <Box className="col-span-full">
           <FormField
             containerClassName="flex-1"
@@ -93,7 +91,7 @@ const ReferrerInformation = ({
               className="min-h-16 rounded-none w-full px-3 py-2"
             />
           </FormField>
-        </Box> */}
+        </Box>
       </Grid>
     </Flex>
   )

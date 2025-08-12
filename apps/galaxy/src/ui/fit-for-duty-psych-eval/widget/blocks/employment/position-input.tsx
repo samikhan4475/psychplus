@@ -10,7 +10,7 @@ import { BlockProps } from '../../types'
 
 const PositionInput = ({ disabled = false }: BlockProps) => {
   return (
-    <FormFieldContainer className="flex-row items-center gap-2">
+    <FormFieldContainer className="flex-row items-start gap-2">
       <FormFieldLabel required className="!text-1">
         How long were they at the position in the previous question?
       </FormFieldLabel>

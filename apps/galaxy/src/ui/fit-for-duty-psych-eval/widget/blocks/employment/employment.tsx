@@ -25,14 +25,14 @@ const Employment = ({ disabled = false }: BlockProps) => {
         options={HAVE_OPTIONS}
         disabled={disabled}
         onChange={(val) => {
-          if (val !== 'has') {
+          if (val !== 'have') {
             setValue('disciplinaryIncident', '')
           }
         }}
         required
       />
 
-      {hadDisciplinary === 'has' && (
+      {hadDisciplinary === 'have' && (
         <DetailsField
           label="Describe the incident that led to reprimand"
           field="disciplinaryIncident"

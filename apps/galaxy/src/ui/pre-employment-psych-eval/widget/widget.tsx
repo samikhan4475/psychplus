@@ -42,7 +42,10 @@ const PreEmploymentPsychEvalWidget = ({
         }
         topHeader={
           isHeader && (
-            <NeuroPsychWidgetHeader heading="Pre-Employment Psych Eval" />
+            <NeuroPsychWidgetHeader<SchemaType>
+              heading="Pre-Employment Psych Eval"
+              getInitialValues={getInitialValues}
+            />
           )
         }
         formResetValues={getInitialValues()}

@@ -1,6 +1,7 @@
 import { cache } from 'react'
+import { getLocalTimeZone, now } from '@internationalized/date'
 import { VisitTypeEnum } from '@/enum'
-import { QuickNoteSectionItem } from '@/types'
+import { Appointment, QuickNoteSectionItem } from '@/types'
 import { FitForDutyPsychEvalClientLoader } from '@/ui/fit-for-duty-psych-eval/widget/client-loader'
 import { HpiWidgetClientLoader } from '@/ui/hpi/hpi-widget/hpi-widget-client-loader'
 import { isHospitalCareVisit, sendEvent, visitTypeToWidgets } from '@/utils'
@@ -38,6 +39,7 @@ import { SubstanceUseHxClientLoader } from '../substance-use-hx/substance-use-hx
 import { TherapyWidgetClientLoader } from '../therapy/therapy-widget-client-loader'
 import { UdsWidget } from '../uds'
 import { UploadedDocumentsClientWidget } from '../uploaded-documents/uploaded-documents-client-widget'
+import { toClinicTime } from '../visit/utils'
 import { VitalsWidgetLoader } from '../vitals/vitals-widget-client-loader'
 import { AddOnClientView } from './actual-note-view/add-on/add-on-client-view'
 import { CodesDetailsClientView } from './actual-note-view/codes/codes-details-client-view'
@@ -58,6 +60,7 @@ import { PastMedicalHxClientView } from './actual-note-view/past-medical-hx/past
 import { PastPsychlDetailClientView } from './actual-note-view/past-psych-hx/past-psych-detail-client-view'
 import { AllergiesDetailsClientView } from './actual-note-view/patient-allergies/allergies-details-client-view'
 import { PhysicalExamClientView } from './actual-note-view/physical-exam/physical-exam-client-view'
+import { PreEmploymentActualNoteView } from './actual-note-view/pre-employment'
 import { PsychiatryAssessmentPlanClientView } from './actual-note-view/psychiatry-assessment-plan/psychiatry-assessment-plan-client-view'
 import { QuestionnairesActualnoteView as QuestionnairesClientView } from './actual-note-view/questionnaires'
 import { ReferralsClientView } from './actual-note-view/referrals/referrals-client-view'
@@ -77,7 +80,6 @@ import { WorkingDiagnosisClientView } from './actual-note-view/working-diagnosis
 import { WorkingDischargeDiagnosisClientView } from './actual-note-view/working-discharge-diagnosis'
 import { QuickNoteSectionName } from './constants'
 import { WidgetType } from './types'
-import { PreEmploymentActualNoteView } from './actual-note-view/pre-employment'
 
 enum ProviderType {
   Psychiatry = 'Psychiatrist',
@@ -415,6 +417,38 @@ const refetchReferrals = () => {
   })
 }
 
+const isFutureAppointment = (appt: Appointment) => {
+  if (!appt?.startDate) return false
+  const tz = appt.locationTimezoneId ?? getLocalTimeZone()
+  const visitZonedTime = toClinicTime(appt.startDate, tz)
+  const cur = now(getLocalTimeZone())
+
+  console.log(cur.toString())
+  console.log(visitZonedTime.toString())
+
+  if (appt.isServiceTimeDependent) {
+    return (
+      Date.parse(visitZonedTime.toAbsoluteString()) >
+      Date.parse(cur.toAbsoluteString())
+    )
+  }
+
+  // For non-time-dependent, check only the date part
+  const visitDateTime = new Date(appt.startDate)
+  const localDate = new Date()
+  const appointmentDate = new Date(
+    visitDateTime.getFullYear(),
+    visitDateTime.getMonth(),
+    visitDateTime.getDate(),
+  )
+  const today = new Date(
+    localDate.getFullYear(),
+    localDate.getMonth(),
+    localDate.getDate(),
+  )
+  return appointmentDate > today
+}
+
 export {
   getCachedWidgetsByVisitType,
   getWidgetIds,
@@ -423,4 +457,5 @@ export {
   getWidgetErrorDetails,
   TherapyVisitTypeNames,
   refetchReferrals,
+  isFutureAppointment,
 }
