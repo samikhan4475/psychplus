@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
 import { ColumnDef } from '@tanstack/react-table'
-import toast from 'react-hot-toast'
 import {
   ColumnHeader,
   DataTable,
@@ -222,7 +221,7 @@ const PaymentCheckTable = ({ paymentDetail }: PaymentCheckHeaderProps) => {
                 paymentListType === PaymentListTypes.Unlinked,
               )}
               disablePagination
-              tableClass="[&_.rt-ScrollAreaRoot]:pb-2 max-w-[calc(100vw-23px)]"
+              tableClass="[&_.rt-ScrollAreaRoot]:pb-2 [&_.rt-ScrollAreaRoot]:pr-2 max-w-[calc(100vw-23px)]"
             />
           )}
         </Accordion.AccordionContent>

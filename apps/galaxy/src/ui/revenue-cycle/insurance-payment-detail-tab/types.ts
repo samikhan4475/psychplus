@@ -24,4 +24,8 @@ interface PaymentAdjustment {
   adjustmentStatus: string
 }
 
-export { PaymentListTypes, type PaymentAdjustment }
+interface PostApiResponse {
+  success: boolean
+  errors: string[]
+}
+export { PaymentListTypes, type PaymentAdjustment, type PostApiResponse }

@@ -113,6 +113,8 @@ const GET_PAYMENT_ADJUSTMENT_CODES = `${API_URL}/api/paymentadjustmentcodes/acti
 const GET_CLAIM_PAYMENTS = `${API_URL}/api/claimpayments/actions/search`
 const MARK_CLAIM_POSTED = (claimPaymentId: string) =>
   `${API_URL}/api/claimpayments/${claimPaymentId}/actions/markposted`
+const POST_CLAIM_PAYMENT = (paymentId: string, claimPaymentId: string) =>
+  `${API_URL}/api/payments/${paymentId}/claimpayments/${claimPaymentId}/actions/post`
 const GET_CLAIM_SERVICELINE_PAYMENTS = `${API_URL}/api/claimservicelinepayments/actions/search`
 const GET_FACILITY_ADMISSION_IDS_ENDPOINT = (patientId: number) =>
   `${API_URL}/api/patients/${patientId}/appointments/actions/facilityadmitids`
@@ -1278,6 +1280,7 @@ export {
   UPDATE_PATIENT_FACESHEET,
   GET_PATIENT_FACESHEET_IMAGE,
   SET_PRIMARY_PATIENT_CREDIT_CARD,
+  POST_CLAIM_PAYMENT,
   DELETE_PATIENT_CREDIT_CARD,
   ADD_PATIENT_CREDIT_CARD,
   GET_PRACTICE_PLAN_STATES,

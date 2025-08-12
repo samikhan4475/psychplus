@@ -5,8 +5,9 @@ import { RowActionDelete } from './row-action-delete'
 import { RowActionEdit } from './row-action-edit'
 import { RowActionHistory } from './row-action-history'
 import { RowActionPaymentPost } from './row-action-payment-post'
+import { RowActionPostPayment } from './row-action-post-payment'
 
-const rowActions: RowAction<ClaimPayment>[] = [
+const rowActions = (includeUnlinked?: boolean): RowAction<ClaimPayment>[] => [
   {
     id: 'check-list-row-action-edit',
     render: RowActionEdit,
@@ -19,13 +20,18 @@ const rowActions: RowAction<ClaimPayment>[] = [
     id: 'check-list-row-action-history',
     render: RowActionHistory,
   },
-]
-
-const unLinkrowActions: RowAction<ClaimPayment>[] = [
   {
-    id: 'unlink-list-row-action-markPosted',
-    render: RowActionPaymentPost,
+    id: 'check-list-row-action-post',
+    render: RowActionPostPayment,
   },
+  ...(includeUnlinked
+    ? [
+        {
+          id: 'unlink-list-row-action-markPosted',
+          render: RowActionPaymentPost,
+        },
+      ]
+    : []),
 ]
 
 interface ActionsCellProps {
@@ -35,10 +41,7 @@ interface ActionsCellProps {
 
 const ActionsCell = ({ row, includeUnlinked }: ActionsCellProps) => {
   return (
-    <AdaptiveRowActionsCell
-      actions={includeUnlinked ? unLinkrowActions : rowActions}
-      row={row}
-    />
+    <AdaptiveRowActionsCell actions={rowActions(includeUnlinked)} row={row} />
   )
 }
 
