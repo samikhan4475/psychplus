@@ -8,6 +8,8 @@ import { QuickNoteSectionItem } from '@/types'
 import { AdultAsrsTab } from './adult-asrs-tab'
 import { AimsTab } from './aims-tab'
 import { AuditTab } from './audit-tab'
+import { BaiTab } from './bai-tab'
+import { BdiTab } from './bdi-tab'
 import { CssrsTab } from './c-ssrs-tab'
 import { QuestionnaireTabs } from './constants'
 import { CopsRTab } from './cops-r-tab'
@@ -59,7 +61,9 @@ const QuestionnairesView = ({ data, patientId }: QuestionnairesViewProps) => {
     QuestionnaireTabs.VADPRS_TAB,
     QuestionnaireTabs.ADULT_ASRS_TAB,
     QuestionnaireTabs.GQ_ASC_TAB,
-  ].map(q => ({ label: q, value: q }))
+    QuestionnaireTabs.BAI_TAB,
+    QuestionnaireTabs.BDI_TAB,
+  ].map((q) => ({ label: q, value: q }))
 
   const tabComponents = {
     [QuestionnaireTabs.DASHBOARD_TAB]: DashboardTab,
@@ -79,6 +83,8 @@ const QuestionnairesView = ({ data, patientId }: QuestionnairesViewProps) => {
     [QuestionnaireTabs.VADPRS_TAB]: VadprsTab,
     [QuestionnaireTabs.ADULT_ASRS_TAB]: AdultAsrsTab,
     [QuestionnaireTabs.GQ_ASC_TAB]: GqAscTab,
+    [QuestionnaireTabs.BAI_TAB]: BaiTab,
+    [QuestionnaireTabs.BDI_TAB]: BdiTab,
   }
 
   useEffect(() => {

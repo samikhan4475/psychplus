@@ -18,6 +18,8 @@ enum QuestionnaireTabs {
   ADULT_ASRS_TAB = 'ADULT ASRS',
   VADPRS_TAB = 'VADPRS',
   GQ_ASC_TAB = 'GQ-ASC',
+  BAI_TAB = 'BAI',
+  BDI_TAB = 'BDI',
 }
 
 enum QuestionnairesStatus {
@@ -43,10 +45,12 @@ enum QuestionnairesTitles {
   'HAM-D' = 'Hamilton Depression Rating Scale (HAM-D)',
   'C-SSRS' = 'Columbia-Suicide Severity Rating Scale (C-SSRS)',
   'PSC-17' = 'Pediatric Symptom Checklist-17 (PSC-17)',
-  'COPS-R'  = 'Candidate & Officer Personnel Survey (COPS-R)',
+  'COPS-R' = 'Candidate & Officer Personnel Survey (COPS-R)',
   'Adult ASRS' = 'Adult Self Report Scale (Adult ASRS)',
   'VADPRS' = 'Vanderbilt ADHD Diagnostic Parent Rating Scale',
-  'GQ-ASC' = 'GQ-ASC Scale for Adult Women (GQ-ASC)'
+  'GQ-ASC' = 'GQ-ASC Scale for Adult Women (GQ-ASC)',
+  'BAI' = 'Beck Anxiety Inventory (BAI)',
+  'BDI' = 'Beck Depression Inventory (BDI)',
 }
 
 const quickNotesSectionsTitles = {
@@ -82,9 +86,35 @@ const quickNotesSectionsTitles = {
     'Vanderbilt ADHD Diagnostic Parent Rating Scale',
   [QuickNoteSectionName.QuickNoteSectionGqasc]:
     'GQ-ASC Scale for Adult Women (GQ-ASC)',
+  [QuickNoteSectionName.QuickNoteSectionBai]: 'Beck Anxiety Inventory (BAI)',
+  [QuickNoteSectionName.QuickNoteSectionBdi]: 'Beck Depression Inventory (BDI)',
 }
 
+const HISTORIES_SECTIONS = [
+  QuickNoteSectionName.QuickNoteSectionPhq9,
+  QuickNoteSectionName.QuickNoteSectionGad7,
+  QuickNoteSectionName.QuickNoteSectionSnapIV,
+  QuickNoteSectionName.QuickNoteSectionDast10,
+  QuickNoteSectionName.QuickNoteSectionAudit,
+  QuickNoteSectionName.QuickNoteSectionHamD,
+  QuickNoteSectionName.QuickNoteSectionYbcos,
+  QuickNoteSectionName.QuickNoteSectionMoca,
+  QuickNoteSectionName.QuickNoteSectionAims,
+  QuickNoteSectionName.QuickNoteSectionPcl5,
+  QuickNoteSectionName.QuickNoteSectionCssrs,
+  QuickNoteSectionName.QuickNoteSectionPsc17,
+  QuickNoteSectionName.QuickNoteSectionCopsR,
+  QuickNoteSectionName.QuickNoteSectionAdultAsrs,
+  QuickNoteSectionName.QuickNoteSectionVadprs,
+  QuickNoteSectionName.QuickNoteSectionGqasc,
+  QuickNoteSectionName.QuickNoteSectionBai,
+  QuickNoteSectionName.QuickNoteSectionBdi,
+]
 export {
-  QuestionnairesFilledBy, QuestionnairesStatus, QuestionnairesTitles, QuestionnaireTabs, quickNotesSectionsTitles
+  QuestionnaireTabs,
+  QuestionnairesStatus,
+  QuestionnairesFilledBy,
+  QuestionnairesTitles,
+  quickNotesSectionsTitles,
+  HISTORIES_SECTIONS,
 }
-

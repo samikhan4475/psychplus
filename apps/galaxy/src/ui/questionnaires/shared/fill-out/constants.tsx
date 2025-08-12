@@ -4,9 +4,19 @@ import {
   SCORE_INTERPRETATION_RANGES as AUDIT_SCORE_INTERPRETATION_RANGES,
 } from '@/ui/questionnaires/audit-tab/constants'
 import {
+  BAI_LABELS,
+  BAI_QUESTIONS,
+  BAI_SCORE_INTERPRETATION_RANGES,
+} from '@/ui/questionnaires/bai-tab/constants'
+import {
+  BDI_QUESTION_LABELS,
+  BDI_QUESTIONS,
+  BDI_SCORE_INTERPRETATION_RANGES,
+} from '@/ui/questionnaires/bdi-tab/constants'
+import {
+  SUBSCALES as COPS_SUBSCALES,
   LABELS as COPSR_LABELS,
   QUESTIONS as COPSR_QUESTIONS,
-  SUBSCALES as COPS_SUBSCALES
 } from '@/ui/questionnaires/cops-r-tab/constants'
 import {
   LABELS as DAST_LABELS,
@@ -86,11 +96,23 @@ export const META_INFO: {
   [QuickNoteSectionName.QuickNoteSectionCopsR]: {
     questions: COPSR_QUESTIONS,
     labels: COPSR_LABELS,
-    scoreInterpretationRanges:[],
-    pagination:{
-      enabled:true,
-      itemsPerPage:50,
-      interpretation: COPS_SUBSCALES as SubscalesConfig
-    }
+    scoreInterpretationRanges: [],
+    pagination: {
+      enabled: true,
+      itemsPerPage: 50,
+      interpretation: COPS_SUBSCALES as SubscalesConfig,
+    },
+  },
+  // BAI
+  [QuickNoteSectionName.QuickNoteSectionBai]: {
+    questions: BAI_QUESTIONS,
+    labels: BAI_LABELS,
+    scoreInterpretationRanges: BAI_SCORE_INTERPRETATION_RANGES,
+  },
+  // BDI
+  [QuickNoteSectionName.QuickNoteSectionBdi]: {
+    questions: BDI_QUESTIONS,
+    labels: BDI_QUESTION_LABELS,
+    scoreInterpretationRanges: BDI_SCORE_INTERPRETATION_RANGES,
   },
 }

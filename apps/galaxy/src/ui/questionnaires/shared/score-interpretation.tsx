@@ -31,12 +31,7 @@ const ScoreInterpretation = ({
 
   return (
     <Flex className="border-y border-gray-3" direction="column">
-      <Flex
-        align="center"
-        justify="between"
-        className='h-9'
-        px="2"
-      >
+      <Flex align="center" justify="between" className="h-9" px="2">
         <Flex className="" gap="4">
           <Text weight="bold" size="2">
             {heading}
@@ -84,7 +79,11 @@ const ScoreInterpretation = ({
           {showScoreLabel && <Text size="1">{currentRange?.label}</Text>}
         </Flex>
       </Flex>
-      {subHeading && <Text className='pl-2 pb-1' size="1">{subHeading}</Text>}
+      {subHeading && (
+        <Text className="pb-1 pl-2" size="1">
+          {subHeading}
+        </Text>
+      )}
     </Flex>
   )
 }
@@ -109,6 +108,10 @@ const getBadgeColor = (currentRange?: ScoreInterpretationRange) => {
       return 'yellow'
     case 'red':
       return 'red'
+    case 'blue':
+      return 'blue'
+    case 'orange':
+      return 'orange'
     default:
       return 'gray'
   }
@@ -126,6 +129,10 @@ const getBadgeBackgroundClass = (color: string) => {
       return 'bg-red-9'
     case 'dark red':
       return 'bg-[red]'
+    case 'blue':
+      return 'bg-blue-9'
+    case 'orange':
+      return 'bg-[orange]'
     default:
       return 'bg-gray'
   }

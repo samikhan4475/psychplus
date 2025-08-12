@@ -4,6 +4,16 @@ import {
   QUESTIONS as AUDITQuestions,
   SCORE_INTERPRETATION_RANGES as AUDITScoreRanges,
 } from '../../audit-tab/constants'
+import {
+  BAI_LABELS,
+  BAI_QUESTIONS,
+  BAI_SCORE_INTERPRETATION_RANGES,
+} from '../../bai-tab/constants'
+import {
+  BDI_QUESTION_LABELS,
+  BDI_QUESTIONS,
+  BDI_SCORE_INTERPRETATION_RANGES,
+} from '../../bdi-tab/constants'
 import { QuestionnaireTabs } from '../../constants'
 import {
   LABELS as COPSRLabels,
@@ -125,7 +135,21 @@ const questionnaireViewDta = [
   {
     sectionName: QuickNoteSectionName.QuickNoteSectionGqasc,
     questionnaireTab: QuestionnaireTabs.GQ_ASC_TAB,
-  }
+  },
+  {
+    sectionName: QuickNoteSectionName.QuickNoteSectionBai,
+    labels: BAI_LABELS,
+    questions: BAI_QUESTIONS,
+    scoreRange: BAI_SCORE_INTERPRETATION_RANGES,
+    questionnaireTab: QuestionnaireTabs.BAI_TAB,
+  },
+  {
+    sectionName: QuickNoteSectionName.QuickNoteSectionBdi,
+    labels: BDI_QUESTION_LABELS,
+    questions: BDI_QUESTIONS,
+    scoreRange: BDI_SCORE_INTERPRETATION_RANGES,
+    questionnaireTab: QuestionnaireTabs.BDI_TAB,
+  },
 ]
 
 export const questionnaireViewConstants = (
