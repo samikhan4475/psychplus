@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { Button, Flex } from '@radix-ui/themes'
 import { CircleCheck } from 'lucide-react'
@@ -35,11 +35,16 @@ const ClinicTimeHeader = ({ staffId }: PropsWithStaffId) => {
     'clickActiveVisitClinicTimeTab',
   )
 
+  const pendingClinicSchedules = useMemo(
+    () => data?.filter((el) => el.status === ClinicScheduleStatus.Pending),
+    [data]
+  )
+  const hasPendingSchedules = pendingClinicSchedules && pendingClinicSchedules.length > 0
+
   const handleApproveAll = async () => {
-    const pendingClinicSchedules = data?.filter(
-      (el) => el.status === ClinicScheduleStatus.Pending,
-    )
-    if (!pendingClinicSchedules) return
+    if (!hasPendingSchedules) {
+      return
+    }
     if (!hasPermissionToApproveSchedule) {
       setShowApproveScheduleAlert(true)
       return
@@ -93,6 +98,7 @@ const ClinicTimeHeader = ({ staffId }: PropsWithStaffId) => {
                 variant="solid"
                 highContrast
                 size="2"
+                disabled={!hasPendingSchedules}
                 onClick={handleApproveAll}
               >
                 <CircleCheck width={16} height={16} />
