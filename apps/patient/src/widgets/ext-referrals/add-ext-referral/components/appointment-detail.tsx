@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useMemo } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { CODESETS } from '@psychplus-v2/constants'
 import { Box, Flex, Grid, Separator, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
@@ -11,6 +11,7 @@ import { useCodesetCodes } from '@/providers'
 import { ReferralType } from '../types'
 import { AppointmentTypeSelect } from './appointment-type-select'
 import { DischargeDate } from './discharge-date'
+import { ExternalReferralIdInput } from './external-referral-id-input'
 import { RequestedDateInput } from './requested-date-input'
 import { SchemaType } from './schema'
 import { StateSelect } from './state-select'
@@ -34,6 +35,9 @@ const AppointmentDetail = ({
   const codes = useCodesetCodes(CODESETS.ServicesOffered)
   const form = useFormContext<SchemaType>()
   const { type: formType } = useParams<{ type: string }>()
+  const searchParams = useSearchParams()
+  const isIncludeExternalReferralIdInput =
+    searchParams?.get('isIncludeExternalReferenceIdInput') === 'true'
 
   const servicesOfferedOptions = useMemo(
     () =>
@@ -92,6 +96,7 @@ const AppointmentDetail = ({
           <Grid columns="2" className="max-xs:grid-cols-1" gap="3">
             <StateSelect googleAPIkey={googleAPIkey} />
             <ZipInput />
+            {isIncludeExternalReferralIdInput && <ExternalReferralIdInput />}
             {[ReferralType.Facility, ReferralType.Payer].includes(
               formType as ReferralType,
             ) && <DischargeDate />}

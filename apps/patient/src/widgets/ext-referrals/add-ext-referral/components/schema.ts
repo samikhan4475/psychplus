@@ -42,6 +42,7 @@ const schema = z
     time: validate.optionalString,
     dischargeTime: z.custom<DateValue>().optional(),
     referrerFacility: validate.limitedString({ max: 256 }).optional(),
+    externalReferenceId: validate.limitedString({ max: 8 }).optional(),
     referrerName: validate.limitedString({ max: 256 }).optional(),
     referrerShortName: validate.limitedString({ max: 256 }).optional(),
     referrerContactDetails: z.object({

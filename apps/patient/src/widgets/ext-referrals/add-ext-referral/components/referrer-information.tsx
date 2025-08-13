@@ -78,7 +78,6 @@ const ReferrerInformation = ({
             className="h-[38px]"
           />
         </FormField>
-
         <Box className="col-span-full">
           <FormField
             containerClassName="flex-1"
