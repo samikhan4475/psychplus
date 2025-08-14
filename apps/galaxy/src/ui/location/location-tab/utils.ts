@@ -1,6 +1,8 @@
 import { Location, SelectOptionType } from '@/types'
+import { LocationType } from '../constant'
 import { LocationFormSchemaType } from './filter-form'
 import { LocationSchemaType } from './location-dialog'
+import { LocationFilter } from './types'
 
 const getInitialValues = (): LocationFormSchemaType => {
   return {
@@ -61,9 +63,19 @@ function sanitizeFormData<T extends object>(obj: T): T {
   ) as T
 }
 
+const withDefaultLocationTypes = (
+  formValues: Partial<LocationFilter> | undefined,
+) => ({
+  ...formValues,
+  ...(formValues?.locationType
+    ? {}
+    : { locationTypes: [LocationType.Clinic, LocationType.Facility] }),
+})
+
 export {
   getServiceLabel,
   getInitialValues,
   getInitialLocationValues,
   sanitizeFormData,
+  withDefaultLocationTypes,
 }

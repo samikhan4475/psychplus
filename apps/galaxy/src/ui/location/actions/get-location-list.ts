@@ -4,6 +4,7 @@ import * as api from '@/api'
 import { Location } from '@/types'
 import { LOCATION_LIST_TABLE_PAGE_SIZE } from '../constant'
 import { GetLocationListParams, GetLocationListResponse } from '../location-tab'
+import { withDefaultLocationTypes } from '../location-tab/utils'
 
 const defaultPayload = {
   isIncludeMetadataResourceChangeControl: true,
@@ -30,9 +31,10 @@ const getLocationListAction = async ({
   } else {
     url.searchParams.append('orderBy', 'createdOn desc')
   }
+  const finalPayload = withDefaultLocationTypes(formValues)
   const response = await api.POST<Location[]>(url?.toString(), {
     ...defaultPayload,
-    ...formValues,
+    ...finalPayload,
   })
   if (response.state === 'error') {
     return {
