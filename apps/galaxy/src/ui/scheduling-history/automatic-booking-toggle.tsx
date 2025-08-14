@@ -58,7 +58,7 @@ const AutomaticBookingToggle = ({ patientId }: AutomaticBookingToggleProps) => {
 
   return (
     <Flex gap="1" align="center">
-      <Text className="text-1 font-medium ">Automatic Booking Opt-out</Text>
+      <Text className="text-1 font-medium ">Automatic Booking</Text>
       <Switch
         checked={patientProfile?.isAutoReschedulingEnabled}
         onCheckedChange={handleToggleSwitch}
