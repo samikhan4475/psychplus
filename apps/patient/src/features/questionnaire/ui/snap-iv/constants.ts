@@ -1,5 +1,5 @@
 const LABELS = [
-  'How often have you been bothered by any of the following problems?',
+  'For each item, check the column which best describes this child/adolescent:',
   'Not at all',
   'Just a Little',
   'Quite a Bit',

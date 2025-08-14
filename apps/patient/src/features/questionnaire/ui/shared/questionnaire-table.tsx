@@ -72,7 +72,7 @@ const QuestionnaireTable = ({
                 align="center"
               >
                 <Flex className="w-1/2">
-                  <Text className="text-[13px]" weight="medium">
+                  <Text className="text-[16px]" weight="bold" color="red">
                     {item.headingLabels?.[0]}
                   </Text>
                 </Flex>

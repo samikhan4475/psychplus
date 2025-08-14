@@ -28,7 +28,7 @@ interface Option {
 interface NoteData {
   id: string
   question: string
-  value: number
+  value: number | string
   options: Option[]
   headingLabels?: string[]
 }

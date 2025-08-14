@@ -1,4 +1,4 @@
-const LABELS = ['Questions', 'No', 'Yes']
+const LABELS = ['In the past 12 months…', 'No', 'Yes']
 
 const QUESTIONS = [
   'Have you used drugs other than those required for medical reasons?',

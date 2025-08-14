@@ -15,7 +15,10 @@ const categories = {
 const snapIvMapping: QuestionnaireSchemaType = Object.fromEntries(
   Object.values(categories)
     .flat()
-    .map((question) => [question, '0']),
+    .map((question) => [
+      question,
+      categories.Inattention.includes(question) ? '0' : '',
+    ]),
 )
 
 export { snapIvMapping }
