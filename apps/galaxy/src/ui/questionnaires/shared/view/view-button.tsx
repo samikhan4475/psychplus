@@ -39,29 +39,27 @@ const ViewButton = ({
             {justIcon ? <EyeIcon height="14" width="14" /> : <span>View</span>}
           </Dialog.Trigger>
 
-          <Dialog.Content maxWidth="70vw" className="relative">
-            <ScrollArea style={{ height: '65vh' }}>
-              <Flex justify="between" align="center" pr="3" mb="2">
-                <Dialog.Title
-                  size="5"
-                  weight="bold"
-                  className="text-black m-0 font-sans"
-                >
-                  {
-                    QuestionnairesTitles[
-                      currentQuestionnaire.questionnaireTab as keyof typeof QuestionnairesTitles
-                    ]
-                  }
-                </Dialog.Title>
-                <Dialog.Close className="cursor-pointer">
-                  <Cross2Icon />
-                </Dialog.Close>
-              </Flex>
-              <QuestionnaireDetailView
-                data={data}
-                sectionName={quickNoteSectionName}
-              />
-            </ScrollArea>
+          <Dialog.Content className="relative max-h-[90vh] max-w-[80vw]">
+            <Flex justify="between" align="center" pr="3" mb="2">
+              <Dialog.Title
+                size="5"
+                weight="bold"
+                className="text-black m-0 font-sans"
+              >
+                {
+                  QuestionnairesTitles[
+                    currentQuestionnaire.questionnaireTab as keyof typeof QuestionnairesTitles
+                  ]
+                }
+              </Dialog.Title>
+              <Dialog.Close className="cursor-pointer">
+                <Cross2Icon />
+              </Dialog.Close>
+            </Flex>
+            <QuestionnaireDetailView
+              data={data}
+              sectionName={quickNoteSectionName}
+            />
           </Dialog.Content>
         </Dialog.Root>
       </Button>

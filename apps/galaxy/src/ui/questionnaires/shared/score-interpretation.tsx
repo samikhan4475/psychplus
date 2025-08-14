@@ -31,7 +31,7 @@ const ScoreInterpretation = ({
 
   return (
     <Flex className="border-y border-gray-3" direction="column">
-      <Flex align="center" justify="between" className="h-9" px="2">
+      <Flex align="center" justify="between" px="2" py="1">
         <Flex className="" gap="4">
           <Text weight="bold" size="2">
             {heading}
@@ -118,7 +118,7 @@ const getBadgeColor = (currentRange?: ScoreInterpretationRange) => {
 }
 
 const getBadgeBackgroundClass = (color: string) => {
-  switch (color) {
+  switch (color.toLocaleLowerCase()) {
     case 'white':
       return 'bg-[white]'
     case 'green':

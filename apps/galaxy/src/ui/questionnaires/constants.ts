@@ -18,6 +18,7 @@ enum QuestionnaireTabs {
   ADULT_ASRS_TAB = 'ADULT ASRS',
   VADPRS_TAB = 'VADPRS',
   GQ_ASC_TAB = 'GQ-ASC',
+  DES_II_TAB = 'DES-II',
   BAI_TAB = 'BAI',
   BDI_TAB = 'BDI',
 }
@@ -47,8 +48,9 @@ enum QuestionnairesTitles {
   'PSC-17' = 'Pediatric Symptom Checklist-17 (PSC-17)',
   'COPS-R' = 'Candidate & Officer Personnel Survey (COPS-R)',
   'Adult ASRS' = 'Adult Self Report Scale (Adult ASRS)',
-  'VADPRS' = 'Vanderbilt ADHD Diagnostic Parent Rating Scale',
   'GQ-ASC' = 'GQ-ASC Scale for Adult Women (GQ-ASC)',
+  'DES-II' = 'Dissociative Experiences Scale (DES- II)',
+  'VADPRS' = 'Vanderbilt ADHD Diagnostic Parent Rating Scale',
   'BAI' = 'Beck Anxiety Inventory (BAI)',
   'BDI' = 'Beck Depression Inventory (BDI)',
 }
@@ -86,6 +88,8 @@ const quickNotesSectionsTitles = {
     'Vanderbilt ADHD Diagnostic Parent Rating Scale',
   [QuickNoteSectionName.QuickNoteSectionGqasc]:
     'GQ-ASC Scale for Adult Women (GQ-ASC)',
+  [QuickNoteSectionName.QuickNoteSectionDesii]:
+    'Dissociative Experiences Scale (DES- II)',
   [QuickNoteSectionName.QuickNoteSectionBai]: 'Beck Anxiety Inventory (BAI)',
   [QuickNoteSectionName.QuickNoteSectionBdi]: 'Beck Depression Inventory (BDI)',
 }
@@ -109,6 +113,7 @@ const HISTORIES_SECTIONS = [
   QuickNoteSectionName.QuickNoteSectionGqasc,
   QuickNoteSectionName.QuickNoteSectionBai,
   QuickNoteSectionName.QuickNoteSectionBdi,
+  QuickNoteSectionName.QuickNoteSectionDesii,
 ]
 export {
   QuestionnaireTabs,

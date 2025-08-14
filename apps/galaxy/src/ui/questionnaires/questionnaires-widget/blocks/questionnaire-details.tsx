@@ -5,9 +5,15 @@ import { ListIcon, SignalIcon } from 'lucide-react'
 import { BlockLabel } from '@/components'
 import { QuickNoteHistory } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import {
+  ADULT_ASRS_SECTIONS,
+  SCORE_INTERPRETATION_RANGES_PART_A,
+  SCORE_INTERPRETATION_RANGES_PART_B,
+} from '../../adult-asrs-tab/constants'
 import { SCORE_INTERPRETATION_RANGES as AUDIT_SCORE_INTERPRETATION_RANGES } from '../../audit-tab/constants'
 import { QuestionnaireTabs } from '../../constants'
 import { SCORE_INTERPRETATION_RANGES as DAST10_SCORE_INTERPRETATION_RANGES } from '../../dast-10-tab/constants'
+import { SCORE_INTERPRETATION_RANGES as DES_II_SCORE_INTERPRETATION_RANGES } from '../../des-ii-tab/constants'
 import { SCORE_INTERPRETATION_RANGES as GAD7_SCORE_INTERPRETATION_RANGES } from '../../gad-7-tab/constants'
 import { SCORE_INTERPRETATION_RANGES as GQ_ASC_SCORE_INTERPRETATION_RANGES } from '../../gq-asc-tab/constants'
 import {
@@ -37,7 +43,6 @@ import { SCORE_INTERPRETATION_RANGES as YBOCS_SCORE_INTERPRETATION_RANGES } from
 import { ChartView, ListView, TabsContent, TabsTrigger } from '../tabs'
 import { DeleteButton } from './delete-button'
 import { RowRightButtons } from './row-right-button'
-import { ADULT_ASRS_SECTIONS, SCORE_INTERPRETATION_RANGES_PART_A, SCORE_INTERPRETATION_RANGES_PART_B } from '../../adult-asrs-tab/constants'
 
 interface QuestionnairesDetailsProps {
   questionnaire: string
@@ -261,6 +266,7 @@ const scoreInterpretationRanges = (
     [QuestionnaireTabs.HAM_D_TAB]: HAMD_SCORE_INTERPRETATION_RANGES,
     [QuestionnaireTabs.C_SSRS_TAB]: CSSRS_SCORE_INTERPRETATION_RANGES,
     [QuestionnaireTabs.GQ_ASC_TAB]: GQ_ASC_SCORE_INTERPRETATION_RANGES,
+    [QuestionnaireTabs.DES_II_TAB]: DES_II_SCORE_INTERPRETATION_RANGES,
   }
 
   return rangesMap[label] || []

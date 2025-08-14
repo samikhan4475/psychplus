@@ -6,6 +6,7 @@ import { AdultAsrsView } from './adult-asrs-view'
 import { AimsView } from './aims-view'
 import { questionnaireViewConstants } from './constant'
 import { CssrsView } from './cssrs-view'
+import { DesiiView } from './des-ii-view'
 import { GqAscView } from './gq-asc-view'
 import { MocaView } from './moca-view'
 import { Psc17View } from './psc-17-view'
@@ -27,7 +28,7 @@ const QuestionnaireDetailView = ({
   const hasOtherQuestionnaire = Boolean(
     currentQuestionnaire.questions &&
       currentQuestionnaire.labels &&
-      (currentQuestionnaire.scoreRange || currentQuestionnaire?.pagination ),
+      (currentQuestionnaire.scoreRange || currentQuestionnaire?.pagination),
   )
 
   const renderView = () => {
@@ -50,6 +51,8 @@ const QuestionnaireDetailView = ({
         return <VadprsView data={data} />
       case QuickNoteSectionName.QuickNoteSectionGqasc:
         return <GqAscView data={data} />
+      case QuickNoteSectionName.QuickNoteSectionDesii:
+        return <DesiiView data={data} />
       default:
         return null
     }

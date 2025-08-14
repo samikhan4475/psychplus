@@ -2,7 +2,7 @@
 
 import { PropsWithChildren } from 'react'
 import { Cross2Icon } from '@radix-ui/react-icons'
-import { Button, Dialog, Flex, ScrollArea } from '@radix-ui/themes'
+import { Button, Dialog, Flex } from '@radix-ui/themes'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { quickNotesSectionsTitles } from '../../constants'
@@ -25,28 +25,25 @@ const FillOutButton = ({ data, sectionName }: FillOutButtonProps) => {
           Fill out
         </Button>
       </Dialog.Trigger>
+      <Dialog.Content className="relative max-h-[90vh] max-w-[80vw]">
+        <Flex justify="between" align="center" pr="3" mb="2">
+          <Dialog.Title
+            size="5"
+            weight="bold"
+            className="text-black m-0 font-sans"
+          >
+            {
+              quickNotesSectionsTitles[
+                sectionName as keyof typeof quickNotesSectionsTitles
+              ]
+            }
+          </Dialog.Title>
+          <Dialog.Close className="cursor-pointer">
+            <Cross2Icon />
+          </Dialog.Close>
+        </Flex>
 
-      <Dialog.Content maxWidth="70vw" className="relative">
-        <ScrollArea style={{ height: '80vh' }}>
-          <Flex justify="between" align="center" pr="3" mb="2">
-            <Dialog.Title
-              size="5"
-              weight="bold"
-              className="text-black m-0 font-sans"
-            >
-              {
-                quickNotesSectionsTitles[
-                  sectionName as keyof typeof quickNotesSectionsTitles
-                ]
-              }
-            </Dialog.Title>
-            <Dialog.Close className="cursor-pointer">
-              <Cross2Icon />
-            </Dialog.Close>
-          </Flex>
-
-          <FillOutView data={data} sectionName={sectionName} />
-        </ScrollArea>
+        <FillOutView data={data} sectionName={sectionName} />
       </Dialog.Content>
     </Dialog.Root>
   )

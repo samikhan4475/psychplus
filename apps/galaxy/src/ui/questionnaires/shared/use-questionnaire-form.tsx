@@ -24,6 +24,7 @@ const calculateTotalFilledQuestions = (data: any): number => {
 const useQuestionnaireForm = (
   initialValues: QuestionnaireSchemaType,
   totalQuestions: number,
+  extensiveScoreCalculation?: (score: number) => number,
 ): UseFormReturn<QuestionnaireSchemaType> & {
   totalScore: number
   totalFilledQuestions: number
@@ -42,8 +43,11 @@ const useQuestionnaireForm = (
   useEffect(() => {
     const scores = calculateTotalScore(initialValues)
     const filledQuestions = calculateTotalFilledQuestions(initialValues)
+    const finalScore = extensiveScoreCalculation
+      ? extensiveScoreCalculation(scores)
+      : scores
 
-    setTotalScore(scores)
+    setTotalScore(finalScore)
     setTotalFilledQuestions(filledQuestions)
   }, [])
 
@@ -51,8 +55,11 @@ const useQuestionnaireForm = (
     const subscription = form.watch((values) => {
       const scores = calculateTotalScore(values)
       const filledQuestions = calculateTotalFilledQuestions(values)
+      const finalScore = extensiveScoreCalculation
+        ? extensiveScoreCalculation(scores)
+        : scores
 
-      setTotalScore(scores)
+      setTotalScore(finalScore)
       setTotalFilledQuestions(filledQuestions)
     })
 

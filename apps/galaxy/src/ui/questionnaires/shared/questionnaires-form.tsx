@@ -36,6 +36,7 @@ interface QuestionnairesFormProps {
   labels: string[]
   totalScore: number
   scoreInterpretationRanges: ScoreInterpretationRange[]
+  classNameHeader?: string
   classNameHeaderCell?: string
   classNameCell?: string
   disabled?: boolean
@@ -50,6 +51,7 @@ const QuestionnairesForm = ({
   labels,
   totalScore,
   scoreInterpretationRanges,
+  classNameHeader,
   classNameHeaderCell,
   classNameCell,
   disabled = false,
@@ -99,13 +101,14 @@ const QuestionnairesForm = ({
     }),
   )
 
+  const headerClass =
+    classNameHeader || (classNameHeaderCell && 'bg-pp-bg-table-label')
+
   return (
     <Box className="w-full">
       <Table.Root variant="ghost" size="1">
         {paginatedData.length > 0 && (
-          <Table.Header
-            className={classNameHeaderCell && 'bg-pp-bg-table-label'}
-          >
+          <Table.Header className={headerClass}>
             {showHeader && (
               <Table.Row>
                 <Table.ColumnHeaderCell width="50%">

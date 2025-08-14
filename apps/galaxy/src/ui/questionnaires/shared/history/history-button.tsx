@@ -83,28 +83,26 @@ const HistoryDialogContent = ({
             </Flex>
           )}
         </Dialog.Trigger>
-        <Dialog.Content maxWidth="70vw" className="relative">
-          <ScrollArea style={{ height: '80vh' }}>
-            <Flex justify="between" align="center" pr="3" mb="2">
-              <Dialog.Title
-                size="5"
-                weight="bold"
-                className="text-black m-0 font-sans"
-              >
-                {
-                  quickNotesSectionsTitles[
-                    questionnaire as keyof typeof quickNotesSectionsTitles
-                  ]
-                }
-              </Dialog.Title>
-              <Dialog.Close className="cursor-pointer">
-                <Cross2Icon />
-              </Dialog.Close>
-            </Flex>
-            <QuestionnaireHistory
-              questionnaire={questionnaire as QuickNoteSectionName}
-            />
-          </ScrollArea>
+        <Dialog.Content className="relative max-h-[90vh] max-w-[80vw]">
+          <Flex justify="between" align="center" mb="2">
+            <Dialog.Title
+              size="5"
+              weight="bold"
+              className="text-black m-0 font-sans"
+            >
+              {
+                quickNotesSectionsTitles[
+                  questionnaire as keyof typeof quickNotesSectionsTitles
+                ]
+              }
+            </Dialog.Title>
+            <Dialog.Close className="cursor-pointer">
+              <Cross2Icon />
+            </Dialog.Close>
+          </Flex>
+          <QuestionnaireHistory
+            questionnaire={questionnaire as QuickNoteSectionName}
+          />
         </Dialog.Content>
       </Dialog.Root>
     </Button>

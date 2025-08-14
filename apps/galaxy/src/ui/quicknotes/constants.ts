@@ -25,6 +25,7 @@ enum QuickNoteSectionName {
   QuickNoteSectionCssrs = 'QuicknoteSectionQuestionnaireCssrs',
   QuickNoteSectionMoca = 'QuicknoteSectionQuestionnaireMoca',
   QuickNoteSectionGqasc = 'QuicknoteSectionQuestionnaireGqasc',
+  QuickNoteSectionDesii = 'QuicknoteSectionQuestionnaireDesii',
   QuickNoteSectionDiagnosis = 'QuicknoteSectionDiagnosis',
   QuickNoteSectionHospitalInitial = 'QuicknoteSectionHospitalInitial',
   QuickNoteSectionHospitalOrders = 'QuicknoteSectionHospitalOrders',
@@ -93,6 +94,7 @@ const questionnairesAddToNotesSection = [
   `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionAdultAsrs}`,
   `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionVadprs}`,
   `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionGqasc}`,
+  `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionDesii}`,
   `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionBai}`,
   `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionBdi}`,
 ]

@@ -137,6 +137,10 @@ const questionnaireViewDta = [
     questionnaireTab: QuestionnaireTabs.GQ_ASC_TAB,
   },
   {
+    sectionName: QuickNoteSectionName.QuickNoteSectionDesii,
+    questionnaireTab: QuestionnaireTabs.DES_II_TAB,
+  },
+  {
     sectionName: QuickNoteSectionName.QuickNoteSectionBai,
     labels: BAI_LABELS,
     questions: BAI_QUESTIONS,

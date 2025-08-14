@@ -15,6 +15,7 @@ import { QuestionnaireTabs } from './constants'
 import { CopsRTab } from './cops-r-tab'
 import { DashboardTab } from './dashboard-tab'
 import { Dast10Tab } from './dast-10-tab'
+import { DesiiTab } from './des-ii-tab'
 import { Gad7Tab } from './gad-7-tab'
 import { GqAscTab } from './gq-asc-tab'
 import { HamDTab } from './ham-d-tab'
@@ -61,6 +62,7 @@ const QuestionnairesView = ({ data, patientId }: QuestionnairesViewProps) => {
     QuestionnaireTabs.VADPRS_TAB,
     QuestionnaireTabs.ADULT_ASRS_TAB,
     QuestionnaireTabs.GQ_ASC_TAB,
+    QuestionnaireTabs.DES_II_TAB,
     QuestionnaireTabs.BAI_TAB,
     QuestionnaireTabs.BDI_TAB,
   ].map((q) => ({ label: q, value: q }))
@@ -83,6 +85,7 @@ const QuestionnairesView = ({ data, patientId }: QuestionnairesViewProps) => {
     [QuestionnaireTabs.VADPRS_TAB]: VadprsTab,
     [QuestionnaireTabs.ADULT_ASRS_TAB]: AdultAsrsTab,
     [QuestionnaireTabs.GQ_ASC_TAB]: GqAscTab,
+    [QuestionnaireTabs.DES_II_TAB]: DesiiTab,
     [QuestionnaireTabs.BAI_TAB]: BaiTab,
     [QuestionnaireTabs.BDI_TAB]: BdiTab,
   }
