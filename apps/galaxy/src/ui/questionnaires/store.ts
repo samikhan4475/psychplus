@@ -14,6 +14,7 @@ import {
 } from './questionnaires-widget/data'
 
 interface Store {
+  loading: boolean
   activeQuestionnaireTab: string
   viewedQuestionnaireTabs: Set<string>
   setQuestionnaireActiveTab: (tab: string) => void
@@ -50,10 +51,12 @@ const initialState = {
   histories: {},
   addedToNotes: {},
   showNoteViewValue: null,
+  loading: false,
 }
 
 const useStore = create<Store>((set, get) => ({
   ...initialState,
+  setLoading: (value: boolean) => set({ loading: value }),
   activeQuestionnaireTab: QuestionnaireTabs.DASHBOARD_TAB,
   viewedQuestionnaireTabs: new Set([QuestionnaireTabs.DASHBOARD_TAB]),
   setQuestionnaireActiveTab: (activeQuestionnaireTab) => {
@@ -87,6 +90,7 @@ const useStore = create<Store>((set, get) => ({
     }
   },
   handleAddToNotes: async (data, questionnaire, patientId) => {
+    set({ loading: true })
     const filtered = Array.isArray(data)
       ? data.filter((item) => item.addToNote)
       : []
@@ -126,6 +130,7 @@ const useStore = create<Store>((set, get) => ({
     } else {
       toast.error('Failed to save!')
     }
+    set({ loading: false })
   },
   initializeQuestionnaires: async (patientId) => {
     set(initialState)

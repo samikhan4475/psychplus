@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { Box, Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import {
   WidgetClearButton,
@@ -64,46 +65,55 @@ const SubstanceUseHxWidget = ({
     form.watch('widgetContainerCheckboxField') === 'show' || isHistoryHeader
 
   return (
-    <FormProvider {...form}>
-      <WidgetFormContainer
-        patientId={patientId}
-        widgetId={QuickNoteSectionName.QuickNoteSectionSubstanceUseHx}
-        title={!isHistoryHeader ? 'Substance Use History' : undefined}
-        widgetContainerCheckboxFieldInitialValue={
-          initialValue.widgetContainerCheckboxField
-        }
-        tags={
-          isHistoryHeader
-            ? [QuickNoteSectionName.QuickNoteSectionSubstanceUseHx]
-            : []
-        }
-        getData={transformOut(
-          patientId,
-          appointmentId,
-          isHospitalDischargeView ? workingDiagnosisData : diagnosisData,
-          isHospitalDischargeView,
-        )}
-        toggleable={!isHistoryHeader}
-        headerRight={
-          <>
-            <WidgetClearButton
-              defaultInitialValues={defaultInitialValues}
-              shouldCheckPermission
-            />
-            {!isHistoryHeader && <WidgetSaveButton shouldCheckPermission />}
-          </>
-        }
-        formResetValues={defaultInitialValues}
-        topHeader={isHistoryHeader && <SubstanceUseHxHxHeader />}
-      >
+    <Box>
+      <FormProvider {...form}>
+        <WidgetFormContainer
+          className="pb-0"
+          patientId={patientId}
+          widgetId={QuickNoteSectionName.QuickNoteSectionSubstanceUseHx}
+          title={!isHistoryHeader ? 'Substance Use History' : undefined}
+          widgetContainerCheckboxFieldInitialValue={
+            initialValue.widgetContainerCheckboxField
+          }
+          tags={
+            isHistoryHeader
+              ? [QuickNoteSectionName.QuickNoteSectionSubstanceUseHx]
+              : []
+          }
+          getData={transformOut(
+            patientId,
+            appointmentId,
+            isHospitalDischargeView ? workingDiagnosisData : diagnosisData,
+            isHospitalDischargeView,
+          )}
+          toggleable={!isHistoryHeader}
+          headerRight={
+            <>
+              <WidgetClearButton
+                defaultInitialValues={defaultInitialValues}
+                shouldCheckPermission
+              />
+              {!isHistoryHeader && <WidgetSaveButton shouldCheckPermission />}
+            </>
+          }
+          formResetValues={defaultInitialValues}
+          topHeader={isHistoryHeader && <SubstanceUseHxHxHeader />}
+        />
         {isShow && (
-          <>
+          <Flex
+            direction={'column'}
+            className="bg-white"
+            mt={'0'}
+            px={'3'}
+            pb={'3'}
+            gap={'2'}
+          >
             <TobaccoBlock />
             <AlcoholDrugsBlock />
-          </>
+          </Flex>
         )}
-      </WidgetFormContainer>
-    </FormProvider>
+      </FormProvider>
+    </Box>
   )
 }
 

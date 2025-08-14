@@ -19,11 +19,14 @@ const HistoryView = ({ questionnaire }: HistoryViewProps) => {
   const [data, setData] = useState<QuickNoteHistory[]>([])
   const patientId = useParams().id as string
 
-  const { addedToNotes, histories, handleAddToNotes } = useStore((state) => ({
-    histories: state.histories,
-    addedToNotes: state.addedToNotes,
-    handleAddToNotes: state.handleAddToNotes,
-  }))
+  const { addedToNotes, histories, handleAddToNotes, loading } = useStore(
+    (state) => ({
+      histories: state.histories,
+      addedToNotes: state.addedToNotes,
+      handleAddToNotes: state.handleAddToNotes,
+      loading: state.loading,
+    }),
+  )
 
   const calculateTotalScoreForHistory = (history: QuickNoteHistory): string => {
     return calculateTotalScore(history.data, questionnaire).toString()
@@ -69,7 +72,7 @@ const HistoryView = ({ questionnaire }: HistoryViewProps) => {
             </Flex>
           </Flex>
         </Tabs.List>
-        <AddToNotesSaveButton onClick={handleOnSave} />
+        <AddToNotesSaveButton onClick={handleOnSave} loading={loading} />
       </Flex>
 
       {data && (

@@ -12,7 +12,7 @@ const DiagnosisSaveButton = () => {
   const patientId = useParams().id as string
   const searchParams = useSearchParams()
   const appointmentId = searchParams.get('id') ?? undefined
-  const { saveWorkingDiagnosis } = useStore()
+  const { saveWorkingDiagnosis, loadingWorkingDiagnosis } = useStore()
   const setWidgetsData = quicknoteStore((state) => state.setWidgetsData)
   const handleSaveDiagnosis = () => {
     saveWorkingDiagnosis(patientId, setWidgetsData, true, appointmentId)
@@ -29,6 +29,7 @@ const DiagnosisSaveButton = () => {
         size="1"
         color="gray"
         className="text-black"
+        disabled={loadingWorkingDiagnosis}
       >
         Save
       </Button>
@@ -42,6 +43,7 @@ const DiagnosisSaveButton = () => {
       size="1"
       color="gray"
       highContrast
+      disabled={loadingWorkingDiagnosis}
     >
       <SaveIcon width={15} height={15} strokeWidth={1.75} />
       Save

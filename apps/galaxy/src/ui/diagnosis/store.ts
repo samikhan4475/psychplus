@@ -93,6 +93,7 @@ const useStore = create<Store>((set, get) => ({
   },
 
   saveWorkingDiagnosis: async (patientId, setWidgetsData, showToast = true,appointmentId) => {
+    set({loadingWorkingDiagnosis:true})
     const codes = get()
       .workingDiagnosisData.map((item) => item.code)
       .filter((code) => code !== 'empty')
@@ -124,6 +125,7 @@ const useStore = create<Store>((set, get) => ({
         },
       ])
     }
+    set({loadingWorkingDiagnosis:false})
   },
 
   deleteWorkingDiagnosis: async (item) => {

@@ -90,6 +90,7 @@ const useStore = create<Store>((set, get) => ({
     setWidgetsData,
     showToast = true,
   ) => {
+    set({loadingWorkingDiagnosis:true})
     const { workingDischargeDiagnosisData } = get()
     const codes = workingDischargeDiagnosisData
       .reduce((acc: string[], item) => {
@@ -128,6 +129,7 @@ const useStore = create<Store>((set, get) => ({
         },
       ])
     }
+    set({loadingWorkingDiagnosis:false})
   },
   deleteWorkingDisrchargeDiagnosis: async ({ code }) => {
     set({

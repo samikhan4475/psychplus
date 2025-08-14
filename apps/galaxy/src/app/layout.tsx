@@ -20,6 +20,8 @@ import { Header } from '@/ui/header'
 import { LockScreenProvider } from '@/ui/lock-screen-context'
 import { cn } from '@/utils'
 import { getAuthCookies } from '@/utils/auth'
+import { ToastProvider } from '@/ui/toast-provider'
+
 export const metadata: Metadata = {
   title: 'PsychPlus',
   description: 'PsychPlus',
@@ -38,6 +40,7 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
   const content = (
     <html lang="en" className={cn(josefin.variable)}>
       <body>
+        <ToastProvider>
         <Toaster
           position="top-center"
           toastOptions={{
@@ -67,6 +70,7 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
             )}
           </Flex>
         </Theme>
+        </ToastProvider>
       </body>
     </html>
   )
@@ -119,7 +123,12 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
       return (
         <html lang="en" className={cn(josefin.variable)}>
           <body>
-            <Toaster position="top-center" toastOptions={{ duration: 5000 }} />
+            <Toaster
+              position="top-center"
+              toastOptions={{
+                duration: 5000,
+              }}
+            />
             <Theme
               accentColor="blue"
               radius="medium"

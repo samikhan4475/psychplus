@@ -6,8 +6,11 @@ import { useStore as quicknoteStore } from '@/ui/quicknotes/store'
 import { useStore } from '../store'
 
 const DiagnosisSaveButton = () => {
-  const saveWorkingDischargeDiagnosis = useStore(
-    (state) => state.saveWorkingDischargeDiagnosis,
+  const { saveWorkingDischargeDiagnosis, loadingWorkingDiagnosis } = useStore(
+    (state) => ({
+      saveWorkingDischargeDiagnosis: state.saveWorkingDischargeDiagnosis,
+      loadingWorkingDiagnosis: state.loadingWorkingDiagnosis,
+    }),
   )
   const setWidgetsData = quicknoteStore((state) => state.setWidgetsData)
   const { id: patientId, apptId = '' } = useParams<{
@@ -25,6 +28,7 @@ const DiagnosisSaveButton = () => {
       size="1"
       color="gray"
       className="text-black"
+      disabled={loadingWorkingDiagnosis}
     >
       Save
     </Button>
