@@ -7,6 +7,7 @@ import {
 } from '../diagnosis/diagnosis/utils'
 
 enum QuickNoteSectionName {
+  NoShowPopUp='NoShowPopUp',
   QuickNoteSectionDashboard = 'QuicknoteSectionDashboard',
   QuicknoteSectionQuestionnaire = 'QuicknoteSectionQuestionnaire',
   QuestionnaireActualNoteView = 'QuicknoteSectionQuestionnaireActualNoteView',

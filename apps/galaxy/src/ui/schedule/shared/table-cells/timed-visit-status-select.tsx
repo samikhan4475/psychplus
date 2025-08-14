@@ -5,6 +5,7 @@ import { CodesetSelectCell } from '@/components'
 import { CODESETS, SettingStatusCode } from '@/constants'
 import { useStore as useGlobalStore, useStore } from '@/store'
 import { Appointment, RolePermission } from '@/types'
+import NoShowPopUp from '@/ui/no-show/ns-popup/no-show-popup'
 import { getPreferenceSettings } from '@/ui/staff-preferences/client-actions'
 import { StatusCode } from '../../constants'
 import {
@@ -32,6 +33,9 @@ const VISIT_STATUS_SUCCESS = 'Visit status is set as Cancel-A'
 
 const STATUS_PATIENT_IN_ROOM = 'The patient is in room'
 
+const VISIT_STATUS_NO_SHOW =
+  "Cannot mark appointment as 'No Show' before the appointment start time."
+
 const TimedVisitStatusSelect = ({
   appointment,
   className,
@@ -52,6 +56,7 @@ const TimedVisitStatusSelect = ({
   const refetch = useRefetchAppointments()
   const [isCancelAlertOpen, setIsCancelAlertOpen] = useState<boolean>(false)
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false)
+  const [isNoShowPopUpOpen, setisNoShowPopUpOpen] = useState<boolean>(false)
   const [alertMessage, setAlertMessage] = useState<string>('')
   const nonTimedVisitStatusCodes = useVisitStatusCodeset('NonTimed')
   const {
@@ -63,9 +68,6 @@ const TimedVisitStatusSelect = ({
     canChangeVisitStatusFromCheckedOut,
     canChangeVisitStatusToConfirmedS,
     canChangeVisitStatusToInRoom,
-    canChangeVisitStatusToNoShowForSelfAppointments,
-    canChangeVisitStatusToNoShowForOtherProviders,
-    canChangeVisitStatusToNoShowAfterVisitStart,
   } = useSchedulerPermissions()
   const { staffId } = useGlobalStore((state) => state.user)
   const currentTime = now(appointment.locationTimezoneId)
@@ -85,13 +87,6 @@ const TimedVisitStatusSelect = ({
   const canChangeVisitStatusToCancelledS = isASelfAppointment
     ? canChangeVisitStatusToCancelledSForSelfAppointments
     : canChangeVisitStatusToCancelledSForOtherProviders
-  const canChangeStatusToNoShowForOther =
-    canChangeVisitStatusToNoShowAfterVisitStart
-      ? true
-      : !!canChangeVisitStatusToNoShowForOtherProviders
-  const canChangeVisitStatusToNoShow = isASelfAppointment
-    ? canChangeVisitStatusToNoShowForSelfAppointments
-    : canChangeStatusToNoShowForOther
 
   const statusPermissions: Record<string, RolePermission> = {
     CheckedIn: canChangeVisitStatusToCheckedIn,
@@ -108,9 +103,11 @@ const TimedVisitStatusSelect = ({
 
     if (status === 'NoShow') {
       if (isPastVisitEndTime) {
-        return !!canChangeVisitStatusToNoShow
+        return true
       } else if (isPastVisitStartTime) {
-        return !!canChangeVisitStatusToNoShowAfterVisitStart
+        return true
+      } else {
+        return false
       }
     }
 
@@ -147,6 +144,15 @@ const TimedVisitStatusSelect = ({
     ) {
       setAlertMessage(VISIT_STATUS_FROM_CHECKED_OUT_PERMISSION)
       return setIsAlertOpen(true)
+    }
+    if (val === 'NoShow') {
+      if (hasPermissionToChangeStatus(val)) {
+        return setisNoShowPopUpOpen(true)
+      } else {
+        setAlertMessage(VISIT_STATUS_NO_SHOW)
+        setIsAlertOpen(true)
+        return
+      }
     }
     if (hasPermissionToChangeStatus(val)) {
       if (val === 'Rescheduled') {
@@ -229,6 +235,11 @@ const TimedVisitStatusSelect = ({
         isOpen={isCancelAlertOpen}
         onClose={onCancelAlertClose}
         onSave={handleCancellation}
+      />
+      <NoShowPopUp
+        appointment={appointment}
+        isOpenDialog={isNoShowPopUpOpen}
+        setIsOpenDialog={setisNoShowPopUpOpen}
       />
       <CodesetSelectCell
         codeset={CODESETS.AppointmentStatus}

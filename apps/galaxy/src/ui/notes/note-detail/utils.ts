@@ -1,5 +1,6 @@
 import { cache } from 'react'
 import { VisitTypeEnum } from '@/enum'
+import NoShowDetailView from '@/ui/no-show/ns-widget/ns-widget'
 import { AddOnDetailView } from '@/ui/quicknotes/actual-note-view/add-on/add-on-detail-view'
 import { CodesNoteDetailsView } from '@/ui/quicknotes/actual-note-view/codes/codes-note-details-view'
 import { EctNoteDetailView } from '@/ui/quicknotes/actual-note-view/ect/ect-note-detail-view'
@@ -48,6 +49,10 @@ enum ProviderType {
 }
 
 const widgetsArray: Array<WidgetType> = [
+  {
+    id: QuickNoteSectionName.NoShowPopUp,
+    actualNoteDetailComponent: NoShowDetailView,
+  },
   {
     id: QuickNoteSectionName.QuicknoteSectionHPI,
     actualNoteDetailComponent: HpiNoteDetailView,

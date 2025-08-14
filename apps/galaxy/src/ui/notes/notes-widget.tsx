@@ -140,8 +140,7 @@ const NotesWidget = ({
     const fetchData = async () => {
       if (
         selectedRow &&
-        appointment &&
-        selectedRow.notePositionCode !== 'Secondary'
+        appointment
       ) {
         fetchWidgets({
           visitType: selectedRow.visitTypeCode ?? '',

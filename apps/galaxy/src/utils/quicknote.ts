@@ -3,6 +3,7 @@ import { QuickNoteSectionName } from '../ui/quicknotes/constants'
 
 const saveAbleWdgets: QuickNoteSectionName[] = [
   QuickNoteSectionName.QuicknoteSectionHPI,
+  QuickNoteSectionName.NoShowPopUp,
   QuickNoteSectionName.QuickNoteSectionPastPsychHx,
   QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
   QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
@@ -31,6 +32,7 @@ const saveAbleWdgets: QuickNoteSectionName[] = [
 const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
   [VisitTypeEnum.Outpatient]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
+    QuickNoteSectionName.NoShowPopUp,
     QuickNoteSectionName.QuickNoteSectionPastPsychHx,
     QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
     QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
@@ -58,6 +60,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
   ],
   [VisitTypeEnum.ResidentCare]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
+    QuickNoteSectionName.NoShowPopUp,
     QuickNoteSectionName.QuickNoteSectionPastPsychHx,
     QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
     QuickNoteSectionName.QuickNoteSectionSocialHx,
@@ -85,6 +88,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
   ],
   [VisitTypeEnum.EdVisit]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
+    QuickNoteSectionName.NoShowPopUp,
     QuickNoteSectionName.QuickNoteSectionPastPsychHx,
     QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
     QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
@@ -112,6 +116,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
   ],
   [VisitTypeEnum.TransitionalCare]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
+    QuickNoteSectionName.NoShowPopUp,
     QuickNoteSectionName.QuickNoteSectionPastPsychHx,
     QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
     QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
@@ -140,6 +145,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
   ],
   [VisitTypeEnum.IndividualPsychotherapy]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
+    QuickNoteSectionName.NoShowPopUp,
     QuickNoteSectionName.QuickNoteSectionPastPsychHx,
     QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
     QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
@@ -161,6 +167,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
   ],
   [VisitTypeEnum.FamilyPsychotherapy]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
+    QuickNoteSectionName.NoShowPopUp,
     QuickNoteSectionName.QuickNoteSectionPastPsychHx,
     QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
     QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
@@ -181,6 +188,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionCodes,
   ],
   [VisitTypeEnum.Ect]: [
+    QuickNoteSectionName.NoShowPopUp,
     QuickNoteSectionName.QuicknoteSectionProcedureEtcTab,
     QuickNoteSectionName.QuickNoteSectionDiagnosis,
     QuickNoteSectionName.QuicknoteSectionReferrals,
@@ -189,12 +197,14 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionUploadedDocuments,
   ],
   [VisitTypeEnum.Tms]: [
+    QuickNoteSectionName.NoShowPopUp,
     QuickNoteSectionName.ProcedureTMS,
     QuickNoteSectionName.QuickNoteSectionDiagnosis,
     QuickNoteSectionName.QuicknoteSectionCodes,
     QuickNoteSectionName.QuicknoteSectionUploadedDocuments,
   ],
   [VisitTypeEnum.Spravato]: [
+    QuickNoteSectionName.NoShowPopUp,
     QuickNoteSectionName.QuicknoteSectionProcedureSpravato,
     QuickNoteSectionName.QuicknoteSectionUploadedDocuments,
     QuickNoteSectionName.QuickNoteSectionDiagnosis,
@@ -205,6 +215,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
   ],
   [VisitTypeEnum.HospitalCareInitial]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
+    QuickNoteSectionName.NoShowPopUp,
     QuickNoteSectionName.QuickNoteSectionPastPsychHx,
     QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
     QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
@@ -232,6 +243,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
   ],
   [VisitTypeEnum.HospitalCareSubsequent]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
+    QuickNoteSectionName.NoShowPopUp,
     QuickNoteSectionName.QuickNoteSectionPastPsychHx,
     QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
     QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
@@ -262,6 +274,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionAdmittingDiagnosis,
     QuickNoteSectionName.QuicknoteSectionWorkingDischargeDiagnosis,
     QuickNoteSectionName.QuicknoteSectionHPI,
+    QuickNoteSectionName.NoShowPopUp,
     QuickNoteSectionName.QuickNoteSectionPastPsychHx,
     QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
     QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
@@ -288,6 +301,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
   ],
   [VisitTypeEnum.HospitalCareInitialDischarge]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
+    QuickNoteSectionName.NoShowPopUp,
     QuickNoteSectionName.QuickNoteSectionPastPsychHx,
     QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
     QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
@@ -316,6 +330,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
   ],
   [VisitTypeEnum.NursingHomeCareInitial]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
+    QuickNoteSectionName.NoShowPopUp,
     QuickNoteSectionName.QuickNoteSectionPastPsychHx,
     QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
     QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
@@ -343,6 +358,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
   ],
   [VisitTypeEnum.NursingHomeCareSubsequent]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
+    QuickNoteSectionName.NoShowPopUp,
     QuickNoteSectionName.QuickNoteSectionPastPsychHx,
     QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
     QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
@@ -372,6 +388,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionAdmittingDiagnosis,
     QuickNoteSectionName.QuicknoteSectionWorkingDischargeDiagnosis,
     QuickNoteSectionName.QuicknoteSectionHPI,
+    QuickNoteSectionName.NoShowPopUp,
     QuickNoteSectionName.QuickNoteSectionPastPsychHx,
     QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
     QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
@@ -398,6 +415,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
   ],
   [VisitTypeEnum.NursingHomeCareInitialDischarge]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
+    QuickNoteSectionName.NoShowPopUp,
     QuickNoteSectionName.QuickNoteSectionPastPsychHx,
     QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
     QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
@@ -427,6 +445,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
 
   [VisitTypeEnum.PhpCareInitial]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
+    QuickNoteSectionName.NoShowPopUp,
     QuickNoteSectionName.QuickNoteSectionPastPsychHx,
     QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
     QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
@@ -454,6 +473,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
   ],
   [VisitTypeEnum.PhpCareSubsequent]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
+    QuickNoteSectionName.NoShowPopUp,
     QuickNoteSectionName.QuickNoteSectionPastPsychHx,
     QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
     QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
@@ -483,6 +503,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionAdmittingDiagnosis,
     QuickNoteSectionName.QuicknoteSectionWorkingDischargeDiagnosis,
     QuickNoteSectionName.QuicknoteSectionHPI,
+    QuickNoteSectionName.NoShowPopUp,
     QuickNoteSectionName.QuickNoteSectionPastPsychHx,
     QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
     QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
@@ -509,6 +530,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
   ],
   [VisitTypeEnum.PhpCareInitialDischarge]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
+    QuickNoteSectionName.NoShowPopUp,
     QuickNoteSectionName.QuickNoteSectionPastPsychHx,
     QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
     QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
@@ -536,6 +558,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionCodes,
   ],
   [VisitTypeEnum.UDS]: [
+    QuickNoteSectionName.NoShowPopUp,
     QuickNoteSectionName.QuicknoteSectionUds,
     QuickNoteSectionName.QuicknoteSectionPatientAllergies,
     QuickNoteSectionName.QuickNoteSectionDiagnosis,
@@ -545,11 +568,11 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
   ],
-
   [VisitTypeEnum.FitnessForDuty]: [
     QuickNoteSectionName.QuicknoteSectionFitForDutyPsychEval,
     QuickNoteSectionName.QuickNoteSectionDiagnosis,
     QuickNoteSectionName.QuicknoteSectionCodes,
+    QuickNoteSectionName.NoShowPopUp,
   ],
 
   [VisitTypeEnum.PreEmployment]: [
