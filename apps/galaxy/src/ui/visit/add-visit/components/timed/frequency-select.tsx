@@ -20,9 +20,7 @@ const FrequencyDropdown = () => {
   })
 
   const items = codes.map((option) => {
-    const value = option?.attributes?.find((attr) => attr.name === 'ResourceId')
-      ?.value as string
-    return { value: value, label: option.display }
+    return { value: option.value, label: option.display }
   })
 
   return (

@@ -14,7 +14,7 @@ import {
 import { CODESETS, FEATURE_FLAGS } from '@/constants'
 import { useCodesetCodes, useHasPermission } from '@/hooks'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
-import { Appointment, BookVisitPayload, VisitSequenceTypes } from '@/types'
+import { Appointment, BookVisitPayload, visitFrequency, VisitSequenceTypes } from '@/types'
 import { signNoteAction } from '@/ui/quicknotes/actions'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { isDirty } from '@/ui/schedule/utils'
@@ -121,7 +121,7 @@ const EditVisitForm = ({
       },
       visitDate: date,
       duration: visitDetails?.appointmentDuration?.toString(),
-      frequency: visitDetails?.appointmentInterval?.toString(),
+      frequency: visitDetails?.visitFrequency ?? '',
       state: visitDetails?.stateCode,
       location: visitDetails?.locationId,
       timeZoneId: visitDetails?.locationTimezoneId,
@@ -155,7 +155,7 @@ const EditVisitForm = ({
       group: visitDetails?.groupResource?.group,
 
       admittingProvider: visitDetails?.admittingProviderId?.toString(),
-      visitFrequency: '1',
+      visitFrequency: visitFrequency.Daily,
       paymentResponsibility: visitDetails?.paymentResponsibility,
       lastCoverageDate: visitDetails?.lastCoverageDate
         ? getCalendarDate(visitDetails?.lastCoverageDate)
@@ -181,7 +181,6 @@ const EditVisitForm = ({
     control: form.control,
     name: 'isServiceTimeDependent',
   })
-
   const noteTypeCodes = useCodesetCodes(CODESETS.NoteType).find(
     (code) => code.groupingCode === 'Primary',
   )

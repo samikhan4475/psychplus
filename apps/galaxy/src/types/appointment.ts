@@ -187,6 +187,7 @@ interface Appointment extends Partial<CustomVisit> {
   admittingProviderId?: number
   noteSignedByUserName?: LegalName
   cosignerName?: LegalName
+  visitFrequency?: string
 }
 
 interface BookVisitPayload {
@@ -205,7 +206,7 @@ interface BookVisitPayload {
   encounterReason?: string
   encounterType?: string
   facilityAppointmentStatus?: string
-  visitFrequency: number
+  visitFrequency?: string
   groupId?: string
   groupTherapyTypeCode?: string
   insuranceVerificationStatusCode?: string
@@ -268,6 +269,11 @@ enum FileTypes {
   Txt = 'Txt',
 }
 
+enum visitFrequency {
+  Once = 'Once',
+  Daily = 'Daily',
+}
+
 interface PatientAppointments extends Partial<Appointment> {
   status: string
   type: string
@@ -284,4 +290,5 @@ export {
   VisitTypes,
   VisitSequenceTypes,
   FileTypes,
+  visitFrequency
 }

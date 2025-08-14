@@ -4,7 +4,7 @@ import { Box, Button, Flex, Grid, Text } from '@radix-ui/themes'
 import { SubmitHandler, useForm, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FormContainer, FormSubmitButton } from '@/components'
-import { NewPatient } from '@/types'
+import { NewPatient, visitFrequency } from '@/types'
 import { AddPatient } from '@/ui/patient/add-patient'
 import { AddVacation } from '@/ui/vacation/add-vacation'
 import { cn } from '@/utils'
@@ -137,13 +137,13 @@ const AddVisitForm = ({
       edDischarge: 'No',
       duration: slotDetails?.duration ?? '',
       insuranceAuthorizationNumber: '',
-      frequency: '0',
+      frequency: visitFrequency.Once,
       admittingProvider: '',
       facilityAdmissionId: 'createNew',
       dateOfAdmission: date,
       timeOfAdmission: '00:00',
       visitStatus: 'Unseen',
-      visitFrequency: '1',
+      visitFrequency: visitFrequency.Daily,
       authDate: undefined,
       legal: 'Voluntary',
       unit: '',

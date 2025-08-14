@@ -58,18 +58,16 @@ const ViewVisitPopup = ({
   )
   const frequency = useMemo(() => {
     const transformedFrequencyCodes = frequencyCodes.map((code) => {
-      const value = code?.attributes?.find((attr) => attr.name === 'ResourceId')
-        ?.value as string
       return {
         ...code,
-        value: value,
+        value: code.value,
       }
     })
     return getCodesetDisplayName(
-      `${appointment.appointmentInterval}`,
+      `${appointment.visitFrequency}`,
       transformedFrequencyCodes,
     )
-  }, [appointment.appointmentInterval, frequencyCodes])
+  }, [appointment.visitFrequency, frequencyCodes])
 
   const onOpenChange = (open: boolean): void => {
     if (!open) onClose()

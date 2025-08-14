@@ -26,7 +26,6 @@ const transformIn = (appointment: Appointment): TransformedAppointment => {
     providerId,
     appointmentDate,
     appointmentDuration,
-    appointmentInterval,
     visitStatus,
     unitResource,
     groupResource,
@@ -44,6 +43,7 @@ const transformIn = (appointment: Appointment): TransformedAppointment => {
     authorizationDate,
     lastCoverageDate,
     groupTherapyTypeCode,
+    visitFrequency,
   } = appointment
 
   const transformedData = {
@@ -61,7 +61,7 @@ const transformIn = (appointment: Appointment): TransformedAppointment => {
     specialistStaffId: providerId,
     startDate: appointmentDate,
     durationMinutes: appointmentDuration,
-    visitFrequency: appointmentInterval,
+    visitFrequency: visitFrequency,
     isOverridePermissionProvided: false,
     isProceedPermissionProvided: false,
     appointmentStatus: visitStatus,

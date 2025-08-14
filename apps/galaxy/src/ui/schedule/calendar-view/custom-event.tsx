@@ -102,18 +102,16 @@ const CustomEvent = ({
     eventContainerClassIndex[visitMedium as VisitMediumEnum] ?? ''
   const frequency = useMemo(() => {
     const transformedFrequencyCodes = frequencyCodes.map((code) => {
-      const value = code?.attributes?.find((attr) => attr.name === 'ResourceId')
-        ?.value as string
       return {
         ...code,
-        value: value,
+        value: code.value,
       }
     })
     return getCodesetDisplayName(
-      `${event.data.appointmentInterval}`,
+      `${event.data.visitFrequency}`,
       transformedFrequencyCodes,
     )
-  }, [event.data.appointmentInterval, frequencyCodes])
+  }, [event.data.visitFrequency, frequencyCodes])
   const { timeZoneSetting } = useUserSettingStore((state) => ({
     timeZoneSetting: state.timeZoneSetting(),
   }))

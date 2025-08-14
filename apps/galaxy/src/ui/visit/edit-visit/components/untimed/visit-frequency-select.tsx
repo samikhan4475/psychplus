@@ -18,10 +18,7 @@ const VisitFrequencySelect = () => {
       ),
     )
     .map((option) => {
-      const value = option?.attributes?.find(
-        (attr) => attr.name === 'ResourceId',
-      )?.value as string
-      return { value, label: option.display }
+      return { value:option.value, label: option.display }
     })
   return (
     <FormFieldContainer className="flex-1">

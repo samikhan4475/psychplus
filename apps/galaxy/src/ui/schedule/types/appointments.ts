@@ -52,7 +52,7 @@ interface TransformedAppointment {
   specialistStaffId: number
   startDate: string
   durationMinutes: number
-  visitFrequency: number
+  visitFrequency?: string
   isOverridePermissionProvided: boolean
   isProceedPermissionProvided: boolean
   appointmentStatus: string

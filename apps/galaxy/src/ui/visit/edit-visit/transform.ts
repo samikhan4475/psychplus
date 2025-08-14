@@ -4,6 +4,7 @@ import {
   BookVisitPayload,
   ClaimDiagnosis,
   ClaimServiceLine,
+  visitFrequency,
   VisitType,
 } from '@/types'
 import { getDateString } from '@/ui/schedule/utils'
@@ -38,7 +39,7 @@ function transformRequestPayload(
     specialistStaffId: 0,
     startDate: '',
     durationMinutes: 0,
-    visitFrequency: 0,
+    visitFrequency: visitFrequency.Once,
     isCustomAppointment: data.isCustomAppointment,
     authorizationNumber: data.authorizationNumber,
     authorizationDate: data.authorizationDate
@@ -194,7 +195,7 @@ function transformTimedRequestPayload(
     ),
     specialistStaffId: data.provider ? parseInt(data.provider) : 0,
     durationMinutes: data.duration ? parseInt(data.duration) : 0,
-    visitFrequency: data.frequency ? parseInt(data.frequency) : 0,
+    visitFrequency: data.frequency ?? visitFrequency.Once,
   }
   if (data.showGroupTypeField) {
     payload.groupTherapyTypeCode = data.groupType
@@ -225,7 +226,7 @@ function transformNonTimedRequestPayload(
     dischargeDate: data.dischargeDate
       ? data.dischargeDate.toString()
       : undefined,
-    visitFrequency: data.visitFrequency ? parseInt(data.visitFrequency) : 0,
+    visitFrequency: data.visitFrequency ?? visitFrequency.Once,
     appointmentStatus: data.visitStatus,
     admissionLegalStatus: data.legal,
     authorizationNumber: data.insuranceAuthorizationNumber,

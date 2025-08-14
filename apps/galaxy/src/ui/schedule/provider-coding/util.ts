@@ -17,7 +17,6 @@ const transformIn = (
     providerId,
     appointmentDate,
     appointmentDuration,
-    appointmentInterval,
     unitResource,
     facilityAdmissionDetailId,
     groupResource,
@@ -38,6 +37,7 @@ const transformIn = (
     visitStatus: baseVisitStatus,
     visitMedium: baseVisitMedium,
     visitSequence: baseVisitSequence,
+    visitFrequency,
   } = appointment
 
   const {
@@ -52,7 +52,7 @@ const transformIn = (
     : ({} as WeekdayData)
 
   const transformedData = {
-    appointmentId: day ? (appointmentId ?? 0) : (baseAppointmentId ?? 0),
+    appointmentId: day ? appointmentId ?? 0 : baseAppointmentId ?? 0,
     patientId: patientId ?? 0,
     stateCode: stateCode ?? '',
     locationId: locationId ?? '',
@@ -66,7 +66,7 @@ const transformIn = (
     specialistStaffId: providerId,
     startDate: appointmentDate,
     durationMinutes: appointmentDuration,
-    visitFrequency: appointmentInterval,
+    visitFrequency: visitFrequency,
     isOverridePermissionProvided: false,
     isProceedPermissionProvided: false,
     appointmentStatus: (day ? visitStatus : baseVisitStatus) ?? '',

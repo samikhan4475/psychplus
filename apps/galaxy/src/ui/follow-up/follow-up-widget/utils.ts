@@ -8,6 +8,7 @@ import {
 import {
   Appointment,
   BookVisitPayload,
+  visitFrequency,
   VisitSequenceTypes,
   VisitTypes,
 } from '@/types'
@@ -156,7 +157,7 @@ const transformIn = (appointment: Appointment, defaultDuration?: string) => {
     specialistStaffId: appointment.providerId,
     durationMinutes: 0,
     startDate: appointment.appointmentDate,
-    visitFrequency: 1,
+    visitFrequency: visitFrequency.Daily,
   }
   if (appointment.isServiceTimeDependent) {
     payload = {
@@ -167,7 +168,7 @@ const transformIn = (appointment: Appointment, defaultDuration?: string) => {
       dischargeDate: appointment.dischargeDate,
       dischargeLocation: appointment.dischargeLocationName,
       isEdVisit: appointment.isEdDischarge,
-      visitFrequency: appointment.appointmentInterval ?? 0,
+      visitFrequency: appointment.visitFrequency ?? visitFrequency.Once,
     }
   } else {
     payload = {

@@ -194,7 +194,7 @@ const transformVisitUpdatePayload = (
     specialistStaffId: data.providerId,
     startDate: data.appointmentDate ?? '',
     durationMinutes: data.duration ?? 0,
-    visitFrequency: data.appointmentInterval,
+    visitFrequency: data.visitFrequency,
     isOverridePermissionProvided: true,
     isProceedPermissionProvided: false,
     dischargeDate: dcDate ? formatISO(new Date(dcDate)) : data.dischargeDate,
