@@ -71,6 +71,7 @@ enum QuickNoteSectionName {
   QuickNoteSectionCopsR = 'QuicknoteSectionQuestionnaireCopsR',
   QuicknoteSectionFitForDutyPsychEval = 'QuicknoteSectionFitForDutyPsychEval',
   QuickNoteSectionAdultAsrs = 'QuicknoteSectionQuestionnaireAdultAsrs',
+  QuicknoteSectionImmunization = 'QuicknoteSectionImmunization',
   QuickNoteSectionVadprs = 'QuicknoteSectionQuestionnaireVadprs',
   QuicknoteSectionPreEmployment = 'QuicknoteSectionPreEmployment',
   QuickNoteSectionBai = 'QuicknoteSectionQuestionnaireBai',

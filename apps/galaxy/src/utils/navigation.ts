@@ -8,6 +8,7 @@ const getNavLinks = (
   visitSequence: string | null,
   isFeatureLabOrdersFlagEnabled: boolean,
   isFeatureFlagEnabledForSecondPhaseFeatures: boolean,
+  isFeatureFlagEnabledForImmunization: boolean
 ): ChartNavLink[] => {
   if (isHospitalCareVisit(visitType)) {
     visitType = `${visitType}/${visitSequence}`
@@ -36,6 +37,7 @@ const getNavLinks = (
     { label: 'Notes', href: '/notes' },
     { label: 'Diagnosis', href: '/diagnosis' },
     { label: 'Medications', href: '/medications' },
+    { label: 'Immunization', href: '/immunization-list',conditions: [isFeatureFlagEnabledForImmunization] },
     { label: 'Allergies', href: '/allergies' },
     {
       label: 'Lab Orders',
@@ -94,6 +96,7 @@ const getNavLinks = (
     },
     { label: 'Allergies', href: '/allergies' },
     { label: 'Medications', href: '/medications' },
+    { label: 'Immunization', href: '/immunization-list',conditions: [isFeatureFlagEnabledForImmunization] },
     {
       label: 'Hospital',
       href: '/hospital',

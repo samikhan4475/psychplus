@@ -60,7 +60,6 @@ import { PastMedicalHxClientView } from './actual-note-view/past-medical-hx/past
 import { PastPsychlDetailClientView } from './actual-note-view/past-psych-hx/past-psych-detail-client-view'
 import { AllergiesDetailsClientView } from './actual-note-view/patient-allergies/allergies-details-client-view'
 import { PhysicalExamClientView } from './actual-note-view/physical-exam/physical-exam-client-view'
-import { PreEmploymentActualNoteView } from './actual-note-view/pre-employment'
 import { PsychiatryAssessmentPlanClientView } from './actual-note-view/psychiatry-assessment-plan/psychiatry-assessment-plan-client-view'
 import { QuestionnairesActualnoteView as QuestionnairesClientView } from './actual-note-view/questionnaires'
 import { ReferralsClientView } from './actual-note-view/referrals/referrals-client-view'
@@ -80,6 +79,8 @@ import { WorkingDiagnosisClientView } from './actual-note-view/working-diagnosis
 import { WorkingDischargeDiagnosisClientView } from './actual-note-view/working-discharge-diagnosis'
 import { QuickNoteSectionName } from './constants'
 import { WidgetType } from './types'
+import { ImmunizationListClientLoader } from '../immunization-list/immunization-list-client-view-loader'
+import { PreEmploymentActualNoteView } from './actual-note-view/pre-employment'
 
 enum ProviderType {
   Psychiatry = 'Psychiatrist',
@@ -177,6 +178,11 @@ const widgets: Array<WidgetType> = [
     component: PatientMedicationsClientLoader,
     id: QuickNoteSectionName.QuicknoteSectionMedications,
     actualNoteComponent: MedicationsClientView,
+    isClient: true,
+  },
+  {
+    component: ImmunizationListClientLoader,
+    id: QuickNoteSectionName.QuicknoteSectionImmunization,
     isClient: true,
   },
   {

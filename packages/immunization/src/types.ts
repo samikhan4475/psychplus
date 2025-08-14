@@ -124,7 +124,7 @@ export enum RealCodesets {
   CVX = 'CVX',
   FUNDING_CLASS = 'PHVS_FinancialClass_IIS',
   FIELD_ID = 'ordering-provider-selector',
-  REFUSALREASON = 'FHIM_ImmunizationRefusalReason',
+  REFUSALREASON = 'FHIM_ImmunizationRefusalReason'
 }
 
 export type { Option, Immunization, ImmunizationPayload, CvxCodes }

@@ -7,6 +7,7 @@ enum FEATURE_FLAGS {
   ehr14021PmpIntegration = 'ehr14021PmpIntegration',
   ehr15606AutoPMPCheckInMedicationWidget = 'ehr15606AutoPMPCheckInMedicationWidget',
   ehr15134CheckEligibility = 'ehr15134CheckEligibility',
+  ehr15803OncClinicalModules = 'ehr15803OncClinicalModules',
   ehr16012GalaxyPracticeDropdownAddVisitPopup = 'ehr16012GalaxyPracticeDropdownAddVisitPopup',
 }
 // Prefetching for layout and main pages

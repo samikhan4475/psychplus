@@ -1145,6 +1145,22 @@ const STANDARD_CODESET_ENDPOINT_NEW = (
   const base = `${API_URL}/api/codeset/authorities/${assigningAuthority}/codesets`
   return queryString ? `${base}?${queryString}` : base
 }
+const GET_IMMUNIZATION_LIST = (
+  appointmentId: string,
+) =>
+  `${API_URL}/api/appointments/${appointmentId}/immunizations/actions/search`
+
+const CREATE_IMMUNIZATION_ENDPOINT = (
+  appointmentId: string,
+) =>
+  `${API_URL}/api/appointments/${appointmentId}/immunizations`
+const IMMUNIZATION_URL_ENDPOINT = (id: string, appointmentId: string) =>
+  `${API_URL}/api/appointments/${appointmentId}/immunizations/${id}`;
+
+const GET_CVX_CODES = (
+  cvxCode: string,
+) =>
+  `${API_URL}/api/immunizations/actions/searchcvx/${cvxCode}`
 
 const GET_PRIMARY_VIRTUAL_LOCATION_HX_ENDPOINT = (stateCode: string) =>
   `${API_URL}/api/states/${stateCode}/locations/actions/primaryhistory/search`
@@ -1656,5 +1672,9 @@ export {
   GET_EXTERNAL_REFERRAL_ATTACHMENT,
   NOTE_DETAILS_SAVE_WITH_APPOINTMENT_ID_ENDPOINT,
   STANDARD_CODESET_ENDPOINT_NEW,
+  GET_IMMUNIZATION_LIST,
+  CREATE_IMMUNIZATION_ENDPOINT,
+  GET_CVX_CODES,
   ASSOCIATE_APPOINTMENT_ENDPOINT,
+  IMMUNIZATION_URL_ENDPOINT
 }

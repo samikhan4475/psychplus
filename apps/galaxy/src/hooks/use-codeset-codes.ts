@@ -2,7 +2,6 @@ import { useStore } from '@/store'
 
 const useCodesetCodes = (name: string) => {
   const codesetCache = useStore((state) => state.codesets)
-
   if (!name) return []
 
   const parts = name.split('.')

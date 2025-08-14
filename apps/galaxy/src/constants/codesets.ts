@@ -143,6 +143,17 @@ const CODESETS = {
   AllergyReaction: 'IHTSDO.SNOMED-CT.AllergicReaction',
   AllergyType: 'IHTSDO.SNOMED-CT.AllergyType',
   AllergySeverity: 'IHTSDO.SNOMED-CT.AllergySeverity',
+
+  ImmunizationInformationSource: 'CDC.PHVS_ImmunizationInformationSource_HITSP',
+  ImmunizationRefusalReason: 'CDC.FHIM_ImmunizationRefusalReason',
+  ImmunizationFundingSource: 'CDC.PHVS_ImmunizationFundingSource_IIS',
+  ImmunizationAdministeredStatus: 'CDC.PHVS_ImmunizationAdministeredStatus_HITSP',
+  ImmunizationAdministiveSite: 'CDC.PHVS_AdministrativeSite_IIS',
+  FinancialClass: 'CDC.PHVS_FinancialClass_IIS',
+  ImmunizationRouteOfAdministration:
+    'CDC.PHVS_RouteOfAdministration_IIS',
+  CVX:'CDC.CVX',
+  MVXCODE: 'CDC.PH_ManufacturersOfVaccinesMVX_CDC_NIP'
 }
 export {
   CODESETS,

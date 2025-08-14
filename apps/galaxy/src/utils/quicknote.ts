@@ -57,6 +57,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionReferrals,
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
+    QuickNoteSectionName.QuicknoteSectionImmunization
   ],
   [VisitTypeEnum.ResidentCare]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
@@ -85,6 +86,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionReferrals,
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
+    QuickNoteSectionName.QuicknoteSectionImmunization
   ],
   [VisitTypeEnum.EdVisit]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
@@ -113,6 +115,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionReferrals,
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
+    QuickNoteSectionName.QuicknoteSectionImmunization
   ],
   [VisitTypeEnum.TransitionalCare]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
@@ -142,6 +145,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionReferrals,
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
+    QuickNoteSectionName.QuicknoteSectionImmunization
   ],
   [VisitTypeEnum.IndividualPsychotherapy]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
@@ -212,6 +216,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionMedications,
     QuickNoteSectionName.Addon,
     QuickNoteSectionName.QuicknoteSectionCodes,
+    QuickNoteSectionName.QuicknoteSectionImmunization
   ],
   [VisitTypeEnum.HospitalCareInitial]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
@@ -567,6 +572,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionLabResults,
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
+    QuickNoteSectionName.QuicknoteSectionImmunization
   ],
   [VisitTypeEnum.FitnessForDuty]: [
     QuickNoteSectionName.QuicknoteSectionFitForDutyPsychEval,
