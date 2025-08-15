@@ -1,5 +1,6 @@
 import { DateValue } from 'react-aria-components'
 import { z } from 'zod'
+import { dateValueToDateOnly } from '@/ui/revenue-cycle/claim-detail-tab/claim-notes-section/schema'
 
 type LabOrderSchemaType = z.infer<typeof labOrderSchema>
 
@@ -96,6 +97,10 @@ const labOrderSchema = z
     specimenList: specimenSchema,
     labQuestions: z.any({}).optional(),
     labOrderNumber: z.number().optional(),
+    isRecurrentOrder: z.string().optional(),
+    repeatStartDate: z.custom<DateValue>().optional(),
+    repeatEndDate: z.custom<DateValue>().optional(),
+    recurrenceType: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     const validations = [
@@ -201,6 +206,70 @@ const labOrderSchema = z
         })
       }
     })
+
+    if (data.isRecurrentOrder === 'yes') {
+      const now = new Date()
+      const nowDate = new Date(now.toString())
+      nowDate.setHours(0, 0, 0, 0)
+      if (!data.repeatStartDate) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['repeatStartDate'],
+          message: 'Start Date is required',
+        })
+      }
+
+      if (!data.repeatEndDate) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['repeatEndDate'],
+          message: 'End Date is required',
+        })
+      }
+
+      if (!data.recurrenceType) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['recurrenceType'],
+          message: 'Recurrence type is required',
+        })
+      }
+
+      if (data.repeatStartDate) {
+        const startDate = dateValueToDateOnly(data.repeatStartDate)
+        if (startDate < nowDate) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ['repeatStartDate'],
+            message: 'Start Date can’t be in the past',
+          })
+        }
+      }
+
+      if (data.repeatStartDate && data.repeatEndDate) {
+        const startDate = dateValueToDateOnly(data.repeatStartDate)
+        const endDate = dateValueToDateOnly(data.repeatEndDate)
+        if (endDate < startDate) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ['repeatEndDate'],
+            message: 'End Date can’t be earlier than Start Date',
+          })
+        }
+      }
+
+      if (data.orderDate && data.repeatStartDate) {
+        const orderDateOnly = dateValueToDateOnly(data.orderDate)
+        const repeatStartOnly = dateValueToDateOnly(data.repeatStartDate)
+        if (repeatStartOnly <= orderDateOnly) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ['repeatStartDate'],
+            message: 'Start Date must be greater than Order Date',
+          })
+        }
+      }
+    }
   })
 
 export { labOrderSchema, type LabOrderSchemaType }

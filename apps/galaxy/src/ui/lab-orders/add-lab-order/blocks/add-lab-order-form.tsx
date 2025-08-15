@@ -15,6 +15,7 @@ import { SpecimenForm } from './specimen'
 import { Status } from './status'
 import { TestLabsTable } from './test-labs-table'
 import { TestQuestionsView } from './test-questions'
+import { RepeatOrderOption } from './repeat-order-option'
 
 const AddLabOrderForm = ({
   labOrderData,
@@ -31,7 +32,6 @@ const AddLabOrderForm = ({
     loadingSubmit,
     isFormDisabled,
   } = useLabOrderForm(transformIn(labOrderData ?? {}), setOpen)
-
   const [isOpenConfirmDialog, setIsOpenConfirmDialog] = useState(false)
 
   const labOrderId = form.getValues('labOrderId')
@@ -55,8 +55,8 @@ const AddLabOrderForm = ({
 
         <Flex direction="row" gap="3">
           <FastingOption />
+          <RepeatOrderOption/>
         </Flex>
-
         <TestQuestionsView />
 
         {labOrderId && <SpecimenForm />}

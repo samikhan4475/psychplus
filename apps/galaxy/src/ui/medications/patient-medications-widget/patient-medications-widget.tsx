@@ -4,10 +4,10 @@ import { useEffect, useMemo, useState } from 'react'
 import { useParams, usePathname } from 'next/navigation'
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
 import { Box, Button, Flex, Text, Tooltip } from '@radix-ui/themes'
-import { EyeIcon } from 'lucide-react'
+import { EyeIcon, TriangleAlert } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { CheckboxCell, WidgetContainer } from '@/components'
-import { InformationLineIcon } from '@/components/icons'
+import { InformationLineIcon, WarningIcon } from '@/components/icons'
 import {
   ACCESS_UNAVAILABLE_MESSAGE,
   CODESETS,
@@ -157,7 +157,15 @@ const PatientMedicationsWidget = ({
       const reportLink = response.data.reportLink
       if (reportLink) {
         window.open(reportLink, '_blank')
-      } else toast.error('PMP report could not be retrieved for this request')
+      } else
+        toast('PMP report could not be retrieved for this request', {
+          icon: (
+            <TriangleAlert
+              className="min-w-6 text-pp-warning-border"
+              size={24}
+            />
+          ),
+        })
     } else {
       toast.error(response.error || 'Failed to fetch report')
     }

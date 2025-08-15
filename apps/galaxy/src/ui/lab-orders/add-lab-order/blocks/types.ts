@@ -180,6 +180,13 @@ enum LabOrderStatusEnum {
   ResultReceived = 'ResultReceived',
 }
 
+const RecurrenceTypeOptions = [
+  { label: 'Daily', value: 'Daily' },
+  { label: 'Weekly', value: 'Weekly' },
+  { label: 'Monthly', value: 'Monthly' },
+  { label: 'Every 3 months', value: 'ThreeMonths' },
+  { label: 'Every 6 months', value: 'SixMonths' },
+]
 export {
   type TestLabsType,
   type DiagnosisType,
@@ -192,4 +199,5 @@ export {
   type SpecimenData,
   ControlType,
   LabOrderStatusEnum,
+  RecurrenceTypeOptions,
 }

@@ -77,7 +77,6 @@ const LabOrderTable = ({
       handleRowResultClick,
     ],
   )
-
   if (loading) {
     return (
       <Flex height="100%" align="center" justify="center" className="mt-5">

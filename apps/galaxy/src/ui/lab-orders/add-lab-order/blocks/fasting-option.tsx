@@ -20,11 +20,10 @@ const FastingOption = () => {
   }, [labTests])
 
   return (
-    <Flex direction="column" gap="1">
+    <Flex direction="column">
       <BlockLabel required>Fasting</BlockLabel>
       <YesNoSelect
         field="isFasting"
-        className="h-7 rounded-1 border border-gray-7"
         disabled
       />
       <FormFieldError name="isFasting" />

@@ -93,10 +93,11 @@ interface LabOrders {
   orderingStaffName?: LegalName
   billType?: string
   isFasting?: boolean
+
   isLabDraw?: boolean
   orderType?: string
   orderSendStatus?: boolean
-  labValidation?:string
+  labValidation?: string
   orderSentDateTime?: string
   isPscHold?: boolean
   isTest?: boolean
@@ -123,11 +124,15 @@ interface LabOrders {
   recordStatus?: string
   orderStatus?: string
   isResultAbnormal?: boolean
-  resultSignedDate?:string
-  resultSignedByStaffName?:{
-    firstName?:string
-    lastName?:string
+  resultSignedDate?: string
+  resultSignedByStaffName?: {
+    firstName?: string
+    lastName?: string
   }
+  isRecurrentOrder?: boolean
+  repeatStartDate?: string
+  repeatEndDate?: string
+  recurrenceType?: string
 }
 interface LabOrderResponseList {
   labOrders: LabOrders[]

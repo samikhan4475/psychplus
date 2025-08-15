@@ -1,8 +1,7 @@
-import { getLocalTimeZone } from '@internationalized/date'
 import { DateValue } from 'react-aria-components'
 import z from 'zod'
 
-const dateValueToDateOnly = (dateValue: DateValue): Date => {
+export const dateValueToDateOnly = (dateValue: DateValue): Date => {
   const date = new Date(dateValue.toString())
   return new Date(date.getFullYear(), date.getMonth(), date.getDate())
 }

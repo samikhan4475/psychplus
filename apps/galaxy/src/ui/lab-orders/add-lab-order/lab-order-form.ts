@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { genericEventBus } from '@/lib/generic-event-bus'
 import { LabOrders } from '@/types'
+import { getCalendarDateLabel } from '@/utils'
 import { useStore } from '../lab-orders-widget/store'
 import {
   addDiagnosis,
@@ -19,6 +21,8 @@ import {
 import { LabOrderStatusEnum, SpecimenData } from './blocks/types'
 import { labOrderSchema, LabOrderSchemaType } from './lab-order-schema'
 
+const getDateString = (date?: DateValue): string | undefined =>
+  date ? getCalendarDateLabel(date) : undefined
 const useLabOrderForm = (
   labOrderData: LabOrderSchemaType,
   setOpen: (value: boolean) => void,
@@ -31,7 +35,8 @@ const useLabOrderForm = (
 
   const isFormDisabled =
     labOrderData?.labLocationData?.name === 'Quest' &&
-    labOrderData.labOrderStatus !== LabOrderStatusEnum.Unsigned && labOrderData.labOrderStatus !== LabOrderStatusEnum.SignedNotSent
+    labOrderData.labOrderStatus !== LabOrderStatusEnum.Unsigned &&
+    labOrderData.labOrderStatus !== LabOrderStatusEnum.SignedNotSent
 
   const form = useForm<LabOrderSchemaType>({
     resolver: zodResolver(labOrderSchema),
@@ -59,6 +64,10 @@ const useLabOrderForm = (
       name: form.getValues('labLocationData')?.name ?? '',
       locationId: form.getValues('labLocationData')?.id ?? '',
     },
+    isRecurrentOrder: data.isRecurrentOrder === 'yes',
+    repeatStartDate: getDateString(data.repeatStartDate),
+    repeatEndDate: getDateString(data.repeatEndDate),
+    recurrenceType: data.recurrenceType,
   })
 
   const labTestAction = async (orderId: string, isEdit: boolean) => {
