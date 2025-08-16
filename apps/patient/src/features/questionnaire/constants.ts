@@ -1,6 +1,11 @@
+import {
+  QUESTIONS as ADULT_ASRS_QUESTIONS,
+  adultAsrsMapping,
+} from '@/features/questionnaire/ui/adult-asrs/constants'
 import { QUESTIONS as AIMS_QUESTIONS } from '@/features/questionnaire/ui/aims/constants'
 import { QUESTIONS as AUDIT_QUESTIONS } from '@/features/questionnaire/ui/audit/constants'
 import { QUESTIONS as CSSRS_QUESTIONS } from '@/features/questionnaire/ui/c-ssrs/constants'
+import { QUESTIONS as COPSR_QUESTIONS } from '@/features/questionnaire/ui/cops-r/constants'
 import { QUESTIONS as DAST10_QUESTIONS } from '@/features/questionnaire/ui/dast-10/constants'
 import { QUESTIONS as GAD7_QUESTIONS } from '@/features/questionnaire/ui/gad-7/constants'
 import { QUESTIONS as HAMD_QUESTIONS } from '@/features/questionnaire/ui/ham-d/constants'
@@ -31,6 +36,8 @@ const TOTAL_QUESTIONS = {
   [NoteSectionName.NoteSectionMoca]: MOCA_QUESTIONS.length,
   [NoteSectionName.NoteSectionCssrs]: CSSRS_QUESTIONS.length,
   [NoteSectionName.NoteSectionPsc17]: PSC17_QUESTIONS.length,
+  [NoteSectionName.NoteSectionCopsR]: COPSR_QUESTIONS.length,
+  [NoteSectionName.NoteSectionAdultAsrs]: ADULT_ASRS_QUESTIONS.length,
 }
 
 const SECTION_QUESTIONS_MAPPING: Partial<
@@ -47,6 +54,7 @@ const SECTION_QUESTIONS_MAPPING: Partial<
   [NoteSectionName.NoteSectionAims]: aimsMapping,
   [NoteSectionName.NoteSectionCssrs]: cssrsMapping,
   [NoteSectionName.NoteSectionPsc17]: psc17Mapping,
+  [NoteSectionName.NoteSectionAdultAsrs]: adultAsrsMapping,
 }
 
 export { SECTION_QUESTIONS_MAPPING, TOTAL_QUESTIONS }

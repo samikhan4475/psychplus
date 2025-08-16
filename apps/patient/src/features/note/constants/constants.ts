@@ -22,6 +22,8 @@ enum NoteSectionName {
   NoteSectionSubstanceUseHx = 'QuicknoteSectionSubstanceUseHx',
   NoteSectionCodes = 'QuicknoteSectionCodes',
   NoteSectionDiagnosis = 'QuicknoteSectionDiagnosis',
+  NoteSectionCopsR = 'QuicknoteSectionQuestionnaireCopsR',
+  NoteSectionAdultAsrs = 'QuicknoteSectionQuestionnaireAdultAsrs',
 }
 
 export { NoteSectionName }

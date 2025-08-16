@@ -7,8 +7,10 @@ import { NoteSectionName } from '@/features/note/constants/constants.ts'
 import { useNoteStore } from '@/features/note/store'
 import { useStore } from '@/features/pre-checkin-assessment/store'
 import {
+  AdultAsrs,
   Aims,
   Audit,
+  CopsR,
   Cssrs,
   Dast10,
   Gad7,
@@ -85,6 +87,16 @@ const sectionComponents = [
     name: NoteSectionName.NoteSectionPsc17,
     title: 'PSC-17',
     component: Psc17,
+  },
+  {
+    name: NoteSectionName.NoteSectionCopsR,
+    title: 'COPS-R',
+    component: CopsR,
+  },
+  {
+    name: NoteSectionName.NoteSectionAdultAsrs,
+    title: 'Adult ASRS',
+    component: AdultAsrs,
   },
 ]
 

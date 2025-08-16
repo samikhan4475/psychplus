@@ -13,6 +13,8 @@ const QuestionnaireType = {
   Hamd: NoteSectionName.NoteSectionHamD,
   Psc: NoteSectionName.NoteSectionPsc17,
   Cssrs: NoteSectionName.NoteSectionCssrs,
+  CopsR: NoteSectionName.NoteSectionCopsR,
+  Asrs: NoteSectionName.NoteSectionAdultAsrs,
 }
 
 export { QuestionnaireType }
