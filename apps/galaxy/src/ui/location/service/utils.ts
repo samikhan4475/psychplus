@@ -159,7 +159,7 @@ const getInitialValues = (
   isPolicyRequired: getYesNoValue(
     service ? service?.isPolicyRequired : location?.locationType !== 'Facility',
   ),
-  isReminderForNotes: getYesNoValue(service?.isReminderForNotes) ?? 'yes',
+  isReminderForNotes: getYesNoValue(service?.isReminderForNotes) || 'yes',
   isReminderForVisit: getYesNoValue(
     service
       ? service?.isReminderForVisit
