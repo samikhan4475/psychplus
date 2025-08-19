@@ -1169,6 +1169,18 @@ const ASSOCIATE_APPOINTMENT_ENDPOINT = (
   externalreferralId: string,
 ) =>
   `${API_URL}/api/appointments/${initialAppointmentId}/externalreferrals/${externalreferralId}/actions/associate`
+const SERVICE_GROUPS_ENDPOINT = `${API_URL}/api/servicegroups/actions/search`
+const UPDATE_SERVICE_GROUPS_ENDPOINT = (
+  locationId: string,
+  serviceId: string,
+  groupId: string,
+) =>
+  `${API_URL}/api/locations/${locationId}/services/${serviceId}/groups/${groupId}`
+const ADD_SERVICE_GROUP_ENDPOINT = (locationId: string, serviceId: string) =>
+  `${API_URL}/api/locations/${locationId}/services/${serviceId}/groups`
+const SERVICE_GROUP_HISTORY_ENDPOINT = (locationId: string, groupId: string) =>
+  `${API_URL}/api/locations/${locationId}/groups/${groupId}/history/actions/search`
+
 export {
   PATIENT_MEDICATION_SIGN_IN,
   GET_PATIENT_MEDICATION_ENDPOINT,
@@ -1676,5 +1688,9 @@ export {
   CREATE_IMMUNIZATION_ENDPOINT,
   GET_CVX_CODES,
   ASSOCIATE_APPOINTMENT_ENDPOINT,
-  IMMUNIZATION_URL_ENDPOINT
+  IMMUNIZATION_URL_ENDPOINT,
+  SERVICE_GROUPS_ENDPOINT,
+  UPDATE_SERVICE_GROUPS_ENDPOINT,
+  ADD_SERVICE_GROUP_ENDPOINT,
+  SERVICE_GROUP_HISTORY_ENDPOINT,
 }

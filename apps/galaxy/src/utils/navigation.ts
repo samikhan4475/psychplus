@@ -346,6 +346,7 @@ const getManagementNavLinks = (
   id: string | null,
   roleId: string | null,
   practiceId: string | null,
+  locationId: string | null,
   staffTypes?: string[],
   segments?: string[],
 ) => {
@@ -469,6 +470,44 @@ const getManagementNavLinks = (
         label: 'Analytics',
         href: `#`,
         disabled: true,
+      },
+    ]
+  }
+
+  if (type === 'services') {
+    const serviceBase = `${baseHref}/location-service/services/${id}/location/${locationId}`
+    return [
+      {
+        label: 'Profile',
+        href: `${serviceBase}/services-profile`,
+      },
+      {
+        label: 'Practice',
+        href: `${serviceBase}/services-practice`,
+      },
+      {
+        label: 'Visits',
+        href: `${serviceBase}/services-visits`,
+      },
+      {
+        label: 'Diagnosis',
+        href: `${serviceBase}/services-diagnosis`,
+      },
+      {
+        label: 'Groups',
+        href: `${serviceBase}/service-groups`,
+      },
+      {
+        label: 'Units',
+        href: `${serviceBase}/services-units`,
+      },
+      {
+        label: 'Rooms',
+        href: `${serviceBase}/services-rooms`,
+      },
+      {
+        label: 'Analytics',
+        href: `${serviceBase}/services-analytics`,
       },
     ]
   }

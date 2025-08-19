@@ -8,10 +8,11 @@ import { useStore } from '@/store'
 import { cn, getManagementNavLinks } from '@/utils'
 
 const ManagementNavigation = () => {
-  const { id, type, roleId } = useParams<{
+  const { id, type, roleId, locationId } = useParams<{
     id: string
     type: string
     roleId: string
+    locationId: string
   }>()
   const searchParams = useSearchParams()
   const practiceId = searchParams.get('practice')
@@ -28,6 +29,7 @@ const ManagementNavigation = () => {
         orgPracticeId,
         roleId,
         practiceId,
+        locationId,
         staffTypes,
         segments,
       ),
