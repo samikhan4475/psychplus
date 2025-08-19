@@ -14,8 +14,8 @@ import {
 } from '@/components'
 import { NewPatient } from '@/types'
 import {
+  formatDateOfBirth,
   getPatientAge,
-  getPatientDOB,
   getPatientFullName,
   getSlashedPaddedDateString,
 } from '@/utils'
@@ -83,7 +83,7 @@ const columns = (patient: Patient): ColumnDef<Match>[] => [
     header: () => <ColumnHeader label="DOB" />,
     cell: ({ row: { original } }) => (
       <TextCell className="truncate">
-        {getPatientDOB(original?.dateOfBirth)}
+        {formatDateOfBirth(original?.dateOfBirth)}
       </TextCell>
     ),
   },
