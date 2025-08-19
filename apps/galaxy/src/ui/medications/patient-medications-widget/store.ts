@@ -64,7 +64,10 @@ interface StoreState {
   loadingDrugs: boolean
   fetchDrugs: (value: string) => void
   drugsData?: DrugInfo[]
-  saveIsPmpReviewedForMedication: (patientId: string,appointmentId?:string) => Promise<void>
+  saveIsPmpReviewedForMedication: (
+    patientId: string,
+    appointmentId?: string,
+  ) => Promise<void>
   fetchScriptSureSessionToken: () => Promise<void>
   pageCache: Record<number, PatientMedication[]>
   next: () => void
@@ -175,6 +178,7 @@ const useStore = create<StoreState>((set, get) => ({
       data: [],
       total: 0,
       pageCache: {},
+      isPmpReviewed: false,
     })
     const result = await getPatientMedicationsAction({
       page,
@@ -256,11 +260,11 @@ const useStore = create<StoreState>((set, get) => ({
     }
   },
 
-  saveIsPmpReviewedForMedication: async (patientId,appointmentId) => {
+  saveIsPmpReviewedForMedication: async (patientId, appointmentId) => {
     const isPmpReviewed = get().isPmpReviewed
     const response = await saveWidgetAction({
       patientId,
-      ...(appointmentId && {appointmentId}),
+      ...(appointmentId && { appointmentId }),
       data: [
         {
           pid: Number(patientId),

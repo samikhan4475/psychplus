@@ -220,6 +220,7 @@ const QuickNotesSignButton = ({
     if (visitType === VisitTypeEnum.Tms) {
       return false
     }
+    if (patientId !== medications?.[0]?.patientId) return false
 
     const hasControlledSubstanceMedication = medications?.some(
       (med) =>
