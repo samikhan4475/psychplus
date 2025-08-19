@@ -121,9 +121,7 @@ const ListViewFilterCard = () => {
         fetchAppointments({ providerIds: [Number(providerId)] })
       }
     }
-    if (cachedFilters.length > 0) {
-      setFilters(cachedFilters)
-    }
+    setFilters(cachedFilters)
     fetchData()
   }, [hasHydrated])
 
