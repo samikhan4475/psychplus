@@ -5,20 +5,19 @@ import { PropsWithRow } from '@/components'
 import { formatDateTime } from '@/utils'
 import { Patient } from '../types'
 
-const ServiceDateTimeCell = ({
+const CreatedDateTimeCell = ({
   row: { original: patient },
 }: PropsWithRow<Patient>) => {
-  const requestedTime = patient?.requestedTime
-  if (!requestedTime) {
-    return <Text className="text-pp-black-3"></Text>
-  }
+  const createdTime = patient?.metadata?.createdOn
+  if (!createdTime) return
+
   return (
-    <Flex justify="between" minWidth="130px" gap="2" className="!truncate">
+    <Flex justify="between" minWidth="130px" className="!truncate">
       <Text className="text-pp-black-3" weight="regular" size="1">
-        {formatDateTime(requestedTime, false)}
+        {formatDateTime(createdTime, false)}
       </Text>
     </Flex>
   )
 }
 
-export { ServiceDateTimeCell }
+export { CreatedDateTimeCell }

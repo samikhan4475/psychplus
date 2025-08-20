@@ -11,6 +11,7 @@ import {
 import {
   ActionCell,
   ContactMadeSelectCell,
+  CreatedDateTimeCell,
   ExternalReferralHistoryCell,
   FacesheetAttachmentCell,
   MedicalRecordAttachmentCell,
@@ -131,20 +132,20 @@ const columns: ColumnDef<Patient>[] = [
     ],
   },
   {
-    id: 'organizationType',
-    header: () => <ColumnHeader label="Organization type" />,
-    cell: ({ row: { original } }) => (
-      <LongTextCell className="min-w-24">
-        {original?.organizationType}
-      </LongTextCell>
-    ),
-  },
-  {
     id: 'referrer',
     header: ({ column }) => (
-      <ColumnHeader column={column} label="Referrering Organization" />
+      <ColumnHeader column={column} label="Referring Organization" />
     ),
     columns: [
+      {
+        id: 'organizationType',
+        header: () => <ColumnHeader label="Type" />,
+        cell: ({ row: { original } }) => (
+          <LongTextCell className="min-w-24">
+            {original?.organizationType}
+          </LongTextCell>
+        ),
+      },
       {
         id: 'referrerFacility',
         header: () => <ColumnHeader label="Referrer Facility" />,
@@ -185,22 +186,20 @@ const columns: ColumnDef<Patient>[] = [
     ),
     columns: [
       {
+        id: 'created-date-time',
+        header: () => <ColumnHeader label="Created Date/Time" />,
+        cell: CreatedDateTimeCell,
+      },
+      {
         id: 'service-date-time',
-        header: () => <ColumnHeader label="Order Date/Time" />,
+        header: () => <ColumnHeader label="Requested Date/Time" />,
         cell: ServiceDateTimeCell,
       },
       {
         id: 'service',
-        header: () => <ColumnHeader label="Service" />,
+        header: () => <ColumnHeader label="Service/Visit Type" />,
         cell: ({ row: { original } }) => (
           <TextCell className="truncate">{original?.requestedService}</TextCell>
-        ),
-      },
-      {
-        id: 'referral-status',
-        header: () => <ColumnHeader label="Referral Status" />,
-        cell: ({ row: { original: patient } }) => (
-          <TextCell>{patient?.referrerStatus}</TextCell>
         ),
       },
       {
@@ -210,33 +209,35 @@ const columns: ColumnDef<Patient>[] = [
           <TextCell>{original?.additionalComments}</TextCell>
         ),
       },
+      {
+        id: 'order-number',
+        header: () => <ColumnHeader label="Order #" />,
+        cell: ({ row: { original: patient } }) => (
+          <TextCell>{patient?.externalReferenceId}</TextCell>
+        ),
+      },
+      {
+        id: 'facesheet',
+        header: () => <ColumnHeader label="Facesheet" />,
+        cell: FacesheetAttachmentCell,
+      },
+      {
+        id: 'dischargeTime',
+        header: () => <ColumnHeader label="DC Date" />,
+        cell: ({ row: { original } }) => (
+          <TextCell>
+            {getSlashedPaddedDateString(original?.dischargeTime) ?? ''}
+          </TextCell>
+        ),
+      },
+      {
+        id: 'medical-record',
+        header: () => (
+          <ColumnHeader label="Discharge summary / Medical Record" />
+        ),
+        cell: MedicalRecordAttachmentCell,
+      },
     ],
-  },
-  {
-    id: 'facesheet',
-    header: () => <ColumnHeader label="Facesheet" />,
-    cell: FacesheetAttachmentCell,
-  },
-  {
-    id: 'medical-record',
-    header: () => <ColumnHeader label="Medical Record" />,
-    cell: MedicalRecordAttachmentCell,
-  },
-  {
-    id: 'dischargeTime',
-    header: () => <ColumnHeader label="DC Date" />,
-    cell: ({ row: { original } }) => (
-      <TextCell>
-        {getSlashedPaddedDateString(original?.dischargeTime) ?? ''}
-      </TextCell>
-    ),
-  },
-  {
-    id: 'dischargeSummary',
-    header: () => <ColumnHeader label="Discharge Summary" />,
-    cell: ({ row: { original } }) => (
-      <TextCell>{original?.dischargeSummary ?? ''}</TextCell>
-    ),
   },
 
   {
@@ -307,7 +308,7 @@ const columns: ColumnDef<Patient>[] = [
   },
   {
     id: 'match-status',
-    header: () => <ColumnHeader label="Status" />,
+    header: () => <ColumnHeader label="Pt Match Status" />,
     cell: ({ row: { original } }) => (
       <TextCell className="truncate">{original?.matchStatus ?? ''}</TextCell>
     ),

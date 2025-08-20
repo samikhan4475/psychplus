@@ -83,6 +83,7 @@ interface Patient extends PatientProfile {
   attachments?: Attachment[]
   referralReason?: string
   patientId: number
+  externalReferenceId?: string
 }
 
 interface SearchPatientsData {
