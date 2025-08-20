@@ -3,14 +3,26 @@
 import { useState } from 'react'
 import { Button } from '@radix-ui/themes'
 import { toast } from 'react-hot-toast'
+import { useStore as zustandUseStore } from 'zustand'
 import { PatientReferral } from '@/types'
 import { submitExternalReferralAction } from '@/ui/referrals/patient-referrals-widget/actions'
+import { getDateLabel } from '@/utils'
+import { useStore } from '../store'
 import { referralServiceType, VisitTypes } from '../types'
 
 interface BookButtonProps {
   referral: PatientReferral
 }
 const SubmitExternalReferralButton = ({ referral }: BookButtonProps) => {
+  const store = useStore()
+  const { page, fetchPatientReferrals, formValues } = zustandUseStore(
+    store,
+    (state) => ({
+      page: state.page,
+      fetchPatientReferrals: state.fetchPatientReferrals,
+      formValues: state.formValues,
+    }),
+  )
   const [loading, setLoading] = useState(false)
   const onBook = async () => {
     setLoading(true)
@@ -23,8 +35,10 @@ const SubmitExternalReferralButton = ({ referral }: BookButtonProps) => {
       referralServiceType: referralServiceType.OCD,
       patientContactDetails: referral.contactDetails,
       referrerShortName: referralServiceType.ReferrerShortName,
+      patientDob:
+        referral.patientDateOfBirth &&
+        getDateLabel(new Date(referral.patientDateOfBirth)),
     }
-
     const response = await submitExternalReferralAction({
       payload,
     })
@@ -35,6 +49,7 @@ const SubmitExternalReferralButton = ({ referral }: BookButtonProps) => {
 
     if (response.state === 'success') {
       toast.success('Submitted successfully!')
+      fetchPatientReferrals(formValues, page)
     }
     setLoading(false)
   }
@@ -47,7 +62,7 @@ const SubmitExternalReferralButton = ({ referral }: BookButtonProps) => {
       onClick={onBook}
       disabled={
         referral.visitTypeCode !== VisitTypes.ExposureResponseTherapy ||
-        !!referral.sentToNocdDate
+        !!referral.sentToThirdPartyDate
       }
       loading={loading}
     >

@@ -107,6 +107,7 @@ interface PatientReferral {
   isPatientEducation?: boolean
   isRemsEnrolled?: boolean
   visitTypeLabel?: string
+  sentToThirdPartyDate?: string
 }
 
 interface GetPatientReferralsParams {
