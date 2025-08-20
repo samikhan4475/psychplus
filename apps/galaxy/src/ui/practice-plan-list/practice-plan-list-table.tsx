@@ -12,9 +12,11 @@ import {
   LoadingPlaceholder,
   TextCell,
 } from '@/components'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { useStore as useRootStore } from '@/store'
-import { Sort } from '@/types'
-import { formatDate, getSortDir } from '@/utils'
+import { SharedCode, Sort } from '@/types'
+import { formatDate, getLabelFromCodeset, getSortDir } from '@/utils'
 import { Practice } from '../organization-practice/types'
 import { getAllOrganizationPracticesListAction } from '../organization-practices/actions'
 import { ActionsCell } from './actions-cell'
@@ -25,6 +27,7 @@ import { InsurancePlanItem } from './types'
 const columns = (
   sort?: Sort,
   onSort?: (column: string) => void,
+  payerTypeCodes?: SharedCode[],
 ): ColumnDef<InsurancePlanItem>[] => {
   return [
     {
@@ -67,7 +70,11 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.planType}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>
+          {getLabelFromCodeset(row.original.planType, payerTypeCodes || [])}
+        </TextCell>
+      ),
     },
     {
       id: 'planStatus',
@@ -184,6 +191,8 @@ const PracticePlanListTable = () => {
     id: string
   }>()
 
+  const payerTypeCodes = useCodesetCodes(CODESETS.PayerType)
+
   const addTab = useRootStore((state) => state.addTab)
 
   const { data, search, loading, sort, sortData } = useStore((state) => ({
@@ -220,7 +229,7 @@ const PracticePlanListTable = () => {
       <ScrollArea className="rounded p-1">
         <DataTable
           data={data?.insurancePlanList ?? []}
-          columns={columns(sort, sortData)}
+          columns={columns(sort, sortData, payerTypeCodes)}
           disablePagination
           sticky
           onRowClick={(row) => {

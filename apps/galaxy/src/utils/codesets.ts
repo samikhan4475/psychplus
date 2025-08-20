@@ -35,4 +35,9 @@ const replaceValueWithLabel = (item: string, codeset: SharedCode[]) => {
   return item.replace(value, label)
 }
 
-export { mapCodesetToOptions, mapValuesToLabels, replaceValueWithLabel }
+export {
+  mapCodesetToOptions,
+  mapValuesToLabels,
+  replaceValueWithLabel,
+  getLabelFromCodeset,
+}

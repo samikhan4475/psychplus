@@ -16,8 +16,13 @@ import {
   FormFieldLabel,
 } from '@/components'
 import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { SelectOptionType } from '@/types'
-import { formatDateToISOString, getLocalCalendarDate } from '@/utils'
+import {
+  formatDateToISOString,
+  getLabelFromCodeset,
+  getLocalCalendarDate,
+} from '@/utils'
 import { addPayerPlanAction, updatePayerPlanAction } from '../../actions'
 import { useStore } from '../../store'
 import { InsurancePlanItem, SelectPayerOption } from '../../types'
@@ -129,6 +134,9 @@ const AddPlanDialogForm = ({ onCloseModal, plan }: AddPlanDialogFormProps) => {
       form.setValue('planType', payerType)
     }
   }
+
+  const payerTypeCodes = useCodesetCodes(CODESETS.PayerType)
+
   return (
     <FormContainer className="gap-2" form={form} onSubmit={onSubmit}>
       <FormFieldContainer className="w-full gap-1">
@@ -166,6 +174,10 @@ const AddPlanDialogForm = ({ onCloseModal, plan }: AddPlanDialogFormProps) => {
             size="1"
             className="border-pp-gray-2 h-5 border border-solid !outline-none [box-shadow:none]"
             {...form.register('planType')}
+            value={getLabelFromCodeset(
+              form.getValues('planType'),
+              payerTypeCodes || [],
+            )}
             placeholder=""
           />
           <FormFieldError name="planType" />
