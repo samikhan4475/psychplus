@@ -14,9 +14,9 @@ const PhoneInput = () => {
       <PhoneNumberInputBase
         field="phone.number"
         className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
-        placeholder="Phone number"
+        placeholder="(000) 111-1111"
       />
-      <FormFieldError name="phone" />
+      <FormFieldError name="phone.number" />
     </FormFieldContainer>
   )
 }

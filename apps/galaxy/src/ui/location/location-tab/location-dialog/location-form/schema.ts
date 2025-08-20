@@ -2,6 +2,7 @@ import z from 'zod'
 import { zipLast4Schema } from '@/utils'
 
 const zipCodeRegex = /(^\d{5}$)|(^\d{5}-\d{4}$)|^$/
+const phoneRegex = /^(\+?[1-9]\d{9}|^$)$/
 
 const locationSchema = z.object({
   id: z.string().optional(),
@@ -10,7 +11,10 @@ const locationSchema = z.object({
   name: z.string().min(1, 'Required'),
   npi: z.string().regex(/^\d{10}$/, '10 digits required'),
   phone: z.object({
-    number: z.string().optional(),
+    number: z
+      .string()
+      .regex(phoneRegex, 'Invalid phone number format')
+      .optional(),
     type: z.string(),
   }),
   fax: z.object({
