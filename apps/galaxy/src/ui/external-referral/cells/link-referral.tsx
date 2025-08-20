@@ -33,7 +33,7 @@ const LinkReferral = ({
           disabled={isNew}
           onClick={handleButtonClick}
         >
-          <Link2Icon height={12} width={12} />
+          <Link2Icon height={14} width={14} color="black" />
         </IconButton>
       </Tooltip>
       {isOpen && (
