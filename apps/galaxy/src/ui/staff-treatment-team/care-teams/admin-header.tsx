@@ -11,7 +11,7 @@ const AdminHeader = ({
   setAlertInfo: (alertInfo: { message: string; isOpen: boolean }) => void
 }) => {
   return (
-    <Flex className="bg-white w-[90%] items-center justify-between gap-3 pb-2 sm:w-[80%] md:w-[50%]">
+    <Flex className="bg-white w-[90%] items-center justify-between gap-3 pb-2 sm:w-[80%] md:w-[50%] z-40">
       <Text size="4" weight="medium" className=" whitespace-nowrap">
         Admin
       </Text>
