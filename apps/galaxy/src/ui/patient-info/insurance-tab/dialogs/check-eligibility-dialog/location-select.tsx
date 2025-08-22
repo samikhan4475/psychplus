@@ -1,70 +1,51 @@
 'use client'
 
-import React, { useCallback, useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
-import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
+import { useEffect, useState } from 'react'
+import { useFormContext } from 'react-hook-form'
+import {
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+  SelectInput,
+} from '@/components'
 import { SelectOptionType } from '@/types'
-import { getAllLocations } from '@/ui/reports/actions'
+import { getClinicLocations } from '@/ui/visit/client-actions'
+import { StateCodeSet } from '@/ui/visit/types'
+import { SchemaType } from './schema'
 
-const LocationSelect = () => {
-  const [locationData, setLocationData] = useState<SelectOptionType[]>()
-  const [loading, setLoading] = useState(false)
-  const fetchLocationData = useCallback(async (signal: AbortSignal) => {
-    setLoading(true)
-    try {
-      const locationResult = await getAllLocations(signal)
-
-      if (locationResult.state === 'success') {
-        const transformedData = locationResult.data.map((item) => {
-          const label = item.locationNameGenerated
-
-          const value = item.id
-
-          return {
-            label,
-            value,
-          }
-        })
-        setLocationData(transformedData)
-      } else if (locationResult.error !== 'AbortError') {
-        toast.error(locationResult.error ?? 'Failed to fetch locations data')
-      }
-      setLoading(false)
-    } catch (error) {
-      if (!(error instanceof DOMException && error.name === 'AbortError')) {
-        toast.error('Failed to fetch location data')
-      }
-    } finally {
-      if (!signal.aborted) {
-        setLoading(false)
-      }
-    }
-
-    setLoading(false)
-  }, [])
+const LocationDropdown = ({ states }: { states: StateCodeSet[] }) => {
+  const form = useFormContext<SchemaType>()
+  const [loading, setLoading] = useState<boolean>(false)
+  const [locations, setLocations] = useState<SelectOptionType[]>([])
+  const stateCode = form.watch('residingStateCode')
 
   useEffect(() => {
-    const controller = new AbortController()
-
-    fetchLocationData(controller.signal)
-
-    return () => {
-      controller.abort()
-    }
-  }, [fetchLocationData])
+    ;(async () => {
+      const state = states.find((state) => state.stateCode === stateCode)
+      if (state?.id) {
+        setLoading(true)
+        form.resetField('locationId')
+        const result = await getClinicLocations(state?.id)
+        setLoading(false)
+        if (result.state === 'error') return setLocations([])
+        setLocations(result.data)
+      }
+    })()
+  }, [stateCode, states])
 
   return (
-    <FormFieldContainer>
+    <FormFieldContainer className="flex-1">
       <FormFieldLabel required>Location</FormFieldLabel>
       <SelectInput
         field="locationId"
-        placeholder="Select"
+        options={locations}
+        buttonClassName="h-6 w-full"
+        disabled={!stateCode}
         loading={loading}
-        options={locationData}
-        buttonClassName="w-full h-6 "
-        className="h-full w-full"
       />
+      <FormFieldError name="locationId" />
     </FormFieldContainer>
   )
 }
-export { LocationSelect }
+
+export { LocationDropdown }

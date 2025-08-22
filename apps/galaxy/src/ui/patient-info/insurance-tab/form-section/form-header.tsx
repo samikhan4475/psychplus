@@ -21,7 +21,9 @@ const FormHeader = ({ insurance, patientId, disabled }: FormHeaderProps) => {
   )
   return (
     <Flex className="w-full justify-end" gap="2">
-      {isEligibilityFeatureFlagEnabled && <CheckEligibilityButton />}
+      {isEligibilityFeatureFlagEnabled && (
+        <CheckEligibilityButton patientId={patientId} insurance={insurance} />
+      )}
       <StatusDropdown />
       <HistoryButton
         insurance={insurance}

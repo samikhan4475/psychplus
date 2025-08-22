@@ -1,8 +1,29 @@
-import { DateValue } from 'react-aria-components'
+import { Metadata } from '@/types'
 
 interface EligibilityDetailResponseModel {
   eligibilityDetailResponse: EligibilityDetailResponse
   isSuccessful: boolean
+}
+
+interface EligibilityLogRequestPayload {
+  summaryId: string
+  patientId: string
+  payerId: string
+  memberId: string
+  patientInsurancePolicyId: string
+  locationId: string
+  practiceId: string
+  providerStaffId: string
+  serviceDate: string | null
+  serviceTypeCode: string
+}
+
+interface ResidingStateResponse {
+  patientId: string
+  patientResidingStateCode: string
+  patientResidingStateName: string
+  mostRecentAppointmentId: string
+  mostRecentVisitDate: string
 }
 
 interface EligibilityRequestPayload {
@@ -11,7 +32,7 @@ interface EligibilityRequestPayload {
   organizationId: string
   practiceId: string
   providerId: string
-  serviceDate: DateValue | string
+  serviceDate: string | null
   serviceTypeCode: string
   cptCodes: string[]
 }
@@ -54,6 +75,32 @@ interface EligibilityDetailResponse {
 interface ServiceType {
   code: string
   value: string
+}
+
+interface Name {
+  firstName: string
+  middleName: string
+  lastName: string
+  preferredName: string
+  title: string
+  suffix: string
+  honors: string
+}
+
+interface EligibilityLogResponse {
+  patientPayorEligibilityId: string
+  serviceDate: string
+  patientName: Name
+  memberId: string
+  serviceTypeCode: string
+  residingStateCode: string
+  locationName: string
+  payerName: string
+  providerName: Name
+  responseStatus: string
+  requestedByName: Name
+  coverageStatus: string
+  metadata: Metadata
 }
 
 interface PersonWithAddress {
@@ -124,7 +171,10 @@ interface SupplementalInformation {
 }
 
 export {
+  type EligibilityLogRequestPayload,
   type EligibilityDetailResponseModel,
   type EligibilityDetailResponse,
   type EligibilityRequestPayload,
+  type EligibilityLogResponse,
+  type ResidingStateResponse,
 }

@@ -310,6 +310,8 @@ const GET_INSURANCE_PAYMENT_LIST_ENDPOINT = `${API_URL}/api/payments/actions/sea
 const GET_PRACTICE_IDS_LIST_ENDPOINT = `${API_URL}/api/practices/actions/search`
 const GET_PRACTICE_USERS_LIST_ENDPOINT = (userId: string, practiceId: string) =>
   `${API_URL}/api/practices/${practiceId}/users/${userId}/roles`
+const GET_PATIENT_RESIDING_STATE_ENDPOINT = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/residingstates`
 const DELETE_INSURANCE_PAYMENT_ENDPOINT = (id: string) =>
   `${API_URL}/api/payments/${id}`
 const GENERATE_PATIENT_STATEMENTS_ENDPOINT = (fileFormat: string) =>
@@ -492,6 +494,8 @@ const GET_PATIENT_REFERRALS_ENDPOINT = `${API_URL}/api/referrals/search`
 const SEND_TO_NOCD_REFERRAL_ENDPOINT = `${API_URL}/api/externalreferrals/actions/submitexternalreferral`
 const GET_PATIENT_REFERRALS_HISTORY_ENDPOINT = (liveReferralId: string) =>
   `${API_URL}/api/referrals/${liveReferralId}/history/search`
+const GET_PATIENT_ELIGIBILITY_LOG_ENDPOINT = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/eligibility/actions/search`
 const GET_PREFERRED_PARTNER_USERS = (ppId: string) =>
   `${API_URL}/api/preferredpartners/${ppId}/userworklists/actions/search`
 const DELETE_PREFERRED_PARTNER_USER = (ppId: string, workListId: string) =>
@@ -1196,6 +1200,7 @@ export {
   GET_PAYMENT_ADJUSTMENT_CODES,
   GET_STAFF_PROFILE_ENDPOINT,
   DELETE_STAFF_ENDPOINT,
+  GET_PATIENT_ELIGIBILITY_LOG_ENDPOINT,
   REFRESH_ENDPOINT,
   GET_CLAIM_SUBMISSION_LIST,
   GET_CLAIMPAYMENTS_HISTORY_LIST_ENDPOINT,
@@ -1209,6 +1214,7 @@ export {
   EXPORT_PAYMENTS_LIST_ENDPOINT,
   ADD_PROVIDER_LOCATION_ENDPOINT,
   ADD_PRACTICE_PLAN_ADDRESS,
+  GET_PATIENT_RESIDING_STATE_ENDPOINT,
   GET_PRACTICE_PLAN_ADDRESS,
   UPDATE_PRACTICE_PLAN_ADDRESS,
   GET_PROVIDER_LOCATIONS_ENDPOINT,

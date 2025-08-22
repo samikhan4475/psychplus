@@ -1,8 +1,11 @@
 'use server'
 
 import * as api from '@/api'
-import { DEFAULT_STAFF_PAYLOAD_PARAMS, STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
-import { StaffResource } from '@/types'
+import {
+  DEFAULT_STAFF_PAYLOAD_PARAMS,
+  STAFF_ROLE_CODE_PRESCRIBER,
+} from '@/constants'
+import { SelectOptionType, StaffResource } from '@/types'
 import { sanitizeFormData } from '@/utils'
 
 const getProvidersOptionsAction = async (
@@ -12,20 +15,24 @@ const getProvidersOptionsAction = async (
     practicesIds?: string[]
     isResultsForNameList?: boolean
     includeInactive?: boolean
+    isIncludePractices?: boolean
   } = {},
-): Promise<api.ActionResult<{ label: string; value: string }[]>> => {
-  const { includeInactive, ...rest } = payload
+): Promise<api.ActionResult<SelectOptionType[]>> => {
+  const { includeInactive, isIncludePractices = false, ...rest } = payload
   const body = {
     roleCodes: [STAFF_ROLE_CODE_PRESCRIBER],
-   ...DEFAULT_STAFF_PAYLOAD_PARAMS,
+    ...DEFAULT_STAFF_PAYLOAD_PARAMS,
+    isIncludePractices,
     ...rest,
   }
+  const url = new URL(`${api.GET_STAFF_ENDPOINT}`)
 
-  const url = includeInactive
-    ? `${api.GET_STAFF_ENDPOINT}?includeInactive=true`
-    : api.GET_STAFF_ENDPOINT
+  if (includeInactive) url.searchParams.append('includeInactive', 'true')
 
-  const response = await api.POST<StaffResource[]>(url, sanitizeFormData(body))
+  const response = await api.POST<StaffResource[]>(
+    String(url),
+    sanitizeFormData(body),
+  )
 
   if (response.state === 'error') {
     return {

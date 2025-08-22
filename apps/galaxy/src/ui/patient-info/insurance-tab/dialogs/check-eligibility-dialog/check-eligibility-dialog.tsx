@@ -3,17 +3,23 @@
 import { Dialog, Flex } from '@radix-ui/themes'
 import { X } from 'lucide-react'
 import { TabContentHeading } from '@/components'
+import { Insurance } from '@/types'
 import { CheckEligibilityForm } from './check-eligibility-form'
-import { CheckEligibilityTable } from './check-eligibility-table'
-import { CheckEligibilityTablePagination } from './check-eligibility-table-pagination'
+import { CheckEligibilityFilterForm } from './check-eligibility-log/check-eligibility-filter-form'
+import { CheckEligibilityTable } from './check-eligibility-log/check-eligibility-table'
+import { CheckEligibilityTablePagination } from './check-eligibility-log/check-eligibility-table-pagination'
 
 interface CheckEligibilityDialogProps {
   open?: boolean
   onClose?: () => void
+  insurance?: Insurance
+  patientId?: string
 }
 const CheckEligibilityDialog = ({
   open,
   onClose,
+  insurance,
+  patientId,
 }: CheckEligibilityDialogProps) => {
   return (
     <Dialog.Root open={open} onOpenChange={onClose}>
@@ -24,13 +30,14 @@ const CheckEligibilityDialog = ({
         <Dialog.Title size="5" weight="bold" className="m-0 mb-1.5">
           Eligibility
         </Dialog.Title>
-        <CheckEligibilityForm />
+        <CheckEligibilityForm insurance={insurance} patientId={patientId} />
         <Flex direction="column">
           <TabContentHeading
             className="my-3 bg-gray-2"
             title="Eligibility Log"
           />
-          <CheckEligibilityTable />
+          <CheckEligibilityFilterForm patientId={patientId} />
+          <CheckEligibilityTable patientId={patientId} />
           <CheckEligibilityTablePagination />
         </Flex>
       </Dialog.Content>

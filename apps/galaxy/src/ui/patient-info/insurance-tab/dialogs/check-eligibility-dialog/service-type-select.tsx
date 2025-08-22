@@ -14,10 +14,10 @@ const ServiceTypeSelect = () => {
       <FormFieldLabel required>Service Type</FormFieldLabel>
       <CodesetSelect
         size="1"
-        name="serviceType"
+        name="serviceTypeCode"
         codeset={CODESETS.BillingMedicalServiceType}
       />
-      <FormFieldError name="serviceType" />
+      <FormFieldError name="serviceTypeCode" />
     </FormFieldContainer>
   )
 }

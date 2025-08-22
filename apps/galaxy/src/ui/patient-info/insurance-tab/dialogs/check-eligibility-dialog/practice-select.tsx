@@ -2,7 +2,12 @@
 
 import React, { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
+import {
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+  SelectInput,
+} from '@/components'
 import { SelectOptionType } from '@/types'
 import { getPracticesOptionsAction } from '@/ui/patient-lookup/actions'
 import { SchemaType } from './schema'
@@ -16,15 +21,15 @@ const PracticeSelect = () => {
 
   useEffect(() => {
     ;(async () => {
+      if (!locationId) return
       setDisabled(false)
       setLoading(true)
+      form.setValue('practiceId', '')
       const result = await getPracticesOptionsAction({
         payload: { locationId },
       })
-      if (result.state === 'success') {
-        setOrganizations(result.data)
-      }
       setLoading(false)
+      if (result.state === 'success') setOrganizations(result.data)
     })()
   }, [locationId])
   return (
@@ -39,6 +44,7 @@ const PracticeSelect = () => {
         loading={loading}
         disabled={disabled || !locationId}
       />
+      <FormFieldError name="practiceId" />
     </FormFieldContainer>
   )
 }

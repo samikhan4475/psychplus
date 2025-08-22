@@ -25,7 +25,6 @@ const CheckEligibilityTablePagination = () => {
     pageSize: state.pageSize,
     onPageSizeChange: state.onPageSizeChange,
   }))
-
   if (!data || loading || !total) {
     return null
   }

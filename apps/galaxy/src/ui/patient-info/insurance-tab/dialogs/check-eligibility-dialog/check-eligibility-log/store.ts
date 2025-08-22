@@ -1,27 +1,24 @@
 import { create } from 'zustand'
 import { Sort } from '@/types'
 import { getNewSortDir } from '@/utils'
-import { checkEligibilityAction } from '../../actions'
-import { ELIGIBILITY_TABLE_PAGE_SIZE } from './constants'
-import {
-  EligibilityDetailResponseModel,
-  EligibilityRequestPayload,
-} from './types'
+import { getEligibilityLogAction } from '../actions'
+import { ELIGIBILITY_TABLE_PAGE_SIZE } from '../constants'
+import { EligibilityLogRequestPayload, EligibilityLogResponse } from '../types'
 
 interface Store {
-  data?: EligibilityDetailResponseModel
+  data?: EligibilityLogResponse[]
   loading?: boolean
   error?: string
-  payload?: Partial<EligibilityRequestPayload>
+  payload?: Partial<EligibilityLogRequestPayload>
   page: number
   sort?: Sort
   pageSize: number
   total?: number
-  pageCache: Record<number, EligibilityDetailResponseModel | undefined>
+  pageCache: Record<number, EligibilityLogResponse[] | undefined>
   onPageSizeChange: (pageSize: number) => void
   jumpToPage: (page: number) => void
   search: (
-    payload?: Partial<EligibilityRequestPayload>,
+    payload?: Partial<EligibilityLogRequestPayload>,
     page?: number,
     pageSize?: number,
     reset?: boolean,
@@ -52,7 +49,7 @@ const useStore = create<Store>((set, get) => ({
       page: 1,
       pageSize: ELIGIBILITY_TABLE_PAGE_SIZE,
     })
-    const result = await checkEligibilityAction({
+    const result = await getEligibilityLogAction({
       payload,
       sort: get().sort,
       page,

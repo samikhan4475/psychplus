@@ -2,75 +2,93 @@ import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Button, Flex, Grid } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { FormContainer, RadioGroup } from '@/components'
+import { Insurance } from '@/types'
 import {
-  AsyncSelect,
-  FormContainer,
-  FormFieldContainer,
-  FormFieldError,
-  FormFieldLabel,
-  RadioGroup,
-} from '@/components'
-import { getPayersListAction } from '@/ui/payer/actions'
-import { SearchProcedureCodes } from '@/ui/revenue-cycle/claim-detail-tab/charges-section'
-import { LocationSelect } from './location-select'
+  formatDateToISOString,
+  getCalendarDate,
+  sanitizeFormData,
+} from '@/utils'
+import { checkEligibilityAction } from './actions'
+import { useStore } from './check-eligibility-log/store'
+import { ELIGIBILITY_TABLE_PAGE_SIZE } from './constants'
+import { CptCodeSelect } from './cpt-code-select'
+import { MemberIdField } from './member-id-field'
 import { PatientSelect } from './patient-select'
+import { PayerSelect } from './payer-select'
 import { PracticeSelect } from './practice-select'
 import { ProviderSelect } from './provider-select'
 import { schema, SchemaType } from './schema'
 import { ServiceDateSelect } from './service-date-select'
 import { ServiceTypeSelect } from './service-type-select'
+import { StateAndLocationFilters } from './state-and-location-filters'
 
 const serviceOptions = [
   { value: 'service', label: 'Service Type' },
   { value: 'cpt', label: 'CPT Code' },
 ]
 
-const CheckEligibilityForm = () => {
+interface CheckEligibilityFormProps {
+  insurance?: Insurance
+  patientId?: string
+}
+
+const CheckEligibilityForm = ({
+  insurance,
+  patientId,
+}: CheckEligibilityFormProps) => {
+  const search = useStore((state) => state.search)
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      patientId: '',
-      patientInsurancePolicyId: '',
-      organizationId: '',
+      patientId: patientId ?? '',
+      patientInsurancePolicyId: insurance?.id ?? '',
       practiceId: '',
       providerId: '',
       locationId: '',
       isService: 'service',
-      serviceDate: null,
+      memberId: insurance?.memberId ?? '',
+      residingStateCode: '',
+      serviceDate: getCalendarDate(),
       serviceTypeCode: '',
-      cptCodes: [],
+      cptCodes: ['99214'],
+      authenticatedUserId: 0,
     },
   })
+  const onSubmit = async (data: SchemaType) => {
+    const payload = {
+      ...data,
+      serviceDate: data.serviceDate
+        ? formatDateToISOString(data.serviceDate)
+        : null,
+    }
+    const sanitizedPayload = sanitizeFormData(payload)
+    const result = await checkEligibilityAction(sanitizedPayload)
+    if (result.state === 'error')
+      return toast.error(result.error ?? 'Failed to verify eligiblity')
 
-  const onSubmit = (data: SchemaType) => {
-    //API Handling will be done
+    toast.success('Eligibility verification successful')
+    search({ patientId }, 1, ELIGIBILITY_TABLE_PAGE_SIZE, true)
   }
   const onSelectionChange = (value: string) => {
     form.setValue('isService', value)
-    form.setValue('cptCodes', [])
-    form.setValue('serviceTypeCode', '')
+    if (value === 'service') form.setValue('cptCodes', ['99214'])
+    else form.setValue('serviceTypeCode', '')
   }
+
   return (
     <FormContainer form={form} onSubmit={onSubmit}>
       <Grid columns="4" gap="2" mt="4">
         <Box className="col-span-4">
-          <PatientSelect />
+          <PatientSelect patientId={patientId} />
         </Box>
-        <Grid className="col-span-4" columns="3" gap="2">
-          <FormFieldContainer>
-            <FormFieldLabel required>Payer</FormFieldLabel>
-            <AsyncSelect
-              field="payerId"
-              placeholder="Select"
-              fetchOptions={getPayersListAction}
-              buttonClassName="w-full h-6"
-              className="h-full flex-1"
-            />
-            <FormFieldError name="payerId" />
-          </FormFieldContainer>
-          <LocationSelect />
-          <PracticeSelect />
+        <Grid className="col-span-4" columns="4" gap="2">
+          <PayerSelect insurance={insurance} />
+          <MemberIdField />
+          <StateAndLocationFilters />
         </Grid>
+        <PracticeSelect />
         <ProviderSelect />
         <ServiceDateSelect />
         <Grid className="col-span-4" columns="4">
@@ -85,20 +103,16 @@ const CheckEligibilityForm = () => {
           {form.watch('isService') === 'service' ? (
             <ServiceTypeSelect />
           ) : (
-            <FormFieldContainer>
-              <FormFieldLabel required>CPT Code</FormFieldLabel>
-              <Box className="rounded-2 border border-gray-5 pr-1">
-                <SearchProcedureCodes
-                  fieldName="cptCodes"
-                  placeholder={form.watch('cptCodes')?.[0] || 'Search'}
-                  required
-                  onChange={(value) => form.setValue('cptCodes', [value.code])}
-                />
-              </Box>
-            </FormFieldContainer>
+            <CptCodeSelect />
           )}
           <Flex justify="end" align="end" className="col-span-2">
-            <Button size="1" highContrast>
+            <Button
+              size="1"
+              highContrast
+              disabled={!patientId}
+              loading={form.formState.isSubmitting}
+              type="submit"
+            >
               Check Eligibility
             </Button>
           </Flex>

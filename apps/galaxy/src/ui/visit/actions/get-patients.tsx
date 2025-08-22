@@ -8,6 +8,7 @@ interface SearchPatientsPayload {
   lastName?: string
   name?: string
   roleCodes?: string[]
+  patientIds?: string[]
   IsIncludeInsuranceVerification?: boolean
 }
 
