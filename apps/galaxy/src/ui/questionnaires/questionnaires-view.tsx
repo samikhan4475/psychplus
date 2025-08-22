@@ -11,6 +11,7 @@ import { AuditTab } from './audit-tab'
 import { BaiTab } from './bai-tab'
 import { BdiTab } from './bdi-tab'
 import { CssrsTab } from './c-ssrs-tab'
+import { Cars2StTab } from './cars-2-st-tab'
 import { QuestionnaireTabs } from './constants'
 import { CopsRTab } from './cops-r-tab'
 import { DashboardTab } from './dashboard-tab'
@@ -19,6 +20,7 @@ import { DesiiTab } from './des-ii-tab'
 import { Gad7Tab } from './gad-7-tab'
 import { GqAscTab } from './gq-asc-tab'
 import { HamDTab } from './ham-d-tab'
+import { MdqTab } from './mdq-tab'
 import { MocaTab } from './moca-tab'
 import { Pcl5Tab } from './pcl-5-tab'
 import { Phq9Tab } from './phq-9-tab'
@@ -65,6 +67,8 @@ const QuestionnairesView = ({ data, patientId }: QuestionnairesViewProps) => {
     QuestionnaireTabs.DES_II_TAB,
     QuestionnaireTabs.BAI_TAB,
     QuestionnaireTabs.BDI_TAB,
+    QuestionnaireTabs.CARS_2_ST_TAB,
+    QuestionnaireTabs.MDQ_TAB,
   ].map((q) => ({ label: q, value: q }))
 
   const tabComponents = {
@@ -88,6 +92,8 @@ const QuestionnairesView = ({ data, patientId }: QuestionnairesViewProps) => {
     [QuestionnaireTabs.DES_II_TAB]: DesiiTab,
     [QuestionnaireTabs.BAI_TAB]: BaiTab,
     [QuestionnaireTabs.BDI_TAB]: BdiTab,
+    [QuestionnaireTabs.CARS_2_ST_TAB]: Cars2StTab,
+    [QuestionnaireTabs.MDQ_TAB]: MdqTab,
   }
 
   useEffect(() => {

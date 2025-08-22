@@ -142,5 +142,6 @@ export {
   ScoreInterpretation,
   getBadgeColor,
   getRange,
+  getBadgeBackgroundClass,
   type ScoreInterpretationRange,
 }

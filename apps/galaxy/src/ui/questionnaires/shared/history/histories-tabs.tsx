@@ -36,10 +36,7 @@ const HistoriesTabs = ({
   }, [defaultTab])
 
   return (
-    <Tabs.Root
-      className="mt-3 flex max-w-screen-md flex-col"
-      defaultValue={defaultTab}
-    >
+    <Tabs.Root className="mt-3 flex flex-col" defaultValue={defaultTab}>
       <Tabs.List>
         <ScrollArea className="flex-1" ref={scrollAreaRef}>
           <Flex width="100%" pb="4">

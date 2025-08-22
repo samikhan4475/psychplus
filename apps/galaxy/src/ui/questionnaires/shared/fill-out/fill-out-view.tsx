@@ -7,12 +7,14 @@ import { FilloutDesii } from './fill-out-des-ii'
 import { FilloutGqAsc } from './fill-out-gq-asc'
 import { FilloutPsc17 } from './fill-out-psc-17'
 import { FilloutSnap4 } from './fill-out-snap4'
+import { FilloutVadprs } from './fill-out-vadprs'
 import { FilloutAims } from './fill-out-view-aims'
+import { FilloutCars2St } from './fill-out-view-cars-2-st'
 import { FilloutCommon } from './fill-out-view-common'
 import { FilloutCssrs } from './fill-out-view-cssrs'
+import { FilloutMdq } from './fill-out-view-mdq'
 import { FilloutMoca } from './fill-out-view-moca'
 import { FilloutYboc } from './fill-out-yboc'
-import { FilloutVadprs } from './fill-out-vadprs'
 
 type FillOutProps = PropsWithChildren<{
   data: QuickNoteSectionItem[]
@@ -34,10 +36,14 @@ const FillOutView = ({ data, sectionName }: FillOutProps) => {
         return <FilloutMoca data={data} sectionName={sectionName} />
       case 'QuicknoteSectionQuestionnaireCssrs':
         return <FilloutCssrs data={data} sectionName={sectionName} />
+      case 'QuicknoteSectionQuestionnaireMdq':
+        return <FilloutMdq data={data} sectionName={sectionName} />
+      case 'QuicknoteSectionQuestionnaireCars2St':
+        return <FilloutCars2St data={data} sectionName={sectionName} />
       case 'QuicknoteSectionQuestionnaireAdultAsrs':
         return <FilloutAdultAsrs data={data} sectionName={sectionName} />
-        case 'QuicknoteSectionQuestionnaireVadprs':
-          return <FilloutVadprs data={data} sectionName={sectionName} />
+      case 'QuicknoteSectionQuestionnaireVadprs':
+        return <FilloutVadprs data={data} sectionName={sectionName} />
       case QuickNoteSectionName.QuickNoteSectionGqasc:
         return <FilloutGqAsc data={data} sectionName={sectionName} />
       case QuickNoteSectionName.QuickNoteSectionDesii:

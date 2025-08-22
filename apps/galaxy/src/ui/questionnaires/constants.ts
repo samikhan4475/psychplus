@@ -12,6 +12,8 @@ enum QuestionnaireTabs {
   DAST_10_TAB = 'DAST-10',
   MOCA_TAB = 'MOCA',
   HAM_D_TAB = 'HAM-D',
+  CARS_2_ST_TAB = 'CARS-2-ST',
+  MDQ_TAB = 'MDQ',
   C_SSRS_TAB = 'C-SSRS',
   PSC_17_TAB = 'PSC-17',
   COPS_R_TAB = 'COPS-R',
@@ -46,6 +48,8 @@ enum QuestionnairesTitles {
   'HAM-D' = 'Hamilton Depression Rating Scale (HAM-D)',
   'C-SSRS' = 'Columbia-Suicide Severity Rating Scale (C-SSRS)',
   'PSC-17' = 'Pediatric Symptom Checklist-17 (PSC-17)',
+  'CARS-2-ST' = 'Childhood Autism Rating Scale (CARS-2 ST)',
+  'MDQ' = 'MDQ Mood Disorder Questionnaire (MDQ)',
   'COPS-R' = 'Candidate & Officer Personnel Survey (COPS-R)',
   'Adult ASRS' = 'Adult Self Report Scale (Adult ASRS)',
   'GQ-ASC' = 'GQ-ASC Scale for Adult Women (GQ-ASC)',
@@ -92,6 +96,10 @@ const quickNotesSectionsTitles = {
     'Dissociative Experiences Scale (DES- II)',
   [QuickNoteSectionName.QuickNoteSectionBai]: 'Beck Anxiety Inventory (BAI)',
   [QuickNoteSectionName.QuickNoteSectionBdi]: 'Beck Depression Inventory (BDI)',
+  [QuickNoteSectionName.QuickNoteSectionMdq]:
+    'MDQ Mood Disorder Questionnaire (MDQ)',
+  [QuickNoteSectionName.QuickNoteSectionCars2St]:
+    'Childhood Autism Rating Scale (CARS-2 ST)',
 }
 
 const HISTORIES_SECTIONS = [
@@ -114,6 +122,8 @@ const HISTORIES_SECTIONS = [
   QuickNoteSectionName.QuickNoteSectionBai,
   QuickNoteSectionName.QuickNoteSectionBdi,
   QuickNoteSectionName.QuickNoteSectionDesii,
+  QuickNoteSectionName.QuickNoteSectionMdq,
+  QuickNoteSectionName.QuickNoteSectionCars2St,
 ]
 export {
   QuestionnaireTabs,

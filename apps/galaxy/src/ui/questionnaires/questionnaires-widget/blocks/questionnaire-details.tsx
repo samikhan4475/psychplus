@@ -3,7 +3,8 @@ import { Badge, Flex, Text } from '@radix-ui/themes'
 import { format } from 'date-fns'
 import { ListIcon, SignalIcon } from 'lucide-react'
 import { BlockLabel } from '@/components'
-import { QuickNoteHistory } from '@/types'
+import { QuickNoteHistory, QuickNoteSectionItem } from '@/types'
+import { getMdqBadge } from '@/ui/questionnaires/mdq-tab/score-interpretation'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import {
   ADULT_ASRS_SECTIONS,
@@ -11,6 +12,7 @@ import {
   SCORE_INTERPRETATION_RANGES_PART_B,
 } from '../../adult-asrs-tab/constants'
 import { SCORE_INTERPRETATION_RANGES as AUDIT_SCORE_INTERPRETATION_RANGES } from '../../audit-tab/constants'
+import { SCORE_INTERPRETATION_RANGES as CARS2ST_SCORE_INTERPRETATION_RANGES } from '../../cars-2-st-tab/constants'
 import { QuestionnaireTabs } from '../../constants'
 import { SCORE_INTERPRETATION_RANGES as DAST10_SCORE_INTERPRETATION_RANGES } from '../../dast-10-tab/constants'
 import { SCORE_INTERPRETATION_RANGES as DES_II_SCORE_INTERPRETATION_RANGES } from '../../des-ii-tab/constants'
@@ -20,6 +22,7 @@ import {
   SCORE_INTERPRETATION_RANGES as CSSRS_SCORE_INTERPRETATION_RANGES,
   SCORE_INTERPRETATION_RANGES as HAMD_SCORE_INTERPRETATION_RANGES,
 } from '../../ham-d-tab/constants'
+import { SCORE_INTERPRETATION_RANGES as MDQ_SCORE_INTERPRETATION_RANGES } from '../../mdq-tab/constants'
 import { SCORE_INTERPRETATION_RANGES_ORIENTATION } from '../../moca-tab/constants'
 import { SCORE_INTERPRETATION_RANGES as PCL5_SCORE_INTERPRETATION_RANGES } from '../../pcl-5-tab/constants'
 import { SCORE_INTERPRETATION_RANGES as PHQ9_SCORE_INTERPRETATION_RANGES } from '../../phq-9-tab/constants'
@@ -160,22 +163,36 @@ const QuestionnaireRowDetail = ({
     option.data,
     option.sectionName as QuickNoteSectionName,
   )
+  const mdqBadge = getMdqBadgeData(
+    option.sectionName as QuickNoteSectionName,
+    option.data,
+    totalScore,
+  )
 
   return (
     <Flex key={option.createdOn} gap="2" align="center" className="w-full">
       <Flex gap="2" align="center" className="w-full">
-        <Badge
-          size="1"
-          variant="surface"
-          color={getBadgeColor(
-            getRange(
-              scoreInterpretationRanges(label, option.sectionName),
-              totalScore,
-            ),
-          )}
-        >
-          Score {totalScore}
-        </Badge>
+        {mdqBadge ? (
+          <>
+            <Badge size="1" variant="surface" color={mdqBadge.color}>
+              Score {totalScore}
+            </Badge>
+            {mdqBadge.label}
+          </>
+        ) : (
+          <Badge
+            size="1"
+            variant="surface"
+            color={getBadgeColor(
+              getRange(
+                scoreInterpretationRanges(label, option.sectionName),
+                totalScore,
+              ),
+            )}
+          >
+            Score {totalScore}
+          </Badge>
+        )}
 
         <Badge variant="surface" size="1" color={'green'}>
           Completed
@@ -211,6 +228,21 @@ const QuestionnaireRowDetail = ({
       )}
     </Flex>
   )
+}
+
+const getMdqBadgeData = (
+  sectionName: QuickNoteSectionName,
+  data: QuickNoteSectionItem[],
+  totalScore: number,
+): ReturnType<typeof getMdqBadge> | null => {
+  if (sectionName !== QuickNoteSectionName.QuickNoteSectionMdq) {
+    return null
+  }
+
+  const Q14 = data.find((item) => item.sectionItem === 'Q14')?.sectionItemValue
+  const Q15 = data.find((item) => item.sectionItem === 'Q15')?.sectionItemValue
+
+  return getMdqBadge(totalScore, Q14, Q15)
 }
 
 const scoreInterpretationRanges = (
@@ -265,6 +297,8 @@ const scoreInterpretationRanges = (
     [QuestionnaireTabs.MOCA_TAB]: SCORE_INTERPRETATION_RANGES_ORIENTATION,
     [QuestionnaireTabs.HAM_D_TAB]: HAMD_SCORE_INTERPRETATION_RANGES,
     [QuestionnaireTabs.C_SSRS_TAB]: CSSRS_SCORE_INTERPRETATION_RANGES,
+    [QuestionnaireTabs.MDQ_TAB]: MDQ_SCORE_INTERPRETATION_RANGES,
+    [QuestionnaireTabs.CARS_2_ST_TAB]: CARS2ST_SCORE_INTERPRETATION_RANGES,
     [QuestionnaireTabs.GQ_ASC_TAB]: GQ_ASC_SCORE_INTERPRETATION_RANGES,
     [QuestionnaireTabs.DES_II_TAB]: DES_II_SCORE_INTERPRETATION_RANGES,
   }

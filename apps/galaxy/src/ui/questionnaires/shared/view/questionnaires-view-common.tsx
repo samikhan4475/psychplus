@@ -4,16 +4,18 @@ import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { AdultAsrsView } from './adult-asrs-view'
 import { AimsView } from './aims-view'
+import { CarsStView } from './cars-2-st-view'
 import { questionnaireViewConstants } from './constant'
 import { CssrsView } from './cssrs-view'
 import { DesiiView } from './des-ii-view'
 import { GqAscView } from './gq-asc-view'
+import { MdqView } from './mdq-view'
 import { MocaView } from './moca-view'
 import { Psc17View } from './psc-17-view'
 import { QuestionnaireViewCommon } from './questionnaires-view'
 import { SnapIvView } from './snap-iv-view'
-import { YBocView } from './y-boc-view'
 import { VadprsView } from './vadprs-view'
+import { YBocView } from './y-boc-view'
 
 interface QuestionnaireDetailViewProps {
   data: QuickNoteSectionItem[]
@@ -47,12 +49,16 @@ const QuestionnaireDetailView = ({
         return <CssrsView data={data} />
       case 'QuicknoteSectionQuestionnaireAdultAsrs':
         return <AdultAsrsView data={data} />
-        case 'QuicknoteSectionQuestionnaireVadprs':
+      case 'QuicknoteSectionQuestionnaireVadprs':
         return <VadprsView data={data} />
       case QuickNoteSectionName.QuickNoteSectionGqasc:
         return <GqAscView data={data} />
       case QuickNoteSectionName.QuickNoteSectionDesii:
         return <DesiiView data={data} />
+      case QuickNoteSectionName.QuickNoteSectionCars2St:
+        return <CarsStView data={data} />
+      case QuickNoteSectionName.QuickNoteSectionMdq:
+        return <MdqView data={data} />
       default:
         return null
     }

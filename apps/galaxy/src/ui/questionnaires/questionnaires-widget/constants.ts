@@ -53,6 +53,14 @@ const BLOCK_OPTIONS = [
     value: QuickNoteSectionName.QuickNoteSectionPsc17,
   },
   {
+    label: QuestionnaireTabs.MDQ_TAB,
+    value: QuickNoteSectionName.QuickNoteSectionMdq,
+  },
+  {
+    label: QuestionnaireTabs.CARS_2_ST_TAB,
+    value: QuickNoteSectionName.QuickNoteSectionCars2St,
+  },
+  {
     label: QuestionnaireTabs.COPS_R_TAB,
     value: QuickNoteSectionName.QuickNoteSectionCopsR,
   },

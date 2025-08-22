@@ -32,6 +32,8 @@ const SaveButton = ({ icon = true, disabled = false }: SaveButtonProps) => {
     QuickNoteSectionName.QuickNoteSectionHamD,
     QuickNoteSectionName.QuickNoteSectionCssrs,
     QuickNoteSectionName.QuickNoteSectionPsc17,
+    QuickNoteSectionName.QuickNoteSectionMdq,
+    QuickNoteSectionName.QuickNoteSectionCars2St,
     QuickNoteSectionName.QuickNoteSectionCopsR,
     QuickNoteSectionName.QuickNoteSectionAdultAsrs,
     QuickNoteSectionName.QuickNoteSectionVadprs,

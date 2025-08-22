@@ -9,7 +9,17 @@ const QUESTIONS = Object.values(quickNotesSectionsTitles).map(
   }),
 )
 
-const HIDDENQUESTIONNAIREIDS = ['Q15', 'Q16', 'Q17', 'Q18', 'Q19']
+const HIDDENQUESTIONNAIREIDS = [
+  'Q13',
+  'Q14',
+  'Q15',
+  'Q16',
+  'Q17',
+  'Q18',
+  'Q19',
+  'Q20',
+  'Q21',
+]
 
 const HIDDENQUESTIONNAIRESECTIONNAMES = [
   QuickNoteSectionName.QuickNoteSectionVadprs,
@@ -17,6 +27,8 @@ const HIDDENQUESTIONNAIRESECTIONNAMES = [
   QuickNoteSectionName.QuickNoteSectionDesii,
   QuickNoteSectionName.QuickNoteSectionBai,
   QuickNoteSectionName.QuickNoteSectionBdi,
+  QuickNoteSectionName.QuickNoteSectionCars2St,
+  QuickNoteSectionName.QuickNoteSectionMdq,
 ]
 
 export { QUESTIONS, HIDDENQUESTIONNAIREIDS, HIDDENQUESTIONNAIRESECTIONNAMES }
