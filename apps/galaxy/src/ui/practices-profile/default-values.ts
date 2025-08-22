@@ -34,7 +34,7 @@ const defaultValues = (data: PracticeResource) => {
     payer: {
       street1: data.practicePaymentAddress?.street1,
       street2: data.practicePaymentAddress?.street2,
-      city: data.practicePaymentAddress?.street2,
+      city: data.practicePaymentAddress?.city,
       state: data.practicePaymentAddress?.state,
       postalCode: data.practicePaymentAddress?.postalCode,
       postalPlus4Code: data.practiceAddress?.postalPlus4Code,
