@@ -33,18 +33,18 @@ const columns: ColumnDef<LocationPractice>[] = [
       <ColumnHeader label="NPI" sortable column={column} clientSideSort />
     ),
     cell: ({ row: { original } }) => (
-      <LongTextCell className="max-w-36">{original?.practice.npi}</LongTextCell>
+      <LongTextCell className="max-w-36">{original?.practice?.npi ?? 'N/A'}</LongTextCell>
     ),
   },
   {
-    id: 'practice.tin',
-    accessorKey: 'practice.tin',
+    id: 'practice.taxId',
+    accessorKey: 'practice.taxId',
     header: ({ column }) => (
       <ColumnHeader label="TIN" column={column} clientSideSort />
     ),
     cell: ({ row: { original } }) => (
       <LongTextCell>
-        {original?.practice.npi ? original?.practice.tin : 'N/A'}
+        {original?.practice.taxId ? original?.practice.taxId : 'N/A'}
       </LongTextCell>
     ),
   },
@@ -92,7 +92,7 @@ const columns: ColumnDef<LocationPractice>[] = [
       <ColumnHeader label="City" column={column} clientSideSort />
     ),
     cell: ({ row: { original } }) => (
-      <LongTextCell>{original?.practice?.practiceAddress?.city}</LongTextCell>
+      <LongTextCell>{original?.practice?.practiceAddress?.city ?? 'N/A'}</LongTextCell>
     ),
   },
   {
@@ -104,14 +104,14 @@ const columns: ColumnDef<LocationPractice>[] = [
     cell: StateCell,
   },
   {
-    id: 'practice?.practiceAddress?.postalPlus4Code',
-    accessorKey: 'practice?.practiceAddress?.postalPlus4Code',
+    id: 'practice?.practiceAddress?.postalCode',
+    accessorKey: 'practice?.practiceAddress?.postalCode',
     header: ({ column }) => (
       <ColumnHeader label="ZIP" column={column} clientSideSort />
     ),
     cell: ({ row: { original } }) => (
       <TextCell>
-        {original?.practice?.practiceAddress?.postalPlus4Code}
+        {original?.practice?.practiceAddress?.postalCode ?? 'N/A'}
       </TextCell>
     ),
   },

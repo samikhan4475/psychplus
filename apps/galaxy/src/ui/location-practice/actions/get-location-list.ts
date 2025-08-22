@@ -11,6 +11,7 @@ const defaultPayload = {
   isIncludeLocation: true,
   isIncludePractice: true,
   isIncludeOrganization: true,
+  isIncludePracticeAddress: true,
 }
 
 interface PayloadParams {
