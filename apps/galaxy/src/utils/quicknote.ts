@@ -57,7 +57,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionReferrals,
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
-    QuickNoteSectionName.QuicknoteSectionImmunization
+    QuickNoteSectionName.QuicknoteSectionImmunization,
   ],
   [VisitTypeEnum.ResidentCare]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
@@ -86,7 +86,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionReferrals,
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
-    QuickNoteSectionName.QuicknoteSectionImmunization
+    QuickNoteSectionName.QuicknoteSectionImmunization,
   ],
   [VisitTypeEnum.EdVisit]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
@@ -115,7 +115,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionReferrals,
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
-    QuickNoteSectionName.QuicknoteSectionImmunization
+    QuickNoteSectionName.QuicknoteSectionImmunization,
   ],
   [VisitTypeEnum.TransitionalCare]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
@@ -145,7 +145,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionReferrals,
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
-    QuickNoteSectionName.QuicknoteSectionImmunization
+    QuickNoteSectionName.QuicknoteSectionImmunization,
   ],
   [VisitTypeEnum.IndividualPsychotherapy]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
@@ -216,7 +216,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionMedications,
     QuickNoteSectionName.Addon,
     QuickNoteSectionName.QuicknoteSectionCodes,
-    QuickNoteSectionName.QuicknoteSectionImmunization
+    QuickNoteSectionName.QuicknoteSectionImmunization,
   ],
   [VisitTypeEnum.HospitalCareInitial]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
@@ -301,6 +301,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.Addon,
     QuickNoteSectionName.QuickNoteSectionHospitalOrders,
     QuickNoteSectionName.QuicknoteSectionReferrals,
+    QuickNoteSectionName.QuicknoteSectionMedications,
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
   ],
@@ -572,7 +573,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionLabResults,
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
-    QuickNoteSectionName.QuicknoteSectionImmunization
+    QuickNoteSectionName.QuicknoteSectionImmunization,
   ],
   [VisitTypeEnum.FitnessForDuty]: [
     QuickNoteSectionName.QuicknoteSectionFitForDutyPsychEval,
@@ -585,7 +586,6 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionPreEmployment,
     QuickNoteSectionName.QuickNoteSectionDiagnosis,
     QuickNoteSectionName.QuicknoteSectionCodes,
-
   ],
 }
 
