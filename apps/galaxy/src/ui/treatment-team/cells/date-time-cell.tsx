@@ -12,9 +12,20 @@ const DateTimeCell = ({
   metadata: Metadata
   checkUpdatedOn?: boolean
 }) => {
-  let dateString = metadata.createdOn ?? ''
-  if (checkUpdatedOn)
-    dateString = metadata.updatedOn ? metadata.updatedOn : dateString
+  const dateString =
+    (checkUpdatedOn ? metadata?.updatedOn : undefined) ??
+    metadata?.createdOn ??
+    null
+
+  if (!dateString) {
+    return (
+      <Grid className="grid-cols-2 gap-1">
+        <TextCell className="px-1">—</TextCell>
+        <TextCell className="px-1 text-gray-9">—</TextCell>
+      </Grid>
+    )
+  }
+
   const date = formatDateManually(dateString)
   const time = getUtcTime(parseAbsoluteToLocal(dateString))
   return (

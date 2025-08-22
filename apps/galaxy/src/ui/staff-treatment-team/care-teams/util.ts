@@ -6,14 +6,19 @@ const sortHistory = <T extends { metadata: Metadata }>(
   a: Row<T>,
   b: Row<T>,
 ) => {
-  const metadataA = a.original?.metadata
-  const metadataB = b.original?.metadata
-  const timeA = parseAbsoluteToLocal(
-    metadataA?.updatedOn ?? metadataA?.createdOn ?? '',
-  )
-  const timeB = parseAbsoluteToLocal(
-    metadataB?.updatedOn ?? metadataB?.createdOn ?? '',
-  )
+  const dateA =
+    a.original?.metadata?.updatedOn ?? a.original?.metadata?.createdOn
+  const dateB =
+    b.original?.metadata?.updatedOn ?? b.original?.metadata?.createdOn
+
+  if (!dateA && !dateB) return 0
+
+  if (!dateA) return 1
+  if (!dateB) return -1
+
+  const timeA = parseAbsoluteToLocal(dateA)
+  const timeB = parseAbsoluteToLocal(dateB)
+
   return timeA.compare(timeB)
 }
 

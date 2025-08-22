@@ -21,7 +21,7 @@ const columns: ColumnDef<CareTeam>[] = [
       <ColumnHeader column={column} clientSideSort label="User" />
     ),
     cell: ({ row }) => (
-      <TextCell>{row.original.metadata.createdByFullName ?? 'N/A'}</TextCell>
+      <TextCell>{row.original.metadata?.createdByFullName ?? 'N/A'}</TextCell>
     ),
   },
   {
@@ -31,7 +31,7 @@ const columns: ColumnDef<CareTeam>[] = [
       <ColumnHeader column={column} clientSideSort label="Date/Time" />
     ),
     cell: ({ row: { original } }) => (
-      <DateTimeCell metadata={original.metadata} checkUpdatedOn />
+      <DateTimeCell metadata={original?.metadata} checkUpdatedOn />
     ),
     sortingFn: sortHistory,
   },
