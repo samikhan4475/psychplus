@@ -1173,6 +1173,9 @@ const ASSOCIATE_APPOINTMENT_ENDPOINT = (
   externalreferralId: string,
 ) =>
   `${API_URL}/api/appointments/${initialAppointmentId}/externalreferrals/${externalreferralId}/actions/associate`
+const GET_EXPERIENCE_LIST_ENDPOINT = `${API_URL}/api/staffratings/actions/search`
+const UPDATE_APPOINTMENT_RATING_REASON_ENDPOINT = (appointmentId: number) =>
+  `${API_URL}/api/appointments/${appointmentId}/staffratings`
 const SERVICE_GROUPS_ENDPOINT = `${API_URL}/api/servicegroups/actions/search`
 const UPDATE_SERVICE_GROUPS_ENDPOINT = (
   locationId: string,
@@ -1694,9 +1697,11 @@ export {
   CREATE_IMMUNIZATION_ENDPOINT,
   GET_CVX_CODES,
   ASSOCIATE_APPOINTMENT_ENDPOINT,
-  IMMUNIZATION_URL_ENDPOINT,
   SERVICE_GROUPS_ENDPOINT,
   UPDATE_SERVICE_GROUPS_ENDPOINT,
   ADD_SERVICE_GROUP_ENDPOINT,
   SERVICE_GROUP_HISTORY_ENDPOINT,
+  GET_EXPERIENCE_LIST_ENDPOINT,
+  UPDATE_APPOINTMENT_RATING_REASON_ENDPOINT,
+  IMMUNIZATION_URL_ENDPOINT
 }

@@ -3,22 +3,20 @@
 import NextLink from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
-import { FEATURE_FLAGS, MAIN_PAGE_FEATURE_FLAGS } from '@/constants'
+import { MAIN_PAGE_FEATURE_FLAGS } from '@/constants'
 import { useHasPermission } from '@/hooks'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { useStore } from '@/store'
 import { cn, getManagementLink } from '@/utils'
 import { InboxLink } from './inbox-link'
 import { PatientLookupDropdown } from './patient-lookup-dropdown'
+import { ScheduleMenuDropdown } from './schedule-menu-dropdown.tsx'
 
 const NavigationLinks = ({ count }: { count: number }) => {
   const { staffPractice, organizationIds, staffTypes } = useStore(
     (state) => state.staffResource,
   )
   const hasPermission = useHasPermission('mainTabManagementPermission')
-  const isFeatureFlagEnabled = useFeatureFlagEnabled(
-    FEATURE_FLAGS.ehr11786EnableGalaxySecondPhaseFeatures,
-  )
 
   const isAvfeatureFlagEnabled = useFeatureFlagEnabled(
     MAIN_PAGE_FEATURE_FLAGS.ehr9475AudioVideoTelemedicine,
@@ -50,15 +48,6 @@ const NavigationLinks = ({ count }: { count: number }) => {
           <NavigationLink href="/revenue-cycle" label="Revenue Cycle" />
         )}
 
-        {isFeatureFlagEnabled && (
-          <>
-            <NavigationLink href="/experience" label="Experience" />
-            <NavigationLink
-              href="/pre-visit-assessment"
-              label="Pre-visit Assessment"
-            />
-          </>
-        )}
         <NavigationLink href="/auto-text" label="Auto Text" />
 
         {isAvfeatureFlagEnabled && (
@@ -84,11 +73,7 @@ const NavigationLink = ({ href, label }: NavigationLinkProps) => {
   })
 
   if (label === 'Schedule') {
-    return (
-      <NextLink prefetch={false} href="/" className={navLinkClass}>
-        Schedule
-      </NextLink>
-    )
+    return <ScheduleMenuDropdown isActive={isActive} />
   }
   if (label === 'Patient Lookup') {
     return <PatientLookupDropdown isActive={isActive} />

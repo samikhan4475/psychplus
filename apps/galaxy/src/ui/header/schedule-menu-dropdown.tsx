@@ -1,0 +1,59 @@
+import { useState } from 'react'
+import NextLink from 'next/link'
+import { CaretDownIcon, CaretUpIcon } from '@radix-ui/react-icons'
+import { DropdownMenu, Flex, Text } from '@radix-ui/themes'
+import { useStore } from '@/store'
+
+const ScheduleMenuDropdown = ({ isActive }: { isActive: boolean }) => {
+  const addTab = useStore((state) => state.addTab)
+  const [isOpen, setIsOpen] = useState(false)
+
+  return (
+    <DropdownMenu.Root modal={false} onOpenChange={setIsOpen}>
+      <DropdownMenu.Trigger className="cursor-pointer">
+        <Flex
+          className={`flex items-center px-2 py-1 ${
+            isActive && 'bg-pp-black-1 rounded-[4px]'
+          }`}
+        >
+          <Text className={`whitespace-nowrap text-[13px]`}>Schedule</Text>
+          {isOpen ? <CaretUpIcon /> : <CaretDownIcon />}
+        </Flex>
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content
+        size="1"
+        align="end"
+        className="rounded-1 px-1 pb-1 pt-1 shadow-3"
+      >
+        <DropdownMenu.Item asChild>
+          <NextLink
+            prefetch={false}
+            href="/"
+            className="hover:text-black hover:bg-pp-bg-accent whitespace-nowrap border-b-2 text-[13px]"
+          >
+            Schedule
+          </NextLink>
+        </DropdownMenu.Item>
+
+        <DropdownMenu.Separator className="m-1" />
+        <DropdownMenu.Item asChild>
+          <NextLink
+            prefetch={false}
+            href="/experience"
+            className="hover:text-black hover:bg-pp-bg-accent whitespace-nowrap text-[13px]"
+            onClick={() => {
+              addTab({
+                href: '/experience',
+                label: 'Experience',
+              })
+            }}
+          >
+            Experience
+          </NextLink>
+        </DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  )
+}
+
+export { ScheduleMenuDropdown }
