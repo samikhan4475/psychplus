@@ -14,6 +14,8 @@ const defaultPayload = {
   isIncludeServiceRoom: true,
   includeServiceVisitType: true,
   isIncludeTestLocations: true,
+  includeServiceLocationCity: true,
+  includeServiceLocationState: true,
 }
 const getServiceList = async ({
   page = 1,
