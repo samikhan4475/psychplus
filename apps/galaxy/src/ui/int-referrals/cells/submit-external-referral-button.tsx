@@ -4,8 +4,10 @@ import { useState } from 'react'
 import { Button } from '@radix-ui/themes'
 import { toast } from 'react-hot-toast'
 import { useStore as zustandUseStore } from 'zustand'
+import { useHasPermission } from '@/hooks'
 import { PatientReferral } from '@/types'
 import { submitExternalReferralAction } from '@/ui/referrals/patient-referrals-widget/actions'
+import { PermissionAlert } from '@/ui/schedule/shared'
 import { getDateLabel } from '@/utils'
 import { useStore } from '../store'
 import { referralServiceType, VisitTypes } from '../types'
@@ -14,6 +16,8 @@ interface BookButtonProps {
   referral: PatientReferral
 }
 const SubmitExternalReferralButton = ({ referral }: BookButtonProps) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const hasPermission = useHasPermission('initiateNocdReferralSubmit')
   const store = useStore()
   const { page, fetchPatientReferrals, formValues } = zustandUseStore(
     store,
@@ -25,6 +29,10 @@ const SubmitExternalReferralButton = ({ referral }: BookButtonProps) => {
   )
   const [loading, setLoading] = useState(false)
   const onBook = async () => {
+    if (!hasPermission) {
+      setIsOpen(true)
+      return
+    }
     setLoading(true)
     const payload = {
       ...referral,
@@ -55,19 +63,26 @@ const SubmitExternalReferralButton = ({ referral }: BookButtonProps) => {
   }
 
   return (
-    <Button
-      size="1"
-      type="button"
-      highContrast
-      onClick={onBook}
-      disabled={
-        referral.visitTypeCode !== VisitTypes.ExposureResponseTherapy ||
-        !!referral.sentToThirdPartyDate
-      }
-      loading={loading}
-    >
-      Send to NOCD
-    </Button>
+    <>
+      <PermissionAlert
+        message="You do not have permission to submit referral to NOCD. Please contact your supervisor if you need any further assistance"
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+      />
+      <Button
+        size="1"
+        type="button"
+        highContrast
+        onClick={onBook}
+        disabled={
+          referral.visitTypeCode !== VisitTypes.ExposureResponseTherapy ||
+          !!referral.sentToThirdPartyDate
+        }
+        loading={loading}
+      >
+        Send to NOCD
+      </Button>
+    </>
   )
 }
 

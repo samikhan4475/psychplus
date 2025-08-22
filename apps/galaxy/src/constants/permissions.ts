@@ -258,6 +258,7 @@ const USER_PERMISSIONS = {
   changeServiceStatusIntReferralTab: 'changeServiceStatusIntReferralTab',
   clickBookButtonIntReferralTab: 'clickBookButtonIntReferralTab',
   applySmartFilterIntReferral: 'applySmartFilterIntReferral',
+  initiateNocdReferralSubmit: 'initiateNocdReferralSubmit',
 }
 
 export { USER_PERMISSIONS }
