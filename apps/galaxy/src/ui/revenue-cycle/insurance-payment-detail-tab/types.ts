@@ -28,4 +28,21 @@ interface PostApiResponse {
   success: boolean
   errors: string[]
 }
-export { PaymentListTypes, type PaymentAdjustment, type PostApiResponse }
+
+interface ClaimPaymentWithError {
+  id: string
+  claimPaymentId: string
+  errorMessage: string[]
+}
+
+interface PostPaymentCheckResponse {
+  claimPaymentsWithErrors: ClaimPaymentWithError[]
+  success: boolean
+}
+
+export {
+  PaymentListTypes,
+  type PaymentAdjustment,
+  type PostApiResponse,
+  type PostPaymentCheckResponse,
+}

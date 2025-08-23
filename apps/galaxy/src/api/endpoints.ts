@@ -115,6 +115,8 @@ const MARK_CLAIM_POSTED = (claimPaymentId: string) =>
   `${API_URL}/api/claimpayments/${claimPaymentId}/actions/markposted`
 const POST_CLAIM_PAYMENT = (paymentId: string, claimPaymentId: string) =>
   `${API_URL}/api/payments/${paymentId}/claimpayments/${claimPaymentId}/actions/post`
+const POST_PAYMENT_CHECK_ENDPOINT = (paymentId: string) =>
+  `${API_URL}/api/payments/${paymentId}/claimpayments/actions/postall`
 const GET_CLAIM_SERVICELINE_PAYMENTS = `${API_URL}/api/claimservicelinepayments/actions/search`
 const GET_FACILITY_ADMISSION_IDS_ENDPOINT = (patientId: number) =>
   `${API_URL}/api/patients/${patientId}/appointments/actions/facilityadmitids`
@@ -1149,21 +1151,15 @@ const STANDARD_CODESET_ENDPOINT_NEW = (
   const base = `${API_URL}/api/codeset/authorities/${assigningAuthority}/codesets`
   return queryString ? `${base}?${queryString}` : base
 }
-const GET_IMMUNIZATION_LIST = (
-  appointmentId: string,
-) =>
+const GET_IMMUNIZATION_LIST = (appointmentId: string) =>
   `${API_URL}/api/appointments/${appointmentId}/immunizations/actions/search`
 
-const CREATE_IMMUNIZATION_ENDPOINT = (
-  appointmentId: string,
-) =>
+const CREATE_IMMUNIZATION_ENDPOINT = (appointmentId: string) =>
   `${API_URL}/api/appointments/${appointmentId}/immunizations`
 const IMMUNIZATION_URL_ENDPOINT = (id: string, appointmentId: string) =>
-  `${API_URL}/api/appointments/${appointmentId}/immunizations/${id}`;
+  `${API_URL}/api/appointments/${appointmentId}/immunizations/${id}`
 
-const GET_CVX_CODES = (
-  cvxCode: string,
-) =>
+const GET_CVX_CODES = (cvxCode: string) =>
   `${API_URL}/api/immunizations/actions/searchcvx/${cvxCode}`
 
 const GET_PRIMARY_VIRTUAL_LOCATION_HX_ENDPOINT = (stateCode: string) =>
@@ -1658,6 +1654,7 @@ export {
   GET_TEMPLATE_EMAIL_REPORT,
   GET_STAFF_HISTORY_ENDPOINT,
   SEARCH_EXTERNAL_REFERRAL_PATIENTS_ENDPOINT,
+  POST_PAYMENT_CHECK_ENDPOINT,
   UPDATE_EXTERNAL_REFERRAL_PATIENT_ENDPOINT,
   GET_EXTERNAL_REFERRAL_PATIENTS_INFO_HISTORY,
   PHARMACY_CHANGE_REQUEST,

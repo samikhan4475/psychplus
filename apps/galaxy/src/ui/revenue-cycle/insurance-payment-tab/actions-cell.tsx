@@ -4,6 +4,7 @@ import { InsurancePayment } from '../types'
 import { RowActionDelete } from './row-action-delete'
 import { RowActionEdit } from './row-action-edit'
 import { RowActionHistory } from './row-action-history'
+import { RowActionPostPayment } from './row-action-post-payment'
 
 const rowActions: RowAction<InsurancePayment>[] = [
   {
@@ -17,6 +18,10 @@ const rowActions: RowAction<InsurancePayment>[] = [
   {
     id: 'insurance-list-row-action-history',
     render: RowActionHistory,
+  },
+  {
+    id: 'insurance-list-row-action-post-payment',
+    render: RowActionPostPayment,
   },
 ]
 
