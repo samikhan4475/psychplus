@@ -12,7 +12,6 @@ const SaveButton = () => {
   const loading = useStore(
     (state) => state.cosignersLoading ?? state.visitTypesLoading,
   )
-
   return (
     <Button
       size="2"

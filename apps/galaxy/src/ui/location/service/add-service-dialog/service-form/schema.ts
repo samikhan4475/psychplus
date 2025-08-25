@@ -49,6 +49,13 @@ const schema = z
         message: 'Primary Provider Type is required',
       })
     }
+    if (data.coSignerType === 'Location' && !data.cosigner?.trim()) {
+      ctx.addIssue({
+        path: ['cosigner'],
+        code: z.ZodIssueCode.custom,
+        message: 'Cosigner is required',
+      })
+    }
   })
 
 type ServiceSchemaType = z.infer<typeof schema>

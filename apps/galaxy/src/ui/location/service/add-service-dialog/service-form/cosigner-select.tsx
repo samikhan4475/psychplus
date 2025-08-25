@@ -2,7 +2,12 @@
 
 import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
+import {
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+  SelectInput,
+} from '@/components'
 import { Cosigner } from '@/types'
 import { useStore } from '../../store'
 import { transformInCosigers } from '../../transform'
@@ -39,6 +44,7 @@ const CosignerSelect = ({ options }: CosignerSelectProps) => {
         field="cosigner"
         buttonClassName="w-full h-7"
       />
+      <FormFieldError name="cosigner" />
     </FormFieldContainer>
   )
 }
