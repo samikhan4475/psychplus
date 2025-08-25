@@ -28,7 +28,7 @@ const defaultPayLoad = {
     patientStatementSlaimStatusCodes.PATIENT_RESPONSIBILITY,
   ],
   recordStatuses: [patientStatementRecordStatuses.ACTIVE],
-  isGroupedByPatient: false,
+  isGroupedByPatient: true,
   includeServiceLinePayment: true,
 }
 
