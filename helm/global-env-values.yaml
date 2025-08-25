@@ -213,3 +213,11 @@
       secretKeyRef:
         name: ehr-secrets
         key: mapboxAccessToken
+
+  # SECRETS: Mapbox
+
+  - name: UTS_LOGIN_API_KEY
+    valueFrom:
+      secretKeyRef:
+        name: ehr-secrets
+        key: utsApiKey
