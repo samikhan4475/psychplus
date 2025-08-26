@@ -114,15 +114,26 @@ const ReviewDrugDetail = ({ drug }: ReviewDrugDetailProps) => {
         <ReviewLabel
           title="Prescriber"
           value={
-            drug?.providerName &&
-            `${getPatientFullName(drug.providerName, true)}${
-              drug.providerName.title ? ',' : ''
-            } ${drug.providerName.title ?? ''}`
+            drug?.prescribingProviderName &&
+            `${getPatientFullName(drug.prescribingProviderName, true)}${
+              drug.prescribingProviderName.title ? ',' : ''
+            } ${drug.prescribingProviderName.title ?? ''}`
           }
         />
+        {drug?.supervisingStaff && (
+          <ReviewLabel
+            title="Supervising Provider"
+            value={
+              drug?.supervisingStaff &&
+              `${getPatientFullName(drug.supervisingStaff.legalName, true)}${
+                drug.supervisingStaff.legalName.title ? ',' : ''
+              } ${drug.supervisingStaff.legalName.title ?? ''}`
+            }
+          />
+        )}
 
-        <ReviewLabel title="NPI" value={drug?.providerNpi} />
-        <ReviewLabel title="DEA" value={drug?.providerDea} />
+        <ReviewLabel title="NPI" value={drug?.prescribingProviderNpi} />
+        <ReviewLabel title="DEA" value={drug?.prescribingProviderDea} />
       </Flex>
       <ReviewLabel
         title="Instruction & Notes"

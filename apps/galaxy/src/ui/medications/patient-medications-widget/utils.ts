@@ -132,6 +132,8 @@ const getInitialValuesPatientMedication = (
             : '',
         medicationStatus: prescriptionDrug?.medicationStatus ?? '',
         prescribingStaffId: String(medication?.prescribingStaffId ?? ''),
+        supervisorStaffId: String(medication?.supervisorStaffId ?? ''),
+        epcsDrugSignedStatus: prescriptionDrug?.epcsDrugSignedStatus ?? '',
         refills: String(prescriptionDrug?.refills ?? ''),
         sigDescription: prescriptionSignature?.description ?? '',
         startDateTime: dateValues?.startDateTime?.date?.toString() ?? '',

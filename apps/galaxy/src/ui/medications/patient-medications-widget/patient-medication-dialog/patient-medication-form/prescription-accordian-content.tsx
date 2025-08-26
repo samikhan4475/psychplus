@@ -1,6 +1,6 @@
 'use client'
 
-import { Flex,Box } from '@radix-ui/themes'
+import { Box, Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { BlockLabel } from '@/components'
 import { DrugBlockProps, MedicationType } from '../../types'
@@ -23,6 +23,7 @@ import { SearchDiagnosis } from './search-diagonisis'
 import { SigField } from './sig-field'
 import { StartDateTime } from './start-date-time-field'
 import { SubstitutionField } from './substitution-field'
+import { SupervisedByField } from './supervised-by-field'
 import { WorkingDiagnosis } from './working-diagnosis'
 
 const PrescriptionAccordianContent = ({ index }: DrugBlockProps) => {
@@ -51,12 +52,10 @@ const PrescriptionAccordianContent = ({ index }: DrugBlockProps) => {
         )}
       </Flex>
       <Flex align="end" gap="2">
-
         <QuantityField index={index} />
         <DoseUnitField index={index} />
         <RefillField index={index} />
         <SubstitutionField index={index} />
-
       </Flex>
       <Flex gap="2">
         <SigField index={index} />
@@ -71,9 +70,13 @@ const PrescriptionAccordianContent = ({ index }: DrugBlockProps) => {
         {prnShow ? (
           <Box width="100%">
             <PrescriberField index={index} />
+            <SupervisedByField index={index} />
           </Box>
         ) : (
-          <PrescriberField index={index} />
+          <>
+            <PrescriberField index={index} />
+            <SupervisedByField index={index} />
+          </>
         )}
       </Flex>
       <InstructionsOrNotesField index={index} />

@@ -1,5 +1,5 @@
-import { Box, Flex, Text, Tooltip } from '@radix-ui/themes'
-import { CheckCircle2, CircleX, EyeIcon, Hourglass } from 'lucide-react'
+import { Flex, Text, Tooltip } from '@radix-ui/themes'
+import { CheckCircle2, CircleX, Hourglass } from 'lucide-react'
 import { LabOrders } from '@/types'
 import { formatDate } from '@/utils'
 import { LabOrderStatusEnum } from '../../add-lab-order/blocks/types'
@@ -24,9 +24,9 @@ export const reviewStatusIcon = (order: LabOrders) => {
 
   const icons = []
 
-  if (isResultSigned && order.orderStatus == OrderStatus.ResultReceived) {
+  if (isResultSigned && order.orderStatus === OrderStatus.ResultReceived) {
     icons.push(
-      <Tooltip key="resultSigned" content={tooltipContent}>
+      <Tooltip content={tooltipContent}>
         <CheckCircle2 size={18} className="ml-1 text-green-10" />
       </Tooltip>,
     )

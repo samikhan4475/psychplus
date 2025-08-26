@@ -53,6 +53,7 @@ interface StoreState {
   errorStatus?: number
   scriptSureSessionToken?: string
   hasControlledMedication: boolean
+  selectedMedicationIds: string[]
   setPmpReviewed: (value: boolean) => void
   setScriptSureSessionToken: (token: string) => void
   fetchExternalScriptsurePatientId: (patientId: string) => void
@@ -92,6 +93,7 @@ interface StoreState {
   loadingProviderOptions: boolean
   fetchProviderOptions: () => Promise<void>
   setHasControlledMedication: (value: boolean) => void
+  setSelectedMedicationIds: (ids: string[]) => void
 }
 
 const useStore = create<StoreState>((set, get) => ({
@@ -100,6 +102,7 @@ const useStore = create<StoreState>((set, get) => ({
   serviceDiagnosisData: [],
   workingDiagnosisData: [],
   favouriteDiagnosisData: [],
+  selectedMedicationIds: [],
   loadingFavouriteDiagnosis: false,
   loadingDrugs: true,
   favoritesLoaded: false,
@@ -120,6 +123,7 @@ const useStore = create<StoreState>((set, get) => ({
   providerOptions: [],
   loadingProviderOptions: false,
   hasControlledMedication: false,
+  setSelectedMedicationIds: (ids) => set({ selectedMedicationIds: ids }),
   fetchProviderOptions: async () => {
     const { providerOptions } = get()
     if (providerOptions.length > 0) return

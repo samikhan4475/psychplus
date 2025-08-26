@@ -7,7 +7,9 @@ import { Row } from '@tanstack/react-table'
 import { CircleX } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { FEATURE_FLAGS } from '@/constants'
+import { useHasPermission } from '@/hooks'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
+import { PermissionAlert } from '@/ui/schedule/shared'
 import { cancelPatientPrescriptions } from '../actions'
 import { cancelNonFeatureFlagPrescriptions } from '../actions/cancel-non-feature-flag-prescription'
 import { ConfirmationDialog } from '../dialog/confirmation-dialog'
@@ -17,6 +19,8 @@ import { PatientMedication, PatientPrescriptionStatus } from '../types'
 interface RowActionRefreshProps {
   row: Row<PatientMedication>
 }
+const DEFAULT_ALERT_MESSAGE =
+  'You do not have permission to Cancel. Please contact your supervisor if you need any further assistance.'
 
 const RowActionCancel = ({ row }: RowActionRefreshProps) => {
   const {
@@ -29,11 +33,13 @@ const RowActionCancel = ({ row }: RowActionRefreshProps) => {
   const pathname = usePathname()
   const isQuickNoteSection = pathname.includes('quicknotes')
   const [open, setOpen] = useState(false)
+  const [openAlert, setOpenAlert] = useState(false)
 
   const { externalPatientId, refetch } = useStore((state) => ({
     externalPatientId: state.externalPatientId,
     refetch: state.refetch,
   }))
+  const cancelMedication = useHasPermission('cancelMedication')
 
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
@@ -82,7 +88,15 @@ const RowActionCancel = ({ row }: RowActionRefreshProps) => {
   const handleClose = () => {
     setOpen(false)
   }
-  const handleClick = isFeatureFlagEnabled ? onCancel : () => setOpen(true)
+  const handleClick = isFeatureFlagEnabled
+    ? onCancel
+    : () => {
+        if (!cancelMedication) {
+          setOpenAlert(true)
+          return
+        }
+        setOpen(true)
+      }
 
   return (
     <>
@@ -102,6 +116,11 @@ const RowActionCancel = ({ row }: RowActionRefreshProps) => {
         closeDialog={handleClose}
         onConfirmation={onCancel}
         heading={'Do you want to cancel this prescription?'}
+      />
+      <PermissionAlert
+        isOpen={openAlert}
+        onClose={() => setOpenAlert(false)}
+        message={DEFAULT_ALERT_MESSAGE}
       />
     </>
   )

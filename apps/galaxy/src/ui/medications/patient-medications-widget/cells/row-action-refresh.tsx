@@ -8,8 +8,10 @@ import { Row } from '@tanstack/react-table'
 import { RefreshCw } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { FEATURE_FLAGS } from '@/constants'
+import { useHasPermission } from '@/hooks'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { useStore as globalStore } from '@/store'
+import { PermissionAlert } from '@/ui/schedule/shared'
 import { getPatientMedicationOrderAction } from '../actions'
 import { AddMedicationButton } from '../add-medication-button'
 import { PatientMedicationIframe } from '../patient-medication-iframe'
@@ -23,6 +25,8 @@ interface RowActionRefreshProps {
     options?: { rePrescribe?: boolean },
   ) => void
 }
+const DEFAULT_ALERT_MESSAGE =
+  'You do not have permission to ReSubscribe. Please contact your supervisor if you need any further assistance.'
 
 const RowActionRefresh = ({ row, onEditClick }: RowActionRefreshProps) => {
   const { prescriptionStatusTypeId, medicationStatus } = row.original
@@ -46,9 +50,14 @@ const RowActionRefresh = ({ row, onEditClick }: RowActionRefreshProps) => {
   const { constant } = globalStore((state) => ({
     constant: state.constants,
   }))
-
+  const rePrescribeMedication = useHasPermission('rePrescribeMedication')
+  const [openAlert, setOpenAlert] = useState(false)
   const onRefresh = async () => {
     if (!isFeatureFlagEnabled) {
+      if (!rePrescribeMedication) {
+        setOpenAlert(true)
+        return
+      }
       onEditClick(record, { rePrescribe: true })
       return
     }
@@ -110,6 +119,11 @@ const RowActionRefresh = ({ row, onEditClick }: RowActionRefreshProps) => {
           )}
         </Dialog.Content>
       </Dialog.Root>
+      <PermissionAlert
+        isOpen={openAlert}
+        onClose={() => setOpenAlert(false)}
+        message={DEFAULT_ALERT_MESSAGE}
+      />
     </>
   )
 }

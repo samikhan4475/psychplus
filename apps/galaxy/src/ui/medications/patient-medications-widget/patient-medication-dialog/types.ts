@@ -30,6 +30,7 @@ interface StepComponentProps {
   onCloseModal?: (open: boolean) => void
   stepContext?: StepContext
   setStepContext?: React.Dispatch<React.SetStateAction<StepContext>>
+  intialStep?: Step
 }
 
 export { ConfirmationMethod, Step, type StepComponentProps,type StepContext }

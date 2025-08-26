@@ -1,10 +1,17 @@
+import { Box } from '@radix-ui/themes'
 import { ColumnDef, Row } from '@tanstack/react-table'
 import { ColumnHeader, DateCell, LongTextCell, TextCell } from '@/components'
 import { FEATURE_FLAGS } from '@/constants'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { formatDateManually } from '@/utils'
-import { ActionsCell, PharmacyCell, StatusCell } from './cells'
-import { PatientMedication } from './types'
+import {
+  ActionsCell,
+  EpcsSignedStatusCell,
+  PharmacyCell,
+  StatusCell,
+  TableRowCheckboxCell,
+} from './cells'
+import { PatientMedication, PatientUserPrescriptionStatus } from './types'
 
 interface UsePatientMedicationColumnsProps {
   onEditClick: (medication: PatientMedication) => void
@@ -17,6 +24,32 @@ const usePatientMedicationColumns = ({
     FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
   )
   return [
+    ...(!isFeatureFlagEnabled
+      ? [
+          {
+            id: 'medication-drugs',
+            size: 30,
+            header: () => <ColumnHeader label="" />,
+            cell: ({ row }: { row: Row<PatientMedication> }) => {
+              return (
+                <>
+                  {row.original?.isControlledSubstance &&
+                    row.original?.userTransactionStatus !==
+                      PatientUserPrescriptionStatus.SUCCESS && (
+                      <Box className="pl-[2px]">
+                        <TableRowCheckboxCell
+                          medicationId={row.original.id}
+                          checked={row.getIsSelected()}
+                          onCheckedChange={(v) => row.toggleSelected(v)}
+                        />
+                      </Box>
+                    )}
+                </>
+              )
+            },
+          },
+        ]
+      : []),
     {
       id: 'medication-drug',
       accessorKey: 'medicationDrug',
@@ -79,11 +112,14 @@ const usePatientMedicationColumns = ({
       minSize: 10,
       maxSize: 100,
       header: () => <ColumnHeader label="Written Date" />,
-      cell: ({ row }) => (
-        <DateCell>
-          {formatDateManually(row.original.writtenDate) ?? 'N/A'}
-        </DateCell>
-      ),
+      cell: ({ row }) => {
+        const writtenDate = row.original.writtenDate
+        const formattedDate =
+          writtenDate === '0001-01-01T00:00:00Z'
+            ? 'N/A'
+            : formatDateManually(writtenDate) ?? ''
+        return <DateCell>{formattedDate}</DateCell>
+      },
     },
     ...(!isFeatureFlagEnabled
       ? [
@@ -142,6 +178,15 @@ const usePatientMedicationColumns = ({
             cell: ({ row }: { row: Row<PatientMedication> }) => (
               <TextCell>{row.original?.userTransactionStatus}</TextCell>
             ),
+          },
+          {
+            id: 'epcs-status',
+            accessorKey: 'epcsStatus',
+            size: 5,
+            minSize: 5,
+            maxSize: 100,
+            header: () => <ColumnHeader label="" />,
+            cell: EpcsSignedStatusCell,
           },
         ]
       : []),

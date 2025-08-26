@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react'
 import { Flex, Text } from '@radix-ui/themes'
 import { ReviewButton } from '../patient-medication-form/review-button'
@@ -19,7 +18,10 @@ const FavoriteView = ({ onJump }: FavoriteViewProps) => {
           Favorites
         </Text>
         <SearchFavoriteMedication setIsSearching={setIsSearching} />
-        <FavoriteList isSearching={isSearching} setIsSearching={setIsSearching} />
+        <FavoriteList
+          isSearching={isSearching}
+          setIsSearching={setIsSearching}
+        />
       </Flex>
       <Flex gap="2" justify="end">
         <SaveButton />

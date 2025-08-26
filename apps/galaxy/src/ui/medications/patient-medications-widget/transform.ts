@@ -3,6 +3,7 @@ import { formatDateToISOString, sanitizeFormData } from '@/utils'
 import { PatientMedicationFilterSchemaType } from './filter-form'
 import { PatientMedicationSchemaType } from './patient-medication-dialog'
 import {
+  EpcsDrugSignedStatus,
   MedicationType,
   PatientMedicationFilterValues,
   Prescription,
@@ -28,6 +29,7 @@ const transformOutPatientMedication = (
   }: PatientMedicationSchemaType,
   patientId: number,
   appointmentId: number,
+  staffId: number,
 ): Partial<Prescription>[] =>
   drugs?.map((drug) =>
     sanitizeFormData({
@@ -38,12 +40,18 @@ const transformOutPatientMedication = (
       locationId: 'EA646A1B-B967-4F92-A48C-EFF413B73762',
       dataSourceType: drug?.dataSourceType ?? '',
       prescribingStaffId: Number(drug.prescribingStaffId),
-      pharmacyNcpdpId : pharmacyNcpdpId,
+      prescriberAgentStaffId: Number(drug.prescribingStaffId) !== staffId ? staffId : null,
+      supervisorStaffId:
+        drug?.supervisorStaffId && drug.supervisorStaffId !== 'none'
+          ? Number(drug.supervisorStaffId)
+          : null,
+      supervisedBy: drug.supervisedBy,
+      pharmacyNcpdpId: pharmacyNcpdpId,
       prescribedStatus:
         medicationType === MedicationType.Prescribed
           ? prescribedStatus
           : undefined,
-      prescriptionStatusType: drug.prescriptionStatusType,
+      prescriptionStatusType: drug.prescriptionStatusType ?? 'Active',
       notes: drug.instructionOrNotes,
       appointmentId,
       pharmacyId:
@@ -69,15 +77,24 @@ const transformOutPatientMedication = (
           refills: Number(drug.refills),
           isMedicationAsNeeded: drug?.isMedicationAsNeeded,
           reasonForPrn: drug.reasonForPrn,
-          startDateTime: `${drug.startDateTime}T${drug.startTime}:00Z`,
+          startDateTime:
+            drug.startDateTime && drug.startTime
+              ? `${drug.startDateTime}T${drug.startTime}:00Z`
+              : undefined,
           effectiveDate: `${drug.effectiveDate}`,
-          endDateTime: drug.endDateTime && drug.endTime ?  `${drug.endDateTime}T${drug.endTime}:00Z` : '',
+          endDateTime:
+            drug.endDateTime && drug.endTime
+              ? `${drug.endDateTime}T${drug.endTime}:00Z`
+              : '',
           isControlledSubstance: drug?.isControlledSubstance,
           DrugCodeQualifier: drug?.DrugCodeQualifier ?? 'ND',
           drugCode: drug?.drugCode ?? '',
           DeaSchedule: drug?.DeaSchedule,
-          DrugNote:drug.instructionOrNotes,
+          DrugNote: drug.instructionOrNotes,
           DaysSupply: Number(drug.duration),
+          epcsDrugSignedStatus: drug?.isControlledSubstance
+            ? EpcsDrugSignedStatus.ReadyToSign
+            : '',
         }),
       ],
       prescriptionSignatures: [

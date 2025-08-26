@@ -8,6 +8,7 @@ import { InfoIcon, PencilIcon } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 import { DeleteIcon } from '@/components/icons'
 import { DrugInfo } from '@/types'
+import { useStore } from '../../store'
 import { SearchDrugs } from '../shared'
 import { FavoriteIcon } from '../shared/favorite-icon'
 import { PrescriptionAccordianContent } from './prescription-accordian-content'
@@ -24,6 +25,10 @@ const PrescriptionAccordian = ({
   const [openItem, setOpenItem] = useState(
     drugs[0]?.prescribableDrugDesc ?? null,
   )
+
+  const { setHasControlledMedication } = useStore((state) => ({
+    setHasControlledMedication: state.setHasControlledMedication,
+  }))
 
   useEffect(() => {
     if (errorIndex !== null && drugs[errorIndex]?.prescribableDrugDesc) {
@@ -50,7 +55,11 @@ const PrescriptionAccordian = ({
     const updatedDrugs = drugs.filter(
       (drug) => drug.prescribableDrugDesc !== drugName,
     )
+    const hasControlled = updatedDrugs.some(
+      (drug) => drug.isControlledSubstance === true,
+    )
     form.setValue('drugs', updatedDrugs)
+    setHasControlledMedication(hasControlled)
   }
   const handleReplace = (newDrug: DrugInfo) => {
     if (editIndex === null) return

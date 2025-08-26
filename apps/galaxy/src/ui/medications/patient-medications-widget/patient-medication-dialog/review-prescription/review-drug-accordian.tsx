@@ -5,7 +5,7 @@ import { ScrollArea, Text } from '@radix-ui/themes'
 import { ChevronDown } from 'lucide-react'
 import { Prescription } from '../../types'
 import { ReviewDrugDetail } from './review-drug-detail'
-import { ReviewDrugWarning } from './review-drug-warning'
+import { ReviewDrugMessage } from './review-drug-message'
 
 interface ReviewDrugAccordianProps {
   prescriptions?: Prescription[]
@@ -33,7 +33,19 @@ const ReviewDrugAccordian = ({ prescriptions }: ReviewDrugAccordianProps) => {
               </Accordion.Trigger>
             </Accordion.Header>
             <Accordion.Content className="px-3 py-2">
-              <ReviewDrugWarning drug={drug} />
+              <ReviewDrugMessage
+                drug={drug}
+                type="info"
+                description={
+                    <>
+                      This medication is classified as a controlled substance{' '}
+                      <span className="text-pp-red">{drug?.prescriptionDrugs[0]?.deaSchedule}</span>{' '}
+                      and may pose a risk of dependency or misuse. Advanced provider verification is required before prescribing or dispensing.
+                    </>
+                }
+
+              />
+
               <ReviewDrugDetail drug={drug} />
             </Accordion.Content>
           </Accordion.Item>

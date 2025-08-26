@@ -9,6 +9,11 @@ enum MedicationType {
   Prescribed = 'prescribed',
   Home = 'home',
 }
+
+enum EpcsDrugSignedStatus {
+  ReadyToSign = 'ReadyToSign',
+  Signed = 'Signed',
+}
 interface DrugDetail {
   drugName?: string
   doseStrength: string
@@ -43,6 +48,11 @@ enum PatientPrescriptionStatus {
   DISCONTINUED = '4',
   AWAITING_APPROVAL = '5',
   CURRENT_MEDICATION = '6',
+}
+
+
+enum PatientUserPrescriptionStatus {
+  SUCCESS = 'success',
 }
 
 interface MedicationDetails {
@@ -98,6 +108,7 @@ interface PatientMedication {
   transactionStatus: string
   userTransactionStatus:string
   effectiveDate:string
+  epcsDrugSignedStatus:string
 }
 
 interface GetPatientMedicationsResponse {
@@ -127,6 +138,12 @@ interface PatientMedicationFilterValues
   recordStatuses?: string[]
   medicationStatuses?: string[]
 }
+interface SupervisingStaff {
+  isTest: boolean;
+  legalName: LegalName;
+  npi: string;
+}
+
 // ADD MEDICATION TYPE
 interface Prescription {
   id: string
@@ -134,8 +151,9 @@ interface Prescription {
   transactionId: string
   rxReferenceNumber: string
   prescribingStaffId: number
-  prescriberAgentStaffId: number
-  supervisorStaffId: number
+  prescriberAgentStaffId: number | null
+  supervisorStaffId: number | null
+  supervisedBy?:string
   locationId: string
   practiceId: string
   patientId?: number
@@ -159,9 +177,9 @@ interface Prescription {
   pharmacyActiveStartTime: string
   pharmacyActiveEndTime: string
   pharmacyServiceLevel: string
-  providerName: LegalName
-  providerNpi: string
-  providerDea: string
+  prescribingProviderName: LegalName
+  prescribingProviderNpi: string
+  prescribingProviderDea: string
   pharmacyAddress: Partial<PatientAddress>
   pharmacyPhone: string
   patientHeight: number
@@ -175,6 +193,7 @@ interface Prescription {
   writtenDate: string
   drugList?: Partial<PrescriptionDrug>[]
   rxChangeRequestCode?: string
+  supervisingStaff: SupervisingStaff
 }
 
 interface PrescriptionDrug {
@@ -208,6 +227,7 @@ interface PrescriptionDrug {
   drugNote: string
   DeaSchedule: string
   deaSchedule: string
+  epcsDrugSignedStatus?:string
 }
 
 interface MedicationDetails {
@@ -397,6 +417,8 @@ export {
   MedicationType,
   PatientPrescriptionStatus,
   RecordStatus,
+  PatientUserPrescriptionStatus,
+  EpcsDrugSignedStatus,
   type PrescriptionDiagnosis,
   type Prescription,
   type PatientMedication,

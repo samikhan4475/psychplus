@@ -7,8 +7,10 @@ import { EditIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { PropsWithRow } from '@/components'
 import { FEATURE_FLAGS } from '@/constants'
+import { useHasPermission } from '@/hooks'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { useStore as globalStore } from '@/store'
+import { PermissionAlert } from '@/ui/schedule/shared'
 import { getPatientMedicationOrderAction } from '../actions'
 import { ScriptSureIframeDialog } from '../script-sure-iframe-dialog'
 import { useStore } from '../store'
@@ -17,6 +19,8 @@ import { PatientMedication, PatientPrescriptionStatus } from '../types'
 interface RowActionEditProps extends PropsWithRow<PatientMedication> {
   onEditClick: (medication: PatientMedication) => void
 }
+const DEFAULT_ALERT_MESSAGE =
+  'You do not have permission to Edit. Please contact your supervisor if you need any further assistance.'
 
 const RowActionEdit = ({ row, onEditClick }: RowActionEditProps) => {
   const { prescriptionStatusTypeId, externalPrescriptionId: prescriptionId } =
@@ -34,6 +38,8 @@ const RowActionEdit = ({ row, onEditClick }: RowActionEditProps) => {
   const { constant } = globalStore((state) => ({
     constant: state.constants,
   }))
+  const editMedication = useHasPermission('editMedication')
+  const [openAlert, setOpenAlert] = useState(false)
 
   const transactionStatus = row.original.userTransactionStatus?.toLowerCase()
   const isTransactionBlocked =
@@ -64,17 +70,30 @@ const RowActionEdit = ({ row, onEditClick }: RowActionEditProps) => {
   }
   if (!isFeatureFlagEnabled) {
     return (
-      <Tooltip content="Edit">
-        <IconButton
-          size="1"
-          color="gray"
-          variant="ghost"
-          onClick={() => onEditClick(row.original)}
-          disabled={isDisabled}
-        >
-          <EditIcon size={18} color="black" />
-        </IconButton>
-      </Tooltip>
+      <>
+        <Tooltip content="Edit">
+          <IconButton
+            size="1"
+            color="gray"
+            variant="ghost"
+            onClick={() => {
+              if (!editMedication) {
+                setOpenAlert(true)
+                return
+              }
+              onEditClick(row.original)
+            }}
+            disabled={isDisabled}
+          >
+            <EditIcon size={18} color="black" />
+          </IconButton>
+        </Tooltip>
+        <PermissionAlert
+          isOpen={openAlert}
+          onClose={() => setOpenAlert(false)}
+          message={DEFAULT_ALERT_MESSAGE}
+        />
+      </>
     )
   }
 

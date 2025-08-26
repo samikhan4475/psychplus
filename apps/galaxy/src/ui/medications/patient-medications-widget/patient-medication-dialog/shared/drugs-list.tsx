@@ -5,7 +5,7 @@ import { PlusCircleIcon } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 import { LoadingPlaceholder } from '@/components'
 import { CODESETS } from '@/constants'
-import { useCodesetCodes } from '@/hooks'
+import { useCodesetCodes, useHasPermission } from '@/hooks'
 import { DrugInfo } from '@/types'
 import { cn } from '@/utils'
 import { useStore } from '../../store'
@@ -18,9 +18,10 @@ const DrugsList = ({
   onSelect?: (drug: DrugInfo) => void
   replaceIndex?: number | null
 }) => {
-  const { drugsData, loadingDrugs } = useStore((state) => ({
+  const { drugsData, loadingDrugs,setHasControlledMedication } = useStore((state) => ({
     drugsData: state.drugsData,
     loadingDrugs: state.loadingDrugs,
+    setHasControlledMedication: state.setHasControlledMedication,
   }))
 
   const form = useFormContext<PatientMedicationSchemaType>()
@@ -34,6 +35,7 @@ const DrugsList = ({
   const PrescriptionDosageFormList = useCodesetCodes(
     CODESETS.PrescriptionDosageFormList,
   )
+  const signMedication = useHasPermission('signMedication')
 
   const handleValueChange = (option: DrugInfo) => {
     const doseFromDesc = PrescriptionDosageFormList.find(
@@ -43,6 +45,9 @@ const DrugsList = ({
     )
     const deaCode = option?.representativeErxPackagedDrug?.federalDeaClassCode
     const isControlledSubstance = ['2', '3', '4', '5'].includes(deaCode)
+    if (isControlledSubstance && !signMedication) {
+       setHasControlledMedication(isControlledSubstance)
+    }
     const defaultValues: PatientMedicationSchemaType['drugs'][number] = {
       doseStrength: option.medStrength,
       prescribableDrugDesc: option.prescribableDrugDesc,
@@ -57,6 +62,7 @@ const DrugsList = ({
       rxNormCode: option.rxCui,
       doseFrequencyCode: '',
       prescribingStaffId: '',
+      supervisorStaffId: '',
       quantityValue: '',
       endDateTime: '',
       endTime: '',

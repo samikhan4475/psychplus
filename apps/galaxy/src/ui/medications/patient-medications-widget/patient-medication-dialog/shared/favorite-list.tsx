@@ -58,6 +58,7 @@ const FavoriteList = ({ isSearching, setIsSearching }: FavoriteListProps) => {
       rxNormCode: Number(medication.rxNormCode),
       doseFrequencyCode: '',
       prescribingStaffId: '',
+      supervisorStaffId: '',
       quantityValue: '',
       endDateTime: '',
       endTime: '',

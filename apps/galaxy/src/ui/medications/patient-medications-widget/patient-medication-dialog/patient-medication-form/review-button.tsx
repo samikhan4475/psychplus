@@ -2,6 +2,8 @@
 
 import { Button } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
+import { useHasPermission } from '@/hooks'
+import { useStore } from '../../store'
 import { PrescribedStatus } from '../../types'
 import { Step, StepComponentProps } from '../types'
 import { PatientMedicationSchemaType } from './schema'
@@ -12,10 +14,20 @@ interface ReviewButtonProps {
 const ReviewButton = ({ onJump }: ReviewButtonProps) => {
   const form = useFormContext<PatientMedicationSchemaType>()
   const prescribedStatus = form.watch('prescribedStatus')
-
-  if (prescribedStatus !== PrescribedStatus.Pharmacy) {
+  const { hasControlledMedication } = useStore((state) => ({
+    hasControlledMedication: state.hasControlledMedication,
+  }))
+  const signMedication = useHasPermission('signMedication')
+  const drugs = form.watch('drugs') || []
+  if (prescribedStatus !== PrescribedStatus.Pharmacy || drugs.length === 0) {
     return null
   }
+  let buttonText = 'Save & Review'
+
+  if (hasControlledMedication && !signMedication) {
+    buttonText = 'Save & Queue'
+  }
+
   return (
     <Button
       size="2"
@@ -28,7 +40,7 @@ const ReviewButton = ({ onJump }: ReviewButtonProps) => {
       disabled={!form.watch('drugs')?.length}
       loading={form.formState.isSubmitting && form.watch('isReviewing')}
     >
-      Save & Review
+      {buttonText}
     </Button>
   )
 }

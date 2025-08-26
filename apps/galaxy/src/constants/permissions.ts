@@ -258,7 +258,16 @@ const USER_PERMISSIONS = {
   changeServiceStatusIntReferralTab: 'changeServiceStatusIntReferralTab',
   clickBookButtonIntReferralTab: 'clickBookButtonIntReferralTab',
   applySmartFilterIntReferral: 'applySmartFilterIntReferral',
-  initiateNocdReferralSubmit: 'initiateNocdReferralSubmit',
+  addMedication: 'addMedication',
+  editMedication: 'editMedication',
+  deleteMedication: 'deleteMedication',
+  transmitmedication: 'transmitmedication',
+  signMedication: 'signMedication',
+  viewMedicationAuditLog: 'viewMedicationAuditLog',
+  cancelMedication: 'cancelMedication',
+  rePrescribeMedication: 'rePrescribeMedication',
+  printMedication: 'printMedication',
+  initiateNocdReferralSubmit: 'initiateNocdReferralSubmit'
 }
 
 export { USER_PERMISSIONS }

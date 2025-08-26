@@ -1,12 +1,16 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Step } from './types'
 
-const useSteps = () => {
-  const [step, setStep] = useState<Step>(Step.Form)
+const useSteps = (initialStep: Step = Step.Form) => {
+  const [step, setStep] = useState<Step>(initialStep)
+  useEffect(() => {
+    setStep(initialStep)
+  }, [initialStep])
+
   const stepKeys = Object.values(Step)
   const stepCount = stepKeys.indexOf(step)
   const totalSteps = stepKeys.length
-  const onNextStep = () => {
+  const onNextStep = () => {  
     setStep((prevStep) => {
       const stepKeys = Object.keys(Step) as Array<Step>
       const currentIndex = stepKeys.indexOf(prevStep)

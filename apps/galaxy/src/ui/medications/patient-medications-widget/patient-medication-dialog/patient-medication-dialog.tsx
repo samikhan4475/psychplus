@@ -19,6 +19,7 @@ interface PatientMedicationDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   editOptions?: EditOptions
+  initialStep?: Step
 }
 
 const PatientMedicationDialog = ({
@@ -28,6 +29,7 @@ const PatientMedicationDialog = ({
   open,
   onOpenChange,
   editOptions,
+  initialStep = Step.Form,
 }: PropsWithChildren<PatientMedicationDialogProps>) => {
   const [loading, setLoading] = useState(false)
   const { id: patientId } = useParams<{ id: string }>()
@@ -36,11 +38,13 @@ const PatientMedicationDialog = ({
   const [prescriptionData, setPrescriptionData] = useState<
     Prescription | undefined
   >()
-  const { step, stepCount, ...stepsProp } = useSteps()
-  const { refetch, hasControlledMedication } = useStore((state) => ({
-    refetch: state.refetch,
-    hasControlledMedication: state.hasControlledMedication,
-  }))
+  const { step, stepCount, ...stepsProp } = useSteps(initialStep)
+  const { refetch, hasControlledMedication, setHasControlledMedication } =
+    useStore((state) => ({
+      refetch: state.refetch,
+      hasControlledMedication: state.hasControlledMedication,
+      setHasControlledMedication: state.setHasControlledMedication,
+    }))
   const totalSteps = 4
   const fetchData = useCallback(
     async (id: number) => {
@@ -51,6 +55,10 @@ const PatientMedicationDialog = ({
             return toast.error(res.error)
           }
           setPrescriptionData(res?.data)
+          const hasCtrl = !!res?.data?.prescriptionDrugs?.some(
+            (d) => d.isControlledSubstance,
+          )
+          setHasControlledMedication(hasCtrl)
         })
         .finally(() => {
           setLoading(false)
@@ -60,6 +68,9 @@ const PatientMedicationDialog = ({
   )
 
   useEffect(() => {
+    if (!medication) {
+      setPrescriptionData(undefined)
+    }
     if (medication && open) {
       fetchData(Number(patientId))
     }
@@ -105,7 +116,7 @@ const PatientMedicationDialog = ({
                 {stepCount}/{totalSteps}
               </Text>
             )}
-            <Text className="text-center mt-1">{dialogTitle}</Text>{' '}
+            <Text className="mt-1 text-center">{dialogTitle}</Text>
           </Flex>
         </Dialog.Title>
         {loading ? (
@@ -119,6 +130,7 @@ const PatientMedicationDialog = ({
             prescription={prescriptionData}
             patientId={Number(patientId)}
             step={step}
+            intialStep={initialStep}
             editOptions={editOptions}
             {...stepsProp}
           />

@@ -20,7 +20,8 @@ import { ReviewPrescription } from '../review-prescription'
 import { Step, StepComponentProps, StepContext } from '../types'
 import { FormFields } from './form-fields'
 import { PatientMedicationSchemaType, schema } from './schema'
-
+import { useHasPermission } from '@/hooks'
+import { useStore as useGlobalStore } from '@/store'
 interface PatientMedicationFormProps extends StepComponentProps {
   onClose?: (updateLocation?: PatientMedicationSchemaType) => void
   prescription?: Prescription
@@ -57,9 +58,11 @@ const PatientMedicationForm = ({
     [],
   )
   const [stepContext, setStepContext] = useState<StepContext>({})
-
+  const signMedication = useHasPermission('signMedication')
+  const { staffId } = useGlobalStore((state) => ({
+      staffId: state.user.staffId
+  }))
   const { setValue } = form
-
   useEffect(() => {
     if (prescription) {
       setPrescriptions([prescription])
@@ -142,6 +145,7 @@ const PatientMedicationForm = ({
       data,
       patientId,
       Number(appointmentId),
+      staffId
     )
     payloads = payloads.map((prescription) => ({
       ...prescription,
@@ -173,10 +177,11 @@ const PatientMedicationForm = ({
       setHasControlledMedication(true)
     }
 
-    if (data?.isReviewing) {
+    if (data?.isReviewing && (signMedication || !hasControlled)) {
       form.setValue('isReviewing', false)
       return stepProps.onJump(Step.Review)
     }
+
     toast.success(
       `Prescription ${prescription?.id ? 'Updated' : 'Added'} Successfully`,
     )
