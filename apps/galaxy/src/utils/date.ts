@@ -91,9 +91,8 @@ const getSlashedDateString = (
 }
 
 const getDateLabel = (date?: Date) => {
-  if (!date) {
-    date = new Date()
-  }
+  date ??= new Date()
+  
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
   const day = String(date.getDate()).padStart(2, '0')
@@ -145,6 +144,32 @@ const formatDateTime = (
   }).format(date)
 
   return `${formattedDate} ${formattedTime}`
+}
+
+// Converting UTC datetime to readable string without converting it into local timezone
+const formatUTCDateTime = (
+  dateString: string | undefined,
+  hour12: boolean | undefined = true,
+) => {
+  if (!dateString) return ''
+  const date = new Date(dateString)
+
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0')
+  const day = String(date.getUTCDate()).padStart(2, '0')
+  const year = String(date.getUTCFullYear()).slice(-2)
+
+  let hours = date.getUTCHours()
+  const minutes = String(date.getUTCMinutes()).padStart(2, '0')
+
+  let period = ''
+  if (hour12) {
+    period = hours >= 12 ? ' PM' : ' AM'
+    hours = hours % 12 || 12
+  }
+
+  const formattedHours = String(hours).padStart(2, '0')
+
+  return `${month}/${day}/${year} ${formattedHours}:${minutes}${period}`
 }
 
 function formatDateToISOString(
@@ -296,6 +321,7 @@ const convertToTimeZoneDate = (date: string, timezoneId: string) => {
     const day = `${zonedDate.day}`.padStart(2, '0')
     return `${month}/${day}/${zonedDate.year}`
   } catch (error) {
+    console.warn(`Invalid date or timezone: ${date}`, error)
     return date
   }
 }
@@ -494,4 +520,5 @@ export {
   MONTH_LABELS,
   generateMonthOptions,
   generateYearOptions,
+  formatUTCDateTime
 }

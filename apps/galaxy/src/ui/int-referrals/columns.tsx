@@ -3,7 +3,7 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, TextCell } from '@/components'
 import { PatientReferral, Sort } from '@/types'
-import { formatDateTime, getSlashedPaddedDateString, getSortDir } from '@/utils'
+import { formatUTCDateTime, getSlashedPaddedDateString, getSortDir } from '@/utils'
 import { ServiceNameCell } from '../referrals/patient-referrals-widget/cells'
 import {
   ActionCell,
@@ -65,7 +65,7 @@ const columns = (
           cell: ({ row }) => (
             <TextCell>
               {row.original.referralDate
-                ? formatDateTime(row.original.referralDate, false)
+                ? formatUTCDateTime(row.original.referralDate, false)
                 : ''}
             </TextCell>
           ),
