@@ -218,10 +218,14 @@ const InsurancePaymentPostingTable = ({
 
       const result = await getPaymentServiceLinesAction(payload)
       if (result.state === 'success') {
+        const sortedServiceLines =
+          result.data?.toSorted((a, b) =>
+            a.chargeId.localeCompare(b.chargeId),
+          ) ?? []
         form.setValue(
           'claimServiceLinePayments',
           transformServiceLines(
-            result.data,
+            sortedServiceLines,
             paymentPostingClaim ?? {},
             processedAsCode,
           ) as ClaimServiceLinePayment[],
@@ -235,10 +239,8 @@ const InsurancePaymentPostingTable = ({
   }, [processedAsCode])
   if (loading)
     return <LoadingPlaceholder className="min-h-[30vh] min-w-[300px]" />
-  const serviceLines = form
-    .watch('claimServiceLinePayments')
-    ?.toSorted((a, b) => a.chargeId.localeCompare(b.chargeId))
 
+  const serviceLines = form.watch('claimServiceLinePayments')
   return (
     <Flex direction="column">
       <Text mb="1" size="3" weight="bold">

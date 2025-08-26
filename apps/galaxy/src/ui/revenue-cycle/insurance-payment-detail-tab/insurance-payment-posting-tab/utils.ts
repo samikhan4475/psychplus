@@ -14,7 +14,6 @@ const validatePayment = ({
   claimPayment,
   paymentDetail,
 }: ValidatePaymentParams): string => {
-
   if (!claimPayment.claimServiceLinePayments) return ''
 
   // Need to check sum of paid amounts should not exceed unapplied amount
@@ -75,7 +74,7 @@ const validatePayment = ({
     const totalPaidForServiceLine =
       +removeNegative(`${sumOfAdjustments}`) + paidAmount
 
-    if (totalPaidForServiceLine > billedAmount && allowedAmount) {
+    if (totalPaidForServiceLine > billedAmount) {
       serviceLineAmountExceeded.push(index + 1)
     }
 

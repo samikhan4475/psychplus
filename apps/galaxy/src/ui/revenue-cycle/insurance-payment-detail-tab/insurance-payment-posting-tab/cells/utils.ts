@@ -124,6 +124,7 @@ const updateOrAddAdjustment = ({
         ? {
             ...adj,
             adjustmentAmount: parsedAdjustmentAmount,
+            recordStatus: 'Active',
           }
         : adj,
     )
@@ -250,7 +251,9 @@ const calculateBalanceAmount = (
       0,
     ) ?? 0
 
-  return (balance - otherAdjustments).toFixed(2)
+  return !+serviceLinePayment.allowedAmount
+    ? '0'
+    : (balance - otherAdjustments).toFixed(2)
 }
 
 interface AdjustmentStatusParams {
