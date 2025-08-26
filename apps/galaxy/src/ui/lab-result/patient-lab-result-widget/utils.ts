@@ -36,7 +36,8 @@ interface FormattedData {
   dateTo: string | null
   patientId: string
   resourceStatusList: string[]
-  labTestName: string
+  labTestName?: string
+  labTestNamePartial: string
 }
 
 const removeEmptyValues = (obj: FormattedData) => {

@@ -14,7 +14,7 @@ const TestSelect = () => {
         size="1"
         placeholder="Test name"
         className="border-pp-gray-2 h-6 w-[122px] border border-solid !outline-none [box-shadow:none]"
-        {...form.register('labTestName')}
+        {...form.register('labTestNamePartial')}
       />
     </FormFieldContainer>
   )

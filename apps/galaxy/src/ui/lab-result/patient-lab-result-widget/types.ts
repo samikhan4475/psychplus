@@ -38,6 +38,7 @@ export interface LabResultsPayload {
   dateFrom?: string
   dateTo?: string
   labTestName?: string
+  labTestNamePartial?: string
   patientId: string
   isIncludeLabOrder?: boolean
   isIncludeLabLocation?: boolean

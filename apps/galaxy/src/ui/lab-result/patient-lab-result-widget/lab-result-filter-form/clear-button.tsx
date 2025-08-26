@@ -19,7 +19,7 @@ const ClearButton = () => {
   ) => {
     e.preventDefault()
     form.reset({
-      labTestName: '',
+      labTestNamePartial: '',
       dateFrom: null,
       dateTo: null,
     })
