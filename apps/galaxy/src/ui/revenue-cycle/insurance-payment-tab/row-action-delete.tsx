@@ -15,7 +15,6 @@ const RowActionDelete = ({
   const search = useStore((state) => state.search)
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
-
   const deleteRecord = async () => {
     if (record.id) {
       setLoading(true)
@@ -31,6 +30,10 @@ const RowActionDelete = ({
   }
 
   const toggleOpen = (open: boolean) => {
+    if (+record.claimCount !== 0)
+      return toast.error(
+        'This check cannot be deleted because it is linked to one or more claim payments.',
+      )
     setOpen(open)
   }
 
