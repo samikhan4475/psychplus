@@ -291,6 +291,8 @@ const UPDATE_INSURANCE_PAYMENT_ENDPOINT = (id: string) =>
   `${API_URL}/api/payments/${id}`
 const INSURANCE_PAYMENT_ATTACHMENTS_ENDPOINT = (paymentId: string) =>
   `${API_URL}/api/payments/${paymentId}/attachments`
+const MASTER_FEE_SCHEDULE_UPLOAD_EXCEL_ENDPOINT = (fileFormat: string) =>
+  `${API_URL}/api/masterfeeschedules/actions/import/${fileFormat}`
 const ADD_INSURANCE_PAYMENT_ENDPOINT = `${API_URL}/api/payments`
 const CLAIM_RESUBMIT_ENDPOINT = (claimId: string) =>
   `${API_URL}/api/claims/${claimId}/markasresubmit`
@@ -979,6 +981,8 @@ const DISABLE_SCHEDULE_REPORT_JOB = (jobId: string) =>
   `${API_URL}/api/jobmanager/jobs/${jobId}/actions/disable`
 const ENABLE_SCHEDULE_REPORT_JOB = (jobId: string) =>
   `${API_URL}/api/jobmanager/jobs/${jobId}/actions/enable`
+const RUN_JOBTASK_ENDPOINT = (taskRunId: string) =>
+  `${API_URL}/api/jobmanager/jobtaskruns/${taskRunId}`
 const GET_PRACTICES_LICENSE_MANAGERS_ENDPOINT = (practiceId: string) =>
   `${API_URL}/api/practices/${practiceId}/licensemanagers/actions/search`
 const ADD_PRACTICES_LICENSE_MANAGERS_ENDPOINT = (practiceId: string) =>
@@ -1367,6 +1371,7 @@ export {
   UPLOAD_ATTACHMENT_SECURE_MESSAGE,
   GET_MASTER_FEE_SCHEDULES,
   GET_PROCEDURES_CODES,
+  MASTER_FEE_SCHEDULE_UPLOAD_EXCEL_ENDPOINT,
   GET_MODIFIERS_CODES,
   GET_CLAIM_BY_ID,
   GET_ORGANIZATIONS_ENDPOINT,
@@ -1532,6 +1537,7 @@ export {
   Add_USER_ROLES,
   UPDATE_USER_ROLES,
   GET_PERMISSIONS_ENDPOINT,
+  RUN_JOBTASK_ENDPOINT,
   ASSOCIATE_PERMISSION_ENDPOINT,
   GET_FORWARDING_MESSAGE_LIST_ENDPOINT,
   UPDATE_FORWARDING_MESSAGE_ENDPOINT,
