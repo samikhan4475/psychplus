@@ -1,2 +1,2 @@
-export * from './experience-filter-form.tsx'
+export * from './experience-filter-form'
 export * from './schema'

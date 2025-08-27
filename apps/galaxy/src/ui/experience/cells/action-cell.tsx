@@ -19,7 +19,7 @@ const ActionCell = ({
   }
 
   return (
-    <Flex justify="center" gap="1" className="w-[100px]">
+    <Flex justify="center" gap="1" className="w-[70px]">
       <EditExperienceDialog experience={experience} onClose={onClose} />
     </Flex>
   )

@@ -37,7 +37,7 @@ const EditExperienceDialog = ({
   const renderDialogHeader = () => (
     <Flex justify="between" align="start" gap="2">
       <Dialog.Title size="5" weight="medium">
-        Edit Experience
+        Edit Rating
       </Dialog.Title>
       <Dialog.Close className="cursor-pointer">
         <X size={22} strokeWidth={1} />

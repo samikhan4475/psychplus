@@ -28,7 +28,11 @@ import { Experience } from '@/types'
 import { updateRatingReasonAction } from '../actions'
 
 const schema = z.object({
-  staffComments: z.string().trim().optional(),
+  staffComments: z
+    .string()
+    .trim()
+    .max(1024, 'Max 1024 characters are allowed')
+    .optional(),
   appointmentRatingReason: z.string().min(1, 'Required').trim(),
   isValidateRating: z.boolean().optional(),
 })
@@ -87,7 +91,7 @@ const EditExperienceForm = ({
   const renderFormFields = () => (
     <Flex direction="column" gap="2">
       <CheckboxInput
-        label={'have not been able to validate this rating'}
+        label={'We have not been able to validate this rating'}
         labelClassName="max-w-max"
         field="isValidateRating"
         checked={form.watch('isValidateRating')}
@@ -130,7 +134,7 @@ const EditExperienceForm = ({
             rows={5}
             {...form.register('staffComments')}
           />
-          <FormFieldError name="comments" />
+          <FormFieldError name="staffComments" />
         </FormFieldContainer>
       </Grid>
     </Flex>
@@ -138,13 +142,8 @@ const EditExperienceForm = ({
 
   const renderButtons = () => (
     <Flex gap="3" justify="end">
-      <Dialog.Close>
-        <Button variant="outline" color="gray" size="2">
-          Cancel
-        </Button>
-      </Dialog.Close>
       <Button highContrast size="2">
-        Save
+        Update
       </Button>
     </Flex>
   )

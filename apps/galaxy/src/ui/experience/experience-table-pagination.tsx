@@ -26,6 +26,7 @@ const ExperienceTablePagination = () => {
     <DataTablePagination
       jumpToPage={jumpToPage}
       total={data?.total ?? 0}
+      showTotal={true}
       loading={loading ?? false}
       page={page}
       pageSize={EXPERIENCES_TABLE_PAGE_SIZE}

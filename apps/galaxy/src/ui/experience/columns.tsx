@@ -112,7 +112,7 @@ const columns = (
       cell: ({ row }) => (
         <TextCell>
           {row.original.dateOfBirth
-            ? getSlashedPaddedDateString(row.original.dateOfBirth)
+            ? getSlashedPaddedDateString(row.original.dateOfBirth, true)
             : ''}
         </TextCell>
       ),
@@ -138,6 +138,7 @@ const columns = (
         <ColumnHeader
           label="Visit Type"
           column={column}
+          className="w-[110px]"
           sortable
           sortDir={getSortDir(column.id, sort)}
           onClick={() => {
@@ -160,6 +161,7 @@ const columns = (
         <ColumnHeader
           label="Rating"
           column={column}
+          className="w-0"
           sortable
           sortDir={getSortDir(column.id, sort)}
           onClick={() => {
