@@ -58,7 +58,6 @@ const AllVisitsListFilterForm = () => {
     ) as Partial<AllVisitsParams>
     return search(cleanedData, 1, true)
   }
-
   return (
     <FormContainer
       className="bg-white flex flex-wrap gap-4 rounded-b-2 rounded-t-1 px-2 py-1 shadow-2"

@@ -1,6 +1,8 @@
+import { getLocalTimeZone, parseTime, today } from '@internationalized/date'
 import { DateValue } from 'react-aria-components'
 import { removeEmptyValues } from '@/ui/notes/utils'
 import { getCalendarDateLabel } from '@/utils'
+import { getDateString } from '../schedule/utils'
 import { TableFilters } from './constants'
 
 interface Code {
@@ -20,56 +22,66 @@ const getStateDisplayName = (codes: Code[], state: string) => {
 }
 
 const getDateRangeFromFilter = (activeFilter?: string) => {
-  const today = new Date()
-  const formatDate = (date: Date) => date.toISOString().split('T')[0]
+  const tz = getLocalTimeZone()
+  const todayDate = today(tz)
 
   switch (activeFilter) {
     case TableFilters.Today: {
-      const dateStr = formatDate(today)
+      const dateStr = getDateString(todayDate, tz)!
       return { dateFrom: dateStr, dateTo: dateStr }
     }
+
     case TableFilters.LastMonth: {
-      const today = new Date()
+      const jsToday = todayDate.toDate(tz)
+
       const firstDayOfCurrentMonth = new Date(
-        today.getFullYear(),
-        today.getMonth(),
+        jsToday.getFullYear(),
+        jsToday.getMonth(),
         1,
       )
       const firstDayOfLastMonth = new Date(
-        today.getFullYear(),
-        today.getMonth() - 1,
+        jsToday.getFullYear(),
+        jsToday.getMonth() - 1,
         1,
       )
       const lastDayOfLastMonth = new Date(firstDayOfCurrentMonth.getTime() - 1)
+
       return {
         dateFrom: firstDayOfLastMonth.toISOString(),
         dateTo: lastDayOfLastMonth.toISOString(),
       }
     }
+
     case TableFilters.LastThirtyDays: {
-      const last30 = new Date(today)
-      last30.setDate(today.getDate() - 30)
+      const jsToday = todayDate.toDate(tz)
+      const last30 = new Date(jsToday)
+      last30.setDate(jsToday.getDate() - 30)
       return {
         dateFrom: last30.toISOString(),
-        dateTo: today.toISOString(),
+        dateTo: jsToday.toISOString(),
       }
     }
+
     case TableFilters.LastNinetyDays: {
-      const last90 = new Date(today)
-      last90.setDate(today.getDate() - 90)
+      const jsToday = todayDate.toDate(tz)
+      const last90 = new Date(jsToday)
+      last90.setDate(jsToday.getDate() - 90)
       return {
         dateFrom: last90.toISOString(),
-        dateTo: today.toISOString(),
+        dateTo: jsToday.toISOString(),
       }
     }
+
     case TableFilters.LastQuarter: {
-      const last180 = new Date(today)
-      last180.setDate(today.getDate() - 180)
+      const jsToday = todayDate.toDate(tz)
+      const last180 = new Date(jsToday)
+      last180.setDate(jsToday.getDate() - 180)
       return {
         dateFrom: last180.toISOString(),
-        dateTo: today.toISOString(),
+        dateTo: jsToday.toISOString(),
       }
     }
+
     default:
       return {}
   }
@@ -80,8 +92,8 @@ function formatFilterFormData<T extends InputData>(
 ): Partial<Record<string, any>> {
   const transformed: Record<string, any> = {
     ...data,
-    ...(data.dateFrom && { dateFrom: getCalendarDateLabel(data.dateFrom) }),
-    ...(data.dateTo && { dateTo: getCalendarDateLabel(data.dateTo) }),
+    ...(data.dateFrom && { dateFrom: getDateString(data.dateFrom) }),
+    ...(data.dateTo && { dateTo: getDateString(data.dateTo?.add({ days: 1 })) }),
   }
 
   return removeEmptyValues(transformed)
