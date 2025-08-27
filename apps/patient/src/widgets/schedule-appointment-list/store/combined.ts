@@ -8,6 +8,7 @@ import { APPOINTMENTS_SEARCH_SESSION_PUBLIC_KEY } from '@/features/appointments/
 import { createAppointmentFiltersStore } from './appointments-filters-store'
 import { createAppointmentsStore } from './appointments-store'
 import { createPatientStore } from './patient-store'
+import { createProviderIdsStore } from './provider-ids'
 import { type StoreType } from './types'
 
 const useStore = createWithEqualityFn<StoreType>()(
@@ -17,6 +18,7 @@ const useStore = createWithEqualityFn<StoreType>()(
       createCodeSetStore,
       createAppointmentFiltersStore,
       createPatientStore,
+      createProviderIdsStore,
     ),
 
     {

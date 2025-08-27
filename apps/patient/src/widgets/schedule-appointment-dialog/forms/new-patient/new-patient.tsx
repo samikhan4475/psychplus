@@ -1,15 +1,13 @@
 'use client'
 
 import { ChangeEvent, useRef, useState } from 'react'
-import { cn, zipCodeSchema, zipLast4Schema } from '@psychplus-v2/utils'
-import * as ToggleGroup from '@radix-ui/react-toggle-group'
+import { zipCodeSchema, zipLast4Schema } from '@psychplus-v2/utils'
 import { Button, Flex, Text, TextField } from '@radix-ui/themes'
-import DatePicker, { registerLocale } from 'react-datepicker'
+import { registerLocale } from 'react-datepicker'
 import { type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 import {
   Form,
-  FormField,
   FormSelect,
   FormSubmitButton,
   FormTextInput,
@@ -23,11 +21,17 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { useRouter } from 'next/navigation'
 import { StorageType } from '@psychplus-v2/constants'
 import { CodeWithDisplayName } from '@psychplus-v2/types'
-import { getMonth, getYear } from 'date-fns'
 import enUS from 'date-fns/locale/en-US'
 import { isMobile } from '@psychplus/utils/client'
 import { formatDateYmd } from '@psychplus/utils/time'
 import { getZipcodeInfo } from '@/actions'
+import { PillToggleGroup } from '@/components-v2/pill-toggle-group'
+import { PillToggleList } from '@/components-v2/pill-toggle-list'
+import { enums, PSYCHPLUS_TEST_SITE_URL } from '@/constants'
+import {
+  SERVICE_TYPE_OPTIONS,
+  VISIT_TYPE_OPTIONS,
+} from '@/constants/appointment'
 import { APPOINTMENTS_SEARCH_SESSION_PUBLIC_KEY } from '@/features/appointments/search/constants'
 import {
   getStartOfWeek,
@@ -36,26 +40,23 @@ import {
 } from '@/features/appointments/search/utils'
 import { StaffWithClinicsAndSlots } from '@/widgets/schedule-appointment-list/types'
 import {
+  getLoginRedirectUrl,
   getNormalizedAppointmentType,
   getNormalizedProviderType,
   transformStaffWithClinicsAndSlots,
 } from '@/widgets/schedule-appointment-list/utils'
-import CustomDateInput from './custom-date-input'
 
 registerLocale('en-US', enUS)
 
 interface NewPatientProps {
   onclose?: () => void
   mapKey: string
+  patientAppUrl: string
 }
-
-const toggleGroupItemClasses =
-  'bg-[#E8E8E8] text-2 lg:text-3 data-[state=on]:bg-[#24366B] data-[state=on]:text-accent-1 rounded-4'
 
 interface ScheduledAppointment {
   providerType: 'Psychiatry' | 'Therapy' | 'unknown'
   appointmentType: 'In-Person' | 'Virtual' | 'unknown'
-  dateOfBirth: string
   zipCode: string
   state: string
   primaryStreet1: string
@@ -76,12 +77,6 @@ interface StateOptions {
 
 const schema = z
   .object({
-    dateOfBirth: z.custom<Date>(
-      (value) => value instanceof Date && !isNaN(value.getTime()),
-      {
-        message: 'Required',
-      },
-    ),
     zipCode: validate.requiredString,
     state: validate.requiredString,
     primaryStreet1: z.string().optional(),
@@ -94,42 +89,28 @@ const schema = z
     primaryPostalPlus4Code: zipLast4Schema.optional(),
     primaryCountry: z.string().optional(),
   })
-  .superRefine(({ dateOfBirth, zipCode }, ctx) => {
-    const currentDate = new Date()
-    const dob = new Date(dateOfBirth)
+  .superRefine(({ zipCode }, ctx) => {
+    const zipCodePattern = /(^\d{5}$)|(^\d{5}-\d{4}$)/
 
-    if (dob) {
-      const ageInYears = currentDate.getFullYear() - dob.getFullYear()
-
-      if (ageInYears < 4) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Age can't be less than 4 years!",
-          path: ['dateOfBirth'],
-        })
-      }
-      const zipCodePattern = /(^\d{5}$)|(^\d{5}-\d{4}$)/
-
-      if (!zipCodePattern.test(zipCode)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Invalid zip code format!',
-          path: ['zipCode'],
-        })
-      }
+    if (!zipCodePattern.test(zipCode)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Invalid zip code format!',
+        path: ['zipCode'],
+      })
     }
   })
 
 type SchemaType = z.infer<typeof schema>
 
-const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
+const NewPatient = ({ mapKey, patientAppUrl }: NewPatientProps) => {
   const { publish } = usePubsub()
+
   const [prefetchPromise, setPrefetchPromise] = useState<Promise<void> | null>(
     null,
   )
 
   const router = useRouter()
-  const [selectedDate, setSelectedDate] = useState<Date | null>()
 
   const form = useForm({
     schema,
@@ -139,7 +120,6 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
   const [schedule, setSchedule] = useState<ScheduledAppointment>({
     providerType: 'Psychiatry',
     appointmentType: 'In-Person',
-    dateOfBirth: new Date().toISOString(),
     zipCode: '',
     state: '',
     primaryStreet1: '',
@@ -155,15 +135,6 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
 
   const [stateOptions, setStateOptions] = useState<StateOptions[]>([])
   const [zipStates, setZipStates] = useState<CodeWithDisplayName[]>([])
-  const getLocalDateWithoutTime = (date?: Date | null): string | undefined => {
-    if (date) {
-      const dateObj = date
-      const utcDate = `${dateObj.getDate()}`.padStart(2, '0')
-      const utcMonth = `${dateObj.getMonth() + 1}`.padStart(2, '0')
-      const utcYear = `${dateObj.getFullYear()}`
-      return `${utcYear}-${utcMonth}-${utcDate}`
-    }
-  }
 
   const onScheduleChange = (key: keyof ScheduledAppointment, value: string) => {
     setSchedule((prev) => ({ ...prev, [key]: value }))
@@ -185,10 +156,10 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
         return
       }
       const states = response.data
-      const options = states.map(() => {
+      const options = states.map((state) => {
         return {
-          label: states[0]?.displayName,
-          value: states[0]?.displayName,
+          label: state?.displayName,
+          value: state?.displayName,
         }
       })
 
@@ -218,7 +189,6 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
           storageKey: APPOINTMENTS_SEARCH_SESSION_PUBLIC_KEY,
           storageType: StorageType.Local,
           gMapKey: mapKey,
-          dateOfBirth: getLocalDateWithoutTime(form.getValues().dateOfBirth),
         }).then(() => void 0)
         setPrefetchPromise(promise)
       }
@@ -230,12 +200,30 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
     }
   }
 
+  const onLoginClick = () => {
+    const mid = localStorage.getItem('mid')
+
+    const url = mid
+      ? `${getLoginRedirectUrl(patientAppUrl)}?mid=${mid}`
+      : getLoginRedirectUrl(patientAppUrl)
+
+    publish(`${SCHEDULE_APPOINTMENT_DIALOG}:existing-login`, {
+      url: url,
+    })
+
+    clickTrack({
+      productArea: 'Patient',
+      productPageKey: 'Search Schedule Appointment',
+      clickAction: 'Navigation',
+      clickActionData: 'Click Existing User',
+    })
+  }
+
   const onSubmit: SubmitHandler<SchemaType> = async () => {
     const queryString = Object.entries({
       ...schedule,
       zipCode: form.getValues().zipCode,
       state: form.getValues().state,
-      dateOfBirth: getLocalDateWithoutTime(form.getValues().dateOfBirth),
     })
       .map((key) => `${key[0]}=${key[1]}`)
       .join('&')
@@ -260,7 +248,7 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
         storageKey: APPOINTMENTS_SEARCH_SESSION_PUBLIC_KEY,
         storageType: StorageType.Local,
         gMapKey: mapKey,
-        dateOfBirth: getLocalDateWithoutTime(form.getValues().dateOfBirth),
+        dateOfBirth: '',
       })
 
       await updateStorage({
@@ -288,97 +276,60 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
       clickActionData: 'Clicked Search',
     })
 
+    parent.postMessage(
+      {
+        event: enums.SCHEDULE_START,
+        user_data: {
+          state: form.getValues().primaryState,
+          zip_code: form.getValues().zipCode,
+        },
+      },
+      PSYCHPLUS_TEST_SITE_URL,
+    )
+
     const url = `/schedule?${queryString}`
 
     router.push(`/widgets/schedule-appointment-list?${queryString}`)
     publish(`${SCHEDULE_APPOINTMENT_DIALOG}:appointment-search`, { url })
   }
 
-  const years = Array.from(
-    { length: 200 },
-    (_, i) => new Date().getFullYear() - i,
-  )
-  const months = [...Array(12)].map((_, i) =>
-    new Date(0, i).toLocaleString('default', { month: 'long' }),
-  )
-
   return (
     <>
       <Flex
-        className="gap-6 text-[#151B4A] max-md:w-full"
+        className="text-pp-blue-8 gap-4 max-md:w-full"
         direction="column"
-        py="5"
-        mt="5"
+        py="3"
+        mt="3"
       >
-        <Flex className="text-3 font-medium lg:text-5">
-          Do you want to see a Psychiatrist or a Therapist?
-        </Flex>
+        <Flex className="text-3 font-medium lg:text-5">Choose one</Flex>
 
-        <ToggleGroup.Root
-          type="single"
-          defaultValue="Psychiatry"
+        <PillToggleList
+          options={SERVICE_TYPE_OPTIONS}
           value={schedule.providerType}
-          onValueChange={(value) => {
+          onChange={(value) => {
             if (value) {
               onScheduleChange('providerType', value)
             }
           }}
-        >
-          <ToggleGroup.Item
-            value="Psychiatry"
-            className={cn(
-              'mt-2 h-[40px] w-[200px] sm:mt-0 lg:h-[50px] lg:w-[292px]',
-              toggleGroupItemClasses,
-            )}
-          >
-            Psychiatry <Text size="1">(Diagnosis / Medications)</Text>
-          </ToggleGroup.Item>
-          <ToggleGroup.Item
-            value="Therapy"
-            className={cn(
-              'mt-2 h-[40px] w-[190px] sm:ml-3 sm:mt-0 lg:h-[50px] lg:w-[207px]',
-              toggleGroupItemClasses,
-            )}
-          >
-            Therapy <Text size="1">(Counseling)</Text>
-          </ToggleGroup.Item>
-        </ToggleGroup.Root>
+          orientation="horizontal"
+          itemClassName="lg:h-[45px]"
+        />
       </Flex>
-      <Flex className="gap-6 max-md:w-full" direction="column" py="5">
+      <Flex className="gap-4 max-md:w-full" direction="column" py="3">
         <Flex className="text-3 font-medium lg:text-5">
-          Would you like to meet in-person or virtually?
+          Virtual / In-Person
         </Flex>
         <Flex className="">
-          <ToggleGroup.Root
-            type="single"
-            defaultValue="In-Person"
+          <PillToggleGroup
+            options={VISIT_TYPE_OPTIONS}
             value={schedule.appointmentType}
-            onValueChange={(value) => {
+            onChange={(value) => {
               if (value) {
                 onScheduleChange('appointmentType', value)
               }
             }}
-          >
-            <ToggleGroup.Item
-              value="In-Person"
-              className={cn(
-                'mt-2 h-[40px] w-[178px] sm:mt-0 lg:h-[50px] ',
-                toggleGroupItemClasses,
-              )}
-            >
-              In-Person
-            </ToggleGroup.Item>
-
-            <ToggleGroup.Item
-              value="Virtual"
-              className={cn(
-                'mt-2 h-[40px] w-[178px] sm:ml-3 lg:h-[50px] ',
-                toggleGroupItemClasses,
-              )}
-            >
-              Virtual
-            </ToggleGroup.Item>
-          </ToggleGroup.Root>
+            itemClassName="lg:h-[45px]"
+          />
         </Flex>
       </Flex>
       <Form form={form} onSubmit={onSubmit}>
@@ -386,88 +337,15 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
           <Flex className="flex-col sm:flex-row" gap="3">
             <Flex direction="column" className="font-regular">
               <Text className="text-2 lg:text-4" mb="2" weight="medium">
-                Date of Birth
-              </Text>
-              <FormField
-                id="dateOfBirth"
-                label=""
-                {...form.register('dateOfBirth')}
-              >
-                <Flex className="h-[45px] w-full rounded-6 text-4 sm:w-[190px]">
-                  <DatePicker
-                    customInput={<CustomDateInput />}
-                    dateFormat="MM/dd/yyyy"
-                    placeholderText="mm/dd/yyyy"
-                    locale="en-US"
-                    selected={selectedDate}
-                    onChange={(date) => {
-                      if (date) {
-                        form.setValue('dateOfBirth', date)
-                        setSelectedDate(date)
-                      }
-                    }}
-                    renderCustomHeader={({
-                      date,
-                      changeYear,
-                      changeMonth,
-                      decreaseMonth,
-                      increaseMonth,
-                      prevMonthButtonDisabled,
-                      nextMonthButtonDisabled,
-                    }) => (
-                      <Flex align={'center'} justify={'center'} gap={'1'}>
-                        <button
-                          onClick={decreaseMonth}
-                          disabled={prevMonthButtonDisabled}
-                        >
-                          {'<'}
-                        </button>
-                        <select
-                          value={getYear(date)}
-                          onChange={({ target: { value } }) =>
-                            changeYear(value as unknown as number)
-                          }
-                        >
-                          {years.map((option) => (
-                            <option key={option} value={option}>
-                              {option}
-                            </option>
-                          ))}
-                        </select>
-
-                        <select
-                          value={months[getMonth(date)]}
-                          onChange={({ target: { value } }) =>
-                            changeMonth(months.indexOf(value))
-                          }
-                        >
-                          {months.map((option) => (
-                            <option key={option} value={option}>
-                              {option}
-                            </option>
-                          ))}
-                        </select>
-
-                        <button
-                          onClick={increaseMonth}
-                          disabled={nextMonthButtonDisabled}
-                        >
-                          {'>'}
-                        </button>
-                      </Flex>
-                    )}
-                  />
-                </Flex>
-              </FormField>
-            </Flex>
-            <Flex direction="column" className="font-regular">
-              <Text className="text-2 lg:text-4" mb="2" weight="medium">
-                Current ZIP Code
+                ZIP Code <Text color="red">*</Text>
               </Text>
               <FormTextInput
+                size="3"
+                radius="full"
                 type="number"
                 label=""
-                placeholder="Current ZIP Code"
+                placeholder="ZIP Code"
+                autoComplete="off"
                 data-testid="zip-code-input"
                 {...form.register('zipCode')}
                 onChange={(e) => {
@@ -480,35 +358,43 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
                 maxLength={5}
               />
             </Flex>
-            <Flex direction="column" className="font-regular">
-              <Text className="text-2 lg:text-4" mb="2" weight="medium">
-                State
+
+            <Flex direction="column" className="rounded-full font-regular">
+              <Text className=" text-2 lg:text-4" mb="2" weight="medium">
+                Residing State <Text color="red">*</Text>
               </Text>
+
               <FormSelect
+                size="3"
                 label={''}
                 required
                 {...form.register('state')}
                 disabled={stateOptions.length < 2}
                 placeholder="Select state"
-                buttonClassName="h-[35px] lg:h-[45px] w-[210px] text-4 rounded-6"
+                buttonClassName="h-[35px] lg:h-[45px] w-[210px] text-4"
                 options={stateOptions}
+                selectProps={{ Trigger: { radius: 'full' } }}
               />
               <TextField.Root />
             </Flex>
           </Flex>
         </Flex>
-        <Flex className="gap-6 max-md:w-full" direction="column" mt="5">
-          <Flex gap="3" direction="row">
+        <Flex className="gap-6 max-md:w-full " direction="column" mt="5">
+          <Flex gap="3" direction="row" justify={'between'}>
             <Button
+              size="3"
+              type="button"
               radius="full"
-              className="h-[30px] w-[100px] cursor-pointer items-center justify-center border-[#151B4A] bg-[white] px-4 text-[#151B4A] outline lg:h-[40px]"
-              onClick={onclose}
+              variant="outline"
+              className="border-indigo-500 text-pp-blue-8 h-[35px] w-[296px] cursor-pointer items-center justify-center border-4 bg-[white] px-4 lg:h-[45px]"
+              onClick={onLoginClick}
             >
-              <Text size="3">Cancel</Text>
+              <Text size="3">Existing Patient</Text>
             </Button>
             <FormSubmitButton
+              size="3"
               radius="full"
-              className="h-[30px] w-[112px] cursor-pointer items-center justify-center bg-[#151B4A] px-4 font-bold lg:h-[40px]"
+              className="border-pp-blue-8 bg-pp-blue-8 h-[35px] w-[296px] cursor-pointer items-center justify-center px-4 font-bold outline-none lg:h-[45px]"
             >
               <Text size="3">Search</Text>
             </FormSubmitButton>

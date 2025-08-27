@@ -2,22 +2,23 @@
 
 import { useEffect } from 'react'
 import { Cross2Icon } from '@radix-ui/react-icons'
+import { Flex } from '@radix-ui/themes'
 import { Dialog } from '@psychplus/ui/dialog'
 import { usePubsub } from '@psychplus/utils/event'
 import { clickTrack } from '@psychplus/utils/tracking'
 import { SCHEDULE_APPOINTMENT_DIALOG } from '@psychplus/widgets'
 import { EventType } from '@psychplus/widgets/events'
 import { useDialog, usePublishLoaded } from '@psychplus/widgets/hooks'
-import { ScheduleTabs } from './tabs'
+import { NewPatient } from './forms'
 
 interface ScheduleAppointmentDialogClientProps {
   mapKey: string
-  patientAppUrl:string
+  patientAppUrl: string
 }
 
 const ScheduleAppointmentDialogClient = ({
   mapKey,
-  patientAppUrl
+  patientAppUrl,
 }: ScheduleAppointmentDialogClientProps) => {
   const { publish } = usePubsub()
   const { open } = useDialog(SCHEDULE_APPOINTMENT_DIALOG)
@@ -45,14 +46,24 @@ const ScheduleAppointmentDialogClient = ({
         }
       }}
     >
-      <Dialog.Content className="relative max-w-[720px] rounded-6 px-5 py-12 font-bold text-[#151B4A] sm:p-12">
-        <Dialog.Close className="absolute right-4 top-4 cursor-pointer">
-          <Cross2Icon />
-        </Dialog.Close>
-        <Dialog.Title className="text-left text-4 lg:text-7">
-          Schedule an appointment
-        </Dialog.Title>
-        {open && <ScheduleTabs onClose={onClose} mapKey={mapKey} patientAppUrl={patientAppUrl} />}
+      <Dialog.Content className="text-pp-blue-8 relative max-w-[720px] rounded-6 px-[32px] py-[32px] font-bold sm:p-[32px] lg:w-[688px]">
+        <Flex className="w-full items-center justify-between">
+          <Dialog.Title className="mb-0 flex-1 text-left text-4 lg:text-7">
+            Search for a NEW patient appointment
+          </Dialog.Title>
+
+          <Dialog.Close className="align-center h-[24px] w-[24px] cursor-pointer justify-center">
+            <Cross2Icon />
+          </Dialog.Close>
+        </Flex>
+
+        {open && (
+          <NewPatient
+            onclose={onClose}
+            mapKey={mapKey}
+            patientAppUrl={patientAppUrl}
+          />
+        )}
       </Dialog.Content>
     </Dialog.Root>
   )

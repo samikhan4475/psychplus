@@ -214,7 +214,12 @@ const LegacyScheduleAppointmentListClient = ({
 
   return (
     <Flex direction="column" className="w-full" ref={ref}>
-      <FilterPanel stateOptions={stateOptions} />
+      <FilterPanel
+        stateOptions={stateOptions.map((item) => ({
+          label: item,
+          value: item,
+        }))}
+      />
       <ProvidersAvailabilityListing
         filters={filters}
         sortedProviders={staffWithClinicsAndSlotsState}

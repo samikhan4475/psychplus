@@ -1,6 +1,5 @@
 import {
   AppointmentType,
-  DEFAULT_RADIUS_DISTANCE,
   ProviderType,
   ServiceOffered,
 } from '@psychplus-v2/constants'
@@ -101,9 +100,7 @@ const transformLocationProvidersRequest = ({
   providerTypeLabel,
   zipCode,
   stateCode,
-  maxDistanceInMiles = DEFAULT_RADIUS_DISTANCE,
 }: LocationProvidersPayloadParams): SearchLocationsProvidersParams => {
-  const isInPersonVisit = appointmentType === AppointmentType.InPerson
   return {
     appointmentType,
     ...(providerType && {
@@ -115,7 +112,6 @@ const transformLocationProvidersRequest = ({
         : ServiceOffered.Therapy,
     postalCode: zipCode,
     ...(stateCode && { stateCodes: [stateCode] }),
-    ...(isInPersonVisit && { maxDistanceInMiles: Number(maxDistanceInMiles) }),
   }
 }
 

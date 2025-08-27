@@ -44,6 +44,8 @@ const config = {
         'pp-info-1': '#0B68CB',
         'pp-info-2': '#E1F0FF',
         'pp-focus-bg': '#D9E2FC',
+        'pp-text-color': '#1C2024',
+        'pp-placeholder': '#9ca3af',
       },
       borderRadius: {
         full: '100%',

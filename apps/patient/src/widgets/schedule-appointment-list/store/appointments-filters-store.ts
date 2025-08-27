@@ -8,6 +8,7 @@ import {
 } from '@psychplus-v2/utils'
 import { unstable_batchedUpdates } from 'react-dom'
 import { type StateCreator } from 'zustand'
+import { SORT_TYPES, VISIT_TYPES } from '@/constants/appointment'
 import { searchLocationsProvidersAction } from '@/features/appointments/search/actions'
 import {
   getProviderTypeLabelNormalized,
@@ -21,12 +22,15 @@ const createAppointmentFiltersStore: StateCreator<AppointmentFiltersState> = (
 ) => ({
   filters: {
     providerType: '',
-    appointmentType: '',
+    appointmentType: VISIT_TYPES.IN_PERSON,
     zipCode: '',
-    sortBy: '',
+    sortBy: SORT_TYPES.BEST_OPTION,
     language: '',
     startingDate: '',
+    specialities: [],
   },
+  defaultDate: new Date(),
+  setDefaultDate: (defaultDate) => set({ defaultDate }),
   data: undefined,
   cache: {},
   boolean: false,
@@ -48,7 +52,6 @@ const createAppointmentFiltersStore: StateCreator<AppointmentFiltersState> = (
       state,
       appointmentType,
       providerType,
-      maxDistanceInMiles: rest.maxDistanceInMiles,
     })
 
     set({
@@ -64,7 +67,6 @@ const createAppointmentFiltersStore: StateCreator<AppointmentFiltersState> = (
     }
 
     const payload = transformLocationProvidersRequest({
-      maxDistanceInMiles: rest.maxDistanceInMiles,
       appointmentType,
       providerType,
       providerTypeLabel,

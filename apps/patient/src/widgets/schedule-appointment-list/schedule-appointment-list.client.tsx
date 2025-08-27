@@ -2,10 +2,16 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { CODESETS, DEFAULT_RADIUS_DISTANCE } from '@psychplus-v2/constants'
+import {
+  AppointmentType,
+  CODESETS,
+  ProviderType,
+} from '@psychplus-v2/constants'
 import { Flex } from '@radix-ui/themes'
+import format from 'date-fns/format'
 import { useDebounce } from 'use-debounce'
 import { useShallow } from 'zustand/react/shallow'
+import { getAppointmentAvailabilityForUnauthenticatedUser } from '@psychplus/appointments/api.client'
 import { isMobile } from '@psychplus/utils/client'
 import { getZipcodeInfo } from '@psychplus/utils/map'
 import { formatDateYmd } from '@psychplus/utils/time'
@@ -15,19 +21,21 @@ import {
   usePublishSize,
   useSubscribeClosePopover,
 } from '@psychplus/widgets/hooks'
+import { enums, PSYCHPLUS_LIVE_URL } from '@/constants'
+import { SERVICE_TYPES, SORT_TYPES, VISIT_TYPES } from '@/constants/appointment'
 import { LoadingPlaceholder } from '@/features/appointments/search/ui/search-appointments-view/loading-placeholder.tsx'
 import { getStartOfWeek } from '@/features/appointments/search/utils'
 import { useDeepCompareEffect } from '@/hooks'
 import { useCodesetCodes, useToast } from '@/providers'
 import { AvailabilityList, FilterPanel } from './components'
 import { useStore } from './store'
+import { FilterOption } from './types'
 import {
   getCodsetValue,
   getNormalizedAppointmentType,
   getNormalizedProviderType,
   getValidStartDate,
 } from './utils'
-import { enums, PSYCHPLUS_LIVE_URL } from '@/constants'
 
 interface ScheduleAppointmentListClientProps {
   mapKey: string
@@ -59,6 +67,7 @@ const ScheduleAppointmentListClient = ({
     setCurrentWeekReel,
     searchLocationsProvidersAction,
     loading,
+    setProviderIds,
   } = useStore(
     useShallow((snapshot) => ({
       filters: snapshot.filters,
@@ -66,6 +75,7 @@ const ScheduleAppointmentListClient = ({
       setCurrentWeekReel: snapshot.setCurrentWeekReel,
       searchLocationsProvidersAction: snapshot.searchLocationsProviders,
       loading: snapshot.loading,
+      setProviderIds: snapshot.setProviderIds,
     })),
   )
 
@@ -92,7 +102,7 @@ const ScheduleAppointmentListClient = ({
     setZipCodeState(filters.zipCode)
   }, [filters.zipCode])
 
-  useEffect(()=>{
+  useEffect(() => {
     parent.postMessage(
       {
         event: enums.SCHEDULE_START,
@@ -105,7 +115,7 @@ const ScheduleAppointmentListClient = ({
       },
       PSYCHPLUS_LIVE_URL,
     )
-  },[])
+  }, [])
 
   useEffect(() => {
     handleFiltersChange({
@@ -113,9 +123,8 @@ const ScheduleAppointmentListClient = ({
       appointmentType: searchParams.get('appointmentType') ?? '',
       zipCode: searchParams.get('zipCode') ?? '',
       state: searchParams.get('state') ?? '',
-      sortBy: 'Rating',
+      sortBy: SORT_TYPES.BEST_OPTION,
       language: 'English',
-      maxDistanceInMiles: DEFAULT_RADIUS_DISTANCE,
       startingDate: isMobile()
         ? formatDateYmd(new Date())
         : getStartOfWeek(new Date()),
@@ -126,32 +135,82 @@ const ScheduleAppointmentListClient = ({
     if (!hasHydrated || filters.zipCode.length < 5 || !filters.state) {
       return
     }
-    const {
-      zipCode,
-      appointmentType,
-      state,
-      startingDate,
-      maxDistanceInMiles,
-      providerType,
-    } = filters
+    const { zipCode, appointmentType, state, startingDate, providerType } =
+      filters
     searchLocationsProvidersAction(
       {
         zipCode,
         appointmentType: getNormalizedAppointmentType(appointmentType),
         state,
-        startingDate: isMobile() ? getValidStartDate(startingDate) : startingDate,
-        maxDistanceInMiles,
+        startingDate: isMobile()
+          ? getValidStartDate(startingDate)
+          : startingDate,
         providerType: getNormalizedProviderType(providerType),
         stateCode: getCodsetValue(stateCodes, filters.state),
       },
       toast,
     )
+
+    const maxDaysOutToLook = 6
+    const includeDistance = filters.appointmentType === VISIT_TYPES.IN_PERSON
+
+    // Pre fetch provider list and sort it to use for sort by filter options (Next available)
+    getAppointmentAvailabilityForUnauthenticatedUser(
+      {
+        postalCode: filters.zipCode,
+        type:
+          filters.appointmentType === VISIT_TYPES.IN_PERSON
+            ? AppointmentType.InPerson
+            : AppointmentType.Virtual,
+        specialistTypeCode:
+          filters.providerType === SERVICE_TYPES.PSYCHIATRY
+            ? ProviderType.Psychiatrist
+            : ProviderType.Therapist,
+        startingDate: filters.startingDate,
+        maxDaysOutToLook,
+
+        state: filters.state,
+        patientDateOfBirth: format(new Date('1970-01-01'), 'yyyy-MM-dd'),
+      },
+      includeDistance,
+    ).then((data) => {
+      const sortedSpecialistIds = data.staffAppointmentAvailabilities
+        .sort((a, b) => {
+          // find earliest slot for specialist a
+          const earliestA = Math.min(
+            ...a.availableSlots.map((slot) =>
+              new Date(slot.startDate).getTime(),
+            ),
+          )
+
+          // find earliest slot for specialist b
+          const earliestB = Math.min(
+            ...b.availableSlots.map((slot) =>
+              new Date(slot.startDate).getTime(),
+            ),
+          )
+
+          return earliestA - earliestB
+        })
+        .map((item) => item.specialist.id)
+
+      const uniqueSpecialistIds: number[] = []
+      const seen = new Set<number>()
+
+      for (const id of sortedSpecialistIds) {
+        if (!seen.has(id)) {
+          seen.add(id)
+          uniqueSpecialistIds.push(id)
+        }
+      }
+
+      setProviderIds(uniqueSpecialistIds)
+    })
   }, [
     filters.state,
     filters.providerType,
     filters.appointmentType,
     filters.startingDate,
-    filters.maxDistanceInMiles,
     hasHydrated,
   ])
 
@@ -193,10 +252,15 @@ const ScheduleAppointmentListClient = ({
     )
   }
 
+  const stateOptionMapping: FilterOption[] = stateOptions.map((state) => ({
+    label: state,
+    value: state,
+  }))
+
   return (
     <Flex direction="column" className="w-full" ref={ref}>
       <FilterPanel
-        stateOptions={stateOptions}
+        stateOptions={stateOptionMapping}
         isSchedulingOptimizationEnabled={isSchedulingOptimizationEnabled}
       />
       <AvailabilityList

@@ -13,10 +13,11 @@ interface AvailabilityListProps {
 const AvailabilityList = ({
   isSchedulingOptimizationEnabled,
 }: AvailabilityListProps) => {
-  const { data, filters } = useStore(
+  const { data, filters, providerIds } = useStore(
     useShallow((state) => ({
       data: state.data,
       filters: state.filters,
+      providerIds: state.providerIds,
     })),
   )
 
@@ -25,6 +26,7 @@ const AvailabilityList = ({
       sortAndFilterAppointments(data ?? [], {
         sortBy: filters.sortBy,
         language: filters.language,
+        providerIds,
       }),
     [data, filters.sortBy, filters.language],
   )

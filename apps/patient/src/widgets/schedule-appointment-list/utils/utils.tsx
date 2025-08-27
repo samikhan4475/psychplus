@@ -29,6 +29,7 @@ import { type Staff } from '@psychplus/staff'
 import { isMobile } from '@psychplus/utils/client'
 import { APP_ENV } from '@psychplus/utils/constants'
 import { convertToLocalISOString } from '@psychplus/utils/time'
+import { SORT_TYPES } from '@/constants/appointment'
 import {
   ClinicWithSlots,
   SortFilterOptions,
@@ -327,14 +328,14 @@ const getCodsetValue = (codes: SharedCode[], display: string) => {
   return codes.find((_code) => _code.display === display)?.value
 }
 
-function getLoginRedirectUrl(patientAppUrl?:string): string {
+function getLoginRedirectUrl(patientAppUrl?: string): string {
   const fallbackBaseUrl =
     String(APP_ENV).toLowerCase() === 'production'
       ? 'https://ui.psychplus.io'
       : 'https://ui.staging.psychplus.dev'
 
   const base = patientAppUrl || fallbackBaseUrl
-  console.log(patientAppUrl,'patientAppUrl')
+
   return `${base.replace(/\/$/, '')}/login`
 }
 
@@ -410,7 +411,7 @@ const transformStaffWithClinicsAndSlots = ({
 
 function sortAndFilterAppointments(
   data: StaffWithClinicsAndSlots[],
-  { sortBy, language }: SortFilterOptions,
+  { sortBy, language, providerIds }: SortFilterOptions,
 ): StaffWithClinicsAndSlots[] {
   if (!data.length) return []
   // 1. filter by language
@@ -424,14 +425,30 @@ function sortAndFilterAppointments(
     return filtered
   }
 
-  if (sortBy === 'Nearest') {
+  if (sortBy === SORT_TYPES.MILEAGE) {
     return sortByFunc(filtered, (item) =>
       getMin(item.clinicWithSlots, (c) => c?.clinic?.distanceInMiles),
     )
   }
 
-  if (sortBy === 'Rating') {
+  if (sortBy === SORT_TYPES.RATING) {
     return sortByFunc(filtered, (item) => -(item.staff?.rating ?? 0))
+  }
+
+  if (sortBy === SORT_TYPES.NEXT_AVAILABLE) {
+    if (providerIds && providerIds.length) {
+      const sorted = [...filtered].sort((a, b) => {
+        const indexA = providerIds.indexOf(a.staff.id)
+        const indexB = providerIds.indexOf(b.staff.id)
+        // If the provider isn't in the list, sort it last
+        return (
+          (indexA === -1 ? Infinity : indexA) -
+          (indexB === -1 ? Infinity : indexB)
+        )
+      })
+
+      return sorted
+    }
   }
 
   return filtered
@@ -459,6 +476,16 @@ function getNormalizedAppointmentType(type: string): AppointmentType {
     ? AppointmentType.InPerson
     : AppointmentType.Virtual
 }
+
+const months = [...Array(12)].map((_, i) =>
+  new Date(0, i).toLocaleString('default', { month: 'long' }),
+)
+
+const years = Array.from(
+  { length: 200 },
+  (_, i) => new Date().getFullYear() - i,
+)
+
 export {
   groupStaffWithClinicsAndSlots,
   applyFilters,
@@ -475,4 +502,6 @@ export {
   getProviderTypeLabelNormalized,
   getNormalizedAppointmentType,
   getNormalizedProviderType,
+  months,
+  years,
 }

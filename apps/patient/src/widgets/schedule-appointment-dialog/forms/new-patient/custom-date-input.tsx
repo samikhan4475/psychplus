@@ -1,5 +1,4 @@
 import React, { forwardRef } from 'react'
-import { cn } from '@psychplus-v2/utils'
 import ReactInputMask from 'react-input-mask'
 import { TextField } from '@psychplus/ui/text-field'
 
@@ -20,11 +19,12 @@ const CustomDateInput = forwardRef<HTMLInputElement, CustomInputProps>(
     >
       {(inputProps) => (
         <TextField.Root
+          radius="full"
           size="3"
           {...inputProps}
           ref={ref}
           onClick={onClick}
-          className="h-[35px] w-[200px] rounded-6 text-4 lg:h-[45px]"
+          className=" w-[130px] text-4 max-sm:h-7 max-xs:h-6 sm:h-8 md:h-8 md:px-[10px] lg:h-10"
         />
       )}
     </ReactInputMask>

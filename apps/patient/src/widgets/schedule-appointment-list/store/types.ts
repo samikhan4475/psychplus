@@ -43,6 +43,8 @@ interface AppointmentState {
 
 interface AppointmentFiltersState {
   filters: Filters
+  defaultDate: Date
+  setDefaultDate: (date: Date) => void
   handleFiltersChange: (newFilters: Partial<Filters>) => void
   cache: AppointmentsCacheMap<StaffWithClinicsAndSlots[]>
   data?: StaffWithClinicsAndSlots[]
@@ -60,10 +62,16 @@ interface PatientState {
   setGMapKey: (gMapKey: string) => void
 }
 
+type providerIdsList = {
+  providerIds: number[]
+  setProviderIds: (ids: number[]) => void
+}
+
 type StoreType = AppointmentState &
   AppointmentFiltersState &
   CodeSetState &
-  PatientState
+  PatientState &
+  providerIdsList
 
 export type {
   AppointmentState,
@@ -71,4 +79,5 @@ export type {
   StoreType,
   BookedSlot,
   PatientState,
+  providerIdsList,
 }

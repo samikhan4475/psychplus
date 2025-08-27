@@ -25,7 +25,6 @@ interface AppointmentSlot {
   clinicId?: string
 }
 
-
 interface StaffAppointmentAvailabilty {
   specialist: Staff
   specialistTypeCode: number
@@ -49,6 +48,7 @@ type AppointmentAvailabilityPayload = {
   specificDay?: string
   state?: string
   patientDateOfBirth?: string
+  providerType?: string
 }
 
 type BookAppointmentPayload = {

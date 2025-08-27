@@ -18,7 +18,7 @@ const ProvidersAvailabilityListing = ({
   return (
     <>
       <Flex
-        className="bg-white sticky z-10 w-full flex-1 border border-gray-3 max-xs:top-[131px] xs:top-[134px] sm:top-[104px] md:top-[99px] lg:top-[72px]"
+        className="bg-white sticky w-full flex-1 border border-gray-3 max-xs:top-[131px] xs:top-[134px] sm:top-[104px] md:top-[99px] lg:top-[160px]"
         py="5"
         px="7"
         align="center"

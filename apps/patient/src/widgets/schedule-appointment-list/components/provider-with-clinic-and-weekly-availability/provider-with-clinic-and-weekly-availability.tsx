@@ -2,8 +2,13 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { getUserInitials } from '@psychplus-v2/utils'
-import { CheckIcon, StarFilledIcon, StarIcon } from '@radix-ui/react-icons'
-import { Avatar, Box, Flex, Text } from '@radix-ui/themes'
+import {
+  CheckIcon,
+  StarFilledIcon,
+  StarIcon,
+  VideoIcon,
+} from '@radix-ui/react-icons'
+import { Avatar, Box, Button, Flex, Text } from '@radix-ui/themes'
 import { getCodeDisplay } from '@psychplus/codeset'
 import { Popover } from '@psychplus/ui/popover'
 import { isMobile } from '@psychplus/utils/client'
@@ -15,6 +20,7 @@ import {
 import { useStore } from '../../store'
 import type { ClinicWithSlots, StaffWithClinicsAndSlots } from '../../types'
 import { renderStaffName } from '../../utils'
+import { ViewBioModal } from '../view-bio-modal'
 
 interface ProviderWithClinicAndWeeklyAvailabilityProps {
   staffWithClinicsAndSlots: StaffWithClinicsAndSlots
@@ -29,10 +35,26 @@ const ProviderWithClinicAndWeeklyAvailability = ({
   const specialistTypeCodeSet = codeSetIndex.SpecialistType
   const [selectedClinicIndex, setSelectedClinicIndex] = useState(0)
   const [slotsLoading, setSlotsLoading] = useState(false)
+  const [showBioModal, setShowBioModal] = useState(false)
 
   useEffect(() => {
     setSelectedClinicIndex(0)
   }, [filters.appointmentType])
+
+  const {
+    providerType,
+    staff: { id, legalName, rating, hasPhoto, bio },
+  } = staffWithClinicsAndSlots
+
+  const bioData = {
+    id,
+    legalName,
+    rating,
+    ratingCount: 10,
+    hasPhoto: hasPhoto,
+    providerType,
+    bio,
+  }
 
   return (
     <Flex className="w-full flex-col gap-5 md:flex-row md:gap-0">
@@ -52,7 +74,7 @@ const ProviderWithClinicAndWeeklyAvailability = ({
             fallback={getUserInitials(
               staffWithClinicsAndSlots?.staff?.legalName,
             )}
-            className="h-[56px] w-[56px]"
+            className="-z-10 h-[56px] w-[56px]"
             radius="full"
           />
 
@@ -60,9 +82,34 @@ const ProviderWithClinicAndWeeklyAvailability = ({
             <Text className="text-3 font-bold md:text-5">
               {renderStaffName(staffWithClinicsAndSlots.staff)}
             </Text>
-            <StarRating
-              rating={staffWithClinicsAndSlots.staff.rating?.valueOf()}
-            />
+            <Flex gap="2" align="center">
+              <StarRating
+                rating={staffWithClinicsAndSlots.staff.rating?.valueOf()}
+              />
+
+              <Button
+                radius="full"
+                size="1"
+                className="!border-pp-gray-2 h-[24px] w-[90px] cursor-pointer  !border !bg-none !shadow-6 !shadow-transparent !outline-none"
+                onClick={() => {
+                  setShowBioModal(true)
+                }}
+                variant="soft"
+              >
+                <Button
+                  size="1"
+                  radius="full"
+                  className="!border-pp-gray-2 -z-10 h-[24px] w-[90px] cursor-pointer border bg-[#F0F4FF] text-[#1C2024]"
+                >
+                  <VideoIcon color="#24366B" /> View Bio
+                </Button>
+              </Button>
+              <ViewBioModal
+                isVisible={showBioModal}
+                onCancel={() => setShowBioModal(false)}
+                data={bioData}
+              />
+            </Flex>
             <Flex align="center">
               <Text size="1" className="text-[#194595]" ml="1">
                 {getCodeDisplay(
@@ -73,7 +120,7 @@ const ProviderWithClinicAndWeeklyAvailability = ({
             </Flex>
           </Flex>
         </Flex>
-        {renderLanguageAndLocation(
+        {renderProviderDetails(
           filters.appointmentType,
           staffWithClinicsAndSlots,
           selectedClinicIndex,
@@ -108,14 +155,14 @@ const ProviderWithClinicAndWeeklyAvailability = ({
   )
 }
 
-const StarRating = ({ rating }: { rating?: number }) => {
-  const numericRating = rating ?? 0;
+export const StarRating = ({ rating }: { rating?: number }) => {
+  const numericRating = rating ?? 0
 
   return (
     <Flex align="center" gap="1">
       {Array.from({ length: 5 }, (_, index) => (
         <Box key={index}>
-          {(numericRating === 0 || index + 1 <= numericRating) ? (
+          {numericRating === 0 || index + 1 <= numericRating ? (
             <StarFilledIcon height={16} width={16} color="#FFC700" />
           ) : (
             <StarIcon height={16} width={16} color="#FFC700" />
@@ -123,14 +170,15 @@ const StarRating = ({ rating }: { rating?: number }) => {
         </Box>
       ))}
       <Text className="text-xs pt-[1px] font-medium text-[#1C2024]">
-        {numericRating}
+        {Number.isInteger(numericRating)
+          ? `${numericRating}.0`
+          : numericRating.toFixed(2)}
       </Text>
     </Flex>
-  );
-};
+  )
+}
 
-
-const renderLanguageAndLocation = (
+const renderProviderDetails = (
   appointmentType: string,
   staffWithClinicsAndSlots: StaffWithClinicsAndSlots,
   selectedClinicIndex: number,
@@ -139,8 +187,8 @@ const renderLanguageAndLocation = (
 ) => (
   <Flex direction="column" gap="2" className="w-[272px]">
     {appointmentType === 'In-Person' && (
-      <Flex gap="1">
-        <Flex mt="1" className="text-2 md:text-3">
+      <Flex gap="1" align="center">
+        <Flex mt="1" className="mt-0 text-2 md:text-3">
           Location:
         </Flex>
         <ClinicsDropDown
@@ -210,11 +258,16 @@ const ClinicsDropDown = ({
         <div />
       </Popover.Close>
       <Popover.Trigger
-        className="cursor-pointer rounded-3 p-1 hover:bg-gray-2"
+        className="cursor-pointer rounded-3 px-2 py-1 hover:bg-gray-2"
         disabled={slotsLoading}
       >
-        <Flex key={defaultClinic.clinic.id}>
-          <Text className="text-2 text-[#575759] md:text-3">
+        <Flex
+          gap="2"
+          align="center"
+          key={defaultClinic.clinic.id}
+          className="border-pp-gray-3 w-full rounded-[100px] border p-1"
+        >
+          <Text className="overflow-hidden text-ellipsis whitespace-nowrap text-2 text-[#575759] md:text-3">
             {defaultClinic?.clinic.name}{' '}
             {defaultClinic?.clinic.contact?.addresses?.[0].street1}{' '}
             {defaultClinic?.clinic.contact?.addresses?.[0].city}

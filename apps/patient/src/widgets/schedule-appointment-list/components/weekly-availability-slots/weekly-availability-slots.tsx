@@ -10,7 +10,7 @@ import { isMobile } from '@psychplus/utils/client'
 import { formatTimeWithAmPm } from '@psychplus/utils/time'
 import { clickTrack } from '@psychplus/utils/tracking'
 import { SlotStateRenderer } from '@/components-v2/slot-state-render'
-import { enums, PSYCHPLUS_LIVE_URL } from '@/constants'
+import { enums, PSYCHPLUS_LIVE_URL, PSYCHPLUS_TEST_SITE_URL } from '@/constants'
 import { useInViewOnce } from '@/hooks'
 import { useSlots } from '@/hooks/use-slots'
 import { useStore } from '../../store'
@@ -163,7 +163,7 @@ const MobileSlotComponent = ({
       {
         event: enums.APPOINTMENT_SELECTED,
       },
-      PSYCHPLUS_LIVE_URL,
+      PSYCHPLUS_TEST_SITE_URL,
     )
 
     clickTrack({
@@ -178,7 +178,8 @@ const MobileSlotComponent = ({
 
   return (
     <Flex className="flex-row overflow-x-auto whitespace-nowrap pb-4" gap="4">
-      {slots && slots?.map((slot, i) => (
+      {slots &&
+        slots?.map((slot, i) => (
           <SlotItem
             key={`${slot.startDate}-${i}`}
             slot={slot}
@@ -226,7 +227,7 @@ const SlotComponent = ({
       {
         event: enums.APPOINTMENT_SELECTED,
       },
-      PSYCHPLUS_LIVE_URL,
+      PSYCHPLUS_TEST_SITE_URL,
     )
 
     clickTrack({
@@ -271,9 +272,10 @@ const SlotItem = ({
   onBookedSlot: (slot: AppointmentSlot) => void
 }) => (
   <Button
+    radius="full"
     variant="outline"
     highContrast
-    className="min-h-[2.25rem] cursor-pointer rounded-[4px] border border-[#b9bbc6] px-3 text-[14px] font-medium leading-[20px] text-[#24366b] hover:bg-[#151B4A] hover:text-[white] sm:rounded-3"
+    className="min-h-[2.25rem] cursor-pointer border border-[#b9bbc6] px-3 text-[14px] font-medium leading-[20px] text-[#24366b] hover:bg-[#151B4A] hover:text-[white]"
     onClick={() => onBookedSlot(slot)}
   >
     {formatTimeWithAmPm(slot.startDate)}

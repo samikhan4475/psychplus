@@ -10,7 +10,11 @@ interface Filters {
   sortBy: string
   language: string
   startingDate: string
-  maxDistanceInMiles?: string
+}
+
+interface FilterOption {
+  label: string
+  value: string
 }
 
 interface FilterOptionButtonProps {
@@ -22,12 +26,13 @@ interface FilterOptionButtonProps {
 
 interface FilterOptionsDropDownProps {
   prefix?: string
-  filterType: keyof Filters
-  options: string[] | undefined
-  onFilterChange: (newFilters: Partial<Filters>) => void
-  placeholder: string
+  filterType: string
+  options: FilterOption[]
+  onFilterChange: (filter: Record<string, string>) => void
+  placeholder?: string
   selectedOption?: string
   disabled?: boolean
+  defaultValue?: string
 }
 
 interface Location {
@@ -75,9 +80,11 @@ interface SortFilterOptions {
   sortBy?: string
   language?: string
   startingDate?: string
+  providerIds?: number[]
 }
 export type {
   Filters,
+  FilterOption,
   FilterOptionButtonProps,
   FilterOptionsDropDownProps,
   Location,

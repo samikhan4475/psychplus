@@ -16,6 +16,12 @@ interface Props
     value: string
     disabled?: boolean
   }[]
+  selectProps?: {
+    Root?: object
+    Trigger?: object
+    Content?: object
+    Item?: object
+  }
 }
 
 const FormSelect = React.forwardRef<HTMLButtonElement, Props>((props, ref) => {
@@ -33,19 +39,26 @@ const FormSelect = React.forwardRef<HTMLButtonElement, Props>((props, ref) => {
               value={field.value}
               defaultValue={props.defaultValue}
               {...childProps}
+              {...props?.selectProps?.Root}
             >
               <Select.Trigger
                 ref={ref}
-                className={props.buttonClassName?? ''}
+                className={props.buttonClassName ?? ''}
                 id={formFieldProps.id}
                 placeholder={props.placeholder}
+                {...props?.selectProps?.Trigger}
               />
-              <Select.Content position='popper' className={props.contentClassName?? ''}>
+              <Select.Content
+                position="popper"
+                className={props.contentClassName ?? ''}
+                {...props?.selectProps?.Content}
+              >
                 {childProps?.options?.map((option) => (
                   <Select.Item
                     value={option.value}
                     key={option.value}
                     disabled={option.disabled}
+                    {...props?.selectProps?.Item}
                   >
                     {option.label}
                   </Select.Item>
