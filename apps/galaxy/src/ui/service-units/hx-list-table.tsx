@@ -3,28 +3,28 @@
 import { useEffect, useState } from 'react'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { DataTable, LoadingPlaceholder } from '@/components'
-import { historyColumns } from '../service-units/hx-columns'
-import { getAllServiceGroupHistoryAction } from './actions'
-import { ServiceGroup } from './types'
+import { getAllServiceUnitHistoryAction } from './actions'
+import { historyColumns } from './hx-columns'
+import { ServiceUnit } from './types'
 
 interface HxListTableProps {
-  groupId: string
+  unitId: string
   locationId: string
 }
 
-const HxListTable = ({ groupId, locationId }: HxListTableProps) => {
-  const [data, setData] = useState<ServiceGroup[]>([])
+const HxListTable = ({ unitId, locationId }: HxListTableProps) => {
+  const [historyData, setHistoryData] = useState<ServiceUnit[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    init()
-  }, [groupId])
+    getUnitHistory()
+  }, [unitId])
 
-  const init = async () => {
+  const getUnitHistory = async () => {
     setLoading(true)
-    const response = await getAllServiceGroupHistoryAction(locationId, groupId)
+    const response = await getAllServiceUnitHistoryAction(locationId, unitId)
     if (response.state === 'success') {
-      setData(response.data)
+      setHistoryData(response.data)
     }
     setLoading(false)
   }
@@ -39,7 +39,7 @@ const HxListTable = ({ groupId, locationId }: HxListTableProps) => {
   return (
     <ScrollArea className="h-full p-2">
       <DataTable
-        data={data ?? []}
+        data={historyData ?? []}
         columns={historyColumns}
         disablePagination
         sticky

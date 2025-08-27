@@ -16,6 +16,7 @@ import { ActionsCell, ServiceGroupHistoryDialog } from './cells'
 import { SERVICE_GROUPS_LIST_TABLE_PAGE_SIZE } from './constants'
 import { useStore } from './store'
 import { ServiceGroup } from './types'
+import { sharedColumns } from './utils'
 
 const columns = (
   sort?: Sort,
@@ -34,68 +35,7 @@ const columns = (
       ),
       cell: ({ row }) => <TextCell>{row.original.group}</TextCell>,
     },
-    {
-      id: 'coSignerName.firstName',
-      header: ({ column }) => (
-        <ColumnHeader
-          label="Default Cosigner"
-          sortable
-          sortDir={getSortDir(column.id, sort)}
-          onClick={() => onSort?.(column.id)}
-        />
-      ),
-      cell: ({ row }) => (
-        <TextCell>
-          {row.original?.coSignerName &&
-            row.original?.coSignerName?.firstName +
-              ' ' +
-              row.original?.coSignerName?.lastName}
-        </TextCell>
-      ),
-    },
-    {
-      id: 'practiceId',
-      header: ({ column }) => (
-        <ColumnHeader
-          label="Default Practice"
-          sortable
-          sortDir={getSortDir(column.id, sort)}
-          onClick={() => onSort?.(column.id)}
-        />
-      ),
-      cell: ({ row }) => <TextCell>{row.original.practiceId}</TextCell>,
-    },
-    {
-      id: 'metadata.createdOn',
-      header: ({ column }) => (
-        <ColumnHeader
-          label="Created on"
-          sortable
-          sortDir={getSortDir(column.id, sort)}
-          onClick={() => onSort?.(column.id)}
-        />
-      ),
-      cell: ({ row }) => (
-        <TextCell>
-          {row.original?.metadata?.createdOn &&
-            formatDateTime(row.original?.metadata?.createdOn)}
-        </TextCell>
-      ),
-    },
-    {
-      id: 'metadata.createdByFullName',
-      header: ({ column }) => (
-        <ColumnHeader
-          label="Created By"
-          sortable
-          sortDir={getSortDir(column.id, sort)}
-          onClick={() => onSort?.(column.id)}
-        />
-      ),
-      cell: ({ row }) => (
-        <TextCell>{row.original?.metadata?.createdByFullName}</TextCell>
-      ),
-    },
+    ...sharedColumns(sort, onSort),
     {
       id: 'resourceStatus',
       header: ({ column }) => (

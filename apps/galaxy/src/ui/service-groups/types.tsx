@@ -12,9 +12,9 @@ interface ServiceGroup {
   serviceId: string
   locationId: string
   practiceId?: string
-  coSignerName?: coSignerName
+  coSignerName?: CoSignerName
 }
-interface coSignerName {
+interface CoSignerName {
   firstName?: string
   lastName?: string
 }

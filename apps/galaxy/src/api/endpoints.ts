@@ -1187,6 +1187,17 @@ const ADD_SERVICE_GROUP_ENDPOINT = (locationId: string, serviceId: string) =>
   `${API_URL}/api/locations/${locationId}/services/${serviceId}/groups`
 const SERVICE_GROUP_HISTORY_ENDPOINT = (locationId: string, groupId: string) =>
   `${API_URL}/api/locations/${locationId}/groups/${groupId}/history/actions/search`
+const SERVICE_UNITS_ENDPOINT = `${API_URL}/api/serviceunits/actions/search`
+const ADD_SERVICE_UNIT_ENDPOINT = (locationId: string, serviceId: string) =>
+  `${API_URL}/api/locations/${locationId}/services/${serviceId}/units`
+const UPDATE_SERVICE_UNITS_ENDPOINT = (
+  locationId: string,
+  serviceId: string,
+  unitId: string,
+) =>
+  `${API_URL}/api/locations/${locationId}/services/${serviceId}/units/${unitId}`
+const SERVICE_UNIT_HISTORY_ENDPOINT = (locationId: string, unitId: string) =>
+  `${API_URL}/api/locations/${locationId}/units/${unitId}/history/actions/search`
 
 export {
   PATIENT_MEDICATION_SIGN_IN,
@@ -1706,5 +1717,9 @@ export {
   SERVICE_GROUP_HISTORY_ENDPOINT,
   GET_EXPERIENCE_LIST_ENDPOINT,
   UPDATE_APPOINTMENT_RATING_REASON_ENDPOINT,
-  IMMUNIZATION_URL_ENDPOINT
+  IMMUNIZATION_URL_ENDPOINT,
+  SERVICE_UNITS_ENDPOINT,
+  ADD_SERVICE_UNIT_ENDPOINT,
+  UPDATE_SERVICE_UNITS_ENDPOINT,
+  SERVICE_UNIT_HISTORY_ENDPOINT,
 }
