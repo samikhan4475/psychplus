@@ -20,6 +20,7 @@ const CODESETS = {
   RaceAndEthnicity: 'cdc.PH_RaceAndEthnicity_CDC',
   ProfSuffix: 'HL7v2.Degree',
   StaffRole: 'StaffRole',
+  StaffType: 'PsychPlusPublic.StaffType',
   UserRoleEnum: 'UserRoleEnum',
   LanguageAbility: 'HL7v3.LanguageAbilityMode',
   LanguageProficiency: 'HL7v3.LanguageAbilityProficiency',
@@ -129,6 +130,7 @@ const CODESETS = {
   PermissionSection: 'PsychPlusPublic.PermissionSection',
   TimeZoneId: 'PsychPlusPublic.TimeZoneId',
   UserActorCategory: 'UserActorCategory',
+  StaffScope: 'StaffScope',
   Paging: 'PsychPlusPublic.Paging',
   PrescriptionQuantityUnitOfMeasureList:
     'PsychPlusPublic.PrescriptionQuantityUnitOfMeasureList',

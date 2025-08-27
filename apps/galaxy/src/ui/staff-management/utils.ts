@@ -16,6 +16,7 @@ const getInitialValues = (id?: string, type?: string): SchemaType => ({
   password: '',
   passwordConfirm: '',
   staffRoleId: '1',
+  staffScope: '',
   supervisedBy: '',
   supervisorStaffId: '',
   npi: '',
@@ -24,9 +25,8 @@ const getInitialValues = (id?: string, type?: string): SchemaType => ({
   providerAttributions: [],
   staffUserRoleIds: [''],
   organizationIds: type === FEATURE_TYPES.ORGANIZATION ? [id ?? ''] : [''],
-  practiceIds: [''],
   isTest: false,
-  staffType: '',
+  specialtyCodes: '',
   userRoleId: '',
   otpCode: '',
   staffId: '',
@@ -76,6 +76,7 @@ const getInitialValues = (id?: string, type?: string): SchemaType => ({
   termsOfServiceConsentOn: '',
   privacyPolicyConsentOn: '',
   hasPhoto: false,
+  userActorCategory: '',
 })
 
 const createOptionsLookup = (options: SelectOptionType[]) =>

@@ -34,7 +34,6 @@ const DeleteDialog = ({ row, staffId }: DeleteDialogProps) => {
       }
       search({
         organizationsIds: type === FEATURE_TYPES.ORGANIZATION ? [id] : [],
-        practicesIds: type === FEATURE_TYPES.PRACTICE ? [id] : [],
       })
     })
   }
@@ -59,7 +58,6 @@ const DeleteDialog = ({ row, staffId }: DeleteDialogProps) => {
       }
       search({
         organizationsIds: type === FEATURE_TYPES.ORGANIZATION ? [id] : [],
-        practicesIds: type === FEATURE_TYPES.PRACTICE ? [id] : [],
       })
     })
   }

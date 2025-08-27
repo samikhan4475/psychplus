@@ -12,6 +12,7 @@ import { SchemaType } from './schema'
 
 const PasswordField = () => {
   const form = useFormContext<SchemaType>()
+
   return (
     <FormFieldContainer>
       <FormFieldLabel required>Password</FormFieldLabel>

@@ -2,18 +2,19 @@
 import React from 'react'
 import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
 
-interface SubRoleSelectProps {
-    specialtyCodes: string
+interface RoleSelectProps {
+  userActorCategory: string
 }
-const SubRoleSelect = ({ specialtyCodes }: SubRoleSelectProps) => {
-  const options = specialtyCodes ? [{ label: specialtyCodes, value: specialtyCodes }] : []
+
+const RoleSelect = ({ userActorCategory }: RoleSelectProps) => {
+  const options = [{ label: userActorCategory, value: userActorCategory }]
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel required>Sub Role</FormFieldLabel>
+      <FormFieldLabel required>Role</FormFieldLabel>
       <SelectInput
         options={options}
-        value={specialtyCodes}
+        field="userActorCategory"
         buttonClassName="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
         disabled
       />
@@ -21,5 +22,5 @@ const SubRoleSelect = ({ specialtyCodes }: SubRoleSelectProps) => {
   )
 }
 
-export { SubRoleSelect }
+export { RoleSelect }
 

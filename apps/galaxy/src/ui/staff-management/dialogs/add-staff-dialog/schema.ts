@@ -106,6 +106,7 @@ const schema = z
     passwordConfirm: z.ostring(),
     relationship: z.ostring(),
     staffRoleId: optionalString,
+    staffScope: optionalString,
     supervisedBy: z.ostring(),
     referralSource: z.ostring(),
     referralName: z.ostring(),
@@ -123,19 +124,17 @@ const schema = z
     status: z.string().min(1, 'Required'),
     providerAttributions: z.array(z.string()).optional(),
     staffUserRoleIds: z.array(z.string().min(1, { message: 'Required' })),
-    virtualRoomLink: z.string().min(1, 'Required'),
+    virtualRoomLink: z.string().optional(),
     isVirtualRoomLink: z.boolean().optional(),
-    staffType: z.string().min(1, 'Required'),
+    specialtyCodes: z.string().min(1, 'Required'),
     organizationIds: z.array(z.string().min(1, { message: 'Required' })),
-    practiceIds: z
-      .array(z.string().min(1, { message: 'Required' }))
-      .min(1, 'Required'),
     timeZonePreference: requiredString,
     isTest: z.boolean(),
     homeAddress: getAddressSchema('Home').optional(),
     mailingAddress: getAddressSchema('Mailing'),
     bioVideo: z.instanceof(File).optional().nullable(),
     hasPhoto: z.boolean(),
+    userActorCategory: z.string().min(1, 'Required'),
   })
   .superRefine((data, ctx) => {
     const {

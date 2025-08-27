@@ -29,14 +29,15 @@ import { MailingAddressGroup } from './mailing-address-group'
 import { MiddleNameField } from './middle-name-field'
 import { OrganizationSelect } from './organization-select'
 import { PhoneField } from './phone-field'
-import { PracticeSelect } from './practice-select'
 import { ProfilePicture } from './profile-picture'
 import { ProviderPreferenceSelect } from './provider-preference-select'
 import { ResetButton } from './reset-button'
 import { SaveStaffButton } from './save-staff-button'
 import { schema, SchemaType } from './schema'
 import { StaffRoleSelect } from './staff-role-select'
-import { StaffTypeSelect } from './staff-type-select'
+import { SubRoleSelect } from './staff-type-select'
+import { RoleSelect } from './user-type-select'
+import { ScopeSelect } from './scope-select'
 import { StatusSelect } from './status-select'
 import { SupervisedByField } from './supervised-by-fields'
 import { TestStaffCheckbox } from './test-staff-checkbox'
@@ -165,9 +166,11 @@ const StaffProfileForm = ({
                 <OrganizationSelect
                   organizations={selectOptions.organizations}
                 />
-                <StaffTypeSelect staffs={selectOptions.staffs} />
                 <StaffRoleSelect roles={selectOptions.roles} />
+                <RoleSelect userActorCategory={form.watch('userActorCategory')} />
+                <SubRoleSelect specialtyCodes={form.watch('specialtyCodes') || ''} />
                 <CredentialsSelect />
+                <ScopeSelect />
                 <SupervisedByField />
                 <StatusSelect />
               </Grid>
@@ -175,7 +178,6 @@ const StaffProfileForm = ({
 
             <Box className="col-span-7">
               <Grid columns="6" gap="2">
-                <PracticeSelect practices={selectOptions.practices} />
                 <ProviderPreferenceSelect />
                 <TimeZoneSelect />
               </Grid>

@@ -100,10 +100,12 @@ interface Staff {
   timeZonePreference: string
   isMailingAddressSameAsPrimary?: boolean
   organizationsIds?: string[]
-  practicesIds?: string[]
   staffSpecialistIds?: string[]
   BioVideoLink?: string
   phoneContacts?: string
+  userActorCategory: string
+  specialtyCodes: string
+  staffScope: string
 }
 
 interface StaffSearchParams extends Staff {
@@ -175,6 +177,15 @@ enum StaffRole {
   Therapist = 'Therapist',
 }
 
+enum UserType {
+  PROVIDER = 'Provider',
+  CLINICAL_SUPPORT = 'ClinicalSupport',
+  INTAKE = 'Intake',
+  REVENUE_CYCLE = 'RevenueCycle',
+  COACH = 'Coach',
+  EXTERNAL_USER = 'External',
+}
+
 interface StaffHistoryPayload {
   historyCreatedFrom: DateValue | null
   historyCreatedTo: DateValue | null
@@ -189,6 +200,7 @@ export {
   type StaffSearchParams,
   type OrganizationOptions,
   type StaffHistoryPayload,
+  UserType,
   StaffType,
   StaffRole,
 }

@@ -75,6 +75,9 @@ const transformIn = (
     providerAttributions = [],
     staffTypes: staffTypeIds = [],
     isMailingAddressSameAsPrimary,
+    specialtyCodes = '',
+    userActorCategory = '',
+    staffScope = '',
     ...rest
   }: Partial<Staff>,
   languageOptions: SelectOptionType[],
@@ -115,6 +118,9 @@ const transformIn = (
         isMailingAddressSameAsPrimary,
     ),
   },
+  userActorCategory,
+  specialtyCodes,
+  staffScope,
   ...rest,
 })
 

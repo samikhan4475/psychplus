@@ -33,15 +33,17 @@ import { MiddleNameField } from './middle-name-field'
 import { OrganizationSelect } from './organization-select'
 import { PasswordField } from './password-field'
 import { PhoneField } from './phone-field'
-import { PracticeSelect } from './practice-select'
 import { schema, SchemaType } from './schema'
 import { StaffRoleSelect } from './staff-role-select'
 import { StaffSaveButton } from './staff-save-button'
-import { StaffTypeSelect } from './staff-type-select'
+import { SubRoleSelect } from './staff-type-select'
 import { StatusSelect } from './status-select'
 import { SupervisedByField } from './supervised-by-field'
 import { TimeZoneSelect } from './time-zone-select'
 import { VirtualWaitRoomField } from './virtual-wait-room-field'
+import { RoleSelect } from './user-type-select'
+import { ScopeSelect } from './scope-select'
+
 
 interface AddStaffDialogFormProps {
   onClose: (open: boolean) => void
@@ -86,7 +88,6 @@ const AddStaffDialogForm = ({ onClose }: AddStaffDialogFormProps) => {
     onClose(false)
     search({
       organizationsIds: type === FEATURE_TYPES.ORGANIZATION ? [id] : [],
-      practicesIds: type === FEATURE_TYPES.PRACTICE ? [id] : [],
     })
   }
 
@@ -99,7 +100,7 @@ const AddStaffDialogForm = ({ onClose }: AddStaffDialogFormProps) => {
         <CheckboxInput label="Add as test provider" field="isTest" />
       </Flex>
       <Grid columns="12" gap="4">
-        <Box className="col-span-3 flex flex-col items-center">
+        <Box className="flex flex-col col-span-3 items-center">
           <ProfilePicture
             setProfileImage={setProfileImage}
             savedProfileImageUrl={savedProfileImageUrl}
@@ -134,13 +135,14 @@ const AddStaffDialogForm = ({ onClose }: AddStaffDialogFormProps) => {
       <MailingAddressGroup />
       <Grid columns="3" gap="2" align="baseline">
         <OrganizationSelect />
-        <StaffRoleSelect />
-        <StaffTypeSelect />
+        <RoleSelect />
+        <SubRoleSelect />
         <CredentialsSelect />
         <SupervisedByField />
+        <ScopeSelect />
+        <StaffRoleSelect />
         <StatusSelect />
         <TimeZoneSelect />
-        <PracticeSelect />
       </Grid>
       <StaffSaveButton />
     </FormContainer>

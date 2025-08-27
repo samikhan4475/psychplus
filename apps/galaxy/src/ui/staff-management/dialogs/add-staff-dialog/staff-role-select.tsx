@@ -33,14 +33,14 @@ const StaffRoleSelect = () => {
       }
       setLoading(false)
     })()
-  }, [])
+  }, [id])
+
   return (
     <FormFieldContainer>
-      <FormFieldLabel required>Role</FormFieldLabel>
+      <FormFieldLabel required>Permission group</FormFieldLabel>
       <SelectInput
         onValueChange={(value) => {
           form.setValue('staffUserRoleIds.0', value)
-          form.setValue('staffType', '')
         }}
         options={organizations}
         buttonClassName="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"

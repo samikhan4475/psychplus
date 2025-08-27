@@ -8,6 +8,7 @@ import { VideoCallLinkInput } from './video-call-link-input'
 const VirtualWaitRoomField = () => {
   const form = useFormContext<SchemaType>()
   const isVirtualRoomLink = form.watch('isVirtualRoomLink')
+
   return (
     <>
       <FormFieldContainer className="bg-pp-focus-bg-2 h-[46px] w-full flex-row items-center justify-between gap-1 rounded-1 p-2">

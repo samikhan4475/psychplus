@@ -18,7 +18,7 @@ const StaffRoleSelect = ({ roles }: StaffRoleSelectProps) => {
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel required>Role</FormFieldLabel>
+      <FormFieldLabel required>Permission group</FormFieldLabel>
       <SelectInput
         field="staffUserRoleIds.0"
         options={roles}

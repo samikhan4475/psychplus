@@ -50,9 +50,11 @@ const getInitialValues = ({
   specialists: staff?.specialists ?? [''],
   providerAttributions: staff?.providerAttributions ?? [],
   organizationIds: staff?.organizationIds ?? [''],
-  practiceIds: staff?.practiceIds ?? [''],
   timeZonePreference: staff?.timeZonePreference ?? '',
   hasBioVideo: staff?.hasBioVideo ?? false,
+  specialtyCodes: staff?.specialtyCodes?.length ? staff?.specialtyCodes[0] : '',
+  userActorCategory: staff?.userActorCategory ?? '',
+  staffScope: staff?.staffScope ?? '',
   isTest: staff.isTest ?? false,
   hasPhoto: staff?.hasPhoto ?? false
 })

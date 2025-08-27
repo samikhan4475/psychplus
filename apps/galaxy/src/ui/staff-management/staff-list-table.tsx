@@ -367,7 +367,6 @@ const StaffListTable = () => {
   useEffect(() => {
     search({
       organizationsIds: type === FEATURE_TYPES.ORGANIZATION ? [id] : [],
-      practicesIds: type === FEATURE_TYPES.PRACTICE ? [id] : [],
     })
     getDropDownOptions()
   }, [])

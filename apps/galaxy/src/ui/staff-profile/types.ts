@@ -12,11 +12,13 @@ interface StaffUpdatePayload extends Partial<Staff> {
   specialists: string[]
   providerAttributions?: string[]
   organizationIds: string[]
-  practiceIds: string[]
   timeZonePreference: string
   hasBioVideo?: boolean
   staffTypeIds?: string[]
+  specialtyCodes: string
+  userActorCategory: string
   hasPhoto?: boolean
+  staffScope: string
 }
 
 export enum Credentials {
