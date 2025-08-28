@@ -57,7 +57,10 @@ const FooterDialog = ({ patientId }: { patientId: number }) => {
 
       const payload = {
         patientIds: [patientId],
-        claimStatusCodes: [patientStatementSlaimStatusCodes.BILLED_TO_PATIENT],
+        claimStatusCodes: [
+          patientStatementSlaimStatusCodes.BILLED_TO_PATIENT,
+          patientStatementSlaimStatusCodes.PATIENT_RESPONSIBILITY,
+        ],
         recordStatuses: [patientStatementRecordStatuses.ACTIVE],
         includeServiceLinePayment: true,
         isGroupedByPatient: true,
