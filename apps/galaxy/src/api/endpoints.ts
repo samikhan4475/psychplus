@@ -177,6 +177,7 @@ const GET_PATIENT_CONSENT_SIGNED_PDF_ENDPOINT = (
   consentId: string,
 ) => `${API_URL}/api/patients/${patientId}/consents/${consentId}/signedpdf`
 const ADD_PATIENT_ENDPOINT = `${API_URL}/api/users/actions/patientsignup`
+const ADD_WEB_PATIENT_ENDPOINT = `${API_URL}/api/users/actions/webpatientsignup`
 const ADD_LOCATION_ENDPOINT = `${API_URL}/api/locations`
 const GET_LOCATION_HISTORY = (locationId: string) =>
   `${API_URL}/api/locations/${locationId}/history/actions/search?offset=0&limit=0&orderBy=createdOn`
@@ -1292,6 +1293,7 @@ export {
   UPDATE_APPOINTMENT,
   UPDATE_VISIT_VERIFICATION_STATUS,
   ADD_PATIENT_ENDPOINT,
+  ADD_WEB_PATIENT_ENDPOINT,
   ADD_LOCATION_ENDPOINT,
   GET_LOCATION_HISTORY,
   GET_US_STATES_ENDPOINT,

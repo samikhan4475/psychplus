@@ -25,11 +25,15 @@ import { ViewBioModal } from '../view-bio-modal'
 interface ProviderWithClinicAndWeeklyAvailabilityProps {
   staffWithClinicsAndSlots: StaffWithClinicsAndSlots
   isSchedulingOptimizationEnabled?: boolean
+  stripeKey: string
+  mapKey: string
 }
 
 const ProviderWithClinicAndWeeklyAvailability = ({
   staffWithClinicsAndSlots,
   isSchedulingOptimizationEnabled,
+  stripeKey,
+  mapKey,
 }: ProviderWithClinicAndWeeklyAvailabilityProps) => {
   const { codeSetIndex, filters } = useStore()
   const specialistTypeCodeSet = codeSetIndex.SpecialistType
@@ -57,7 +61,7 @@ const ProviderWithClinicAndWeeklyAvailability = ({
   }
 
   return (
-    <Flex className="w-full flex-col gap-5 md:flex-row md:gap-0">
+    <Flex className="flex-col gap-5 w-full md:flex-row md:gap-0">
       <Flex
         direction="column"
         gap="2"
@@ -79,7 +83,7 @@ const ProviderWithClinicAndWeeklyAvailability = ({
           />
 
           <Flex direction="column" gap="1" className="text-[#151B4A]">
-            <Text className="text-3 font-bold md:text-5">
+            <Text className="font-bold text-3 md:text-5">
               {renderStaffName(staffWithClinicsAndSlots.staff)}
             </Text>
             <Flex gap="2" align="center">
@@ -140,6 +144,8 @@ const ProviderWithClinicAndWeeklyAvailability = ({
             setSlotsLoading={setSlotsLoading}
             onClinicChange={setSelectedClinicIndex}
             selectedClinic={selectedClinicIndex}
+            stripeKey={stripeKey}
+            mapKey={mapKey}
           />
         ) : (
           <LegacyWeeklyAvailabilitySlots
@@ -148,6 +154,8 @@ const ProviderWithClinicAndWeeklyAvailability = ({
             clinicWithSlots={
               staffWithClinicsAndSlots.clinicWithSlots[selectedClinicIndex]
             }
+            stripeKey={stripeKey}
+            mapKey={mapKey}
           />
         )}
       </Flex>
@@ -201,7 +209,7 @@ const renderProviderDetails = (
     )}
 
     {appointmentType === 'In-Person' && (
-      <Flex align="start" className="w-52 flex-wrap justify-between" gap="2">
+      <Flex align="start" className="flex-wrap justify-between w-52" gap="2">
         <Flex align="end" className="gap-[17px] text-2 md:text-3">
           Distance:
           <Text className="text-2 text-[#575759] md:text-3">

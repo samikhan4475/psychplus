@@ -39,11 +39,13 @@ import {
 
 interface ScheduleAppointmentListClientProps {
   mapKey: string
+  stripeKey: string
   isSchedulingOptimizationEnabled?: boolean
 }
 
 const ScheduleAppointmentListClient = ({
   mapKey,
+  stripeKey,
   isSchedulingOptimizationEnabled,
 }: ScheduleAppointmentListClientProps) => {
   const [hasHydrated, setHasHydrated] = useState(false)
@@ -265,6 +267,8 @@ const ScheduleAppointmentListClient = ({
       />
       <AvailabilityList
         isSchedulingOptimizationEnabled={isSchedulingOptimizationEnabled}
+        mapKey={mapKey}
+        stripeKey={stripeKey}
       />
     </Flex>
   )

@@ -1,7 +1,7 @@
 const PATIENT_APP_LOCAL_STORAGE_KEY = 'p+-patient-app'
 
 const PSYCHPLUS_LIVE_URL = 'https://psychplus.com'
-const PSYCHPLUS_TEST_SITE_URL = 'https://test-site.psychplus.dev'
+const PSYCHPLUS_TEST_SITE_URL = 'https://test-site.psychplus.dev/'
 
 const enums = {
   SCHEDULE_START: 'schedule_start',

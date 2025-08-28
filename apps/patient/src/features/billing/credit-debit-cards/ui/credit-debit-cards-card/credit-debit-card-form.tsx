@@ -115,15 +115,18 @@ const CreditCardForm = ({
     cardBrand = cardBrand === 'amex' ? 'AmericanExpress' : cardBrand
 
     return addCreditCardAction({
-      name: profile.legalName.firstName + ' ' + profile.legalName.lastName,
-      cardKey: stripeResult.paymentMethod.id,
-      cardType: cardBrand,
-      expireMonth: card.exp_month,
-      expireYear: card.exp_year,
-      numberLastFour: card.last4,
-      isActive: true,
-      patientId: profile.id,
-      isPrimary: !existingCards?.length,
+      payload: {
+        name: profile.legalName.firstName + ' ' + profile.legalName.lastName,
+        cardKey: stripeResult.paymentMethod.id,
+        cardType: cardBrand,
+        expireMonth: card.exp_month,
+        expireYear: card.exp_year,
+        numberLastFour: card.last4,
+        isActive: true,
+        patientId: profile.id,
+        isPrimary: !existingCards?.length,
+      },
+      headers: {},
     })
   }
 

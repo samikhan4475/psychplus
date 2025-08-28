@@ -8,10 +8,14 @@ import { ProvidersAvailabilityListing } from '../provider-listing'
 
 interface AvailabilityListProps {
   isSchedulingOptimizationEnabled?: boolean
+  stripeKey: string
+  mapKey: string
 }
 
 const AvailabilityList = ({
   isSchedulingOptimizationEnabled,
+  stripeKey,
+  mapKey,
 }: AvailabilityListProps) => {
   const { data, filters, providerIds } = useStore(
     useShallow((state) => ({
@@ -36,6 +40,8 @@ const AvailabilityList = ({
       filters={filters}
       sortedProviders={sortedProviders}
       isSchedulingOptimizationEnabled={isSchedulingOptimizationEnabled}
+      stripeKey={stripeKey}
+      mapKey={mapKey}
     />
   )
 }

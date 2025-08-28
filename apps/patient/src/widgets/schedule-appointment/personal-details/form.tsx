@@ -1,17 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import NextLink from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { zipCodeSchema, zipLast4Schema } from '@psychplus-v2/utils'
-import { Flex, Link, Text, TextArea } from '@radix-ui/themes'
-import { ChevronDownIcon } from 'lucide-react'
+import { useSearchParams } from 'next/navigation'
+import { Box, Flex, Text, TextField } from '@radix-ui/themes'
 import { type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
-import { sendOtp } from '@psychplus/auth/otp'
-import { signup } from '@psychplus/auth/signup'
-import { Code } from '@psychplus/codeset'
-import { getCodeSet } from '@psychplus/codeset/api.client'
 import {
   Form,
   FormFieldError,
@@ -21,20 +15,27 @@ import {
   useForm,
   validate,
 } from '@psychplus/form'
-import { RadioGroup } from '@psychplus/ui/radio-group'
-import { Select } from '@psychplus/ui/select'
+import * as RadioGroup from '@radix-ui/react-radio-group'
 import { usePubsub } from '@psychplus/utils/event'
 import { clickTrack } from '@psychplus/utils/tracking'
-import { OTP_DIALOG, SCHEDULE_APPOINTMENT_LIST } from '@psychplus/widgets'
-import { loginAction } from '@/actions'
-import { CrossIcon } from '@/components'
-import { PlacesAutocomplete } from '@/components-v2'
-import { WarningIcon } from '@/components/icons/warning-icon'
-import { enums, PSYCHPLUS_LIVE_URL } from '@/constants'
-import { useGooglePlacesContext } from '@/providers'
+import { SCHEDULE_APPOINTMENT_LIST } from '@psychplus/widgets'
+import { webPatientSignupAction } from '@/features/signup/actions/web-signup'
+import { PhoneNumberEnum } from '@psychplus-v2/types'
+import { enums, PSYCHPLUS_TEST_SITE_URL } from '@/constants'
 import { useStore } from '@/widgets/schedule-appointment-list/store'
 import { getLoginRedirectUrl } from '@/widgets/schedule-appointment-list/utils'
+import { useToast } from '@/providers/toast-provider'
+import { BookAppointmentPayload } from '@psychplus/appointments'
+import { ProviderType } from '@psychplus-v2/constants'
+import { bookAppointmentAction } from '@/api/book-appointment'
+import { RadioGroupToggle } from '@/components-v2'
+import { UserFillIcon } from '@/components-v2/icons/user-fill-icon'
+import { cn } from '@psychplus/ui/cn'
+import { Checkbox } from '@psychplus/ui/checkbox'
+import { HipaaComplianceIcon } from '@/components-v2/icons/hipa-compliance-icon'
+import { PersonIcon } from '@/components-v2/icons/person-icon'
 
+const INSURANCE_PAYMENT_MODAL = 'INSURANCE_PAYMENT_MODAL'
 const schema = z
   .object({
     firstName: validate.requiredString,
@@ -42,27 +43,15 @@ const schema = z
     dateOfBirth: validate.requiredString,
     phoneNumber: validate.phoneNumber,
     email: validate.email,
-    gender: z.string(),
-    password: validate.passwordStrong,
     isParentOrGuardian: z.boolean().default(false),
     guardianFirstName: z.string().optional(),
     guardianLastName: z.string().optional(),
-    note: z.string().optional(),
     agreeToTerms: z
       .boolean()
       .default(false)
       .refine((value) => value === true, {
         message: 'Please agree to our terms and conditions',
       }),
-    primaryStreet1: z.string().optional(),
-    primaryStreet2: z.string().optional(),
-    primaryStreet: z.string().optional(),
-    primaryStreetNumber: z.string().optional(),
-    primaryCity: z.string().optional(),
-    primaryState: z.string().optional(),
-    primaryPostalCode: zipCodeSchema.optional(),
-    primaryPostalPlus4Code: zipLast4Schema.optional(),
-    primaryCountry: z.string().optional(),
   })
   .superRefine(
     (
@@ -107,171 +96,179 @@ const schema = z
 type SchemaType = z.infer<typeof schema>
 
 interface Props {
-  patientAppUrl:string
+  patientAppUrl: string
+  onCancel: () => void
+  openInsurancePaymentModal: () => void
 }
-const PersonalDetailsForm = ({patientAppUrl}:Props) => {
-  const router = useRouter()
-  const { setPatient } = useStore()
+const PersonalDetailsForm = ({ patientAppUrl, onCancel, openInsurancePaymentModal }: Props) => {
+  const { setPatient, setAccessToken, bookedSlot } = useStore()
+  const { toast } = useToast()
 
   const searchParams = useSearchParams()
 
   const form = useForm({
     schema,
     criteriaMode: 'all',
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      dateOfBirth: '',
+      phoneNumber: '',
+      isParentOrGuardian: false,
+      guardianFirstName: '',
+      guardianLastName: '',
+      agreeToTerms: false,
+    }
   })
 
-  const [alertError, setAlertError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
-  const { publish, subscribe } = usePubsub()
-  const [genders, setGenders] = useState<Code[]>()
+  const { publish } = usePubsub()
 
-  const { loaded } = useGooglePlacesContext()
-
-  useEffect(() => {
-    getCodeSet('Gender')
-      .then((res) => {
-        const genders = res.codes
-        setGenders(genders)
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-  }, [])
-
-  useEffect(() => {
-    return subscribe<{ code: string }>(`${OTP_DIALOG}:submit`, (data) => {
-      if (isLoading) {
-        return
-      }
-
-      setIsLoading(true)
-
-      const guardianField = form.getValues().isParentOrGuardian
-        ? {
-            guardian: {
-              name: {
-                firstName: form.getValues().guardianFirstName ?? '',
-                lastName: form.getValues().guardianLastName ?? '',
-              },
-            },
-          }
-        : {}
-
-      signup({
-        otpCode: data.code,
-        legalName: {
-          firstName: form.getValues().firstName,
-          lastName: form.getValues().lastName,
-        },
-        contactInfo: {
-          phoneNumbers: [
-            {
-              number: form.getValues().phoneNumber,
-              type: 'Home',
-            },
-          ],
-          email: form.getValues().email,
-        },
-        language: ['English'],
-        preferredLanguage: 'English',
-        dateOfBirth: form.getValues().dateOfBirth,
-        password: form.getValues().password,
-        passwordConfirm: form.getValues().password,
-        gender: form.getValues().gender,
-        aboutPatientDescription: form.getValues().note,
-        ...guardianField,
-      })
-        .then((res) => {
-          setPatient({
-            ...res.user,
-            dateOfBirth: form.getValues().dateOfBirth,
-          })
-
-          // Login user to generate access token
-          loginAction({
-            next: null,
-            shouldRedirect: false,
-            username: form.getValues().email,
-            password: form.getValues().password,
-          })
-            .then((res) => {
-              if (res.state === 'error') {
-                alert(res.error)
-                return
-              }
-
-              publish(`${OTP_DIALOG}:closed`)
-
-              parent.postMessage(
-                {
-                  event: enums.ACCOUNT_CREATED,
-                  user_data: {
-                    email_address: form.getValues().email,
-                    phone_number: form.getValues().phoneNumber,
-                    first_name: form.getValues().firstName,
-                    last_name: form.getValues().lastName,
-                    gender: form.getValues().gender,
-                    date_of_birth: form.getValues().dateOfBirth,
-                    city: form.getValues().primaryCity,
-                    state: form.getValues().primaryState,
-                    zip_code: form.getValues().primaryPostalCode,
-                  },
-                },
-                PSYCHPLUS_LIVE_URL,
-              )
-
-              clickTrack({
-                productArea: 'Patient',
-                productPageKey: 'Schedule Appointment - Personal Details',
-                clickAction: 'Navigation',
-                clickActionData: 'Clicked Next',
-              })
-
-              router.push(`/schedule-appointment/insurance-payment`)
-            })
-            .catch((error: { message: string }) => {
-              alert(error.message)
-            })
-            .finally(() => {
-              setIsLoading(false)
-            })
-        })
-        .catch((error) => {
-          const { message } = error
-          if (message.toLowerCase().includes('otp')) {
-            publish(`${OTP_DIALOG}:status`, { status: 'error' })
-            publish(`${OTP_DIALOG}:error`, { message })
-            return
-          }
-          publish(`${OTP_DIALOG}:closed`)
-          setAlertError(message)
-        })
-        .finally(() => {
-          setIsLoading(false)
-        })
-    })
-  }, [form, subscribe, publish, isLoading, router, setPatient])
-
-  const sendOtpHandler = (email: string, phoneNumber: string) => {
-    setAlertError(null)
-    sendOtp({
-      emailAddress: email,
-      phoneNumber: phoneNumber,
-    })
-      .then(() => {
-        publish(`${OTP_DIALOG}:opened`, { email })
-      })
-      .catch((e) => {
-        setAlertError(e.message)
-      })
-      .finally(() => {
-        setIsLoading(false)
-      })
-  }
+  const hasParentOrGuardian = form.watch('isParentOrGuardian');
+  const hasAgreedToTerms = form.watch('agreeToTerms');
 
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
     setIsLoading(true)
-    sendOtpHandler(data.email, data.phoneNumber)
+
+    try {
+      const signupParams = {
+        legalName: {
+          firstName: data.firstName,
+          lastName: data.lastName,
+        },
+        dateOfBirth: data.dateOfBirth,
+        contactInfo: {
+          email: data.email,
+          phoneNumbers: [
+            {
+              type: PhoneNumberEnum.CONTACT,
+              number: data.phoneNumber,
+            },
+          ],
+        },
+        password: 'xxx',
+        termsOfServiceConsentOn: new Date().toISOString(),
+        hipaaConsentOn: new Date().toISOString(),
+        privacyPolicyConsentOn: new Date().toISOString(),
+        ...(data.isParentOrGuardian && {
+          guardian: {
+            name: {
+              firstName: data.guardianFirstName ?? '',
+              lastName: data.guardianLastName ?? '',
+            },
+          },
+        }),
+      }
+      const result = await webPatientSignupAction(signupParams)
+
+      if (result.state === 'error') {
+        toast?.({
+          type: 'error',
+          title: result.error || 'Failed to create account',
+        })
+        return
+      }
+
+      setPatient(result.data.user);
+      setAccessToken(result.data.accessToken);
+
+      parent.postMessage(
+        {
+          event: enums.ACCOUNT_CREATED,
+          user_data: {
+            email_address: data.email,
+            phone_number: data.phoneNumber,
+            first_name: data.firstName,
+            last_name: data.lastName,
+            date_of_birth: data.dateOfBirth,
+          },
+        },
+        PSYCHPLUS_TEST_SITE_URL,
+      )
+
+      // Book the appointment
+      const appointmentTypeMapper: { [key: string]: string } = {
+        'In-Person': 'InPerson',
+        Virtual: 'TeleVisit',
+      }
+      const startDate = new Date(
+        bookedSlot?.startDate ?? new Date(),
+      ).toISOString()
+
+      const patientMid = localStorage.getItem('mid')
+
+      const payload: BookAppointmentPayload = {
+        locationId: bookedSlot?.locationId
+          ? bookedSlot?.locationId
+          : bookedSlot?.clinic?.id ?? 0,
+        specialistStaffId: bookedSlot?.specialist?.id ?? 0,
+        specialistTypeCode: bookedSlot?.specialistTypeCode ?? 0,
+        type: appointmentTypeMapper[bookedSlot?.type ?? ''],
+        startDate,
+        duration: bookedSlot?.duration || 0,
+        isFollowup: true,
+        serviceId: bookedSlot?.servicesOffered?.[0],
+        providerType:
+          bookedSlot?.specialistTypeCode === 1 ? 'Psychiatrist' : 'Therapy',
+        isSelfPay: false, // Will be determined in insurance modal
+        stateCode: bookedSlot?.state,
+      }
+
+      if (patientMid) {
+        payload.marketingCampaignId = patientMid;
+      }
+
+      try {
+        const headers = {
+          Authorization: `Bearer ${result.data.accessToken}`,
+        };
+        const appointmentResponse = await bookAppointmentAction({ payload, headers })
+
+        if (appointmentResponse.state === 'error') {
+          toast?.({
+            type: 'error',
+            title: appointmentResponse.error,
+          })
+          return
+        }
+
+        const providerType =
+          bookedSlot?.specialistTypeCode === 1
+            ? ProviderType.Psychiatrist
+            : ProviderType.Therapist
+
+        clickTrack({
+          productArea: 'Patient',
+          productPageKey: 'Web appointmentBooked',
+          clickAction: 'Accepted',
+          clickActionData: `${providerType}|${appointmentTypeMapper[bookedSlot?.type ?? '']}`,
+        })
+
+        clickTrack({
+          productArea: 'Patient',
+          productPageKey: 'Schedule Appointment - Personal Details',
+          clickAction: 'Navigation',
+          clickActionData: 'Clicked Next',
+        })
+
+        onCancel();
+        openInsurancePaymentModal();
+      } catch {
+        toast?.({
+          type: 'error',
+          title: 'Failed to book appointment. Please try again.',
+        })
+        return
+      }
+    } catch {
+      toast?.({
+        type: 'error',
+        title: 'An unexpected error occurred. Please try again.',
+      })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const isLessThen18 = (dateOfBirth: string) => {
@@ -298,285 +295,266 @@ const PersonalDetailsForm = ({patientAppUrl}:Props) => {
 
   return (
     <Form form={form} onSubmit={onSubmit}>
-      <Flex gap="6" className="text-[#151B4A]" direction="column">
-        {alertError && (
-          <Flex align="center" justify="between" className="bg-[#ffe5e7] p-6">
-            <Flex align="center">
-              <WarningIcon />
-              <Text className="text-psych-blue ml-2 text-[12px] md:text-[16px]">
-                {alertError}
-              </Text>
-            </Flex>
-            <div>
-              <button
-                className="text-white ml-3 items-end"
-                onClick={() => setAlertError(null)}
-              >
-                <CrossIcon />
-              </button>
-            </div>
-          </Flex>
-        )}
-        <Flex direction="column" gap="5">
+      <Flex direction="column" gap="4">
+        <Flex className="flex-col sm:flex-row" gap="4">
           <Flex direction="column" gap="1" className="w-full">
-            <Text as="p" className="text-[12px] font-medium md:text-[14px]">
-              <Text>Email Address</Text>
+            <Text as="p" className="text-[14px] font-medium text-[#1C2024]">
+              <Text>First Name</Text>
               <Text className="text-[#f14545]">*</Text>
             </Text>
+
             <FormTextInput
               type="text"
               label=""
-              className="h-11 w-full md:h-14"
-              data-testid="email-input"
-              {...form.register('email')}
-            />
-          </Flex>
-
-          <Flex className="flex-col sm:flex-row" gap="4">
-            <Flex direction="column" gap="1" className="w-full">
-              <Text as="p" className="text-[12px] font-medium md:text-[14px]">
-                <Text>First Name</Text>
-                <Text className="text-[#f14545]">*</Text>
-              </Text>
-              <FormTextInput
-                type="text"
-                label=""
-                className="h-11 w-full md:h-14"
-                data-testid="first-name-input"
-                {...form.register('firstName')}
-              />
-            </Flex>
-            <Flex direction="column" gap="1" className="w-full">
-              <Text as="p" className="text-[12px] font-medium md:text-[14px]">
-                <Text>Last Name</Text>
-                <Text className="text-[#f14545]">*</Text>
-              </Text>
-              <FormTextInput
-                type="text"
-                label=""
-                className="h-11 w-full md:h-14"
-                data-testid="last-name-input"
-                {...form.register('lastName')}
-              />
-            </Flex>
-          </Flex>
-
-          <Flex className="flex-col sm:flex-row" gap="4">
-            <Flex direction="column" gap="1" className="w-full">
-              <Text as="p" className="text-[12px] font-medium md:text-[14px]">
-                <Text>Gender</Text>
-                <Text className="text-[#f14545]">*</Text>
-              </Text>
-              <Select.Root
-                size="3"
-                {...form.register('gender')}
-                value={form.watch('gender')}
-                onValueChange={(value) => {
-                  form.setValue('gender', value)
-                }}
-              >
-                <Select.Trigger
-                  placeholder={'Select gender'}
-                  className="h-11 w-full whitespace-nowrap rounded-[4px] border border-[#b9bbc6] px-[10px] py-2 text-[16px] font-regular text-[#1c2024] placeholder-[#1C2024] md:h-14"
-                >
-                  {form.watch('gender')
-                    ? form.watch('gender')
-                    : 'Select gender'}
-                  <ChevronDownIcon className="absolute right-3 top-1/2 -translate-y-1/2 transform" />
-                </Select.Trigger>
-                <Select.Content align="end" position="popper" highContrast>
-                  {genders?.map((gender) => (
-                    <Select.Item key={gender.code} value={gender.code}>
-                      <Text size="4">{gender.display}</Text>
-                    </Select.Item>
-                  ))}
-                </Select.Content>
-              </Select.Root>
-              {form.formState.errors.gender?.message && (
-                <Text size="2" color="red">
-                  {form.formState.errors.gender?.message}
-                </Text>
-              )}
-            </Flex>
-            <Flex direction="column" gap="1" className="w-full">
-              <Text as="p" className="text-[12px] font-medium md:text-[14px]">
-                <Text>Date of birth</Text>
-                <Text className="text-[#f14545]">*</Text>
-              </Text>
-              <FormTextInput
-                type="date"
-                label=""
-                max="9999-12-31"
-                data-testid="date-of-birth-input"
-                {...form.register('dateOfBirth')}
-                style={{ marginRight: 12 }}
-                className="h-11 w-full md:h-14"
-                defaultValue={searchParams.get('dateOfBirth') ?? ''}
-                onChange={(e) => {
-                  if (isLessThen18(e.target.value)) {
-                    form.setValue('isParentOrGuardian', true)
-                  } else {
-                    form.setValue('isParentOrGuardian', false)
-                  }
-                }}
-              />
-            </Flex>
-            <Flex direction="column" gap="1" className="w-full">
-              <Text as="p" className="text-[12px] font-medium md:text-[14px]">
-                <Text>Phone Number</Text>
-                <Text className="text-[#f14545]">*</Text>
-              </Text>
-              <FormPhoneNumberInput
-                label=""
-                data-testid="phone-number-input"
-                {...form.register('phoneNumber')}
-                className="h-11 w-full md:h-14"
-              />
-            </Flex>
-          </Flex>
-          {loaded && (
-            <PlacesAutocomplete
-              name="primary"
-              label="Primary"
-              className="h-[35px] rounded-6 text-2 md:h-[45px] md:text-4"
-              isSelfScheduling
-            />
-          )}
-
-          <Flex direction="column" gap="1" className="w-full">
-            <Text>What can we help you with?</Text>
-            <TextArea
-              placeholder="Tell us more about what you would like to discuss with your clinician in your first appointment. They will review your note ahead of your first session."
-              className="w-full"
-              rows={4}
-              data-testid="note-input"
-              {...form.register('note')}
-            />
+              placeholder="Jade"
+              size="3"
+              maxLength={16}
+              radius="full"
+              className="font-[400]"
+              data-testid="first-name-input"
+              {...form.register('firstName')}
+            >
+              <TextField.Slot>
+                <PersonIcon />
+              </TextField.Slot>
+            </FormTextInput>
           </Flex>
 
           <Flex direction="column" gap="1" className="w-full">
-            <Text as="p" className="text-[12px] font-medium md:text-[14px]">
-              <Text>Password</Text>
+            <Text as="p" className="text-[14px] font-medium text-[#1C2024]">
+              <Text>Last Name</Text>
               <Text className="text-[#f14545]">*</Text>
             </Text>
+
             <FormTextInput
-              type="password"
+              type="text"
               label=""
-              className="h-11 w-full md:h-14"
-              data-testid="password-input"
-              {...form.register('password')}
+              placeholder="Brown"
+              size="3"
+              maxLength={16}
+              radius="full"
+              className="font-[400]"
+              data-testid="last-name-input"
+              {...form.register('lastName')}
+            >
+              <TextField.Slot>
+                <PersonIcon />
+              </TextField.Slot>
+            </FormTextInput>
+          </Flex>
+        </Flex>
+
+        <Flex className="flex-col sm:flex-row" gap="4">
+          <Flex direction="column" gap="1" className="w-full">
+            <Text as="p" className="text-[14px] font-medium text-[#1C2024]">
+              <Text>Date of Birth</Text>
+              <Text className="text-[#f14545]">*</Text>
+            </Text>
+
+            <FormTextInput
+              type="date"
+              label=""
+              max="9999-12-31"
+              size="3"
+              radius="full"
+              data-testid="date-of-birth-input"
+              {...form.register('dateOfBirth')}
+              defaultValue={searchParams.get('dateOfBirth') ?? ''}
+              onChange={(e) => {
+                if (isLessThen18(e.target.value)) {
+                  form.setValue('isParentOrGuardian', true)
+                } else {
+                  form.setValue('isParentOrGuardian', false)
+                }
+              }}
+            />
+          </Flex>
+
+          <Flex direction="column" gap="1" className="w-full">
+            <Text as="p" className="text-[14px] font-medium text-[#1C2024]">
+              <Text>Phone Number</Text>
+              <Text className="text-[#f14545]">*</Text>
+            </Text>
+
+            <FormPhoneNumberInput
+              label=""
+              size="3"
+              radius="full"
+              placeholder="(123) 123 1234"
+              data-testid="phone-number-input"
+              {...form.register('phoneNumber')}
             />
           </Flex>
         </Flex>
 
-        <Flex className="flex-col gap-2 sm:flex-row">
-          <Text size="4">Do you have a parent/guardian?</Text>
+        <Flex direction="column" gap="1" className="w-full">
+          <Text as="p" className="text-[14px] font-medium text-[#1C2024]">
+            <Text>Email Address</Text>
+            <Text className="text-[#f14545]">*</Text>
+          </Text>
 
-          <Flex className="flex-auto justify-start sm:justify-end">
+          <FormTextInput
+            type="text"
+            label=""
+            placeholder="hello@email.com"
+            radius="full"
+            data-testid="email-input"
+            {...form.register('email')}
+          />
+        </Flex>
+
+
+        <Flex gap="4" p="4" direction="column" className='border border-pp-gray-7 rounded-2'>
+          <Flex align="center" className="flex-col gap-4 sm:flex-row">
+            <Flex align="center" gap="2">
+              <UserFillIcon />
+
+              <Box>
+                <Text size="3" className='font-medium text-[#1C2024]'>Do you have a parent/guardian?</Text>
+                <Text className="text-[#f14545] px-0.5">*</Text>
+              </Box>
+            </Flex>
+
+
             <RadioGroup.Root
-              value={form.watch('isParentOrGuardian') ? 'Yes' : 'No'}
               data-testid="is-parent-or-guardian-input"
+              name="isParentOrGuardian"
+              value={String(form.watch('isParentOrGuardian'))}
               onValueChange={(value) => {
-                form.setValue('isParentOrGuardian', value === 'Yes')
+                form.setValue('isParentOrGuardian', value === 'true')
               }}
             >
-              <Flex gap="4">
-                {['Yes', 'No'].map((option) => (
-                  <Text as="label" key={option} size="2">
-                    <Flex gap="1">
-                      <RadioGroup.Item value={option} />
-                      {option}
-                    </Flex>
-                  </Text>
+              <Flex gap="2">
+                {['true', 'false'].map((option) => (
+                  <RadioGroupToggle
+                    value={form.watch('isParentOrGuardian')}
+                    option={option}
+                    key={option}
+                    className={cn('py-2 px-[10px] rounded-[1000px] text-[14px]', {
+                      'bg-white': option !== String(form.watch('isParentOrGuardian')),
+                      'bg-pp-blue-3 text-white': option === String(form.watch('isParentOrGuardian')),
+                    })}
+                  />
                 ))}
               </Flex>
             </RadioGroup.Root>
           </Flex>
+
+          {hasParentOrGuardian ? (
+            <Flex gap="4" className="flex-col sm:flex-row">
+              <Flex direction="column" gap="1" className="w-full">
+                <Text as="p" className="text-[14px] font-medium text-[#1C2024]">
+                  <Text>Guardian First Name</Text>
+                  <Text className="text-[#f14545]">*</Text>
+                </Text>
+
+                <FormTextInput
+                  type="text"
+                  label=""
+                  placeholder="Jane"
+                  size="3"
+                  maxLength={16}
+                  radius="full"
+                  className="font-[400]"
+                  data-testid="guardian-first-name-input"
+                  {...form.register('guardianFirstName')}
+                >
+                  <TextField.Slot>
+                    <PersonIcon />
+                  </TextField.Slot>
+                </FormTextInput>
+              </Flex>
+
+              <Flex direction="column" gap="1" className="w-full">
+                <Text as="p" className="text-[14px] font-medium text-[#1C2024]">
+                  <Text>Guardian Last Name</Text>
+                  <Text className="text-[#f14545]">*</Text>
+                </Text>
+
+                <FormTextInput
+                  type="text"
+                  label=""
+                  placeholder="Brown"
+                  size="3"
+                  maxLength={16}
+                  radius="full"
+                  className="font-[400]"
+                  data-testid="guardian-last-name-input"
+                  {...form.register('guardianLastName')}
+                >
+                  <TextField.Slot>
+                    <PersonIcon />
+                  </TextField.Slot>
+                </FormTextInput>
+              </Flex>
+            </Flex>
+          ) : null}
         </Flex>
 
-        {form.watch('isParentOrGuardian') && (
-          <Flex gap="4" className="mb-2 flex-col sm:flex-row">
-            <Flex direction="column" gap="1" className="w-full">
-              <Text>First name</Text>
-              <FormTextInput
-                type="text"
-                label=""
-                data-testid="guardian-first-name-input"
-                {...form.register('guardianFirstName')}
-                className="h-11 w-full md:h-14"
-              />
-            </Flex>
-            <Flex direction="column" gap="1" className="h-11 w-full md:h-14">
-              <Text>Last name</Text>
-              <FormTextInput
-                type="text"
-                label=""
-                data-testid="guardian-last-name-input"
-                {...form.register('guardianLastName')}
-                className="h-11 w-full md:h-14"
-              />
-            </Flex>
-          </Flex>
-        )}
-
-        <Flex direction="column">
-          <Flex align="center">
-            <input
-              type="checkbox"
-              data-testid="agreeToTerms-checkbox"
-              {...form.register('agreeToTerms')}
+        <Box>
+          <Flex gap="2">
+            <Checkbox
+              className='mt-1 cursor-pointer'
+              name='agreeToTerms'
+              checked={hasAgreedToTerms}
+              onCheckedChange={(checked: boolean) => form.setValue('agreeToTerms', checked)}
             />
-            <Text as="label" size="3" ml="2" htmlFor="agreeToTerms-checkbox">
-              Agree to our{' '}
-              <Link
-                className="font-bold text-[#333333] no-underline"
-                href="#"
+
+            <Text as="label" htmlFor='agreeToTerms'>
+              I am the above mentioned patient or guardian of the patient and I agree to electronically sign all{' '}
+              <Text
+                as="span"
+                className="text-[#194595] underline cursor-pointer"
                 onClick={() => {
                   publish(`${SCHEDULE_APPOINTMENT_LIST}:open-tos`)
                 }}
               >
-                terms and conditions
-              </Link>
+                policies
+              </Text>
             </Text>
           </Flex>
 
           <FormFieldError
             message={form.formState.errors.agreeToTerms?.message}
           />
+        </Box>
+
+        <FormSubmitButton
+          data-testid="signup-submit-button"
+          radius="full"
+          className="w-full text-white cursor-pointer bg-[#151B4A]"
+        >
+          <Text className="font-bold text-5 md:text-2">
+            {isLoading ? 'Loading...' : 'Book Now'}
+          </Text>
+        </FormSubmitButton>
+
+        <Flex align="center" justify="center" gap="2">
+          <Text size="3" className="text-[#1C2024]">
+            Already have an account?
+          </Text>
+
+          <NextLink
+            href={'#'}
+            onClick={() => {
+              publish(`${SCHEDULE_APPOINTMENT_LIST}:existing-login`, {
+                url: getLoginRedirectUrl(patientAppUrl),
+              })
+            }}
+          >
+            <Text className="text-[#194595] underline">Login</Text>
+          </NextLink>
         </Flex>
 
-        <Flex
-          align="center"
-          className="gap-5 first-letter:flex-col sm:gap-6 md:flex-row"
-        >
-          <FormSubmitButton
-            data-testid="signup-submit-button"
-            radius="full"
-            className="md:min-w-20 min-w-40  h-12 bg-[#151B4A] text-[#FFFFFF] md:h-9"
-          >
-            <Text className="text-5 font-bold md:text-2">
-              {isLoading ? 'Loading...' : 'Next'}
-            </Text>
-          </FormSubmitButton>
+        <Flex align="center" justify="center" gap="2">
+          <HipaaComplianceIcon />
 
-          <Flex align="center" gap="2">
-            <Text size="4" className="text-[##333333]">
-              Already have an account?
-            </Text>
-            <NextLink
-              href={'#'}
-              onClick={() => {
-                publish(`${SCHEDULE_APPOINTMENT_LIST}:existing-login`, {
-                  url: getLoginRedirectUrl(patientAppUrl),
-                })
-              }}
-            >
-              <Text className="text-[#111111] underline">Log in</Text>
-            </NextLink>
-          </Flex>
+          <Text size="3" className="text-[#1C2024] font-medium">
+            Secure & HIPAA Compliant
+          </Text>
         </Flex>
       </Flex>
     </Form>
   )
 }
-export { PersonalDetailsForm }
+export { PersonalDetailsForm, INSURANCE_PAYMENT_MODAL }

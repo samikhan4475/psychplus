@@ -58,6 +58,8 @@ interface AppointmentFiltersState {
 interface PatientState {
   patient: User | undefined
   setPatient: (patient: User) => void
+  accessToken?: string
+  setAccessToken: (token: string) => void
   gMapKey: string
   setGMapKey: (gMapKey: string) => void
 }

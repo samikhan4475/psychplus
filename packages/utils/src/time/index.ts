@@ -34,25 +34,38 @@ const formatDateYmd = (inputDate: Date) => {
 }
 
 function formatStartDate(startDate?: string) {
-  const options: Intl.DateTimeFormatOptions = {
-    weekday: 'short',
-    month: 'short',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    // timeZoneName: 'short',
-    hour12: true,
-    // timeZone: TIMEZONE_FORMAT,
-  }
-
   if (startDate) {
-    let formattedDate = new Date(startDate).toLocaleString('en-US', options)
-
+    const date = new Date(startDate)
+    
+    const dateTimeOptions: Intl.DateTimeFormatOptions = {
+      weekday: 'long',
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    }
+    
+    const timezoneOptions: Intl.DateTimeFormatOptions = {
+      timeZoneName: 'short',
+      timeZone: TIMEZONE_FORMAT,
+    }
+    
+    let formattedDate = date.toLocaleString('en-US', dateTimeOptions)
+    const timezoneString = date.toLocaleString('en-US', timezoneOptions)
+    
+    const timezoneMatch = timezoneString.match(/\b[A-Z]{3,4}\b/)
+    const timezone = timezoneMatch ? timezoneMatch[0] : ''
+    
     formattedDate = formattedDate.replace(/,([^,]*)$/, ' - $1')
-
     formattedDate = formattedDate.replace(/\s([ap]m)/i, (match) =>
-      match.toLowerCase(),
+      match.toUpperCase(),
     )
+    
+    if (timezone) {
+      formattedDate += ` ${timezone}`
+    }
+
     return formattedDate
   }
 }
@@ -64,7 +77,6 @@ const formatTimeWithAmPm = (date: string) => {
     hour: 'numeric',
     minute: 'numeric',
     hour12: true,
-    // timeZone: TIMEZONE_FORMAT,
   }
 
   return dateTime.toLocaleTimeString('en-US', options)

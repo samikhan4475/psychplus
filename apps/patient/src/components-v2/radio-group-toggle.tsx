@@ -8,9 +8,10 @@ interface RadioGroupItemProps {
   option: string
   value: boolean
   disabled?: boolean
+  className?: string;
 }
 
-const RadioGroupToggle = ({ value, option, disabled }: RadioGroupItemProps) => {
+const RadioGroupToggle = ({ value, option, disabled, className = '' }: RadioGroupItemProps) => {
   return (
     <Flex
       className={cn(
@@ -19,6 +20,7 @@ const RadioGroupToggle = ({ value, option, disabled }: RadioGroupItemProps) => {
         String(value) === option &&
           !disabled &&
           'border-[#8DA4EF] bg-[#D9E2FC] text-[#194595]',
+        className
       )}
       gap="1"
       px="2"

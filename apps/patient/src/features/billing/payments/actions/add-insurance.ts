@@ -32,10 +32,12 @@ interface InsuranceParams {
 
 const addInsuranceAction = async (
   params: InsuranceParams,
+  headers?: HeadersInit,
 ): Promise<ActionResult<Insurance>> => {
   const result = await api.POST<Insurance>(
     `${API_URL}/api/patients/self/policies`,
     params,
+    { headers },
   )
 
   if (result.state === 'error') {

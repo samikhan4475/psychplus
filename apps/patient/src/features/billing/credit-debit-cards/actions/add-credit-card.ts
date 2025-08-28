@@ -5,23 +5,40 @@ import { type ActionResult } from '@psychplus-v2/api'
 import { API_URL } from '@psychplus-v2/env'
 
 interface AddCreditCardParams {
-  name?: string
-  cardKey: string
-  cardType: string
-  numberLastFour: string
-  expireMonth: number
-  expireYear: number
-  isActive: boolean
-  patientId: number
-  isPrimary: boolean
+  payload: {
+    name?: string
+    cardKey: string
+    cardType: string
+    numberLastFour: string
+    expireMonth: number
+    expireYear: number
+    isActive: boolean
+    patientId: number
+    isPrimary: boolean
+    billingAddress?: {
+      street1: string
+      street2?: string
+      city: string
+      state: string
+      country?: string
+      postalCode: string
+      postalPlus4Code?: string
+    }
+  }
+  headers: HeadersInit
 }
 
 const addCreditCardAction = async ({
-  ...params
+  payload,
+  headers,
 }: AddCreditCardParams): Promise<ActionResult<void>> => {
-  const result = await api.POST(`${API_URL}/api/patients/self/creditcards`, {
-    ...params,
-  })
+  const result = await api.POST(
+    `${API_URL}/api/patients/self/creditcards`,
+    {
+      ...payload,
+    },
+    { headers },
+  )
 
   if (result.state === 'error') {
     return {

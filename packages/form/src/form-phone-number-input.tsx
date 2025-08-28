@@ -5,7 +5,10 @@ import { FormField, useFormField, UseFormFieldProps } from './form-field'
 
 type FormPhoneNumberInputProps = UseFormFieldProps & {
   className?: string,
-  disabled?: boolean
+  disabled?: boolean,
+  size?: React.ComponentProps<typeof PhoneNumberInput>['size'],
+  radius?: React.ComponentProps<typeof PhoneNumberInput>['radius'],
+  placeholder?: string
 }
 
 const FormPhoneNumberInput = React.forwardRef<
@@ -13,25 +16,28 @@ const FormPhoneNumberInput = React.forwardRef<
   FormPhoneNumberInputProps
 >((props, ref) => {
   const { formFieldProps, childProps } = useFormField(props)
+  const { size = "3", radius, placeholder, ...restChildProps } = childProps
 
   return (
     <FormField {...formFieldProps}>
       <Controller
-        name={childProps.id}
+        name={restChildProps.id}
         render={({ field }) => {
           return (
             <PhoneNumberInput
-              size="3"
-              id={childProps.id}
+              size={size}
+              radius={radius}
+              placeholder={placeholder}
+              id={restChildProps.id}
               ref={field.ref}
               name={field.name}
               value={field.value}
-              disabled={childProps.disabled}
+              disabled={restChildProps.disabled}
               onBlur={field.onBlur}
               onValueChange={(value) => {
                 field.onChange(value)
               }}
-              className={childProps.className ?? ''}
+              className={restChildProps.className ?? ''}
             />
           )
         }}

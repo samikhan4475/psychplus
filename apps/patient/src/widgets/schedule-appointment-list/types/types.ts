@@ -82,6 +82,12 @@ interface SortFilterOptions {
   startingDate?: string
   providerIds?: number[]
 }
+
+export enum ProviderType {
+  Psychiatrist = 'Psychiatrist',
+  Therapist = 'Therapist',
+}
+
 export type {
   Filters,
   FilterOption,

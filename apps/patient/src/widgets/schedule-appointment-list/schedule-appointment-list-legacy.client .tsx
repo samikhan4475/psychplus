@@ -35,10 +35,12 @@ import {
 
 interface ScheduleAppointmentListClientProps {
   mapKey: string
+  stripeKey: string
 }
 
 const LegacyScheduleAppointmentListClient = ({
   mapKey,
+  stripeKey,
 }: ScheduleAppointmentListClientProps) => {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -223,6 +225,8 @@ const LegacyScheduleAppointmentListClient = ({
       <ProvidersAvailabilityListing
         filters={filters}
         sortedProviders={staffWithClinicsAndSlotsState}
+        stripeKey={stripeKey}
+        mapKey={mapKey}
       />
     </Flex>
   )

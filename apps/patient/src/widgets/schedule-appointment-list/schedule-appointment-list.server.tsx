@@ -1,6 +1,6 @@
 import { unstable_noStore as noStore } from 'next/cache'
 import { CODESETS } from '@psychplus-v2/constants'
-import { GOOGLE_MAPS_API_KEY } from '@psychplus-v2/env'
+import { GOOGLE_MAPS_API_KEY, STRIPE_PUBLISHABLE_KEY } from '@psychplus-v2/env'
 import { getCodesets, getIsFeatureFlagEnabled } from '@/api'
 import { FeatureFlags } from '@/constants'
 import { CodesetStoreProvider, ToastProvider } from '@/providers'
@@ -26,10 +26,14 @@ const ScheduleAppointmentListServer = async () => {
         {isSchedulingOptimizationEnabled ? (
           <ScheduleAppointmentListClient
             mapKey={GOOGLE_MAPS_API_KEY}
+            stripeKey={STRIPE_PUBLISHABLE_KEY}
             isSchedulingOptimizationEnabled={isSchedulingOptimizationEnabled}
           />
         ) : (
-          <LegacyScheduleAppointmentListClient mapKey={GOOGLE_MAPS_API_KEY} />
+          <LegacyScheduleAppointmentListClient
+            stripeKey={STRIPE_PUBLISHABLE_KEY}
+            mapKey={GOOGLE_MAPS_API_KEY}
+          />
         )}
       </CodesetStoreProvider>
     </ToastProvider>

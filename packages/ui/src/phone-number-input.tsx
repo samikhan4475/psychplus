@@ -26,6 +26,8 @@ const PhoneNumberInput = React.forwardRef<
       onValueChange,
       onBlur,
       className,
+      radius,
+      placeholder,
     }: PhoneNumberInputProps,
     ref,
   ) => {
@@ -44,6 +46,8 @@ const PhoneNumberInput = React.forwardRef<
         name={name}
         value={value as string}
         disabled={disabled}
+        placeholder={placeholder}
+        radius={radius}
         onValueChange={({ value }) => {
           _setValue(value)
           onValueChange?.(value)

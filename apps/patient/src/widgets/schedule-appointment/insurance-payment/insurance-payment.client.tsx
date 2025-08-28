@@ -2,20 +2,21 @@
 
 import * as React from 'react'
 import { useEffect, useState } from 'react'
-import { Container, Flex } from '@radix-ui/themes'
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
 import { InsurancePayers } from '@psychplus/appointments'
 import { fetchInsurancePayers } from '@psychplus/appointments/api.client'
 import { SCHEDULE_APPOINTMENT_LIST } from '@psychplus/widgets'
 import { usePublishSize } from '@psychplus/widgets/hooks'
-import { psychPlusBlueColor } from '@/components/colors'
+import { GooglePlacesContextProvider } from '@/providers'
 import { InsurancePaymentForm } from './form'
 
 interface Props {
   stripeApiKey: string
+  onClose: () => void
+  mapKey: string
 }
-const InsurancePaymentClient = ({ stripeApiKey }: Props) => {
+const InsurancePaymentClient = ({ stripeApiKey, onClose, mapKey }: Props) => {
   const stripePromise = React.useMemo(
     () => loadStripe(stripeApiKey),
     [stripeApiKey],
@@ -33,28 +34,22 @@ const InsurancePaymentClient = ({ stripeApiKey }: Props) => {
   }, [])
 
   return (
-    <Flex direction="column" className="w-full" ref={ref}>
-      <Container
-        className="px-5 sm:px-[25%]"
-        style={{
-          color: psychPlusBlueColor,
-        }}
-      >
-        <Elements stripe={stripePromise}>
-          <InsurancePaymentForm
-            insuranceOptions={insuranceOptions}
-            insurancePayers={insurancePayers}
-          />
-        </Elements>
-      </Container>
-    </Flex>
+    <GooglePlacesContextProvider apiKey={mapKey}>
+      <Elements stripe={stripePromise}>
+        <InsurancePaymentForm
+          insuranceOptions={insuranceOptions}
+          insurancePayers={insurancePayers}
+          onClose={onClose}
+        />
+      </Elements>
+    </GooglePlacesContextProvider>
   )
 }
 
 const insuranceOptions = [
   {
     key: 'yes',
-    label: 'Yes',
+    label: 'Insurance',
     value: true,
   },
   {

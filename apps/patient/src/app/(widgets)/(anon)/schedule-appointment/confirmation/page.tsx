@@ -13,7 +13,7 @@ import { SCHEDULE_APPOINTMENT_LIST } from '@psychplus/widgets'
 import { usePublishSize } from '@psychplus/widgets/hooks'
 import AppointmentDetailCard from '@/components/appointment-detail-card/appointment-detail-card'
 import { psychPlusBlueColor, whiteColor } from '@/components/colors'
-import { enums, PSYCHPLUS_LIVE_URL } from '@/constants'
+import { enums, PSYCHPLUS_TEST_SITE_URL } from '@/constants'
 import { LocationMap } from '@/widgets/schedule-appointment-list/components'
 import { confirmationNotes } from '@/widgets/schedule-appointment-list/constants'
 import { useStore } from '@/widgets/schedule-appointment-list/store'
@@ -34,7 +34,7 @@ const ConfirmationPage = () => {
   useEffect(() => {
     parent.postMessage(
       { event: enums.APPOINTMENT_SCHEDULED },
-      PSYCHPLUS_LIVE_URL,
+      PSYCHPLUS_TEST_SITE_URL,
     )
   }, [])
 
@@ -74,7 +74,7 @@ const ConfirmationPage = () => {
           {formatLocaleDate(new Date(bookedSlotState?.startDate ?? new Date()))}{' '}
         </Text>
 
-        <AppointmentDetailCard className="my-3" />
+        <AppointmentDetailCard />
 
         <Flex
           direction="column"

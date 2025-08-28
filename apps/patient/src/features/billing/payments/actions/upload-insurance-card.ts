@@ -4,7 +4,7 @@ interface UploadInsuranceCardParams {
   side: 'Front' | 'Back'
 }
 
-const uploadInsuranceCard = (params: UploadInsuranceCardParams) => {
+const uploadInsuranceCard = (params: UploadInsuranceCardParams, headers: HeadersInit = {}) => {
   const data = new FormData()
   data.append('file', params.file)
 
@@ -13,6 +13,7 @@ const uploadInsuranceCard = (params: UploadInsuranceCardParams) => {
     {
       method: 'PATCH',
       body: data,
+      headers
     },
   )
 }

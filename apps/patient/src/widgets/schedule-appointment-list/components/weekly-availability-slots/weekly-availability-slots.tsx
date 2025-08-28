@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
+import { PATIENT_APP_URL } from '@psychplus-v2/env'
 import { AppointmentSlot } from '@psychplus-v2/types'
 import { cn, getCalendarDateLabel } from '@psychplus-v2/utils'
 import { Button, Flex, Text } from '@radix-ui/themes'
@@ -13,6 +14,7 @@ import { SlotStateRenderer } from '@/components-v2/slot-state-render'
 import { enums, PSYCHPLUS_LIVE_URL, PSYCHPLUS_TEST_SITE_URL } from '@/constants'
 import { useInViewOnce } from '@/hooks'
 import { useSlots } from '@/hooks/use-slots'
+import { PersonalDetailsModal } from '@/widgets/schedule-appointment/personal-details'
 import { useStore } from '../../store'
 import type { ClinicWithSlots } from '../../types'
 import {
@@ -21,6 +23,7 @@ import {
   getValidStartDate,
   organizeSlotsByDate,
 } from '../../utils'
+import { InsurancePaymentModal } from '@/widgets/schedule-appointment/insurance-payment'
 
 interface WeeklyAvailabilitySlotsProps {
   staff: Staff
@@ -30,6 +33,8 @@ interface WeeklyAvailabilitySlotsProps {
   setSlotsLoading?: (val: boolean) => void
   onClinicChange?: (index: number) => void
   selectedClinic?: number
+  stripeKey: string
+  mapKey: string
 }
 
 const WeeklyAvailabilitySlots = ({
@@ -40,12 +45,19 @@ const WeeklyAvailabilitySlots = ({
   setSlotsLoading,
   onClinicChange,
   selectedClinic,
+  stripeKey,
+  mapKey,
 }: WeeklyAvailabilitySlotsProps) => {
   const {
     handleFiltersChange,
     filters: { startingDate, appointmentType, providerType, zipCode, sortBy },
   } = useStore()
   const [ref, inViewOnce] = useInViewOnce<HTMLDivElement>()
+
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [isInsuranceModalVisible, setIsInsuranceModalVisible] = useState(false)
+  const [selectedSlot, setSelectedSlot] = useState<AppointmentSlot | null>(null)
+
   const {
     showSlots,
     slotState,
@@ -76,55 +88,79 @@ const WeeklyAvailabilitySlots = ({
   }, [sortBy])
 
   return (
-    <Flex
-      gap="4"
-      className={cn(
-        'w-full max-sm:ml-0 sm:ml-[100px] md:ml-0 lg:ml-[53px]',
-        isMobile() && 'overflow-x-auto',
-      )}
-      justify="center"
-      ref={ref}
-    >
-      <SlotStateRenderer
-        slotsLoading={slotsLoading}
-        errorMessage={errorMessage}
-        showSlots={showSlots}
-        dateIsInFuture={dateIsInFuture}
-        slotState={slotState.current}
-        nextAvailableSlotDate={nextAvailableSlotDate}
-        dateRange={dateRange}
-        fetchSlots={fetchSlots}
-        handleGoToAppointment={(dateLabel) =>
-          handleFiltersChange({
-            startingDate: dateLabel,
-          })
-        }
-        renderSlotList={({ date }) => {
-          const key = getCalendarDateLabel(date)
-          const slots = slotState.current[key] ?? []
+    <>
+      <Flex
+        gap="4"
+        className={cn(
+          'w-full max-sm:ml-0 sm:ml-[100px] md:ml-0 lg:ml-[53px]',
+          isMobile() && 'overflow-x-auto',
+        )}
+        justify="center"
+        ref={ref}
+      >
+        <SlotStateRenderer
+          slotsLoading={slotsLoading}
+          errorMessage={errorMessage}
+          showSlots={showSlots}
+          dateIsInFuture={dateIsInFuture}
+          slotState={slotState.current}
+          nextAvailableSlotDate={nextAvailableSlotDate}
+          dateRange={dateRange}
+          fetchSlots={fetchSlots}
+          handleGoToAppointment={(dateLabel) =>
+            handleFiltersChange({
+              startingDate: dateLabel,
+            })
+          }
+          renderSlotList={({ date }) => {
+            const key = getCalendarDateLabel(date)
+            const slots = slotState.current[key] ?? []
 
-          return (
-            <Flex className="w-full">
-              {!isMobile() ? (
-                <SlotComponent
-                  slots={slots}
-                  clinicWithSlots={clinicWithSlots}
-                  staff={staff}
-                  staffTypeCode={staffTypeCode}
-                />
-              ) : (
-                <MobileSlotComponent
-                  slots={slots}
-                  clinicWithSlots={clinicWithSlots}
-                  staff={staff}
-                  staffTypeCode={staffTypeCode}
-                />
-              )}
-            </Flex>
-          )
-        }}
+            return (
+              <Flex className="w-full">
+                {!isMobile() ? (
+                  <SlotComponent
+                    slots={slots}
+                    clinicWithSlots={clinicWithSlots}
+                    staff={staff}
+                    staffTypeCode={staffTypeCode}
+                    setIsModalVisible={setIsModalVisible}
+                    setSelectedSlot={setSelectedSlot}
+                  />
+                ) : (
+                  <MobileSlotComponent
+                    slots={slots}
+                    clinicWithSlots={clinicWithSlots}
+                    staff={staff}
+                    staffTypeCode={staffTypeCode}
+                    setIsModalVisible={setIsModalVisible}
+                    setSelectedSlot={setSelectedSlot}
+                  />
+                )}
+              </Flex>
+            )
+          }}
+        />
+      </Flex>
+
+      <PersonalDetailsModal
+        isVisible={isModalVisible}
+        slot={selectedSlot}
+        staff={staff}
+        clinic={clinicWithSlots?.clinic}
+        onCancel={() => setIsModalVisible(false)}
+        mapKey={mapKey}
+        patientAppUrl={PATIENT_APP_URL ?? ''}
+        openInsurancePaymentModal={() => setIsInsuranceModalVisible(true)}
       />
-    </Flex>
+
+      <InsurancePaymentModal
+        isVisible={isInsuranceModalVisible}
+        stripeApiKey={stripeKey}
+        mapKey={mapKey}
+        onCancel={() => setIsInsuranceModalVisible(false)}
+      />
+    </>
   )
 }
 
@@ -133,14 +169,17 @@ const MobileSlotComponent = ({
   clinicWithSlots,
   staff,
   staffTypeCode,
+  setIsModalVisible,
+  setSelectedSlot,
 }: {
   slots?: AppointmentSlot[]
   clinicWithSlots: ClinicWithSlots | undefined
   staff: Staff
   staffTypeCode: number
+  setIsModalVisible: (visible: boolean) => void
+  setSelectedSlot: (slot: AppointmentSlot) => void
 }) => {
   const { setBookedSlot, filters } = useStore()
-  const router = useRouter()
 
   const searchParams = useSearchParams()
 
@@ -173,7 +212,8 @@ const MobileSlotComponent = ({
       clickActionData: 'Clicked Slot',
     })
 
-    router.push(`/schedule-appointment/personal-details`)
+    setSelectedSlot(slot)
+    setIsModalVisible(true)
   }
 
   return (
@@ -195,16 +235,19 @@ const SlotComponent = ({
   clinicWithSlots,
   staff,
   staffTypeCode,
+  setIsModalVisible,
+  setSelectedSlot,
 }: {
   slots: AppointmentSlot[] | undefined
   clinicWithSlots: ClinicWithSlots | undefined
   staff: Staff
   staffTypeCode: number
+  setIsModalVisible: (visible: boolean) => void
+  setSelectedSlot: (slot: AppointmentSlot) => void
 }) => {
   const [showAll, setShowAll] = useState(false)
   const handleShowMore = () => setShowAll(!showAll)
   const { setBookedSlot, filters } = useStore()
-  const router = useRouter()
 
   const searchParams = useSearchParams()
 
@@ -237,22 +280,23 @@ const SlotComponent = ({
       clickActionData: 'Clicked Slot',
     })
 
-    router.push(`/schedule-appointment/personal-details`)
+    setSelectedSlot(slot)
+    setIsModalVisible(true)
   }
 
   return (
-    <Flex className="flex-1 flex-col whitespace-nowrap pb-4" gap="4">
-      {slots &&
-        slots
-          .slice(0, showAll || isMobile() ? slots.length : 3)
-          .map((slot, i) => (
-            <SlotItem
-              key={`${slot.startDate}-${i}`}
-              slot={slot}
-              onBookedSlot={setBookedSlotDetails}
-            />
-          ))}
-      {!isMobile() && slots && slots?.length > 3 && (
+    <Flex className="flex-col flex-1 pb-4 whitespace-nowrap" gap="4">
+      {slots
+        ?.slice(0, showAll || isMobile() ? slots.length : 3)
+        ?.map((slot, i) => (
+          <SlotItem
+            key={`${slot.startDate}-${i}`}
+            slot={slot}
+            onBookedSlot={setBookedSlotDetails}
+          />
+        ))}
+
+      {!isMobile() && (slots?.length ?? 0) > 3 && (
         <Button
           className="h-[36px] w-full rounded-[40px] bg-[#f0f4ff] p-2 text-[14px] font-medium leading-5 text-[#24366b] hover:bg-[#151B4A] hover:text-[white]"
           onClick={handleShowMore}

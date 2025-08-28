@@ -187,7 +187,7 @@ const PlacesAutocomplete = ({
         <li
           key={place_id}
           onClick={handleSelect(suggestion)}
-          className="cursor-pointer border-b border-b-gray-5 px-4 py-2 last:border-b-0 hover:bg-gray-2"
+          className="px-4 py-2 border-b cursor-pointer border-b-gray-5 last:border-b-0 hover:bg-gray-2"
         >
           <Text weight="bold" size="2">
             {main_text}
@@ -234,7 +234,7 @@ const PlacesAutocomplete = ({
             {required && <FormFieldError name={street1Field} />}
           </FormFieldContainer>
           {status === 'OK' && showSuggestions ? (
-            <ul className="bg-white absolute top-full z-50 w-full rounded-2 shadow-3">
+            <ul className="absolute top-full z-50 w-full bg-white rounded-2 shadow-3">
               {renderSuggestions()}
             </ul>
           ) : null}

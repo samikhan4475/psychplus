@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Flex, Text } from '@radix-ui/themes'
-import { getCodeDisplay } from '@psychplus/codeset'
+import { Flex, Text, Button, Box, Avatar } from '@radix-ui/themes'
 import { getStaffProfilePicture } from '@psychplus/staff/api.client'
-import { formatStartDate } from '@psychplus/utils/time'
+import { formatStartDate, formatLocalToCustom } from '@psychplus/utils/time'
+import { addMinutes } from 'date-fns'
 import {
   useStore,
   type BookedSlot,
@@ -11,14 +11,14 @@ import {
   renderProfileImage,
   renderStaffName,
 } from '@/widgets/schedule-appointment-list/utils'
+import { ProviderType } from '@/widgets/schedule-appointment-list/types'
+import { BulletDotIcon } from '@/components-v2/icons/bullet-dot'
 
 interface BookedStaffAndClinicDetailsProps {
-  className?: string
+  showActions?: boolean
 }
 
-const BookedStaffAndClinicDetails = ({
-  className,
-}: BookedStaffAndClinicDetailsProps) => {
+const BookedStaffAndClinicDetails = ({ showActions = false }: BookedStaffAndClinicDetailsProps) => {
   const { bookedSlot } = useStore()
   const [profileImage, setProfileImage] = useState<string | undefined>()
 
@@ -34,29 +34,92 @@ const BookedStaffAndClinicDetails = ({
     getStaffProfilePicture(bookedSlot?.specialist?.id).then(setProfileImage)
   }, [bookedSlot])
 
-  return (
-    <Flex className={className} gap="2">
-      {renderProfileImage(
-        profileImage,
-        bookedSlotState?.specialist.legalName.firstName[0],
-      )}
+  const handleAddToCalendar = () => {
+    if (!bookedSlotState) return
 
-      <Flex direction="column" className="text-[#151B4A" gap="1">
-        <Text className="font-bold text-3 md:text-5">
+    const specialistName = renderStaffName(bookedSlotState.specialist)
+    const startDate = new Date(bookedSlotState.startDate)
+    const endDate = addMinutes(startDate, bookedSlotState.duration || 30)
+
+    const calendarEvent = {
+      title: `Appointment with ${specialistName}`,
+      startTime: formatLocalToCustom(startDate),
+      endTime: formatLocalToCustom(endDate),
+      description: 'Appointment Scheduled',
+      location: bookedSlotState.type === 'In-Person'
+        ? `${bookedSlotState.clinic?.name}, ${bookedSlotState.clinic?.contact?.addresses?.[0].street1}, ${bookedSlotState.clinic?.contact?.addresses?.[0].city}, ${bookedSlotState.clinic?.contact?.addresses?.[0].state}`
+        : 'Psych+ Virtual',
+    }
+
+    const googleEventLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(calendarEvent.title)}&dates=${calendarEvent.startTime}/${calendarEvent.endTime}&details=${encodeURIComponent(calendarEvent.description)}&location=${encodeURIComponent(calendarEvent.location)}`
+
+    window.open(googleEventLink, '_blank')
+  }
+
+  const handlePrint = () => {
+    const printId = 'appointment-detail-print'
+    const printContent = document.getElementById(printId)
+
+    if (!printContent) {
+      const tempDiv = document.createElement('div')
+      tempDiv.id = printId
+      tempDiv.innerHTML = `
+        <div style="font-family: Arial, sans-serif; padding: 20px;">
+          <h2>Appointment Details</h2>
+          <p><strong>Provider:</strong> ${renderStaffName(bookedSlotState?.specialist)}</p>
+          <p><strong>Date:</strong> ${formatStartDate(bookedSlotState?.startDate)}</p>
+          <p><strong>Type:</strong> ${bookedSlotState?.type}</p>
+          <p><strong>Specialist Type:</strong> ${bookedSlotState?.specialistTypeCode === 1 ? ProviderType.Psychiatrist : ProviderType.Therapist}</p>
+          ${bookedSlotState?.type === 'In-Person' ? `<p><strong>Location:</strong> ${bookedSlotState?.clinic?.name}, ${bookedSlotState?.clinic?.contact?.addresses?.[0].street1}, ${bookedSlotState?.clinic?.contact?.addresses?.[0].city}, ${bookedSlotState?.clinic?.contact?.addresses?.[0].state} ${bookedSlotState?.clinic?.contact?.addresses?.[0].postalCode}</p>` : ''}
+        </div>
+      `
+      document.body.appendChild(tempDiv)
+
+      window.print()
+      document.body.removeChild(tempDiv)
+    } else {
+      window.print()
+    }
+  }
+
+  return (
+    <Flex gap="4" align='start'>
+      <Box className='flex-shrink-0'>
+        <Avatar
+          src={profileImage ?? ''}
+          color="gray"
+          fallback={bookedSlot?.specialist.legalName.firstName?.[0] ?? 'A'}
+          className="h-[80px] w-[80px]"
+          radius="full"
+        />
+      </Box>
+
+      <Box className='space-y-2'>
+        <Text className="font-[600] text-[24px] text-pp-blue-7">
           {renderStaffName(bookedSlotState?.specialist)}
         </Text>
 
-        <Text className="text-2 md:text-4" size="4">{formatStartDate(bookedSlotState?.startDate)}</Text>
+        <Flex className="font-medium text-[#1C2024]" gap="2" align="center">
+          <Text as="p" size="4">{formatStartDate(bookedSlotState?.startDate)}</Text>
 
-        <Flex className="text-[#194595]" gap="4">
-          <Text  className="text-2 md:text-3">
-            {bookedSlotState?.specialistTypeCode === 1 ? 'Psychiatrist' : 'Therapist'}
-          </Text>
-          <Text className="text-2 md:text-3">{bookedSlotState?.type}</Text>
+          <Flex gap="2" align="center">
+            <BulletDotIcon />
+            <Text as="p" size="4">
+              {bookedSlotState?.specialistTypeCode === 1 ? ProviderType.Psychiatrist : ProviderType.Therapist}
+            </Text>
+          </Flex>
+
+          <Flex gap="2" align="center">
+            <BulletDotIcon />
+            <Text as="p" size="4">
+              {bookedSlotState?.type}
+            </Text>
+          </Flex>
         </Flex>
+
         {bookedSlotState?.type === 'In-Person' && (
           <Flex gap="2">
-            <Text className="text-[#575759] text-1 md:text-2" size="2">
+            <Text as="p" size="4" className='text-[#1C2024] font-medium'>
               {bookedSlotState?.clinic?.name.trim()}
               {', '}
               {bookedSlotState?.clinic?.contact?.addresses?.[0].street1}{' '}
@@ -67,7 +130,31 @@ const BookedStaffAndClinicDetails = ({
             </Text>
           </Flex>
         )}
-      </Flex>
+
+        {showActions ? (
+          <Flex gap="2">
+            <Button
+              radius='full'
+              variant='outline'
+              color='gray'
+              className='px-[14px] py-2 w-[136px] text-[#1C2024] bg-white cursor-pointer'
+              onClick={handleAddToCalendar}
+            >
+              Add to Calendar
+            </Button>
+
+            <Button
+              radius='full'
+              variant='outline'
+              color='gray'
+              className='px-[14px] py-2 w-[136px] text-[#1C2024] bg-white cursor-pointer text-center'
+              onClick={handlePrint}
+            >
+              Print
+            </Button>
+          </Flex>
+        ) : null}
+      </Box>
     </Flex>
   )
 }

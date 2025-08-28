@@ -1,4 +1,5 @@
 import { ContactDetails, LegalName } from '@psychplus-v2/types'
+import { User } from '@psychplus/user'
 
 interface SignupUserParams {
   legalName: LegalName
@@ -16,4 +17,11 @@ interface SignupUserParams {
   privacyPolicyConsentOn: string
 }
 
-export type { SignupUserParams }
+interface WebsiteSignupUserResponse {
+  accessToken: string
+  patientMrn: string
+  patientStatus: string
+  user: User
+}
+
+export type { SignupUserParams, WebsiteSignupUserResponse }

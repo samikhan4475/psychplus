@@ -36,7 +36,12 @@ const PersonalDetailsClient = ({ mapKey,patientAppUrl }: PersonalDetailsClientPr
             </Text>
           </Flex>
 
-          <PersonalDetailsForm patientAppUrl={patientAppUrl}/>
+          <PersonalDetailsForm 
+            patientAppUrl={patientAppUrl} 
+            onCancel={() => undefined}
+            openInsurancePaymentModal={() => {}}
+            
+          />
         </Flex>
       </Flex>
     </GooglePlacesContextProvider>

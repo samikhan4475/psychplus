@@ -8,12 +8,16 @@ interface Props {
   sortedProviders: StaffWithClinicsAndSlots[]
   filters: Filters
   isSchedulingOptimizationEnabled?: boolean
+  stripeKey: string
+  mapKey: string
 }
 
 const ProvidersAvailabilityListing = ({
   sortedProviders,
   filters,
   isSchedulingOptimizationEnabled,
+  stripeKey,
+  mapKey,
 }: Props) => {
   return (
     <>
@@ -25,7 +29,7 @@ const ProvidersAvailabilityListing = ({
       >
         <Flex align="center" className="justify-between md:justify-center">
           <Flex className="text-[#151B4A] sm:min-w-[61px] md:min-w-[275px] lg:min-w-[380px]">
-            <Text className="sm-text-2 text-3 md:text-5 whitespace-nowrap">
+            <Text className="whitespace-nowrap sm-text-2 text-3 md:text-5">
               {sortedProviders?.length} Providers
             </Text>
           </Flex>
@@ -36,12 +40,12 @@ const ProvidersAvailabilityListing = ({
       </Flex>
 
       <Flex>
-        <Flex className="max-h-full overflow-y-auto" direction="column" pb="7">
+        <Flex className="overflow-y-auto max-h-full" direction="column" pb="7">
           {sortedProviders?.map((staffWithClinicsAndSlots) => (
             <Flex
               py="5"
               px="7"
-              className="h-auto w-full border-b border-b-gray-3"
+              className="w-full h-auto border-b border-b-gray-3"
               key={staffWithClinicsAndSlots.staff.id}
             >
               <ProviderWithClinicAndWeeklyAvailability
@@ -49,6 +53,8 @@ const ProvidersAvailabilityListing = ({
                 isSchedulingOptimizationEnabled={
                   isSchedulingOptimizationEnabled
                 }
+                stripeKey={stripeKey}
+                mapKey={mapKey}
               />
             </Flex>
           ))}
