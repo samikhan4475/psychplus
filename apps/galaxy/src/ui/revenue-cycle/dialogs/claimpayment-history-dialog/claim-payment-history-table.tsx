@@ -15,6 +15,8 @@ import { getClaimPaymentHistoryListAction } from '../../actions/get-claimpayment
 import { ClaimAuditHistory, ClaimAuditHistoryPayload } from '../../types'
 import { InsurancePaymentHistoryFilterForm } from '../insurance-payment-history-dialog/insurance-payment-history-filter-form'
 
+const excludedKeys = ['Id', 'PostedBy']
+
 const columns: ColumnDef<ClaimAuditHistory>[] = [
   {
     id: 'metadata.updatedOn',
@@ -69,7 +71,8 @@ const columns: ColumnDef<ClaimAuditHistory>[] = [
     ),
     cell: ({ row }) => {
       const { oldValue, fieldName } = row.original
-      const hasPayment = !isNaN(Number(oldValue)) && !fieldName.includes('Id')
+      const hasPayment =
+        !isNaN(Number(oldValue)) && !excludedKeys.includes(fieldName)
 
       return (
         <TextCell hasPayment={hasPayment}>{row.original.oldValue}</TextCell>
@@ -84,7 +87,8 @@ const columns: ColumnDef<ClaimAuditHistory>[] = [
     ),
     cell: ({ row }) => {
       const { newValue, fieldName } = row.original
-      const hasPayment = !isNaN(Number(newValue)) && !fieldName.includes('Id')
+      const hasPayment =
+        !isNaN(Number(newValue)) && !excludedKeys.includes(fieldName)
 
       return <TextCell hasPayment={hasPayment}>{newValue}</TextCell>
     },
