@@ -25,6 +25,7 @@ const ActionCell = ({
   const pathname = usePathname()
   const [showApproveScheduleAlert, setShowApproveScheduleAlert] =
     useState(false)
+  const [showUpdateAlert, setShowUpdateAlert] = useState(false)
 
   const hasPermissionToUpdateSchedule = useHasPermission(
     'clickEditClinicTimeTab',
@@ -41,9 +42,15 @@ const ActionCell = ({
     updateClinicScheduleStatus: store.updateClinicScheduleStatus,
     refetch: store.refetch,
   }))
-  const canUpdateSchedule = isProvider
-    ? loggedInStaff?.id.toString() === staffId && hasPermissionToUpdateSchedule
-    : hasPermissionToUpdateSchedule
+
+  let showEditIcon = false
+  if (isAdminView) {
+    if (isProvider) {
+      showEditIcon = loggedInStaff?.id.toString() === staffId
+    } else {
+      showEditIcon = true
+    }
+  }
 
   const handleApproveClinicSchedule = async () => {
     if (!hasPermissionToApproveSchedule) {
@@ -70,14 +77,26 @@ const ActionCell = ({
         message={ClinicAlertMessages.APPROVE_CLINIC_SCHEDULES_MESSAGE}
         onClose={() => setShowApproveScheduleAlert(false)}
       />
-      {!showApproveButton && isAdminView && (
+      <PermissionAlert
+        isOpen={showUpdateAlert}
+        message={ClinicAlertMessages.CLICK_UPDATE_CLINIC_SCHEDULE}
+        onClose={() => setShowUpdateAlert(false)}
+      />
+      {!showApproveButton && showEditIcon && (
         <>
-          {canUpdateSchedule && (
+          {hasPermissionToUpdateSchedule ? (
             <EditClinicScheduleDialog staffId={staffId} clinicTime={clinicTime}>
               <IconButton variant="ghost">
                 <TableEditIcon height={18} />
               </IconButton>
             </EditClinicScheduleDialog>
+          ) : (
+            <IconButton
+              variant="ghost"
+              onClick={() => setShowUpdateAlert(true)}
+            >
+              <TableEditIcon height={18} />
+            </IconButton>
           )}
         </>
       )}
