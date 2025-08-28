@@ -51,6 +51,7 @@ const ExternalReferralTable = () => {
         initialPageSize={!showFilters ? 20 : 30}
         isRowSpan
         sticky
+        totalColumnsIncludingSubColumns={36}
       />
     </ScrollArea>
   )

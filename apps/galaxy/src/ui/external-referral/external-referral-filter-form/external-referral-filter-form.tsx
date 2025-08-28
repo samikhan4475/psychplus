@@ -37,6 +37,7 @@ const ExternalReferralFilterForm = () => {
     defaultValues: getInitialValues(),
     values: {
       ...(formValues || {}),
+      isPatientLinked: formValues?.patientCreatedFrom?.toString(),
       patientDateOfBirth: convertDateField(formValues?.patientDateOfBirth),
       patientCreatedFrom: convertDateField(formValues?.patientCreatedFrom),
       patientCreatedTo: convertDateField(formValues?.patientCreatedTo),
@@ -44,7 +45,12 @@ const ExternalReferralFilterForm = () => {
   })
 
   const onSubmit: SubmitHandler<ExternalReferralSchemaType> = (data) => {
-    return search(data, 1, true)
+    const parsedData = {
+      ...data,
+      isPatientLinked: data.isPatientLinked && JSON.parse(data.isPatientLinked),
+    }
+
+    return search(parsedData, 1, true)
   }
   const onError: SubmitErrorHandler<ExternalReferralSchemaType> = (errors) => {
     if (!showFilters && hasFieldErrors(errors)) {

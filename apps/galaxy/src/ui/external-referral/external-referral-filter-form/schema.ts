@@ -16,8 +16,8 @@ const patientLookupSchema = z
       .trim()
       .max(35, { message: 'Cannot exceed 35 characters' })
       .optional(),
-    email: z.union([z.literal(''), z.string().email()]).optional(),
-    age: z
+    patientEmail: z.union([z.literal(''), z.string().email()]).optional(),
+    patientAge: z
       .string()
       .max(3, { message: 'Cannot exceed 3 characters' })
       .optional(),
@@ -33,12 +33,12 @@ const patientLookupSchema = z
       .max(35, { message: 'Cannot exceed 35 characters' })
       .optional(),
     patientDateOfBirth: z.custom<null | DateValue>().optional(),
-    city: z
+    patientCity: z
       .string()
       .trim()
       .max(35, { message: 'Cannot exceed 35 characters' })
       .optional(),
-    postalCode: z
+    patientPostalCode: z
       .string()
       .trim()
       .regex(zipCodeRegex, 'Invalid zip code!')
@@ -46,7 +46,7 @@ const patientLookupSchema = z
     hasGuardian: z.string().trim().optional(),
     creditCardVerificationStatuses: z.array(z.string()).optional(),
     consentVerificationStatuses: z.array(z.string()).optional(),
-    telephone: z.string().trim().optional(),
+    patientPhoneNumber: z.string().trim().optional(),
     patientCreatedFrom: z.custom<null | DateValue>().optional(),
     patientCreatedTo: z.custom<null | DateValue>().optional(),
     ssn: z
@@ -61,12 +61,12 @@ const patientLookupSchema = z
     nextVisitStatus: z.string().optional(),
     pastVisitStatus: z.string().optional(),
     organizationType: z.string().optional(),
-    organizationName: z.string().optional(),
-    referrerFacility: z.string().optional(),
+    referrerPartialName: z.string().optional(),
+    referrerShortName: z.string().optional(),
     contactMadeStatusList: z.string().trim().optional(),
     insurancePolicyIds: z.array(z.string()).optional(),
-    stateCode: z.string().trim().optional(),
-    isLinked: z.string().optional(),
+    patientStateCode: z.string().trim().optional(),
+    isPatientLinked: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     const { patientCreatedFrom, patientCreatedTo } = data

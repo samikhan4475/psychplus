@@ -50,6 +50,7 @@ interface DataTableProps<TData, TValue> {
   defaultExpanded?: ExpandedState
   tRowClass?: string
   stickyLastColumn?: boolean
+  totalColumnsIncludingSubColumns?: number
 }
 
 const DataTable = <TData, TValue>({
@@ -79,6 +80,7 @@ const DataTable = <TData, TValue>({
   defaultSorting = [],
   tRowClass,
   stickyLastColumn = false,
+  totalColumnsIncludingSubColumns,
 }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>(defaultSorting)
   const [pagination, setPagination] = useState<PaginationState>({
@@ -184,7 +186,7 @@ const DataTable = <TData, TValue>({
                         'border-t-pp-table-border': header.depth > 1,
                         'bg-pp-focus-bg-2 sticky left-0 z-10':
                           stickyRow && index === 0,
-                        'bg-pp-focus-bg-2 sticky right-0 z-[20] top-0 ':
+                        'bg-pp-focus-bg-2 sticky right-0 top-0 z-[20] ':
                           stickyLastColumn && isLastHeader,
                       },
                       `w-[${header.getSize()}px]`,
@@ -240,7 +242,8 @@ const DataTable = <TData, TValue>({
                       className={cn(
                         'border-pp-table-border last:border-r-pp-gray-2 first:border-l-pp-gray-2 group-last/row-hover:!border-b-pp-gray-2 h-5 border-b border-l border-r-0 px-1 py-0.5 last:border-r group-last/row-hover:first:rounded-bl-1 group-last/row-hover:last:rounded-br-1',
                         {
-                          'bg-white sticky left-0 z-10': stickyRow && index === 0,
+                          'bg-white sticky left-0 z-10':
+                            stickyRow && index === 0,
                           'bg-gray-3': tRowClass && row.depth === 0,
                           'bg-white sticky right-0 z-[9]':
                             stickyLastColumn && isLastCell,
@@ -261,7 +264,9 @@ const DataTable = <TData, TValue>({
             ))
           ) : (
             <Table.Row>
-              <Table.Cell colSpan={columns.length}>
+              <Table.Cell
+                colSpan={totalColumnsIncludingSubColumns ?? columns.length}
+              >
                 {renderEmpty ? (
                   renderEmpty()
                 ) : (

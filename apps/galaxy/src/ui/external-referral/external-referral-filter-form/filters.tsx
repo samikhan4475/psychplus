@@ -8,7 +8,6 @@ import {
   DatePickerInput,
   DropdownSelect,
   FormFieldContainer,
-  FormFieldError,
   FormFieldLabel,
   MultiSelectField,
   NumericInput,
@@ -49,7 +48,6 @@ const Filters = () => {
             {...form.register('patientPartialFirstName')}
           />
         </Flex>
-        <FormFieldError name="patientPartialFirstName" />
       </FormFieldContainer>
 
       <FormFieldContainer className="gap-1">
@@ -62,7 +60,6 @@ const Filters = () => {
             {...form.register('patientPartialLastName')}
           />
         </Flex>
-        <FormFieldError name="patientPartialLastName" />
       </FormFieldContainer>
 
       <FormFieldContainer className="flex-row gap-1">
@@ -80,10 +77,9 @@ const Filters = () => {
             size="1"
             placeholder="Organization name"
             className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
-            {...form.register('organizationName')}
+            {...form.register('referrerPartialName')}
           />
         </Flex>
-        <FormFieldError name="patientPartialLastName" />
       </FormFieldContainer>
 
       <FormFieldContainer className="flex-row gap-1">
@@ -97,11 +93,11 @@ const Filters = () => {
       </FormFieldContainer>
 
       <Grid columns="2" gap="2" align="baseline">
-        <FormFieldContainer className="gap-1">
+        <FormFieldContainer className="flex gap-1">
           <Flex gap="1">
             <FormFieldLabel className="!text-1">Age</FormFieldLabel>
             <NumericInput
-              field="age"
+              field="patientAge"
               allowNegative={false}
               prefix=""
               placeholder="Age"
@@ -111,7 +107,6 @@ const Filters = () => {
               className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
             />
           </Flex>
-          <FormFieldError name="age" />
         </FormFieldContainer>
 
         <FormFieldContainer className="flex-row gap-1">
@@ -135,7 +130,6 @@ const Filters = () => {
               className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
             />
           </Flex>
-          <FormFieldError name="patientExternalMrn" />
         </FormFieldContainer>
         <FormFieldContainer className="flex-row gap-1">
           <FormFieldLabel className="!text-1">DOB</FormFieldLabel>
@@ -151,20 +145,18 @@ const Filters = () => {
               size="1"
               placeholder="City"
               className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
-              {...form.register('city')}
+              {...form.register('patientCity')}
             />
           </Flex>
-          <FormFieldError name="city" />
         </FormFieldContainer>
         <FormFieldContainer className="gap-1">
           <PhoneNumberInput
-            field="postalCode"
+            field="patientPostalCode"
             placeholder="Zip"
             label="Zip code"
             format="#####"
             className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
           />
-          <FormFieldError name="postalCode" />
         </FormFieldContainer>
       </Grid>
 
@@ -179,11 +171,10 @@ const Filters = () => {
         <FormFieldContainer className="gap-1">
           <PhoneNumberInput
             label="Phone"
-            field="telephone"
+            field="patientPhoneNumber"
             className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
             placeholder="Phone number"
           />
-          <FormFieldError name="telephone" />
         </FormFieldContainer>
       </Grid>
 
@@ -195,16 +186,15 @@ const Filters = () => {
             type="text"
             placeholder="Email"
             className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
-            {...form.register('email')}
+            {...form.register('patientEmail')}
           />
         </Flex>
-        <FormFieldError name="email" />
       </FormFieldContainer>
 
       <FormFieldContainer className="flex-row gap-1">
         <FormFieldLabel className="!text-1">State</FormFieldLabel>
         <AsyncSelect
-          field="stateCode"
+          field="patientStateCode"
           placeholder="Select"
           size="1"
           fetchOptions={getUsStatesOptionsAction}
@@ -216,7 +206,7 @@ const Filters = () => {
         <FormFieldLabel className="!text-1">
           Referring Organization
         </FormFieldLabel>
-        <DropdownSelect field="referrerFacility" options={referralOptions} />
+        <DropdownSelect field="referrerShortName" options={referralOptions} />
       </FormFieldContainer>
 
       <InsuranceSelect />
@@ -266,7 +256,7 @@ const Filters = () => {
         </FormFieldContainer>
         <FormFieldContainer className="flex-row gap-1">
           <FormFieldLabel className="!text-1">Linked</FormFieldLabel>
-          <DropdownSelect field="linked" options={YesNoOptions} />
+          <DropdownSelect field="isPatientLinked" options={YesNoOptions} />
         </FormFieldContainer>
       </Grid>
     </Grid>

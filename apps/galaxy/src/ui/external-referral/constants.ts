@@ -1,6 +1,6 @@
 export const YesNoOptions = [
-  { value: 'yes', label: 'Yes' },
-  { value: 'no', label: 'No' },
+  { value: 'true', label: 'Yes' },
+  { value: 'false', label: 'No' },
 ]
 
 export const GUARDIAN_SELECT_OPTIONS = [
