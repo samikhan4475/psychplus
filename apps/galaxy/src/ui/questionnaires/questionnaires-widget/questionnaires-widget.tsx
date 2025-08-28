@@ -18,7 +18,10 @@ interface QuestionnaireRow {
 }
 
 const QuestionnairesWidget = () => {
-  const patientId = useParams().id as string
+   const { id: patientId, apptId : appointmentId } = useParams<{
+    id: string
+    apptId: string
+  }>()
   const { selectedTabs, setSelectedTabs, initializeQuestionnaires } = useStore(
     (state) => ({
       selectedTabs: state.selectedTabs,
@@ -28,7 +31,7 @@ const QuestionnairesWidget = () => {
   )
 
   useEffect(() => {
-    initializeQuestionnaires(patientId)
+    initializeQuestionnaires(patientId,appointmentId)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

@@ -28,7 +28,8 @@ const CODESETS = {
   ServicesOffered: 'ServicesOffered',
   SpecialistType: 'SpecialistType',
   AppointmentType: 'AppointmentType',
-  ReferrerFacility:'ReferrerFacility'
+  ReferrerFacility: 'ReferrerFacility',
+  VisitType: 'PsychPlusPublic.VisitType',
 }
 
 export {

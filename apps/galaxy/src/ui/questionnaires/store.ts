@@ -29,13 +29,15 @@ interface Store {
     data: QuickNoteHistory[],
     questionnaire: string,
     patientId: string | number,
+    appointmentId?: string,
   ) => void
   handleDeleteQuestionnaire: (
     questionnaireDate: string,
     questionnaire: string,
     patientId: string,
+    appointmentId?: string,
   ) => void
-  initializeQuestionnaires: (patientId: string) => void
+  initializeQuestionnaires: (patientId: string, appointmentId?: string) => void
   histories: { [key: string]: QuickNoteHistory[] }
   addedToNotes: { [key: string]: string[] }
   showNoteViewValue: string | null
@@ -89,7 +91,7 @@ const useStore = create<Store>((set, get) => ({
       set({ selectedTabs: selectedTabs.filter((tab) => tab !== tabId) })
     }
   },
-  handleAddToNotes: async (data, questionnaire, patientId) => {
+  handleAddToNotes: async (data, questionnaire, patientId, appointmentId) => {
     set({ loading: true })
     const filtered = Array.isArray(data)
       ? data.filter((item) => item.addToNote)
@@ -109,6 +111,7 @@ const useStore = create<Store>((set, get) => ({
         pid: Number(patientId),
         sectionName: `${QuickNoteSectionName.AddToNoteQuestionnaire}-${questionnaire}`,
         sectionItem: questionnaire,
+        ...(appointmentId && { appId: Number(appointmentId) }),
         sectionItemValue: addToNoteData?.toString() || 'empty',
       },
     ]
@@ -132,10 +135,10 @@ const useStore = create<Store>((set, get) => ({
     }
     set({ loading: false })
   },
-  initializeQuestionnaires: async (patientId) => {
+  initializeQuestionnaires: async (patientId, appointmentId) => {
     set(initialState)
     const [addToNotesResponse, historiesResponse] = await Promise.all([
-      getQuestionnairesAddToNotes({ patientId }),
+      getQuestionnairesAddToNotes({ patientId, appointmentId }),
       getQuestionnairesHistories({ patientId }),
     ])
 
@@ -196,12 +199,14 @@ const useStore = create<Store>((set, get) => ({
     questionnaireDate: string,
     questionnaire: string,
     patientId: string,
+    appointmentId?: string,
   ) => {
     const filtered = get().addedToNotes[questionnaire].filter(
       (item) => item !== questionnaireDate,
     )
     const payload = [
       {
+        ...(appointmentId && { appId: Number(appointmentId) }),
         pid: Number(patientId),
         sectionName: `${QuickNoteSectionName.AddToNoteQuestionnaire}-${questionnaire}`,
         sectionItem: questionnaire,

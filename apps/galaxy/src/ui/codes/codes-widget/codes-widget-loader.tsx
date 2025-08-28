@@ -1,11 +1,19 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import { getAppointment } from '@/api'
-import { getQuestionnairesHistories } from '@/ui/questionnaires/questionnaires-widget/actions'
-import { transformHistories } from '@/ui/questionnaires/questionnaires-widget/data'
+import {
+  getQuestionnairesAddToNotes,
+  getQuestionnairesHistories,
+} from '@/ui/questionnaires/questionnaires-widget/actions'
+import {
+  transformAddToNotesData,
+  transformHistories,
+} from '@/ui/questionnaires/questionnaires-widget/data'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { transformIn as substanceTransformIn } from '@/ui/substance-use-hx/substance-use-hx-widget/data'
 import { CodesWidget } from './codes-widget'
 import { transformInAppointmentCodes } from './data'
+import { countQuestionnaireSections, getSectionItems } from './utils'
 
 interface CodesWidgetLoaderProps {
   patientId: string
@@ -23,10 +31,14 @@ const CodesWidgetLoader = async ({
     appointmentCodeResult,
     appointmentResult,
     questionairesResult,
+    questionnairesHistoriesResult,
   ] = await Promise.all([
     getQuickNoteDetailAction(
       patientId,
-      [QuickNoteSectionName.QuicknoteSectionCodes],
+      [
+        QuickNoteSectionName.QuicknoteSectionCodes,
+        QuickNoteSectionName.QuickNoteSectionSubstanceUseHx,
+      ],
       false,
       undefined,
       true,
@@ -44,6 +56,7 @@ const CodesWidgetLoader = async ({
       isIncludeCosigners: true,
       isIncludeLocation: true,
     }),
+    getQuestionnairesAddToNotes({ patientId, appointmentId }),
     getQuestionnairesHistories({ patientId }),
   ])
 
@@ -63,14 +76,27 @@ const CodesWidgetLoader = async ({
     return <Text>{questionairesResult.error}</Text>
   }
 
+  if (questionnairesHistoriesResult.state === 'error') {
+    return <Text>{questionnairesHistoriesResult.error}</Text>
+  }
   const initialValues = transformInAppointmentCodes(
-    codesResult.data,
+    getSectionItems(
+      codesResult.data,
+      QuickNoteSectionName.QuicknoteSectionCodes,
+    ),
     appointmentCodeResult.data,
   )
 
-  const questionairesCount = Object.keys(
-    transformHistories(questionairesResult.data),
-  )?.length
+  const questionairesCount = countQuestionnaireSections({
+    addedToNotes: transformAddToNotesData(questionairesResult.data),
+    histories: transformHistories(questionnairesHistoriesResult.data),
+    substanceData: substanceTransformIn(
+      getSectionItems(
+        codesResult.data,
+        QuickNoteSectionName.QuickNoteSectionSubstanceUseHx,
+      ),
+    ),
+  })
 
   return (
     <Flex direction="column" width="100%">

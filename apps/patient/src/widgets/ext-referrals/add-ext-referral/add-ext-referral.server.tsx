@@ -13,6 +13,7 @@ const AddExtReferralServer = async () => {
       CODESETS.Language,
       CODESETS.UsStates,
       CODESETS.ServicesOffered,
+      CODESETS.VisitType
     ]),
   ])
 

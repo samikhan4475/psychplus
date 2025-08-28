@@ -16,7 +16,10 @@ const DeleteButton = ({
   questionnaireDate,
   questionnaire,
 }: DeleteButtonBlockProps) => {
-  const patientId = useParams().id as string
+     const { id: patientId, apptId : appointmentId } = useParams<{
+    id: string
+    apptId: string
+  }>()
 
   const { handleDeleteQuestionnaire } = useStore((state) => ({
     handleDeleteQuestionnaire: state.handleDeleteQuestionnaire,
@@ -27,7 +30,7 @@ const DeleteButton = ({
       <Button
         variant="ghost"
         onClick={() =>
-          handleDeleteQuestionnaire(questionnaireDate, questionnaire, patientId)
+          handleDeleteQuestionnaire(questionnaireDate, questionnaire, patientId,appointmentId)
         }
         className="p-1"
         size="1"

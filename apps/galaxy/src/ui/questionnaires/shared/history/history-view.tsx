@@ -17,10 +17,13 @@ interface HistoryViewProps {
 
 const HistoryView = ({ questionnaire }: HistoryViewProps) => {
   const [data, setData] = useState<QuickNoteHistory[]>([])
-  const patientId = useParams().id as string
+   const { id: patientId, apptId:appointmentId  } = useParams<{
+     id: string
+     apptId: string
+   }>()
 
   const { addedToNotes, histories, handleAddToNotes, loading } = useStore(
-    (state) => ({
+(state) => ({
       histories: state.histories,
       addedToNotes: state.addedToNotes,
       handleAddToNotes: state.handleAddToNotes,
@@ -48,7 +51,7 @@ const HistoryView = ({ questionnaire }: HistoryViewProps) => {
   }, [addedToNotes, histories, patientId, questionnaire])
 
   const handleOnSave = () => {
-    handleAddToNotes(data, questionnaire, patientId)
+    handleAddToNotes(data, questionnaire, patientId,appointmentId)
   }
 
   return (

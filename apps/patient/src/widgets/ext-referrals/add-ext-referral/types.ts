@@ -39,6 +39,7 @@ interface PatientExtReferralParams
   dischargeTime?: string
   patientDateOfBirth?: string
   patientId?: number
+  requestedVisitTypeCode?:string
 }
 
 type ReferralSuccess = ActionSuccessState<{ id: string; patientId: number }>

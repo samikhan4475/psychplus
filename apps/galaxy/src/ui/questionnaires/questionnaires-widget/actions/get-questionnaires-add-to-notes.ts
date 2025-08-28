@@ -9,10 +9,12 @@ import {
 
 interface GetQuestionnairesAddToNotesParams {
   patientId: string
+  appointmentId?: string
 }
 
 const getQuestionnairesAddToNotes = async ({
   patientId,
+  appointmentId
 }: GetQuestionnairesAddToNotesParams): Promise<
   api.ActionResult<QuickNoteHistory[]>
 > => {
@@ -20,6 +22,7 @@ const getQuestionnairesAddToNotes = async ({
     api.NOTE_DETAILS_HISTORY_ENDPOINT,
     {
       patientId: Number(patientId),
+      ...(appointmentId && { appointmentId }),
       sectionName: [
         QuickNoteSectionName.QuickNoteSectionDashboard,
         ...questionnairesAddToNotesSection,

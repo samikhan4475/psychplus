@@ -33,9 +33,14 @@ import { YBocsTab } from './y-bocs-tab'
 interface QuestionnairesViewProps {
   data: QuickNoteSectionItem[]
   patientId: string
+  appointmentId?: string
 }
 
-const QuestionnairesView = ({ data, patientId }: QuestionnairesViewProps) => {
+const QuestionnairesView = ({
+  data,
+  patientId,
+  appointmentId,
+}: QuestionnairesViewProps) => {
   const {
     activeQuestionnaireTab,
     setQuestionnaireActiveTab,
@@ -97,7 +102,7 @@ const QuestionnairesView = ({ data, patientId }: QuestionnairesViewProps) => {
   }
 
   useEffect(() => {
-    initializeQuestionnaires(patientId)
+    initializeQuestionnaires(patientId, appointmentId)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

@@ -5,11 +5,14 @@ import {
   CodesWidgetItem,
   CptCode,
   CptCodeKeys,
+  QuickNoteSectionItem,
   SelectOptionType,
 } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { convertToTimeZoneTime } from '@/utils'
 import { CodesWidgetSchemaType } from './codes-widget-schema'
 import { transformOut } from './data'
+import { CountQuestionnaireSectionsArgs } from './types'
 
 const visitSpecificCodes: CodesWidgetItem[] = [
   { key: CptCodeKeys.ADD_ONS_KEY, code: '99050' },
@@ -250,7 +253,6 @@ function getModifiedCptCodes(
     cptAddonCodes.push('99050')
     isChanged = true
   }
-
   if (
     cptAddonCodes.some((code) => therapySessionCodes.includes(code)) &&
     cptAddonCodes?.includes('96127')
@@ -260,10 +262,11 @@ function getModifiedCptCodes(
     }
     isChanged = true
   } else if (
-    !cptAddonCodes.some((code) => therapySessionCodes.includes(code)) &&
-    !cptAddonCodes?.includes('96127') &&
-    questionairesCount > 0
+    !cptAddonCodes.some((code) => therapySessionCodes.includes(code))
   ) {
+    for (let i = cptAddonCodes.length; i--; ) {
+      if (cptAddonCodes[i] === '96127') cptAddonCodes.splice(i, 1)
+    }
     ;[...Array(questionairesCount)].forEach((_, index) => {
       index < 2 && cptAddonCodes.push('96127')
     })
@@ -293,6 +296,41 @@ function getModifiedCptCodes(
     },
   }
 }
+const isYesResponse = (value?: string) =>
+  (value ?? '').trim().toLowerCase() === 'yes'
+
+const countQuestionnaireSections = ({
+  addedToNotes = {},
+  histories = {},
+  substanceData,
+  excludeKey = 'ShowNoteView',
+}: CountQuestionnaireSectionsArgs): number => {
+  let base = 0
+  for (const k in addedToNotes) {
+    if (k === excludeKey) continue
+    const v = addedToNotes[k]
+    if (Array.isArray(v) && v.length > 0) base++
+  }
+  if (base > 1) return base
+  const hasAudit =
+    (histories[QuickNoteSectionName.QuickNoteSectionAudit]?.length ?? 0) > 0
+  const hasDast =
+    (histories[QuickNoteSectionName.QuickNoteSectionDast10]?.length ?? 0) > 0
+
+  const flags =
+    (hasAudit && isYesResponse(substanceData?.alcohol) ? 1 : 0) +
+    (hasDast && isYesResponse(substanceData?.drugs) ? 1 : 0)
+
+  return Math.max(base, flags)
+}
+
+const getSectionItems = (
+  items: QuickNoteSectionItem[] = [],
+  sectionName: string,
+): QuickNoteSectionItem[] => {
+  return items.filter((i) => i?.sectionName === sectionName)
+}
+
 export {
   handleDefaultSubmission,
   getCptCodeOptions,
@@ -301,4 +339,6 @@ export {
   visitSpecificCodes,
   updatedCptCodes,
   restrictedCodesTCM,
+  countQuestionnaireSections,
+  getSectionItems,
 }

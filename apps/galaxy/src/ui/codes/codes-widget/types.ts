@@ -1,4 +1,5 @@
-import { Appointment, QuickNoteSectionItem, SelectOptionType } from '@/types'
+import { Appointment, QuickNoteHistory, QuickNoteSectionItem, SelectOptionType } from '@/types'
+import { SubstanceUseHxWidgetSchemaType } from '@/ui/substance-use-hx/substance-use-hx-widget/substance-use-hx-schema'
 
 interface VisitProps {
   cptPrimaryCodes: SelectOptionType[]
@@ -10,4 +11,11 @@ interface VisitProps {
   isQuicknoteView?: boolean
 }
 
-export type { VisitProps }
+interface CountQuestionnaireSectionsArgs {
+  addedToNotes?: Record<string, string[]>
+  histories?:Record<string, QuickNoteHistory[]> 
+  excludeKey?: string
+  substanceData?: SubstanceUseHxWidgetSchemaType
+}
+
+export type { VisitProps, CountQuestionnaireSectionsArgs }

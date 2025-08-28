@@ -46,7 +46,7 @@ const QuestionnairesLoader = async ({
     return <div>fail Questionnaires: {response.error}</div>
   }
 
-  return <QuestionnairesView patientId={params.id} data={response.data} />
+  return <QuestionnairesView patientId={params.id} appointmentId={params.apptId} data={response.data} />
 }
 
 export { QuestionnairesLoader }

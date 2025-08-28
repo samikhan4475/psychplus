@@ -1,10 +1,11 @@
 'use client'
 
-import { ComponentType, useEffect } from 'react'
+import { ComponentType } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Box } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer, WidgetSaveButton } from '@/components'
+import { useDeepCompareEffect } from '@/hooks'
 import { Appointment, QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { CodeHistory } from './code-history'
@@ -48,7 +49,7 @@ const CodesWidget = ({
     visitsMap?.[`${visitType}${visitSequence}`] ??
     visitsMap['Common']
 
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     const { isChanged, updatedCodes } = getModifiedCptCodes(
       initialValues,
       appointment,
@@ -73,7 +74,6 @@ const CodesWidget = ({
     appointment?.cptModifiersCodes,
     initialValues,
   )
-
   return (
     <FormProvider {...form}>
       <WidgetFormContainer

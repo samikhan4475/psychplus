@@ -15,7 +15,7 @@ interface SaveButtonProps {
 }
 
 const SaveButton = ({ icon = true, disabled = false }: SaveButtonProps) => {
-  const patientId = useParams().id as string
+  const {id:patientId,apptId:appointmentId} = useParams<{id:string,apptId:string}>()
   const [isOpen, setIsOpen] = useState(false)
   const { initializeQuestionnaires } = useStore()
 
@@ -50,7 +50,7 @@ const SaveButton = ({ icon = true, disabled = false }: SaveButtonProps) => {
       success &&
       questionnaireWedgetIds.includes(widgetId)
     ) {
-      initializeQuestionnaires(patientId)
+      initializeQuestionnaires(patientId,appointmentId)
     }
   }
 

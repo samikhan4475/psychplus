@@ -26,12 +26,12 @@ const transformIn = (
     number | string | undefined | boolean | string[] | null
   > = getInitialValues()
 
-  const value = list.filter(
+  const value = list?.filter(
     (item) =>
       item.sectionName === QuickNoteSectionName.QuickNoteSectionSubstanceUseHx,
   )
 
-  value.forEach((item) => {
+  value?.forEach((item) => {
     const key = item.sectionItem
     const itemValue = item.sectionItemValue
 

@@ -26,11 +26,13 @@ interface AddExtReferralFormProps {
   scrollToTop?: () => void
   googleAPIkey: string
   formType:ReferralType
+  visitTypeCode?:string
 }
 const AddExtReferralForm = ({
   scrollToTop,
   googleAPIkey,
-  formType
+  formType,
+  visitTypeCode
 }: AddExtReferralFormProps) => {
   const { toast } = useToast()
   const [fileResetCounter, setFileResetCounter] = useState(0)
@@ -53,6 +55,9 @@ const AddExtReferralForm = ({
 
     const base = recursiveSanitize(rest)
 
+     if(visitTypeCode){
+      base.requestedVisitTypeCode=visitTypeCode
+     }
     // build all payloads (first service, then the rest)
 
     const payloads = requestedServices.length
