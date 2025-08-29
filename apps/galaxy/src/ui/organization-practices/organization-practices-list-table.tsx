@@ -17,6 +17,7 @@ import { ActionsCell } from './cells'
 import { PracticesHistoryDialog } from './practices-history-dialog'
 import { useStore } from './store'
 import { PracticeNameCell } from './table-row-practice-name-cell'
+import { selfPayOptions } from '../organization-practice/dialogs/practice-dialog/self-pay-radio-group'
 
 const columns = (
   isPractices?: boolean,
@@ -318,6 +319,20 @@ const columns = (
           {row.original.isAutoPaymentPostingEnabled ? 'Yes' : 'No'}
         </TextCell>
       ),
+    },
+    {
+      id: 'selfPayType',
+      header: ({ column }) => (
+        <ColumnHeader label="Self Pay" column={column} clientSideSort />
+      ),
+      cell: ({ row }) => {
+        const selfPayType =
+          selfPayOptions.find(
+            (option) => option.value === row.original.selfPayType,
+          )?.label ?? ''
+
+        return <TextCell className="truncate">{selfPayType}</TextCell>
+      },
     },
     {
       id: 'recordStatus',

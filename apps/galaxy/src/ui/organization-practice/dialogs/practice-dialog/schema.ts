@@ -39,6 +39,7 @@ const schema = z.object({
   defaultClearinghouseReceiverId: z.string().min(1, 'Required'),
   isAutoSubmissionEnabled: z.string().min(1, 'Required'),
   isAutoPaymentPostingEnabled: z.string().min(1, 'Required'),
+  selfPayType: z.string().optional(),
 })
 
 type SchemaType = z.infer<typeof schema>

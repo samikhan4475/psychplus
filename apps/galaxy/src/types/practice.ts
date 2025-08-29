@@ -49,6 +49,7 @@ interface PracticeResource {
   organizationId: string
   isAutoSubmissionEnabled: boolean | string
   isAutoPaymentPostingEnabled: boolean | string
+  selfPayType: string
 }
 
 interface SelfPractice {

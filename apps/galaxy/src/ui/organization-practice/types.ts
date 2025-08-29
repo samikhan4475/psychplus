@@ -46,6 +46,7 @@ interface Practice {
   organizationDisplayName: string
   isAutoSubmissionEnabled: boolean
   isAutoPaymentPostingEnabled: boolean
+  selfPayType: string
 }
 
 interface Organization extends OrganizationRoot {

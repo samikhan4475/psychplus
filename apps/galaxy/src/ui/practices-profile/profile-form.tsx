@@ -2,7 +2,6 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex } from '@radix-ui/themes'
-import { Box } from 'lucide-react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import z from 'zod'
@@ -10,6 +9,7 @@ import { FormContainer } from '@/components'
 import { Organization, PracticeResource } from '@/types'
 import { sanitizeFormData, zipLast4Schema } from '@/utils'
 import { PracticeSettingsFields } from '../organization-practice/dialogs/practice-dialog/practice-settings-fields'
+import { SelfPayRadioGroup } from '../organization-practice/dialogs/practice-dialog/self-pay-radio-group'
 import { updatePracticeAction } from './actions'
 import { AddressGroup } from './address-group'
 import { defaultValues } from './default-values'
@@ -50,6 +50,7 @@ const ProfileSchema = z.object({
   isMailingAddressSameAsPrimary: z.string().optional(),
   isAutoSubmissionEnabled: z.string().min(1, 'Required'),
   isAutoPaymentPostingEnabled: z.string().min(1, 'Required'),
+  selfPayType: z.string().optional(),
 })
 
 type ProfileSchemaType = z.infer<typeof ProfileSchema>
@@ -137,6 +138,10 @@ const ProfileForm = ({ practice, organization }: ProfileFormProps) => {
       <ProfileContentHeading title="Practice Setting" />
       <Flex gap="2" px="2" py="1" className="bg-white w-full">
         <PracticeSettingsFields />
+      </Flex>
+      <ProfileContentHeading title="Self Pay" />
+      <Flex gap="2" px="2" py="1" className="bg-white w-full">
+        <SelfPayRadioGroup />
       </Flex>
     </FormContainer>
   )

@@ -9,6 +9,7 @@ const defaultValues = (data: PracticeResource) => {
     taxonomy: data.taxonomy,
     clia: data.clia,
     organizationId: data.organizationId,
+    selfPayType: data.selfPayType ?? '',
     defaultClearinghouseReceiverId: data.defaultClearinghouseReceiverId,
     defaultClearinghouseReceiverName: data.defaultClearinghouseReceiverName,
     isAutoPaymentPostingEnabled: data.isAutoPaymentPostingEnabled

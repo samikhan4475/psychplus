@@ -19,6 +19,7 @@ import { PhoneField } from './phone-field'
 import { PracticeSettings } from './practice-settings'
 import { PrimaryAddressFields } from './primary-address-fields'
 import { schema, type SchemaType } from './schema'
+import { SelfPayField } from './self-pay-field'
 import { StatusSelect } from './status-select'
 import { SubmitFormButton } from './submit-form-button'
 import { TaxonomyCodeField } from './taxonomy-code-field'
@@ -133,6 +134,7 @@ const PracticeForm = ({
         <PrimaryAddressFields organizationAddress={data.organizationAddress} />
         <PayerAddressFields />
         <PracticeSettings />
+        <SelfPayField />
       </Box>
       <SubmitFormButton />
     </FormContainer>
