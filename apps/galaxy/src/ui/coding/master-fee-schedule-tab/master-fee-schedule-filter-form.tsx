@@ -17,7 +17,7 @@ import { useStore } from './store'
 import { SubmitFormButton } from './submit-form-button'
 
 const schema = z.object({
-  cptCode: z.string().optional(),
+  cptCodes: z.string().optional(),
   placeOfService: z.string().optional(),
   description: z.string().optional(),
   requirement: z.string().optional(),
@@ -38,7 +38,7 @@ const MasterFeeScheduleFilterForm = () => {
     reValidateMode: 'onChange',
     defaultValues: {
       recordStatus: '',
-      cptCode: '',
+      cptCodes: '',
       placeOfService: '',
       description: '',
       requirement: '',
@@ -53,7 +53,7 @@ const MasterFeeScheduleFilterForm = () => {
     const payload = {
       ...data,
       resourceStatusList: data.recordStatus && [data.recordStatus],
-      cptCode: data.cptCode && [data.cptCode],
+      cptCodes: data.cptCodes && [data.cptCodes],
     }
     const sanitizedData = sanitizeFormData(payload) as MasterFeeScheduleFilter
     return search(sanitizedData, 1, true)

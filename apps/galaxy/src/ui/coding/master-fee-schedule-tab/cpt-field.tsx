@@ -13,7 +13,7 @@ const CptField = () => {
         size="1"
         placeholder="Enter CPT"
         className="border-pp-gray-2 h-[var(--chip-height)] w-[102px] border border-solid !outline-none [box-shadow:none]"
-        {...form.register('cptCode')}
+        {...form.register('cptCodes')}
       />
     </FormFieldContainer>
   )
