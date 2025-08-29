@@ -1,10 +1,13 @@
 'use client'
 
+import { Box, Flex } from '@radix-ui/themes'
 import { EmptyFileIcon, FeatureEmpty, TriggerButton } from '@/components-v2'
-import { InsurancePayer, InsurancePolicy } from '@/features/billing/payments/types'
+import {
+  InsurancePayer,
+  InsurancePolicy,
+} from '@/features/billing/payments/types'
 import { InsuranceFormTrigger } from '@/features/billing/payments/ui/insurance-card/Insurance-form-trigger'
 import { VerificationStatus } from '@/types'
-import { Box, Flex } from '@radix-ui/themes'
 
 const InsuranceContent = ({
   patientInsurances,
@@ -15,7 +18,7 @@ const InsuranceContent = ({
   insurancePayers: InsurancePayer[]
   setInsuranceOpenStateValue: (value: string) => void
 }) => {
-  if (!patientInsurances) {
+  if (!patientInsurances || patientInsurances.length === 0) {
     return (
       <>
         <FeatureEmpty
