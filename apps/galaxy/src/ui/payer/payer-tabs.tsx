@@ -6,10 +6,11 @@ import { TabsTrigger } from '@/components'
 import { EdiTabView } from '../clearing-house/edi-tab'
 import { PayerPlanTabView } from './payer-plan-tab'
 import { EditPayerPlanDetail } from './payer-plan-tab/edit-payer-plan/edit-payer-plan-detail'
+import { PayerTabView } from './payer-tab/payer-tab-view'
 import { useStore } from './store'
 import { PayerTabs } from './types'
 
-const PayerTabView = () => {
+const PayerTabsView = () => {
   const {
     activeTab,
     setActiveTab,
@@ -25,15 +26,16 @@ const PayerTabView = () => {
   }))
   const tabId = activeTab?.split('#')[1]
   return (
-    <Box className="flex-1 flex px-1 pt-1">
+    <Box className="flex flex-1 px-1 pt-1">
       <Tabs.Root
-        defaultValue={PayerTabs.Plan}
+        defaultValue={PayerTabs.Payer}
         value={activeTab}
         onValueChange={setActiveTab}
-        className="flex w-full flex-col flex-1"
+        className="flex w-full flex-1 flex-col"
       >
         <Flex className="z-50">
           <Tabs.List>
+            <TabsTrigger value={PayerTabs.Payer}>{PayerTabs.Payer}</TabsTrigger>
             <TabsTrigger value={PayerTabs.Plan}>{PayerTabs.Plan}</TabsTrigger>
             <TabsTrigger value={PayerTabs.EDI}>{PayerTabs.EDI}</TabsTrigger>
             {closeableTabs.map((tab) => (
@@ -43,6 +45,9 @@ const PayerTabView = () => {
             ))}
           </Tabs.List>
         </Flex>
+        <TabsContent value={PayerTabs.Payer}>
+          <PayerTabView />
+        </TabsContent>
         <TabsContent value={PayerTabs.Plan}>
           <PayerPlanTabView />
         </TabsContent>
@@ -76,4 +81,4 @@ const TabsContent = ({
   )
 }
 
-export { PayerTabView }
+export { PayerTabsView }

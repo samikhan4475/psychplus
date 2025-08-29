@@ -80,7 +80,37 @@ interface GetPayerList {
 
 interface AddPayer {
   id?: string
-  name: string
+  payerName: string
+  recordStatus?: string
+}
+
+interface PayerResponse {
+  payerId: string
+  recordStatus: string
+  metadata?: Metadata
+  payerName: string
+}
+
+interface PayerListResponse {
+  payers: PayerResponse[]
+  total: number
+}
+
+interface PayerFilter {
+  payerId?: string
+  payerName?: string
+  recordStatus?: string
+  fromDateTime?: string
+  toDateTime?: string
+  isIncludeMetadataResourceChangeControl?: boolean
+  isIncludeMetadataResourceIds?: boolean
+  isIncludeMetadataResourceStatus?: boolean
+}
+
+interface UpdatePayer {
+  payerId: string
+  payerName: string
+  recordStatus: string
 }
 interface PayerPlanAddress {
   id: string
@@ -121,5 +151,9 @@ export type {
   UpdatePayerPlan,
   GetPayerList,
   AddPayer,
+  PayerResponse,
+  PayerListResponse,
+  PayerFilter,
+  UpdatePayer,
   PayerPlanAddressResponse,
 }

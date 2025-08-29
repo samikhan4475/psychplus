@@ -21,8 +21,8 @@ function isActiveTabCloseable<T extends Record<string, string | number>>(
 }
 
 const useStore = create<Store>((set, get) => ({
-  activeTab: PayerTabs.Plan,
-  viewedTabs: new Set([PayerTabs.Plan]),
+  activeTab: PayerTabs.Payer,
+  viewedTabs: new Set([PayerTabs.Payer]),
   closeableTabs: new Set(),
   setActiveTab: (activeTab) => {
     const viewedTabs = get().viewedTabs
@@ -43,7 +43,7 @@ const useStore = create<Store>((set, get) => ({
     const updatedViewedTabs = get().viewedTabs
     updatedViewedTabs.delete(tab)
     set({
-      activeTab: PayerTabs.Plan,
+      activeTab: PayerTabs.Payer,
       closeableTabs: updatedCloseableTabs,
       viewedTabs: updatedViewedTabs,
       selectPayerPlanId: '',

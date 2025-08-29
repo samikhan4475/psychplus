@@ -6,11 +6,7 @@ import { Box, Button, Dialog } from '@radix-ui/themes'
 import { CloseDialogTrigger } from '@/components/close-dialog-trigger'
 import { PayerForm } from './add-payer-form'
 
-interface AddPayerDialogProps {
-  setAddingNewPayer: (value: boolean) => void
-}
-
-const AddPayerDialog = ({ setAddingNewPayer }: AddPayerDialogProps) => {
+const AddPayerDialog = () => {
   const [open, setOpen] = useState(false)
 
   const onOpenChange = (open: boolean) => {
@@ -20,7 +16,7 @@ const AddPayerDialog = ({ setAddingNewPayer }: AddPayerDialogProps) => {
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Trigger>
-        <Box className="mt-[18px] flex-1">
+        <Box className="flex-1">
           <Button size="1" highContrast type="button">
             <PlusIcon /> Add New
           </Button>
@@ -31,10 +27,7 @@ const AddPayerDialog = ({ setAddingNewPayer }: AddPayerDialogProps) => {
         <Dialog.Title className="font-sans -tracking-[0.25px]">
           Add Payer
         </Dialog.Title>
-        <PayerForm
-          onCloseModal={onOpenChange}
-          setAddingNewPayer={setAddingNewPayer}
-        />
+        <PayerForm onCloseModal={onOpenChange} />
       </Dialog.Content>
     </Dialog.Root>
   )

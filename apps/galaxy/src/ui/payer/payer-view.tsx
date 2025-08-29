@@ -1,7 +1,7 @@
 'use client'
 
 import { GooglePlacesContextProvider } from '@/providers/google-places-provider'
-import { PayerTabView } from './payer-tabs'
+import { PayerTabsView } from './payer-tabs'
 
 interface PayerViewProps {
   googleApiKey: string
@@ -10,7 +10,7 @@ interface PayerViewProps {
 const PayerView = ({ googleApiKey }: PayerViewProps) => {
   return (
     <GooglePlacesContextProvider apiKey={googleApiKey}>
-      <PayerTabView />
+      <PayerTabsView />
     </GooglePlacesContextProvider>
   )
 }

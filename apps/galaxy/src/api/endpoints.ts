@@ -633,8 +633,14 @@ const ADD_PAYER_PLAN = (id: string) =>
   `${API_URL}/api/insurance/payers/${id}/insuranceplans`
 const UPDATE_PAYER_PLAN = (payerId: string, insuranceid: string) =>
   `${API_URL}/api/insurance/payers/${payerId}/insuranceplans/${insuranceid}`
+const PAYERS_SEARCH_ENDPOINT = `${API_URL}/api/payers/actions/search`
+const PAYERS_HISTORY_SEARCH_ENDPOINT = `${API_URL}/api/payers/actions/history/search`
+const PAYERS_EXPORT_ENDPOINT = (fileFormat: string) =>
+  `${API_URL}/api/payers/actions/export/${fileFormat}`
+const ADD_PAYER = () => `${API_URL}/api/payers`
+const UPDATE_PAYER = (payerId: string) => `${API_URL}/api/payers/${payerId}`
 const GET_PAYERS = `${API_URL}/api/insurance/payers?includePlans=false&includeInactive=false&includeTest=false&publicViewable=true&offset=0&limit=0`
-const ADD_PAYER = () => `${API_URL}/api/insurance/payers`
+const GET_PAYERS_AUDIT_HISTORY_LIST_ENDPOINT = `${API_URL}/api/insurance/payers/history`
 const PAYER_PLAN_BY_ID = (id: string) => `${API_URL}/api/insurance/plans/${id}`
 const GET_PAYER_PLAN_ADDRESS = (insurancePlanId: string) =>
   `${API_URL}/api/insurance/insuranceplans/${insurancePlanId}/addresses`
@@ -1468,7 +1474,12 @@ export {
   ADD_PAYER_PLAN,
   UPDATE_PAYER_PLAN,
   GET_PAYERS,
+  GET_PAYERS_AUDIT_HISTORY_LIST_ENDPOINT,
+  PAYERS_SEARCH_ENDPOINT,
+  PAYERS_HISTORY_SEARCH_ENDPOINT,
+  PAYERS_EXPORT_ENDPOINT,
   ADD_PAYER,
+  UPDATE_PAYER,
   PAYER_PLAN_BY_ID,
   GET_PAYER_PLAN_ADDRESS,
   UPDATE_PAYER_PLAN_ADDRESS,
