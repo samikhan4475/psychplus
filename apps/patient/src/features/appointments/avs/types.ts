@@ -158,6 +158,9 @@ interface TableColumn<T> {
   key: string
   label: string
   render?: (row: T) => React.JSX.Element | string | null
+  enableSorting?: boolean
+  sortingFn?: (rowA: T, rowB: T, columnId: string) => number
+  accessorFn?: (row: T) => string | number | boolean | Date
 }
 
 interface Appointment {

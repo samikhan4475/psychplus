@@ -10,16 +10,18 @@ import {
 } from '@/components-v2'
 import { getInsurancePayerPlans } from '../../actions'
 import type { InsurancePayer, InsurancePlan } from '../../types'
-import { type SchemaType } from './insurance-form'
+import { InsuranceSchemaType } from './schema'
 
 const PlanSelect = ({
   payers,
   disabled = false,
+  required = true,
 }: {
   payers: InsurancePayer[]
   disabled?: boolean
+  required?: boolean
 }) => {
-  const form = useFormContext<SchemaType>()
+  const form = useFormContext<InsuranceSchemaType>()
   const [loading, setLoading] = useState(false)
   const [plans, setPlans] = useState<InsurancePlan[]>()
   const payerName = useWatch({ name: 'payerName' })
@@ -52,7 +54,7 @@ const PlanSelect = ({
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel required>Insurance Plan</FormFieldLabel>
+      <FormFieldLabel required={required}>Insurance Plan</FormFieldLabel>
       <Controller
         name="insurancePlanId"
         control={form.control}

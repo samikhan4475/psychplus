@@ -8,15 +8,16 @@ import {
   FormFieldLabel,
 } from '@/components-v2'
 import type { InsurancePayer } from '../../types'
-import { type SchemaType } from './insurance-form'
+import { InsuranceSchemaType } from './schema'
 
 interface PayerSelectProps {
   payers: InsurancePayer[]
   disabled?: boolean
+  required?: boolean
 }
 
-const PayerSelect = ({ payers, disabled = false }: PayerSelectProps) => {
-  const form = useFormContext<SchemaType>()
+const PayerSelect = ({ payers, disabled = false, required = true }: PayerSelectProps) => {
+  const form = useFormContext<InsuranceSchemaType>()
 
   const items = payers.map((payer) => (
     <Select.Item key={payer.id} value={payer.name}>
@@ -26,7 +27,7 @@ const PayerSelect = ({ payers, disabled = false }: PayerSelectProps) => {
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel required>Payer</FormFieldLabel>
+      <FormFieldLabel required={required}>Payer</FormFieldLabel>
       <Controller
         name={'payerName'}
         control={form.control}

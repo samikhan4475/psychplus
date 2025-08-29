@@ -13,6 +13,9 @@ import {
 } from '@psychplus-v2/utils'
 import { NoteSectionItem } from '@/features/note/types'
 import { INSURANCE_DEPENDENT_DIAGNOSIS } from '../constants'
+import { InsurancePolicy } from '@/features/billing/payments/types'
+import { InsurancePolicyPriority } from '@/features/billing/payments/constants'
+import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 
 function isProviderMemberOfCareTeam(
   careTeam: CareTeamMember[],
@@ -56,14 +59,14 @@ const insuranceMayNotCoverMessage = (appointmentType: AppointmentType) =>
       appointmentType,
     ).toLocaleLowerCase()} `
 
-    const generateICS = (event: {
-    title: string
-    description: string
-    location: string
-    startTime: string
-    endTime: string
-  }) => {
-    return `BEGIN:VCALENDAR
+const generateICS = (event: {
+  title: string
+  description: string
+  location: string
+  startTime: string
+  endTime: string
+}) => {
+  return `BEGIN:VCALENDAR
 VERSION:2.0
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
@@ -79,31 +82,44 @@ STATUS:CONFIRMED
 TRANSP:OPAQUE
 END:VEVENT
 END:VCALENDAR`
-  }
+}
 
-  const downloadICS = (event: {
-    title: string
-    description: string
-    location: string
-    startTime: string
-    endTime: string
-  }) => {
-    const blob = new Blob([generateICS(event)], {
-      type: 'text/calendar;charset=utf-8',
-    })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = 'appointment.ics'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
+const downloadICS = (event: {
+  title: string
+  description: string
+  location: string
+  startTime: string
+  endTime: string
+}) => {
+  const blob = new Blob([generateICS(event)], {
+    type: 'text/calendar;charset=utf-8',
+  })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = 'appointment.ics'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+}
+
+const getPrimaryInsurance = (policies: InsurancePolicy[]) => {
+  return policies?.find(
+    (insurance) =>
+      insurance.insurancePolicyPriority === InsurancePolicyPriority.Primary,
+  )
+}
+
+const getPrimaryActiveCard = (creditCards: CreditCard[]) => {
+  return creditCards?.find((card) => card.isPrimary && card.isActive)
+}
 
 export {
-  isProviderMemberOfCareTeam,
+  downloadICS,
   getAppointmentDateTimeLabel,
-  isInsuranceDisabledBasedOnDiagnosisCodes,
   insuranceMayNotCoverMessage,
-  downloadICS
+  isInsuranceDisabledBasedOnDiagnosisCodes,
+  isProviderMemberOfCareTeam,
+  getPrimaryActiveCard,
+  getPrimaryInsurance
 }

@@ -1,69 +1,105 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { getLocalTimeZone, isToday } from '@internationalized/date'
-import { AppointmentType } from '@psychplus-v2/constants'
-import {
-  getAppointmentTypeLabel,
-  getClinicAddressLabel,
-  getDayOfWeekLabel,
-  getLocalCalendarDate,
-  getMonthLabel,
-  getNewProviderTypeLabel,
-  getTimeLabel,
-  getUserFullName,
-} from '@psychplus-v2/utils'
+import { CODESETS, PaymentType } from '@psychplus-v2/constants'
+import { cn, getLocalCalendarDate } from '@psychplus-v2/utils'
 import { Flex, Text } from '@radix-ui/themes'
 import { ProviderAvatar } from '@/components-v2'
 import { BookedAppointmentProps } from '@/features/appointments/book/types'
+import { InsurancePolicy } from '@/features/billing/payments/types'
+import CallDetails from '@/features/call/blocks/call-details'
+import { AcsInfo } from '@/features/call/types'
+import { useCodesetCodes } from '@/providers'
+import { getPrimaryInsurance } from '../../utils'
+import AppointmentTypeInfo from './appointment-type-info'
+import DateTimeInfo from './date-time-info'
+import ProviderInfo from './provider-info'
 
-const AppointmentDetails = ({ bookedSlot }: BookedAppointmentProps) => {
-  const { specialist, clinic, slot, appointmentType, newProviderType } = bookedSlot
+const AppointmentDetails = ({
+  bookedSlot,
+  isCall = false,
+  paymentMethod,
+  activeCreditCard,
+  patientInsurances,
+  setPaymentMethod,
+  acsInfo,
+}: BookedAppointmentProps) => {
+  const params = useSearchParams()
+  const appointmentId = params.get('appointmentId')
+  const { specialist, clinic, slot, appointmentType, newProviderType } =
+    bookedSlot
 
-  const slotDate = getLocalCalendarDate(slot.startDate)
+  const slotDate = getLocalCalendarDate(
+    isCall ? acsInfo?.paymentData?.appointmentDateTime : slot.startDate,
+  )
   const isSlotToday = isToday(slotDate, getLocalTimeZone())
 
+  const primaryPolicy = isCall
+    ? getPrimaryInsurance(patientInsurances || [] as InsurancePolicy[])
+    : undefined
+
+  const codes = useCodesetCodes(CODESETS.VisitType ?? '')
+  const visitType = codes.find(
+    (code) => code.value === acsInfo?.paymentData?.visitTypeCode,
+  )
+
   return (
-    <Flex gap="3" align={{initial:'start', md:'center'}}>
-      <ProviderAvatar provider={specialist} size={{initial:'4', md:'8'}} />
-      <Flex direction="column" gap={{initial:'1', md:'2'}}>
-        <Text trim="end" weight="bold" className="text-[16px] md:text-[22px] text-[#151B4A]">
-          {getUserFullName(specialist.legalName)}
-          {specialist.legalName.honors && `, ${specialist.legalName.honors}`}
-        </Text>
+    <Flex
+      gap="3"
+      align={{ initial: 'start', md: isCall ? 'start' : 'center' }}
+      className={cn(
+        isCall ? 'rounded-[8px] border border-[#E0E0E0] p-[16px]' : '',
+      )}
+    >
+      <ProviderAvatar
+        provider={specialist}
+        size={{ initial: '4', md: isCall ? '6' : '8' }}
+      />
+      <Flex direction="column" gap="1">
+        <ProviderInfo
+          specialist={specialist}
+          acsInfo={acsInfo as AcsInfo}
+          isCall={isCall}
+        />
 
-        <Flex
-          className="text-[14px] md:text-[18px] text-[#151B4A]"
-          direction="row"
-          gap="2"
-          align="center"
-        >
-          <Flex direction="row" gap="1">
-            {isSlotToday ? (
-              <Text>Today</Text>
-            ) : (
-              <>
-                <Text>{getDayOfWeekLabel(slotDate).slice(0, 3)},</Text>
-                <Text>{getMonthLabel(slotDate).slice(0, 3)}</Text>
-                <Text>{slotDate.day}</Text>
-              </>
-            )}
-            <Text>-</Text>
-            <Text>{getTimeLabel(slot.startDate)}</Text>
-          </Flex>
-        </Flex>
-        <Flex gap="5">
-          <Text weight="medium" className="text-[13px] text-accent-11">
-            {getNewProviderTypeLabel(newProviderType || "").toLocaleUpperCase()}
-          </Text>
-          <Text weight="medium" className="text-[13px] text-accent-11">
-            {getAppointmentTypeLabel(appointmentType).toLocaleUpperCase()}
-          </Text>
-        </Flex>
-
-        {appointmentType === AppointmentType.InPerson && (
-          <Text className="text-[12px] md:text-[14px] text-[#60646C]" weight="bold">
-            {getClinicAddressLabel(clinic.contact?.addresses)}
-          </Text>
+        {isCall ? (
+          <>
+            <Text className="text-[#1C2024]" size="2" weight="bold">
+              {acsInfo?.paymentData.service} - {visitType?.display || ''}
+            </Text>
+            <DateTimeInfo
+              slotDate={slotDate}
+              isSlotToday={isSlotToday}
+              slot={slot}
+              acsInfo={acsInfo as AcsInfo}
+              isCall={isCall}
+              appointmentId={appointmentId}
+            />
+            <CallDetails
+              acsInfo={acsInfo as AcsInfo}
+              paymentMethod={paymentMethod as PaymentType}
+              setPaymentMethod={setPaymentMethod}
+              primaryPolicy={primaryPolicy}
+              activeCreditCard={activeCreditCard}
+            />
+          </>
+        ) : (
+          <>
+            <DateTimeInfo
+              slotDate={slotDate}
+              isSlotToday={isSlotToday}
+              slot={slot}
+              acsInfo={acsInfo as AcsInfo}
+              isCall={isCall}
+              appointmentId={appointmentId}
+            />
+            <AppointmentTypeInfo
+              appointmentType={appointmentType}
+              newProviderType={newProviderType}
+              clinic={clinic}
+            />
+          </>
         )}
       </Flex>
     </Flex>

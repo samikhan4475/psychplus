@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { Box, Button, Dialog } from '@radix-ui/themes'
-import { ViewPictureIcon } from '@/components'
+import { Eye } from 'lucide-react'
 import { CloseDialogIcon } from '@/components-v2'
 
 interface CardImgViewDialogProps {
@@ -12,7 +12,7 @@ const CardImgViewDialog = ({ imageSrc }: CardImgViewDialogProps) => {
     <Dialog.Root>
       <Dialog.Trigger>
         <Button className="bg-transparent p-0">
-          <ViewPictureIcon />
+          <Eye size="20" color="#24366B" />
         </Button>
       </Dialog.Trigger>
       <Dialog.Content className="relative w-full max-w-[780px] p-0">

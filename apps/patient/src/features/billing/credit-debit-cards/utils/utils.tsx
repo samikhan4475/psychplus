@@ -4,7 +4,11 @@ import { CreditCard } from '../types'
 const getDefaultCreditCardName = (creditCard: CreditCard) =>
   `${creditCard.cardType}:${creditCard.numberLastFour}`.toLowerCase()
 
-const getCreditCardExpiry = (expireMonth: number, expireYear: number) => {
+const getCreditCardExpiry = (
+  expireMonth: number,
+  expireYear: number,
+  showString?: boolean,
+) => {
   const currentDate = new Date()
   const currentYear = currentDate.getFullYear()
   const currentMonth = currentDate.getMonth() + 1
@@ -15,7 +19,9 @@ const getCreditCardExpiry = (expireMonth: number, expireYear: number) => {
   )
     return <Text color="red">Expired</Text>
 
-  return `Expires ${expireMonth}/${expireYear.toString().slice(-2)}`
+  return `${showString ? 'Expires' : ''} ${expireMonth}/${expireYear
+    .toString()
+    .slice(-2)}`
 }
 
 const sortCreditCardsByPrimary = (creditCards: CreditCard[]) => {

@@ -36,6 +36,9 @@ interface ToggleableFormProps<T extends FieldValues, Response> {
   isExternalSavePressed?: boolean
   resetExternalSaveState?: () => Promise<void>
   allowExternalSave?: boolean
+  showButtons?: boolean
+  isCall?: boolean
+  isCreditCard?: boolean
 }
 
 const ToggleableForm = <T extends FieldValues, R>({
@@ -56,6 +59,9 @@ const ToggleableForm = <T extends FieldValues, R>({
   isExternalSavePressed = false,
   resetExternalSaveState,
   allowExternalSave = false,
+  showButtons = true,
+  isCall = false,
+  isCreditCard = false,
 }: React.PropsWithChildren<ToggleableFormProps<T, R>>) => {
   const { toast } = useToast()
   const [open, setOpen] = useState(!trigger)
@@ -68,7 +74,7 @@ const ToggleableForm = <T extends FieldValues, R>({
   }, [trigger])
 
   useEffect(() => {
-    if (!isExternalSavePressed) return;
+    if (!isExternalSavePressed) return
     if (isExternalSavePressed && allowExternalSave) {
       const handleExternalSave = async () => {
         const isValid = await form.trigger()
@@ -76,10 +82,10 @@ const ToggleableForm = <T extends FieldValues, R>({
           await resetExternalSaveState?.()
           return
         }
- 
+
         onSubmit(form.getValues())
       }
- 
+
       handleExternalSave()
     }
   }, [isExternalSavePressed, allowExternalSave])
@@ -147,7 +153,14 @@ const ToggleableForm = <T extends FieldValues, R>({
         ) : null}
       </Flex>
       <FormContainer form={form} onSubmit={onSubmit}>
-        <Content className={contentClassName}>{children}</Content>
+        <Content
+          className={contentClassName}
+          showButtons={showButtons}
+          isCall={isCall}
+          isCreditCard={isCreditCard}
+        >
+          {children}
+        </Content>
       </FormContainer>
     </ToggleableFormContext.Provider>
   )

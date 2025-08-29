@@ -1,11 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { type ActionErrorState } from '@psychplus-v2/api'
 import { DocumentType } from '@psychplus-v2/types'
 import { cn } from '@psychplus-v2/utils'
-import { Box, Flex, Text } from '@radix-ui/themes'
+import { Box, Flex, TextFieldInput } from '@radix-ui/themes'
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useForm } from 'react-hook-form'
 import {
@@ -13,6 +13,7 @@ import {
   FormFieldContainer,
   FormFieldLabel,
   FormHeading,
+  PlacesAutocomplete,
   ToggleableForm,
 } from '@/components-v2'
 import { useProfileStore } from '@/features/account/profile/store'
@@ -36,11 +37,13 @@ const CreditCardForm = ({
   existingCards,
   triggerClassName,
   onFormClose,
+  isCall = false,
 }: {
-  trigger?: any
+  trigger?: ReactNode
   creditCard?: CreditCard
   existingCards?: CreditCard[]
   triggerClassName?: string
+  isCall?: boolean
   onFormClose?: () => void
 }) => {
   const router = useRouter()
@@ -73,9 +76,8 @@ const CreditCardForm = ({
 
     if (
       stripeResult.error ||
-      stripeResult.paymentMethod.type !== 'card' ||
-      !stripeResult.paymentMethod ||
-      !stripeResult.paymentMethod.card
+      stripeResult.paymentMethod?.type !== 'card' ||
+      !stripeResult.paymentMethod?.card
     ) {
       return {
         state: 'error',
@@ -114,9 +116,24 @@ const CreditCardForm = ({
 
     cardBrand = cardBrand === 'amex' ? 'AmericanExpress' : cardBrand
 
+    let extraFields = {}
+    if (isCall) {
+      const values = form.getValues()
+      extraFields = {
+        name: values.name,
+        address1: values.primaryStreet,
+        address2: values.primaryStreet2 || '',
+        city: values.primaryCity,
+        state: values.primaryState,
+        zipcode: values.primaryPostalCode || '',
+      }
+    }
+
     return addCreditCardAction({
       payload: {
-        name: profile.legalName.firstName + ' ' + profile.legalName.lastName,
+        name: isCall
+          ? form.getValues('name')
+          : profile.legalName.firstName + ' ' + profile.legalName.lastName,
         cardKey: stripeResult.paymentMethod.id,
         cardType: cardBrand,
         expireMonth: card.exp_month,
@@ -125,6 +142,7 @@ const CreditCardForm = ({
         isActive: true,
         patientId: profile.id,
         isPrimary: !existingCards?.length,
+        ...(isCall ? extraFields : {}),
       },
       headers: {},
     })
@@ -137,6 +155,8 @@ const CreditCardForm = ({
 
   return (
     <ToggleableForm
+      isCreditCard
+      isCall={isCall}
       form={form}
       submitAction={onSubmit}
       onSuccess={onSuccess}
@@ -155,31 +175,71 @@ const CreditCardForm = ({
         }}
         documentType={showConsentView.type}
       />
-      <FormHeading title="Add Card" />
+      {!isCall && <FormHeading title="Add Card" />}
       <Flex gap="4" direction="column" className="w-full">
-        <FormFieldContainer className="w-full md:w-5/12">
-          <FormFieldLabel required>Card Number</FormFieldLabel>
-          <Box
-            py="2"
-            px="3"
-            className={cn('-m-[1px] h-10 rounded-6 border border-gray-6', {
-              'border-transparent shadow-[0_0_0_2px_var(--color-focus-root)]':
-                focus,
-            })}
-          >
-            <CardElement
-              onFocus={() => {
-                setFocus(true)
-              }}
-              onBlur={() => {
-                setFocus(false)
-              }}
-              options={{
-                style: STRIPE_INPUT_STYLE,
-                hidePostalCode: true,
-              }}
-            />
-          </Box>
+        <FormFieldContainer className="w-full">
+          <Flex direction="column" gap="4">
+            {isCall && (
+              <Flex direction="column" gap="1">
+                <FormFieldLabel required>Name on Card</FormFieldLabel>
+                <TextFieldInput
+                  placeholder="Enter name on card"
+                  size="3"
+                  {...form.register('name', {
+                    required: 'Name on card is required',
+                    minLength: {
+                      value: 2,
+                      message: 'Name on card must be at least 2 characters',
+                    },
+                    maxLength: {
+                      value: 50,
+                      message: 'Name on card must not exceed 50 characters',
+                    },
+                  })}
+                  className="w-full"
+                />
+              </Flex>
+            )}
+            <Flex
+              direction="column"
+              gap="1"
+              className={cn(!isCall && 'w-full md:w-5/12')}
+            >
+              <FormFieldLabel required>
+                {isCall && 'Credit'} Card Number
+              </FormFieldLabel>
+              <Box
+                py="2"
+                px="3"
+                className={cn('-m-[1px] h-10 rounded-6 border border-gray-6', {
+                  'border-transparent shadow-[0_0_0_2px_var(--color-focus-root)]':
+                    focus,
+                })}
+              >
+                <CardElement
+                  onFocus={() => {
+                    setFocus(true)
+                  }}
+                  onBlur={() => {
+                    setFocus(false)
+                  }}
+                  options={{
+                    style: STRIPE_INPUT_STYLE,
+                    hidePostalCode: true,
+                  }}
+                />
+              </Box>
+            </Flex>
+            {isCall && (
+              <PlacesAutocomplete
+                name="primary"
+                label="Primary"
+                isFieldsRequired={true}
+                showPostal={false}
+                isCall
+              />
+            )}
+          </Flex>
         </FormFieldContainer>
       </Flex>
     </ToggleableForm>

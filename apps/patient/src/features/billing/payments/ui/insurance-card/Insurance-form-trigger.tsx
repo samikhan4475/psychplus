@@ -5,12 +5,10 @@ import { useRouter } from 'next/navigation'
 import { getSlashedDateString } from '@psychplus-v2/utils'
 import { Box, Flex, Heading, Separator, Text } from '@radix-ui/themes'
 import { Badge, DeletableFieldValue, EditableFieldValue } from '@/components-v2'
-import { InsurancePolicyPriority } from '@/features/billing/payments/constants'
 import {
   InsuranceChipVariantType,
   InsurancePayer,
   InsurancePolicy,
-  PoliciesMetadata,
 } from '@/features/billing/payments/types'
 import { deleteInsurance } from '../../actions'
 import { InsuranceForm } from './insurance-form'
@@ -41,7 +39,12 @@ const InsuranceFormTrigger = ({
   const trigger = (
     <>
       <Box>
-        <Flex align="center" justify="between" className="mb-3 flex-col md:flex-row gap-1" width="100%">
+        <Flex
+          align="center"
+          justify="between"
+          className="mb-3 flex-col gap-1 md:flex-row"
+          width="100%"
+        >
           <Flex align="center" gap="2">
             <Heading weight="medium" size="4" className="font-sans text-[18px]">
               {insurance.payerName}
@@ -73,7 +76,12 @@ const InsuranceFormTrigger = ({
           </Flex>
         </Flex>
 
-        <Flex align="center" gap="1" className="mb-2" wrap={{initial:'wrap', md:'nowrap'}}>
+        <Flex
+          align="center"
+          gap="1"
+          className="mb-2"
+          wrap={{ initial: 'wrap', md: 'nowrap' }}
+        >
           <Badge
             label={insurance.verificationStatus}
             type={getStatusVariant(
@@ -98,18 +106,16 @@ const InsuranceFormTrigger = ({
             {getSlashedDateString(insurance.terminationDate)}
           </Text>
 
-          {
-            insurance.policyHolderName?.firstName && insurance.policyHolderName?.lastName 
-            ? <Text className="text-[12px] relative text-[#60646C] after:text-[32px] after-ml-[9px] after:leading-[4px] after:content-['.'] after:absolute after:top-[-1px] after:ml-[9px] last:after:hidden">
-              <span className="font-medium text-[#1C2024]">
+          {insurance.policyHolderName?.firstName &&
+          insurance.policyHolderName?.lastName ? (
+            <Text className="after-ml-[9px] relative text-[12px] text-[#60646C] after:absolute after:top-[-1px] after:ml-[9px] after:text-[32px] after:leading-[4px] after:content-['.'] last:after:hidden">
+              <Text size="1" className="font-medium text-[#1C2024]">
                 Primary Holder Name:{' '}
-              </span>{' '}
+              </Text>{' '}
               {insurance.policyHolderName?.firstName}{' '}
               {insurance.policyHolderName?.lastName}
             </Text>
-            
-            : null
-          }
+          ) : null}
           {insurance.policyHolderRelationship && (
             <Text className="after-ml-[9px] relative text-[12px] text-[#60646C] after:absolute after:top-[-1px] after:ml-[9px] after:text-[32px] after:leading-[4px] after:content-['.'] last:after:hidden">
               <Text className="font-medium text-[#1C2024]">Relationship: </Text>
@@ -126,9 +132,6 @@ const InsuranceFormTrigger = ({
             key={insurance.id}
             insurance={insurance}
             insurancePayers={insurancePayers}
-            insurancePriority={
-              insurance.insurancePolicyPriority as InsurancePolicyPriority
-            }
             onFormClose={toggleUpdateFormTrigger}
             formHeading="Edit Insurance"
           />

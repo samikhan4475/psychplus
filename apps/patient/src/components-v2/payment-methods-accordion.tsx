@@ -1,35 +1,43 @@
 'use client'
 
-import {
-  EmptyFileIcon,
-  FeatureEmpty,
-  PaymentMethodsAccordionItem,
-  TriggerButton,
-} from '@/components-v2'
-import { CreditCard } from '@/features/billing/credit-debit-cards/types'
-import { CreditCardForm } from '@/features/billing/credit-debit-cards/ui/credit-debit-cards-card/credit-debit-card-form'
-import { CreditCardListItem } from '@/features/billing/credit-debit-cards/ui/credit-debit-cards-card/credit-debit-card-list-item'
-import { InsurancePolicyPriority } from '@/features/billing/payments/constants'
-import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
-import { InsuranceForm } from '@/features/billing/payments/ui/insurance-card/insurance-form'
-import { InsuranceFormTrigger } from '@/features/billing/payments/ui/insurance-card/Insurance-form-trigger'
-import { VerificationStatus } from '@/types'
+import { useEffect, useMemo, useState } from 'react'
 import { PaymentType } from '@psychplus-v2/constants'
-import * as Accordion from '@radix-ui/react-accordion'
-import { Box, Flex, Text } from '@radix-ui/themes'
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
-import { Check } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import InsurancePaymentSection from '@/features/appointments/book/ui/book-appointment/insurance'
+import PreferredPartnerSection from '@/features/appointments/book/ui/book-appointment/preferred-partner'
+import SelfPaySection from '@/features/appointments/book/ui/book-appointment/selfpay'
+import {
+  getPrimaryActiveCard,
+  getPrimaryInsurance,
+} from '@/features/appointments/book/utils'
+import { CreditCard } from '@/features/billing/credit-debit-cards/types'
+import {
+  InsurancePayer,
+  InsurancePolicy,
+} from '@/features/billing/payments/types'
+import { AcsInfo } from '@/features/call/types'
+import { VerificationStatus } from '@/types'
 
 interface PaymentMethodAccordionProps {
   paymentMethod: PaymentType
   stripeApiKey: string
   creditCards: CreditCard[]
-  patientInsurances: Insurance
+  patientInsurances: InsurancePolicy[]
   insurancePayers: InsurancePayer[]
+  isCall?: boolean
+  acsInfo?: AcsInfo
 }
 
+const isFullyPaid = (acsInfo?: AcsInfo) => {
+  const coInsFullyPaid =
+    (acsInfo?.paymentData?.coInsDue || 0) ===
+    (acsInfo?.paymentData?.coInsPaid || 0)
+  const coPayFullyPaid =
+    (acsInfo?.paymentData?.coPayDue || 0) ===
+    (acsInfo?.paymentData?.coPayPaid || 0)
+  return coInsFullyPaid && coPayFullyPaid
+}
 
 const PaymentMethodAccordion = ({
   paymentMethod,
@@ -37,235 +45,81 @@ const PaymentMethodAccordion = ({
   creditCards,
   patientInsurances,
   insurancePayers,
+  isCall = false,
+  acsInfo,
 }: PaymentMethodAccordionProps) => {
   const stripePromise = useMemo(() => loadStripe(stripeApiKey), [stripeApiKey])
-  const [creditCardOpenStateValue, setCreditCardOpenStateValue] =
-    useState<string>('Credit/Debit Cards')
-  const [insuranceOpenStateValue, setInsuranceOpenStateValue] =
-    useState<string>('Insurance on File')
 
+  const getDefaultInsuranceOpenState = () => {
+    if (!isCall) return 'Insurance on File'
+    const primaryInsurance = getPrimaryInsurance(patientInsurances || [])
+    const hasActivePrimaryInsurance =
+      primaryInsurance?.verificationStatus === VerificationStatus.Verified
+    return hasActivePrimaryInsurance ? '' : 'Add Insurance'
+  }
+
+  const getDefaultCreditCardOpenState = () => {
+    if (!isCall) return 'Credit/Debit Cards'
+    const hasActivePrimaryCard = getPrimaryActiveCard(creditCards)
+    return hasActivePrimaryCard ? '' : 'Add Payment Card'
+  }
+
+  const [creditCardOpenStateValue, setCreditCardOpenStateValue] =
+    useState<string>(getDefaultCreditCardOpenState())
+  const [insuranceOpenStateValue, setInsuranceOpenStateValue] =
+    useState<string>(getDefaultInsuranceOpenState())
   const [selectedCreditCard, setSelectedCreditCard] = useState<
     CreditCard | undefined
   >(creditCards?.[0])
 
-  const hasPrimaryInsurance = patientInsurances?.policies?.some(
-    (insurance) =>
-      insurance.insurancePolicyPriority === InsurancePolicyPriority.Primary,
-  )
-  const hasSecondaryInsurance = patientInsurances?.policies?.some(
-    (insurance) =>
-      insurance.insurancePolicyPriority === InsurancePolicyPriority.Secondary,
-  )
-  const hasTertiaryInsurance = patientInsurances?.policies?.some(
-    (insurance) =>
-      insurance.insurancePolicyPriority === InsurancePolicyPriority.Tertiary,
-  )
-
-  let insurancePriority = InsurancePolicyPriority.Other
-
-  if (!hasPrimaryInsurance) {
-    insurancePriority = InsurancePolicyPriority.Primary
-  } else if (!hasSecondaryInsurance) {
-    insurancePriority = InsurancePolicyPriority.Secondary
-  } else if (!hasTertiaryInsurance) {
-    insurancePriority = InsurancePolicyPriority.Tertiary
-  }
-
-  const trigger = <TriggerButton title="Add New Credit/Debit Card" />
+  const shouldHideSelfPay =
+    isCall && paymentMethod === PaymentType.SelfPay && isFullyPaid(acsInfo)
 
   useEffect(() => {
-    setSelectedCreditCard(creditCards.length > 0 ? creditCards[0] : undefined)
+    setSelectedCreditCard(creditCards?.length > 0 ? creditCards?.[0] : undefined)
   }, [creditCards])
 
-  return (
-    <Elements stripe={stripePromise}>
-      {paymentMethod === PaymentType.Insurance && (
-        <Accordion.Root
-          type="single"
-          className="w-full"
-          defaultValue="Insurance on File"
-          value={insuranceOpenStateValue}
-          onValueChange={(value) => setInsuranceOpenStateValue(value)}
-        >
-          <PaymentMethodsAccordionItem
-            title="Insurance on File"
-            content={
-              <Box>
-                {patientInsurances?.policies ? (
-                  <Flex width="100%" gap={{ initial: '2', md: '3' }} direction="column">
-                    {patientInsurances.policies.map((insurance) => (
-                      <Flex
-                        key={insurance.id}
-                        p={{ initial: '2', md: '3' }}
-                        className="w-full rounded-2 border border-[#DDDDE3]"
-                      >
-                        <Box className="w-full">
-                          <InsuranceFormTrigger
-                            isReadOnly={
-                              insurance.verificationStatus === VerificationStatus.Verified
-                            }
-                            insurance={insurance}
-                            insurancePayers={insurancePayers}
-                          />
-                        </Box>
-                      </Flex>
-                    ))}
-                  </Flex>
-                ) : (
-                  <>
-                    <FeatureEmpty
-                      description="No insurance added yet"
-                      Icon={EmptyFileIcon}
-                    />
-                    <Flex
-                      width="100%"
-                      justify="center"
-                      className="-mt-10 mb-8"
-                      onClick={() =>
-                        setInsuranceOpenStateValue('Add/Edit Insurance')
-                      }
-                    >
-                      <TriggerButton title="Add New Insurance" />
-                    </Flex>
-                  </>
-                )}
-              </Box>
-            }
-          />
+  useEffect(() => {
+    if (isCall) {
+      setInsuranceOpenStateValue(getDefaultInsuranceOpenState())
+      setCreditCardOpenStateValue(getDefaultCreditCardOpenState())
+    }
+  }, [isCall, patientInsurances, creditCards, acsInfo, paymentMethod])
 
-          <PaymentMethodsAccordionItem
-            title="Add/Edit Insurance"
-            content={
-              <InsuranceForm
-                insurancePriority={insurancePriority}
-                insurancePayers={insurancePayers}
-                onFormClose={() =>
-                  setInsuranceOpenStateValue('Insurance on File')
-                }
-              />
-            }
+  const renderPaymentSection = () => {
+    switch (paymentMethod) {
+      case PaymentType.Insurance:
+        return (
+          <InsurancePaymentSection
+            patientInsurances={patientInsurances || []}
+            insurancePayers={insurancePayers}
+            creditCards={creditCards || []}
+            isCall={isCall}
+            insuranceOpenStateValue={insuranceOpenStateValue}
+            setInsuranceOpenStateValue={setInsuranceOpenStateValue}
+            setCreditCardOpenStateValue={setCreditCardOpenStateValue}
+            selectedCreditCard={selectedCreditCard}
+            shouldHideSelfPay={shouldHideSelfPay}
           />
-          <PaymentMethodsAccordionItem
-            title="Credit/Debit Card Details"
-            content={
-              <Box>
-                {selectedCreditCard ? (
-                  <Flex direction="column" gap="4">
-                    <CreditCardListing creditCards={creditCards} />
-
-                    <CreditCardForm
-                      trigger={trigger}
-                      existingCards={creditCards}
-                    />
-                  </Flex>
-                ) : (
-                  <FeatureEmpty
-                    description="No Credit/Debit card added yet"
-                    Icon={EmptyFileIcon}
-                    action={
-                      <CreditCardForm
-                        trigger={trigger}
-                        triggerClassName="justify-center"
-                        existingCards={creditCards}
-                      />
-                    }
-                  />
-                )}
-              </Box>
-            }
-          />
-        </Accordion.Root>
-      )}
-
-      {paymentMethod === PaymentType.SelfPay && (
-        <Accordion.Root
-          type="single"
-          className="w-full"
-          value={creditCardOpenStateValue}
-          onValueChange={(value) => setCreditCardOpenStateValue(value)}
-        >
-          <PaymentMethodsAccordionItem
-            title="Credit/Debit Cards"
-            content={
-              <Box>
-                {selectedCreditCard ? (
-                  <CreditCardListing creditCards={creditCards} />
-                ) : (
-                  <Flex direction="column" align="center">
-                    <FeatureEmpty
-                      description="No Credit/Debit card added yet"
-                      Icon={EmptyFileIcon}
-                    />
-                    <Flex mt="-7">
-                      <Box
-                        className="w-full"
-                        onClick={() => {
-                          setCreditCardOpenStateValue('Add New Card')
-                        }}
-                      >
-                        {trigger}
-                      </Box>
-                    </Flex>
-                  </Flex>
-                )}
-              </Box>
-            }
-          />
-          <PaymentMethodsAccordionItem
-            title="Add New Card"
-            content={
-              <CreditCardForm
-                existingCards={creditCards}
-                onFormClose={() =>
-                  setCreditCardOpenStateValue('Credit/Debit Cards')
-                }
-              />
-            }
-          />
-        </Accordion.Root>
-      )}
-
-      {
-        paymentMethod === PaymentType.PreferredPartner && (
-          <Flex gap="2" align="start" className='bg-[#E9F9EE] border border-[#92CEAC] rounded-3 p-3'>
-            <Flex align={"center"} justify={"center"} className='border border-[#92CEAC] rounded-full size-[22px] shrink-0'>
-              <Flex align={"center"} justify={"center"} className='rounded-full bg-[#18794E] size-[16px]'>
-                <Check className='text-white size-[14px]' />
-              </Flex>
-            </Flex>
-            <Flex direction={"column"} gap={"1"}>
-              <Text size={{ initial: "1", sm: "2" }} weight={"bold"} className='text-[#1C2024]'>
-                Preferred partner program applied
-              </Text>
-              <Text size={{ initial: "2", sm: "3" }} className='text-[#60646C]'>
-                You are enrolled in preferred partner program by your employer.
-              </Text>
-            </Flex>
-          </Flex>
         )
-      }
-    </Elements>
-  )
-}
+      case PaymentType.SelfPay:
+        return (
+          <SelfPaySection
+            creditCards={creditCards || []}
+            isCall={isCall}
+            creditCardOpenStateValue={creditCardOpenStateValue}
+            setCreditCardOpenStateValue={setCreditCardOpenStateValue}
+            selectedCreditCard={selectedCreditCard}
+          />
+        )
+      case PaymentType.PreferredPartner:
+        return <PreferredPartnerSection />
+      default:
+        return null
+    }
+  }
 
-const CreditCardListing = ({ creditCards }: { creditCards: CreditCard[] }) => {
-  return (
-    <Flex direction="column" width="100%" gap="3">
-      {creditCards.map((card) => (
-        <Flex
-          key={card.cardKey}
-          p="3"
-          className="w-full rounded-2 border border-[#DDDDE3]"
-          justify="between"
-          align="center"
-        >
-          <Box className="w-[98%]">
-            <CreditCardListItem creditCard={card} />
-          </Box>
-        </Flex>
-      ))}
-    </Flex>
-  )
+  return <Elements stripe={stripePromise}>{renderPaymentSection()}</Elements>
 }
 
 export { PaymentMethodAccordion }

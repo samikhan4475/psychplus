@@ -10,8 +10,10 @@ import { UpdateCreditCardAction } from '../../actions'
 
 const ChangePrimaryCardDialog = ({
   creditCard,
+  trigger = 'Set as Primary',
 }: {
   creditCard: CreditCard
+  trigger?: React.ReactElement | string
 }) => {
   const { toast } = useToast()
   const [open, setOpen] = useState(false)
@@ -50,7 +52,7 @@ const ChangePrimaryCardDialog = ({
       <Flex align="start" className="group cursor-pointer">
         <Dialog.Trigger>
           <Text className="text-[#194595] underline" size="2">
-            Set as Primary
+            {trigger}
           </Text>
         </Dialog.Trigger>
       </Flex>

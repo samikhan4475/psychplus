@@ -6,9 +6,11 @@ import {
 import { CareTeamMember, Clinic, Consent } from '@psychplus-v2/types'
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { Insurance } from '@/features/billing/payments/types'
-import { InsurancePayer } from '@/features/billing/payments/types/insurance'
+import { InsurancePayer, InsurancePolicy } from '@/features/billing/payments/types/insurance'
 import { NoteSectionItem } from '@/features/note/types'
 import { AppointmentSlot, AppointmentSpecialist } from '../../search/types'
+import { ReactNode } from 'react'
+import { AcsInfo } from '@/features/call/types'
 
 interface ConfirmationNote {
   appointmentType: string
@@ -70,6 +72,13 @@ interface PaymentMethodProps {
 
 interface BookedAppointmentProps {
   bookedSlot: BookedSlot
+  isCall?:boolean
+  paymentMethod?: PaymentType
+  setPaymentMethod?: (value: PaymentType) => void
+  activeCreditCard?: CreditCard
+  patientInsurances?: InsurancePolicy[]
+  paymentMethods?: ReactNode
+  acsInfo?: AcsInfo
 }
 
 interface PrimaryProviderAppointedProps {

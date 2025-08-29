@@ -2,7 +2,7 @@ import { ChangeEvent, useRef, useState } from 'react'
 import Image from 'next/image'
 import { cn } from '@psychplus-v2/utils'
 import { Box, Flex, IconButton, Text } from '@radix-ui/themes'
-import { XIcon } from 'lucide-react'
+import { Camera, XIcon } from 'lucide-react'
 import { EditCameraIcon, ImagePlaceholderIcon } from '@/components'
 import { CardImgViewDialog } from './card-img-view-dialog'
 
@@ -11,6 +11,7 @@ interface CardInputProps {
   onImageChanged: (file: File | undefined) => void
   label: string
   disabled?: boolean
+  isCall?: boolean
 }
 
 const CardInput = ({
@@ -18,6 +19,7 @@ const CardInput = ({
   onImageChanged,
   label,
   disabled = false,
+  isCall = false,
 }: CardInputProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [previewImage, setPreviewImage] = useState<string | null>(null)
@@ -45,23 +47,23 @@ const CardInput = ({
 
   return (
     <Box className="flex-1">
-      <div
+      <Box
         onClick={handleImageInput}
         className={cn(
-          'bg-white relative flex h-[230px] w-full cursor-pointer items-center justify-center rounded-[5px] border border-dashed border-[#bebebe]',
+          'bg-white relative flex h-[130px] w-full cursor-pointer items-center justify-center rounded-[5px] border border-[#DDDDE3]',
           disabled && 'cursor-not-allowed opacity-50',
         )}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            handleImageInput();
+            e.preventDefault()
+            handleImageInput()
           }
         }}
       >
         {hasImage ? (
-          <div className="relative h-full w-full">
+          <Box className="relative h-full w-full">
             <Image
-              loader={() => imageSrc as string}
+              loader={() => imageSrc}
               src={imageSrc}
               alt="insurance card preview"
               fill
@@ -82,7 +84,7 @@ const CardInput = ({
                 <XIcon strokeWidth={1.5} className="h-[18px] w-[18px]" />
               </IconButton>
             )}
-          </div>
+          </Box>
         ) : (
           <Flex
             height="100%"
@@ -92,7 +94,7 @@ const CardInput = ({
           >
             <ImagePlaceholderIcon />
             <Text
-              className="text-sm w-[92px] pt-2 leading-[20px] text-[#151B4A]"
+              className="text-sm pt-2 leading-[20px] text-[#151B4A]"
               align="center"
               size="1"
             >
@@ -109,13 +111,24 @@ const CardInput = ({
           accept="image/png, image/jpeg, image/jpg"
           disabled={disabled}
         />
-      </div>
+      </Box>
 
-      <Flex gap="3" align="center" className="pt-2">
+      <Flex
+        gap="3"
+        align="center"
+        justify={isCall ? 'center' : 'start'}
+        className="pt-2"
+      >
         {hasImage && <CardImgViewDialog imageSrc={imageSrc} />}
         <Box onClick={handleImageInput} className="cursor-pointer">
-          <EditCameraIcon />
+          {isCall && !hasImage && <Camera size="20" color="#24366B" />}
+          {!isCall && <EditCameraIcon />}
         </Box>
+        {hasImage && (
+          <Box onClick={handleImageInput} className="cursor-pointer">
+            <EditCameraIcon isCall />
+          </Box>
+        )}
       </Flex>
     </Box>
   )

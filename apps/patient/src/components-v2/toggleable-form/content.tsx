@@ -9,11 +9,17 @@ import { SaveButton } from './save-button'
 
 interface ContentProps {
   className?: string
+  showButtons?: boolean
+  isCall?: boolean
+  isCreditCard?: boolean
 }
 
 const Content = ({
   className,
   children,
+  showButtons = true,
+  isCall = false,
+  isCreditCard = false,
 }: React.PropsWithChildren<ContentProps>) => {
   const { open, isEdit, allowExternalSave } = useToggleableFormContext()
 
@@ -30,10 +36,14 @@ const Content = ({
     >
       {children}
       <ErrorMessage />
-      {isEdit && !allowExternalSave && (
-        <Flex gap="2">
-          <SaveButton />
-          <CancelButton />
+      {showButtons && isEdit && !allowExternalSave && (
+        <Flex gap="2" className={cn(isCall && 'w-full')}>
+          <SaveButton
+            showIcon={!isCall}
+            className={cn(isCall && 'bg-pp-blue-3 text-white w-full flex-1')}
+            title={isCreditCard && isCall ? 'Submit Payment Details' : 'Save'}
+          />
+          {!isCall && <CancelButton />}
         </Flex>
       )}
     </Flex>

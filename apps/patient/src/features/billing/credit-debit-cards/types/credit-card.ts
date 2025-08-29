@@ -1,5 +1,5 @@
 import { CreditCardType } from '@psychplus-v2/constants'
-import { PatientAddress } from '@psychplus-v2/types'
+import { Metadata, PatientAddress } from '@psychplus-v2/types'
 
 interface CreditCard {
   id: number
@@ -13,6 +13,7 @@ interface CreditCard {
   billingAddress: PatientAddress
   cardKey: string
   isPrimary: boolean
+  metadata: Metadata
 }
 
 export type { CreditCard }

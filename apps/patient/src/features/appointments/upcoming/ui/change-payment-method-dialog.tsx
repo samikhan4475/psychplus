@@ -142,7 +142,7 @@ const ChangePaymentMethodDialog = ({
           paymentMethod={paymentMethod}
           stripeApiKey={stripeApiKey}
           creditCards={creditCards}
-          patientInsurances={patientInsurances}
+          patientInsurances={patientInsurances.policies}
           insurancePayers={insurancePayers}
         />
 

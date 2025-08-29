@@ -46,6 +46,8 @@ interface PlacesAutocompleteProps {
   containerClassName?: string
   isSelfScheduling?: boolean
   isFieldsRequired?: boolean
+  showPostal?:boolean
+  isCall?: boolean
 }
 
 const PlacesAutocomplete = ({
@@ -58,6 +60,8 @@ const PlacesAutocomplete = ({
   containerClassName,
   isSelfScheduling = false,
   isFieldsRequired = true,
+  showPostal = true,
+  isCall = false
 }: PlacesAutocompleteProps) => {
   const street1Field = `${name}Street1`
   const street2Field = `${name}Street2`
@@ -208,13 +212,13 @@ const PlacesAutocomplete = ({
       <Flex
         ref={ref}
         gap="3"
-        direction={{ initial: 'column', sm: 'row' }}
+        direction={{ initial: 'column', sm: isCall ? "column" : 'row' }}
         className={cn('w-full')}
       >
         <Box className="flex-1" position="relative">
           <FormFieldContainer>
             <FormFieldLabel required={required}>
-              {label} Address 1
+              {!isCall && label} Address 1
             </FormFieldLabel>
             <InputComponent
               label=""
@@ -240,7 +244,7 @@ const PlacesAutocomplete = ({
           ) : null}
         </Box>
         <FormFieldContainer className="flex-1">
-          <FormFieldLabel>{label} Address 2</FormFieldLabel>
+          <FormFieldLabel>{!isCall && label} Address 2</FormFieldLabel>
           <InputComponent
             label=""
             size={{ initial: '2', sm: '3' }}
@@ -298,7 +302,7 @@ const PlacesAutocomplete = ({
           />
           {required && <FormFieldError name={postalCodeField} />}
         </FormFieldContainer>
-        {!includeState &&
+        {!includeState && showPostal &&
           renderZipLast4Field(
             form,
             zipLast4Field,
@@ -308,7 +312,7 @@ const PlacesAutocomplete = ({
             required,
           )}
       </Flex>
-      {includeState && (
+      {includeState && showPostal && (
         <Flex className="w-full">
           {renderZipLast4Field(
             form,

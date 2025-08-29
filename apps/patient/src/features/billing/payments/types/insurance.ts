@@ -49,6 +49,7 @@ interface InsurancePolicy {
   policyName: string
   payerName: string
   policyPriority: string
+  isDeleted?: boolean
 }
 
 interface Insurance {

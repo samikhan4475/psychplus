@@ -1,7 +1,6 @@
 import { cn } from '@psychplus-v2/utils'
 import { Flex, Separator } from '@radix-ui/themes'
 import { EmptyFileIcon, FeatureEmpty, TriggerButton } from '@/components-v2'
-import { InsurancePolicyPriority } from '@/features/billing/payments/constants'
 import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
 import { VerificationStatus } from '@/types'
 import { InsuranceForm } from './insurance-form'
@@ -16,29 +15,6 @@ const InsuranceForms = ({
   insurancePayers,
   patientInsurances,
 }: InsuranceFormProps) => {
-  const hasPrimaryInsurance = patientInsurances.policies?.some(
-    (insurance) =>
-      insurance.insurancePolicyPriority === InsurancePolicyPriority.Primary,
-  )
-  const hasSecondaryInsurance = patientInsurances.policies?.some(
-    (insurance) =>
-      insurance.insurancePolicyPriority === InsurancePolicyPriority.Secondary,
-  )
-  const hasTertiaryInsurance = patientInsurances.policies?.some(
-    (insurance) =>
-      insurance.insurancePolicyPriority === InsurancePolicyPriority.Tertiary,
-  )
-
-  let insurancePriority = InsurancePolicyPriority.Other
-
-  if (!hasPrimaryInsurance) {
-    insurancePriority = InsurancePolicyPriority.Primary
-  } else if (!hasSecondaryInsurance) {
-    insurancePriority = InsurancePolicyPriority.Secondary
-  } else if (!hasTertiaryInsurance) {
-    insurancePriority = InsurancePolicyPriority.Tertiary
-  }
-
   return (
     <Flex direction="column" gap="2">
       {patientInsurances.policies ? (
@@ -65,7 +41,6 @@ const InsuranceForms = ({
       )}
 
       <InsuranceForm
-        insurancePriority={insurancePriority}
         insurancePayers={insurancePayers}
         trigger={
           <Flex
