@@ -31,6 +31,7 @@ import {
   REPORT_TYPE,
   STAFF_SELECTION,
   TemplateParameter,
+  VISIT_SELECTION,
 } from './types'
 import { matchesAnyReport } from './utils'
 
@@ -154,6 +155,12 @@ const DynamicTemplateFilters = () => {
       reportParameterCode === REPORT_PARAMETER_CODE.SPECIALLIST_TYPE_LIST
     ) {
       matchingCodeset = codesetIndex[STAFF_SELECTION.SPECIALIST_TYPE]
+    } else if (
+      reportParameterCode === REPORT_PARAMETER_CODE.APPOINTMENT_TYPE_LIST
+    ) {
+      matchingCodeset = codesetIndex[VISIT_SELECTION.APPOINTMENT_TYPE]
+    } else if (reportParameterCode === REPORT_PARAMETER_CODE.VISIT_TYPE_LIST) {
+      matchingCodeset = codesetIndex[VISIT_SELECTION.VISIT_TYPE]
     } else {
       matchingCodeset = codesetIndex[reportParameterCode]
     }
@@ -250,7 +257,6 @@ const DynamicTemplateFilters = () => {
             const { isString, isDate, isSelect, isMultiple } = getFieldTypes(
               item.parameterCode,
             )
-
             return (
               <Flex key={item.id} className="gap-x-1">
                 {isString && (

@@ -18,6 +18,7 @@ import {
   REPORT_PARAMETER_CODE,
   STAFF_SELECTION,
   TemplateParameter,
+  VISIT_SELECTION,
 } from '../types'
 import { matchesAnyReport } from '../utils'
 import { excludedParams } from './constants'
@@ -79,6 +80,12 @@ const ScheduleParameters = () => {
       reportParameterCode === 'SpecialistTypeList'
     ) {
       matchingCodeset = codesetIndex[STAFF_SELECTION.SPECIALIST_TYPE]
+    } else if (
+      reportParameterCode === REPORT_PARAMETER_CODE.APPOINTMENT_TYPE_LIST
+    ) {
+      matchingCodeset = codesetIndex[VISIT_SELECTION.APPOINTMENT_TYPE]
+    } else if (reportParameterCode === REPORT_PARAMETER_CODE.VISIT_TYPE_LIST) {
+      matchingCodeset = codesetIndex[VISIT_SELECTION.VISIT_TYPE]
     } else {
       matchingCodeset = codesetIndex[reportParameterCode]
     }

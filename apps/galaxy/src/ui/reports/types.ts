@@ -199,6 +199,11 @@ export enum VIEW_TYPE {
   SCHEDULE = 'schedule',
 }
 
+export enum VISIT_SELECTION {
+  VISIT_TYPE = 'VisitType',
+  APPOINTMENT_TYPE = 'AppointmentType',
+}
+
 export enum REPORT_PARAMETER_CODE {
   STAFF_SELECTION_LIST = 'StaffSelectionList',
   SPECIALLIST_TYPE_LIST = 'SpecialistTypeList',
@@ -206,6 +211,8 @@ export enum REPORT_PARAMETER_CODE {
   INSURANCE_LIST = 'InsuranceList',
   PATIENT_LIST = 'PatientList',
   COSIGNER_LIST = 'CosignerList',
+  APPOINTMENT_TYPE_LIST = 'AppointmentTypeList',
+  VISIT_TYPE_LIST = 'VisitTypeList',
 }
 export type {
   Template,
