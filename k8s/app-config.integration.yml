@@ -26,3 +26,4 @@ data:
   authApiUrl: 'https://auth-pr-ODE_PR_NUMBER.ode.psychplus.dev'
   serviceUrlsWebsocketService: 'wss://websocketservice-pr-ODE_PR_NUMBER.ode.psychplus.dev'
   APP_ENV: 'development'
+  UTC_LOGIN_API_KEY: '04191e8a-3efb-45f0-bab4-e363a84181e3'
