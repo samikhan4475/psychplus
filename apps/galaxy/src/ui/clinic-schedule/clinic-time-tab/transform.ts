@@ -13,9 +13,7 @@ const transformIn = (clinicTimes: ClinicSchedule[]): ClinicSchedule[] =>
     )
     const endDateTime = clinicTime.endTime
       ? convertToTimezone(
-          `${clinicTime.endDate ?? clinicTime.startDate}T${
-            clinicTime.endTime
-          }Z`,
+          `${clinicTime.startDate}T${clinicTime.endTime}Z`,
           clinicTime.timezoneId,
         )
       : undefined
