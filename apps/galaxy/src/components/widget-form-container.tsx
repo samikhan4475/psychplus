@@ -1,5 +1,11 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { dequal } from 'dequal'
+import { useFormContext } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { useDebouncedCallback } from 'use-debounce'
 import { saveWidgetClientAction } from '@/actions'
 import { revalidateAction } from '@/actions/revalidate'
 import { saveWidgetAction } from '@/actions/save-widget'
@@ -10,12 +16,6 @@ import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
 import { useStore } from '@/ui/quicknotes/store'
 import { getWidgetContainerCheckboxStateByWidgetId, postEvent } from '@/utils'
-import { dequal } from 'dequal'
-import { useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { useFormContext } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import { useDebouncedCallback } from 'use-debounce'
 import { WidgetContainer, type WidgetContainerProps } from './widget-container'
 import { WidgetLoadingOverlay } from './widget-loading-overlay'
 
@@ -53,7 +53,7 @@ const WidgetFormContainer = ({
   const formValues = form.watch()
   const [loading, setLoading] = useState(false)
   const [shouldValidate, setShouldValidate] = useState(false)
-    const [resetCounter, setResetCounter] = useState<number>(0)
+  const [resetCounter, setResetCounter] = useState<number>(0)
   const memoizedValues = useDeepCompareMemo(() => formValues, [formValues])
 
   const {
@@ -85,48 +85,53 @@ const WidgetFormContainer = ({
 
   const onSubmit =
     (shouldToast = true) =>
-      async (event: React.FormEvent) => {
-        event.preventDefault()
-        setLoading(true)
-        form.clearErrors()
-        const values = await getData(form.getValues(), true, updateCptCodes)
-        const payload = { patientId, data: values, tags,...(appointmentId && {appointmentId}) }
-        const result = await (isQuickNoteView
-          ? saveWidgetClientAction
-          : saveWidgetAction)(payload)
+    async (event: React.FormEvent) => {
+      event.preventDefault()
+      setLoading(true)
+      form.clearErrors()
+      const values = await getData(form.getValues(), true, updateCptCodes)
+      const payload = {
+        patientId,
+        data: values,
+        tags,
+        ...(appointmentId && { appointmentId }),
+      }
+      const result = await (isQuickNoteView
+        ? saveWidgetClientAction
+        : saveWidgetAction)(payload)
 
-        if (result.state === 'error') {
-          postEvent({
-            type: 'widget:save',
-            widgetId: widgetId,
-            success: false,
-          })
-
-          if (shouldToast) {
-            toast.error('Failed to save!')
-          }
-          setLoading(false)
-          return
-        }
-
+      if (result.state === 'error') {
         postEvent({
           type: 'widget:save',
           widgetId: widgetId,
-          success: true,
+          success: false,
         })
-        updateWidgetsData?.(values)
-        revalidateAction(isQuickNoteView)
-        setLoading(false)
-        setShouldValidate(false)
-        fetchHistory({ patientId })
-        if (shouldToast) {
-          toast.success('Saved!')
-        }
 
-        if (props.onSuccess) {
-          props.onSuccess()
+        if (shouldToast) {
+          toast.error('Failed to save!')
         }
+        setLoading(false)
+        return
       }
+
+      postEvent({
+        type: 'widget:save',
+        widgetId: widgetId,
+        success: true,
+      })
+      updateWidgetsData?.(values)
+      revalidateAction(isQuickNoteView)
+      setLoading(false)
+      setShouldValidate(false)
+      fetchHistory({ patientId })
+      if (shouldToast) {
+        toast.success('Saved!')
+      }
+
+      if (props.onSuccess) {
+        props.onSuccess()
+      }
+    }
 
   const saveWidget = async (
     event: MessageEvent,
@@ -135,6 +140,12 @@ const WidgetFormContainer = ({
     if (event.data.widgetId && event.data.widgetId !== widgetId) return
     const isFormValid = await form.trigger()
     if (isFormValid) {
+      if (QuickNoteSectionName.QuicknoteSectionTograBlue === widgetId) {
+        // We are calling the onSubmit function directly here because the form is not being submitted when the timer expires.
+        const mockFormEvent = { preventDefault: () => {} } as React.FormEvent
+        onSubmit()(mockFormEvent)
+        return
+      }
       onSubmit()
     } else {
       postEvent({
@@ -186,7 +197,7 @@ const WidgetFormContainer = ({
         case 'quicknotes:clear':
           if (!isResetDisabled) {
             formResetValues ? form.reset(formResetValues) : form.reset()
-              setResetCounter((prev) => prev + 1)
+            setResetCounter((prev) => prev + 1)
           }
           handleOnClear?.()
           setShouldValidate(false)
@@ -218,7 +229,7 @@ const WidgetFormContainer = ({
     (state) => ({
       hpiData:
         state.actualNotewidgetsData?.[
-        QuickNoteSectionName.QuicknoteSectionHPI
+          QuickNoteSectionName.QuicknoteSectionHPI
         ] ?? [],
       mseData:
         state.actualNotewidgetsData?.[QuickNoteSectionName.QuicknoteSectionMse],

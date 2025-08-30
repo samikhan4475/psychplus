@@ -32,6 +32,7 @@ const sections = [
   QuickNoteSectionName.QuickNoteSectionDesii,
   QuickNoteSectionName.QuickNoteSectionBai,
   QuickNoteSectionName.QuickNoteSectionBdi,
+  QuickNoteSectionName.QuicknoteSectionTograBlue,
 ]
 
 const QuestionnairesLoader = async ({

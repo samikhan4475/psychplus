@@ -88,6 +88,10 @@ const BLOCK_OPTIONS = [
     label: QuestionnaireTabs.BDI_TAB,
     value: QuickNoteSectionName.QuickNoteSectionBdi,
   },
+  {
+    label: QuestionnaireTabs.TOGRA_BLUE_TAB,
+    value: QuickNoteSectionName.QuicknoteSectionTograBlue,
+  },
 ]
 
 export { BLOCK_TITLE, BLOCK_OPTIONS }

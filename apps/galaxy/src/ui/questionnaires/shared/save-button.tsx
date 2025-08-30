@@ -41,6 +41,7 @@ const SaveButton = ({ icon = true, disabled = false }: SaveButtonProps) => {
     QuickNoteSectionName.QuickNoteSectionDesii,
     QuickNoteSectionName.QuickNoteSectionBai,
     QuickNoteSectionName.QuickNoteSectionBdi,
+    QuickNoteSectionName.QuicknoteSectionTograBlue,
   ]
 
   const handleEvent = (event: MessageEvent) => {

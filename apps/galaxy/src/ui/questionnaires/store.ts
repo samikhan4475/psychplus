@@ -46,6 +46,10 @@ interface Store {
     patientId: string,
     addedToNotesData: { [key: string]: string[] | string },
   ) => void
+  startTimer: boolean
+  setStartTimer: (startTimer: boolean) => void
+  hasActiveTimer: (patientId: string) => boolean
+  clearTimer: (patientId: string) => void
 }
 
 const initialState = {
@@ -61,6 +65,8 @@ const useStore = create<Store>((set, get) => ({
   setLoading: (value: boolean) => set({ loading: value }),
   activeQuestionnaireTab: QuestionnaireTabs.DASHBOARD_TAB,
   viewedQuestionnaireTabs: new Set([QuestionnaireTabs.DASHBOARD_TAB]),
+  startTimer: false,
+  setStartTimer: (startTimer) => set({ startTimer }),
   setQuestionnaireActiveTab: (activeQuestionnaireTab) => {
     const viewedQuestionnaireTabs = get().viewedQuestionnaireTabs
     viewedQuestionnaireTabs.add(activeQuestionnaireTab)
@@ -228,6 +234,19 @@ const useStore = create<Store>((set, get) => ({
     } else {
       toast.error('Failed to delete!')
     }
+  },
+  hasActiveTimer: (patientId) => {
+    const storedTimer = localStorage.getItem(`togra-timer-${patientId}`)
+    if (storedTimer) {
+      const { startTime, totalSeconds } = JSON.parse(storedTimer)
+      const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000)
+      const remainingSeconds = Math.max(0, totalSeconds - elapsedSeconds)
+      return remainingSeconds > 0
+    }
+    return false
+  },
+  clearTimer: (patientId) => {
+    localStorage.removeItem(`togra-timer-${patientId}`)
   },
 }))
 

@@ -16,6 +16,7 @@ enum QuestionnaireTabs {
   MDQ_TAB = 'MDQ',
   C_SSRS_TAB = 'C-SSRS',
   PSC_17_TAB = 'PSC-17',
+  TOGRA_BLUE_TAB = 'TOGRA Blue',
   COPS_R_TAB = 'COPS-R',
   ADULT_ASRS_TAB = 'ADULT ASRS',
   VADPRS_TAB = 'VADPRS',
@@ -48,6 +49,7 @@ enum QuestionnairesTitles {
   'HAM-D' = 'Hamilton Depression Rating Scale (HAM-D)',
   'C-SSRS' = 'Columbia-Suicide Severity Rating Scale (C-SSRS)',
   'PSC-17' = 'Pediatric Symptom Checklist-17 (PSC-17)',
+  'TOGRA Blue' = 'TOGRA Blue',
   'CARS-2-ST' = 'Childhood Autism Rating Scale (CARS-2 ST)',
   'MDQ' = 'MDQ Mood Disorder Questionnaire (MDQ)',
   'COPS-R' = 'Candidate & Officer Personnel Survey (COPS-R)',
@@ -84,6 +86,7 @@ const quickNotesSectionsTitles = {
     'Columbia-Suicide Severity Rating Scale (C-SSRS)',
   [QuickNoteSectionName.QuickNoteSectionPsc17]:
     'Pediatric Symptom Checklist-17 (PSC-17)',
+  [QuickNoteSectionName.QuicknoteSectionTograBlue]: 'TOGRA Blue',
   [QuickNoteSectionName.QuickNoteSectionCopsR]:
     'Candidate & Officer Personnel Survey (COPS-R)',
   [QuickNoteSectionName.QuickNoteSectionAdultAsrs]:
@@ -124,6 +127,8 @@ const HISTORIES_SECTIONS = [
   QuickNoteSectionName.QuickNoteSectionDesii,
   QuickNoteSectionName.QuickNoteSectionMdq,
   QuickNoteSectionName.QuickNoteSectionCars2St,
+  QuickNoteSectionName.AddToNoteQuestionnaire,
+  QuickNoteSectionName.QuicknoteSectionTograBlue,
 ]
 export {
   QuestionnaireTabs,

@@ -2,17 +2,18 @@ import React from 'react'
 import { useParams } from 'next/navigation'
 import { Button, Flex } from '@radix-ui/themes'
 import { Input, Label } from 'react-aria-components'
+import { useFormContext } from 'react-hook-form'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { HIDDENQUESTIONNAIRESECTIONNAMES } from '../../dashboard-tab/constants'
 import { sendToPatient } from '../../utils'
-import { SaveButton } from '../save-button'
-import { useFormContext } from 'react-hook-form'
 import { VADPRS_CHILD_EVALUATION } from '../../vadprs-tab/constants'
+import { SaveButton } from '../save-button'
 
 type FilloutCurrentTabProps = React.PropsWithChildren<{
   max: number
   value?: number
   widgetId: QuickNoteSectionName
+  hideSaveButton?: boolean
 }>
 
 const FilloutCurrentTab = ({
@@ -20,10 +21,13 @@ const FilloutCurrentTab = ({
   value,
   widgetId,
   children,
+  hideSaveButton = false,
 }: FilloutCurrentTabProps) => {
   const form = useFormContext()
   const { id } = useParams<{ id: string }>()
-  const isDisabled = widgetId === QuickNoteSectionName.QuickNoteSectionVadprs && !form.watch(VADPRS_CHILD_EVALUATION);
+  const isDisabled =
+    widgetId === QuickNoteSectionName.QuickNoteSectionVadprs &&
+    !form.watch(VADPRS_CHILD_EVALUATION)
 
   return (
     <Flex maxWidth="100%" className="bg-white" px="3" py="1" direction="column">
@@ -57,7 +61,7 @@ const FilloutCurrentTab = ({
             Request Patient to Fill
           </Button>
         )}
-        <SaveButton disabled={isDisabled} />
+        {!hideSaveButton && <SaveButton disabled={isDisabled} />}
       </Flex>
     </Flex>
   )

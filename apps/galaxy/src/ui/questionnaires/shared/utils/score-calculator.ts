@@ -1,6 +1,7 @@
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { QUESTIONS } from '../../des-ii-tab/constants'
+import { calculateTotalScore as calculateTograBlueScore } from '../../togra-blue-tab/utils'
 import { parseSectionItemValue } from '../../utils'
 
 export const calculateVadprsScore = (data: QuickNoteSectionItem[]): number => {
@@ -30,6 +31,17 @@ export const calculateDefaultScore = (data: QuickNoteSectionItem[]): number => {
   }, 0)
 }
 
+export const calculateTograScore = (data: QuickNoteSectionItem[]): number => {
+  return (
+    calculateTograBlueScore(
+      data.reduce((acc, item) => {
+        acc[item.sectionItem] = item.sectionItemValue
+        return acc
+      }, {} as Record<string, string>),
+    ).correct ?? 0
+  )
+}
+
 export const calculateTotalScore = (
   data: QuickNoteSectionItem[],
   sectionName: QuickNoteSectionName,
@@ -44,6 +56,9 @@ export const calculateTotalScore = (
 
     case QuickNoteSectionName.QuickNoteSectionDesii:
       return calculateDesiiScore(defaultScore)
+
+    case QuickNoteSectionName.QuicknoteSectionTograBlue:
+      return calculateTograScore(data)
 
     default:
       return defaultScore

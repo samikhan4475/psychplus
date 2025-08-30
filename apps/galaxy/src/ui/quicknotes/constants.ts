@@ -7,7 +7,7 @@ import {
 } from '../diagnosis/diagnosis/utils'
 
 enum QuickNoteSectionName {
-  NoShowPopUp='NoShowPopUp',
+  NoShowPopUp = 'NoShowPopUp',
   QuickNoteSectionDashboard = 'QuicknoteSectionDashboard',
   QuicknoteSectionQuestionnaire = 'QuicknoteSectionQuestionnaire',
   QuestionnaireActualNoteView = 'QuicknoteSectionQuestionnaireActualNoteView',
@@ -70,6 +70,7 @@ enum QuickNoteSectionName {
   QuicknoteSectionLabResults = 'QuicknoteSectionLabResults',
   QuicknoteSectionAutoReferrals = 'QuicknoteSectionAutoReferrals',
   QuicknoteSectionUds = 'QuicknoteSectionUDS',
+  QuicknoteSectionTograBlue = 'QuicknoteSectionTograBlue',
   QuickNoteSectionCopsR = 'QuicknoteSectionQuestionnaireCopsR',
   QuicknoteSectionFitForDutyPsychEval = 'QuicknoteSectionFitForDutyPsychEval',
   QuickNoteSectionAdultAsrs = 'QuicknoteSectionQuestionnaireAdultAsrs',
@@ -102,6 +103,7 @@ const questionnairesAddToNotesSection = [
   `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionDesii}`,
   `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionBai}`,
   `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionBdi}`,
+  `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuicknoteSectionTograBlue}`,
 ]
 
 const COPY_PREVIOUS_BUTTON =

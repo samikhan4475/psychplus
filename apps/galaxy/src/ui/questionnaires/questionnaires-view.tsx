@@ -27,6 +27,7 @@ import { Phq9Tab } from './phq-9-tab'
 import { Psc17Tab } from './psc-17-tab'
 import { SnapIvTab } from './snap-iv-tab'
 import { useStore } from './store'
+import { TograBlueTab } from './togra-blue-tab'
 import { VadprsTab } from './vadprs-tab'
 import { YBocsTab } from './y-bocs-tab'
 
@@ -74,6 +75,7 @@ const QuestionnairesView = ({
     QuestionnaireTabs.BDI_TAB,
     QuestionnaireTabs.CARS_2_ST_TAB,
     QuestionnaireTabs.MDQ_TAB,
+    QuestionnaireTabs.TOGRA_BLUE_TAB,
   ].map((q) => ({ label: q, value: q }))
 
   const tabComponents = {
@@ -99,6 +101,7 @@ const QuestionnairesView = ({
     [QuestionnaireTabs.BDI_TAB]: BdiTab,
     [QuestionnaireTabs.CARS_2_ST_TAB]: Cars2StTab,
     [QuestionnaireTabs.MDQ_TAB]: MdqTab,
+    [QuestionnaireTabs.TOGRA_BLUE_TAB]: TograBlueTab,
   }
 
   useEffect(() => {

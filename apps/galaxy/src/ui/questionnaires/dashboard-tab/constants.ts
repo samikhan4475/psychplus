@@ -19,6 +19,7 @@ const HIDDENQUESTIONNAIREIDS = [
   'Q19',
   'Q20',
   'Q21',
+  'Q22',
 ]
 
 const HIDDENQUESTIONNAIRESECTIONNAMES = [
@@ -29,6 +30,7 @@ const HIDDENQUESTIONNAIRESECTIONNAMES = [
   QuickNoteSectionName.QuickNoteSectionBdi,
   QuickNoteSectionName.QuickNoteSectionCars2St,
   QuickNoteSectionName.QuickNoteSectionMdq,
+  QuickNoteSectionName.QuicknoteSectionTograBlue,
 ]
 
 export { QUESTIONS, HIDDENQUESTIONNAIREIDS, HIDDENQUESTIONNAIRESECTIONNAMES }

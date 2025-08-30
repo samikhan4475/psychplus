@@ -162,6 +162,10 @@ const questionnaireViewDta = [
     scoreRange: BDI_SCORE_INTERPRETATION_RANGES,
     questionnaireTab: QuestionnaireTabs.BDI_TAB,
   },
+  {
+    sectionName: QuickNoteSectionName.QuicknoteSectionTograBlue,
+    questionnaireTab: QuestionnaireTabs.TOGRA_BLUE_TAB,
+  },
 ]
 
 export const questionnaireViewConstants = (

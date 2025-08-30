@@ -1,3 +1,5 @@
+'use server'
+
 import * as api from '@/api'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'

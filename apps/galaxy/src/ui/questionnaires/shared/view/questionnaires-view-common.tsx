@@ -14,6 +14,7 @@ import { MocaView } from './moca-view'
 import { Psc17View } from './psc-17-view'
 import { QuestionnaireViewCommon } from './questionnaires-view'
 import { SnapIvView } from './snap-iv-view'
+import { TograBlueView } from './togra-blue-view'
 import { VadprsView } from './vadprs-view'
 import { YBocView } from './y-boc-view'
 
@@ -59,6 +60,8 @@ const QuestionnaireDetailView = ({
         return <CarsStView data={data} />
       case QuickNoteSectionName.QuickNoteSectionMdq:
         return <MdqView data={data} />
+      case QuickNoteSectionName.QuicknoteSectionTograBlue:
+        return <TograBlueView data={data} />
       default:
         return null
     }

@@ -21,11 +21,21 @@ const RowRightButtons = ({
   const showButton =
     filteredHistories.length > 0 && filteredHistories.length < 2
 
+  const TograData = historiesData.find(
+    (history) =>
+      history.sectionName === QuickNoteSectionName.QuicknoteSectionTograBlue,
+  )
+
   return (
     <Flex gap="4" align="center" justify="between" mr="1">
       <FillOutButton
         sectionName={questionnaire as QuickNoteSectionName}
-        data={[]}
+        data={
+          questionnaire === QuickNoteSectionName.QuicknoteSectionTograBlue &&
+          TograData?.data
+            ? TograData?.data
+            : []
+        }
       />
       {showButton && (
         <ViewButton

@@ -14,6 +14,7 @@ import { FilloutCommon } from './fill-out-view-common'
 import { FilloutCssrs } from './fill-out-view-cssrs'
 import { FilloutMdq } from './fill-out-view-mdq'
 import { FilloutMoca } from './fill-out-view-moca'
+import { FilloutTograBlue } from './fill-out-view-togra'
 import { FilloutYboc } from './fill-out-yboc'
 
 type FillOutProps = PropsWithChildren<{
@@ -48,6 +49,8 @@ const FillOutView = ({ data, sectionName }: FillOutProps) => {
         return <FilloutGqAsc data={data} sectionName={sectionName} />
       case QuickNoteSectionName.QuickNoteSectionDesii:
         return <FilloutDesii data={data} sectionName={sectionName} />
+      case QuickNoteSectionName.QuicknoteSectionTograBlue:
+        return <FilloutTograBlue sectionName={sectionName} data={data} />
       default:
         return <FilloutCommon data={data} sectionName={sectionName} />
     }

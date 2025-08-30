@@ -19,12 +19,12 @@ interface QuestionnairesMocaData {
 }
 
 interface QuestionnairesFormMocaProps {
-  labels?: string[]
+  labels?: string
   totalScore: { [key: string]: number }
   disabled?: boolean
 }
 
-export type scoreType = Record<string, number>
+export type ScoreType = Record<string, number>
 
 export type {
   ScoreInterpretationRange,
