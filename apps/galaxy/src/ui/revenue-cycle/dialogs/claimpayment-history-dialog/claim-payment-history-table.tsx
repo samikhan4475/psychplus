@@ -12,10 +12,9 @@ import {
 } from '@/components'
 import { formatDateTime } from '@/utils'
 import { getClaimPaymentHistoryListAction } from '../../actions/get-claimpayments-history-action'
+import { NON_PAYMENT_FIELDS } from '../../constants'
 import { ClaimAuditHistory, ClaimAuditHistoryPayload } from '../../types'
 import { InsurancePaymentHistoryFilterForm } from '../insurance-payment-history-dialog/insurance-payment-history-filter-form'
-
-const excludedKeys = ['Id', 'PostedBy']
 
 const columns: ColumnDef<ClaimAuditHistory>[] = [
   {
@@ -72,11 +71,8 @@ const columns: ColumnDef<ClaimAuditHistory>[] = [
     cell: ({ row }) => {
       const { oldValue, fieldName } = row.original
       const hasPayment =
-        !isNaN(Number(oldValue)) && !excludedKeys.includes(fieldName)
-
-      return (
-        <TextCell hasPayment={hasPayment}>{row.original.oldValue}</TextCell>
-      )
+        !isNaN(Number(oldValue)) && !NON_PAYMENT_FIELDS.includes(fieldName)
+      return <TextCell hasPayment={hasPayment}>{oldValue}</TextCell>
     },
   },
   {
@@ -88,8 +84,7 @@ const columns: ColumnDef<ClaimAuditHistory>[] = [
     cell: ({ row }) => {
       const { newValue, fieldName } = row.original
       const hasPayment =
-        !isNaN(Number(newValue)) && !excludedKeys.includes(fieldName)
-
+        !isNaN(Number(newValue)) && !NON_PAYMENT_FIELDS.includes(fieldName)
       return <TextCell hasPayment={hasPayment}>{newValue}</TextCell>
     },
   },

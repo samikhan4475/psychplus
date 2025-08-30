@@ -13,10 +13,13 @@ const defaultPayload = {
 const getClaimPaymentHistoryListAction = async (
   payload: PaymentHistoryPayload,
 ): Promise<api.ActionResult<ClaimAuditHistory[]>> => {
-  const response = await api.POST<ClaimAuditHistory[]>(
-    api.GET_CLAIMPAYMENTS_HISTORY_LIST_ENDPOINT(payload.id),
-    { ...defaultPayload, ...payload },
-  )
+  const url = new URL(api.GET_CLAIMPAYMENTS_HISTORY_LIST_ENDPOINT(payload.id))
+  url.searchParams.append('orderBy', 'updatedOn asc')
+
+  const response = await api.POST<ClaimAuditHistory[]>(url.toString(), {
+    ...defaultPayload,
+    ...payload,
+  })
 
   if (response.state === 'error') {
     return {
