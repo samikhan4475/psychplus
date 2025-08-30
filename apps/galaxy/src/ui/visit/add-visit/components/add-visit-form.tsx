@@ -8,7 +8,7 @@ import { NewPatient, visitFrequency } from '@/types'
 import { AddPatient } from '@/ui/patient/add-patient'
 import { AddVacation } from '@/ui/vacation/add-vacation'
 import { cn } from '@/utils'
-import { bookVisitAction } from '../../client-actions'
+import { bookVisitAction, getProviders } from '../../client-actions'
 import { BookVisitPayload, BookVisitResponse } from '../../types'
 import { schema, SchemaType } from '../schema'
 import { useAddVisitStore } from '../store'
@@ -254,7 +254,20 @@ const AddVisitForm = ({
         resultWidgets.error ?? 'Failed to save widgets for custom visit',
       )
     const billingProviderType = form.getValues('billingProviderInfo')
-    const cosignerId = form.getValues('cosignerId')
+    const [cosignerStaffId, providerType] = form.getValues([
+      'cosignerId',
+      'providerType',
+    ])
+    let coSignedByUserId = ''
+    if (cosignerStaffId) {
+      const res = await getProviders({
+        locationIds: [location],
+        providerType,
+        staffIds: [cosignerStaffId],
+      })
+      if (res.state === 'success' && res.data.length > 0)
+        coSignedByUserId = String(res.data[0].userId)
+    }
     const resultSignNote = await signNoteAction({
       patientId: String(patientId),
       appointmentId: String(appointmentId),
@@ -263,7 +276,7 @@ const AddVisitForm = ({
       noteTitleCode: noteTitleCode?.value ?? '',
       signedByUserId: providerUserId,
       billingProviderType,
-      coSignedByUserId: cosignerId,
+      coSignedByUserId,
     })
 
     if (resultSignNote.state === 'error')

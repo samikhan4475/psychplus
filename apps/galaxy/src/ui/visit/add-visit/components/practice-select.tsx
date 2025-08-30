@@ -24,8 +24,11 @@ const PracticeSelect = () => {
     setLoading(true)
 
     const result = await getPracticeIdsAction(location)
-    if (result.state === 'success') {
+    if (result.state === 'success' && result.data.length > 0) {
       setOrganizations(result.data)
+    } else if (result.state === 'success' && result.data.length === 0) {
+      setOrganizations([])
+      form.setValue('practiceId', '')
     }
     setLoading(false)
   }

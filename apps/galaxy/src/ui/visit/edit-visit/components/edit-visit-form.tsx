@@ -14,16 +14,23 @@ import {
 import { CODESETS, FEATURE_FLAGS } from '@/constants'
 import { useCodesetCodes, useHasPermission } from '@/hooks'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
-import { Appointment, BookVisitPayload, visitFrequency, VisitSequenceTypes } from '@/types'
+import {
+  Appointment,
+  BookVisitPayload,
+  visitFrequency,
+  VisitSequenceTypes,
+} from '@/types'
 import { signNoteAction } from '@/ui/quicknotes/actions'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { isDirty } from '@/ui/schedule/utils'
 import { cn, getCalendarDate } from '@/utils'
 import { AuthorizationDateField } from '../../add-visit/components/authorization-date-field'
+import { BillingProviderInfoPhoneNum } from '../../add-visit/components/billing-provider-info-select'
 import { CosignerSelect } from '../../add-visit/components/cosigner-select'
 import { InsuranceAuthNumberField } from '../../add-visit/components/insurance-authorization-number-field'
 import { PracticeSelect } from '../../add-visit/components/practice-select'
 import { sectionCodesMapping } from '../../add-visit/util'
+import { getProviders } from '../../client-actions'
 import { SAVE_APPOINTMENT } from '../../constants'
 import { useUpdateVisitInsuranceVerificationStatus } from '../../hooks/use-update-visit-insurance-verfication-status'
 import {
@@ -39,7 +46,6 @@ import {
   transformRequestPayload,
 } from '../transform'
 import { AddonsSelect } from './addons-select'
-import { BillingProviderInfoPhoneNum } from './billing-provider-info-select'
 import { CptCodeSelect } from './cpt-code-select'
 import { DiagnosisSelect } from './diagnosis-select'
 import { EditVisitAlert } from './edit-visit-alert'
@@ -91,7 +97,7 @@ const EditVisitForm = ({
     visitDetails?.locationTimezoneId,
   )
 
-  const { billingProviderType, practiceId, cosignerStaffId } =
+  const { billingProviderType, practiceId, supervisingProviderId } =
     visitDetails?.claimData ?? {}
   const dischargeDate = visitDetails?.dischargeDate
     ? getCalendarDate(visitDetails?.dischargeDate)
@@ -143,7 +149,7 @@ const EditVisitForm = ({
       timeOfAdmission: timeOfAdmission,
       groupType: visitDetails?.groupTherapyTypeCode ?? '',
       visitStatus: visitDetails?.visitStatus,
-      billingProviderType,
+      billingProviderInfo: billingProviderType,
       insuranceVerificationStatus: visitDetails?.insuranceVerification,
       legal: visitDetails?.legalStatus,
       insuranceAuthorizationNumber: visitDetails?.authorizationNumber,
@@ -172,7 +178,9 @@ const EditVisitForm = ({
       authorizationNumber: visitDetails?.authorizationNumber,
       customCptCodes: visitDetails.customCptCodes ?? '',
       practiceId,
-      cosignerId: cosignerStaffId ? String(cosignerStaffId) : undefined,
+      cosignerId: supervisingProviderId
+        ? String(supervisingProviderId)
+        : undefined,
       isOverridePrimaryProvider: undefined,
     },
   })
@@ -235,23 +243,46 @@ const EditVisitForm = ({
       return toast.error(
         resultWidgets.error ?? 'Failed to save widgets for custom visit',
       )
-    const billingProviderType = form.getValues('billingProviderType')
+    const billingProviderType = form.getValues('billingProviderInfo')
     const cosignerId = form.getValues('cosignerId')
     if (visitDetails.claimData) {
+      const cptCodesAndAddons = [
+        form.getValues('customCptCodes'),
+        form.getValues('customAddons'),
+      ]
+        .filter(Boolean)
+        .join(',')
+
       const { updatedDiagnoses, updatedServiceLines } =
         transformClaimServiceLines({
           timeZone: getLocalTimeZone(),
-          rawCptCodes: form.getValues('customCptCodes') ?? '',
+          rawCptCodes: cptCodesAndAddons,
           rawDiagnosisCodes: form.getValues('customDiagnosis') ?? '',
-          existingLines: visitDetails.claimData?.claimServiceLines ?? [],
-          existingDiagnoses: visitDetails.claimData?.claimDiagnosis ?? [],
-          claimId: visitDetails.claimData?.id ?? '',
+          claim: visitDetails.claimData,
         })
 
       visitDetails.claimData.claimServiceLines = updatedServiceLines
       visitDetails.claimData.claimDiagnosis = updatedDiagnoses
     }
 
+    if (appointmentId === oldAppointmentId)
+      delete visitDetails.claimData?.cptCodes
+
+    const [cosignerStaffId, providerType, location] = form.getValues([
+      'cosignerId',
+      'providerType',
+      'location',
+    ])
+    let coSignedByUserId = ''
+    if (cosignerStaffId) {
+      const res = await getProviders({
+        locationIds: [location],
+        providerType,
+        staffIds: [cosignerStaffId],
+      })
+      if (res.state === 'success' && res.data.length > 0)
+        coSignedByUserId = String(res.data[0].userId)
+    }
     const resultSignNote = await signNoteAction({
       patientId: String(patientId),
       appointmentId: String(appointmentId),
@@ -260,12 +291,12 @@ const EditVisitForm = ({
       noteTitleCode: noteTitleCode?.value ?? '',
       signedByUserId: +provider!,
       billingProviderType,
-      coSignedByUserId: cosignerId,
+      coSignedByUserId,
       ...(appointmentId === oldAppointmentId && {
         claimModel: JSON.parse(
           JSON.stringify({
             ...visitDetails.claimData,
-            cosignerStaffId: cosignerId,
+            supervisingProviderId: cosignerId,
             billingProviderType,
           }),
         ),
@@ -390,13 +421,6 @@ const EditVisitForm = ({
           <Box className="col-span-4">
             <ServiceSelect />
           </Box>
-          {customVisitFeatureEnabled && (
-            <Grid columns="3" className="col-span-12" gap="3">
-              {isCustomAppointment && <CosignerSelect />}
-              <PracticeSelect />
-              <BillingProviderInfoPhoneNum />
-            </Grid>
-          )}
 
           {isServiceTimeDependent ? (
             <TimedVisitForm
@@ -407,6 +431,13 @@ const EditVisitForm = ({
               isPsychiatristVisitTypeSequence={isPsychiatristVisitTypeSequence}
               visitDetails={visitDetails}
             />
+          )}
+          {customVisitFeatureEnabled && (
+            <Grid columns="3" className="col-span-12" gap="3">
+              <PracticeSelect />
+              <BillingProviderInfoPhoneNum />
+              {isCustomAppointment && <CosignerSelect />}
+            </Grid>
           )}
         </Grid>
         {isCustomAppointment && customVisitFeatureEnabled && (

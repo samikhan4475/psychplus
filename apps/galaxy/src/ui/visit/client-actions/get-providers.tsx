@@ -24,11 +24,13 @@ const getProviders = async (payload: {
   isIncludeProvidersForServicePrimaryProviderType?: boolean
   servicesOffered?: string
   staffIds?: string[]
+  userIds?: string[]
 }): Promise<api.ActionResult<Provider[]>> => {
   const {
     isIncludeProvidersForServicePrimaryProviderType,
     servicesOffered,
     staffIds,
+    userIds,
     providerType,
     ...rest
   } = payload
@@ -48,6 +50,9 @@ const getProviders = async (payload: {
     }),
     ...(staffIds && {
       staffIds,
+    }),
+    ...(userIds && {
+      userIds,
     }),
   })
   if (response.state === 'error') {

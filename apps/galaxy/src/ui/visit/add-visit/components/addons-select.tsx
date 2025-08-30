@@ -34,7 +34,7 @@ const AddonsSelect = () => {
     <Flex direction="column" className="shadow-2">
       <Flex justify="between" p="1" className="bg-blue-2">
         <Text size="1" weight="medium">
-          Addons
+          Add on Codes
         </Text>
         <SearchPopoverInput
           placeholder="Search Addon"

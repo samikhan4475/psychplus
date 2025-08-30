@@ -2,6 +2,7 @@ import { parseZonedDateTime, today } from '@internationalized/date'
 import {
   Appointment,
   BookVisitPayload,
+  Claim,
   ClaimDiagnosis,
   ClaimServiceLine,
   visitFrequency,
@@ -58,18 +59,17 @@ interface UpdateLinesParams {
   timeZone: string
   rawCptCodes: string
   rawDiagnosisCodes: string
-  existingLines: ClaimServiceLine[]
-  existingDiagnoses: ClaimDiagnosis[]
-  claimId: string
+  claim: Claim
 }
 function transformClaimServiceLines({
   timeZone,
   rawCptCodes,
   rawDiagnosisCodes,
-  existingLines,
-  existingDiagnoses,
-  claimId,
+  claim,
 }: UpdateLinesParams) {
+  const existingLines = claim?.claimServiceLines ?? []
+  const existingDiagnoses = claim?.claimDiagnosis ?? []
+  const claimId = claim?.id ?? ''
   const todayDate = today(timeZone)
 
   const inputCptCodes = rawCptCodes
@@ -83,7 +83,7 @@ function transformClaimServiceLines({
   for (const line of existingLines) {
     const cpt = line.cptCode ?? ''
     if (inputCptCodes.includes(cpt)) {
-      preservedLines.push(line)
+      preservedLines.push({ ...line, recordStatus: 'Active' })
       usedCptCodes.add(cpt)
     } else if (line.id) {
       preservedLines.push({ ...line, recordStatus: 'Deleted' })
@@ -108,7 +108,7 @@ function transformClaimServiceLines({
       units: 0,
       unitAmount: 0,
       totalAmount: 0,
-      placeOfService: '',
+      placeOfService: claim.placeOfService,
       isDoNotBill: false,
       statusCode: 'NewCharge',
       isAnesthesia: false,
@@ -129,7 +129,7 @@ function transformClaimServiceLines({
   for (const diag of existingDiagnoses) {
     const code = diag.diagnosisCode ?? ''
     if (inputDiagnosisCodes.includes(code)) {
-      preservedDiagnoses.push(diag)
+      preservedDiagnoses.push({ ...diag, recordStatus: 'Active' })
       usedDiagnosisCodes.add(code)
     } else if (diag.id) {
       preservedDiagnoses.push({ ...diag, recordStatus: 'Deleted' })

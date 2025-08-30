@@ -35,7 +35,6 @@ const CosignerSelect = () => {
 
         setLoading(false)
         if (result.state === 'error') return setOptions([])
-
         const filteredOptions =
           result.data
             ?.filter((option) => option.id !== Number(provider))
@@ -48,6 +47,7 @@ const CosignerSelect = () => {
       })()
     }
   }, [location, providerType, provider])
+
   return (
     <FormFieldContainer className="flex-1">
       <FormFieldLabel>Cosigner</FormFieldLabel>

@@ -7,11 +7,11 @@ const customVisitRequiredFields = (flagEnabled: boolean) =>
   flagEnabled
     ? {
         practiceId: z.string().min(1, 'Required'),
-        billingProviderType: z.string().min(1, 'Required'),
+        billingProviderInfo: z.string().min(1, 'Required'),
       }
     : {
         practiceId: z.string().optional(),
-        billingProviderType: z.string().optional(),
+        billingProviderInfo: z.string().optional(),
       }
 
 const schema = (customVisitFeatureEnabled: boolean) =>

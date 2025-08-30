@@ -12,7 +12,6 @@ import { FormContainer } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import {
-  Claim,
   ClaimDiagnosisApiResponse,
   ClaimServiceLine,
   ClaimServiceLineApiResponse,
