@@ -84,11 +84,7 @@ const InsuranceForm = ({
   const shortUrlReference = searchParams.get('reference')
   const { toast } = useToast()
   const router = useRouter()
-  const { accessToken } = useStore()
 
-  const headers = {
-    Authorization: `Bearer ${accessToken}`,
-  }
 
   const { form, watchisPatientPolicyHolder, hasChanges, onCheckedChange } =
     useInsuranceFormLogic(insurance)
@@ -110,7 +106,7 @@ const InsuranceForm = ({
       ? await updateInsuranceAction({ ...payload, verificationStatus })
       : await addInsuranceAction(
           payload,
-          headers,
+          null,
           isUnAuthenticated,
           shortUrlReference as string,
         )

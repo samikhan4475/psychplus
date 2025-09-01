@@ -54,11 +54,6 @@ const CardForm = ({
   const shortUrlReference = searchParams.get('reference')
   const router = useRouter()
   const stripe = useStripe()
-  const { accessToken } = useStore()
-
-  const headers = {
-    Authorization: `Bearer ${accessToken}`,
-  }
 
   const elements = useElements()
 
@@ -152,7 +147,7 @@ const CardForm = ({
 
     return addCreditCardAction({
       payload,
-      headers,
+      headers:null,
       isUnAuthenticated,
       shortUrlReference: shortUrlReference as string,
     })

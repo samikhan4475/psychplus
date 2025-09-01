@@ -25,7 +25,7 @@ interface AddCreditCardParams {
       postalPlus4Code?: string
     }
   }
-  headers: HeadersInit
+  headers: HeadersInit | null
   isUnAuthenticated?: boolean
   shortUrlReference?: string
 }
@@ -43,7 +43,7 @@ const addCreditCardAction = async ({
     {
       ...payload,
     },
-    { headers },
+    headers ? { headers }: {},
   )
 
   if (result.state === 'error') {
