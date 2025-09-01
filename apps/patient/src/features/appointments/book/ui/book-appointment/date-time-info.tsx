@@ -17,6 +17,7 @@ interface DateTimeInfoProps {
   acsInfo: AcsInfo
   isCall?: boolean
   appointmentId?: string | null
+  isUnAuthenticated?: boolean
 }
 
 interface TextWithCallStyleProps {
@@ -91,7 +92,7 @@ const DateTimeInfo = ({
   const timeLabel = isCall
     ? getTimeLabel(String(acsInfo?.paymentData?.appointmentDateTime))
     : getTimeLabel(slot.startDate)
-
+    
   return (
     <Flex
       className="text-[14px] text-[#24366B] md:text-[18px]"
@@ -106,7 +107,9 @@ const DateTimeInfo = ({
           isCall={isCall}
         />
         <TimeDisplay timeLabel={timeLabel} isCall={isCall} />
-        {isCall && appointmentId && <VisitIdDisplay appointmentId={appointmentId} />}
+        {isCall && appointmentId && (
+          <VisitIdDisplay appointmentId={appointmentId} />
+        )}
       </Flex>
     </Flex>
   )

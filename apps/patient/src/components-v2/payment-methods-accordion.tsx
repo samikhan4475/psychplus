@@ -22,11 +22,12 @@ import { VerificationStatus } from '@/types'
 interface PaymentMethodAccordionProps {
   paymentMethod: PaymentType
   stripeApiKey: string
-  creditCards: CreditCard[]
-  patientInsurances: InsurancePolicy[]
-  insurancePayers: InsurancePayer[]
+  creditCards?: CreditCard[]
+  patientInsurances?: InsurancePolicy[]
+  insurancePayers?: InsurancePayer[]
   isCall?: boolean
   acsInfo?: AcsInfo
+  isUnAuthenticated?: boolean
 }
 
 const isFullyPaid = (acsInfo?: AcsInfo) => {
@@ -47,20 +48,35 @@ const PaymentMethodAccordion = ({
   insurancePayers,
   isCall = false,
   acsInfo,
+  isUnAuthenticated = false,
 }: PaymentMethodAccordionProps) => {
   const stripePromise = useMemo(() => loadStripe(stripeApiKey), [stripeApiKey])
 
   const getDefaultInsuranceOpenState = () => {
+    if (isUnAuthenticated) {
+      return acsInfo?.paymentData?.isPrimaryInsuranceActive
+        ? ''
+        : 'Add Insurance'
+    }
     if (!isCall) return 'Insurance on File'
-    const primaryInsurance = getPrimaryInsurance(patientInsurances || [])
+    const primaryInsurance = getPrimaryInsurance(
+      patientInsurances as InsurancePolicy[],
+    )
     const hasActivePrimaryInsurance =
       primaryInsurance?.verificationStatus === VerificationStatus.Verified
     return hasActivePrimaryInsurance ? '' : 'Add Insurance'
   }
 
   const getDefaultCreditCardOpenState = () => {
+    if (isUnAuthenticated) {
+      return acsInfo?.paymentData?.patientCardInfoExist
+        ? ''
+        : 'Add Payment Card'
+    }
     if (!isCall) return 'Credit/Debit Cards'
-    const hasActivePrimaryCard = getPrimaryActiveCard(creditCards)
+    const hasActivePrimaryCard = getPrimaryActiveCard(
+      creditCards as CreditCard[],
+    )
     return hasActivePrimaryCard ? '' : 'Add Payment Card'
   }
 
@@ -76,7 +92,9 @@ const PaymentMethodAccordion = ({
     isCall && paymentMethod === PaymentType.SelfPay && isFullyPaid(acsInfo)
 
   useEffect(() => {
-    setSelectedCreditCard(creditCards?.length > 0 ? creditCards?.[0] : undefined)
+    if (creditCards?.length) {
+      setSelectedCreditCard(creditCards[0])
+    }
   }, [creditCards])
 
   useEffect(() => {
@@ -91,25 +109,27 @@ const PaymentMethodAccordion = ({
       case PaymentType.Insurance:
         return (
           <InsurancePaymentSection
-            patientInsurances={patientInsurances || []}
-            insurancePayers={insurancePayers}
-            creditCards={creditCards || []}
+            patientInsurances={patientInsurances as InsurancePolicy[]}
+            insurancePayers={insurancePayers as InsurancePayer[]}
+            creditCards={creditCards as CreditCard[]}
             isCall={isCall}
             insuranceOpenStateValue={insuranceOpenStateValue}
             setInsuranceOpenStateValue={setInsuranceOpenStateValue}
             setCreditCardOpenStateValue={setCreditCardOpenStateValue}
             selectedCreditCard={selectedCreditCard}
             shouldHideSelfPay={shouldHideSelfPay}
+            isUnAuthenticated={isUnAuthenticated}
           />
         )
       case PaymentType.SelfPay:
         return (
           <SelfPaySection
-            creditCards={creditCards || []}
+            creditCards={creditCards as CreditCard[]}
             isCall={isCall}
             creditCardOpenStateValue={creditCardOpenStateValue}
             setCreditCardOpenStateValue={setCreditCardOpenStateValue}
             selectedCreditCard={selectedCreditCard}
+            isUnAuthenticated={isUnAuthenticated}
           />
         )
       case PaymentType.PreferredPartner:

@@ -30,6 +30,7 @@ interface InsurancePaymentSectionProps {
   setCreditCardOpenStateValue: (value: string) => void
   selectedCreditCard?: CreditCard
   shouldHideSelfPay: boolean
+  isUnAuthenticated?: boolean
 }
 
 const InsurancePaymentSection = ({
@@ -42,6 +43,7 @@ const InsurancePaymentSection = ({
   setCreditCardOpenStateValue,
   selectedCreditCard,
   shouldHideSelfPay,
+  isUnAuthenticated = false
 }: InsurancePaymentSectionProps) => {
   return (
     <Accordion.Root
@@ -51,11 +53,12 @@ const InsurancePaymentSection = ({
       value={insuranceOpenStateValue}
       onValueChange={setInsuranceOpenStateValue}
     >
-      {isCall ? (
+      {!isUnAuthenticated && ( isCall ? (
         <InsuranceList
           patientInsurances={patientInsurances}
           insurancePayers={insurancePayers}
           isCall={isCall}
+          isUnAuthenticated={isUnAuthenticated}
         />
       ) : (
         <PaymentMethodsAccordionItem
@@ -70,7 +73,7 @@ const InsurancePaymentSection = ({
             </Box>
           }
         />
-      )}
+      ))}
       <PaymentMethodsAccordionItem
         title={isCall ? 'Add Insurance' : 'Add/Edit Insurance'}
         content={
@@ -78,10 +81,11 @@ const InsurancePaymentSection = ({
             isCall={isCall}
             insurancePayers={insurancePayers}
             onFormClose={() => setInsuranceOpenStateValue('Insurance on File')}
+            isUnAuthenticated={isUnAuthenticated}
           />
         }
       />
-      {isCall && selectedCreditCard && (
+      {isCall && selectedCreditCard && !isUnAuthenticated && (
         <CreditCardList creditCards={creditCards} />
       )}
       {isCall && !shouldHideSelfPay && (
@@ -94,6 +98,7 @@ const InsurancePaymentSection = ({
               onFormClose={() =>
                 setCreditCardOpenStateValue('Credit/Debit Cards')
               }
+              isUnAuthenticated={isUnAuthenticated}
             />
           }
         />
@@ -111,6 +116,7 @@ const InsurancePaymentSection = ({
                       <TriggerButton title="Add New Credit/Debit Card" />
                     }
                     existingCards={creditCards}
+                    isUnAuthenticated={isUnAuthenticated}
                   />
                 </Flex>
               ) : (
@@ -124,6 +130,7 @@ const InsurancePaymentSection = ({
                       }
                       triggerClassName="justify-center"
                       existingCards={creditCards}
+                      isUnAuthenticated={isUnAuthenticated}
                     />
                   }
                 />

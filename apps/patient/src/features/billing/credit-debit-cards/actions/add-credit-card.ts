@@ -13,7 +13,7 @@ interface AddCreditCardParams {
     expireMonth: number
     expireYear: number
     isActive: boolean
-    patientId: number
+    patientId?: number
     isPrimary: boolean
     billingAddress?: {
       street1: string
@@ -26,14 +26,20 @@ interface AddCreditCardParams {
     }
   }
   headers: HeadersInit
+  isUnAuthenticated?: boolean
+  shortUrlReference?: string
 }
 
 const addCreditCardAction = async ({
   payload,
   headers,
+  isUnAuthenticated = false,
+  shortUrlReference = '',
 }: AddCreditCardParams): Promise<ActionResult<void>> => {
+  const baseUrl = `${API_URL}/api/patients/self/creditcards`
+  const url = isUnAuthenticated ? `${baseUrl}/${shortUrlReference}` : baseUrl
   const result = await api.POST(
-    `${API_URL}/api/patients/self/creditcards`,
+    url,
     {
       ...payload,
     },

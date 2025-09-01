@@ -1,49 +1,76 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { cn } from '@psychplus-v2/utils'
-import { Button, Dialog, Flex, Text } from '@radix-ui/themes'
+import { Button, Dialog, Flex } from '@radix-ui/themes'
 import { CloseDialogIcon } from '@/components-v2'
 
 interface JoinNowButtonProps {
   checkCallEligibility: () => boolean
   setIsStartCall: (value: boolean) => void
   className?: string
+  targetDate: string
+  isUnAuthenticated?: boolean
 }
 
 const JoinNowButton = ({
   checkCallEligibility,
   setIsStartCall,
   className = '',
+  targetDate,
+  isUnAuthenticated = false,
 }: JoinNowButtonProps) => {
+  const validTime = isUnAuthenticated ? 30 : 15
   const [open, setOpen] = useState(false)
+  const [isWithinValidTime, setIsWithinValidTime] = useState(false)
 
-  return checkCallEligibility() ? (
-    <Button
-      highContrast
-      className={cn(className)}
-      variant="solid"
-      size="3"
-      type="button"
-      onClick={() => setIsStartCall(true)}
-    >
-      Join Now
-    </Button>
-  ) : (
+  const isEligible = checkCallEligibility()
+
+  useEffect(() => {
+    const target = new Date(targetDate).getTime()
+
+    const checkTime = () => {
+      const now = new Date().getTime()
+      const difference = target - now
+      const minutesLeft = difference / (1000 * 60)
+      setIsWithinValidTime(minutesLeft <= validTime && minutesLeft > 0)
+    }
+
+    checkTime()
+    const timer = setInterval(checkTime, 1000 * validTime)
+
+    return () => clearInterval(timer)
+  }, [targetDate])
+
+  if (isEligible) {
+    return (
+      <Button
+        highContrast
+        className={cn(className)}
+        variant="solid"
+        size="3"
+        type="button"
+        disabled={!isWithinValidTime}
+        onClick={() => setIsStartCall(true)}
+      >
+        Join Now
+      </Button>
+    )
+  }
+
+  return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Flex align="start" className="group cursor-pointer">
         <Dialog.Trigger>
-          <Text className={cn('text-[#194595] underline', className)} size="2">
-            <Button
-              highContrast
-              className={cn(className)}
-              variant="solid"
-              size="3"
-              type="button"
-            >
-              Join Now
-            </Button>
-          </Text>
+          <Button
+            highContrast
+            className={cn(className)}
+            variant="solid"
+            size="3"
+            type="button"
+          >
+            Join Now
+          </Button>
         </Dialog.Trigger>
       </Flex>
       <Dialog.Content className="relative">

@@ -13,11 +13,13 @@ import { Flex, Text } from '@radix-ui/themes'
 const InsuranceList = ({
   patientInsurances,
   insurancePayers,
-  isCall = false
+  isCall = false,
+  isUnAuthenticated = false,
 }: {
   patientInsurances: InsurancePolicy[]
   insurancePayers: InsurancePayer[]
   isCall?: boolean
+  isUnAuthenticated?: boolean
 }) => {
   const columns: TableColumn<InsurancePolicy>[] = [
     {
@@ -36,6 +38,7 @@ const InsuranceList = ({
           insurancePayers={insurancePayers}
           isList
           isCall={isCall}
+          isUnAuthenticated={isUnAuthenticated}
         />
       ),
     },

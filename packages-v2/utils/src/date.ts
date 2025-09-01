@@ -52,7 +52,7 @@ const getTimeLabel = (dateString: string) => {
   return new DateFormatter('en-US', {
     hour: 'numeric',
     minute: 'numeric',
-  }).format(new Date(dateString))
+  })?.format(new Date(dateString))
 }
 
 function convertTo12HourFormat(time24: string): string {

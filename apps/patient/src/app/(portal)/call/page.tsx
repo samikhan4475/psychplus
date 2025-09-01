@@ -61,23 +61,6 @@ const Call = async ({
     return <Text>{acsResponse.error}</Text>
   }
 
-  if (profileResponse.state === 'error') {
-    return (
-      <Suspense fallback={<Text>Loading...</Text>}>
-        <UnauthenticatedCallView
-          acsInfo={acsResponse.data as AcsInfo}
-          user={user}
-        />
-      </Suspense>
-    )
-  }
-
-  const insurancePayerResponse = await getInsurancePayers()
-
-  if (insurancePayerResponse.state === 'error') {
-    return <Text>{insurancePayerResponse.error}</Text>
-  }
-
   const codesets = await getCodesets([
     CODESETS.InsuranceRelationship,
     CODESETS.UsStates,
@@ -85,6 +68,28 @@ const Call = async ({
     CODESETS.VisitType,
     CODESETS.Gender,
   ])
+
+  const insurancePayerResponse = await getInsurancePayers()
+  
+  if (insurancePayerResponse.state === 'error') {
+    return <Text>{insurancePayerResponse.error}</Text>
+  }
+  
+  if (profileResponse.state === 'error') {
+    return (
+      <Suspense fallback={<Text>Loading...</Text>}>
+        <GooglePlacesContextProvider apiKey={GOOGLE_MAPS_API_KEY}>
+          <CodesetStoreProvider codesets={codesets}>
+            <UnauthenticatedCallView
+              acsInfo={acsResponse.data as AcsInfo}
+              stripeApiKey={STRIPE_PUBLISHABLE_KEY}
+              insurancePayers={insurancePayerResponse.data}
+            />
+          </CodesetStoreProvider>
+        </GooglePlacesContextProvider>
+      </Suspense>
+    )
+  }
 
   return (
     <Suspense fallback={<Text>Loading...</Text>}>
@@ -99,8 +104,9 @@ const Call = async ({
                 acsResponse.data.paymentData.patientCards as CreditCard[],
               )}
               patientInsurances={
-                acsResponse.data.paymentData
-                  .patientInsurancePolicies?.filter(policy=> !policy.isDeleted) as InsurancePolicy[]
+                acsResponse.data.paymentData.patientInsurancePolicies?.filter(
+                  (policy) => !policy.isDeleted,
+                ) as InsurancePolicy[]
               }
               insurancePayers={insurancePayerResponse.data}
             />

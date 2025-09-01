@@ -2,11 +2,13 @@
 
 import { useSearchParams } from 'next/navigation'
 import { getLocalTimeZone, isToday } from '@internationalized/date'
-import { CODESETS, PaymentType } from '@psychplus-v2/constants'
+import { AppointmentType, CODESETS, PaymentType } from '@psychplus-v2/constants'
+import { AppointmentSlot, Clinic } from '@psychplus-v2/types'
 import { cn, getLocalCalendarDate } from '@psychplus-v2/utils'
 import { Flex, Text } from '@radix-ui/themes'
 import { ProviderAvatar } from '@/components-v2'
 import { BookedAppointmentProps } from '@/features/appointments/book/types'
+import { AppointmentSpecialist } from '@/features/appointments/search/types'
 import { InsurancePolicy } from '@/features/billing/payments/types'
 import CallDetails from '@/features/call/blocks/call-details'
 import { AcsInfo } from '@/features/call/types'
@@ -24,23 +26,24 @@ const AppointmentDetails = ({
   patientInsurances,
   setPaymentMethod,
   acsInfo,
+  isUnAuthenticated = false,
 }: BookedAppointmentProps) => {
   const params = useSearchParams()
   const appointmentId = params.get('appointmentId')
-  const { specialist, clinic, slot, appointmentType, newProviderType } =
-    bookedSlot
 
   const slotDate = getLocalCalendarDate(
-    isCall ? acsInfo?.paymentData?.appointmentDateTime : slot.startDate,
+    isCall && acsInfo?.paymentData?.appointmentDateTime
+      ? acsInfo?.paymentData?.appointmentDateTime
+      : bookedSlot?.slot.startDate,
   )
   const isSlotToday = isToday(slotDate, getLocalTimeZone())
 
   const primaryPolicy = isCall
-    ? getPrimaryInsurance(patientInsurances || [] as InsurancePolicy[])
+    ? getPrimaryInsurance(patientInsurances || ([] as InsurancePolicy[]))
     : undefined
 
   const codes = useCodesetCodes(CODESETS.VisitType ?? '')
-  const visitType = codes.find(
+  const visitType = codes?.find(
     (code) => code.value === acsInfo?.paymentData?.visitTypeCode,
   )
 
@@ -53,12 +56,14 @@ const AppointmentDetails = ({
       )}
     >
       <ProviderAvatar
-        provider={specialist}
+        provider={bookedSlot?.specialist as AppointmentSpecialist}
         size={{ initial: '4', md: isCall ? '6' : '8' }}
+        isCall={isCall}
+        acsInfo={acsInfo}
       />
       <Flex direction="column" gap="1">
         <ProviderInfo
-          specialist={specialist}
+          specialist={bookedSlot?.specialist as AppointmentSpecialist}
           acsInfo={acsInfo as AcsInfo}
           isCall={isCall}
         />
@@ -66,15 +71,17 @@ const AppointmentDetails = ({
         {isCall ? (
           <>
             <Text className="text-[#1C2024]" size="2" weight="bold">
-              {acsInfo?.paymentData.service} - {visitType?.display || ''}
+              {acsInfo?.paymentData?.service}
+              {!isUnAuthenticated && <>- {visitType?.display || ''}</>}
             </Text>
             <DateTimeInfo
               slotDate={slotDate}
               isSlotToday={isSlotToday}
-              slot={slot}
+              slot={bookedSlot?.slot as AppointmentSlot}
               acsInfo={acsInfo as AcsInfo}
               isCall={isCall}
               appointmentId={appointmentId}
+              isUnAuthenticated={isUnAuthenticated}
             />
             <CallDetails
               acsInfo={acsInfo as AcsInfo}
@@ -82,6 +89,7 @@ const AppointmentDetails = ({
               setPaymentMethod={setPaymentMethod}
               primaryPolicy={primaryPolicy}
               activeCreditCard={activeCreditCard}
+              isUnAuthenticated={isUnAuthenticated}
             />
           </>
         ) : (
@@ -89,15 +97,15 @@ const AppointmentDetails = ({
             <DateTimeInfo
               slotDate={slotDate}
               isSlotToday={isSlotToday}
-              slot={slot}
+              slot={bookedSlot?.slot as AppointmentSlot}
               acsInfo={acsInfo as AcsInfo}
               isCall={isCall}
               appointmentId={appointmentId}
             />
             <AppointmentTypeInfo
-              appointmentType={appointmentType}
-              newProviderType={newProviderType}
-              clinic={clinic}
+              appointmentType={bookedSlot?.appointmentType as AppointmentType}
+              newProviderType={bookedSlot?.newProviderType}
+              clinic={bookedSlot?.clinic as Clinic}
             />
           </>
         )}

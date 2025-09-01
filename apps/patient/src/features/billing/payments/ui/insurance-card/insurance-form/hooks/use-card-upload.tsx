@@ -9,7 +9,11 @@ const useCardUpload = () => {
     undefined,
   )
 
-  const uploadCards = async (policyId: string) => {
+  const uploadCards = async (
+    policyId: string,
+    isUnAuthenticated?: boolean,
+    shortUrlReference?: string,
+  ) => {
     const cardUploadPromises = []
 
     if (cardFrontImage) {
@@ -18,6 +22,8 @@ const useCardUpload = () => {
           file: cardFrontImage,
           side: 'Front',
           policyId,
+          isUnAuthenticated,
+          shortUrlReference
         }),
       )
     }
@@ -28,6 +34,8 @@ const useCardUpload = () => {
           file: cardBackImage,
           side: 'Back',
           policyId,
+          isUnAuthenticated,
+          shortUrlReference
         }),
       )
     }

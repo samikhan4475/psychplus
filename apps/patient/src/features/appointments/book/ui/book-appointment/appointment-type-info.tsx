@@ -26,7 +26,7 @@ const AppointmentTypeInfo = ({
         {getNewProviderTypeLabel(newProviderType || '').toLocaleUpperCase()} -
       </Text>
       <Text weight="medium" className="text-[13px] text-accent-11">
-        {getAppointmentTypeLabel(appointmentType).toLocaleUpperCase()}
+        {getAppointmentTypeLabel(appointmentType || '').toLocaleUpperCase()}
       </Text>
     </Flex>
     {appointmentType === AppointmentType.InPerson && (

@@ -71,7 +71,7 @@ interface PaymentMethodProps {
 }
 
 interface BookedAppointmentProps {
-  bookedSlot: BookedSlot
+  bookedSlot?: BookedSlot
   isCall?:boolean
   paymentMethod?: PaymentType
   setPaymentMethod?: (value: PaymentType) => void
@@ -79,6 +79,7 @@ interface BookedAppointmentProps {
   patientInsurances?: InsurancePolicy[]
   paymentMethods?: ReactNode
   acsInfo?: AcsInfo
+  isUnAuthenticated?: boolean
 }
 
 interface PrimaryProviderAppointedProps {

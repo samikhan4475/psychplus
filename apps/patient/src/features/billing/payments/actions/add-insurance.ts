@@ -33,12 +33,13 @@ interface InsuranceParams {
 const addInsuranceAction = async (
   params: InsuranceParams,
   headers?: HeadersInit,
+  isUnAuthenticated?: boolean,
+  shortUrlCode?: string,
 ): Promise<ActionResult<Insurance>> => {
-  const result = await api.POST<Insurance>(
-    `${API_URL}/api/patients/self/policies`,
-    params,
-    { headers },
-  )
+  const url = isUnAuthenticated
+    ? `${API_URL}/api/patients/unauthenticated/policies/${shortUrlCode}`
+    : `${API_URL}/api/patients/self/policies`
+  const result = await api.POST<Insurance>(url, params, { headers })
 
   if (result.state === 'error') {
     return {

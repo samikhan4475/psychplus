@@ -180,11 +180,11 @@ const DataTable = <T,>({
   }
 
   const renderTableRows = () => {
-    if (sortedData.length === 0) {
+    if (sortedData?.length === 0) {
       return (
         <Table.Row>
           <Table.Cell
-            colSpan={columns.length}
+            colSpan={columns?.length}
             className="border-pp-gray-2 border-r"
           >
             {renderEmptyState()}
@@ -193,9 +193,9 @@ const DataTable = <T,>({
       )
     }
 
-    return sortedData.map((row) => (
+    return sortedData?.map((row) => (
       <Table.Row key={getRowKey(row)} className="whitespace-nowrap">
-        {columns.map((col, index) => (
+        {columns?.map((col, index) => (
           <Table.Cell 
             key={col.key} 
             className={`border-pp-gray-2 ${
@@ -213,7 +213,7 @@ const DataTable = <T,>({
     <Table.Root variant="surface" size="1" className="w-full">
       <Table.Header className="bg-pp-blue-5">
         <Table.Row className="whitespace-nowrap">
-          {columns.map((col, index) => (
+          {columns?.map((col, index) => (
             <Table.ColumnHeaderCell 
               key={col.key}
               className={cn(

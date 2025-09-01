@@ -7,7 +7,6 @@ import {
   CallComposite,
   useAzureCommunicationCallAdapter,
 } from '@azure/communication-react'
-import { Text } from '@radix-ui/themes'
 import { useDebouncedCallback } from 'use-debounce'
 import { LoadingPlaceholder } from '@/components-v2'
 import { notifyProvider } from '../api/notify-provider'

@@ -9,9 +9,10 @@ import { AcsInfo } from '@/features/call/types'
 
 interface UseCallViewProps {
   acsInfo: AcsInfo
-  patientInsurances: InsurancePolicy[]
-  creditCards: CreditCard[]
-  paymentMethod: PaymentType
+  patientInsurances?: InsurancePolicy[]
+  creditCards?: CreditCard[]
+  paymentMethod?: PaymentType
+  isUnAuthenticated?: boolean
 }
 
 export const useCallView = ({
@@ -19,13 +20,24 @@ export const useCallView = ({
   patientInsurances,
   creditCards,
   paymentMethod,
+  isUnAuthenticated = false,
 }: UseCallViewProps) => {
   const checkCallEligibility = () => {
-    const primaryInsurance = getPrimaryInsurance(patientInsurances)
+    const isPrimaryInsuranceActive =
+      isUnAuthenticated && acsInfo?.paymentData?.isPrimaryInsuranceActive
+    const isPrimaryCardActive =
+      isUnAuthenticated && acsInfo?.paymentData?.patientCardInfoExist
 
-    const primaryCreditCard = getPrimaryActiveCard(creditCards)
+    const primaryInsurance = getPrimaryInsurance(patientInsurances || [])
 
-    if (!primaryInsurance || !primaryCreditCard) return false
+    const primaryCreditCard = getPrimaryActiveCard(creditCards || [])
+
+    const activeCreditCard = isUnAuthenticated
+      ? isPrimaryCardActive
+      : primaryCreditCard?.isActive
+    const activeInsurance = isUnAuthenticated
+      ? isPrimaryInsuranceActive
+      : primaryInsurance?.verificationStatus === 'Verified'
 
     const hasOutstandingBalance = () => {
       return (
@@ -47,17 +59,13 @@ export const useCallView = ({
 
     const isInsurancePaymentValid = () => {
       return (
-        primaryInsurance.verificationStatus === 'Verified' &&
-        (isFullyPaid() ||
-          (hasOutstandingBalance() && primaryCreditCard?.isActive))
+        activeInsurance &&
+        (isFullyPaid() || (hasOutstandingBalance() && activeCreditCard))
       )
     }
 
     const isSelfPayValid = () => {
-      return (
-        isFullyPaid() ||
-        (hasOutstandingBalance() && primaryCreditCard?.isActive)
-      )
+      return isFullyPaid() || (hasOutstandingBalance() && activeCreditCard)
     }
 
     if (paymentMethod === PaymentType.Insurance) {

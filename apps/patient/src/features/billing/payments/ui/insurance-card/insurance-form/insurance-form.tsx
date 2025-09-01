@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { ActionErrorState, ActionSuccessState } from '@psychplus-v2/api'
 import { FormHeading, ToggleableForm } from '@/components-v2'
 import {
@@ -8,6 +8,7 @@ import {
   InsurancePolicy,
 } from '@/features/billing/payments/types'
 import { useToast } from '@/providers'
+import { useStore } from '@/widgets/schedule-appointment-list/store'
 import { deleteInsurance, updateInsuranceAction } from '../../../actions'
 import {
   addInsuranceAction,
@@ -29,6 +30,7 @@ interface InsuranceFormProps {
   formHeading?: string
   isList?: boolean
   isCall?: boolean
+  isUnAuthenticated?: boolean
 }
 
 const createInsurancePayload = (
@@ -76,9 +78,17 @@ const InsuranceForm = ({
   formHeading,
   isList = false,
   isCall = false,
+  isUnAuthenticated = false,
 }: InsuranceFormProps) => {
+  const searchParams = useSearchParams()
+  const shortUrlReference = searchParams.get('reference')
   const { toast } = useToast()
   const router = useRouter()
+  const { accessToken } = useStore()
+
+  const headers = {
+    Authorization: `Bearer ${accessToken}`,
+  }
 
   const { form, watchisPatientPolicyHolder, hasChanges, onCheckedChange } =
     useInsuranceFormLogic(insurance)
@@ -86,7 +96,7 @@ const InsuranceForm = ({
   const { setCardFrontImage, setCardBackImage, uploadCards } = useCardUpload()
 
   const onSubmit = async (data: InsuranceSchemaType) => {
-    if (!hasChanges() && !isCall ) {
+    if (!hasChanges() && !isCall) {
       onFormClose?.()
       return { state: 'success' } as ActionSuccessState
     }
@@ -98,7 +108,12 @@ const InsuranceForm = ({
 
     const insuranceResponse = insurance
       ? await updateInsuranceAction({ ...payload, verificationStatus })
-      : await addInsuranceAction(payload)
+      : await addInsuranceAction(
+          payload,
+          headers,
+          isUnAuthenticated,
+          shortUrlReference as string,
+        )
 
     if (insuranceResponse.state === 'error') {
       if (isList) {
@@ -120,7 +135,11 @@ const InsuranceForm = ({
       })
     }
 
-    const cardUploadSuccess = await uploadCards(insuranceResponse.data.id)
+    const cardUploadSuccess = await uploadCards(
+      insuranceResponse.data.id,
+      isUnAuthenticated,
+      shortUrlReference as string,
+    )
 
     if (!cardUploadSuccess) {
       return {

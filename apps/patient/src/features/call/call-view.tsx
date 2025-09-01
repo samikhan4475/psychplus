@@ -1,12 +1,11 @@
 'use client'
 
-import { PaymentMethodAccordion } from '@/components-v2'
+import { useEffect, useState } from 'react'
+import NextLink from 'next/link'
 import { User } from '@psychplus-v2/auth'
 import { PaymentType } from '@psychplus-v2/constants'
 import { Flex, Text } from '@radix-ui/themes'
-import NextLink from 'next/link'
-import { useEffect, useState } from 'react'
-import { BookedSlot } from '../appointments/book/types'
+import { PaymentMethodAccordion } from '@/components-v2'
 import { AppointmentDetails } from '../appointments/book/ui/book-appointment'
 import { CreditCard } from '../billing/credit-debit-cards/types'
 import { InsurancePayer, InsurancePolicy } from '../billing/payments/types'
@@ -16,7 +15,7 @@ import JoinNowButton from './blocks/join-now-button'
 import { useCallView } from './hooks/use-call-view'
 import { AcsInfo } from './types'
 
-interface Props {
+interface CallViewProps {
   acsInfo: AcsInfo
   user?: User
   stripeApiKey?: string
@@ -32,7 +31,7 @@ const CallView = ({
   creditCards,
   patientInsurances,
   insurancePayers,
-}: Props) => {
+}: CallViewProps) => {
   const username = user ? `${user.firstName} ${user.lastName}` : ''
   const [isStartCall, setIsStartCall] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState<PaymentType>(
@@ -61,36 +60,6 @@ const CallView = ({
     return age >= 18
   })()
 
-  const bookedSlot = {
-    slot: {
-      type: 'TeleVisit',
-      isPlusSlot: true,
-      duration: 30,
-      startDate: new Date().toISOString(),
-      endDate: new Date(new Date().getTime() + 30 * 60 * 1000).toISOString(),
-      servicesOffered: ['TeleVisit'],
-    },
-    clinic: {
-      id: '001',
-      name: '',
-      contact: {},
-    },
-    specialist: {
-      id: 2,
-      isTest: true,
-      legalName: {
-        firstName: acsInfo?.staffName?.firstName,
-        lastName: acsInfo?.staffName?.lastName,
-        legalName: {
-          honors: acsInfo?.staffName?.honors,
-        },
-      },
-    },
-    appointmentType: 'TeleVisit',
-    providerType: 2,
-    newProviderType: null,
-  }
-
   useEffect(() => {
     if (acsInfo?.paymentData?.paymentResponsibilityCode) {
       const formattedPaymentMethod =
@@ -103,7 +72,7 @@ const CallView = ({
   }, [acsInfo?.paymentData?.paymentResponsibilityCode])
 
   useEffect(() => {
-    setIsStartCall(checkCallEligibility())
+    setIsStartCall(checkCallEligibility() as boolean)
   }, [paymentMethod, acsInfo, creditCards, patientInsurances])
 
   return isStartCall ? (
@@ -127,11 +96,11 @@ const CallView = ({
             </Text>
             <JoinNowButton
               setIsStartCall={() => setIsStartCall(true)}
-              checkCallEligibility={checkCallEligibility}
+              checkCallEligibility={checkCallEligibility as () => boolean}
+              targetDate={acsInfo?.paymentData?.appointmentDateTime}
             />
           </Flex>
           <AppointmentDetails
-            bookedSlot={bookedSlot as BookedSlot}
             isCall
             paymentMethod={paymentMethod}
             setPaymentMethod={setPaymentMethod}
@@ -149,9 +118,10 @@ const CallView = ({
           />
           {!isAdult && <GuardianDetails />}
           <JoinNowButton
-            checkCallEligibility={checkCallEligibility}
+            checkCallEligibility={checkCallEligibility as () => boolean}
             setIsStartCall={setIsStartCall}
             className="w-full"
+            targetDate={acsInfo?.paymentData?.appointmentDateTime}
           />
           {!username && (
             <Text align="center" size="2" className="mt-8">

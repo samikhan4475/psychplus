@@ -14,6 +14,7 @@ interface SelfPaySectionProps {
   creditCardOpenStateValue: string
   setCreditCardOpenStateValue: (value: string) => void
   selectedCreditCard?: CreditCard
+  isUnAuthenticated?: boolean
 }
 
 const SelfPaySection = ({
@@ -22,6 +23,7 @@ const SelfPaySection = ({
   creditCardOpenStateValue,
   setCreditCardOpenStateValue,
   selectedCreditCard,
+  isUnAuthenticated = false
 }: SelfPaySectionProps) => {
   return (
     <Accordion.Root
@@ -30,7 +32,7 @@ const SelfPaySection = ({
       value={creditCardOpenStateValue}
       onValueChange={setCreditCardOpenStateValue}
     >
-      {isCall ? (
+      {isCall && !isUnAuthenticated ? (
         selectedCreditCard && <CreditCardList creditCards={creditCards} />
       ) : (
         <PaymentMethodsAccordionItem
@@ -55,6 +57,7 @@ const SelfPaySection = ({
             onFormClose={() =>
               setCreditCardOpenStateValue('Credit/Debit Cards')
             }
+            isUnAuthenticated={isUnAuthenticated}
           />
         }
       />

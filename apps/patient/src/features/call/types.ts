@@ -33,6 +33,7 @@ interface AcsInfo {
     service:string
     patientCards?: CreditCard[]
     patientInsurancePolicies?: InsurancePolicy[]
+    patientFirstName?: string
   }
 }
 
