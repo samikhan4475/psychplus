@@ -4,7 +4,7 @@ import { Messages } from '../types'
 import { RecevierMessageView } from './receiver-message-view'
 import { SenderMessageView } from './sender-message-view'
 
-const MessageItem = ({ content, isMine, name }: Messages) => {
+const MessageItem = ({ message, isMine, name }: Messages) => {
   return (
     <Flex
       className={cn({
@@ -12,9 +12,9 @@ const MessageItem = ({ content, isMine, name }: Messages) => {
       })}
     >
       {!isMine ? (
-        <RecevierMessageView name={name} content={content} />
+        <RecevierMessageView name={name} content={message} />
       ) : (
-        <SenderMessageView content={content} />
+        <SenderMessageView content={message} />
       )}
     </Flex>
   )

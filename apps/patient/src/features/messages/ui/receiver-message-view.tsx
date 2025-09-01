@@ -29,7 +29,10 @@ const RecevierMessageView = ({ content, name }: RecevierMessageViewProps) => {
       <Flex direction="column" gap="2">
         <Text className="text-2 font-[600]">{name}</Text>
         <Flex className="bg-pp-gray-10 border-pp-gray-2 max-w-[960px] rounded-bl-2 rounded-br-2 rounded-tr-2 border px-[14px] py-[10px]">
-          <Text className="text-3 font-[400]">{content}</Text>
+          <Text
+            className="text-3 font-[400]"
+            dangerouslySetInnerHTML={{ __html: content }}
+          />
         </Flex>
       </Flex>
     </Flex>

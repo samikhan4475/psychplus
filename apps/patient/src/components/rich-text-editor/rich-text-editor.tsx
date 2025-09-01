@@ -13,6 +13,7 @@ type Props = {
   style?: React.CSSProperties
   maxLength?: number
   baseStyes?: React.CSSProperties
+  maxLengthStyles?: React.CSSProperties
 }
 
 interface QuillInstance {
@@ -36,7 +37,8 @@ const RichTextEditor: React.FC<Props> = ({
   readOnly = false,
   style = {},
   baseStyes = {},
-  maxLength
+  maxLength,
+  maxLengthStyles = {},
 }) => {
   const editorRef = useRef<HTMLDivElement | null>(null)
   const quillRef = useRef<QuillInstance | null>(null)
@@ -65,8 +67,6 @@ const RichTextEditor: React.FC<Props> = ({
               [{ header: [1, 2, 3, false] }],
               ['bold', 'italic', 'underline', 'strike'],
               [{ list: 'ordered' }, { list: 'bullet' }],
-              ['link'],
-              ['clean'],
             ],
           },
           placeholder: placeholder,
@@ -202,7 +202,8 @@ const RichTextEditor: React.FC<Props> = ({
             padding: '2px 6px',
             borderRadius: '4px',
             pointerEvents: 'none',
-            zIndex: 10
+            zIndex: 10,
+            ...maxLengthStyles
           }}
         >
           {remainingCharacters} / {maxLength}

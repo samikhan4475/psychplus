@@ -5,6 +5,7 @@ enum WebSocketEventType {
   ScrollMessage = 'ScrollMessage',
   ScrollAlert = 'ScrollAlert',
   Auth = 'Auth',
+  SecureChatNotification = 'SecureChatNotification',
 }
 type WebSocketEvents = {
   [WebSocketEventType.Ping]: { dv?: string }
@@ -12,6 +13,7 @@ type WebSocketEvents = {
   [WebSocketEventType.InboxCount]: { lv?: number }
   [WebSocketEventType.ScrollMessage]: { sv?: string }
   [WebSocketEventType.ScrollAlert]: { sv?: string }
+  [WebSocketEventType.SecureChatNotification]: { sc?: string }
 }
 type GenericPayload<T = Record<string, unknown>> = T | undefined
 
