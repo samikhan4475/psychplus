@@ -305,7 +305,7 @@ const claimUpdateSchema = z
         .map((d) => d.sequenceNo),
     )
 
-    data.claimServiceLines.forEach((line, lineIndex) => {
+    data.claimServiceLines.filter(serviceLine=>serviceLine.recordStatus==='Active')?.forEach((line, lineIndex) => {
       const pointers = [
         line.diagnosisPointer1,
         line.diagnosisPointer2,

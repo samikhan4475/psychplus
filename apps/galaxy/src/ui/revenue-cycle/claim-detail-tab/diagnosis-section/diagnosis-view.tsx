@@ -101,6 +101,21 @@ const DiagnosisView = () => {
       return activeDiagnose ?? diagnosis
     })
 
+    const claimServiceLines = form.getValues('claimServiceLines') ?? []
+    type DiagnosisPointerKey = `diagnosisPointer${1 | 2 | 3 | 4}`
+
+    type ClaimServiceLine = {
+      [K in DiagnosisPointerKey]?: string
+    }
+
+    claimServiceLines.forEach((charge: ClaimServiceLine) => {
+      for (let i = activeDiagnosis.length + 1; i <= 4; i++) {
+        const key = `diagnosisPointer${i}` as DiagnosisPointerKey
+        charge[key] = ''
+      }
+    })
+
+    form.setValue('claimServiceLines', claimServiceLines)
     form.setValue('claimDiagnosis', finalDiagnoses)
   }
 
