@@ -18,9 +18,11 @@ const ScoreCell = ({ value, data, row }: ScoreCellProps) => {
   return (
     <TextCell>
       <Flex align="center" gap="2">
-        <Text className="border-pp-sky-blue-5 bg-pp-cyan-1 text-pp-cyan-10 w-[40px] rounded-5 border text-center">
-          {value}
-        </Text>
+        {Number(value) >= 0 && (
+          <Text className="border-pp-sky-blue-5 bg-pp-cyan-1 text-pp-cyan-10 w-[40px] rounded-5 border text-center">
+            {value}
+          </Text>
+        )}
         <EyeIcon
           height="14"
           width="14"

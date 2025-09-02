@@ -68,7 +68,7 @@ const HistoryDetail = ({ entry }: { entry: QuickNoteHistory }) => {
 
   return (
     <LabelAndValue
-      label={`Score ${totalScore}:`}
+      label={totalScore >= 0 ? `Score ${totalScore}:` : ''}
       value={
         <>
           Completed on {format(new Date(entry.createdOn), 'MM/dd/yyyy HH:mm')}{' '}

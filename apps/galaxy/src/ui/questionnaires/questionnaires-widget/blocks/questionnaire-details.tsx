@@ -172,27 +172,28 @@ const QuestionnaireRowDetail = ({
   return (
     <Flex key={option.createdOn} gap="2" align="center" className="w-full">
       <Flex gap="2" align="center" className="w-full">
-        {mdqBadge ? (
-          <>
-            <Badge size="1" variant="surface" color={mdqBadge.color}>
+        {totalScore >= 0 &&
+          (mdqBadge ? (
+            <>
+              <Badge size="1" variant="surface" color={mdqBadge.color}>
+                Score {totalScore}
+              </Badge>
+              {mdqBadge.label}
+            </>
+          ) : (
+            <Badge
+              size="1"
+              variant="surface"
+              color={getBadgeColor(
+                getRange(
+                  scoreInterpretationRanges(label, option.sectionName),
+                  totalScore,
+                ),
+              )}
+            >
               Score {totalScore}
             </Badge>
-            {mdqBadge.label}
-          </>
-        ) : (
-          <Badge
-            size="1"
-            variant="surface"
-            color={getBadgeColor(
-              getRange(
-                scoreInterpretationRanges(label, option.sectionName),
-                totalScore,
-              ),
-            )}
-          >
-            Score {totalScore}
-          </Badge>
-        )}
+          ))}
 
         <Badge variant="surface" size="1" color={'green'}>
           Completed

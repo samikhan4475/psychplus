@@ -60,6 +60,9 @@ export const calculateTotalScore = (
     case QuickNoteSectionName.QuicknoteSectionTograBlue:
       return calculateTograScore(data)
 
+    case QuickNoteSectionName.QuickNoteSectionCopsR:
+      return -1
+
     default:
       return defaultScore
   }
