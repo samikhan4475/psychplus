@@ -132,7 +132,9 @@ const ClaimDetailView = () => {
 
     const allCptCodes = form
       .getValues('claimServiceLines')
-      ?.map((line: ClaimServiceLine) => line.cptCode?.trim())
+      ?.map((line: ClaimServiceLine) =>
+        line.recordStatus === 'Active' ? line.cptCode?.trim() : '',
+      )
       .filter((code): code is string => Boolean(code))
 
     const serviceLineCptCodeSet = new Set(allCptCodes)
