@@ -33,7 +33,7 @@ const getInitialLocationValues = (location?: Location): LocationSchemaType => {
     name: location?.name ?? '',
     npi: location?.npi ?? '',
     phone: {
-      number: location?.phone?.number ?? '',
+      number: sanitizePhoneNumber(location?.phone?.number ?? ''),
       type: location?.phone?.type ?? 'Home',
     },
     recordStatus: location?.recordStatus ?? '',
@@ -71,7 +71,9 @@ const withDefaultLocationTypes = (
     ? {}
     : { locationTypes: [LocationType.Clinic, LocationType.Facility] }),
 })
-
+function sanitizePhoneNumber(input: string): string {
+  return input.replace(/[^\d]/g, '')
+}
 export {
   getServiceLabel,
   getInitialValues,
