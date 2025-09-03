@@ -5,7 +5,7 @@ export interface TemplateParameter {
   parameterCode: string
   displayName: string
   resourceStatus: string
-  isRequired:boolean
+  isRequired: boolean
   reportTemplateId?: string
   displayOrder: number
   runValue?: string
@@ -45,8 +45,8 @@ interface Parameter {
 }
 
 interface ReportFilterParameters {
-  id: string;
-  runValue: string | null;
+  id: string
+  runValue: string | null
 }
 interface StaffDataOptions {
   value: string
@@ -155,6 +155,11 @@ type Schedule = {
   resourceStatus?: string
 }
 
+type Option = {
+  display: string
+  value: string
+}
+
 export enum CODE_PARAM_ATTRIBUTES {
   DATA_TYPE = 'DataType',
   TEXTBOX = 'TextBox',
@@ -233,4 +238,5 @@ export type {
   GetScheduleReportListResponse,
   ParsedCron,
   DistributionGroup,
+  Option,
 }

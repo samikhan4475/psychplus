@@ -18,6 +18,7 @@ type TemplateSelectProps = {
   isMultiple: boolean
   isLoading?: boolean
   isRequired: boolean
+  isUseLabelAsValue?: boolean
 }
 
 const TemplateSelect = ({
@@ -42,7 +43,6 @@ const TemplateSelect = ({
 
   const handleOnChange = (values: string[]) => {
     const allValues = options.map((option) => option.value)
-
     if (
       values.length === allValues.length &&
       values.every((v) => allValues.includes(v))

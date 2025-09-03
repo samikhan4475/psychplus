@@ -27,6 +27,7 @@ import { TemplateStateSelect } from './template-state-select'
 import {
   CODE_PARAM_ATTRIBUTES,
   CodeType,
+  Option,
   REPORT_PARAMETER_CODE,
   REPORT_TYPE,
   STAFF_SELECTION,
@@ -199,9 +200,16 @@ const DynamicTemplateFilters = () => {
         return []
       case REPORT_PARAMETER_CODE.COSIGNER_LIST:
         return []
+      case REPORT_PARAMETER_CODE.VISIT_TYPE_LIST:
+         return matchingCodeset.codes.map(
+          (code: Option) => ({
+            value: code.display,
+            label: code.display,
+          }),
+        )
       default:
         return matchingCodeset.codes.map(
-          (code: { value: string; display: string }) => ({
+          (code: Option) => ({
             value: code.value,
             label: code.display,
           }),
