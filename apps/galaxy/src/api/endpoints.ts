@@ -1205,7 +1205,17 @@ const UPDATE_SERVICE_UNITS_ENDPOINT = (
   `${API_URL}/api/locations/${locationId}/services/${serviceId}/units/${unitId}`
 const SERVICE_UNIT_HISTORY_ENDPOINT = (locationId: string, unitId: string) =>
   `${API_URL}/api/locations/${locationId}/units/${unitId}/history/actions/search`
-
+const SERVICE_ROOM_ENDPOINT = `${API_URL}/api/servicerooms/actions/search`
+const ADD_SERVICE_ROOM_ENDPOINT = (locationId: string, serviceId: string) =>
+  `${API_URL}/api/locations/${locationId}/services/${serviceId}/rooms`
+const UPDATE_SERVICE_ROOMS_ENDPOINT = (
+  locationId: string,
+  serviceId: string,
+  roomId: string,
+) =>
+  `${API_URL}/api/locations/${locationId}/services/${serviceId}/rooms/${roomId}`
+const SERVICE_ROOM_HISTORY_ENDPOINT = (locationId: string, roomId: string) =>
+  `${API_URL}/api/locations/${locationId}/rooms/${roomId}/history/actions/search`
 export {
   PATIENT_MEDICATION_SIGN_IN,
   GET_PATIENT_MEDICATION_ENDPOINT,
@@ -1735,4 +1745,8 @@ export {
   ADD_SERVICE_UNIT_ENDPOINT,
   UPDATE_SERVICE_UNITS_ENDPOINT,
   SERVICE_UNIT_HISTORY_ENDPOINT,
+  SERVICE_ROOM_ENDPOINT,
+  ADD_SERVICE_ROOM_ENDPOINT,
+  UPDATE_SERVICE_ROOMS_ENDPOINT,
+  SERVICE_ROOM_HISTORY_ENDPOINT,
 }
