@@ -486,6 +486,38 @@ const years = Array.from(
   (_, i) => new Date().getFullYear() - i,
 )
 
+const extractUniqueSortedSpecialistIds = (
+  data: StaffAppointmentAvailabilities,
+) => {
+  const sortedSpecialistIds = data.staffAppointmentAvailabilities
+    .sort((a, b) => {
+      const earliestA = Math.min(
+        ...a.availableSlots.map((slot: any) =>
+          new Date(slot.startDate).getTime(),
+        ),
+      )
+      const earliestB = Math.min(
+        ...b.availableSlots.map((slot: any) =>
+          new Date(slot.startDate).getTime(),
+        ),
+      )
+      return earliestA - earliestB
+    })
+    .map((item: any) => item.specialist.id)
+
+  const uniqueSpecialistIds: number[] = []
+  const seen = new Set<number>()
+
+  for (const id of sortedSpecialistIds) {
+    if (!seen.has(id)) {
+      seen.add(id)
+      uniqueSpecialistIds.push(id)
+    }
+  }
+
+  return uniqueSpecialistIds
+}
+
 export {
   groupStaffWithClinicsAndSlots,
   applyFilters,
@@ -504,4 +536,5 @@ export {
   getNormalizedProviderType,
   months,
   years,
+  extractUniqueSortedSpecialistIds,
 }

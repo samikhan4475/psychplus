@@ -14,7 +14,7 @@ import {
   VISIT_TYPE_OPTIONS,
   VISIT_TYPES,
 } from '@/constants/appointment'
-import { mapCodesetToOptions, useCodesetCodes } from '@/providers'
+import { mapCodesetToOptions, useCodesetCodes, useToast } from '@/providers'
 import CustomDateInput from '@/widgets/schedule-appointment-dialog/forms/new-patient/custom-date-input'
 import { useStore } from '../../store'
 import { FilterOption, type Filters } from '../../types'
@@ -22,19 +22,16 @@ import { FilterOptionsSelect } from '../filter-options-select'
 import { FilterItem } from '../filter-panel-item'
 import 'react-datepicker/dist/react-datepicker.css'
 import { isMobile } from '@psychplus/utils/client'
-import { useToast } from '@/providers'
 import {
   getCodsetValue,
   getNormalizedAppointmentType,
   getNormalizedProviderType,
   getValidStartDate,
   months,
-  years,
 } from '../../utils'
 
 interface FilterPanelProps {
   stateOptions?: FilterOption[]
-  isSchedulingOptimizationEnabled?: boolean
 }
 
 const FilterPanel = ({ stateOptions = [] }: FilterPanelProps) => {
@@ -49,6 +46,11 @@ const FilterPanel = ({ stateOptions = [] }: FilterPanelProps) => {
     setDefaultDate,
     defaultDate,
   } = useStore()
+
+  const years = Array.from(
+    { length: 200 },
+    (_, i) => new Date().getFullYear() + i,
+  )
 
   const [filtersState, setFiltersState] = useState<Filters>(filters)
 
@@ -160,7 +162,7 @@ const FilterPanel = ({ stateOptions = [] }: FilterPanelProps) => {
                     {'<'}
                   </button>
                   <select
-                    value={getYear(date)}
+                    value={getYear(new Date(date))}
                     onChange={({ target: { value } }) =>
                       changeYear(value as unknown as number)
                     }
@@ -173,7 +175,7 @@ const FilterPanel = ({ stateOptions = [] }: FilterPanelProps) => {
                   </select>
 
                   <select
-                    value={months[getMonth(date)]}
+                    value={months[getMonth(new Date(date))]}
                     onChange={({ target: { value } }) =>
                       changeMonth(months.indexOf(value))
                     }

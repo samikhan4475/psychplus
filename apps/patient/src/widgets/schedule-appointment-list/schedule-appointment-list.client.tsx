@@ -31,6 +31,7 @@ import { AvailabilityList, FilterPanel } from './components'
 import { useStore } from './store'
 import { FilterOption } from './types'
 import {
+  extractUniqueSortedSpecialistIds,
   getCodsetValue,
   getNormalizedAppointmentType,
   getNormalizedProviderType,
@@ -176,36 +177,7 @@ const ScheduleAppointmentListClient = ({
       },
       includeDistance,
     ).then((data) => {
-      const sortedSpecialistIds = data.staffAppointmentAvailabilities
-        .sort((a, b) => {
-          // find earliest slot for specialist a
-          const earliestA = Math.min(
-            ...a.availableSlots.map((slot) =>
-              new Date(slot.startDate).getTime(),
-            ),
-          )
-
-          // find earliest slot for specialist b
-          const earliestB = Math.min(
-            ...b.availableSlots.map((slot) =>
-              new Date(slot.startDate).getTime(),
-            ),
-          )
-
-          return earliestA - earliestB
-        })
-        .map((item) => item.specialist.id)
-
-      const uniqueSpecialistIds: number[] = []
-      const seen = new Set<number>()
-
-      for (const id of sortedSpecialistIds) {
-        if (!seen.has(id)) {
-          seen.add(id)
-          uniqueSpecialistIds.push(id)
-        }
-      }
-
+      const uniqueSpecialistIds = extractUniqueSortedSpecialistIds(data)
       setProviderIds(uniqueSpecialistIds)
     })
   }, [
@@ -261,10 +233,7 @@ const ScheduleAppointmentListClient = ({
 
   return (
     <Flex direction="column" className="w-full" ref={ref}>
-      <FilterPanel
-        stateOptions={stateOptionMapping}
-        isSchedulingOptimizationEnabled={isSchedulingOptimizationEnabled}
-      />
+      <FilterPanel stateOptions={stateOptionMapping} />
       <AvailabilityList
         isSchedulingOptimizationEnabled={isSchedulingOptimizationEnabled}
         mapKey={mapKey}
