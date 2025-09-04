@@ -46,25 +46,12 @@ function formatStartDate(startDate?: string) {
       hour12: true,
     }
     
-    const timezoneOptions: Intl.DateTimeFormatOptions = {
-      timeZoneName: 'short',
-      timeZone: TIMEZONE_FORMAT,
-    }
-    
     let formattedDate = date.toLocaleString('en-US', dateTimeOptions)
-    const timezoneString = date.toLocaleString('en-US', timezoneOptions)
-    
-    const timezoneMatch = timezoneString.match(/\b[A-Z]{3,4}\b/)
-    const timezone = timezoneMatch ? timezoneMatch[0] : ''
     
     formattedDate = formattedDate.replace(/,([^,]*)$/, ' - $1')
     formattedDate = formattedDate.replace(/\s([ap]m)/i, (match) =>
       match.toUpperCase(),
     )
-    
-    if (timezone) {
-      formattedDate += ` ${timezone}`
-    }
 
     return formattedDate
   }
