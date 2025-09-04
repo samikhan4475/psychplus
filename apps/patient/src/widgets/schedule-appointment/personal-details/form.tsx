@@ -101,7 +101,7 @@ interface Props {
   openInsurancePaymentModal: () => void
 }
 const PersonalDetailsForm = ({ patientAppUrl, onCancel, openInsurancePaymentModal }: Props) => {
-  const { setPatient, setAccessToken, bookedSlot } = useStore()
+  const { setPatient, setAccessToken, bookedSlot, setAppointmentId } = useStore()
   const { toast } = useToast()
 
   const searchParams = useSearchParams()
@@ -252,8 +252,11 @@ const PersonalDetailsForm = ({ patientAppUrl, onCancel, openInsurancePaymentModa
           clickActionData: 'Clicked Next',
         })
 
-        onCancel();
-        openInsurancePaymentModal();
+        onCancel()
+        setAppointmentId(
+          Number(appointmentResponse?.data && appointmentResponse?.data?.appointments?.[0]?.id)
+        )
+        openInsurancePaymentModal()
       } catch {
         toast?.({
           type: 'error',

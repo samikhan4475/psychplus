@@ -2,6 +2,7 @@
 
 import * as api from '@psychplus-v2/api'
 import { API_URL } from '@psychplus-v2/env'
+import { Appointment } from '@psychplus-v2/types'
 import { BookAppointmentPayload } from '@psychplus/appointments'
 
 interface BookAppointmentProps {
@@ -9,11 +10,15 @@ interface BookAppointmentProps {
   headers: HeadersInit
 }
 
+interface BookAppointmentResponse {
+  appointments: Appointment[]
+}
+
 const bookAppointmentAction = async ({
   payload,
   headers,
 }: BookAppointmentProps) => {
-  const result = await api.POST(`${API_URL}/api/appointments/book`, payload, {
+  const result = await api.POST<BookAppointmentResponse>(`${API_URL}/api/appointments/book`, payload, {
     headers,
   })
 

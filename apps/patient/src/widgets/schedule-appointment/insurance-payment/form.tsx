@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import { useEffect, useState } from 'react'
+import { PaymentType } from '@psychplus-v2/constants'
 import { cn, getAgeFromDate } from '@psychplus-v2/utils'
 import * as RadioGroup from '@radix-ui/react-radio-group'
 import { Box, Flex, Text } from '@radix-ui/themes'
@@ -29,6 +30,7 @@ import { HipaaComplianceIcon } from '@/components-v2/icons/hipa-compliance-icon'
 import { PlacesAutocomplete } from '@/components-v2/places-autocomplete'
 import AppointmentDetailCard from '@/components/appointment-detail-card/appointment-detail-card'
 import { PSYCHPLUS_LIVE_URL } from '@/constants'
+import { changeAppointmentPaymentMethod } from '@/features/appointments/upcoming/actions/change-appointment-payment-method'
 import { addCreditCardAction } from '@/features/billing/credit-debit-cards/actions'
 import { uploadInsuranceCard } from '@/features/billing/payments/actions'
 import {
@@ -38,6 +40,8 @@ import {
 import { useToast } from '@/providers/toast-provider'
 import { useStore } from '@/widgets/schedule-appointment-list/store'
 import { SECURE_HIPAA_TEXT, VISIT_NOTES } from './constants'
+
+type PaymentOptionType = 'insurance' | 'selfPay' | 'skip' | null
 
 type InsuranceSchemaType = z.infer<typeof baseSchema>
 const baseSchema = z
@@ -271,10 +275,16 @@ const PaymentOptionButton = ({
   </button>
 )
 
-const PaymentDetailsSection = ({ onClose }: { onClose: () => void }) => {
+const PaymentDetailsSection = ({
+  selectedPaymentOption,
+  onClose,
+}: {
+  selectedPaymentOption: PaymentOptionType
+  onClose: () => void
+}) => {
   const stripe = useStripe()
   const elements = useElements()
-  const { patient, accessToken } = useStore()
+  const { patient, accessToken, appointmentId } = useStore()
   const { toast } = useToast()
 
   const [isLoading, setIsLoading] = useState(false)
@@ -386,6 +396,16 @@ const PaymentDetailsSection = ({ onClose }: { onClose: () => void }) => {
         title: result.error,
       })
     } else {
+      await changeAppointmentPaymentMethod({
+        appointmentId,
+        paymentMethod:
+          selectedPaymentOption === 'insurance'
+            ? (PaymentType.Insurance as string)
+            : (PaymentType.SelfPay as string).split(' ').join(''),
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
       toast({
         type: 'success',
         title: 'Payment card added successfully',
@@ -798,12 +818,11 @@ const InsurancePaymentForm = ({
   insurancePayers,
   onClose,
 }: InsurancePaymentFormProps) => {
-  const { accessToken } = useStore()
+  const { accessToken, appointmentId } = useStore()
   const { toast } = useToast()
 
-  const [selectedPaymentOption, setSelectedPaymentOption] = useState<
-    'insurance' | 'selfPay' | 'skip' | null
-  >(null)
+  const [selectedPaymentOption, setSelectedPaymentOption] =
+    useState<PaymentOptionType>(null)
 
   const insuranceForm = useForm({
     schema: baseSchema,
@@ -909,6 +928,12 @@ const InsurancePaymentForm = ({
       setIsLoading(false)
       return
     }
+
+    await changeAppointmentPaymentMethod({
+      appointmentId,
+      paymentMethod: PaymentType.Insurance as string,
+      headers,
+    })
 
     const cardPromises = []
     if (cardFrontImage) {
@@ -1108,7 +1133,7 @@ const InsurancePaymentForm = ({
 
             {isPaymentCardOpen && (
               <Box className="p-4 bg-gray-50 border border-t-0 border-pp-gray-2 rounded-b-6">
-                <PaymentDetailsSection onClose={onClose} />
+                <PaymentDetailsSection selectedPaymentOption={selectedPaymentOption} onClose={onClose} />
               </Box>
             )}
           </Box>
@@ -1125,7 +1150,7 @@ const InsurancePaymentForm = ({
 
           {isSelfPayCardOpen && (
             <Box className="p-4 bg-gray-50 border border-t-0 border-pp-gray-2 rounded-b-6">
-              <PaymentDetailsSection onClose={onClose} />
+              <PaymentDetailsSection selectedPaymentOption={selectedPaymentOption} onClose={onClose} />
             </Box>
           )}
         </Box>

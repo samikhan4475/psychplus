@@ -7,6 +7,7 @@ import { Appointment } from '@psychplus-v2/types'
 interface ChangeAppointmentPaymentMethodParams {
   appointmentId: number
   paymentMethod: string
+  headers?: HeadersInit
 }
 
 interface ChangeAppointmentPaymentMethodApiResponse {
@@ -16,9 +17,13 @@ interface ChangeAppointmentPaymentMethodApiResponse {
 const changeAppointmentPaymentMethod = async ({
   appointmentId,
   paymentMethod,
+  headers,
 }: ChangeAppointmentPaymentMethodParams) => {
   const result = await api.PATCH<ChangeAppointmentPaymentMethodApiResponse>(
-    `${API_URL}/api/patients/self/appointments/${appointmentId}/paymentmethods/${paymentMethod}`,{})
+    `${API_URL}/api/patients/self/appointments/${appointmentId}/paymentmethods/${paymentMethod}`,
+    {},
+    { headers },
+  )
 
   if (result.state === 'error') {
     return {

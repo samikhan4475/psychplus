@@ -8,7 +8,9 @@ const createAppointmentsStore: StateCreator<AppointmentState> = (set) => ({
   filteredStaffAppointmentAvailabilities: [],
   staffWithClinicsAndSlots: [],
   currentWeekReel: 0,
+  appointmentId: 0,
 
+  setAppointmentId: (appointmentId) => set({ appointmentId }),
   setBookedSlot: (bookedSlot) => set({ bookedSlot }),
   setCurrentWeekReel: (currentWeekReel) => set({ currentWeekReel }),
   setFilteredStaffAppointmentAvailabilities: (
