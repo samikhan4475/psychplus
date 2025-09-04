@@ -8,7 +8,6 @@ import {
   type BookedSlot,
 } from '@/widgets/schedule-appointment-list/store'
 import {
-  renderProfileImage,
   renderStaffName,
 } from '@/widgets/schedule-appointment-list/utils'
 import { ProviderType } from '@/widgets/schedule-appointment-list/types'
@@ -83,7 +82,7 @@ const BookedStaffAndClinicDetails = ({ showActions = false }: BookedStaffAndClin
   }
 
   return (
-    <Flex gap="4" align='start'>
+    <Flex gap="4" align='center' className="flex-col sm:flex-row sm:items-start">
       <Box className='flex-shrink-0'>
         <Avatar
           src={profileImage ?? ''}
@@ -99,7 +98,7 @@ const BookedStaffAndClinicDetails = ({ showActions = false }: BookedStaffAndClin
           {renderStaffName(bookedSlotState?.specialist)}
         </Text>
 
-        <Flex className="font-medium text-[#1C2024]" gap="2" align="center">
+        <Flex className="font-medium text-[#1C2024] flex-col sm:flex-row" gap="2" align="start">
           <Text as="p" size="4">{formatStartDate(bookedSlotState?.startDate)}</Text>
 
           <Flex gap="2" align="center">
@@ -132,7 +131,7 @@ const BookedStaffAndClinicDetails = ({ showActions = false }: BookedStaffAndClin
         )}
 
         {showActions ? (
-          <Flex gap="2">
+          <Flex gap="2" className="flex-col sm:flex-row">
             <Button
               radius='full'
               variant='outline'

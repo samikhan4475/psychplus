@@ -107,7 +107,7 @@ const FilterPanel = ({ stateOptions = [] }: FilterPanelProps) => {
         <Flex
           gap="4"
           align="center"
-          className="bg-white border-b-pp-gray-4 mx-7 h-[100px] w-full flex-wrap border-b-[1px] py-1"
+          className="bg-white border-b-pp-gray-4 mx-7  min-h-[100px] w-full flex-wrap border-b-[1px] py-2 sm:py-1 px-2 sm:px-0"
         >
           <FilterItem label="Appointment" className="w-[200px]">
             <FilterOptionsSelect

@@ -233,7 +233,9 @@ const ScheduleAppointmentListClient = ({
 
   return (
     <Flex direction="column" className="w-full" ref={ref}>
-      <FilterPanel stateOptions={stateOptionMapping} />
+      <FilterPanel
+        stateOptions={stateOptionMapping}
+      />
       <AvailabilityList
         isSchedulingOptimizationEnabled={isSchedulingOptimizationEnabled}
         mapKey={mapKey}
