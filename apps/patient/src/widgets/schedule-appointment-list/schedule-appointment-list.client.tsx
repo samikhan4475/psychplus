@@ -148,7 +148,13 @@ const ScheduleAppointmentListClient = ({
         startingDate: isMobile()
           ? getValidStartDate(startingDate)
           : startingDate,
-        providerType: getNormalizedProviderType(providerType),
+        providerType: getNormalizedProviderType(
+          [SERVICE_TYPES.PSYCHIATRY, SERVICE_TYPES.SUBOXONE_MAT].includes(
+            providerType,
+          )
+            ? SERVICE_TYPES.PSYCHIATRY
+            : providerType,
+        ),
         stateCode: getCodsetValue(stateCodes, filters.state),
       },
       toast,
@@ -165,13 +171,14 @@ const ScheduleAppointmentListClient = ({
           filters.appointmentType === VISIT_TYPES.IN_PERSON
             ? AppointmentType.InPerson
             : AppointmentType.Virtual,
-        specialistTypeCode:
-          filters.providerType === SERVICE_TYPES.PSYCHIATRY
-            ? ProviderType.Psychiatrist
-            : ProviderType.Therapist,
+        specialistTypeCode: [
+          SERVICE_TYPES.PSYCHIATRY,
+          SERVICE_TYPES.SUBOXONE_MAT,
+        ].includes(filters.providerType)
+          ? ProviderType.Psychiatrist
+          : ProviderType.Therapist,
         startingDate: filters.startingDate,
         maxDaysOutToLook,
-
         state: filters.state,
         patientDateOfBirth: format(new Date('1970-01-01'), 'yyyy-MM-dd'),
       },

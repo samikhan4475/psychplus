@@ -11,9 +11,11 @@ import { isMobile } from '@psychplus/utils/client'
 import { formatTimeWithAmPm } from '@psychplus/utils/time'
 import { clickTrack } from '@psychplus/utils/tracking'
 import { SlotStateRenderer } from '@/components-v2/slot-state-render'
-import { enums, PSYCHPLUS_LIVE_URL, PSYCHPLUS_TEST_SITE_URL } from '@/constants'
+import { enums, PSYCHPLUS_TEST_SITE_URL } from '@/constants'
+import { SERVICE_TYPES } from '@/constants/appointment'
 import { useInViewOnce } from '@/hooks'
 import { useSlots } from '@/hooks/use-slots'
+import { InsurancePaymentModal } from '@/widgets/schedule-appointment/insurance-payment'
 import { PersonalDetailsModal } from '@/widgets/schedule-appointment/personal-details'
 import { useStore } from '../../store'
 import type { ClinicWithSlots } from '../../types'
@@ -23,7 +25,6 @@ import {
   getValidStartDate,
   organizeSlotsByDate,
 } from '../../utils'
-import { InsurancePaymentModal } from '@/widgets/schedule-appointment/insurance-payment'
 
 interface WeeklyAvailabilitySlotsProps {
   staff: Staff
@@ -70,7 +71,13 @@ const WeeklyAvailabilitySlots = ({
     providerId: staff.id,
     clinicId: clinicWithSlots.clinic.id,
     appointmentType: getNormalizedAppointmentType(appointmentType),
-    providerType: getNormalizedProviderType(providerType),
+    providerType: getNormalizedProviderType(
+      [SERVICE_TYPES.PSYCHIATRY, SERVICE_TYPES.SUBOXONE_MAT].includes(
+        providerType,
+      )
+        ? SERVICE_TYPES.PSYCHIATRY
+        : providerType,
+    ),
     zipCode: zipCode ?? '',
     startingDate: getValidStartDate(startingDate),
     selectedClinic,
@@ -217,7 +224,7 @@ const MobileSlotComponent = ({
   }
 
   return (
-    <Flex className="flex-row overflow-x-auto whitespace-nowrap pb-4" gap="4">
+    <Flex className="overflow-x-auto flex-row pb-4 whitespace-nowrap" gap="4">
       {slots &&
         slots?.map((slot, i) => (
           <SlotItem
